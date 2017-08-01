@@ -1,0 +1,10 @@
+Package: spatsoc
+Title: Group animal location data by their spatial relationship
+Version: 0.0.0.9000
+Authors@R: person("Alec L.", "Robitaille", email = "robit.alect@gmail.com", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+Depends: R (>= 3.3.3)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: data.table
