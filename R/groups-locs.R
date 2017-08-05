@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-grp.pts <- function(sp.pts, width){
+grp_pts <- function(sp.pts, width){
   buffers <- rgeos::gBuffer(sp.pts, width=buffer.width, byid = FALSE)
   o <- sp::over(sp.pts, sp::disaggregate(buffers))
   dt <- data.table::data.table(sp.pts@coords, id = sp.pts$id, group = o)

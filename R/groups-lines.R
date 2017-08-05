@@ -9,7 +9,7 @@
 #' @examples
 #'
 #' @import data.table
-grp.lines <- function(in.dt, crs) {
+grp_lines <- function(in.dt, crs) {
   # Split up the data.table by collar ID into lists
   lst <- data.table:::split.data.table(in.dt[, list(EASTING, NORTHING)],
                                        in.dt[, list(ID)])
