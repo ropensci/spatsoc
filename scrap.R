@@ -1,5 +1,4 @@
 locs <- data.table::fread('input/mock-locs.csv')
-
 locs <- locs[X_COORD != 0 & Y_COORD != 0]
 
 x.col <- 'X_COORD'
@@ -14,8 +13,49 @@ locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col
 
 locs <- locs[NORTHING > 5360000 & EASTING < 650000]
 
-spatsoc::grp.lines(locs[, list(EASTING, NORTHING, ID = ANIMAL_ID)],
+l <- spatsoc::grp.lines(locs[, list(EASTING, NORTHING, ID = ANIMAL_ID)],
                    crs = utm21N)
+l
+
+
+lst <- data.table:::split.data.table(locs[, list(EASTING, NORTHING)],
+                                     locs[, list(ANIMAL_ID)])
+
+`%do%` <- foreach::`%do%`
+
+# Make each list of an individuals locs into a spatial lines [sp, mapview, foreach]
+sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = sp::rbind.SpatialLines) %do% {
+  mapview::coords2Lines(
+    matrix(c(i[['EASTING']], i[['NORTHING']]), ncol = 2),
+                        ID = id,
+                        proj4string = sp::CRS(utm21N))
+}
+sp.lines
+
+data.table::setorder(locs, FIX_DATE, FIX_TIME)
+locs
+
+in.dt <- locs[, list(EASTING, NORTHING, ID = ANIMAL_ID)]
+lst <- data.table:::split.data.table(in.dt[, list(EASTING, NORTHING)],
+                                     in.dt[, list(ID)])
+#  ------------------------------------------------------------------------
+
+as.matrix(c(lst[1]$EASTING, lst[1]$NORTHING))
+lst[1][['EASTING']]
+
+d <- lst[1]
+d
+
+
+`%do%` <- foreach::`%do%`
+lst <- lst[1]
+# Make each list of an individuals locs into a spatial lines [sp, mapview, foreach]
+sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = rbind) %do% {
+  mapview::coords2Lines(matrix(c(i[['EASTING']], i[['NORTHING']]), ncol = 2),
+                        ID = id,
+                        proj4string = sp::CRS(crs))
+}
+sp.lines
 
 # #### grps lines
 #
