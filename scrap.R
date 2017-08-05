@@ -7,9 +7,25 @@ id.field <- 'ANIMAL_ID'
 buffer.width <- 500
 utm21N <- '+proj=utm +zone=21 ellps=WGS84'
 
+
+locs[, round(FIX_TIME)]
+locs[, floor(data.table::as.ITime(FIX_TIME))]
+
 proj.fields <- c('EASTING', 'NORTHING')
 locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col), get(y.col)),
                                             utm21N))]
+
+Mrlocs[, c("meanDistance", "distID") :=
+         MeanPairwiseDists(.SD), by = timeGroup,
+       .SDcols = c(id.col, east.col, north.col)]
+
+Mrlocs[, c("meanDistance", "distID") :=
+         MeanPairwiseDists(.SD), by = timeGroup,
+       .SDcols = c(id.col, east.col, north.col)]
+
+
+spatsoc::mean_pairwise_dist(locs, 'FIX_DATE', 'ANIMAL_ID')
+
 
 locs <- locs[NORTHING > 5360000 & EASTING < 650000]
 
