@@ -1,4 +1,3 @@
-
 #' Group Points By Buffer
 #'
 #' Group points by buffer overlap at each time interval

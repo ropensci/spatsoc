@@ -4,7 +4,7 @@
 \alias{grp.lines}
 \title{Groups From Spatial Lines}
 \usage{
-grp.lines(in.dt)
+grp.lines(in.dt, crs)
 }
 \arguments{
 \item{in.dt}{the 3 column data.table with coordinates (EASTING, NORTHING) and
@@ -15,4 +15,7 @@ id by spatial group data.table
 }
 \description{
 Groups From Spatial Lines
+}
+\examples{
+
 }

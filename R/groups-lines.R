@@ -7,18 +7,21 @@
 #' @export
 #'
 #' @examples
+#'
+#' @import data.table
 grp.lines <- function(in.dt, crs) {
   # Split up the data.table by collar ID into lists
-  lst <- data.table:::split.data.table(in.dt[, list(EASTING, NORTHING)], list(in.dt[, list(ID)]))
+  lst <- data.table:::split.data.table(in.dt[, list(EASTING, NORTHING)],
+                                       in.dt[, list(ID)])
 
   `%do%` <- foreach::`%do%`
 
   # Make each list of an individuals locs into a spatial lines [sp, mapview, foreach]
-  sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = rbind) %do% {
-    mapview::coords2Lines(as.matrix(c(i$EASTING, i$NORTHING)), ID = id,
+  sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = sp::rbind.SpatialLines) %do% {
+    mapview::coords2Lines(matrix(c(i[['EASTING']], i[['NORTHING']]), ncol = 2),
+                          ID = id,
                           proj4string = sp::CRS(crs))
   }
-
 
   # Buffer those lines by a preassigned buffer width
   buffers <- rgeos::gBuffer(sp.lines, width = buffer.width, byid = FALSE)

@@ -2,3 +2,4 @@
 
 export(grp.lines)
 export(grp.pts)
+import(data.table)
