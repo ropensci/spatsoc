@@ -8,6 +8,15 @@
 * decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required.
 * similarly about time groups
 
+
+read about dt in functions/packages
+* https://stackoverflow.com/questions/13756178/writings-functions-procedures-for-data-table-objects
+* https://stackoverflow.com/questions/28078640/adding-new-columns-to-a-data-table-by-reference-within-a-function-not-always-wor
+* https://stackoverflow.com/questions/30601332/data-table-assignment-by-reference-within-function
+* https://stackoverflow.com/questions/8030452/pass-by-reference-operator-in-the-data-table-package-modifies-another-data
+
+
+
 ## functions
 ### groups-locs
 * flex chaining or not?
