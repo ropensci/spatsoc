@@ -5,10 +5,12 @@
 * Title: Group animal location data by their spatial *and temporal* relationship
 * Description...
 * check about which are exported
-* decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required.
+* decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required. OR add a prep step
 * similarly about time groups
-
-
+* group polys or group HRs?
+* output data.tables can go back to lists if they are run BY = ...
+* look at moveBank other forms of data
+* missing adehabitat
 read about dt in functions/packages
 * https://stackoverflow.com/questions/13756178/writings-functions-procedures-for-data-table-objects
 * https://stackoverflow.com/questions/28078640/adding-new-columns-to-a-data-table-by-reference-within-a-function-not-always-wor

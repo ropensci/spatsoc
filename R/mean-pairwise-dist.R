@@ -1,11 +1,8 @@
 #' Euclidean Pairwise Distance
 #'
-#' @param locs input data.table with X, Y and ID columns
-#' @param time.col time column upon which individuals are compared. recommended
+#' @inheritParams BuildPts
+#' @param timeField time column upon which individuals are compared. recommended
 #'   to use a rounded time, see SOME LINK.
-#' @param id.col ID column name, if not provided defaults to 'ID'
-#' @param east.col X column name, if not provided defaults to 'EASTING'
-#' @param north.col Y column name, if not provided defaults to 'NORTHING'
 #'
 #' @return
 #' @export
@@ -13,16 +10,16 @@
 #' @import data.table
 #'
 #' @examples
-mean_pairwise_dist <- function(in.dt, time.col = NULL, id.col = 'ID', east.col = 'EASTING', north.col = 'NORTHING') {
-  if(is.null(time.col)) {
+PairwiseDist <- function(dt, timeField, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
+  if(is.null(timeField)) {
     warning('time column not provided - pairwise distance will be computed across all locs')
   }
 
-  # in.dt[, .... , by = time.col]
+  # dt[, .... , by = time.col]
 
-  names <- in.dt[, get(id.col)]
+  names <- dt[, get(idField)]
 
-  dst.mtrx <- sp::spDists(as.matrix(in.dt[ , .(get(east.col), get(north.col))]),
+  distMatrix <- sp::spDists(as.matrix(dt[ , ..coordFields]),
                           longlat = FALSE)
 
   # this should call another function to flex on the time
@@ -31,6 +28,6 @@ mean_pairwise_dist <- function(in.dt, time.col = NULL, id.col = 'ID', east.col =
   # !!!! check for if any names are equal, out warning
 
   # Output the column means (average pairwise dist) + names
-  list(meanDistance = colMeans(dst.mtrx),
+  data.table(meanDistance = colMeans(distMatrix),
              id = names)
 }
