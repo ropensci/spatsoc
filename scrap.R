@@ -49,7 +49,6 @@ proj.fields <- c('EASTING', 'NORTHING')
 locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col), get(y.col)),
                                             utm21N))]
 # ____________
-library(spatsoc)
 a <- BuildPts(locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
                idField = id.field)
 a
@@ -59,7 +58,8 @@ a
 a <- BuildHRs('mcp', locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
                idField = id.field)
 a
-a <- GroupPts(locs, 50, crs = utm21N, idField = id.field)
+a <- GroupPts(locs, 50, timeField = 'FIX_DATE',
+              crs = utm21N, idField = id.field)
 a
 a <- GroupLines(locs, 50, crs = utm21N, idField = id.field)
 a

@@ -4,13 +4,15 @@
 \alias{GroupPts}
 \title{Group Points By Buffer}
 \usage{
-GroupPts(dt, bufferWidth, crs, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID", spPts = NULL)
+GroupPts(dt, bufferWidth, timeField, crs, coordFields = c("EASTING",
+  "NORTHING"), idField = "ID", spPts = NULL)
 }
 \arguments{
 \item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}
 
 \item{bufferWidth}{The width of the buffer in the units of the projection}
+
+\item{timeField}{Time field in the dt upon which the spatial grouping will be calculated}
 
 \item{crs}{Character string for input to sp::CRS()}
 
