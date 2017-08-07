@@ -1,6 +1,6 @@
 #' Build Lines
 #'
-#' @inheritParams build_pts
+#' @inheritParams BuildLines
 #'
 #' @return SpatialLines for each ID provided
 #' @export
@@ -8,10 +8,10 @@
 #' @examples
 #'
 #' @import data.table
-build_lines <- function(dt, crs, coord.fields = c('EASTING', 'NORTHING'), id.field = 'ID') {
+BuildLines <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
   # Split up the data.table by collar ID into lists
-  lst <- data.table:::split.data.table(dt[, ..coord.fields],
-                                       dt[, .(get(id.field))])
+  lst <- data.table:::split.data.table(dt[, ..coordFields],
+                                       dt[, .(get(idField))])
 
   `%do%` <- foreach::`%do%`
 

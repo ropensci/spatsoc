@@ -2,9 +2,9 @@
 #'
 #' @param dt Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'
 #' @param crs Character string for input to sp::CRS()
-#' @param coord.fields Character vector indicating the X coordinate and Y
+#' @param coordFields Character vector indicating the X coordinate and Y
 #'   coordinate columns. eg: c('EASTING', 'NORTHING')
-#' @param id.field Character string indicating the column name for the ID associated
+#' @param idField Character string indicating the column name for the ID associated
 #'   with each point
 #'
 #' @return SpatialPointsDataFrame for each ID provided
@@ -12,10 +12,10 @@
 #'
 #' @examples
 #' @import data.table
-build_pts <- function(dt, crs, coord.fields = c('EASTING', 'NORTHING'), id.field = 'ID'){
+BuildPts <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
   # TODO: check if dt is a data.table
   # TODO: stopif null crs
-  sp::SpatialPointsDataFrame(dt[, ..coord.fields],
+  sp::SpatialPointsDataFrame(dt[, ..coordFields],
                              proj4string = sp::CRS(crs),
-                             data = dt[, .(id = get(id.field))])
+                             data = dt[, .(id = get(idField))])
 }

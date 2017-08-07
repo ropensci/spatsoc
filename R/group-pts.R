@@ -2,24 +2,26 @@
 #'
 #' Group points by buffer overlap at each time interval
 #'
-#' This function uses input spatial points to determine groups in space and time.
+#' This function uses input spatial points to determine groups in space and
+#' time.
 #'
-#' @inheritParams build_pts
-#' @param sp.pts Alternatively, provide a SpatialPointsDataFrame created with the sp package.
-#' @param buffer.width The width of the buffer in the units of the projection
+#' @inheritParams BuildPts
+#' @param spPts Alternatively, provide a SpatialPointsDataFrame created with the
+#'   sp package.
+#' @param bufferWidth The width of the buffer in the units of the projection
 #'
 #' @return
 #' @export
 #'
 #' @examples
-grp_pts <- function(dt, buffer.width, crs, coord.fields = c('EASTING', 'NORTHING'),
-                    id.field = 'ID', sp.pts = NULL){
-  if(is.null(sp.pts)){
-    if(is.null(dt)) stop("must provide either sp.pts or dt")
-    sp.pts <- build_pts(dt, crs, coord.fields, id.field)
+GroupPts <- function(dt, bufferWidth, crs, coordFields = c('EASTING', 'NORTHING'),
+                     idField = 'ID', spPts = NULL){
+  if(is.null(spPts)){
+    if(is.null(dt)) stop("must provide either pts or dt")
+    spPts <- BuildPts(dt, crs, coordFields, idField)
   }
 
-  buffers <- rgeos::gBuffer(sp.pts, width = buffer.width, byid = FALSE)
-  o <- sp::over(sp.pts, sp::disaggregate(buffers))
-  dt <- data.table::data.table(sp.pts@coords, id = sp.pts$id, group = o)
+  buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
+  o <- sp::over(spPts, sp::disaggregate(buffers))
+  dt <- data.table::data.table(spPts@coords, id = spPts$id, group = o)
 }
