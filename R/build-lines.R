@@ -17,8 +17,8 @@ BuildLines <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField 
 
   # Make each list of an individuals locs into a spatial lines [sp, mapview, foreach]
   sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = rbind) %do% {
-    mapview::coords2Lines(matrix(c(i[['EASTING']], i[['NORTHING']]), ncol = 2),
-                          ID = id,
+    mapview::coords2Lines(matrix(c(i[[coordFields[1]]], i[[coordFields[2]]]), ncol = 2),
+                          ID = id, data = data.frame(id), match.ID = FALSE,
                           proj4string = sp::CRS(crs))
   }
 }
