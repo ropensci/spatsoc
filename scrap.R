@@ -41,17 +41,49 @@ id.field <- 'ANIMAL_ID'
 buffer.width <- 500
 utm21N <- '+proj=utm +zone=21 ellps=WGS84'
 
-
-locs[, round(FIX_TIME)]
-locs[, floor(data.table::as.ITime(FIX_TIME))]
+# locs[, round(FIX_TIME)]
+# locs[, floor(data.table::as.ITime(FIX_TIME))]
 
 proj.fields <- c('EASTING', 'NORTHING')
 locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col), get(y.col)),
                                             utm21N))]
+
 # ____________
-a <- GroupPts(locs, 50, 'FIX_DATE', crs = utm21N,
+
+l <- locs[(FIX_DATE == '2010-05-01' | FIX_DATE == '2010-05-02')& FIX_TIME < '00:01:30']
+b <- l[, Nearest(.SD, 'FIX_DATE', crs = utm21N,
+            coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+b
+
+
+
+
+a <- spatsoc::GroupPts(locs, 50, 'FIX_DATE', crs = utm21N,
               coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
+
+a <- spatsoc::GroupLines(locs, 50, 'FIX_DATE', crs = utm21N, idField = id.field)
+a
+
+locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field)
+        spLines
+}, by = FIX_DATE]
+a
+
+locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field)
+        buffers <- rgeos::gBuffer(spLines, width = 50, byid = FALSE)
+        # ovr <- sp::over(spLines, sp::disaggregate(buffers), returnList = T)
+        length(spLines)
+        },
+     by = FIX_DATE]
+
+buffers <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+ovr <- sp::over(spLines, sp::disaggregate(buffers), returnList = T)
+list(id = names(ovr), group = unlist(ovr))
+
+locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field); spLines@bbox}, by = FIX_DATE]
+
+
 
 
 a <- BuildPts(locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
@@ -59,7 +91,12 @@ a <- BuildPts(locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
 a
 a <- BuildLines(locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
                  idField = id.field)
-a
+
+b <- rgeos::gBuffer(a, width = 50, byid = FALSE)
+o <- sp::over(a, sp::disaggregate(b), returnList = T)
+o
+
+
 a <- BuildHRs('mcp', locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
                idField = id.field)
 a
