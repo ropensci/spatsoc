@@ -25,3 +25,4 @@ GroupHRs <- function(hrType = 'mcp', dt, crs, coordFields = c('EASTING', 'NORTHI
 
 # TODO: optional proportion overlap
 # TODO: by year
+# TODO: add adehabitat to depends
