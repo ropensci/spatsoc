@@ -16,7 +16,10 @@ read about dt in functions/packages
 * https://stackoverflow.com/questions/28078640/adding-new-columns-to-a-data-table-by-reference-within-a-function-not-always-wor
 * https://stackoverflow.com/questions/30601332/data-table-assignment-by-reference-within-function
 * https://stackoverflow.com/questions/8030452/pass-by-reference-operator-in-the-data-table-package-modifies-another-data
+* can't use spatsoc, too similar to spatstat
 
+
+* if ID is character vector, .. paste??
 
 
 ## functions

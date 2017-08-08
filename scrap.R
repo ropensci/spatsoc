@@ -49,6 +49,11 @@ proj.fields <- c('EASTING', 'NORTHING')
 locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col), get(y.col)),
                                             utm21N))]
 # ____________
+a <- GroupPts(locs, 50, 'FIX_DATE', crs = utm21N,
+              coordFields = c("EASTING", "NORTHING"), idField = id.field)
+a
+
+
 a <- BuildPts(locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
                idField = id.field)
 a
