@@ -4,14 +4,16 @@
 \alias{GroupLines}
 \title{Groups From Spatial Lines}
 \usage{
-GroupLines(dt, bufferWidth, crs, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID", spLines = NULL)
+GroupLines(dt, bufferWidth, timeField = NULL, crs,
+  coordFields = c("EASTING", "NORTHING"), idField = "ID", spLines = NULL)
 }
 \arguments{
 \item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}
 
-\item{bufferWidth}{The width of the buffer around the SpatialLines in the
-units of the projection provided.}
+\item{bufferWidth}{The width of the buffer around the geometry in the units of the projection}
+
+\item{timeField}{Time field in the dt upon which the spatial grouping will be
+calculated}
 
 \item{crs}{Character string for input to sp::CRS()}
 
