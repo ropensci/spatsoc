@@ -60,7 +60,11 @@ b <- locs[, Nearest(.SD, 'roundtime',
             coordFields = c("EASTING", "NORTHING"), idField = id.field)]
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!             b[ID == neighbor]
 timeField <- 'roundtime'
-b[, nTime := uniqueN(get(timeField))]
+b[, nTime := data.table::uniqueN(get(timeField)), by = ID]
+b[, nTimeAll :=data.table::uniqueN(get(timeField))]
+
+b[nTime == nTimeAll]
+
 b[, .N, by = .(ID, neighbor)]
 b[, .N, by = roundtime]
 

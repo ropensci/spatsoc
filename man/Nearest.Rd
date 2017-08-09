@@ -4,8 +4,8 @@
 \alias{Nearest}
 \title{Proportion/Frequency Nearest Neighbors}
 \usage{
-Nearest(dt, timeField = NULL, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID")
+Nearest(dt, timeField = NULL, proportions = FALSE,
+  coordFields = c("EASTING", "NORTHING"), idField = "ID")
 }
 \arguments{
 \item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}

@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-Nearest <- function(dt, timeField = NULL, coordFields = c('EASTING', 'NORTHING'),
+Nearest <- function(dt, timeField = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
                     idField = 'ID'){
   if(is.null(timeField)){
     rowIDs <- dt[, .(id = get(idField), .I)]
@@ -17,12 +17,20 @@ Nearest <- function(dt, timeField = NULL, coordFields = c('EASTING', 'NORTHING')
     data.table::data.table(ID = rowIDs[, id],
                            neighbor = rowIDs[order(match(I, knn[, 2])), id])
   } else {
-    dt[, {rowIDs <- .SD[, .(id = get(idField), .I)]
-          tree <- SearchTrees::createTree(.SD[, ..coordFields])
-          knn <- (SearchTrees::knnLookup(tree, newdat = .SD[, ..coordFields], k = 2))
-          list(ID = rowIDs[, id],
-               neighbor = rowIDs[order(match(I, knn[, 2])), id])},
+    d <- dt[, {#if(.SD[, uniqueN(get(idField))] < 2){
+               rowIDs <- .SD[, .(id = get(idField), .I)]
+               tree <- SearchTrees::createTree(.SD[, ..coordFields])
+               knn <- (SearchTrees::knnLookup(tree, newdat = .SD[, ..coordFields], k = 2))
+               list(ID = rowIDs[, id],
+                    neighbor = rowIDs[order(match(I, knn[, 2])), id])
+               },
        by = timeField, .SDcols = c(coordFields, idField)]
+    if(!proportions){
+      return(d)
+    } else {
+      d[, nTime := data.table::uniqueN(get(timeField)), by = ID]
+      unique(d[, .(prop = .N / nTime), by = .(ID, neighbor)])
+    }
   }
 }
 
@@ -31,6 +39,7 @@ Nearest <- function(dt, timeField = NULL, coordFields = c('EASTING', 'NORTHING')
 #       single matrix
 
 # TODO: check that there aren't ever any ID == neighbor
+#       NOTE--- this occurs because ???
 # TODO: check for all unique IDs on input
 
 # TODO: nTime is global not relative to the nLocs for each animal
