@@ -50,13 +50,27 @@ locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col
 
 # ____________
 
+
+locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
+locs
+
 l <- locs[(FIX_DATE == '2010-05-01' | FIX_DATE == '2010-05-02')& FIX_TIME < '00:01:30']
-b <- l[, Nearest(.SD, 'FIX_DATE', crs = utm21N,
+l <- locs[FIX_DATE == '2010-05-01' & FIX_TIME < '00:01:30']
+b <- locs[, Nearest(.SD, 'roundtime',
             coordFields = c("EASTING", "NORTHING"), idField = id.field)]
-b
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!             b[ID == neighbor]
+timeField <- 'roundtime'
+b[, nTime := uniqueN(get(timeField))]
+b[, .N, by = .(ID, neighbor)]
+b[, .N, by = roundtime]
+
+c <- unique(b[, .(prop = .N / nTime), by = .(ID, neighbor)])
 
 
 
+a <- locs[, Nearest(.SD, 'FIX_DATE',
+                    coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+a
 
 a <- spatsoc::GroupPts(locs, 50, 'FIX_DATE', crs = utm21N,
               coordFields = c("EASTING", "NORTHING"), idField = id.field)

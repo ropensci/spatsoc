@@ -4,25 +4,20 @@
 \alias{Nearest}
 \title{Proportion/Frequency Nearest Neighbors}
 \usage{
-Nearest(dt, timeField = NULL, crs, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID", spPts = NULL)
+Nearest(dt, timeField = NULL, coordFields = c("EASTING", "NORTHING"),
+  idField = "ID")
 }
 \arguments{
 \item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}
 
-\item{timeField}{Time field in the dt upon which the spatial grouping will be
-calculated}
-
-\item{crs}{Character string for input to sp::CRS()}
+\item{timeField}{Time field in the dt upon which the nearest neighbors will
+be calculate}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
 
 \item{idField}{Character string indicating the column name for the ID associated
 with each point}
-
-\item{spPts}{Alternatively, provide a SpatialPointsDataFrame created with the
-sp package. If a spPts object is provided, groups cannot be calculated by}
 }
 \description{
 Proportion/Frequency Nearest Neighbors
