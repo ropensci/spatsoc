@@ -10,25 +10,24 @@
 #'
 #' @examples
 Nearest <- function(dt, timeField = NULL, crs, coordFields = c('EASTING', 'NORTHING'),
-                    idField = 'ID', spPts = NULL){
+                    idField = 'ID'){
   if(is.null(timeField)){
-    if(is.null(spPts)){
-      if(is.null(dt)) stop("must provide either pts or dt")
-      spPts <- BuildPts(dt, crs, coordFields, idField)
-      rowIDs <- data.table::data.table(dt[, ..idField])[, r := .I]
-    }
-    tree <- SearchTrees::createTree(spPts@coords)
-    knn <- data.table::data.table(SearchTrees::knnLookup(tree, newdat = spPts@coords, k = 2))
+    # rowIDs <- dt[, .(get(idField), .I)]
+    # tree <- SearchTrees::createTree(dt[, ..coordFields])
+    # knn <- SearchTrees::knnLookup(tree, newdat = dt[, ..coordFields], k = 2)
+    #
+    # data.table::data.table(ID = dt[, get(idField)],
+    #                        neighbor = rowIDs[order(match(I, knn[,2])), get(idField)])
+    #
+    #
+    rowIDs <- dt[, .(id = get(idField), .I)]
+    tree <- SearchTrees::createTree(dt[, ..coordFields])
+    knn <- (SearchTrees::knnLookup(tree, newdat = dt[, ..coordFields], k = 2))
 
-    setnames(knn, c('id', 'neighbor'))
-
-    merge(
-      merge(rowIDs, knn, by.x = 'r', by.y = 'id'),
-      rowIDs,
-      by.x = 'neighbor', by.y = 'r')
+    data.table::data.table(ID = rowIDs[, id],
+                           neighbor = rowIDs[order(match(I, knn[, 2])), id])
   } else {
-    if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
-    dt[, {spPts <- BuildPts(.SD, crs, coordFields, idField)
+    dt[, {
           tree <- SearchTrees::createTree(spPts@coords)
           d <- data.table::data.table(SearchTrees::knnLookup(tree, newdat = spPts@coords, k = 2),
                                       id = get(idField))
