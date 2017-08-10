@@ -59,9 +59,15 @@ l <- locs[FIX_DATE == '2010-05-01' & FIX_TIME < '00:01:30']
 b <- locs[, Nearest(.SD, 'roundtime', TRUE,
             coordFields = c("EASTING", "NORTHING"), idField = id.field)]
 b
+Nearest(l, coordFields = c("EASTING", "NORTHING"), idField = id.field)
 
 b[ID == neighbor]
 b[, .N, by =ID]
+
+b <- l[, Nearest(.SD,
+                    coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+b
+
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!             b[ID == neighbor]
 b

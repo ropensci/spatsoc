@@ -4,14 +4,17 @@
 \alias{Nearest}
 \title{Proportion/Frequency Nearest Neighbors}
 \usage{
-Nearest(dt, timeField = NULL, proportions = FALSE,
+Nearest(dt, timeField = NULL, groupField = NULL, proportions = FALSE,
   coordFields = c("EASTING", "NORTHING"), idField = "ID")
 }
 \arguments{
 \item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}
 
-\item{timeField}{Time field in the dt upon which the nearest neighbors will
-be calculate}
+\item{timeField}{(optional) timeField in the dt upon which the neighbors'
+distance will be compared}
+
+\item{groupField}{(optional) groupField in the dt which can be used to group
+neighbors (eg: season, year, herd, known social groups, ...)}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
