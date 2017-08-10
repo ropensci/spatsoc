@@ -7,14 +7,22 @@
 #' @export
 #'
 #' @examples
-Nearest <- function(dt, timeField = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
+Nearest <- function(dt, timeField = NULL, group = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
                     idField = 'ID'){
-  if(is.null(timeField)){
-    tree <- SearchTrees::createTree(dt[, ..coordFields])
-    knn <- (SearchTrees::knnLookup(tree, newdat = dt[, ..coordFields], k = 2))
+  FindNearest <- function(dt, coords, id){
+    tree <- SearchTrees::createTree(dt[, ..coords])
+    knn <- (SearchTrees::knnLookup(tree, newdat = dt[, ..coords], k = 2))
+    return(list(ID = dt[, get(id)],
+                neighbor = dt[, get(id)][knn[,2]]))
+  }
 
-    data.table::data.table(ID = dt[, get(idField)],
-                           neighbor = dt[, get(idField)][knn[,2]])
+  if(is.null(timeField)){
+    # tree <- SearchTrees::createTree(dt[, ..coordFields])
+    # knn <- (SearchTrees::knnLookup(tree, newdat = dt[, ..coordFields], k = 2))
+    #
+    # data.table::data.table(ID = dt[, get(idField)],
+    #                        neighbor = dt[, get(idField)][knn[,2]])
+    FindNearest(dt, coordFields, idField)
   } else {
     d <- dt[, {tree <- SearchTrees::createTree(.SD[, ..coordFields])
                knn <- (SearchTrees::knnLookup(tree, newdat = .SD[, ..coordFields], k = 2))
