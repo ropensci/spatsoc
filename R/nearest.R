@@ -10,19 +10,18 @@
 Nearest <- function(dt, timeField = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
                     idField = 'ID'){
   if(is.null(timeField)){
-    rowIDs <- dt[, .(id = get(idField), .I)]
     tree <- SearchTrees::createTree(dt[, ..coordFields])
     knn <- (SearchTrees::knnLookup(tree, newdat = dt[, ..coordFields], k = 2))
 
-    data.table::data.table(ID = rowIDs[, id],
-                           neighbor = rowIDs[order(match(I, knn[, 2])), id])
+    data.table::data.table(ID = dt[, get(idField)],
+                           neighbor = dt[, get(idField)][knn[,2]])
   } else {
     d <- dt[, {#if(.SD[, uniqueN(get(idField))] < 2){
                rowIDs <- .SD[, .(id = get(idField), .I)]
                tree <- SearchTrees::createTree(.SD[, ..coordFields])
                knn <- (SearchTrees::knnLookup(tree, newdat = .SD[, ..coordFields], k = 2))
                list(ID = rowIDs[, id],
-                    neighbor = rowIDs[order(match(I, knn[, 2])), id])
+                    neighbor = rowIDs$id[knn[,2]])
                },
        by = timeField, .SDcols = c(coordFields, idField)]
     if(!proportions){
@@ -41,5 +40,3 @@ Nearest <- function(dt, timeField = NULL, proportions = FALSE, coordFields = c('
 # TODO: check that there aren't ever any ID == neighbor
 #       NOTE--- this occurs because ???
 # TODO: check for all unique IDs on input
-
-# TODO: nTime is global not relative to the nLocs for each animal
