@@ -16,12 +16,10 @@ Nearest <- function(dt, timeField = NULL, proportions = FALSE, coordFields = c('
     data.table::data.table(ID = dt[, get(idField)],
                            neighbor = dt[, get(idField)][knn[,2]])
   } else {
-    d <- dt[, {#if(.SD[, uniqueN(get(idField))] < 2){
-               rowIDs <- .SD[, .(id = get(idField), .I)]
-               tree <- SearchTrees::createTree(.SD[, ..coordFields])
+    d <- dt[, {tree <- SearchTrees::createTree(.SD[, ..coordFields])
                knn <- (SearchTrees::knnLookup(tree, newdat = .SD[, ..coordFields], k = 2))
-               list(ID = rowIDs[, id],
-                    neighbor = rowIDs$id[knn[,2]])
+               list(ID = .SD[, get(idField)],
+                    neighbor = .SD[, get(idField)][knn[,2]])
                },
        by = timeField, .SDcols = c(coordFields, idField)]
     if(!proportions){
@@ -33,10 +31,10 @@ Nearest <- function(dt, timeField = NULL, proportions = FALSE, coordFields = c('
   }
 }
 
-# TODO: eval(idField) or the like for naming the list with input idField
 # TODO: ?? by date within by month/season/year?? for reducing proportions less than a
 #       single matrix
 
-# TODO: check that there aren't ever any ID == neighbor
-#       NOTE--- this occurs because ???
-# TODO: check for all unique IDs on input
+
+# TODO: eval(idField) or the like for naming the list with input idField
+#       https://stackoverflow.com/questions/17169475/create-list-programmatically-with-tags-from-character-vector
+#       setNames

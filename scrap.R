@@ -52,13 +52,25 @@ locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col
 
 
 locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
-locs
 
 l <- locs[(FIX_DATE == '2010-05-01' | FIX_DATE == '2010-05-02')& FIX_TIME < '00:01:30']
 l <- locs[FIX_DATE == '2010-05-01' & FIX_TIME < '00:01:30']
-b <- locs[, Nearest(.SD, 'roundtime',
+
+b <- locs[, Nearest(.SD, 'roundtime', TRUE,
             coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+b
+
+b[ID == neighbor]
+b[, .N, by =ID]
+
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!             b[ID == neighbor]
+b
+
+b[ID == neighbor]
+
+mapview::mapview(BuildPts(l, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
+                          idField = id.field))
+
 timeField <- 'roundtime'
 b[, nTime := data.table::uniqueN(get(timeField)), by = ID]
 b[, nTimeAll :=data.table::uniqueN(get(timeField))]
