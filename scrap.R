@@ -41,38 +41,23 @@ id.field <- 'ANIMAL_ID'
 buffer.width <- 500
 utm21N <- '+proj=utm +zone=21 ellps=WGS84'
 
-# locs[, round(FIX_TIME)]
-# locs[, floor(data.table::as.ITime(FIX_TIME))]
+locs[, group := seq(1:4)]
 
 proj.fields <- c('EASTING', 'NORTHING')
 locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col), get(y.col)),
                                             utm21N))]
 
-# ____________
-
-
 locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
 
+# ____________
 l <- locs[(FIX_DATE == '2010-05-01' | FIX_DATE == '2010-05-02')& FIX_TIME < '00:01:30']
 l <- locs[FIX_DATE == '2010-05-01' & FIX_TIME < '00:01:30']
 
-b <- locs[, Nearest(.SD, 'roundtime', TRUE,
-            coordFields = c("EASTING", "NORTHING"), idField = id.field)]
-b
-Nearest(l, coordFields = c("EASTING", "NORTHING"), idField = id.field)
+Nearest(locs, 'roundtime', 'group', TRUE,
+        coordFields = c("EASTING", "NORTHING"), idField = id.field)
 
 b[ID == neighbor]
-b[, .N, by =ID]
 
-b <- l[, Nearest(.SD,
-                    coordFields = c("EASTING", "NORTHING"), idField = id.field)]
-b
-
-
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!             b[ID == neighbor]
-b
-
-b[ID == neighbor]
 
 mapview::mapview(BuildPts(l, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
                           idField = id.field))
