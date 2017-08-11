@@ -12,7 +12,7 @@ GroupLines(dt, bufferWidth, timeField = NULL, crs,
 
 \item{bufferWidth}{The width of the buffer around the geometry in the units of the projection}
 
-\item{timeField}{Time field in the dt upon which the spatial grouping will be
+\item{timeField}{(optional) time field in the dt upon which the spatial grouping will be
 calculated}
 
 \item{crs}{Character string for input to sp::CRS()}

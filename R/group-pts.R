@@ -9,7 +9,7 @@
 #' @param spPts Alternatively, provide a SpatialPointsDataFrame created with the
 #'   sp package. If a spPts object is provided, groups cannot be calculated by
 #' @param bufferWidth The width of the buffer around the geometry in the units of the projection
-#' @param timeField Time field in the dt upon which the spatial grouping will be
+#' @param timeField (optional) time field in the dt upon which the spatial grouping will be
 #'   calculated
 #' @return
 #' @export
