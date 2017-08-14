@@ -16,7 +16,8 @@ BuildLines <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField 
   l <- lapply(seq_along(lst), function(i){
     sp::SpatialLines(list(sp::Lines(sp::Line(cbind(lst[[i]][[coordFields[1]]],
                                                    lst[[i]][[coordFields[2]]])),
-                                    names(lst)[[1]])))
+                                    names(lst)[[1]])),
+                     proj4string = sp::CRS(crs))
   })
   do.call(rbind, l)
 }
