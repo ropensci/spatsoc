@@ -5,13 +5,19 @@
 #' @return SpatialLines for each ID provided
 #' @export
 #'
-#' @examples
-#'
 #' @import data.table
 BuildLines <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
+  # Find any ids with only one loc (rgeos requires at least 2 locs for a line buffer)
+  dropRows <- dt[, .(dropped = .N < 2), by = idField]
+
+  # if(dropRows[(dropped), .N] > 0) {
+  #   message('some rows dropped, cannot build lines with less than two points')}
+
   # Split up the data.table by collar ID into lists
-  lst <- data.table:::split.data.table(dt[, ..coordFields],
-                                       dt[, .(get(idField))])
+  lst <- data.table:::split.data.table(dt[get(idField) %in% dropRows[!(dropped), get(idField)],
+                                          ..coordFields],
+                                       dt[get(idField) %in% dropRows[!(dropped), get(idField)],
+                                          .(get(idField))])
 
   l <- lapply(seq_along(lst), function(i){
     sp::SpatialLines(list(sp::Lines(sp::Line(cbind(lst[[i]][[coordFields[1]]],
@@ -21,3 +27,5 @@ BuildLines <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField 
   })
   do.call(rbind, l)
 }
+
+# TODO: one single warning with count of how many dropped

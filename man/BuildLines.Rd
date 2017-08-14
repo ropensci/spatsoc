@@ -23,6 +23,3 @@ SpatialLines for each ID provided
 \description{
 Build Lines
 }
-\examples{
-
-}
