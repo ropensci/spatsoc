@@ -1,5 +1,7 @@
 #' Build Points
 #'
+#' Build a SpatialPointsDataFrame from provided data for input to GroupPts or other uses.
+#'
 #' @param dt Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'
 #' @param crs Character string for input to sp::CRS()
 #' @param coordFields Character vector indicating the X coordinate and Y
@@ -12,9 +14,10 @@
 #'
 #' @import data.table
 BuildPts <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
-  # TODO: check if dt is a data.table
-  # TODO: stopif null crs
   sp::SpatialPointsDataFrame(dt[, ..coordFields],
                              proj4string = sp::CRS(crs),
                              data = dt[, .(id = get(idField))])
 }
+
+# TODO: check if dt is a data.table
+# TODO: stopif null crs

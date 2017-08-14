@@ -8,8 +8,6 @@
 #' @export
 #'
 #' @import data.table
-#'
-#' @examples
 PairwiseDist <- function(dt, timeField, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
   if(is.null(timeField)) {
     warning('time column not provided - pairwise distance will be computed across all locs')

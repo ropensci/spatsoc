@@ -1,16 +1,14 @@
-#' Group Overlapping Polygons (Home ranges)
+#' Group Overlapping Polygons
 #'
-#' Group individuals by polygon overlap
+#' Group individuals by polygon (eg: home ranges) overlap
 #'
 #' @inheritParams BuildPts
 #'
 #' @param hrType Type of HR estimation, defaults to 'mcp'
 #' @param spPolys Alternatively, provide a SpatialPolygons object.
 #'
-#' @return id by group data.table
+#' @return ID by group data.table
 #' @export
-#'
-#' @examples
 GroupHRs <- function(hrType = 'mcp', dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
                      spPolys = NULL){
   if(is.null(spPolys)){

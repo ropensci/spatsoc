@@ -2,15 +2,18 @@
 
 
 ## TODO
+* check if dt, else setDT
+
+
+
 * Title: Group animal location data by their spatial *and temporal* relationship
 * Description...
 * check about which are exported
 * decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required. OR add a prep step
 * similarly about time groups
 * group polys or group HRs?
-* output data.tables can go back to lists if they are run BY = ...
 * look at moveBank other forms of data
-* missing adehabitat
+* missing adehabitat, SearchTrees
 * can't use spatsoc, too similar to spatstat
 * if ID is character vector, paste?? (as in ID, Year ---> AN1_2007)
 * can't use `crs` as a variable, it is in the raster namespace
@@ -30,7 +33,6 @@ read about dt in functions/packages
 * `list(split(spPts@coords, c(col(spPts@coords)))` compare this to `as.list(as.data.frame)` for speed
 
 ### GroupLines
-* ideally, don't use mapview, foreach for building the lines..
 
 ### GroupHRs/Polys
 * proportional overlap?

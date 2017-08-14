@@ -5,10 +5,7 @@
 #'   distance will be compared
 #' @param groupField (optional) groupField in the dt which can be used to group
 #'   neighbors (eg: season, year, herd, known social groups, ...)
-#' @return
 #' @export
-#'
-#' @examples
 Nearest <- function(dt, timeField = NULL, groupField = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
                     idField = 'ID'){
   FindNearest <- function(in.dt, coords, id){

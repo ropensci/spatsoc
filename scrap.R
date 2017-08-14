@@ -54,10 +54,22 @@ locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour
 # mapview::mapview(BuildPts(l, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
 #                           idField = id.field))
 
+## NEAREST ##
+a <- locs[, Nearest(.SD, coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+a
+
 a <- locs[, Nearest(.SD, 'FIX_DATE',
                     coordFields = c("EASTING", "NORTHING"), idField = id.field)]
 a
 
+a <- locs[, Nearest(.SD, 'FIX_DATE', 'group',
+                    coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+a
+
+## PTS ##
+a <- spatsoc::BuildPts(locs, 50, 'FIX_DATE', crs = utm21N,
+                       coordFields = c("EASTING", "NORTHING"), idField = id.field)
+a
 a <- spatsoc::GroupPts(locs, 50, 'FIX_DATE', crs = utm21N,
               coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
