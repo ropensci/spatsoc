@@ -26,6 +26,9 @@ with each point}
 \item{spPts}{Alternatively, provide a SpatialPointsDataFrame created with the
 sp package. If a spPts object is provided, groups cannot be calculated by}
 }
+\value{
+id by group data.table
+}
 \description{
 Group points by buffer overlap at equal time.
 }

@@ -7,7 +7,7 @@
 #' @param hrType Type of HR estimation, defaults to 'mcp'
 #' @param spPolys Alternatively, provide a SpatialPolygons object.
 #'
-#' @return
+#' @return id by group data.table
 #' @export
 #'
 #' @examples

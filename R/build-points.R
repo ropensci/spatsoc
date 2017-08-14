@@ -10,7 +10,6 @@
 #' @return SpatialPointsDataFrame for each ID provided
 #' @export
 #'
-#' @examples
 #' @import data.table
 BuildPts <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
   # TODO: check if dt is a data.table

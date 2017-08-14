@@ -22,6 +22,9 @@ with each point}
 
 \item{spPolys}{Alternatively, provide a SpatialPolygons object.}
 }
+\value{
+id by group data.table
+}
 \description{
 Group individuals by polygon overlap
 }

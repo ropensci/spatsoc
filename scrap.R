@@ -50,30 +50,9 @@ locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col
 locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
 
 # ____________
-l <- locs[(FIX_DATE == '2010-05-01' | FIX_DATE == '2010-05-02')& FIX_TIME < '00:01:30']
-l <- locs[FIX_DATE == '2010-05-01' & FIX_TIME < '00:01:30']
 
-Nearest(locs, 'roundtime', 'group', TRUE,
-        coordFields = c("EASTING", "NORTHING"), idField = id.field)
-
-b[ID == neighbor]
-
-
-mapview::mapview(BuildPts(l, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
-                          idField = id.field))
-
-timeField <- 'roundtime'
-b[, nTime := data.table::uniqueN(get(timeField)), by = ID]
-b[, nTimeAll :=data.table::uniqueN(get(timeField))]
-
-b[nTime == nTimeAll]
-
-b[, .N, by = .(ID, neighbor)]
-b[, .N, by = roundtime]
-
-c <- unique(b[, .(prop = .N / nTime), by = .(ID, neighbor)])
-
-
+# mapview::mapview(BuildPts(l, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
+#                           idField = id.field))
 
 a <- locs[, Nearest(.SD, 'FIX_DATE',
                     coordFields = c("EASTING", "NORTHING"), idField = id.field)]

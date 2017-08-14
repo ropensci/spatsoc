@@ -3,10 +3,9 @@
 #' @param hrType Type of HR estimation, defaults to 'mcp'
 #' @inheritParams BuildPts
 #'
-#' @return
+#' @return Home range polygons for each ID
 #' @export
 #'
-#' @examples
 BuildHRs <- function(hrType = 'mcp', dt, crs, coordFields = c('EASTING', 'NORTHING'),
                      idField = 'ID', spPts = NULL){
   if(is.null(spPts)){
