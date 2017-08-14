@@ -1,6 +1,6 @@
 #' Build Lines
 #'
-#' @inheritParams BuildLines
+#' @inheritParams BuildPts
 #'
 #' @return SpatialLines for each ID provided
 #' @export
@@ -13,15 +13,10 @@ BuildLines <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField 
   lst <- data.table:::split.data.table(dt[, ..coordFields],
                                        dt[, .(get(idField))])
 
-  `%do%` <- foreach::`%do%`
-
-  # Make each list of an individuals locs into a spatial lines [sp, mapview, foreach]
-  sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = rbind) %do% {
-    mapview::coords2Lines(matrix(c(i[[coordFields[1]]], i[[coordFields[2]]]), ncol = 2),
-                          ID = id, data = data.frame(id), match.ID = FALSE,
-                          proj4string = sp::CRS(crs))
-  }
+  l <- lapply(seq_along(lst), function(i){
+    sp::SpatialLines(list(sp::Lines(sp::Line(cbind(lst[[i]][[coordFields[1]]],
+                                                   lst[[i]][[coordFields[2]]])),
+                                    names(lst)[[1]])))
+  })
+  do.call(rbind, l)
 }
-
-
-# TODO: check warnings..
