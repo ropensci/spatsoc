@@ -15,6 +15,17 @@
 #' @export
 #'
 GroupPts <- function(dt, bufferWidth, timeField = NULL, crs, coordFields = c('EASTING', 'NORTHING'),
+#' @examples
+#' data(locs)
+#' groups <- GroupPts(locs, 50)
+#'
+#' groups <- GroupPts(locs, 50, timeField = 'FIX_DATE',
+#'         crs = '+proj=utm +zone=21 ellps=WGS84',
+#'         idField = 'ID')
+#'
+#' data(locsPts)
+#'
+#' groups <- GroupPts(spPts = locsPts)
                      idField = 'ID', spPts = NULL){
   if(is.null(timeField)){
     if(is.null(spPts)){

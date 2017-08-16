@@ -10,6 +10,18 @@
 #' @return id by group data.table
 #' @export
 #'
+#' @examples
+#' data(locs)
+#' groups <- GroupLines(locs, 50)
+#'
+#' groups <- GroupLines(locs, 50, timeField = 'FIX_DATE',
+#'         crs = '+proj=utm +zone=21 ellps=WGS84',
+#'         idField = 'ID')
+#'
+#'
+#' data(locsLines)
+#'
+#' groups <- GroupLines(spLines = locsLines)
 #' @import data.table
 GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, crs, coordFields = c('EASTING', 'NORTHING'),
                        idField = 'ID', spLines = NULL) {

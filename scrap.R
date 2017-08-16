@@ -49,6 +49,12 @@ locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col
 
 locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
 
+
+locs[, herd := as.integer(rep(1:4))]
+devtools::use_data(locs, overwrite = TRUE)
+locs <- locs[, .(EASTING, NORTHING, ID = (as.numeric(factor(ANIMAL_ID))), date = FIX_DATE,
+         time = FIX_TIME, GROUP = herd)]
+
 # ____________
 
 # mapview::mapview(BuildPts(l, crs = utm21N, coordFields = c("EASTING", "NORTHING"),

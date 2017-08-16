@@ -1,5 +1,10 @@
 # spatsoc [working.title]
 
+* create example data in xy loc form 
+* create example data in sp form for lines, points and multipolygons
+* change group HRs to group Polys
+* add a build polygons step in addition to the homerange
+* sub functions for build HR, build polys.. then group all resulting polys 
 
 ## TODO
 * check if dt, else setDT

@@ -9,6 +9,20 @@
 #'
 #' @return ID by group data.table
 #' @export
+#'
+#' @examples
+#' # Build the HRs for a set of locs by individuals using mcp,
+#' # kernel density estimation...
+#' data(locs)
+#'
+#' groups <- GroupHRs('mcp', locs, 50, crs = '+proj=utm +zone=21 ellps=WGS84',
+#'                    idField = 'ID')
+#'
+#' # If you'd like to simply compare proportion or overlap of a set of polygons,
+#' # ...
+#' data(locsPolys)
+#'
+#' groups <- GroupHRs(spPolys = locsPolys)
 GroupHRs <- function(hrType = 'mcp', dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
                      spPolys = NULL){
   if(is.null(spPolys)){
