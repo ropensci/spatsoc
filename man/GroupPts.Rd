@@ -12,7 +12,7 @@ GroupPts(dt, bufferWidth, timeField = NULL, crs, coordFields = c("EASTING",
 
 \item{bufferWidth}{The width of the buffer around the geometry in the units of the projection}
 
-\item{timeField}{Time field in the dt upon which the spatial grouping will be
+\item{timeField}{(optional) time field in the dt upon which the spatial grouping will be
 calculated}
 
 \item{crs}{Character string for input to sp::CRS()}
@@ -25,6 +25,9 @@ with each point}
 
 \item{spPts}{Alternatively, provide a SpatialPointsDataFrame created with the
 sp package. If a spPts object is provided, groups cannot be calculated by}
+}
+\value{
+id by group data.table
 }
 \description{
 Group points by buffer overlap at equal time.

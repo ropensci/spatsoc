@@ -41,59 +41,41 @@ id.field <- 'ANIMAL_ID'
 buffer.width <- 500
 utm21N <- '+proj=utm +zone=21 ellps=WGS84'
 
-# locs[, round(FIX_TIME)]
-# locs[, floor(data.table::as.ITime(FIX_TIME))]
+locs[, group := seq(1:4)]
 
 proj.fields <- c('EASTING', 'NORTHING')
 locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col), get(y.col)),
                                             utm21N))]
 
-# ____________
-
-
 locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
 
-l <- locs[(FIX_DATE == '2010-05-01' | FIX_DATE == '2010-05-02')& FIX_TIME < '00:01:30']
-l <- locs[FIX_DATE == '2010-05-01' & FIX_TIME < '00:01:30']
 
-b <- locs[, Nearest(.SD, 'roundtime', TRUE,
-            coordFields = c("EASTING", "NORTHING"), idField = id.field)]
-b
-Nearest(l, coordFields = c("EASTING", "NORTHING"), idField = id.field)
+locs[, herd := as.integer(rep(1:4))]
+devtools::use_data(locs, overwrite = TRUE)
+locs <- locs[, .(EASTING, NORTHING, ID = (as.numeric(factor(ANIMAL_ID))), date = FIX_DATE,
+         time = FIX_TIME, GROUP = herd)]
 
-b[ID == neighbor]
-b[, .N, by =ID]
+# ____________
 
-b <- l[, Nearest(.SD,
-                    coordFields = c("EASTING", "NORTHING"), idField = id.field)]
-b
+# mapview::mapview(BuildPts(l, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
+#                           idField = id.field))
 
-
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!             b[ID == neighbor]
-b
-
-b[ID == neighbor]
-
-mapview::mapview(BuildPts(l, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
-                          idField = id.field))
-
-timeField <- 'roundtime'
-b[, nTime := data.table::uniqueN(get(timeField)), by = ID]
-b[, nTimeAll :=data.table::uniqueN(get(timeField))]
-
-b[nTime == nTimeAll]
-
-b[, .N, by = .(ID, neighbor)]
-b[, .N, by = roundtime]
-
-c <- unique(b[, .(prop = .N / nTime), by = .(ID, neighbor)])
-
-
+## NEAREST ##
+a <- locs[, Nearest(.SD, coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+a
 
 a <- locs[, Nearest(.SD, 'FIX_DATE',
                     coordFields = c("EASTING", "NORTHING"), idField = id.field)]
 a
 
+a <- locs[, Nearest(.SD, 'FIX_DATE', 'group',
+                    coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+a
+
+## PTS ##
+a <- spatsoc::BuildPts(locs, 50, 'FIX_DATE', crs = utm21N,
+                       coordFields = c("EASTING", "NORTHING"), idField = id.field)
+a
 a <- spatsoc::GroupPts(locs, 50, 'FIX_DATE', crs = utm21N,
               coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a

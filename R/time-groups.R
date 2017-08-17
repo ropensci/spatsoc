@@ -12,11 +12,8 @@
 #' @param time time column name
 #' @param roundunit unit by which the time should be rounded (optional)
 #'
-#' @return
 #' @export
-#'
-#' @examples
-time_groups <- function(dt, time, roundunit = NULL) {
+TimeGroups <- function(dt, time, roundunit = NULL) {
   if(is.null(roundunit)) {
     dt[, timeGroup := .GRP, by = time]
   } else {

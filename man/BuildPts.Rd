@@ -21,5 +21,5 @@ with each point}
 SpatialPointsDataFrame for each ID provided
 }
 \description{
-Build Points
+Build a SpatialPointsDataFrame from provided data for input to GroupPts or other uses.
 }

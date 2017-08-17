@@ -9,13 +9,23 @@
 #' @param spPts Alternatively, provide a SpatialPointsDataFrame created with the
 #'   sp package. If a spPts object is provided, groups cannot be calculated by
 #' @param bufferWidth The width of the buffer around the geometry in the units of the projection
-#' @param timeField Time field in the dt upon which the spatial grouping will be
+#' @param timeField (optional) time field in the dt upon which the spatial grouping will be
 #'   calculated
-#' @return
+#' @return id by group data.table
 #' @export
 #'
-#' @examples
 GroupPts <- function(dt, bufferWidth, timeField = NULL, crs, coordFields = c('EASTING', 'NORTHING'),
+#' @examples
+#' data(locs)
+#' groups <- GroupPts(locs, 50)
+#'
+#' groups <- GroupPts(locs, 50, timeField = 'FIX_DATE',
+#'         crs = '+proj=utm +zone=21 ellps=WGS84',
+#'         idField = 'ID')
+#'
+#' data(locsPts)
+#'
+#' groups <- GroupPts(spPts = locsPts)
                      idField = 'ID', spPts = NULL){
   if(is.null(timeField)){
     if(is.null(spPts)){

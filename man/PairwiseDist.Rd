@@ -19,6 +19,9 @@ coordinate columns. eg: c('EASTING', 'NORTHING')}
 \item{idField}{Character string indicating the column name for the ID associated
 with each point}
 }
+\value{
+mean pairwise distance data.table by ID and (optional) time field
+}
 \description{
 Euclidean Pairwise Distance
 }

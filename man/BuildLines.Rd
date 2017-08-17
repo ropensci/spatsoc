@@ -6,12 +6,20 @@
 \usage{
 BuildLines(dt, crs, coordFields = c("EASTING", "NORTHING"), idField = "ID")
 }
+\arguments{
+\item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}
+
+\item{crs}{Character string for input to sp::CRS()}
+
+\item{coordFields}{Character vector indicating the X coordinate and Y
+coordinate columns. eg: c('EASTING', 'NORTHING')}
+
+\item{idField}{Character string indicating the column name for the ID associated
+with each point}
+}
 \value{
 SpatialLines for each ID provided
 }
 \description{
 Build Lines
-}
-\examples{
-
 }

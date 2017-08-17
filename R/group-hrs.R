@@ -1,16 +1,28 @@
-#' Group Overlapping Polygons (Home ranges)
+#' Group Overlapping Polygons
 #'
-#' Group individuals by polygon overlap
+#' Group individuals by polygon (eg: home ranges) overlap
 #'
 #' @inheritParams BuildPts
 #'
 #' @param hrType Type of HR estimation, defaults to 'mcp'
 #' @param spPolys Alternatively, provide a SpatialPolygons object.
 #'
-#' @return
+#' @return ID by group data.table
 #' @export
 #'
 #' @examples
+#' # Build the HRs for a set of locs by individuals using mcp,
+#' # kernel density estimation...
+#' data(locs)
+#'
+#' groups <- GroupHRs('mcp', locs, 50, crs = '+proj=utm +zone=21 ellps=WGS84',
+#'                    idField = 'ID')
+#'
+#' # If you'd like to simply compare proportion or overlap of a set of polygons,
+#' # ...
+#' data(locsPolys)
+#'
+#' groups <- GroupHRs(spPolys = locsPolys)
 GroupHRs <- function(hrType = 'mcp', dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
                      spPolys = NULL){
   if(is.null(spPolys)){

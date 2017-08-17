@@ -2,7 +2,7 @@
 % Please edit documentation in R/group-hrs.R
 \name{GroupHRs}
 \alias{GroupHRs}
-\title{Group Overlapping Polygons (Home ranges)}
+\title{Group Overlapping Polygons}
 \usage{
 GroupHRs(hrType = "mcp", dt, crs, coordFields = c("EASTING", "NORTHING"),
   idField = "ID", spPolys = NULL)
@@ -22,6 +22,9 @@ with each point}
 
 \item{spPolys}{Alternatively, provide a SpatialPolygons object.}
 }
+\value{
+ID by group data.table
+}
 \description{
-Group individuals by polygon overlap
+Group individuals by polygon (eg: home ranges) overlap
 }
