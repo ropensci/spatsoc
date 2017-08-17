@@ -14,6 +14,7 @@
 * can't use spatsoc, too similar to spatstat
 * if ID is character vector, paste?? (as in ID, Year ---> AN1_2007)
 * can't use `crs` as a variable, it is in the raster namespace
+* clarify documentation for 'crs'  - QW
 
 ## To Read (build)
 read about dt in functions/packages
