@@ -11,7 +11,7 @@
 
 
 
-* Title: Group animal location data by their spatial *and temporal* relationship
+* Title: Group animal location data by their spatial and temporal relationship
 * Description...
 * check about which are exported
 * decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required. OR add a prep step
@@ -21,8 +21,8 @@
 * missing adehabitat, SearchTrees
 * can't use spatsoc, too similar to spatstat
 * if ID is character vector, paste?? (as in ID, Year ---> AN1_2007)
-* can't use `crs` as a variable, it is in the raster namespace
-* clarify documentation for 'crs'  - QW
+
+* (later) review all variable, function etc names for conflicts and for clarity/brevity
 
 ## To Read (build)
 read about dt in functions/packages

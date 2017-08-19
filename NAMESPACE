@@ -3,6 +3,7 @@
 export(BuildHRs)
 export(BuildLines)
 export(BuildPts)
+export(CalcCentroids)
 export(GroupHRs)
 export(GroupLines)
 export(GroupPts)
