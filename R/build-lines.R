@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @import data.table
-BuildLines <- function(dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
+BuildLines <- function(dt, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
   # Find any ids with only one loc (rgeos requires at least 2 locs for a line buffer)
   dropRows <- dt[, .(dropped = .N < 2), by = idField]
 

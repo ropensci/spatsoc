@@ -4,31 +4,45 @@
 \alias{GroupLines}
 \title{Groups From Spatial Lines}
 \usage{
-GroupLines(dt, bufferWidth = 0, timeField = NULL, crs,
+GroupLines(dt, bufferWidth = 0, timeField = NULL, projection,
   coordFields = c("EASTING", "NORTHING"), idField = "ID", spLines = NULL)
 }
 \arguments{
-\item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}
+\item{dt}{Input data with coordinate and id fields. If not provided, fields
+default to c('EASTING', 'NORTHING') and 'ID'}
 
 \item{bufferWidth}{The width of the buffer around the geometry in the units
 of the projection. Optionally, exclude argument or supply 0 to compare
 SpatialLines intersection}
 
-\item{crs}{Character string for input to sp::CRS()}
+\item{projection}{Character string for input to sp::CRS() and proj4string()}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
 
-\item{idField}{Character string indicating the column name for the ID associated
-with each point}
+\item{idField}{Character string indicating the column name for the ID
+associated with each point}
 
 \item{spLines}{Alternatively, provide a SpatialLines object created with the sp
 package. If a spLines object is provided, groups cannot be calculated by a
 timeField}
 }
 \value{
-id by group data.table
+Group by ID (by time) data.table
 }
 \description{
 Groups From Spatial Lines
+}
+\examples{
+data(locs)
+groups <- GroupLines(locs, 50)
+
+groups <- GroupLines(locs, 50, timeField = 'FIX_DATE',
+        crs = '+proj=utm +zone=21 ellps=WGS84',
+        idField = 'ID')
+
+
+data(locsLines)
+
+groups <- GroupLines(spLines = locsLines)
 }

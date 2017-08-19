@@ -4,21 +4,22 @@
 \alias{BuildHRs}
 \title{Build Home Ranges for Individuals}
 \usage{
-BuildHRs(hrType = "mcp", dt, crs, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID", spPts = NULL)
+BuildHRs(hrType = "mcp", dt, projection, coordFields = c("EASTING",
+  "NORTHING"), idField = "ID", spPts = NULL)
 }
 \arguments{
 \item{hrType}{Type of HR estimation, defaults to 'mcp'}
 
-\item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}
+\item{dt}{Input data with coordinate and id fields. If not provided, fields
+default to c('EASTING', 'NORTHING') and 'ID'}
 
-\item{crs}{Character string for input to sp::CRS()}
+\item{projection}{Character string for input to sp::CRS() and proj4string()}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
 
-\item{idField}{Character string indicating the column name for the ID associated
-with each point}
+\item{idField}{Character string indicating the column name for the ID
+associated with each point}
 }
 \value{
 Home range polygons for each ID

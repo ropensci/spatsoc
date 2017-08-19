@@ -4,27 +4,42 @@
 \alias{GroupHRs}
 \title{Group Overlapping Polygons}
 \usage{
-GroupHRs(hrType = "mcp", dt, crs, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID", spPolys = NULL)
+GroupHRs(hrType = "mcp", dt, projection, coordFields = c("EASTING",
+  "NORTHING"), idField = "ID", spPolys = NULL)
 }
 \arguments{
 \item{hrType}{Type of HR estimation, defaults to 'mcp'}
 
-\item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}
+\item{dt}{Input data with coordinate and id fields. If not provided, fields
+default to c('EASTING', 'NORTHING') and 'ID'}
 
-\item{crs}{Character string for input to sp::CRS()}
+\item{projection}{Character string for input to sp::CRS() and proj4string()}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
 
-\item{idField}{Character string indicating the column name for the ID associated
-with each point}
+\item{idField}{Character string indicating the column name for the ID
+associated with each point}
 
 \item{spPolys}{Alternatively, provide a SpatialPolygons object.}
 }
 \value{
-ID by group data.table
+Group by ID (by time) data.table
 }
 \description{
 Group individuals by polygon (eg: home ranges) overlap
+}
+\examples{
+# Build the HRs for a set of locs by individuals using mcp,
+# kernel density estimation...
+data(locs)
+
+groups <- GroupHRs('mcp', locs, 50, crs = '+proj=utm +zone=21 ellps=WGS84',
+                   idField = 'ID')
+
+# If you'd like to simply compare proportion or overlap of a set of polygons,
+# ...
+data(locsPolys)
+
+groups <- GroupHRs(spPolys = locsPolys)
 }

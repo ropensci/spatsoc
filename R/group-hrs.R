@@ -7,7 +7,7 @@
 #' @param hrType Type of HR estimation, defaults to 'mcp'
 #' @param spPolys Alternatively, provide a SpatialPolygons object.
 #'
-#' @return ID by group data.table
+#' @return Group by ID (by time) data.table
 #' @export
 #'
 #' @examples
@@ -23,7 +23,7 @@
 #' data(locsPolys)
 #'
 #' groups <- GroupHRs(spPolys = locsPolys)
-GroupHRs <- function(hrType = 'mcp', dt, crs, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
+GroupHRs <- function(hrType = 'mcp', dt, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
                      spPolys = NULL){
   if(is.null(spPolys)){
     if(is.null(dt)) stop("must provide either spPolys or dt")

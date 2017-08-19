@@ -11,13 +11,12 @@
 #' @param bufferWidth The width of the buffer around the geometry in the units of the projection
 #' @param timeField (optional) time field in the dt upon which the spatial grouping will be
 #'   calculated
-#' @return id by group data.table
+#' @return Group by ID (by time) data.table
 #' @export
 #'
-GroupPts <- function(dt, bufferWidth, timeField = NULL, crs, coordFields = c('EASTING', 'NORTHING'),
 #' @examples
 #' data(locs)
-#' groups <- GroupPts(locs, 50)
+#' groups <- GroupPts(locs, '+init=epsg:4326', 50)
 #'
 #' groups <- GroupPts(locs, 50, timeField = 'FIX_DATE',
 #'         crs = '+proj=utm +zone=21 ellps=WGS84',
@@ -26,6 +25,7 @@ GroupPts <- function(dt, bufferWidth, timeField = NULL, crs, coordFields = c('EA
 #' data(locsPts)
 #'
 #' groups <- GroupPts(spPts = locsPts)
+GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
                      idField = 'ID', spPts = NULL){
   if(is.null(timeField)){
     if(is.null(spPts)){

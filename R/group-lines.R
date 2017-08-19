@@ -7,7 +7,7 @@
 #' @param spLines Alternatively, provide a SpatialLines object created with the sp
 #'   package. If a spLines object is provided, groups cannot be calculated by a
 #'   timeField
-#' @return id by group data.table
+#' @return Group by ID (by time) data.table
 #' @export
 #'
 #' @examples
@@ -23,7 +23,7 @@
 #'
 #' groups <- GroupLines(spLines = locsLines)
 #' @import data.table
-GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, crs, coordFields = c('EASTING', 'NORTHING'),
+GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
                        idField = 'ID', spLines = NULL) {
   # Check for a timeField
   if(is.null(timeField)){

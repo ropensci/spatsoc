@@ -4,30 +4,31 @@
 \alias{GroupPts}
 \title{Group Points By Buffer}
 \usage{
-GroupPts(dt, bufferWidth, timeField = NULL, crs, coordFields = c("EASTING",
-  "NORTHING"), idField = "ID", spPts = NULL)
+GroupPts(dt, bufferWidth, timeField = NULL, projection,
+  coordFields = c("EASTING", "NORTHING"), idField = "ID", spPts = NULL)
 }
 \arguments{
-\item{dt}{Input data with coordinate and id fields. If not provided, fields default to c('EASTING', 'NORTHING') and 'ID'}
+\item{dt}{Input data with coordinate and id fields. If not provided, fields
+default to c('EASTING', 'NORTHING') and 'ID'}
 
 \item{bufferWidth}{The width of the buffer around the geometry in the units of the projection}
 
 \item{timeField}{(optional) time field in the dt upon which the spatial grouping will be
 calculated}
 
-\item{crs}{Character string for input to sp::CRS()}
+\item{projection}{Character string for input to sp::CRS() and proj4string()}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
 
-\item{idField}{Character string indicating the column name for the ID associated
-with each point}
+\item{idField}{Character string indicating the column name for the ID
+associated with each point}
 
 \item{spPts}{Alternatively, provide a SpatialPointsDataFrame created with the
 sp package. If a spPts object is provided, groups cannot be calculated by}
 }
 \value{
-id by group data.table
+Group by ID (by time) data.table
 }
 \description{
 Group points by buffer overlap at equal time.
@@ -35,4 +36,16 @@ Group points by buffer overlap at equal time.
 \details{
 This function uses input spatial points to determine groups in space and
 time.
+}
+\examples{
+data(locs)
+groups <- GroupPts(locs, '+init=epsg:4326', 50)
+
+groups <- GroupPts(locs, 50, timeField = 'FIX_DATE',
+        crs = '+proj=utm +zone=21 ellps=WGS84',
+        idField = 'ID')
+
+data(locsPts)
+
+groups <- GroupPts(spPts = locsPts)
 }
