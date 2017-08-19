@@ -34,7 +34,7 @@ GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields 
     }
     buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
     ovr <- sp::over(spPts, sp::disaggregate(buffers))
-    dt <- data.table::data.table(spPts@coords, id = spPts$id, spatialGroup = ovr)
+    dt <- data.table::data.table(spPts@coords, id = spPts$id, group = ovr)
   } else {
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
     dt[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
@@ -42,9 +42,11 @@ GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields 
           ovr <- sp::over(spPts, sp::disaggregate(buffers))
           c(as.list(as.data.frame(spPts@coords)),
             list(id = spPts$id, spatialGroup = ovr))},
-       by = timeField,
-       .SDcols = c(coordFields, idField)][, group := .GRP, by = .(spatialGroup, get(timeField))][]
+       by = timeField, .SDcols = c(coordFields, idField)][,
+            group := .GRP, by = .(spatialGroup, get(timeField))][,
+            .(easting = get(coordFields[1]), northing = get(coordFields[2]), id, group)]
   }
 }
 
-# TODO: drop spatialGroup on output
+# TODO: check that drop is not much slower ~drop spatialGroup on output~
+# TODO: fix so no rename of coordFields in drop spatialGroup step

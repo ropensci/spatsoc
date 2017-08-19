@@ -10,10 +10,14 @@ Title: Group animal location data by their spatial and temporal relationship
 * rounding is here (ask him?): https://github.com/jangorecki/data.table/blob/iunit/R/IPeriod.R
 * create example data in xy loc form 
 * create example data in sp form for lines, points and multipolygons
+* must check if provided columns are found in input data, otherwise non descript errors like type closure (since date col similar to date function)
 
 #### GroupPts
 * flex chaining or not?
 * `list(split(spPts@coords, c(col(spPts@coords)))` compare this to `as.list(as.data.frame)` for speed
+* check that drop is not much slower ~drop spatialGroup on output~
+* fix so no rename of coordFields in drop spatialGroup step
+
 
 #### GroupLines
 

@@ -37,15 +37,24 @@ x.col <- 'X_COORD'
 y.col <- 'Y_COORD'
 id.field <- 'ID'
 buffer.width <- 50
-utm21N <- '+proj=utm +zone=21 ellps=WGS84'
+utm <- '+proj=utm +zone=21 ellps=WGS84'
 proj.fields <- c("EASTING", "NORTHING")
 data(locs)
 # locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
 
 
+locs <- data.table::fread('input/Striped hyenas Carmel Israel.csv')
+id.field <- 'individual-local-identifier'
+buffer.width <- 50
+
+utm <- '+init=epsg:32636'
+proj.fields <- c("utm-easting", "utm-northing")
+locs <- locs[!is.na(`utm-easting`)]
+locs[, idate := data.table::as.IDate(timestamp)]
+
 # ____________
 
-# mapview::mapview(BuildPts(l, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
+# mapview::mapview(BuildPts(l, crs = utm, coordFields = c("EASTING", "NORTHING"),
 #                           idField = id.field))
 
 ## NEAREST ##
@@ -61,42 +70,44 @@ a <- locs[, Nearest(.SD, 'date', 'group',
 a
 
 ## PTS ##
-a <- spatsoc::BuildPts(locs, projection = utm21N,
-                       coordFields = c("EASTING", "NORTHING"), idField = id.field)
+a <- spatsoc::BuildPts(locs, projection = utm,
+                       coordFields = proj.fields, idField = id.field)
 a
-a <- spatsoc::GroupPts(locs, 50, 'date', projection = utm21N,
-              coordFields = c("EASTING", "NORTHING"), idField = id.field)
+a <- spatsoc::GroupPts(locs, 50, 'idate', projection = utm,
+              coordFields = proj.fields, idField = id.field)
 a
 ### LINES ###############
-a <- BuildLines(locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
+a <- spatsoc::BuildLines(locs, projection = utm, coordFields = proj.fields,
                 idField = id.field)
 a
-
-a <- spatsoc::GroupLines(locs, projection = utm21N, idField = id.field)
+# with new data:
+# unable to find an inherited method for function ‘is.projected’ for signature ‘"data.table"’
+a <- spatsoc::GroupLines(locs, projection = utm, coordFields = proj.fields, idField = id.field)
 a
 
-a <- spatsoc::GroupLines(locs, 100, projection = utm21N, idField = id.field)
+a <- spatsoc::GroupLines(locs, 100, coordFields = proj.fields, projection = utm, idField = id.field)
 a
-
-a <- spatsoc::GroupLines(locs, 100, timeField = 'date', projection = utm21N, idField = id.field)
+mapview::mapview(a)
+a <- spatsoc::GroupLines(locs, 100, coordFields = proj.fields, timeField = 'idate',
+                         projection = utm, idField = id.field)
 a
 
 ##################
 
-a <- BuildPts(locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
+a <- BuildPts(locs, projection = utm, coordFields = proj.fields,
                idField = id.field)
 a
 
 
-a <- BuildHRs('mcp', locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
+a <- BuildHRs('mcp', locs, projection = utm, coordFields = proj.fields,
                idField = id.field)
 a
 a <- GroupPts(locs, 50, timeField = 'date',
-              projection = utm21N, idField = id.field)
+              projection = utm, idField = id.field)
 a
 
 
-a <- GroupHRs('mcp', locs, projection = utm21N, idField = id.field)
+a <- GroupHRs('mcp', locs, projection = utm, idField = id.field)
 a
 
 mapview::mapview(a)
@@ -107,12 +118,12 @@ a
 
 
 spatsoc::grp_pts()
-a <- spatsoc::grp_lines(buffer.width = 10, sp.lines = build_lines(locs, utm21N, idField = 'ANIMAL_ID'))
+a <- spatsoc::grp_lines(buffer.width = 10, sp.lines = build_lines(locs, utm, idField = 'ANIMAL_ID'))
 a
 
-mapview::mapview(build_lines(locs, utm21N, idField = 'ANIMAL_ID'))
+mapview::mapview(build_lines(locs, utm, idField = 'ANIMAL_ID'))
 
-a <- grp_lines(locs, 50, utm21N, idField = 'ANIMAL_ID')
+a <- grp_lines(locs, 50, utm, idField = 'ANIMAL_ID')
 a
 
 
