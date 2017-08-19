@@ -34,11 +34,10 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
       spLines <- BuildLines(dt, projection, coordFields, idField)
     }
     if(bufferWidth == 0) {
-      merged <- rgeos::gLineMerge(spLines)
+      merged <- rgeos::gBuffer(a, width = 0.0001, byid = F)
     } else {
       merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
     }
-
     # Find which buffers overlap each other and return
     ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = T)
     return(data.table::data.table(id = names(ovr), group = unlist(ovr)))
@@ -47,21 +46,23 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
     if(!is.null(spLines)) {
       stop("if providing a spLines, cannot provide a time field")
     }
-
     # Build and buffer as above, by timeField. Return spatial and unique groups
     dt[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
-          if(bufferWidth == 0) {
-            merged <- rgeos::gLineMerge(spLines)
+          if(is.null(spLines)) {
+            message('some locs are dropped - unable to build lines')
           } else {
-            merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
-          }
-          ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
-          list(id = names(ovr), spatialGroup = unlist(ovr))},
+            if(bufferWidth == 0) {
+              merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+            } else {
+              merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+            }
+            ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
+            list(id = names(ovr), spatialGroup = unlist(ovr))
+            }
+          },
        by = timeField,
        .SDcols = c(coordFields, idField)][, group := .GRP, by = .(spatialGroup, get(timeField))][]
   }
 }
-# TODO: check above else for same error
-# TODO: optional buffer
 # TODO: check if the IDs are returned well with drop during build
-# TODO: check here and others for if default coordFIelds and idField are not present...
+# TODO: check here and others 0.0001 buffer

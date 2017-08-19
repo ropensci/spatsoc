@@ -18,14 +18,17 @@ BuildLines <- function(dt, projection, coordFields = c('EASTING', 'NORTHING'), i
                                           ..coordFields],
                                        dt[get(idField) %in% dropRows[!(dropped), get(idField)],
                                           .(get(idField))])
-
-  l <- lapply(seq_along(lst), function(i){
-    sp::SpatialLines(list(sp::Lines(sp::Line(cbind(lst[[i]][[coordFields[1]]],
-                                                   lst[[i]][[coordFields[2]]])),
-                                    names(lst)[[i]])),
-                     proj4string = sp::CRS(projection))
-  })
-  do.call(sp::rbind.SpatialLines, l)
+  if(length(lst) == 0){
+    return(NULL)
+  } else {
+    l <- lapply(seq_along(lst), function(i){
+      sp::SpatialLines(list(sp::Lines(sp::Line(cbind(lst[[i]][[coordFields[1]]],
+                                                     lst[[i]][[coordFields[2]]])),
+                                      names(lst)[[i]])),
+                       proj4string = sp::CRS(projection))
+    })
+    do.call(sp::rbind.SpatialLines, l)
+  }
 }
 
 # TODO: one single warning with count of how many dropped

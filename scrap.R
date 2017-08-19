@@ -67,42 +67,19 @@ a
 a <- spatsoc::GroupPts(locs, 50, 'date', projection = utm21N,
               coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
-##################
+### LINES ###############
 a <- BuildLines(locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
                 idField = id.field)
 a
 
-
-#### WHY With buff = 0, we get two sets of groups and
 a <- spatsoc::GroupLines(locs, projection = utm21N, idField = id.field)
 a
-# with buf = 1, we get one set
-a <- spatsoc::GroupLines(locs, 1, projection = utm21N, idField = id.field)
+
+a <- spatsoc::GroupLines(locs, 100, projection = utm21N, idField = id.field)
 a
 
-
-
-dropRows <- locs[, .(dropped = .N < 2), by = id.field]
-
-b <- data.table:::split.data.table(locs[get(id.field) %in% dropRows[!(dropped), get(id.field)],
-                                        ..proj.fields],
-                                     locs[get(id.field) %in% dropRows[!(dropped), get(id.field)],
-                                        .(get(id.field))])
-l <- lapply(seq_along(b), function(i){
-  sp::SpatialLines(list(sp::Lines(sp::Line(cbind(b[[i]][[proj.fields[1]]],
-                                                 b[[i]][[proj.fields[2]]])),
-                                  names(b)[[i]])),
-                   proj4string = sp::CRS(utm21N))
-})
-
-a <- GroupLines(locs, 50, projection = utm21N, idField = id.field)
+a <- spatsoc::GroupLines(locs, 100, timeField = 'date', projection = utm21N, idField = id.field)
 a
-
-a <- GroupLines(locs, 50, 'date', projection = utm21N, idField = id.field)
-a
-# Error in `rownames<-`(x, value) :
-#   attempt to set 'rownames' on an object with no dimensions
-
 
 ##################
 
