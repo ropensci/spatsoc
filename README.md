@@ -23,7 +23,7 @@
 * if ID is character vector, paste?? (as in ID, Year ---> AN1_2007)
 
 * (later) review all variable, function etc names for conflicts and for clarity/brevity
-
+* do we prefer grp_lines or GroupLines
 ## To Read (build)
 read about dt in functions/packages
 * wowowow: https://stackoverflow.com/questions/25898162/data-table-anonymous-function-in-j

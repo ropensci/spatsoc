@@ -68,8 +68,32 @@ a <- spatsoc::GroupPts(locs, 50, 'date', projection = utm21N,
               coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
 ##################
+a <- BuildLines(locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
+                idField = id.field)
+a
+
+
+#### WHY With buff = 0, we get two sets of groups and
 a <- spatsoc::GroupLines(locs, projection = utm21N, idField = id.field)
 a
+# with buf = 1, we get one set
+a <- spatsoc::GroupLines(locs, 1, projection = utm21N, idField = id.field)
+a
+
+
+
+dropRows <- locs[, .(dropped = .N < 2), by = id.field]
+
+b <- data.table:::split.data.table(locs[get(id.field) %in% dropRows[!(dropped), get(id.field)],
+                                        ..proj.fields],
+                                     locs[get(id.field) %in% dropRows[!(dropped), get(id.field)],
+                                        .(get(id.field))])
+l <- lapply(seq_along(b), function(i){
+  sp::SpatialLines(list(sp::Lines(sp::Line(cbind(b[[i]][[proj.fields[1]]],
+                                                 b[[i]][[proj.fields[2]]])),
+                                  names(b)[[i]])),
+                   proj4string = sp::CRS(utm21N))
+})
 
 a <- GroupLines(locs, 50, projection = utm21N, idField = id.field)
 a
@@ -78,39 +102,14 @@ a <- GroupLines(locs, 50, 'date', projection = utm21N, idField = id.field)
 a
 # Error in `rownames<-`(x, value) :
 #   attempt to set 'rownames' on an object with no dimensions
-locs[, BuildLines(.SD, 50, projection = utm21N, idField = id.field), by = date]
-#
-# Error in `[.data.table`(dt, get(idField) %in% dropRows[!(dropped), get(idField)],  :
-#                           Item 1 of j is 50 which is outside the column number range [1,ncol=5]
-#
+
 
 ##################
-locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field)
-        spLines
-}, by = date]
-a
-
-locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field)
-        buffers <- rgeos::gBuffer(spLines, width = 50, byid = FALSE)
-        # ovr <- sp::over(spLines, sp::disaggregate(buffers), returnList = T)
-        length(spLines)
-        },
-     by = date]
-
-buffers <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
-ovr <- sp::over(spLines, sp::disaggregate(buffers), returnList = T)
-list(id = names(ovr), group = unlist(ovr))
-
-locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field); spLines@bbox}, by = date]
-
-
 
 a <- BuildPts(locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
                idField = id.field)
 a
-a <- BuildLines(locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
-                 idField = id.field)
-a
+
 
 a <- BuildHRs('mcp', locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
                idField = id.field)
@@ -153,106 +152,3 @@ Mrlocs[, c("meanDistance", "distID") :=
 
 
 spatsoc::mean_pairwise_dist(locs, 'date', 'ANIMAL_ID')
-
-
-locs <- locs[NORTHING > 5360000 & EASTING < 650000]
-
-l <- spatsoc::grp.lines(locs[, list(EASTING, NORTHING, ID = ANIMAL_ID)],
-                   projection = utm21N)
-l
-
-
-lst <- data.table:::split.data.table(locs[, list(EASTING, NORTHING)],
-                                     locs[, list(ANIMAL_ID)])
-
-`%do%` <- foreach::`%do%`
-
-# Make each list of an individuals locs into a spatial lines [sp, mapview, foreach]
-sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = sp::rbind.SpatialLines) %do% {
-  mapview::coords2Lines(
-    matrix(c(i[['EASTING']], i[['NORTHING']]), ncol = 2),
-                        ID = id,
-                        proj4string = sp::CRS(utm21N))
-}
-sp.lines
-
-data.table::setorder(locs, date, FIX_TIME)
-locs
-
-in.dt <- locs[, list(EASTING, NORTHING, ID = ANIMAL_ID)]
-lst <- data.table:::split.data.table(in.dt[, list(EASTING, NORTHING)],
-                                     in.dt[, list(ID)])
-#  ------------------------------------------------------------------------
-
-as.matrix(c(lst[1]$EASTING, lst[1]$NORTHING))
-lst[1][['EASTING']]
-
-d <- lst[1]
-d
-
-
-`%do%` <- foreach::`%do%`
-lst <- lst[1]
-# Make each list of an individuals locs into a spatial lines [sp, mapview, foreach]
-sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = rbind) %do% {
-  mapview::coords2Lines(matrix(c(i[['EASTING']], i[['NORTHING']]), ncol = 2),
-                        ID = id,
-                        proj4string = sp::CRS(crs))
-}
-sp.lines
-
-# #### grps lines
-#
-# # Split up the data.table by collar ID into lists
-# lst <- data.table:::split.data.table(locs[, .(EASTING, NORTHING)], list(locs[[id.field]]))
-#
-# `%do%` <- foreach::`%do%`
-#
-# # Make each list of an individuals locs into a spatial lines [sp, mapview, foreach]
-# sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = rbind) %do% {
-# mapview::coords2Lines(as.matrix(i[, get(proj.fields[1]), get(proj.fields[2])]), ID = id,
-#                proj4string = sp::CRS(utm21N))
-# }
-#
-#
-# # Buffer those lines by a preassigned buffer width
-# buffers <- rgeos::gBuffer(sp.lines, width = buffer.width, byid = FALSE)
-#
-# # Find which buffers overlap each other and return as a list
-# ovr <- sp::over(sp.lines, sp::disaggregate(buffers), returnList = T)
-# dt <- data.table::data.table(id = names(ovr), group = ovr)
-# dt
-#
-
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-# #### grps pts
-# # ##### this is not important for the package.... (prepping our own data)
-# sp.pts <- sp::SpatialPointsDataFrame(locs[, ..proj.fields],
-#                                  proj4string = sp::CRS(utm21N),
-#                                  data = locs[, .(id = get(id.field))])
-#
-# #
-# # spatsoc::grp.pts(sp.pts, 50)
-# buffers <- rgeos::gBuffer(sp.pts, width = buffer.width, byid = TRUE)
-#
-#
-# disbuf <- rbind(sp::disaggregate(buffers))
-# # b <- SpatialPolygonsDataFrame(disbuf, data.frame(1:29))
-#
-# # ggplot(dt) + geom_point(aes(EASTING, NORTHING),
-# #                         color = o) +
-# #   guides(color = guide_colorbar()) +
-# #   # polygon calls fortify, and the default x y are long lat with id for grouping
-# #   geom_polygon(data = b, aes(long, lat, group = id, color = id), alpha = 0.2)

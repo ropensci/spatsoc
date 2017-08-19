@@ -64,3 +64,4 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
 # TODO: check above else for same error
 # TODO: optional buffer
 # TODO: check if the IDs are returned well with drop during build
+# TODO: check here and others for if default coordFIelds and idField are not present...
