@@ -26,6 +26,8 @@ BuildLines <- function(dt, projection, coordFields = c('EASTING', 'NORTHING'), i
                      proj4string = sp::CRS(projection))
   })
   do.call(rbind, l)
+  # investigate further, but simply - the do.call rbind messes up the names
+  row.names(b) <- names(lst)
 }
 
 # TODO: one single warning with count of how many dropped
