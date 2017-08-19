@@ -49,7 +49,7 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
     # Build and buffer as above, by timeField. Return spatial and unique groups
     dt[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
           if(is.null(spLines)) {
-            message('some locs are dropped - unable to build lines')
+            message('some rows are dropped - unable to build lines with <2 locs')
           } else {
             if(bufferWidth == 0) {
               merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
@@ -64,5 +64,4 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
        .SDcols = c(coordFields, idField)][, group := .GRP, by = .(spatialGroup, get(timeField))][]
   }
 }
-# TODO: check if the IDs are returned well with drop during build
-# TODO: check here and others 0.0001 buffer
+# TODO: find alternative to 0.0001 buffer

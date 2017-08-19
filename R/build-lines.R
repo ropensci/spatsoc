@@ -32,4 +32,4 @@ BuildLines <- function(dt, projection, coordFields = c('EASTING', 'NORTHING'), i
 }
 
 # TODO: one single warning with count of how many dropped
-# TODO: ls is a function
+# TODO: should this be flexible to time?
