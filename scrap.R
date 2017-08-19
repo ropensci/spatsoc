@@ -44,13 +44,23 @@ data(locs)
 
 
 locs <- data.table::fread('input/Striped hyenas Carmel Israel.csv')
-id.field <- 'individual-local-identifier'
-buffer.width <- 50
-
-utm <- '+init=epsg:32636'
-proj.fields <- c("utm-easting", "utm-northing")
 locs <- locs[!is.na(`utm-easting`)]
 locs[, idate := data.table::as.IDate(timestamp)]
+locs[, ihour := data.table::hour(data.table::as.ITime(timestamp, format = '%F %T'))]
+
+id.field <- 'individual-local-identifier'
+buffer.width <- 50
+utm <- '+init=epsg:32636'
+proj.fields <- c("utm-easting", "utm-northing")
+
+
+locs[, itime := (data.table::as.ITime(timestamp, format = '%F %T'))]
+locs[, round(itime, 'hours')]
+locs[minute(itime) > 30, .(itime, hour = hour(itime),
+                           timePlus30 = itime + as.ITime('00:30:00'),
+                           hourPlus30 = hour(itime + as.ITime('00:30:00')))]
+
+
 
 # ____________
 
@@ -73,7 +83,7 @@ a
 a <- spatsoc::BuildPts(locs, projection = utm,
                        coordFields = proj.fields, idField = id.field)
 a
-a <- spatsoc::GroupPts(locs, 50, 'idate', projection = utm,
+a <- spatsoc::GroupPts(locs, 50, 'ihour', projection = utm,
               coordFields = proj.fields, idField = id.field)
 a
 ### LINES ###############

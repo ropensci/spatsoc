@@ -1,6 +1,6 @@
-#' Time Groups
+#' Group Time
 #'
-#' Assign a numerical group ID for rows/locs sorted by provided time column. If
+#' Assign a numerical group for rows by provided time column. If
 #' using GPS collar data, it is recommended to round this time column providing
 #' the rounding unit as described below.
 #'
@@ -9,14 +9,30 @@
 #' Note that this numerical time group ID is added to the provided data.table.
 #'
 #' @param dt input locs/rows
-#' @param time time column name
-#' @param roundunit unit by which the time should be rounded (optional)
+#' @param timeField time column name
+#' @param roundBool (optional) unit of time to round on (eg: day, hour, minute)
 #'
 #' @export
-TimeGroups <- function(dt, time, roundunit = NULL) {
-  if(is.null(roundunit)) {
-    dt[, timeGroup := .GRP, by = time]
+GroupTime <- function(dt, timeField, roundField = NULL) {
+  if(!(roundunit)) {
+    dt[, timeGroup := .GRP, by = timeField]
   } else {
-    dt[, timeGroup := .GRP, by = round(time)]
+    if(roundField == 'hour'){
+
+      # select only those rows with minute > 30, add 30 to itime
+      # take all itimes (with new ones) and pull out unit indicated
+
+      ### sub in function for:
+      # round to nearest hour? minute? 5 minutes? (how) take minutes and divide and round?
+      # if modulus 5 is > 2.5 then add
+
+      # if no rounding, provide daily groups etc
+
+      dt[data.table::minute(itime) > 30, itime + as.ITime('00:30:00')]
+    }
+
+
   }
 }
+
+# TODO: Update description above..

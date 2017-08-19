@@ -4,13 +4,18 @@ Title: Group animal location data by their spatial and temporal relationship
 ## TODO
 ### Functions
 #### Global
-* check if dt, else setDT
 * missing adehabitat, SearchTrees
 * if ID is character vector, paste?? (as in ID, Year ---> AN1_2007)
 * rounding is here (ask him?): https://github.com/jangorecki/data.table/blob/iunit/R/IPeriod.R
+* or: try   as Idate/asITime  pull hours + minutes. if minutes > 30, add 30 else keep hours. thatll round to closest hour
 * create example data in xy loc form 
 * create example data in sp form for lines, points and multipolygons
 * must check if provided columns are found in input data, otherwise non descript errors like type closure (since date col similar to date function)
+
+
+#### GroupTime
+* split off rounding to a separate function (for hourly, minute, 5 minute etc)
+* then assign groups depending on optional rounding + field provided. 
 
 #### GroupPts
 * flex chaining or not?
@@ -43,6 +48,8 @@ Title: Group animal location data by their spatial and temporal relationship
 ### Decisions
 * decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required. OR add a prep step. 
 * similarly about time groups
+* is it acceptable for a user to be **required** to provide a data.table? https://stackoverflow.com/questions/26069219/using-setdt-inside-a-function
+
 
 ### Style/Naming
 * group polys or group HRs?
@@ -60,7 +67,7 @@ Title: Group animal location data by their spatial and temporal relationship
 * wowowow: https://stackoverflow.com/questions/25898162/data-table-anonymous-function-in-j
 * suppressing intermediate... http://brooksandrew.github.io/simpleblog/articles/advanced-data-table/
 * https://stackoverflow.com/questions/28078640/adding-new-columns-to-a-data-table-by-reference-within-a-function-not-always-wor
-* https://stackoverflow.com/questions/30601332/data-table-assignment-by-reference-within-function
+* https:/stackoverflow.com/questions/30601332/data-table-assignment-by-reference-within-function/
 * https://stackoverflow.com/questions/8030452/pass-by-reference-operator-in-the-data-table-package-modifies-another-data
 * https://stackoverflow.com/questions/10527072/using-data-table-package-inside-my-own-package
 
