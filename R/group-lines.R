@@ -33,24 +33,29 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
       # If it isn't, build it
       spLines <- BuildLines(dt, projection, coordFields, idField)
     }
-    # Buffer the lines by a provided buffer width
-    buffers <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+    if(bufferWidth == 0) {
+      merged <- rgeos::gLineMerge(spLines)
+    } else {
+      merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+    }
 
     # Find which buffers overlap each other and return
-    ovr <- sp::over(spLines, sp::disaggregate(buffers), returnList = T)
+    ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = T)
     return(data.table::data.table(id = names(ovr), group = unlist(ovr)))
   } else {
     # If timeField is provided, check that spLines is not.
-    if(!is.null(spLines)) stop("if providing a spLines, cannot provide a time field")
+    if(!is.null(spLines)) {
+      stop("if providing a spLines, cannot provide a time field")
+    }
 
     # Build and buffer as above, by timeField. Return spatial and unique groups
     dt[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
-          if(bufferWidth > 0) {
-            buffers <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+          if(bufferWidth == 0) {
+            merged <- rgeos::gLineMerge(spLines)
           } else {
-            buffers <- rgeos::gLineMerge(spLines)
-          }################ due to disaggregating the glinemerg
-          ovr <- sp::over(spLines, sp::disaggregate(buffers), returnList = TRUE)
+            merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+          }
+          ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
           list(id = names(ovr), spatialGroup = unlist(ovr))},
        by = timeField,
        .SDcols = c(coordFields, idField)][, group := .GRP, by = .(spatialGroup, get(timeField))][]

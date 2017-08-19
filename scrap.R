@@ -38,7 +38,7 @@ y.col <- 'Y_COORD'
 id.field <- 'ID'
 buffer.width <- 50
 utm21N <- '+proj=utm +zone=21 ellps=WGS84'
-
+proj.fields <- c("EASTING", "NORTHING")
 data(locs)
 # locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
 
@@ -73,6 +73,17 @@ a
 
 a <- GroupLines(locs, 50, projection = utm21N, idField = id.field)
 a
+
+a <- GroupLines(locs, 50, 'date', projection = utm21N, idField = id.field)
+a
+# Error in `rownames<-`(x, value) :
+#   attempt to set 'rownames' on an object with no dimensions
+locs[, BuildLines(.SD, 50, projection = utm21N, idField = id.field), by = date]
+#
+# Error in `[.data.table`(dt, get(idField) %in% dropRows[!(dropped), get(idField)],  :
+#                           Item 1 of j is 50 which is outside the column number range [1,ncol=5]
+#
+
 ##################
 locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field)
         spLines
