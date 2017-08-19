@@ -15,7 +15,7 @@
 #' # kernel density estimation...
 #' data(locs)
 #'
-#' groups <- GroupHRs('mcp', locs, 50, crs = '+proj=utm +zone=21 ellps=WGS84',
+#' groups <- GroupHRs('mcp', locs, 50, projection = '+proj=utm +zone=21 ellps=WGS84',
 #'                    idField = 'ID')
 #'
 #' # If you'd like to simply compare proportion or overlap of a set of polygons,
@@ -27,7 +27,7 @@ GroupHRs <- function(hrType = 'mcp', dt, projection, coordFields = c('EASTING', 
                      spPolys = NULL){
   if(is.null(spPolys)){
     if(is.null(dt)) stop("must provide either spPolys or dt")
-    spPolys <- BuildHRs(hrType, dt, crs, coordFields, idField)
+    spPolys <- BuildHRs(hrType, dt, projection, coordFields, idField)
   }
 
   unionPolys <- rgeos::gUnaryUnion(spPolys)

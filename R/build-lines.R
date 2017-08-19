@@ -23,7 +23,7 @@ BuildLines <- function(dt, projection, coordFields = c('EASTING', 'NORTHING'), i
     sp::SpatialLines(list(sp::Lines(sp::Line(cbind(lst[[i]][[coordFields[1]]],
                                                    lst[[i]][[coordFields[2]]])),
                                     names(lst)[[1]])),
-                     proj4string = sp::CRS(crs))
+                     proj4string = sp::CRS(projection))
   })
   do.call(rbind, l)
 }

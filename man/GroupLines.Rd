@@ -38,7 +38,7 @@ data(locs)
 groups <- GroupLines(locs, 50)
 
 groups <- GroupLines(locs, 50, timeField = 'FIX_DATE',
-        crs = '+proj=utm +zone=21 ellps=WGS84',
+        projection = '+proj=utm +zone=21 ellps=WGS84',
         idField = 'ID')
 
 

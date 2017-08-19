@@ -9,14 +9,12 @@ BuildHRs <- function(hrType = 'mcp', dt, projection, coordFields = c('EASTING', 
                      idField = 'ID', spPts = NULL){
   if(is.null(spPts)){
     if(is.null(dt)) stop("must provide either spPts or dt")
-    spPts <- BuildPts(dt, crs, coordFields, idField)
+    spPts <- BuildPts(dt, projection, coordFields, idField)
   }
-  else {
-    if(hrType == 'mcp'){
+  if(hrType == 'mcp'){
       adehabitatHR::mcp(spPts, percent = 95)
-    } #else if(hrType == '')
+  } #else if(hrType == '')
 
-  }
 
   # adehabitatHR::kerneloverlap(spPts, method = "UDOI", percent = 95, grid = 700)
 }

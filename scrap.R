@@ -32,28 +32,16 @@ updatePackageVersion <- function(packageLocation ="."){
 }
 updatePackageVersion()
 
-locs <- data.table::fread('input/mock-locs.csv')
-locs <- locs[X_COORD != 0 & Y_COORD != 0]
 
 x.col <- 'X_COORD'
 y.col <- 'Y_COORD'
-id.field <- 'ANIMAL_ID'
-buffer.width <- 500
+id.field <- 'ID'
+buffer.width <- 50
 utm21N <- '+proj=utm +zone=21 ellps=WGS84'
 
-locs[, group := seq(1:4)]
+data(locs)
+# locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
 
-proj.fields <- c('EASTING', 'NORTHING')
-locs[, (proj.fields) := data.table::as.data.table(rgdal::project(cbind(get(x.col), get(y.col)),
-                                            utm21N))]
-
-locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
-
-
-locs[, herd := as.integer(rep(1:4))]
-devtools::use_data(locs, overwrite = TRUE)
-locs <- locs[, .(EASTING, NORTHING, ID = (as.numeric(factor(ANIMAL_ID))), date = FIX_DATE,
-         time = FIX_TIME, GROUP = herd)]
 
 # ____________
 
@@ -64,28 +52,31 @@ locs <- locs[, .(EASTING, NORTHING, ID = (as.numeric(factor(ANIMAL_ID))), date =
 a <- locs[, Nearest(.SD, coordFields = c("EASTING", "NORTHING"), idField = id.field)]
 a
 
-a <- locs[, Nearest(.SD, 'FIX_DATE',
+a <- locs[, Nearest(.SD, 'date',
                     coordFields = c("EASTING", "NORTHING"), idField = id.field)]
 a
 
-a <- locs[, Nearest(.SD, 'FIX_DATE', 'group',
+a <- locs[, Nearest(.SD, 'date', 'group',
                     coordFields = c("EASTING", "NORTHING"), idField = id.field)]
 a
 
 ## PTS ##
-a <- spatsoc::BuildPts(locs, 50, 'FIX_DATE', crs = utm21N,
+a <- spatsoc::BuildPts(locs, projection = utm21N,
                        coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
-a <- spatsoc::GroupPts(locs, 50, 'FIX_DATE', crs = utm21N,
+a <- spatsoc::GroupPts(locs, 50, 'date', projection = utm21N,
               coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
-
-a <- spatsoc::GroupLines(locs, 50, 'FIX_DATE', crs = utm21N, idField = id.field)
+##################
+a <- spatsoc::GroupLines(locs, projection = utm21N, idField = id.field)
 a
 
+a <- GroupLines(locs, 50, projection = utm21N, idField = id.field)
+a
+##################
 locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field)
         spLines
-}, by = FIX_DATE]
+}, by = date]
 a
 
 locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field)
@@ -93,42 +84,37 @@ locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field)
         # ovr <- sp::over(spLines, sp::disaggregate(buffers), returnList = T)
         length(spLines)
         },
-     by = FIX_DATE]
+     by = date]
 
 buffers <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
 ovr <- sp::over(spLines, sp::disaggregate(buffers), returnList = T)
 list(id = names(ovr), group = unlist(ovr))
 
-locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field); spLines@bbox}, by = FIX_DATE]
+locs[, {spLines <- BuildLines(.SD, utm21N, proj.fields, id.field); spLines@bbox}, by = date]
 
 
 
-
-a <- BuildPts(locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
+a <- BuildPts(locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
                idField = id.field)
 a
-a <- BuildLines(locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
+a <- BuildLines(locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
                  idField = id.field)
+a
 
-b <- rgeos::gBuffer(a, width = 50, byid = FALSE)
-o <- sp::over(a, sp::disaggregate(b), returnList = T)
-o
-
-
-a <- BuildHRs('mcp', locs, crs = utm21N, coordFields = c("EASTING", "NORTHING"),
+a <- BuildHRs('mcp', locs, projection = utm21N, coordFields = c("EASTING", "NORTHING"),
                idField = id.field)
 a
-a <- GroupPts(locs, 50, timeField = 'FIX_DATE',
-              crs = utm21N, idField = id.field)
+a <- GroupPts(locs, 50, timeField = 'date',
+              projection = utm21N, idField = id.field)
 a
-a <- GroupLines(locs, 50, crs = utm21N, idField = id.field)
-a
-a <- GroupHRs('mcp', locs, crs = utm21N, idField = id.field)
+
+
+a <- GroupHRs('mcp', locs, projection = utm21N, idField = id.field)
 a
 
 mapview::mapview(a)
 
-a <- PairwiseDist(locs, 'FIX_DATE', idField = id.field)
+a <- PairwiseDist(locs, 'date', idField = id.field)
 a
 
 
@@ -155,13 +141,13 @@ Mrlocs[, c("meanDistance", "distID") :=
        .SDcols = c(id.col, east.col, north.col)]
 
 
-spatsoc::mean_pairwise_dist(locs, 'FIX_DATE', 'ANIMAL_ID')
+spatsoc::mean_pairwise_dist(locs, 'date', 'ANIMAL_ID')
 
 
 locs <- locs[NORTHING > 5360000 & EASTING < 650000]
 
 l <- spatsoc::grp.lines(locs[, list(EASTING, NORTHING, ID = ANIMAL_ID)],
-                   crs = utm21N)
+                   projection = utm21N)
 l
 
 
@@ -179,7 +165,7 @@ sp.lines <- foreach::foreach(i = lst, id = names(lst), .combine = sp::rbind.Spat
 }
 sp.lines
 
-data.table::setorder(locs, FIX_DATE, FIX_TIME)
+data.table::setorder(locs, date, FIX_TIME)
 locs
 
 in.dt <- locs[, list(EASTING, NORTHING, ID = ANIMAL_ID)]

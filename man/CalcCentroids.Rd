@@ -12,7 +12,10 @@ default to c('EASTING', 'NORTHING') and 'ID'}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
+
+\item{groupField}{The group field generated}
 }
 \description{
-Calculate Centroids For Each Group
+Append two columns indicating the centroid coordinates for each group to an
+group by ID, coordinates data.table/frame.
 }

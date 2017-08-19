@@ -19,7 +19,7 @@
 #' groups <- GroupPts(locs, '+init=epsg:4326', 50)
 #'
 #' groups <- GroupPts(locs, 50, timeField = 'FIX_DATE',
-#'         crs = '+proj=utm +zone=21 ellps=WGS84',
+#'         projection = '+proj=utm +zone=21 ellps=WGS84',
 #'         idField = 'ID')
 #'
 #' data(locsPts)
@@ -30,14 +30,14 @@ GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields 
   if(is.null(timeField)){
     if(is.null(spPts)){
       if(is.null(dt)) stop("must provide either pts or dt")
-      spPts <- BuildPts(dt, crs, coordFields, idField)
+      spPts <- BuildPts(dt, projection, coordFields, idField)
     }
     buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
     ovr <- sp::over(spPts, sp::disaggregate(buffers))
     dt <- data.table::data.table(spPts@coords, id = spPts$id, spatialGroup = ovr)
   } else {
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
-    dt[, {spPts <- BuildPts(.SD, crs, coordFields, idField)
+    dt[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
           buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
           ovr <- sp::over(spPts, sp::disaggregate(buffers))
           c(as.list(as.data.frame(spPts@coords)),
@@ -46,3 +46,5 @@ GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields 
        .SDcols = c(coordFields, idField)][, group := .GRP, by = .(spatialGroup, get(timeField))][]
   }
 }
+
+# TODO: drop spatialGroup on output

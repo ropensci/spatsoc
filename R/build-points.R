@@ -21,9 +21,9 @@
 #' @import data.table
 BuildPts <- function(dt, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
   sp::SpatialPointsDataFrame(dt[, ..coordFields],
-                             proj4string = sp::CRS(crs),
+                             proj4string = sp::CRS(projection),
                              data = dt[, .(id = get(idField))])
 }
 
 # TODO: check if dt is a data.table
-# TODO: stopif null crs
+# TODO: stopif null projection

@@ -42,7 +42,7 @@ data(locs)
 groups <- GroupPts(locs, '+init=epsg:4326', 50)
 
 groups <- GroupPts(locs, 50, timeField = 'FIX_DATE',
-        crs = '+proj=utm +zone=21 ellps=WGS84',
+        projection = '+proj=utm +zone=21 ellps=WGS84',
         idField = 'ID')
 
 data(locsPts)

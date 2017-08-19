@@ -34,7 +34,7 @@ Group individuals by polygon (eg: home ranges) overlap
 # kernel density estimation...
 data(locs)
 
-groups <- GroupHRs('mcp', locs, 50, crs = '+proj=utm +zone=21 ellps=WGS84',
+groups <- GroupHRs('mcp', locs, 50, projection = '+proj=utm +zone=21 ellps=WGS84',
                    idField = 'ID')
 
 # If you'd like to simply compare proportion or overlap of a set of polygons,

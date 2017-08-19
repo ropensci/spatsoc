@@ -15,7 +15,7 @@
 #' groups <- GroupLines(locs, 50)
 #'
 #' groups <- GroupLines(locs, 50, timeField = 'FIX_DATE',
-#'         crs = '+proj=utm +zone=21 ellps=WGS84',
+#'         projection = '+proj=utm +zone=21 ellps=WGS84',
 #'         idField = 'ID')
 #'
 #'
@@ -31,7 +31,7 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
     if(is.null(spLines)){
       if(is.null(dt)) stop("must provide either spLines or dt")
       # If it isn't, build it
-      spLines <- BuildLines(dt, crs, coordFields, idField)
+      spLines <- BuildLines(dt, projection, coordFields, idField)
     }
     # Buffer the lines by a provided buffer width
     buffers <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
@@ -44,12 +44,12 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
     if(!is.null(spLines)) stop("if providing a spLines, cannot provide a time field")
 
     # Build and buffer as above, by timeField. Return spatial and unique groups
-    dt[, {spLines <- BuildLines(.SD, crs, coordFields, idField)
+    dt[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
           if(bufferWidth > 0) {
             buffers <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
           } else {
             buffers <- rgeos::gLineMerge(spLines)
-          }
+          }################ due to disaggregating the glinemerg
           ovr <- sp::over(spLines, sp::disaggregate(buffers), returnList = TRUE)
           list(id = names(ovr), spatialGroup = unlist(ovr))},
        by = timeField,
@@ -58,3 +58,4 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
 }
 # TODO: check above else for same error
 # TODO: optional buffer
+# TODO: check if the IDs are returned well with drop during build
