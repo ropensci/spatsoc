@@ -43,10 +43,12 @@ GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields 
           c(as.list(as.data.frame(spPts@coords)),
             list(id = spPts$id, spatialGroup = ovr))},
        by = timeField, .SDcols = c(coordFields, idField)][,
-            group := .GRP, by = .(spatialGroup, get(timeField))][,
-            .(easting = get(coordFields[1]), northing = get(coordFields[2]), id, group)]
+            group := .GRP, by = .(spatialGroup, timeGroup)]#[
+              # , spatialGroup := NULL] []
   }
 }
 
 # TODO: check that drop is not much slower ~drop spatialGroup on output~
 # TODO: fix so no rename of coordFields in drop spatialGroup step
+# TODO: proper output of time used for grouping
+# TODO: a[, uniqueN(spatialGroup), by = group]
