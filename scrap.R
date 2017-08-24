@@ -94,23 +94,26 @@ for(u in seq(1:nrow(cj))){
 }
 z
 ##################
-for(c in nrow(g)){
-  g[, 2]
-  # set(z,
-  # z[time == g$t, which(id == g$i)]
-  # , j = 's', value = sample(ls.n, 1))
+
+cj <- CJ(t = locs$idate, i = locs$ID, unique = TRUE)
+ls.ids <- unique(locs$ID)
+for(u in seq(1:nrow(cj))){
+  intr <- intersect(which(locs$idate == cj[u, t]), which(locs$ID == cj[u, i]))
+  set(locs, i = intr,
+      j = 's', value = sample(ls.ids, 1))
 }
+locs
 
 
+z <- locs[ihour < 15, .(idate, ID, group)]
 
-for(t in unique(z$time)){
-  for(i in unique(z$id)){
-    # set(z,
-        z[time == t, which(id == i)]
-        # , j = 's', value = sample(ls.n, 1))
-  }
-}
-z
+#### THIS?
+z[, s := sample(ls.ids, 1), by = .(idate, ID)]
+#####
+
+b <- spatsoc::Randomizations(locs, 'ID', 'group', 'daily', 'idate')
+spatsoc::Randomizations(locs, 'ID', 'group', 'hourly')
+
 
 
 # mapview::mapview(BuildPts(l, crs = utm, coordFields = c("EASTING", "NORTHING"),

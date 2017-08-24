@@ -43,7 +43,7 @@ Title: Group animal location data by their spatial and temporal relationship
 ### Man
 * Description...
 * check about which are exported
-
+* in vignette descripe how to run within a data.table to update columns etc
 
 ### Decisions
 * decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required. OR add a prep step. 
