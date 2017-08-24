@@ -33,6 +33,8 @@ updatePackageVersion <- function(packageLocation ="."){
 updatePackageVersion()
 
 
+library(data.table)
+
 x.col <- 'X_COORD'
 y.col <- 'Y_COORD'
 id.field <- 'ID'
@@ -40,29 +42,76 @@ buffer.width <- 50
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 proj.fields <- c("EASTING", "NORTHING")
 data(locs)
-# locs[, roundtime := lubridate::round_date(as.POSIXct(paste(idate, itime)), 'hour')]
+
+utm21N <- '+proj=utm +zone=21 ellps=WGS84'
+locs[, c('EASTING', 'NORTHING') := as.data.table(rgdal::project(cbind(X_COORD, Y_COORD), utm21N))]
+
+locs[, ihour := hour(itime)]
+
+locs[, timeGroup := paste(.BY[1], .BY[2], sep = '_'), by = .(idate, ihour)]
+# group...
+locs[, c('group') := .(a$group)]
 
 
-locs <- data.table::fread('input/Striped hyenas Carmel Israel.csv')
-locs <- locs[!is.na(`utm-easting`)]
-locs[, idate := data.table::as.IDate(timestamp)]
-locs[, ihour := data.table::hour(data.table::as.ITime(timestamp, format = '%F %T'))]
+a[, sID := sample(id)]
+# but this just samples within group
+a[, bsID := sample(id), by = group]
 
-id.field <- 'individual-local-identifier'
-buffer.width <- 50
-utm <- '+init=epsg:32636'
-proj.fields <- c("utm-easting", "utm-northing")
+# so alternatively, we can sample from all possible IDs
+ls.ids <- unique(a$id)
+a[, lsID := sample(ls.ids, size = .N), by = group]
 
-
-locs[, itime := (data.table::as.ITime(timestamp, format = '%F %T'))]
-locs[, round(itime, 'hours')]
-locs[minute(itime) > 30, .(itime, hour = hour(itime),
-                           timePlus30 = itime + as.ITime('00:30:00'),
-                           hourPlus30 = hour(itime + as.ITime('00:30:00')))]
+unique.counts <- data.table(id = a[, uniqueN(id), by = group]$V1,
+                            sID = a[, uniqueN(sID), by = group]$V1,
+                            bsID = a[, uniqueN(bsID), by = group]$V1,
+                            lsID = a[, uniqueN(lsID), by = group]$V1,
+                            group = a[, 1, by = group]$group)
 
 
+# the sample across the entire dataset returns different group size
+unique.counts[id != sID]
+# the group replacement only samples from within group but group suze is good
+unique.counts[id != bsID]
+# group replacement from separate dict/list of ids returns same group size and any ids
+unique.counts[id != lsID]
 
-# ____________
+z <- data.table(time = c(1,1,1,2,2,2,3,3,3,4,4,4),
+                group = c(1,2,3,4,4,4,5,6,7,8,8,9),
+                id = seq(1:3),
+                day = c(1,1,1,1,1,1,2,2,2,2,2,2))
+ls.n <- unique(z$id)
+
+z[, sample(ls.n, 1), by = id]
+
+
+########### functional....
+cj <- CJ(t = z$day, i = z$id, unique = TRUE)
+
+for(u in seq(1:nrow(cj))){
+  intr <- intersect(which(z$day == cj[u, t]), which(z$id == cj[u, i]))
+  set(z, i = intr,
+      j = 's', value = sample(ls.n, 1))
+}
+z
+##################
+for(c in nrow(g)){
+  g[, 2]
+  # set(z,
+  # z[time == g$t, which(id == g$i)]
+  # , j = 's', value = sample(ls.n, 1))
+}
+
+
+
+for(t in unique(z$time)){
+  for(i in unique(z$id)){
+    # set(z,
+        z[time == t, which(id == i)]
+        # , j = 's', value = sample(ls.n, 1))
+  }
+}
+z
+
 
 # mapview::mapview(BuildPts(l, crs = utm, coordFields = c("EASTING", "NORTHING"),
 #                           idField = id.field))
@@ -83,8 +132,8 @@ a
 a <- spatsoc::BuildPts(locs, projection = utm,
                        coordFields = proj.fields, idField = id.field)
 a
-a <- spatsoc::GroupPts(locs, 50, 'ihour', projection = utm,
-              coordFields = proj.fields, idField = id.field)
+a <- spatsoc::GroupPts(locs, 50, 'timeGroup', projection = utm,
+                       coordFields = proj.fields, idField = id.field)
 a
 ### LINES ###############
 a <- spatsoc::BuildLines(locs, projection = utm, coordFields = proj.fields,
@@ -150,3 +199,25 @@ Mrlocs[, c("meanDistance", "distID") :=
 
 
 spatsoc::mean_pairwise_dist(locs, 'date', 'ANIMAL_ID')
+
+z <- locs[, .(
+  timeGroup, idate, itime, E = `utm-easting`, N = `utm-northing`,
+  ID = `individual-local-identifier`, group)]
+
+
+locs <- data.table::fread('input/Striped hyenas Carmel Israel.csv')
+locs <- locs[!is.na(`utm-easting`)]
+locs[, idate := data.table::as.IDate(timestamp)]
+locs[, ihour := data.table::hour(data.table::as.ITime(timestamp, format = '%F %T'))]
+
+id.field <- 'individual-local-identifier'
+buffer.width <- 50
+utm <- '+init=epsg:32636'
+proj.fields <- c("utm-easting", "utm-northing")
+
+
+locs[, itime := (data.table::as.ITime(timestamp, format = '%F %T'))]
+locs[, round(itime, 'hours')]
+locs[minute(itime) > 30, .(itime, hour = hour(itime),
+                           timePlus30 = itime + as.ITime('00:30:00'),
+                           hourPlus30 = hour(itime + as.ITime('00:30:00')))]
