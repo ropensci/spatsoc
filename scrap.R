@@ -52,6 +52,22 @@ locs[, timeGroup := paste(.BY[1], .BY[2], sep = '_'), by = .(idate, ihour)]
 # group...
 locs[, c('group') := .(a$group)]
 
+range(locs[, uniqueN(ID), by = group]$V1)
+
+##############
+d <- data.table(dates =  unique(locs[ID == 'mr2009a31', idate]))[,
+                rands :=  sample(1:length(dates), length(dates))]
+locs[ID == 'mr2009a31', randDate := d[rands == .GRP, dates], by = idate]
+z <- locs[ID == 'mr2009a31', .(ID, idate, randDate)]
+##############
+
+x <- locs[, {d <- data.table(dates =  unique(idate))[,
+                        rands :=  sample(1:length(dates), length(dates))]
+        .SD[, .(randDate = d[rands == .GRP, dates]), by = idate]
+        },
+     by = ID]
+v <- merge(locs, x, by = c('ID', 'idate'))[, .(ID, idate, randDate)]
+
 
 a[, sID := sample(id)]
 # but this just samples within group

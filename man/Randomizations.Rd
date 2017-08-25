@@ -13,12 +13,16 @@ Randomizations(dt, idField, groupField, randomType, dateField = NULL)
 
 \item{groupField}{field indicating the group membership for each id}
 
-\item{randomType}{either 'daily' or 'hourly'. 'daily' will randomize the
-ID for each individual 24hr trajector while 'hourly' simply randomly
-assigns an ID to each location}
+\item{randomType}{either 'daily' or 'hourly'. 'daily' will randomize the ID
+for each individual 24hr trajector while 'hourly' simply randomly assigns
+an ID to each location. 'spiegel' will implement the daily movement
+trajectory randomizations (Spiegel et al. 2016).}
 
 \item{dateField}{(optional) date field used when randomType == 'daily'}
 }
 \description{
 Randomizations
+}
+\seealso{
+\url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 }

@@ -1,14 +1,17 @@
 #' Randomizations
 #'
 #' @param dt input data.table with id, group fields and (optional) time fields
-#' @param randomType either 'daily' or 'hourly'. 'daily' will randomize the
-#'   ID for each individual 24hr trajector while 'hourly' simply randomly
-#'   assigns an ID to each location
+#' @param randomType either 'daily' or 'hourly'. 'daily' will randomize the ID
+#'   for each individual 24hr trajector while 'hourly' simply randomly assigns
+#'   an ID to each location. 'spiegel' will implement the daily movement
+#'   trajectory randomizations (Spiegel et al. 2016).
 #' @param idField field indicating the id in the input data.table
 #' @param groupField field indicating the group membership for each id
 #' @param dateField (optional) date field used when randomType == 'daily'
 #' @inheritParams BuildPts
 #'
+#' @seealso
+#'   \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 #' @export
 Randomizations <- function(dt, idField, groupField, randomType, dateField = NULL) {
   if(randomType == 'hourly'){
@@ -30,6 +33,14 @@ Randomizations <- function(dt, idField, groupField, randomType, dateField = NULL
     # so the dimensions input are the same returned
     dt[, .(randomID = rep(sample(ls.ids, 1), .N)),
        by = c(dateField, idField)]
+  } else if(randomType == 'spiegel'){
+    randomDatesDT <- dt[, {d <- data.table(dates =  unique(get(dateField)))
+                           d[, randomN :=  sample(1:length(dates), length(dates))]
+                           .SD[, .(randomDate = d[rands == .GRP, dates]), by = dateField]
+                           },
+                        by = idField]
+    merge(dt, randomDatesDT, by = c(idField, dateField))
+
   } else {
     stop('must provide either hourly or daily for randomType')
   }
@@ -37,3 +48,4 @@ Randomizations <- function(dt, idField, groupField, randomType, dateField = NULL
 
 # TODO: work on var names
 # TODO: remove old ID once we are satisfied?
+# TODO: change 'randomDatesDT'
