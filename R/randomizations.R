@@ -39,10 +39,12 @@ Randomizations <- function(dt, idField, groupField, randomType, dateField = NULL
   } else if(randomType == 'spiegel'){
     randomDatesDT <- dt[, {d <- data.table(dates =  unique(get(dateField)))
                            d[, randomN :=  sample(1:length(dates), length(dates))]
-                           .SD[, .(randomDate = d[randomN == .GRP, dates], group = get(groupField)), by = dateField]
+                           .SD[, .(randomDate = rep(d[randomN == .GRP, dates], .N),
+                                   group = get(groupField)),
+                               by = dateField]
                            },
                         by = idField]
-    data.table::merge.data.table(dt, randomDatesDT, by = c(idField, dateField))
+    # dt[randomDatesDT, on = c(idField, dateField)]
 
   } else {
     stop('must provide either hourly or daily for randomType')
@@ -52,3 +54,4 @@ Randomizations <- function(dt, idField, groupField, randomType, dateField = NULL
 # TODO: work on var names
 # TODO: remove old ID once we are satisfied?
 # TODO: change 'randomDatesDT'
+# TODO: optional N random iterations?
