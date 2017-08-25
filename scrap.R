@@ -71,8 +71,10 @@ x <- locs[, {d <- data.table(dates =  unique(idate))[,
         .SD[, .(randDate = d[rands == .GRP, dates]), by = idate]
         },
      by = ID]
-v <- merge(locs, x, by = c('ID', 'idate'))[, .(ID, idate, randDate)]
-
+id.field <- 'ID'
+date.field <- 'idate'
+v <- merge(locs, x, by = c(id.field, date.field))#[, .(ID, idate, randDate)]
+v
 
 a[, sID := sample(id)]
 # but this just samples within group
@@ -132,7 +134,8 @@ z <- locs[ihour < 15, .(idate, ID, group)]
 z[, s := sample(ls.ids, 1), by = .(idate, ID)]
 #####
 
-b <- spatsoc::Randomizations(locs, 'ID', 'group', 'daily', 'idate')
+b <- spatsoc::Randomizations(locs, 'ID', 'group', 'spiegel', 'idate')
+b
 spatsoc::Randomizations(locs, 'ID', 'group', 'hourly')
 
 
