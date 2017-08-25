@@ -18,7 +18,7 @@ for each individual 24hr trajector while 'hourly' simply randomly assigns
 an ID to each location. 'spiegel' will implement the daily movement
 trajectory randomizations (Spiegel et al. 2016).}
 
-\item{dateField}{(optional) date field used when randomType == 'daily'}
+\item{dateField}{(optional) date field used when randomType == 'daily' or 'spiegel'}
 }
 \description{
 Randomizations

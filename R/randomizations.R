@@ -7,7 +7,7 @@
 #'   trajectory randomizations (Spiegel et al. 2016).
 #' @param idField field indicating the id in the input data.table
 #' @param groupField field indicating the group membership for each id
-#' @param dateField (optional) date field used when randomType == 'daily'
+#' @param dateField (optional) date field used when randomType == 'daily' or 'spiegel'
 #' @inheritParams BuildPts
 #'
 #' @seealso
