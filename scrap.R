@@ -54,6 +54,11 @@ locs[, c('group') := .(a$group)]
 
 range(locs[, uniqueN(ID), by = group]$V1)
 
+rand_fake_spiegel = Randomizations(locs, idField = "ID", groupField = "group",
+               randomType = "spiegel", dateField = "idate")
+
+
+
 ##############
 d <- data.table(dates =  unique(locs[ID == 'mr2009a31', idate]))[,
                 rands :=  sample(1:length(dates), length(dates))]

@@ -34,15 +34,15 @@ Randomizations <- function(dt, idField, groupField, randomType, dateField = NULL
 
     # sample 1 id from the list and repeat it for the number of rows
     # so the dimensions input are the same returned
-    dt[, .(randomID = rep(sample(ls.ids, 1), .N)),
+    dt[, .(randomID = rep(sample(ls.ids, 1), .N), group = get(groupField)),
        by = c(dateField, idField)]
   } else if(randomType == 'spiegel'){
     randomDatesDT <- dt[, {d <- data.table(dates =  unique(get(dateField)))
                            d[, randomN :=  sample(1:length(dates), length(dates))]
-                           .SD[, .(randomDate = d[rands == .GRP, dates]), by = dateField]
+                           .SD[, .(randomDate = d[randomN == .GRP, dates], group = get(groupField)), by = dateField]
                            },
                         by = idField]
-    merge(dt, randomDatesDT, by = c(idField, dateField))
+    data.table::merge.data.table(dt, randomDatesDT, by = c(idField, dateField))
 
   } else {
     stop('must provide either hourly or daily for randomType')
