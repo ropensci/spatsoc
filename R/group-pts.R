@@ -27,6 +27,9 @@
 #' groups <- GroupPts(spPts = locsPts)
 GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
                      idField = 'ID', spPts = NULL){
+  if(any(!(c(timeField, idField, coordFields) %in% colnames(dt)))){
+    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  }
   if(is.null(timeField)){
     if(is.null(spPts)){
       if(is.null(dt)) stop("must provide either pts or dt")

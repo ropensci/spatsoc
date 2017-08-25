@@ -136,15 +136,15 @@ spatsoc::Randomizations(locs, 'ID', 'group', 'hourly')
 #                           idField = id.field))
 
 ## NEAREST ##
-a <- locs[, Nearest(.SD, coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+a <- Nearest(locs, coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
 
-a <- locs[, Nearest(.SD, 'date',
-                    coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+a <- Nearest(locs, 'date',
+                    coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
 
-a <- locs[, Nearest(.SD, 'date', 'group',
-                    coordFields = c("EASTING", "NORTHING"), idField = id.field)]
+a <- Nearest(locs, 'date', 'group',
+             coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
 
 ## PTS ##

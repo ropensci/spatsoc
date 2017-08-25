@@ -25,6 +25,9 @@
 #' groups <- GroupHRs(spPolys = locsPolys)
 GroupHRs <- function(hrType = 'mcp', dt, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
                      spPolys = NULL){
+  if(any(!(c(idField, coordFields) %in% colnames(dt)))){
+    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  }
   if(is.null(spPolys)){
     if(is.null(dt)) stop("must provide either spPolys or dt")
     spPolys <- BuildHRs(hrType, dt, projection, coordFields, idField)

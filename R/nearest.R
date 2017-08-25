@@ -8,19 +8,24 @@
 #' @export
 Nearest <- function(dt, timeField = NULL, groupField = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
                     idField = 'ID'){
+  if(any(!(c(timeField, groupField, coordFields) %in% colnames(dt)))){
+    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  }
+
   FindNearest <- function(in.dt, coords, id){
     tree <- SearchTrees::createTree(in.dt[, ..coords])
     knn <- (SearchTrees::knnLookup(tree, newdat = in.dt[, ..coords], k = 2))
     return(list(ID = in.dt[, get(id)],
                 neighbor = in.dt[, get(id)][knn[,2]]))
   }
+
   # check if there is a groupField variable
   if(is.null(groupField)){
     # if no timeField, calculate directly with all locs, else calc on by timeField
     if(is.null(timeField)){
       data.table::rbindlist(list(FindNearest(dt, coordFields, idField)))
     } else {
-      d <- dt[, FindNearest(.SD, coordFields, idField),
+      d <- dt[, FindNearest(.SD, coordFields, idField), ##!!!!!!!!!!!!!!!
               by = timeField, .SDcols = c(coordFields, idField)]
       # optionally, return proportions or all matches
       if(!proportions){

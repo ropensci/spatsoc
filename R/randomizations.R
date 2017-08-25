@@ -14,6 +14,9 @@
 #'   \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 #' @export
 Randomizations <- function(dt, idField, groupField, randomType, dateField = NULL) {
+  if(any(!(c(idField, groupField, dateField) %in% colnames(dt)))){
+    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  }
   if(randomType == 'hourly'){
     # TODO: this isn't really 'hourly' it's just not 'daily'
     if(!is.null(dateField)) warning('dateField ignored since randomType is hourly')

@@ -20,6 +20,9 @@
 #'
 #' @import data.table
 BuildPts <- function(dt, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
+  if(any(!(c(idField, coordFields) %in% colnames(dt)))){
+    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  }
   sp::SpatialPointsDataFrame(dt[, ..coordFields],
                              proj4string = sp::CRS(projection),
                              data = dt[, .(id = get(idField))])

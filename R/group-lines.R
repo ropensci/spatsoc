@@ -25,6 +25,9 @@
 #' @import data.table
 GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
                        idField = 'ID', spLines = NULL) {
+  if(any(!(c(idField, timeField, coordFields) %in% colnames(dt)))){
+    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  }
   # Check for a timeField
   if(is.null(timeField)){
     # Check if spLines is already provided

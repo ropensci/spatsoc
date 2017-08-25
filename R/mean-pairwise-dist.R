@@ -9,6 +9,9 @@
 #'
 #' @import data.table
 PairwiseDist <- function(dt, timeField, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
+  if(any(!(c(timeField, idField, coordFields) %in% colnames(dt)))){
+    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  }
   if(is.null(timeField)) {
     warning('time column not provided - pairwise distance will be computed across all locs')
 

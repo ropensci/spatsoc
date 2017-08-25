@@ -12,7 +12,11 @@ Title: Group animal location data by their spatial and temporal relationship
 * create example data in sp form for lines, points and multipolygons
 * must check if provided columns are found in input data, otherwise non descript errors like type closure (since date col similar to date function)
 
-
+#### Nearest
+* `Error in [.data.table(dt, , FindNearest(.SD, coordFields, idField),  : 
+  column or expression 1 of 'by' or 'keyby' is type closure. Do not quote column names. Usage: DT[,sum(colC),by=list(colA,month(colB))]`
+* above occurs when the column name provided does not match any from the DT
+  
 #### GroupTime
 * split off rounding to a separate function (for hourly, minute, 5 minute etc)
 * then assign groups depending on optional rounding + field provided. 
@@ -22,7 +26,7 @@ Title: Group animal location data by their spatial and temporal relationship
 * `list(split(spPts@coords, c(col(spPts@coords)))` compare this to `as.list(as.data.frame)` for speed
 * check that drop is not much slower ~drop spatialGroup on output~
 * fix so no rename of coordFields in drop spatialGroup step
-
+* add optional return spatial + time groups
 
 #### GroupLines
 
