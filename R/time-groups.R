@@ -4,7 +4,7 @@
 #' using GPS collar data, it is recommended to round this time column providing
 #' the rounding unit as described below.
 #'
-#' The rounding unit must be provided
+#' The rounding unit must be provided....
 #'
 #' Note that this numerical time group ID is added to the provided data.table.
 #'

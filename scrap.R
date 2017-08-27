@@ -44,9 +44,9 @@ proj.fields <- c("EASTING", "NORTHING")
 data(locs)
 
 utm21N <- '+proj=utm +zone=21 ellps=WGS84'
-locs[, c('EASTING', 'NORTHING') := as.data.table(rgdal::project(cbind(X_COORD, Y_COORD), utm21N))]
+locs[, c('EASTING', 'NORTHING') := data.table::as.data.table(rgdal::project(cbind(X_COORD, Y_COORD), utm21N))]
 
-locs[, ihour := hour(itime)]
+locs[, ihour := data.table::hour(itime)]
 
 locs[, timeGroup := paste(.BY[1], .BY[2], sep = '_'), by = .(idate, ihour)]
 # group...
@@ -54,8 +54,25 @@ locs[, c('group') := .(a$group)]
 
 range(locs[, uniqueN(ID), by = group]$V1)
 
-rand_fake_spiegel = Randomizations(locs, idField = "ID", groupField = "group",
-               randomType = "spiegel", dateField = "idate")
+########### TIME ROUNDING
+# watch the >= <= < >
+
+# roundUnit = data.table::as.ITime('00:05:00')
+roundUnit = data.table::as.ITime('01:00:00')
+locs[(data.table::minute(itime) %% data.table::minute(roundUnit)) >
+       (data.table::minute(roundUnit) / 2),
+     .(ID, idate, itime,
+       itime + roundUnit)]
+minute(roundUnit)
+
+locs[minute(itime) > 30, .(itime, hour = hour(itime))]
+                           # timePlus30 = itime + as.ITime('00:30:00'),
+                           # hourPlus30 = hour(itime + as.ITime('00:30:00')))]
+
+# if there are no rows, then it returns the origin must be supplied error..
+
+########### TIME ROUNDING
+
 
 
 

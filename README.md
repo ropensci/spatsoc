@@ -53,7 +53,7 @@ Title: Group animal location data by their spatial and temporal relationship
 * decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required. OR add a prep step. 
 * similarly about time groups
 * is it acceptable for a user to be **required** to provide a data.table? https://stackoverflow.com/questions/26069219/using-setdt-inside-a-function
-
+* is the package going to follow suit with data.table's modify on reference or is it going to simply return columns? (or option(modByRef = TRUE))
 
 ### Style/Naming
 * group polys or group HRs?
