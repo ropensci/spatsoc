@@ -7,7 +7,7 @@
 #'
 #' @import data.table
 BuildLines <- function(dt, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
-  if(any(!(c(timeField, coordFields) %in% colnames(dt)))){
+  if(any(!(c(idField, coordFields) %in% colnames(dt)))){
     stop('some fields provided are not present in data.table provided/colnames(dt)')
   }
   # Find any ids with only one loc (rgeos requires at least 2 locs for a line buffer)
