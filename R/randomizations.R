@@ -1,7 +1,7 @@
 #' Randomizations
 #'
 #' @param dt input data.table with id, group fields and (optional) time fields
-#' @param randomType either 'daily' or 'hourly'. 'daily' will randomize the ID
+#' @param randomType one of 'daily', 'hourly' or 'spiegel'. 'daily' will randomize the ID
 #'   for each individual 24hr trajector while 'hourly' simply randomly assigns
 #'   an ID to each location. 'spiegel' will implement the daily movement
 #'   trajectory randomizations (Spiegel et al. 2016).
@@ -23,8 +23,8 @@ Randomizations <- function(dt, idField, groupField, randomType, dateField = NULL
 
     ls.ids <- unique(dt[[idField]])
 
-    dt[, .(randomID = sample(ls.ids, .N),
-           ID = get(idField)),
+    dt[, .(randomID = sample(ls.ids, .N)),
+           # ID = get(idField)),
        by = groupField]
 
   } else if(randomType == 'daily'){
@@ -55,3 +55,4 @@ Randomizations <- function(dt, idField, groupField, randomType, dateField = NULL
 # TODO: remove old ID once we are satisfied?
 # TODO: change 'randomDatesDT'
 # TODO: optional N random iterations?
+# TODO: optionally return the original ID for checking?

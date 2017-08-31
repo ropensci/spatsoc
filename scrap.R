@@ -54,6 +54,19 @@ locs[, c('group') := .(a$group)]
 
 range(locs[, uniqueN(ID), by = group]$V1)
 
+fake <- readRDS('/home/alecr/Documents/Local-git/implementations/CAH and RDH/output/cleaned-locs.Rds')
+system.time(
+f <- spatsoc::GroupPts(fake, idField = "ANIMAL_ID", bufferWidth = 50,
+                          timeField = "roundtime",
+                          projection = '+proj=utm +zone=21 ellps=WGS84')
+)
+
+e <- spatsoc::Randomizations()
+
+colnames(fake)
+
+f
+
 ########### TIME ROUNDING
 # watch the >= <= < >
 
@@ -153,10 +166,16 @@ z[, s := sample(ls.ids, 1), by = .(idate, ID)]
 
 b <- spatsoc::Randomizations(locs, 'ID', 'group', 'spiegel', 'idate')
 b
+system.time(
+for(i in 1:100){
 spatsoc::Randomizations(locs, 'ID', 'group', 'hourly')
+}
+)
 
 
-
+empty <- locs[NA][, .(seq(1:100), ID, group)]
+d <- locs[rep(1:.N, 100)][,Indx:=1:.N,by=ID]
+d
 # mapview::mapview(BuildPts(l, crs = utm, coordFields = c("EASTING", "NORTHING"),
 #                           idField = id.field))
 
