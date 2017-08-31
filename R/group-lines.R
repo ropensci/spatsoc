@@ -37,13 +37,14 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
       spLines <- BuildLines(dt, projection, coordFields, idField)
     }
     if(bufferWidth == 0) {
-      merged <- rgeos::gBuffer(a, width = 0.0001, byid = F)
+      merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = F)
     } else {
       merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
     }
     # Find which buffers overlap each other and return
     ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = T)
-    return(data.table::data.table(id = names(ovr), group = unlist(ovr)))
+    return(data.table::data.table(id = names(ovr),
+                                  group = unlist(ovr)))
   } else {
     # If timeField is provided, check that spLines is not.
     if(!is.null(spLines)) {
@@ -60,11 +61,12 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
               merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
             }
             ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
-            list(id = names(ovr), spatialGroup = unlist(ovr))
+            setNames(list(names(ovr), paste(ovr, .GRP, sep = '_')),
+                     c(idField, 'group'))
             }
           },
-       by = timeField,
-       .SDcols = c(coordFields, idField)][, group := .GRP, by = .(spatialGroup, get(timeField))][]
+       by = timeField, .SDcols = c(coordFields, idField)]
   }
 }
 # TODO: find alternative to 0.0001 buffer
+# TODO: adjust output names on line 46
