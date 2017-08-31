@@ -43,8 +43,12 @@ GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields 
     dt[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
           buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
           ovr <- sp::over(spPts, sp::disaggregate(buffers))
-          c(as.list(as.data.frame(spPts@coords)),
-            list(id = spPts$id, group = paste(ovr, .GRP, sep = '_')))},
+          # c(as.list(as.data.frame(spPts@coords)),
+          #   list(id = spPts$id, group = paste(ovr, .GRP, sep = '_')))},
+          setNames(c(as.list(as.data.frame(spPts@coords)),
+                     list(spPts$id, paste(ovr, .GRP, sep = '_'))),
+                   c(coordFields, idField, 'group'))
+          },
        by = timeField, .SDcols = c(coordFields, idField)]
   }
 }
