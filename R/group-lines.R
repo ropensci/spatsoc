@@ -43,8 +43,9 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
     }
     # Find which buffers overlap each other and return
     ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = T)
-    return(data.table::data.table(id = names(ovr),
-                                  group = unlist(ovr)))
+    data.table::setnames(data.table::data.table(names(ovr),
+                                                unlist(ovr)),
+                         c(idField, 'group'))
   } else {
     # If timeField is provided, check that spLines is not.
     if(!is.null(spLines)) {

@@ -30,21 +30,29 @@ GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields 
   if(any(!(c(timeField, idField, coordFields) %in% colnames(dt)))){
     stop('some fields provided are not present in data.table provided/colnames(dt)')
   }
+
   if(is.null(timeField)){
     if(is.null(spPts)){
       if(is.null(dt)) stop("must provide either pts or dt")
       spPts <- BuildPts(dt, projection, coordFields, idField)
     }
     buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
+
     ovr <- sp::over(spPts, sp::disaggregate(buffers))
-    dt <- data.table::data.table(spPts@coords, id = spPts$id, group = ovr)
+
+    data.table::setnames(data.table::data.table(spPts@coords,
+                                                spPts$id,
+                                                ovr),
+                         c(coordFields, idField, 'group'))
   } else {
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
+
     dt[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
+
           buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
+
           ovr <- sp::over(spPts, sp::disaggregate(buffers))
-          # c(as.list(as.data.frame(spPts@coords)),
-          #   list(id = spPts$id, group = paste(ovr, .GRP, sep = '_')))},
+
           setNames(c(as.list(as.data.frame(spPts@coords)),
                      list(spPts$id, paste(ovr, .GRP, sep = '_'))),
                    c(coordFields, idField, 'group'))
@@ -52,6 +60,3 @@ GroupPts <- function(dt, bufferWidth, timeField = NULL, projection, coordFields 
        by = timeField, .SDcols = c(coordFields, idField)]
   }
 }
-
-# TODO: check that drop is not much slower ~drop spatialGroup on output~
-# TODO: a[, uniqueN(spatialGroup), by = group]

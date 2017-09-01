@@ -202,8 +202,6 @@ a
 a <- spatsoc::BuildLines(locs, projection = utm, coordFields = proj.fields,
                 idField = id.field)
 a
-# with new data:
-# unable to find an inherited method for function ‘is.projected’ for signature ‘"data.table"’
 a <- spatsoc::GroupLines(locs, projection = utm, coordFields = proj.fields, idField = id.field)
 a
 

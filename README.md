@@ -10,6 +10,7 @@ Title: Group animal location data by their spatial and temporal relationship
 * create example data in xy loc form 
 * create example data in sp form for lines, points and multipolygons
 * must check if provided columns are found in input data, otherwise non descript errors like type closure (since date col similar to date function)
+* remove comments from functions
 
 #### Nearest
 * `Error in [.data.table(dt, , FindNearest(.SD, coordFields, idField),  : 
