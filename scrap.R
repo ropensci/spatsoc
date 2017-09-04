@@ -183,11 +183,12 @@ d
 a <- Nearest(locs, coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
 
-a <- Nearest(locs, 'date',
+## sub in roundtime here
+a <- Nearest(locs, 'idate',
                     coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
 
-a <- Nearest(locs, 'date', 'group',
+a <- Nearest(locs, 'idate', 'group',
              coordFields = c("EASTING", "NORTHING"), idField = id.field)
 a
 
