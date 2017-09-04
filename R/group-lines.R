@@ -23,18 +23,18 @@
 #'
 #' groups <- GroupLines(spLines = locsLines)
 #' @import data.table
-GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
+GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
                        idField = 'ID', spLines = NULL) {
-  if(any(!(c(idField, timeField, coordFields) %in% colnames(dt)))){
-    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  if(any(!(c(idField, timeField, coordFields) %in% colnames(DT)))){
+    stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
   # Check for a timeField
   if(is.null(timeField)){
     # Check if spLines is already provided
     if(is.null(spLines)){
-      if(is.null(dt)) stop("must provide either spLines or dt")
+      if(is.null(DT)) stop("must provide either spLines or DT")
       # If it isn't, build it
-      spLines <- BuildLines(dt, projection, coordFields, idField)
+      spLines <- BuildLines(DT, projection, coordFields, idField)
     }
     if(bufferWidth == 0) {
       merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = F)
@@ -52,7 +52,7 @@ GroupLines <- function(dt, bufferWidth = 0, timeField = NULL, projection, coordF
       stop("if providing a spLines, cannot provide a time field")
     }
     # Build and buffer as above, by timeField. Return spatial and unique groups
-    dt[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
+    DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
           if(is.null(spLines)) {
             message('some rows are dropped - unable to build lines with <2 locs')
           } else {

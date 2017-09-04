@@ -23,19 +23,19 @@
 #' data(locsPolys)
 #'
 #' groups <- GroupHRs(spPolys = locsPolys)
-GroupHRs <- function(hrType = 'mcp', dt, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
+GroupHRs <- function(hrType = 'mcp', DT, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
                      spPolys = NULL){
-  if(any(!(c(idField, coordFields) %in% colnames(dt)))){
-    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  if(any(!(c(idField, coordFields) %in% colnames(DT)))){
+    stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
   if(is.null(spPolys)){
-    if(is.null(dt)) stop("must provide either spPolys or dt")
-    spPolys <- BuildHRs(hrType, dt, projection, coordFields, idField)
+    if(is.null(DT)) stop("must provide either spPolys or DT")
+    spPolys <- BuildHRs(hrType, DT, projection, coordFields, idField)
   }
 
   unionPolys <- rgeos::gUnaryUnion(spPolys)
   o <- sp::over(spPolys, sp::disaggregate(unionPolys))
-  dt <- data.table::data.table(id = names(o), group = o)
+  data.table::data.table(id = names(o), group = o)
 }
 
 # TODO: optional proportion overlap

@@ -5,14 +5,14 @@
 #'
 #' @return Home range polygons for each ID
 #' @export
-BuildHRs <- function(hrType = 'mcp', dt, projection, coordFields = c('EASTING', 'NORTHING'),
+BuildHRs <- function(hrType = 'mcp', DT, projection, coordFields = c('EASTING', 'NORTHING'),
                      idField = 'ID', spPts = NULL){
-  if(any(!(c(idField, coordFields) %in% colnames(dt)))){
-    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  if(any(!(c(idField, coordFields) %in% colnames(DT)))){
+    stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
   if(is.null(spPts)){
-    if(is.null(dt)) stop("must provide either spPts or dt")
-    spPts <- BuildPts(dt, projection, coordFields, idField)
+    if(is.null(DT)) stop("must provide either spPts or DT")
+    spPts <- BuildPts(DT, projection, coordFields, idField)
   }
   if(hrType == 'mcp'){
       adehabitatHR::mcp(spPts, percent = 95)

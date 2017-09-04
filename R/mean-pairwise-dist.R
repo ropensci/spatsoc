@@ -8,23 +8,23 @@
 #' @export
 #'
 #' @import data.table
-PairwiseDist <- function(dt, timeField, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
-  if(any(!(c(timeField, idField, coordFields) %in% colnames(dt)))){
-    stop('some fields provided are not present in data.table provided/colnames(dt)')
+PairwiseDist <- function(DT, timeField, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
+  if(any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
+    stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
   if(is.null(timeField)) {
     warning('time column not provided - pairwise distance will be computed across all locs')
 
-    names <- dt[, get(idField)]
+    names <- DT[, get(idField)]
 
-    distMatrix <- sp::spDists(as.matrix(dt[ , ..coordFields]),
+    distMatrix <- sp::spDists(as.matrix(DT[ , ..coordFields]),
                               longlat = FALSE)
 
     # Output the column means (average pairwise dist) + names
     data.table(meanDistance = colMeans(distMatrix),
                id = names)
   } else {
-    dt[, {names <- .SD[, get(idField)]
+    DT[, {names <- .SD[, get(idField)]
           distMatrix <- sp::spDists(as.matrix(.SD[ , ..coordFields]),
                                     longlat = FALSE)
           list(meanDistance = colMeans(distMatrix),

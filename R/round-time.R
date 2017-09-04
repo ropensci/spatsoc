@@ -1,13 +1,13 @@
 #' Round Time
 #'
-#' @param dt input locs/rows
+#' @param DT input locs/rows
 #' @param timeField time column name
 #' @param roundUnit unit of time to round on (eg: day, hour, minute)
 #'
 #' @export
-RoundTime <- function(dt, timeField, roundUnit = '1 hour') {
-  if(any(!(c(timeField, roundField) %in% colnames(dt)))){
-    stop('some fields provided are not present in data.table provided/colnames(dt)')
+RoundTime <- function(DT, timeField, roundUnit = '1 hour') {
+  if(any(!(c(timeField, roundField) %in% colnames(DT)))){
+    stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
 
   if(grepl('hour', roundUnit)){

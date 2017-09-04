@@ -3,11 +3,11 @@
 #' Build a SpatialPointsDataFrame from provided data for input to GroupPts or
 #' other uses.
 #'
-#' The parameter projection can be built by finding the EPSG code of your
+#' The parameter projection can be built by finding the EPSG code for your
 #' given projection at \url{http://spatialreference.org/ref/epsg/} and providing it with
 #' "+init=epsg:CODE" (eg: "+init=epsg:4326").
 #'
-#' @param dt Input data with coordinate and id fields. If not provided, fields
+#' @param DT Input data with coordinate and id fields. If not provided, fields
 #'   default to c('EASTING', 'NORTHING') and 'ID'
 #' @param projection Character string for input to sp::CRS() and proj4string()
 #' @param coordFields Character vector indicating the X coordinate and Y
@@ -19,14 +19,14 @@
 #' @export
 #'
 #' @import data.table
-BuildPts <- function(dt, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
-  if(any(!(c(idField, coordFields) %in% colnames(dt)))){
-    stop('some fields provided are not present in data.table provided/colnames(dt)')
+BuildPts <- function(DT, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
+  if(any(!(c(idField, coordFields) %in% colnames(DT)))){
+    stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
-  sp::SpatialPointsDataFrame(dt[, ..coordFields],
+  sp::SpatialPointsDataFrame(DT[, ..coordFields],
                              proj4string = sp::CRS(projection),
-                             data = dt[, .(id = get(idField))])
+                             data = DT[, .(id = get(idField))])
 }
 
-# TODO: check if dt is a data.table
+# TODO: check if DT is a data.table
 # TODO: stopif null projection

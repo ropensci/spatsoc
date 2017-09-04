@@ -1,15 +1,15 @@
 #' Proportion/Frequency Nearest Neighbors
 #'
 #' @inheritParams BuildPts
-#' @param timeField (optional) timeField in the dt upon which the neighbors'
+#' @param timeField (optional) timeField in the DT upon which the neighbors'
 #'   distance will be compared
-#' @param groupField (optional) groupField in the dt which can be used to group
+#' @param groupField (optional) groupField in the DT which can be used to group
 #'   neighbors (eg: season, year, herd, known social groups, ...)
 #' @export
-Nearest <- function(dt, timeField = NULL, groupField = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
+Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
                     idField = 'ID'){
-  if(any(!(c(timeField, groupField, coordFields) %in% colnames(dt)))){
-    stop('some fields provided are not present in data.table provided/colnames(dt)')
+  if(any(!(c(timeField, groupField, coordFields) %in% colnames(DT)))){
+    stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
 
   FindNearest <- function(in.dt, coords, id){
@@ -23,9 +23,9 @@ Nearest <- function(dt, timeField = NULL, groupField = NULL, proportions = FALSE
   if(is.null(groupField)){
     # if no timeField, calculate directly with all locs, else calc on by timeField
     if(is.null(timeField)){
-      data.table::rbindlist(list(FindNearest(dt, coordFields, idField)))
+      data.table::rbindlist(list(FindNearest(DT, coordFields, idField)))
     } else {
-      d <- dt[, FindNearest(.SD, coordFields, idField), ##!!!!!!!!!!!!!!!
+      d <- DT[, FindNearest(.SD, coordFields, idField), ##!!!!!!!!!!!!!!!
               by = timeField, .SDcols = c(coordFields, idField)]
       # optionally, return proportions or all matches
       if(!proportions){
@@ -38,11 +38,11 @@ Nearest <- function(dt, timeField = NULL, groupField = NULL, proportions = FALSE
   } else {
   # if there is a groupField variable, but no timeField, return all pairs in each group
     if(is.null(timeField)){
-      dt[, FindNearest(.SD, coordFields, idField),
+      DT[, FindNearest(.SD, coordFields, idField),
               by = groupField]
     } else {
       # else, return either proportions or pairs by each group * time
-      dt[, {d <- dt[, FindNearest(.SD, coordFields, idField),
+      DT[, {d <- DT[, FindNearest(.SD, coordFields, idField),
                     by = timeField, .SDcols = c(coordFields, idField)]
             if(!proportions){
               d
