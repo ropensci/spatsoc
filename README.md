@@ -9,10 +9,6 @@ ID for grouped dates/times (if the user wants this functionality). This wont be 
 by the functions as it is not needed. The second usage, will be rounding times..* 
 
 
-
-
-
-
 ## TODO
 ### Functions
 #### Global
@@ -23,7 +19,7 @@ by the functions as it is not needed. The second usage, will be rounding times..
 * create example data in sp form for lines, points and multipolygons
 * must check if provided columns are found in input data, otherwise non descript errors like type closure (since date col similar to date function)
 * remove comments from functions
-* make consistent pts points filenames functions
+* function for get_group_by_individual speedup
 
 #### Nearest
 * `Error in [.data.table(dt, , FindNearest(.SD, coordFields, idField),  : 
