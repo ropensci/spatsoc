@@ -15,19 +15,19 @@ by the functions as it is not needed. The second usage, will be rounding times..
 * missing adehabitat, SearchTrees
 * if ID is character vector, paste?? (as in ID, Year ---> AN1_2007)
 * or: try   as Idate/asITime  pull hours + minutes. if minutes > 30, add 30 else keep hours. thatll round to closest hour
-* create example data in xy loc form 
+* create example data in xy loc form
 * create example data in sp form for lines, points and multipolygons
 * must check if provided columns are found in input data, otherwise non descript errors like type closure (since date col similar to date function)
 * remove comments from functions
 * function for get_group_by_individual speedup
 
 #### Nearest
-* `Error in [.data.table(dt, , FindNearest(.SD, coordFields, idField),  : 
+* `Error in [.data.table(dt, , FindNearest(.SD, coordFields, idField),  :
   column or expression 1 of 'by' or 'keyby' is type closure. Do not quote column names. Usage: DT[,sum(colC),by=list(colA,month(colB))]`
 * above occurs when the column name provided does not match any from the DT
-  
+
 #### GroupTime
-* then assign groups depending on optional rounding + field provided. 
+* then assign groups depending on optional rounding + field provided.
 
 #### GroupPts
 * flex chaining or not?
@@ -40,7 +40,7 @@ by the functions as it is not needed. The second usage, will be rounding times..
 * proportional overlap
 * add a build polygons step in addition to the homerange
 * change group HRs to group Polys?
-* sub functions for build HR, build polys.. then group all resulting polys 
+* sub functions for build HR, build polys.. then group all resulting polys
 
 #### PairwiseDist
 * only mean? or flexible stat?
@@ -56,12 +56,12 @@ by the functions as it is not needed. The second usage, will be rounding times..
 * in vignette descripe how to run within a data.table to update columns etc
 
 ### Decisions
-* decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required. OR add a prep step. 
+* decide if we want to (**as a standard**) allow users to provide column names, or force them to provide things as required. OR add a prep step.
 * similarly about time groups
 * is it acceptable for a user to be **required** to provide a data.table? https://stackoverflow.com/questions/26069219/using-setdt-inside-a-function
 * is the package going to follow suit with data.table's modify on reference or is it going to simply return columns? (or option(modByRef = TRUE))
 * should we only return one or few columns so that the functions can integrate in dt[, grp := ...]
-
+* use @importFrom pkg fun to decrease cost of repeated function callsMV917540R0
 
 ### Style/Naming
 * group polys or group HRs?
@@ -89,5 +89,3 @@ by the functions as it is not needed. The second usage, will be rounding times..
 * wildlifeDI(/TG?)
 * asnipe
 * tim paco methods ecology evo paper
-
-
