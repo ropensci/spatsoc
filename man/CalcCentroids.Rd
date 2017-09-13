@@ -4,10 +4,10 @@
 \alias{CalcCentroids}
 \title{Calculate Centroids For Each Group}
 \usage{
-CalcCentroids(dt, coordFields, groupField)
+CalcCentroids(DT, coordFields, groupField)
 }
 \arguments{
-\item{dt}{Input data with coordinate and id fields. If not provided, fields
+\item{DT}{Input data with coordinate and id fields. If not provided, fields
 default to c('EASTING', 'NORTHING') and 'ID'}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y

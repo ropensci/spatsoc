@@ -4,11 +4,11 @@
 \alias{BuildLines}
 \title{Build Lines}
 \usage{
-BuildLines(dt, projection, coordFields = c("EASTING", "NORTHING"),
+BuildLines(DT, projection, coordFields = c("EASTING", "NORTHING"),
   idField = "ID")
 }
 \arguments{
-\item{dt}{Input data with coordinate and id fields. If not provided, fields
+\item{DT}{Input data with coordinate and id fields. If not provided, fields
 default to c('EASTING', 'NORTHING') and 'ID'}
 
 \item{projection}{Character string for input to sp::CRS() and proj4string()}

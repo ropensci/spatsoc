@@ -4,16 +4,16 @@
 \alias{Randomizations}
 \title{Randomizations}
 \usage{
-Randomizations(dt, idField, groupField, randomType, dateField = NULL)
+Randomizations(DT, idField, groupField, randomType, dateField = NULL)
 }
 \arguments{
-\item{dt}{input data.table with id, group fields and (optional) time fields}
+\item{DT}{input data.table with id, group fields and (optional) time fields}
 
 \item{idField}{field indicating the id in the input data.table}
 
 \item{groupField}{field indicating the group membership for each id}
 
-\item{randomType}{either 'daily' or 'hourly'. 'daily' will randomize the ID
+\item{randomType}{one of 'daily', 'hourly' or 'spiegel'. 'daily' will randomize the ID
 for each individual 24hr trajector while 'hourly' simply randomly assigns
 an ID to each location. 'spiegel' will implement the daily movement
 trajectory randomizations (Spiegel et al. 2016).}

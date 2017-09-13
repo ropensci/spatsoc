@@ -4,11 +4,11 @@
 \alias{GroupLines}
 \title{Groups From Spatial Lines}
 \usage{
-GroupLines(dt, bufferWidth = 0, timeField = NULL, projection,
+GroupLines(DT, bufferWidth = 0, timeField = NULL, projection,
   coordFields = c("EASTING", "NORTHING"), idField = "ID", spLines = NULL)
 }
 \arguments{
-\item{dt}{Input data with coordinate and id fields. If not provided, fields
+\item{DT}{Input data with coordinate and id fields. If not provided, fields
 default to c('EASTING', 'NORTHING') and 'ID'}
 
 \item{bufferWidth}{The width of the buffer around the geometry in the units

@@ -4,11 +4,11 @@
 \alias{PairwiseDist}
 \title{Euclidean Pairwise Distance}
 \usage{
-PairwiseDist(dt, timeField, coordFields = c("EASTING", "NORTHING"),
+PairwiseDist(DT, timeField, coordFields = c("EASTING", "NORTHING"),
   idField = "ID")
 }
 \arguments{
-\item{dt}{Input data with coordinate and id fields. If not provided, fields
+\item{DT}{Input data with coordinate and id fields. If not provided, fields
 default to c('EASTING', 'NORTHING') and 'ID'}
 
 \item{timeField}{time column upon which individuals are compared. recommended

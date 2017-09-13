@@ -4,13 +4,13 @@
 \alias{GroupHRs}
 \title{Group Overlapping Polygons}
 \usage{
-GroupHRs(hrType = "mcp", dt, projection, coordFields = c("EASTING",
+GroupHRs(hrType = "mcp", DT, projection, coordFields = c("EASTING",
   "NORTHING"), idField = "ID", spPolys = NULL)
 }
 \arguments{
 \item{hrType}{Type of HR estimation, defaults to 'mcp'}
 
-\item{dt}{Input data with coordinate and id fields. If not provided, fields
+\item{DT}{Input data with coordinate and id fields. If not provided, fields
 default to c('EASTING', 'NORTHING') and 'ID'}
 
 \item{projection}{Character string for input to sp::CRS() and proj4string()}
