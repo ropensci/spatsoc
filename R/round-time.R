@@ -6,14 +6,14 @@
 #'
 #' @export
 RoundTime <- function(DT, timeField, roundUnit = '1 hour') {
-  if(any(!(c(timeField, roundField) %in% colnames(DT)))){
+  if(any(!(c(timeField) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
 
   if(grepl('hour', roundUnit)){
-    nTime <- data.table::as.ITime(strsplit(roundUnit, 'hour')[1], format = '%H')
+    nTime <- data.table::as.ITime(strsplit(roundUnit, ' hour')[1], format = '%H')
   } else if(grepl('minute', roundUnit)){
-    nTime <- data.table::as.ITime(strsplit(roundUnit, 'minute')[1], format = '%M')
+    nTime <- data.table::as.ITime(strsplit(roundUnit, ' minute')[1], format = '%M')
   } else {
     stop('must round to nearest hour or minute (as determined by roundUnit variable)')
   }

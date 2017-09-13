@@ -17,7 +17,7 @@ GroupTime <- function(dt, timeField, roundField = NULL) {
   if(any(!(c(timeField, roundField) %in% colnames(dt)))){
     stop('some fields provided are not present in data.table provided/colnames(dt)')
   }
-  if(!(roundunit)) {
+  if(!(roundField)) {
     dt[, timeGroup := .GRP, by = timeField]
   } else {
     if(roundField == 'hour'){
