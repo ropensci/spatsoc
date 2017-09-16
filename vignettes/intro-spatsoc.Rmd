@@ -47,24 +47,45 @@ data(locs)
 locs[1:5]
 ```
 
-The data consists of the location of `r locs[, uniqueN(ID)]` individuals over `r locs[, max(idate) - min(idate)]` days. The location was recorded using GPS collars with two-hour fixes. 
-Using this data, we can compare the various grouping methods available in `spatsoc`. 
-
-
+The data consists of the location of `r locs[, uniqueN(ID)]` individuals over `r locs[, max(idate) - min(idate)]` days. The location was recorded using GPS collars with two-hour fixes. Using this data, we can compare the various grouping methods available in `spatsoc`. 
 
 ### `GroupPts`
 The `GroupPts` function compares the location of all individuals at each time step in the input data and groups those within a provided distance. 
 
+Before grouping, we will ensure that the time field we intend to group on is suitable. First, we will check how many locations are taken more than 5 minutes off of the nearest hour. 
+
+```{r}
+locs[minute(itime) > 5, .N]
+locs[minute(itime) > 5]
+```
+
+If we want to group individuals in time and space, it is clear that these 20 locations may not be relevant to those recorded ~40-50 minutes earlier. We will round the times to the nearest hour using `RoundTime` and returning them `as.POSIXct` datetimes if a date field is provided. Alternatively, if the temporal scale of your input data is different, time fields can be rounded using different round units such as `'15 minutes'` or `'4 hours'`. 
+
 ```{r, eval = FALSE}
-GroupPts(locs, 50, timeField = 'roundtime', idField = 'ID', coordFields = c('EASTING', 'NORTHING'))
+locs[, roundDateTime := RoundTime(.SD, 'itime', roundUnit = '1 hour', dateField = 'idate')]
+```
+
+<!-- Finally, the data preparation is complete by using the grouppts to call helper function
+above roundtime to group times to on nearest hour-->
+
+We can then use the `GroupPts` function to find overlapping spatial location of buffered points. Here, we buffer each point by 50m to match temporal and spatial overlap of potential interation or social group.  
+
+```{r, eval = FALSE}
+GroupPts(locs, 50, timeField = 'roundDateTime', 
+         projection = '+proj=utm +zone=21 ellps=WGS84', 
+         idField = 'ID', coordFields = c('EASTING', 'NORTHING'))
 
 ```
 
 
 <!-- ?QW when would best period be for social interactions -->
+<!---
+The basic methodology is as follows:
 
-
-
+1. Group locations by overlapping or matching time. 
+1. Group locations 
+1. *Optionally* round time fields.
+-->
 ## Notes
 Package dependencies for `spatsoc` are primarily `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference. 
 
