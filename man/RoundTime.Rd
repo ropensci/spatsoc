@@ -4,7 +4,7 @@
 \alias{RoundTime}
 \title{Round Time}
 \usage{
-RoundTime(DT, timeField, roundUnit = "1 hour")
+RoundTime(DT, timeField, roundUnit = "1 hour", dateField)
 }
 \arguments{
 \item{DT}{input locs/rows}

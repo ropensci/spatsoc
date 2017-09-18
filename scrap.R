@@ -32,6 +32,84 @@ updatePackageVersion <- function(packageLocation ="."){
 }
 updatePackageVersion()
 
+data(locs)
+
+locs[, datetime:= as.POSIXct(paste(idate, itime))]
+
+GroupTimes(locs, 'datetime', '2 hours')
+
+#####HOURLY
+timeTh <- '2 hours'
+
+# nTime <- data.table::as.ITime(strsplit(roundUnit, ' hour')[[1]], format = '%H')
+nTime <- unlist(data.table::tstrsplit(timeTh, ' ', keep = 1, type.convert = TRUE)) * 60 * 60
+nHour <- unlist(data.table::tstrsplit(timeTh, ' ', keep = 1, type.convert = TRUE))
+
+locs[]
+
+hyenas <- data.table::fread('input/Striped hyenas Carmel Israel.csv')
+
+GroupTimes(hyenas, 'timestamp', '30 minutes')[]
+hyenas[1:1000, .(timestamp, data.table::minute(timestamp), data.table::minute(timestamp) %% 30,
+                data.table::minute(timestamp) %% 30 > 15)]
+
+# locs[, .(itime, even = itime %% nTime, odd = ((itime - (60*60)) %% nTime))]
+nHour
+nTime
+
+locs[data.table::hour(itime) %% nHour != 0]
+locs[data.table::hour(datetime) %% nHour,
+     newTime := datetime + ((nHour/2) * 60 * 60)]
+
+locs[data.table::hour(datetime) %% nHour == 0,
+     newdate := datetime]
+locs[data.table::hour(datetime) %% nHour != 0,
+     newdate := datetime + ((nHour / 2) * 60 * 60)]
+
+#[(itime %% nTime) > (nTime / 2)]
+
+#######MINUTE
+timeTh <- '30 minutes'
+
+nTime <- unlist(data.table::tstrsplit(timeTh, ' ', keep = 1, type.convert = TRUE))
+timeField <- 'timestamp'
+
+hyenas[data.table::minute(timestamp) %% 30 > 15, newtime := as.POSIXct(timestamp) + 15 * 60]
+hyenas[order(newtime), .(newtime, timestamp)]
+
+hyenas[(data.table::minute(timestamp) %% nTime) > (nTime / 2),
+       .(minutes = data.table::minute(timestamp),
+         mod30 = data.table::minute(timestamp) %% nTime,
+         timestamp,
+         as.POSIXct(timestamp) + ((30 - (data.table::minute(timestamp) %% nTime)) * 60),
+         data.table::minute(timestamp) + (30 - data.table::minute(timestamp) %% nTime))]
+
+
+# if minute
+# DT[(data.table::minute(timestamp) %% nTime) > (nTime / 2),
+#    as.POSIXct(timestamp) + ((30 - (data.table::minute(timestamp) %% nTime)) * 60)]
+
+# if 1 hour
+timeTh <- '1 hour'
+nTime <- unlist(data.table::tstrsplit(timeTh, ' ', keep = 1, type.convert = TRUE))
+
+hyenas[minute(timestamp) %% (1 * 60) > 30,
+       as]
+
+
+# DT[(data.table::minute(timestamp) %% nTime) > (nTime / 2),
+#    as.POSIXct(timestamp) + ((30 - (data.table::minute(timestamp) %% nTime)) * 60)]
+
+
+locs[order(-idate), .(itime, minutes = itime %% nTime)][order(-minutes)][1:100]
+
+
+
+
+
+data.table::as.ITime(unlist(data.table::tstrsplit(timeTh, ' ', type.convert = TRUE, keep = 1)),
+                     format = '%H')
+
 
 library(data.table)
 
