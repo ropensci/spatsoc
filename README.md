@@ -4,8 +4,14 @@ Title: Group animal location data by their spatial and temporal relationship
 **so instead of RoundTime and GroupTime --> one GroupTime that returns either a numeric
 ID for grouped dates/times (if the user wants this functionality). This wont be used
 by the functions as it is not needed. The second usage, will be rounding times..**
-
 **returnDateTime from RoundTime function**
+
+tests..
+
+test with readcsv 
+read_table
+
+
 
 ## TODO
 ### Functions

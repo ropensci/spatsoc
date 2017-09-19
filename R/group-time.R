@@ -19,6 +19,12 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
   if(any(!(c(timeField) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
+
+  if('newtime' %in% colnames(DT)){
+    warning('`newtime` column name found in input DT, it will be removed before determining new time groups')
+    DT[, newtime := NULL]
+  }
+
   if(is.null(timeThreshold)) {
     DT[, timeGroup := .GRP, by = timeField]
   } else {
@@ -30,14 +36,19 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
 
       nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ', keep = 1, type.convert = TRUE))
 
-      # alloc.col(DT, 1)
+      # alloc.col(DT, 1 )
 
       DT[(data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
          newtime := as.POSIXct(get(timeField)) +
                 (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60]
-      DT[is.na(newtime), newtime := as.POSIXct(get(timeField))]
 
-      return(DT)
+      DT[is.na(newtime),
+         newtime :=
+         as.POSIXct(get(timeField)) -
+           ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
+           data.table::second(get(timeField))]
+
+      return(DT[])
 
       # by = .(hour(V1), yday(V1), minute(V1))
 
@@ -49,6 +60,7 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
 }
 
 # TODO: Update description above..
+# TODO: change newtime
 
 # select only those rows with minute > 30, add 30 to itime
 # take all itimes (with new ones) and pull out unit indicated
