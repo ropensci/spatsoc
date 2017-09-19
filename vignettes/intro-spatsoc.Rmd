@@ -9,9 +9,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The `spatsoc` package aims to provide functionality for analysing animal location data in time and space to find potential interactions or social groups. 
+The `spatsoc` package provides functionality for analysing animal location data in time and space to identify potential interactions among individuals or social groups. 
 
-The package contains a set of `Group*` functions that are used for finding groups in input data depending on spatial location and (optionally) time. In addition, the package contains functions for determining the nearest neighbor to each individual, as well as the mean pairwise distance between a set of individuals (both optionally across time). 
+The package contains a set of `Group*` functions that are used for identifying groups from input data depending on spatial location and (optionally) time. In addition, the package contains functions for determining the nearest neighbor to each individual, as well as the mean pairwise distance between a set of individuals (both optionally across time). 
 
 ## Functions
 * Grouping 
@@ -47,19 +47,22 @@ data(locs)
 locs[1:5]
 ```
 
-The data consists of the location of `r locs[, uniqueN(ID)]` individuals over `r locs[, max(idate) - min(idate)]` days. The location was recorded using GPS collars with two-hour fixes. Using this data, we can compare the various grouping methods available in `spatsoc`. 
+<!-- note this input/example data is just for now.. -->
+The data consist of relocations of `r locs[, uniqueN(ID)]` individuals over `r locs[, max(idate) - min(idate)]` days. Relocations were recorded using GPS collars with fixes obtained every two hours. Using these data, we can compare the various grouping methods available in `spatsoc`. 
 
 ### `GroupPts`
-The `GroupPts` function compares the location of all individuals at each time step in the input data and groups those within a provided distance. 
+The `GroupPts` function compares the relocations of all individuals at each time step in the input data and groups those within a specified buffer distance. 
+Before grouping, we will ensure that the time field we intend to group on is in the correct format. Because GPS location fixes across animals are not 
+necessarily obtained at the exact same time, we provide the function `GroupTimes` to find temporal groups within a specified time threshold. 
 
-Before grouping, we will ensure that the time field we intend to group on is suitable. First, we will check how many locations are taken more than 5 minutes off of the nearest hour. 
+<!-- all below needs updating since GroupTimes replaces RoundTime -->
 
 ```{r}
 locs[minute(itime) > 5, .N]
 locs[minute(itime) > 5]
 ```
 
-If we want to group individuals in time and space, it is clear that these 20 locations may not be relevant to those recorded ~40-50 minutes earlier. We will round the times to the nearest hour using `RoundTime` and returning them `as.POSIXct` datetimes if a date field is provided. Alternatively, if the temporal scale of your input data is different, time fields can be rounded using different round units such as `'15 minutes'` or `'4 hours'`. 
+If we want to group individuals in time and space, it is clear that these 20 relocations may not be relevant to those recorded ~40-50 minutes earlier. We will round the times to the nearest hour using `RoundTime` and returning them `as.POSIXct` datetimes if a date field is provided. Alternatively, if the temporal scale of your input data is different, time fields can be rounded using different round units such as `'15 minutes'` or `'4 hours'`. <!-- for example this time -->
 
 ```{r, eval = FALSE}
 locs[, roundDateTime := RoundTime(.SD, 'itime', roundUnit = '1 hour', dateField = 'idate')]
@@ -87,6 +90,6 @@ The basic methodology is as follows:
 1. *Optionally* round time fields.
 -->
 ## Notes
-Package dependencies for `spatsoc` are primarily `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference. 
+Package dependencies for `spatsoc` are <!-- list all and note details --> `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference. 
 
 In addition, since the `rgeos` package is used in most functions (notably `GroupPts` and `GroupLines`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`. 
