@@ -49,7 +49,7 @@ locs[]
 
 hyenas <- data.table::fread('input/Striped hyenas Carmel Israel.csv')
 
-GroupTimes(hyenas, 'timestamp', '5 minutes')[, .(timestamp, newtime)]
+GroupTimes(hyenas, 'timestamp', '30 minutes')[]#[, .(timestamp, newtime)]
 
 hyenas[1:1000, .(timestamp, data.table::minute(timestamp), data.table::minute(timestamp) %% 30,
                 data.table::minute(timestamp) %% 30 > 15)]
@@ -63,6 +63,15 @@ DT[, {new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
                   data.table::second(get(timeField)))
           class(new) <- c("POSIXct", "POSIXt")
           new}]
+
+
+hyenas[(data.table::minute(timestamp) %% 30) > (30 / 2),
+       .(timestamp,
+         sec = data.table::second(timestamp),
+         sub = (as.POSIXct(timestamp) +
+                  ((30 - (data.table::minute(timestamp) %% 30)) * 60) -
+                  (data.table::second(timestamp))),
+         woSec = as.POSIXct(timestamp) - data.table::second(timestamp))]
 
 hyenas[is.na(newtime),
    newtime :=

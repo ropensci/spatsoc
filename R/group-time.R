@@ -32,35 +32,35 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
 # if 1 hour, go to 60 minutes
       data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ', type.convert = TRUE, keep = 1),
                            format = '%H')
+
     } else if(grepl('minute', timeThreshold)){
 
       nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ', keep = 1, type.convert = TRUE))
 
       # alloc.col(DT, 1 )
 
-      DT[(data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
-         newtime := as.POSIXct(get(timeField)) +
-                (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60]
+      newdates <- DT[, .(new =
+                           {new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
+                                          (as.POSIXct(get(timeField)) +
+                                             (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60) -
+                                             data.table::second(get(timeField)),
+                                          as.POSIXct(get(timeField)) -
+                                            ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
+                                            data.table::second(get(timeField)))
+                           class(new) <- c("POSIXct", "POSIXt")
+                           new})]
 
-      DT[is.na(newtime),
-         newtime :=
-         as.POSIXct(get(timeField)) -
-           ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
-           data.table::second(get(timeField))]
+      newdates[, timeGroup := .GRP, by = new]
 
-      return(DT[])
-
-      # by = .(hour(V1), yday(V1), minute(V1))
-
-
-      # DT[is.null(newtime), newtime := get(timeField)]
-      # return(DT[])
+      return(DT[, (colnames(newdates)) := newdates])
     }
   }
 }
 
 # TODO: Update description above..
 # TODO: change newtime
+# TODO: note results may be strange if you use something non-divisible by 60
+
 
 # select only those rows with minute > 30, add 30 to itime
 # take all itimes (with new ones) and pull out unit indicated
