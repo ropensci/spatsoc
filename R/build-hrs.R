@@ -1,26 +1,32 @@
 #' Build Home Ranges for Individuals
 #'
-#' @param hrType Type of HR estimation, defaults to 'mcp'
+#' @param hrType Type of HR estimation either 'mcp' or 'kernel'
+#' @param hrParams List of named arguments to be passed to adehabitatHR functions as determined by hrType
 #' @inheritParams BuildPts
 #'
 #' @return Home range polygons for each ID
 #' @export
-BuildHRs <- function(hrType = 'mcp', DT, projection, coordFields = c('EASTING', 'NORTHING'),
-                     idField = 'ID', spPts = NULL){
-  if(any(!(c(idField, coordFields) %in% colnames(DT)))){
-    stop('some fields provided are not present in data.table provided/colnames(DT)')
-  }
+BuildHRs <- function(hrType = 'mcp', hrParams = NULL,
+                     DT = NULL, projection = NULL,
+                     coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
+                     spPts = NULL){
+
   if(is.null(spPts)){
-    if(is.null(DT)) stop("must provide either spPts or DT")
+    if(is.null(DT)){
+      stop("must provide either spPts or DT")
+    }
+    if(any(!(c(idField, coordFields) %in% colnames(DT)))){
+      stop('some fields provided are not present in data.table provided/colnames(DT)')
+    }
     spPts <- BuildPts(DT, projection, coordFields, idField)
   }
+  hrParams$xy <- spPts
   if(hrType == 'mcp'){
-      adehabitatHR::mcp(spPts, percent = 95)
-  } #else if(hrType == '')
-
-
-  # adehabitatHR::kerneloverlap(spPts, method = "UDOI", percent = 95, grid = 700)
+    do.call(adehabitatHR::mcp, hrParams)
+  } else if(hrType == 'kernel') {
+    adehabitatHR::getverticeshr(
+      do.call(adehabitatHR::kernelUD, hrParams))
+  }
 }
 
-# is a binary HR overlap actually interesting?
-# TODO: add different HR types
+
