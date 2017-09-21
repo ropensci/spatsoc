@@ -12,8 +12,12 @@ test with readcsv
 read_table
 
 
+do we want to return vertices strictly for kernel?
 
 ## TODO
+* check that all functions have proper is null DT and colnames present / it didn't break anything
+
+
 ### Functions
 #### Global
 * missing adehabitat, SearchTrees

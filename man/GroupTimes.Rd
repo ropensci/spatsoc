@@ -4,15 +4,16 @@
 \alias{GroupTimes}
 \title{Group Times}
 \usage{
-GroupTimes(dt, timeField, timeThreshold = NULL)
+GroupTimes(DT, timeField, timeThreshold = NULL)
 }
 \arguments{
-\item{dt}{input locs/rows}
+\item{DT}{input locs/rows}
 
 \item{timeField}{time column name}
 
 \item{timeThreshold}{threshold for grouping times. eg: '2 hours', '10 minutes', etc.
-if not provided, times will be matched exactly.}
+if not provided, times will be matched exactly. Note that provided
+threshold must be in the expected format: ## unit}
 }
 \description{
 Assign a numerical group for rows by provided time column. If

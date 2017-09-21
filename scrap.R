@@ -34,6 +34,15 @@ updatePackageVersion()
 
 data(locs)
 
+
+
+utm <- '+proj=utm +zone=21 ellps=WGS84'
+BuildHRs(hrType = 'mcp', hrParams = list(percent = 50), DT = locs, projection = utm)
+BuildHRs(hrType = 'kernel', DT = locs, projection = utm)
+
+hrprms <- list(percent = 95)
+do.call(adehabitatHR::mcp, list(xy = BuildPts(locs, projection = utm), hrprms))
+
 locs[, datetime:= as.POSIXct(paste(idate, itime))]
 
 GroupTimes(locs, 'datetime', '2 hours')
