@@ -4,6 +4,8 @@
 #'
 #' @inheritParams BuildPts
 #'
+#' @param proportion boolean indicating either returning proportional overlap
+#'                   of polygons or grouping
 #' @param hrType Type of HR estimation, defaults to 'mcp'
 #' @param spPolys Alternatively, provide a SpatialPolygons object.
 #'
@@ -23,7 +25,7 @@
 #' data(locsPolys)
 #'
 #' groups <- GroupPolys(spPolys = locsPolys)
-GroupPolys <- function(hrType = 'mcp', hrParams = NULL,
+GroupPolys <- function(proportion = FALSE, hrType = 'mcp', hrParams = NULL,
                        DT = NULL, projection = NULL, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
                        spPolys = NULL){
   if(is.null(spPolys)){
@@ -36,11 +38,23 @@ GroupPolys <- function(hrType = 'mcp', hrParams = NULL,
     spPolys <- BuildHRs(hrType, hrParams, DT, projection, coordFields, idField)
   }
 
-  unionPolys <- rgeos::gUnaryUnion(spPolys)
-  ovr <- sp::over(spPolys, sp::disaggregate(unionPolys))
-  data.table::setnames(data.table::data.table(names(ovr),
-                                              ovr),
-                       c(idField, 'group'))[]
+  if(proportion){
+    inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
+
+    data.table::data.table(area = sapply(inters@polygons,
+                                         FUN=function(x) {slot(x, 'area')}))[,
+                           c('ID1', 'ID2') := data.table::tstrsplit(
+                             sapply(inters@polygons, FUN=function(x) {slot(x, 'ID')}), ' ',
+                             type.convert = TRUE)][]
+# this is susceptible to error if ID field provided has spaces
+  } else {
+    unionPolys <- rgeos::gUnaryUnion(spPolys)
+    ovr <- sp::over(spPolys, sp::disaggregate(unionPolys))
+    data.table::setnames(data.table::data.table(names(ovr),
+                                                ovr),
+                         c(idField, 'group'))[]
+  }
+
 }
 
 # TODO: optional proportion overlap

@@ -37,7 +37,40 @@ data(locs)
 
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-BuildHRs(hrType = 'mcp', hrParams = list(percent = 50), DT = locs, projection = utm)
+b <- BuildHRs(hrType = 'mcp', hrParams = list(percent = 50), DT = locs, projection = utm)
+b
+
+GroupPolys(TRUE, spPolys = b)
+
+
+inters <- rgeos::gIntersection(b, b, byid = TRUE)
+
+data.table::data.table(area = lapply(b@polygons, FUN=function(x) {slot(x, 'area')}))[,
+                       c('ID1', 'ID2') := data.table::tstrsplit(
+                         sapply(b@polygons, FUN=function(x) {slot(x, 'ID')}), ' ',
+                         type.convert = TRUE)]
+
+
+pi <- rgeos::gIntersection(b, b, byid = TRUE)
+# Extract areas from polygon objects then attach as attribute
+areas <- data.frame(area=sapply(pi@polygons, FUN=function(x) {slot(x, 'area')}))
+# row.names(areas) <-
+library(data.table)
+library(rgeos)
+
+
+data.table::data.table(area=lapply(pi@polygons, FUN=function(x) {slot(x, 'area')}),
+data.table::tstrsplit(
+  sapply(pi@polygons, FUN=function(x) {slot(x, 'ID')}), ' ')
+)
+
+# Combine attributes info and areas
+attArea <- sp::spCbind(pi, areas)
+
+# For each field, get area per soil type
+aggregate(area~field + soil, data=attArea, FUN=sum)
+
+
 BuildHRs(hrType = 'kernel', DT = locs, projection = utm)
 
 hrprms <- list(percent = 95)
