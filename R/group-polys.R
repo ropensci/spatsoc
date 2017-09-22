@@ -4,8 +4,8 @@
 #'
 #' @inheritParams BuildPts
 #'
-#' @param proportion boolean indicating either returning proportional overlap
-#'                   of polygons or grouping
+#' @param area boolean indicating either returning area of overlap
+#'                   of polygons or simply group
 #' @param hrType Type of HR estimation, defaults to 'mcp'
 #' @param spPolys Alternatively, provide a SpatialPolygons object.
 #'
@@ -25,7 +25,7 @@
 #' data(locsPolys)
 #'
 #' groups <- GroupPolys(spPolys = locsPolys)
-GroupPolys <- function(proportion = FALSE, hrType = 'mcp', hrParams = NULL,
+GroupPolys <- function(area = FALSE, hrType = 'mcp', hrParams = NULL,
                        DT = NULL, projection = NULL, coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
                        spPolys = NULL){
   if(is.null(spPolys)){
@@ -38,7 +38,7 @@ GroupPolys <- function(proportion = FALSE, hrType = 'mcp', hrParams = NULL,
     spPolys <- BuildHRs(hrType, hrParams, DT, projection, coordFields, idField)
   }
 
-  if(proportion){
+  if(area){
     inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
 
     data.table::data.table(area = sapply(inters@polygons,
