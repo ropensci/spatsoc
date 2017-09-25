@@ -4,11 +4,14 @@
 \alias{GroupPolys}
 \title{Group Overlapping Polygons}
 \usage{
-GroupPolys(hrType = "mcp", hrParams = NULL, DT = NULL,
+GroupPolys(area = FALSE, hrType = "mcp", hrParams = NULL, DT = NULL,
   projection = NULL, coordFields = c("EASTING", "NORTHING"),
   idField = "ID", spPolys = NULL)
 }
 \arguments{
+\item{area}{boolean indicating either returning area of overlap
+of polygons or simply group}
+
 \item{hrType}{Type of HR estimation, defaults to 'mcp'}
 
 \item{DT}{Input data with coordinate and id fields. If not provided, fields

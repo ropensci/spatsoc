@@ -9,6 +9,45 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r}
+library(ggplot2); library(data.table); library(spatsoc)
+data(locs)
+utm <- '+proj=utm +zone=21 ellps=WGS84'
+
+sublocs <- locs[EASTING < 640000 & (ID %in% c('ind23', 'ind11', 'ind15'))][order(idate, itime)]
+sublocs[, datetime := as.POSIXct(paste(idate, itime))]
+
+ggplot(sublocs) + 
+  geom_point(aes(EASTING, NORTHING, color = ID, group = ID))# + guides(color = FALSE)
+
+
+ggplot(fortify(rgeos::gBuffer(BuildPts(sublocs, utm), 50, byid = FALSE))) + 
+  geom_polygon(aes(long, lat, group = group, color = id, fill = id), alpha = 0.2)# +
+
+
+GroupPts
+
+ggplot(sublocs) + 
+  geom_path(aes(EASTING, NORTHING, color = ID, group = ID))# + guides(color = FALSE)
+
+hrs <- BuildHRs(hrType = 'mcp', DT = sublocs, projection = utm)
+ggplot(fortify(hrs)) + 
+  geom_polygon(aes(long, lat, group = group, color = id, fill = id), alpha = 0.2)# +
+  # geom_point(data = sublocs, aes(EASTING, NORTHING, color = ID, group = ID)) + # + guides(color = FALSE)
+  # geom_path(data = sublocs, aes(EASTING, NORTHING, color = ID, group = ID))# + guides(color = FALSE)
+
+```
+
+
+
+
+
+
+
+
+
+
+
 The `spatsoc` package provides functionality for analysing animal location data in time and space to identify potential interactions among individuals or social groups. 
 
 The package contains a set of `Group*` functions that are used for identifying groups from input data depending on spatial location and (optionally) time. In addition, the package contains functions for determining the nearest neighbor to each individual, as well as the mean pairwise distance between a set of individuals (both optionally across time). 
