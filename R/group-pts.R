@@ -25,7 +25,7 @@
 #' data(locsPts)
 #'
 #' groups <- GroupPts(spPts = locsPts)
-GroupPts <- function(DT, bufferWidth, timeField = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
+GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
                      idField = 'ID', spPts = NULL){
 
   if(!is.null(DT) && any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
@@ -48,17 +48,34 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, projection, coordFields 
                          c(coordFields, idField, 'group'))
   } else {
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
-    DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
 
-          buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
+    if(is.null(timeThreshold)){
+      DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
 
-          ovr <- sp::over(spPts, sp::disaggregate(buffers))
+      buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
 
-          setNames(
-            c(as.list(as.data.frame(spPts@coords)),
-              list(spPts$id, paste(.GRP, ovr, sep = '_'))),
-            c(coordFields, idField, 'group'))
-          },
-       by = timeField, .SDcols = c(coordFields, idField)]
+      ovr <- sp::over(spPts, sp::disaggregate(buffers))
+
+      setNames(
+        c(as.list(as.data.frame(spPts@coords)),
+          list(spPts$id, paste(.GRP, ovr, sep = '_'))),
+        c(coordFields, idField, 'group'))
+      },
+      by = timeField, .SDcols = c(coordFields, idField)]
+    } else {
+      GroupTimes(DT, timeField, timeThreshold)[,
+            {spPts <- BuildPts(.SD, projection, coordFields, idField)
+
+            buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
+
+            ovr <- sp::over(spPts, sp::disaggregate(buffers))
+
+            setNames(
+              c(as.list(as.data.frame(spPts@coords)),
+                list(spPts$id, paste(.GRP, ovr, sep = '_'))),
+              c(coordFields, idField, 'group'))
+            },
+         by = timeGroup, .SDcols = c(coordFields, idField)]
+    }
   }
 }

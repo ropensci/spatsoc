@@ -16,6 +16,10 @@
 #'
 #' @export
 GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
+  if (!truelength(DT))
+    setDT(DT)
+
+
   if(any(!(c(timeField) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
@@ -47,12 +51,12 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
                                           as.POSIXct(get(timeField)) -
                                             ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
                                             data.table::second(get(timeField)))
-                           class(new) <- c("POSIXct", "POSIXt")
+                           class(new) <- c("POSIXct", "POSIXct")
                            new})]
 
       newdates[, timeGroup := .GRP, by = new]
 
-      return(DT[, (colnames(newdates)) := newdates])
+      return(DT[, (colnames(newdates)) := newdates][])
     }
   }
 }

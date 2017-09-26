@@ -10,37 +10,60 @@ vignette: >
 ---
 
 ```{r}
+# winter mid jan to mid feb
+sl <- locs[EASTING > 6e+05][ANIMAL_ID %in% c('mr2009a11', 'mr2009a28', 'mr2009a07')]#,
+
+locs2 <- locs
+locs <- locs[, .(ID = ANIMAL_ID, EASTING = EASTING, NORTHING = NORTHING, datetime = datetime)]
+devtools::use_data(locs, overwrite = TRUE)
+
+data(locs)
+locs
 library(ggplot2); library(data.table); library(spatsoc)
 data(locs)
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
-sublocs <- locs[EASTING < 640000 & (ID %in% c('ind23', 'ind11', 'ind15'))][order(idate, itime)]
-sublocs[, datetime := as.POSIXct(paste(idate, itime))]
+locs <- locs[order(datetime)]
 
-ggplot(sublocs) + 
-  geom_point(aes(EASTING, NORTHING, color = ID, group = ID))# + guides(color = FALSE)
+ggplot(locs) + 
+  geom_point(aes(EASTING, NORTHING, color = ID, group = ID)) + guides(color = FALSE)
 
+pt.grps <- GroupPts(sublocs, idField = 'ID', bufferWidth = 50, projection = utm, timeField = 'datetime', timeThreshold = '10 minutes')
 
-ggplot(fortify(rgeos::gBuffer(BuildPts(sublocs, utm), 50, byid = FALSE))) + 
-  geom_polygon(aes(long, lat, group = group, color = id, fill = id), alpha = 0.2)# +
-
-
-GroupPts
-
-ggplot(sublocs) + 
-  geom_path(aes(EASTING, NORTHING, color = ID, group = ID))# + guides(color = FALSE)
-
-hrs <- BuildHRs(hrType = 'mcp', DT = sublocs, projection = utm)
-ggplot(fortify(hrs)) + 
-  geom_polygon(aes(long, lat, group = group, color = id, fill = id), alpha = 0.2)# +
-  # geom_point(data = sublocs, aes(EASTING, NORTHING, color = ID, group = ID)) + # + guides(color = FALSE)
-  # geom_path(data = sublocs, aes(EASTING, NORTHING, color = ID, group = ID))# + guides(color = FALSE)
+pt.grps[, groupN := .N, by = group]#[N > 1]#, groupN := N]
+ggplot() + 
+  geom_point(aes(EASTING, NORTHING, shape = ID, color = groupN), data = pt.grps) + scale_shape_manual(values = c(21, 22, 23))
+  # geom_point(aes(EASTING, NORTHING, color = factor(group)), data =,  pt.grps[groupN > 1])
 
 ```
 
 
+```{r}
+  # geom_point(aes(EASTING, NORTHING, color = group, type = ID))
+#ggplot(fortify(rgeos::gBuffer(BuildPts(sublocs, utm), 50, byid = FALSE))) + 
+ # geom_polygon(aes(long, lat, group = group, color = id, fill = id), alpha = 0.2)# +
 
 
+
+ggplot(sl) + 
+  geom_path(aes(EASTING, NORTHING, color = ID, group = ID))# + guides(color = FALSE)
+
+hr.grps <- GroupPolys(area = FALSE, hrType = 'mcp', DT = sublocs, projection = utm)
+hrs <- BuildHRs(hrType = 'mcp', DT = sublocs, projection = utm)
+hrs@data$grps <- hr.grps$group
+
+m <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
+           by = 'id')
+
+
+ggplot(m) + 
+  geom_polygon(aes(long, lat, group = group, color = id, fill = factor(grps)), alpha = 0.4) + labs(fill = 'Group', color = 'ID')
+```
+
+```{r}
+ggplot(sl[ANIMAL_ID %in% c('mr2009a11', 'mr2009a28', 'mr2009a07')]) + 
+  geom_path(aes(EASTING, NORTHING, color = ANIMAL_ID, group = ANIMAL_ID))
+```
 
 
 
