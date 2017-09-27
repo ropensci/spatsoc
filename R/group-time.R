@@ -21,11 +21,13 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
 
 
   if(any(!(c(timeField) %in% colnames(DT)))){
-    stop('some fields provided are not present in data.table provided/colnames(DT)')
+    stop('some fields provided are not present
+         in data.table provided/colnames(DT)')
   }
 
   if('newtime' %in% colnames(DT)){
-    warning('`newtime` column name found in input DT, it will be removed before determining new time groups')
+    warning('`newtime` column name found in input DT, it will be removed
+            before determining new time groups')
     DT[, newtime := NULL]
   }
 
@@ -34,25 +36,27 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
   } else {
     if(grepl('hour', timeThreshold)){
 # if 1 hour, go to 60 minutes
-      data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ', type.convert = TRUE, keep = 1),
+      data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ',
+                                                 type.convert = TRUE, keep = 1),
                            format = '%H')
 
     } else if(grepl('minute', timeThreshold)){
 
-      nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ', keep = 1, type.convert = TRUE))
+      nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ',
+                                            keep = 1, type.convert = TRUE))
 
       # alloc.col(DT, 1 )
 
       newdates <- DT[, .(new =
-                           {new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
-                                          (as.POSIXct(get(timeField)) +
-                                             (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60) -
-                                             data.table::second(get(timeField)),
-                                          as.POSIXct(get(timeField)) -
-                                            ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
-                                            data.table::second(get(timeField)))
-                           class(new) <- c("POSIXct", "POSIXct")
-                           new})]
+       {new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
+                      (as.POSIXct(get(timeField)) +
+                         (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60) -
+                         data.table::second(get(timeField)),
+                      as.POSIXct(get(timeField)) -
+                        ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
+                        data.table::second(get(timeField)))
+       class(new) <- c("POSIXct", "POSIXct")
+       new})]
 
       newdates[, timeGroup := .GRP, by = new]
 
@@ -60,6 +64,9 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
     }
   }
 }
+
+# TODO: add daily, monthly, yearly, block? times
+#        eg to make daily lines, or block HRs etc
 
 # TODO: Update description above..
 # TODO: change newtime

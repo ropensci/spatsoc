@@ -9,17 +9,23 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
-library(ggplot2); library(data.table); library(spatsoc); library(gridExtra)
-data(locs)
-sublocs <- locs[EASTING > 6e+05][ID %in% c('mr2009a11', 'mr2009a28', 'mr2009a07')]#,
-utm <- '+proj=utm +zone=21 ellps=WGS84'
 
+The `spatsoc` package provides functionality for analyzing animal location data in time and space to identify potential interactions among individuals or social groups. 
+
+The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. In addition, the package contains functions for determining the nearest neighbor to each individual, as well as the mean pairwise distance between individuals (optionally across time). Finally, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
+
+The functions were developped for application across animal relocation data, for example, proximity based social network analyses and spatial and temporal clustering of points. 
+
+```{r, echo = FALSE, fig.width= 8, fig.height=5, message = FALSE, cache=TRUE}
+library(ggplot2); library(data.table); library(spatsoc); 
+library(gridExtra); library(ggthemes)
+data(locs)
+sublocs <- locs[EASTING > 6e+05]
+utm <- '+proj=utm +zone=21 ellps=WGS84'
 
 pt.grps <- GroupPts(sublocs, idField = 'ID', bufferWidth = 50, 
                     projection = utm, timeField = 'datetime', 
                     timeThreshold = '10 minutes')
-
 pt.grps[, groupN := .N, by = group]
 pt.grps[sample(5), groupN := 2]
 
@@ -29,119 +35,115 @@ hrs@data$grps <- hr.grps$group
 hr <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
             by = 'id')
 
-
 g1 <- ggplot(sublocs) + 
-  geom_point(aes(EASTING, NORTHING, color = ID, group = ID)) + guides(color = FALSE)
+  geom_point(aes(EASTING, NORTHING, color = factor(ID), group = ID), alpha = 0.5) + 
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
+        legend.position = c(0, 1), legend.justification = c(0, 1)) + 
+  labs(color = 'ID') + 
+  scale_color_few('medium')
 
 g2 <- ggplot(sublocs) + 
-  geom_path(aes(EASTING, NORTHING, color = ID, group = ID)) + guides(color = FALSE)
+  geom_path(aes(EASTING, NORTHING, color = ID, group = ID)) + guides(color = FALSE) +
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
+        legend.position = c(0, 1)) + 
+  scale_color_few('medium')
 
 g3 <- ggplot(broom::tidy(hrs)) + 
-  geom_polygon(aes(long, lat, group = id, color = id, fill = factor(id)), alpha = 0.4) #+ labs(fill = 'Group', color = 'ID'))
+  geom_polygon(aes(long, lat, group = id, color = id, fill = factor(id)), alpha = 0.4) + 
+  guides(color = FALSE, fill = FALSE ) + labs(fill = 'ID') + 
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank()) + 
+        # legend.position = c(0, 1), legend.justification = c(0, 1)) +
+  scale_color_few('medium')
 
 g4 <- ggplot() + 
-  geom_point(aes(EASTING, NORTHING, shape = ID), alpha = 0.5, data = pt.grps) + scale_shape_manual(values = c(21, 22, 23)) + 
-  geom_point(aes(EASTING, NORTHING, color = group),  pt.grps[groupN > 1]) 
+  geom_point(aes(EASTING, NORTHING, shape = ID), alpha = 0.4, data = pt.grps) + 
+  scale_shape_manual(values = c(21, 22, 23)) + 
+  geom_point(aes(EASTING, NORTHING, color = group),  pt.grps[groupN > 1]) + 
+  guides(fill = FALSE, shape = FALSE, color = FALSE) + 
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank()) + 
+        # legend.position = c(0, 1), legend.justification = c(0,1)) +
+  labs(color = 'Group')
 
 g5 <- ggplot(merge(sublocs, GroupLines(sublocs, projection = utm))) + 
-  geom_path(aes(EASTING, NORTHING, color = factor(group), group = ID)) + labs(color = 'Group')
+  geom_path(aes(EASTING, NORTHING, color = factor(group), group = ID)) + labs(color = 'Group')  + guides(fill = FALSE, color = FALSE) + 
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank()) + 
+  scale_color_few('dark')
 
 g6 <- ggplot(hr) + 
-  geom_polygon(aes(long, lat, group = group, color = id, fill = factor(grps)), alpha = 0.4) + labs(fill = 'Group', color = 'ID')
+  geom_polygon(aes(long, lat, group = group, color = factor(id), fill = factor(grps)), alpha = 1) + labs(fill = 'Group', color = 'ID')  + guides(fill = FALSE, color = FALSE) + 
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank()) + scale_color_few('dark')
 
-gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2)
+gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2, 
+                        top = 'Point                                                       Line                                                       Polygon')
 
 ```
 
 
-```{r}
-  # geom_point(aes(EASTING, NORTHING, color = group, type = ID))
-#ggplot(fortify(rgeos::gBuffer(BuildPts(sublocs, utm), 50, byid = FALSE))) + 
- # geom_polygon(aes(long, lat, group = group, color = id, fill = id), alpha = 0.2)# +
+<!-- ## Functions -->
+<!-- * Grouping  -->
+<!--     * `GroupPts`   -->
+<!--     * `GroupLines`   -->
+<!--     * `GroupHRs` / `GroupPolys`  -->
+<!--     * `GroupClusters`  -->
+<!--     * `CalcCentroids` -->
+<!--     * `GroupTime` -->
 
+<!-- * Mean pairwise distance -->
+<!--     * `PairwiseDist` -->
 
+<!-- * Nearest neighbor -->
+<!--     * `Nearest` -->
 
+<!-- * Randomization of IDs within groups -->
+<!--     * `Randomizations` -->
 
-hr.grps <- GroupPolys(area = FALSE, hrType = 'mcp', DT = sublocs, projection = utm)
-hrs <- BuildHRs(hrType = 'mcp', DT = sublocs, projection = utm)
-hrs@data$grps <- hr.grps$group
-
-m <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
-           by = 'id')
-
-
-ggplot(m) + 
-  geom_polygon(aes(long, lat, group = group, color = id, fill = factor(grps)), alpha = 0.4) + labs(fill = 'Group', color = 'ID')
-```
-
-```{r}
-ggplot(sl[ANIMAL_ID %in% c('mr2009a11', 'mr2009a28', 'mr2009a07')]) + 
-  geom_path(aes(EASTING, NORTHING, color = ANIMAL_ID, group = ANIMAL_ID))
-```
-
-
-
-
-
-
-
-The `spatsoc` package provides functionality for analysing animal location data in time and space to identify potential interactions among individuals or social groups. 
-
-The package contains a set of `Group*` functions that are used for identifying groups from input data depending on spatial location and (optionally) time. In addition, the package contains functions for determining the nearest neighbor to each individual, as well as the mean pairwise distance between a set of individuals (both optionally across time). 
-
-## Functions
-* Grouping 
-    * `GroupPts`  
-    * `GroupLines`  
-    * `GroupHRs` / `GroupPolys` 
-    * `GroupClusters` 
-    * `CalcCentroids`
-    * `GroupTime`
-   
-* Mean pairwise distance
-    * `PairwiseDist`
-
-* Nearest neighbor
-    * `Nearest`
-
-* Randomization of IDs within groups
-    * `Randomizations`
-    
-* Helper functions
-    * `BuildPts`
-    * `BuildLines`
-    * `BuildHRs`
-    * `BuildClusters`
-    * `RoundTime`
+<!-- * Helper functions -->
+<!--     * `BuildPts` -->
+<!--     * `BuildLines` -->
+<!--     * `BuildHRs` -->
+<!--     * `BuildClusters` -->
 
 ## Grouping
 Let's read in `spatsoc`'s example data.
 
-```{r}
+```{r, eval = FALSE}
 library(spatsoc); library(data.table)
 data(locs)
 locs[1:5]
 ```
+```{r}
+knitr::kable(locs[1:5])
+```
 
 <!-- note this input/example data is just for now.. -->
-The data consist of relocations of `r locs[, uniqueN(ID)]` individuals over `r locs[, max(idate) - min(idate)]` days. Relocations were recorded using GPS collars with fixes obtained every two hours. Using these data, we can compare the various grouping methods available in `spatsoc`. 
+The data consist of relocations of `r locs[, uniqueN(ID)]` individuals over `r locs[, max(yday(datetime)) - min(yday(datetime))]` days. Relocations were recorded using GPS collars with fixes obtained every two hours. Using these data, we can compare the various grouping methods available in `spatsoc`.
 
 ### `GroupPts`
-The `GroupPts` function compares the relocations of all individuals at each time step in the input data and groups those within a specified buffer distance. 
+The `GroupPts` function compares the relocations of all individuals at each time step and groups individuals based on a buffer distance provided by the user. 
+
+Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`timeThreshold`), to consider all fixes within this threshold taken at the same time. 
+
+For example, we can define a 5 minute threshold
+
+```{r}
+
+
+```
+
 Before grouping, we will ensure that the time field we intend to group on is in the correct format. Because GPS location fixes across animals are not 
 necessarily obtained at the exact same time, we provide the function `GroupTimes` to find temporal groups within a specified time threshold. 
 
 <!-- all below needs updating since GroupTimes replaces RoundTime -->
 
 ```{r}
-locs[minute(itime) > 5, .N]
-locs[minute(itime) > 5]
+locs[minute(datetime) > 5, .N]
+locs[minute(datetime) > 5]
 ```
 
 If we want to group individuals in time and space, it is clear that these 20 relocations may not be relevant to those recorded ~40-50 minutes earlier. We will round the times to the nearest hour using `RoundTime` and returning them `as.POSIXct` datetimes if a date field is provided. Alternatively, if the temporal scale of your input data is different, time fields can be rounded using different round units such as `'15 minutes'` or `'4 hours'`. <!-- for example this time -->
 
 ```{r, eval = FALSE}
-locs[, roundDateTime := RoundTime(.SD, 'itime', roundUnit = '1 hour', dateField = 'idate')]
+locs[, roundDateTime := RoundTime(.SD, 'datetime', roundUnit = '1 hour', dateField = 'datetime')]
 ```
 
 <!-- Finally, the data preparation is complete by using the grouppts to call helper function
@@ -157,7 +159,6 @@ GroupPts(locs, 50, timeField = 'roundDateTime',
 ```
 
 
-<!-- ?QW when would best period be for social interactions -->
 <!---
 The basic methodology is as follows:
 
