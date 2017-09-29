@@ -33,8 +33,26 @@ updatePackageVersion <- function(packageLocation ="."){
 updatePackageVersion()
 
 data(locs)
+library(spatsoc)
+locs[, day := data.table::yday(datetime)]
+l <- GroupLines(locs, projection = utm, timeField = 'day')
+l[, groupN := .N, by = group]
 
+v <- merge(locs, l)
 
+ggplot(v[order(datetime)]) +
+  geom_path(aes(EASTING, NORTHING, color = ID, group = ID)) + guides(color = FALSE) +
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(),
+        legend.position = c(0, 1))
+
+library(ggplot2)
+ggplot(v[order(datetime)]) +
+  # geom_path(aes(EASTING, NORTHING,
+  #               group = ID), color = 'orange',
+  #           data = v[groupN > 1][order(datetime)]) +
+  geom_path(aes(EASTING, NORTHING,
+                group = ID, color = groupN)) +
+  guides(color = FALSE)
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 b <- BuildHRs(hrType = 'mcp', hrParams = list(percent = 50), DT = locs, projection = utm)

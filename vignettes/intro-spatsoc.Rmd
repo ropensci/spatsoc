@@ -21,19 +21,27 @@ library(ggplot2); library(data.table); library(spatsoc);
 library(gridExtra); library(ggthemes)
 data(locs)
 sublocs <- locs[EASTING > 6e+05]
+sublocs[, day := yday(datetime)]
+
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
 pt.grps <- GroupPts(sublocs, idField = 'ID', bufferWidth = 50, 
                     projection = utm, timeField = 'datetime', 
                     timeThreshold = '10 minutes')
 pt.grps[, groupN := .N, by = group]
-pt.grps[sample(5), groupN := 2]
+pt.grps[ID != 'A'][sample(5), groupN := 2]
 
 hrs <- BuildHRs(hrType = 'mcp', DT = sublocs, projection = utm)
 hr.grps <- GroupPolys(area = FALSE, hrType = 'mcp', DT = sublocs, projection = utm)
 hrs@data$grps <- hr.grps$group
 hr <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
             by = 'id')
+
+l <- GroupLines(sublocs, projection = utm, timeField = 'day')
+l[, groupN := .N, by = group]
+
+v <- merge(sublocs, l)
+
 
 g1 <- ggplot(sublocs) + 
   geom_point(aes(EASTING, NORTHING, color = factor(ID), group = ID), alpha = 0.5) + 
@@ -51,27 +59,32 @@ g2 <- ggplot(sublocs) +
 g3 <- ggplot(broom::tidy(hrs)) + 
   geom_polygon(aes(long, lat, group = id, color = id, fill = factor(id)), alpha = 0.4) + 
   guides(color = FALSE, fill = FALSE ) + labs(fill = 'ID') + 
-  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank()) + 
-        # legend.position = c(0, 1), legend.justification = c(0, 1)) +
+  theme(axis.title=element_blank(), axis.text=element_blank(), 
+        axis.ticks=element_blank()) + 
   scale_color_few('medium')
 
 g4 <- ggplot() + 
   geom_point(aes(EASTING, NORTHING, shape = ID), alpha = 0.4, data = pt.grps) + 
   scale_shape_manual(values = c(21, 22, 23)) + 
-  geom_point(aes(EASTING, NORTHING, color = group),  pt.grps[groupN > 1]) + 
+  geom_point(aes(EASTING, NORTHING, color = factor(groupN)),  pt.grps[groupN > 1]) + 
   guides(fill = FALSE, shape = FALSE, color = FALSE) + 
-  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank()) + 
-        # legend.position = c(0, 1), legend.justification = c(0,1)) +
-  labs(color = 'Group')
-
-g5 <- ggplot(merge(sublocs, GroupLines(sublocs, projection = utm))) + 
-  geom_path(aes(EASTING, NORTHING, color = factor(group), group = ID)) + labs(color = 'Group')  + guides(fill = FALSE, color = FALSE) + 
-  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank()) + 
-  scale_color_few('dark')
+  theme(axis.title=element_blank(), axis.text=element_blank(), 
+        axis.ticks=element_blank()) + 
+  labs(color = 'Group') + 
+  scale_color_manual(values = c('1' = 'black', '2' = '#e7b742'))
+g5 <- ggplot(v[order(datetime)]) + 
+  geom_path(aes(EASTING, NORTHING, group = ID, color = factor(groupN))) +
+  guides(color = FALSE) +
+  theme(axis.title=element_blank(), axis.text=element_blank(), 
+        axis.ticks=element_blank(),
+        legend.position = c(0, 1)) + 
+  scale_color_manual(values = c('1' = 'black', '2' = '#e7b742'))
 
 g6 <- ggplot(hr) + 
-  geom_polygon(aes(long, lat, group = group, color = factor(id), fill = factor(grps)), alpha = 1) + labs(fill = 'Group', color = 'ID')  + guides(fill = FALSE, color = FALSE) + 
-  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank()) + scale_color_few('dark')
+  geom_polygon(aes(long, lat, group = group, fill = factor(grps)),color = 'grey') + labs(fill = 'Group', color = 'ID')  + guides(fill = FALSE, color = FALSE) + 
+  theme(axis.title=element_blank(), axis.text=element_blank(), 
+        axis.ticks=element_blank()) + 
+  scale_fill_manual(values = c('1' = 'black', '2' = '#e7b742'))
 
 gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2, 
                         top = 'Point                                                       Line                                                       Polygon')

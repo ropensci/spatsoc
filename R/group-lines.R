@@ -23,7 +23,8 @@
 #'
 #' groups <- GroupLines(spLines = locsLines)
 #' @import data.table
-GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
+GroupLines <- function(DT, bufferWidth = 0, timeField = NULL,
+                       projection, coordFields = c('EASTING', 'NORTHING'),
                        idField = 'ID', spLines = NULL) {
   if(any(!(c(idField, timeField, coordFields) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
