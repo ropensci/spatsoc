@@ -1,6 +1,7 @@
 #' Groups From Spatial Lines
 #'
 #' @inheritParams BuildPts
+#' @inheritParams GroupPts
 #' @param bufferWidth The width of the buffer around the geometry in the units
 #'   of the projection. Optionally, exclude argument or supply 0 to compare
 #'   SpatialLines intersection

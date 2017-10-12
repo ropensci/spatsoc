@@ -15,6 +15,9 @@ default to c('EASTING', 'NORTHING') and 'ID'}
 of the projection. Optionally, exclude argument or supply 0 to compare
 SpatialLines intersection}
 
+\item{timeField}{(optional) time field in the DT upon which the spatial grouping will be
+calculated}
+
 \item{projection}{Character string for input to sp::CRS() and proj4string()}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y

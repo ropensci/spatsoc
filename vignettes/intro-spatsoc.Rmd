@@ -12,11 +12,11 @@ vignette: >
 
 The `spatsoc` package provides functionality for analyzing animal location data in time and space to identify potential interactions among individuals or social groups. 
 
-The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. In addition, the package contains functions for determining the nearest neighbor to each individual, as well as the mean pairwise distance between individuals (optionally across time). Finally, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
+The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. In addition, the package contains functions for determining the nearest neighbor and mean pairwise distance between individuals, optionally across time steps. Finally, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
 
 The functions were developped for application across animal relocation data, for example, proximity based social network analyses and spatial and temporal clustering of points. 
 
-```{r, echo = FALSE, fig.width= 8, fig.height=5, message = FALSE, cache=TRUE}
+```{r, echo = FALSE, fig.width= 8, fig.height=5, message = FALSE}
 library(ggplot2); library(data.table); library(spatsoc); 
 library(gridExtra); library(ggthemes)
 data(locs)
@@ -122,10 +122,10 @@ Let's read in `spatsoc`'s example data.
 ```{r, eval = FALSE}
 library(spatsoc); library(data.table)
 data(locs)
-locs[1:5]
+locs
 ```
-```{r}
-knitr::kable(locs[1:5])
+```{r, echo=FALSE}
+knitr::kable(locs[sample(.N, 5)])
 ```
 
 <!-- note this input/example data is just for now.. -->
@@ -134,51 +134,25 @@ The data consist of relocations of `r locs[, uniqueN(ID)]` individuals over `r l
 ### `GroupPts`
 The `GroupPts` function compares the relocations of all individuals at each time step and groups individuals based on a buffer distance provided by the user. 
 
-Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`timeThreshold`), to consider all fixes within this threshold taken at the same time. 
-
-For example, we can define a 5 minute threshold
+Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`timeThreshold`), to consider all fixes within this threshold taken at the same time. For example, we will use a 5 minute threshold. 
 
 ```{r}
-
+GroupPts(locs, 50, 'datetime', '5 minutes', '+proj=utm +zone=21 ellps=WGS84', c('EASTING', 'NORTHING'), 'ID')
 
 ```
 
-Before grouping, we will ensure that the time field we intend to group on is in the correct format. Because GPS location fixes across animals are not 
-necessarily obtained at the exact same time, we provide the function `GroupTimes` to find temporal groups within a specified time threshold. 
+### `GroupLines`
+The `GroupLines` function compares the trajectory of individuals in a specified time interval (eg: daily)
 
-<!-- all below needs updating since GroupTimes replaces RoundTime -->
+Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`timeThreshold`), to consider all fixes within this threshold taken at the same time. For example, we will use a 5 minute threshold. 
 
 ```{r}
-locs[minute(datetime) > 5, .N]
-locs[minute(datetime) > 5]
-```
-
-If we want to group individuals in time and space, it is clear that these 20 relocations may not be relevant to those recorded ~40-50 minutes earlier. We will round the times to the nearest hour using `RoundTime` and returning them `as.POSIXct` datetimes if a date field is provided. Alternatively, if the temporal scale of your input data is different, time fields can be rounded using different round units such as `'15 minutes'` or `'4 hours'`. <!-- for example this time -->
-
-```{r, eval = FALSE}
-locs[, roundDateTime := RoundTime(.SD, 'datetime', roundUnit = '1 hour', dateField = 'datetime')]
-```
-
-<!-- Finally, the data preparation is complete by using the grouppts to call helper function
-above roundtime to group times to on nearest hour-->
-
-We can then use the `GroupPts` function to find overlapping spatial location of buffered points. Here, we buffer each point by 50m to match temporal and spatial overlap of potential interation or social group.  
-
-```{r, eval = FALSE}
-GroupPts(locs, 50, timeField = 'roundDateTime', 
-         projection = '+proj=utm +zone=21 ellps=WGS84', 
-         idField = 'ID', coordFields = c('EASTING', 'NORTHING'))
+GroupPts(locs, 50, 'datetime', '5 minutes', '+proj=utm +zone=21 ellps=WGS84', c('EASTING', 'NORTHING'), 'ID')
 
 ```
 
 
-<!---
-The basic methodology is as follows:
 
-1. Group locations by overlapping or matching time. 
-1. Group locations 
-1. *Optionally* round time fields.
--->
 ## Notes
 Package dependencies for `spatsoc` are <!-- list all and note details --> `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference. 
 

@@ -6,6 +6,8 @@
 #' time.
 #'
 #' @inheritParams BuildPts
+#' @param timeThreshold The threshold for considering time groups, eg: '5 minutes' or
+#'                     '1 hour'. If not provided, times will be matched exactly.
 #' @param spPts Alternatively, provide a SpatialPointsDataFrame created with the
 #'   sp package. If a spPts object is provided, groups cannot be calculated by
 #' @param bufferWidth The width of the buffer around the geometry in the units of the projection
@@ -25,7 +27,8 @@
 #' data(locsPts)
 #'
 #' groups <- GroupPts(spPts = locsPts)
-GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL, projection, coordFields = c('EASTING', 'NORTHING'),
+GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL,
+                     projection, coordFields = c('EASTING', 'NORTHING'),
                      idField = 'ID', spPts = NULL){
 
   if(!is.null(DT) && any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
