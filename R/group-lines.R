@@ -53,22 +53,42 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL,
     if(!is.null(spLines)) {
       stop("if providing a spLines, cannot provide a time field")
     }
-    # Build and buffer as above, by timeField. Return spatial and unique groups
-    DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
-          if(is.null(spLines)) {
-            message('some rows are dropped - unable to build lines with <2 locs')
+
+    ####
+    if(is.null(timeThreshold)){
+      DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
+      if(is.null(spLines)) {
+        message('some rows are dropped - unable to build lines with <2 locs')
+      } else {
+        if(bufferWidth == 0) {
+          merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+        } else {
+          merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+        }
+        ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
+        setNames(list(names(ovr), paste(ovr, .GRP, sep = '_')),
+                 c(idField, 'group'))
+      }
+      },
+      by = timeField, .SDcols = c(coordFields, idField)]
+    } else {
+      GroupTimes(DT, timeField, timeThreshold)[, {
+        spLines <- BuildLines(.SD, projection, coordFields, idField)
+        if(is.null(spLines)) {
+          message('some rows are dropped - unable to build lines with <2 locs')
+        } else {
+          if(bufferWidth == 0) {
+            merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
           } else {
-            if(bufferWidth == 0) {
-              merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
-            } else {
-              merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
-            }
-            ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
-            setNames(list(names(ovr), paste(ovr, .GRP, sep = '_')),
-                     c(idField, 'group'))
-            }
-          },
-       by = timeField, .SDcols = c(coordFields, idField)]
+            merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+          }
+          ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
+          setNames(list(names(ovr), paste(ovr, .GRP, sep = '_')),
+                   c(idField, 'group'))
+        }
+        },
+        by = timeGroup, .SDcols = c(coordFields, idField)]
+    }
   }
 }
 # TODO: find alternative to 0.0001 buffer
