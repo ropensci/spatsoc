@@ -61,6 +61,14 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
       newdates[, timeGroup := .GRP, by = new]
 
       return(DT[, (colnames(newdates)) := newdates][])
+    } else if(grepl('day', timeThreshold)){
+      nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ',
+                                            keep = 1, type.convert = TRUE))
+      if(nTime == 1){
+        DT[, timeGroup := data.table::yday(get(timeField))]
+      } else {
+
+      }
     }
   }
 }
