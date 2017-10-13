@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-The `spatsoc` package provides functionality for analyzing animal location data in time and space to identify potential interactions among individuals or social groups. 
+The `spatsoc` package provides functionality for analyzing animal relocation data in time and space to identify potential interactions among individuals or social groups. 
 
 The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. In addition, the package contains functions for determining the nearest neighbor and mean pairwise distance between individuals, optionally across time steps. Finally, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
 
@@ -136,27 +136,42 @@ The `GroupPts` function compares the relocations of all individuals at each time
 
 Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`timeThreshold`), to consider all fixes within this threshold taken at the same time. For example, we will use a 5 minute threshold. 
 
-```{r}
-GroupPts(locs, 50, 'datetime', '5 minutes', '+proj=utm +zone=21 ellps=WGS84', c('EASTING', 'NORTHING'), 'ID')
+```{r grouppts}
+GroupPts(locs, 50, 'datetime', '5 minutes', 
+         '+proj=utm +zone=21 ellps=WGS84', 
+         c('EASTING', 'NORTHING'), 'ID')
 
 ```
 
 ### `GroupLines`
-The `GroupLines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `GroupPts` which is interesting to understand shared space at daily, weekly or other temporal resolutions. 
+The `GroupLines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `GroupPts` which can help understand shared space at daily, weekly or other temporal resolutions. 
 
-
-
-```{r}
-colnames(locs)
-(c('ID', 'datetime', c('EASTING', 'NORTHING')) %in% colnames(locs))
-    
-GroupLines(locs, bufferWidth = 50, timeField = 'datetime', timeThreshold = '10 hours', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), idField = 'ID')
-
+```{r fake grouplines, eval = FALSE}
+GroupLines(locs, bufferWidth = 50, timeField = 'datetime', timeThreshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), 
+           idField = 'ID')
 ```
 
-# TODO:
-timeGroup needs to accomodate 10 hours 
-and 2 days
+```{r grouplines, echo = FALSE}
+GroupLines(locs, bufferWidth = 50, timeField = 'datetime', timeThreshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), 
+           idField = 'ID')[59:69]
+```
+
+
+### `GroupPolys`
+The `GroupPolys` function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`. Alternatively, a `SpatialPolygonsDataFrame` can be input to the `spPolys` argument. 
+
+```{r grouppolys}
+GroupPolys(area = TRUE, hrType = 'mcp', 
+           hrParams = list('percent' = 95),
+           locs, projection = '+proj=utm +zone=21 ellps=WGS84',
+           coordFields = c('EASTING', 'NORTHING'), idField = 'ID')
+```
+
+
+<!-- timeGroup needs to accomodate 10 hours  FR?
+     home ranges are calculated with adehabitat... 
+     where in depends
+-->
 
 
 
@@ -164,3 +179,8 @@ and 2 days
 Package dependencies for `spatsoc` are `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference. 
 
 In addition, since the `rgeos` package is used in most functions (notably `GroupPts` and `GroupLines`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`. 
+
+
+```{r, echo = FALSE}
+beepr::beep()
+```
