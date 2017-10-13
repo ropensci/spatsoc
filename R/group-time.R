@@ -67,6 +67,22 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
       if(nTime == 1){
         DT[, timeGroup := data.table::yday(get(timeField))]
       } else {
+        days <- DT[, data.table::yday(get(timeField))]
+        blockLength <- nTime
+        seqBlockCuts <- seq.int(min(days), max(days) + blockLength,
+                                by = blockLength)
+
+        DT[, timeGroup := cut(data.table::yday(get(timeField)),
+                              breaks = seqBlockCuts, right = FALSE,
+                              labels = FALSE)]
+
+        if(((max(days) - min(days)) / blockLength) %% 1 != 0){
+          warning('the minimum and maximum days provided in DT are not
+          evenly divisible by the block length')
+        }
+
+        DT
+
 
       }
     }
