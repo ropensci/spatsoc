@@ -11,17 +11,18 @@ GroupTimes(DT, timeField, timeThreshold = NULL)
 
 \item{timeField}{time column name}
 
-\item{timeThreshold}{threshold for grouping times. eg: '2 hours', '10 minutes', etc.
-if not provided, times will be matched exactly. Note that provided
-threshold must be in the expected format: ## unit}
+\item{timeThreshold}{character defining the threshold for grouping times.
+eg: '2 hours', '10 minutes', etc.
+if not provided, times will be matched exactly.
+Note that provided threshold must be in the expected format: '## unit'}
 }
 \description{
 Assign a numerical group for rows by provided time column. If
-using GPS collar data, it is recommended to round this time column providing
-the rounding unit as described below.
+using GPS collar data or other data with variability in concurrent measures across individuals,
+it is recommended to round this time column providing the timeThreshold.
+Otherwise, rows are grouped by matching exact times.
 }
 \details{
-The rounding unit must be provided....
-
-Note that this numerical time group ID is added to the provided data.table.
+This function can also group rows on time intervals, such as blocks of 5 days.
+Simply provide the interval in the same manner eg: '5 days'.
 }
