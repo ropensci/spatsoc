@@ -18,6 +18,9 @@ do we want to return vertices strictly for kernel?
 * check that all functions have proper is null DT and colnames present / it didn't break anything
 
 
+## Vignettes
+* highlight build blocks
+
 ### Functions
 #### Global
 * missing adehabitat, SearchTrees

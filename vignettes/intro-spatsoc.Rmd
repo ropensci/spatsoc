@@ -136,12 +136,19 @@ The `GroupPts` function compares the relocations of all individuals at each time
 
 Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`timeThreshold`), to consider all fixes within this threshold taken at the same time. For example, we will use a 5 minute threshold. 
 
-```{r grouppts}
+```{r grouppts, eval = FALSE}
 GroupPts(locs, 50, 'datetime', '5 minutes', 
          '+proj=utm +zone=21 ellps=WGS84', 
          c('EASTING', 'NORTHING'), 'ID')
-
 ```
+
+```{r fake grouppts, echo=FALSE}
+knitr::kable(
+  GroupPts(locs, 50, 'datetime', '5 minutes', 
+         '+proj=utm +zone=21 ellps=WGS84', 
+         c('EASTING', 'NORTHING'), 'ID')[388:395])
+```
+
 
 ### `GroupLines`
 The `GroupLines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `GroupPts` which can help understand shared space at daily, weekly or other temporal resolutions. 
@@ -152,19 +159,28 @@ GroupLines(locs, bufferWidth = 50, timeField = 'datetime', timeThreshold = '1 da
 ```
 
 ```{r grouplines, echo = FALSE}
-GroupLines(locs, bufferWidth = 50, timeField = 'datetime', timeThreshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), 
-           idField = 'ID')[59:69]
+knitr::kable(
+  GroupLines(locs, bufferWidth = 50, timeField = 'datetime', timeThreshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), 
+           idField = 'ID')[59:65])
 ```
 
 
 ### `GroupPolys`
 The `GroupPolys` function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`. Alternatively, a `SpatialPolygonsDataFrame` can be input to the `spPolys` argument. 
 
-```{r grouppolys}
+```{r fake grouppolys, eval=FALSE}
 GroupPolys(area = TRUE, hrType = 'mcp', 
            hrParams = list('percent' = 95),
            locs, projection = '+proj=utm +zone=21 ellps=WGS84',
            coordFields = c('EASTING', 'NORTHING'), idField = 'ID')
+```
+
+```{r grouppolys, echo=FALSE}
+knitr::kable(
+  GroupPolys(area = TRUE, hrType = 'mcp', 
+           hrParams = list('percent' = 95),
+           locs, projection = '+proj=utm +zone=21 ellps=WGS84',
+           coordFields = c('EASTING', 'NORTHING'), idField = 'ID'))
 ```
 
 
@@ -182,5 +198,5 @@ In addition, since the `rgeos` package is used in most functions (notably `Group
 
 
 ```{r, echo = FALSE}
-beepr::beep()
+# beepr::beep()
 ```
