@@ -21,20 +21,20 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
     # TODO: this isn't really 'hourly' it's just not 'daily'
     if(!is.null(dateField)) warning('dateField ignored since randomType is hourly')
 
-    ls.ids <- unique(DT[[idField]])
+    listIDs <- unique(DT[[idField]])
 
-    DT[, .(randomID = sample(ls.ids, .N)),
+    DT[, .(randomID = sample(listIDs, .N)),
            # ID = get(idField)),
        by = groupField]
 
   } else if(randomType == 'daily'){
     if(is.null(dateField)) stop('must provide a dateField if daily randomType chosen')
-    ls.ids <- unique(DT[[idField]])
+    listIDs <- unique(DT[[idField]])
     # TODO: is it just daily or should this flex to specified time?
 
     # sample 1 id from the list and repeat it for the number of rows
     # so the dimensions input are the same returned
-    DT[, .(randomID = rep(sample(ls.ids, 1), .N), group = get(groupField)),
+    DT[, .(randomID = rep(sample(listIDs, 1), .N), group = get(groupField)),
        by = c(dateField, idField)]
   } else if(randomType == 'spiegel'){
     randomDatesDT <- DT[, {d <- data.table(dates =  unique(get(dateField)))

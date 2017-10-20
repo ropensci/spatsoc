@@ -34,6 +34,41 @@ updatePackageVersion()
 
 data(locs)
 library(spatsoc)
+locs[, .(EASTING, {m <- mean(EASTING)
+                   m + NORTHING}),
+         by = ID]
+GroupTimes(locs, 'datetime')
+locs
+
+
+glins <- GroupLines(locs, projection = utm, timeField = 'datetime',
+                    timeThreshold = '1 day')
+ls.ids <- unique(glins[['ID']])
+
+# hourly.. but its daily
+glins[, .(randomID = sample(ls.ids, .N),
+          ID),
+     by = group]
+
+listIDs <- unique(DT[[idField]])
+# TODO: is it just daily or should this flex to specified time?
+
+# sample 1 id from the list and repeat it for the number of rows
+# so the dimensions input are the same returned
+glins[, .(randomID = rep(sample(ls.ids, 1), .N), group),
+   by = .(datetime, ID)]
+
+# sample 1 id from the list and repeat it for the number of rows
+# so the dimensions input are the same returned
+locs[, .(randomID = rep(sample(ls.ids, 1), .N), group = get(groupField)),
+   by = c(dateField, idField)]
+
+
+locs
+
+
+
+
 locs[, day := data.table::yday(datetime)]
 l <- GroupLines(locs, projection = utm, timeField = 'day')
 l[, groupN := .N, by = group]

@@ -17,15 +17,15 @@
 #'
 #' @export
 GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
-  if (!truelength(DT))
-    setDT(DT)
-
+  if (!truelength(DT)){
+    alloc.col(DT)
+  }
   if(any(!(c(timeField) %in% colnames(DT)))){
     stop('some fields provided are not present
          in data.table provided/colnames(DT)')
   }
 
-    if('newtime' %in% colnames(DT)){
+  if('newtime' %in% colnames(DT)){
     warning('`newtime` column name found in input DT, it will be removed
             before determining new time groups')
     DT[, newtime := NULL]

@@ -53,7 +53,7 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NU
     if(is.null(timeThreshold)){
       DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
       if(is.null(spLines)) {
-        message('some rows are dropped - unable to build lines with <2 locs')
+        message('some rows are dropped - unable to build lines with <3 locs')
       } else {
         if(bufferWidth == 0) {
           merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
@@ -70,7 +70,7 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NU
       GroupTimes(DT, timeField, timeThreshold)[, {
         spLines <- BuildLines(.SD, projection, coordFields, idField)
         if(is.null(spLines)) {
-          message('some rows are dropped - unable to build lines with <2 locs')
+          message('some rows are dropped - unable to build lines with <3 locs')
         } else {
           if(bufferWidth == 0) {
             merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
