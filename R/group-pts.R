@@ -45,10 +45,11 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL,
 
     ovr <- sp::over(spPts, sp::disaggregate(buffers))
 
-    data.table::setnames(data.table::data.table(spPts@coords,
-                                                spPts$id,
-                                                ovr),
-                         c(coordFields, idField, 'group'))
+    data.table::setnames(
+      data.table::data.table(spPts@coords,
+                             spPts$id,
+                             ovr),
+      c(coordFields, idField, 'group'))
   } else {
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
 
@@ -59,9 +60,10 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL,
 
       ovr <- sp::over(spPts, sp::disaggregate(buffers))
 
-      setNames(
-        c(as.list(as.data.frame(spPts@coords)),
-          list(spPts$id, paste(.GRP, ovr, sep = '_'))),
+      data.table::setnames(
+        data.table::data.table(spPts@coords,
+                               spPts$id,
+                               paste(.GRP, ovr, sep = '_')),
         c(coordFields, idField, 'group'))
       },
       by = timeField, .SDcols = c(coordFields, idField)]
@@ -73,10 +75,11 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL,
 
             ovr <- sp::over(spPts, sp::disaggregate(buffers))
 
-            setnames(
-              data.table(spPts@coords,
-                spPts$id, paste(.GRP, ovr, sep = '_'),
-                get(timeField)),
+            data.table::setnames(
+              data.table::data.table(spPts@coords,
+                                     spPts$id,
+                                     paste(.GRP, ovr, sep = '_'),
+                                     get(timeField)),
               c(coordFields, idField, 'group', timeField))
             },
          by = timeGroup, .SDcols = c(coordFields, idField)]
