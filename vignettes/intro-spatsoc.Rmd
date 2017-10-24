@@ -6,7 +6,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8} -->
+  %\VignetteEncoding{UTF-8}
 ---
 
 The `spatsoc` package provides functionality for analyzing animal relocation data in time and space to identify potential interactions among individuals or social groups. 
@@ -125,7 +125,7 @@ data(locs)
 locs
 ```
 ```{r, echo=FALSE}
-knitr::kable(locs[sample(.N, 5)])
+pander::pander(locs[sample(.N, 5)])
 ```
 
 <!-- note this input/example data is just for now.. -->
@@ -143,7 +143,7 @@ GroupPts(locs, 50, 'datetime', '5 minutes',
 ```
 
 ```{r fake grouppts, echo=FALSE}
-knitr::kable(
+pander::pander(
   GroupPts(locs, 50, 'datetime', '5 minutes', 
          '+proj=utm +zone=21 ellps=WGS84', 
          c('EASTING', 'NORTHING'), 'ID')[388:395])
@@ -159,7 +159,7 @@ GroupLines(locs, bufferWidth = 50, timeField = 'datetime', timeThreshold = '1 da
 ```
 
 ```{r grouplines, echo = FALSE}
-knitr::kable(
+pander::pander(
   GroupLines(locs, bufferWidth = 50, timeField = 'datetime', timeThreshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), 
            idField = 'ID')[59:65])
 ```
@@ -176,7 +176,7 @@ GroupPolys(area = TRUE, hrType = 'mcp',
 ```
 
 ```{r grouppolys, echo=FALSE}
-knitr::kable(
+pander::pander(
   GroupPolys(area = TRUE, hrType = 'mcp', 
            hrParams = list('percent' = 95),
            locs, projection = '+proj=utm +zone=21 ellps=WGS84',
