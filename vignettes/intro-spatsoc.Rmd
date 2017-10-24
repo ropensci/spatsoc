@@ -3,14 +3,11 @@ title: "Introduction to spatsoc"
 author: "Alec Robitaille"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
----
-
-<!-- output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8} -->
-
+---
 
 The `spatsoc` package provides functionality for analyzing animal relocation data in time and space to identify potential interactions among individuals or social groups. 
 
@@ -44,26 +41,26 @@ l[, groupN := .N, by = group]
 
 v <- merge(sublocs, l)
 
-
 g1 <- ggplot(sublocs) + 
-  geom_point(aes(EASTING, NORTHING, color = factor(ID), group = ID), alpha = 0.5) + 
+  geom_point(aes(EASTING, NORTHING, color = factor(ID), group = ID), alpha = 0.8) + 
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
         legend.position = c(0, 1), legend.justification = c(0, 1)) + 
   labs(color = 'ID') + 
-  scale_color_brewer(type='qual')
+  scale_color_brewer(type='qual', palette='Dark2')
 
 g2 <- ggplot(sublocs) + 
   geom_path(aes(EASTING, NORTHING, color = ID, group = ID)) + guides(color = FALSE) +
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), 
         legend.position = c(0, 1)) + 
-  scale_color_brewer(type='qual')
+  scale_color_brewer(type='qual', palette='Dark2')
 
 g3 <- ggplot(broom::tidy(hrs)) + 
   geom_polygon(aes(long, lat, group = id, color = id, fill = factor(id)), alpha = 0.4) + 
   guides(color = FALSE, fill = FALSE ) + labs(fill = 'ID') + 
   theme(axis.title=element_blank(), axis.text=element_blank(), 
         axis.ticks=element_blank()) + 
-  scale_color_brewer(type='qual') + scale_fill_brewer(type='qual')
+  scale_color_brewer(type='qual', palette = 'Dark2') + 
+  scale_fill_brewer(type='qual', palette = 'Dark2')
 
 g4 <- ggplot() + 
   geom_point(aes(EASTING, NORTHING, shape = ID), alpha = 0.4, data = pt.grps) + 
@@ -73,20 +70,21 @@ g4 <- ggplot() +
   theme(axis.title=element_blank(), axis.text=element_blank(), 
         axis.ticks=element_blank()) + 
   labs(color = 'Group') + 
-  scale_color_manual(values = c('1' = '#b5b3b8', '2' = '#fb9a99'))
+  scale_color_manual(values = c('1' = '#b5b3b8', '2' = '#ff3333'))
+
 g5 <- ggplot(v[order(datetime)]) + 
   geom_path(aes(EASTING, NORTHING, group = ID, color = factor(groupN))) +
   guides(color = FALSE) +
   theme(axis.title=element_blank(), axis.text=element_blank(), 
         axis.ticks=element_blank(),
         legend.position = c(0, 1)) + 
-  scale_color_manual(values = c('1' = '#b5b3b8', '2' = '#fb9a99'))
+  scale_color_manual(values = c('1' = '#6a696b', '2' = '#ff3333'))
 
 g6 <- ggplot(hr) + 
   geom_polygon(aes(long, lat, group = group, fill = factor(grps)),color = 'grey') + labs(fill = 'Group', color = 'ID')  + guides(fill = FALSE, color = FALSE) + 
   theme(axis.title=element_blank(), axis.text=element_blank(), 
         axis.ticks=element_blank()) + 
-  scale_fill_manual(values = c('1' = '#b5b3b8', '2' = '#fb9a99'))
+  scale_fill_manual(values = c('1' = '#6a696b', '2' = '#ff3333'))
 
 gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2, 
                         top = 'Point                                                       Line                                                       Polygon')
