@@ -73,10 +73,11 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL,
 
             ovr <- sp::over(spPts, sp::disaggregate(buffers))
 
-            setNames(
-              c(as.list(as.data.frame(spPts@coords)),
-                list(spPts$id, paste(.GRP, ovr, sep = '_'))),
-              c(coordFields, idField, 'group'))
+            setnames(
+              data.table(spPts@coords,
+                spPts$id, paste(.GRP, ovr, sep = '_'),
+                get(timeField)),
+              c(coordFields, idField, 'group', timeField))
             },
          by = timeGroup, .SDcols = c(coordFields, idField)]
     }
