@@ -64,21 +64,32 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
       nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ',
                                             keep = 1, type.convert = TRUE))
       if(nTime == 1){
-        DT[, timeGroup := data.table::yday(get(timeField))]
+        # DT[, timeGroup := data.table::yday(get(timeField))]
+        data.table::setnames(
+          data.table::data.table(DT,
+                                 data.table::yday(DT[[timeField]]),
+                                 data.table::yday(DT[[timeField]])),
+          c(names(DT), 'day', 'timeGroup')
+        )
       } else {
         days <- DT[, data.table::yday(get(timeField))]
         blockLength <- nTime
         seqBlockCuts <- seq.int(min(days), max(days) + blockLength,
                                 by = blockLength)
 
-        DT[, timeGroup := cut(data.table::yday(get(timeField)),
-                              breaks = seqBlockCuts, right = FALSE,
-                              labels = FALSE)]
-
         if(((max(days) - min(days)) / blockLength) %% 1 != 0){
-          warning('the minimum and maximum days provided in DT are not
-          evenly divisible by the block length')
+          warning('the minimum and maximum days provided in DT are not evenly divisible by the block length')
         }
+
+        data.table::setnames(
+          data.table::data.table(DT,
+                                 cut(days,
+                                     breaks = seqBlockCuts, right = FALSE,
+                                     labels = FALSE),
+                                 data.table::yday(DT[[timeField]])),
+          c(names(DT), 'timeGroup', 'day'))
+
+
       }
     }
   }
