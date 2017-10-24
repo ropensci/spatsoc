@@ -21,11 +21,10 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
     # TODO: this isn't really 'hourly' it's just not 'daily'
     if(!is.null(dateField)) warning('dateField ignored since randomType is hourly')
 
-    listIDs <- unique(DT[[idField]])
+    lsIDs <- unique(DT[[idField]])
+    randIDs <- sample(lsIDs)
 
-    DT[, .(randomID = sample(listIDs, .N)),
-           # ID = get(idField)),
-       by = groupField]
+    DT[, randomID := randIDs[.GRP], by = idField]
 
   } else if(randomType == 'daily'){
     if(is.null(dateField)) stop('must provide a dateField if daily randomType chosen')

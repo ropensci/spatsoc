@@ -1,10 +1,10 @@
 # spatsoc [working.title]
 Title: Group animal location data by their spatial and temporal relationship
 
-**so instead of RoundTime and GroupTime --> one GroupTime that returns either a numeric
-ID for grouped dates/times (if the user wants this functionality). This wont be used
-by the functions as it is not needed. The second usage, will be rounding times..**
-**returnDateTime from RoundTime function**
+
+
+
+
 
 tests..
 
@@ -16,7 +16,7 @@ do we want to return vertices strictly for kernel?
 
 ## TODO
 * check that all functions have proper is null DT and colnames present / it didn't break anything
-
+* check for [] for DT and fix so outputs what we want
 
 ## Vignettes
 * highlight build blocks

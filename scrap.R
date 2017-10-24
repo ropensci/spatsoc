@@ -34,16 +34,38 @@ updatePackageVersion()
 
 data(locs)
 library(spatsoc)
-locs[, .(EASTING, {m <- mean(EASTING)
-                   m + NORTHING}),
-         by = ID]
-GroupTimes(locs, 'datetime')
-locs
 
+utm <- '+proj=utm +zone=21 ellps=WGS84'
 
-glins <- GroupLines(locs, projection = utm, timeField = 'datetime',
-                    timeThreshold = '1 day')
+glins <- GroupPts(locs, bufferWidth = 50, projection = utm, timeField = 'datetime',
+                    timeThreshold = '10 minutes')
 ls.ids <- unique(glins[['ID']])
+rand.ids <- sample(ls.ids)
+
+glins[, randomID := rand.ids[.GRP], by = ID]
+
+days <- DT[, data.table::yday(get(timeField))]
+blockLength <- nTime
+seqBlockCuts <- seq.int(min(days), max(days) + blockLength,
+                        by = blockLength)
+
+cut(data.table::yday(locs[['datetime']]),
+    breaks = seqBlockCuts, right = FALSE,
+    labels = FALSE)
+
+glins[, {lsIDs <- unique(ID)
+         randIDs <- sample(lsIDs)
+         data.table(ID)[, rand := randIDs[.GRP], by = ID]
+
+         # randIDs[.GRP]
+         },
+      by = timeGroup]
+
+
+
+DT[, .(randomID = rep(sample(listIDs, 1), .N), group = get(groupField)),
+   by = c(dateField, idField)]
+
 
 # hourly.. but its daily
 glins[, .(randomID = sample(ls.ids, .N),

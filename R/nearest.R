@@ -58,4 +58,3 @@ Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE
 
 # TODO: eval(idField) or the like for naming the list with input idField
 #       https://stackoverflow.com/questions/17169475/create-list-programmatically-with-tags-from-character-vector
-#       setNames
