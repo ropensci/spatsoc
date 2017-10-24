@@ -42,9 +42,10 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NU
       merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
     }
     ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = T)
-    data.table::setnames(data.table::data.table(names(ovr),
-                                                unlist(ovr)),
-                         c(idField, 'group'))
+    data.table::setnames(
+      data.table::data.table(names(ovr),
+                             unlist(ovr)),
+      c(idField, 'group'))
   } else {
     if(!is.null(spLines)) {
       stop("if providing a spLines, cannot provide a time field")
@@ -61,8 +62,10 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NU
           merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
         }
         ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
-        setNames(list(names(ovr), paste(ovr, .GRP, sep = '_')),
-                 c(idField, 'group'))
+        data.table::setnames(
+          data.table::data.table(names(ovr),
+                                 paste(ovr, .GRP, sep = '_')),
+          c(idField, 'group'))
       }
       },
       by = timeField, .SDcols = c(coordFields, idField)]
@@ -78,8 +81,10 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NU
             merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
           }
           ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
-          setNames(list(names(ovr), paste(ovr, .GRP, sep = '_')),
-                   c(idField, 'group'))
+          data.table::setnames(
+            data.table::data.table(names(ovr),
+                                   paste(ovr, .GRP, sep = '_')),
+            c(idField, 'group'))
         }
         },
         by = timeGroup, .SDcols = c(coordFields, idField)]
@@ -87,4 +92,3 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NU
   }
 }
 # TODO: find alternative to 0.0001 buffer
-# TODO: adjust output names on line 46
