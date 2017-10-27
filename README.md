@@ -17,6 +17,7 @@ do we want to return vertices strictly for kernel?
 ## TODO
 * check that all functions have proper is null DT and colnames present / it didn't break anything
 * check for [] for DT and fix so outputs what we want
+* what are the incompatibilities between randomization + grouping methods
 
 ## Vignettes
 * highlight build blocks

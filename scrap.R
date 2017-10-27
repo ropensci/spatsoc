@@ -38,20 +38,9 @@ library(spatsoc)
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
 glins <- GroupPts(locs, bufferWidth = 50, projection = utm, timeField = 'datetime',
-                    timeThreshold = '10 minutes')
+                    timeThreshold = '1 day')
 ls.ids <- unique(glins[['ID']])
 rand.ids <- sample(ls.ids)
-
-glins[, randomID := rand.ids[.GRP], by = ID]
-
-days <- DT[, data.table::yday(get(timeField))]
-blockLength <- nTime
-seqBlockCuts <- seq.int(min(days), max(days) + blockLength,
-                        by = blockLength)
-
-cut(data.table::yday(locs[['datetime']]),
-    breaks = seqBlockCuts, right = FALSE,
-    labels = FALSE)
 
 glins[, {lsIDs <- unique(ID)
          randIDs <- sample(lsIDs)
@@ -59,8 +48,17 @@ glins[, {lsIDs <- unique(ID)
 
          # randIDs[.GRP]
          },
-      by = timeGroup]
+      by = timeGroup][1:100]
+glins[1:100]
 
+
+
+
+locs[, {
+  lsdays <- unique(yday(datetime))
+  randays <- sample(lsdays)
+
+  return(yday(datetime), ), by = ID]
 
 
 DT[, .(randomID = rep(sample(listIDs, 1), .N), group = get(groupField)),

@@ -35,10 +35,9 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
     DT[, timeGroup := .GRP, by = timeField]
   } else {
     if(grepl('hour', timeThreshold)){
-      data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ',
-                                                 type.convert = TRUE, keep = 1),
+      data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ')[[1]],
                            format = '%H')
-
+      stop('this function (hourly time group) is broken')
     } else if(grepl('minute', timeThreshold)){
 
       nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ',
