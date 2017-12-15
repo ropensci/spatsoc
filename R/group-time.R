@@ -1,8 +1,9 @@
 #' Group Times
 #'
 #' Assign a numerical group for rows by provided time column. If
-#' using GPS collar data or other data with variability in concurrent measures across individuals,
-#' it is recommended to round this time column providing the timeThreshold.
+#' using GPS collar data or other data with variability in concurrent measures
+#' across individuals, it is recommended to round this time column
+#' providing the timeThreshold.
 #' Otherwise, rows are grouped by matching exact times.
 #'
 #' This function can also group rows on time intervals, such as blocks of 5 days.
@@ -35,9 +36,28 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
     DT[, timeGroup := .GRP, by = timeField]
   } else {
     if(grepl('hour', timeThreshold)){
-      data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ')[[1]],
-                           format = '%H')
-      stop('this function (hourly time group) is broken')
+      if(data.table::tstrsplit(timeThreshold, ' ')[[1]] == 1){
+        nTime <- 60
+        newdates <- DT[, .(new =
+        {new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
+                       (as.POSIXct(get(timeField)) +
+                          (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60) -
+                         data.table::second(get(timeField)),
+                       as.POSIXct(get(timeField)) -
+                         ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
+                         data.table::second(get(timeField)))
+        class(new) <- c("POSIXct", "POSIXct")
+        new})]
+
+        # newdates[, timeGroup := .GRP, by = new]
+
+        # return(DT[, (colnames(newdates)) := newdates][])
+      } else {
+        print(data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ')[[1]],
+                             format = '%H'))
+        stop('this function (hourly time group) is broken')
+      }
+
     } else if(grepl('minute', timeThreshold)){
 
       nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ',

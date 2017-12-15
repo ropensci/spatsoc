@@ -40,6 +40,23 @@ do we want to return vertices strictly for kernel?
 
 #### GroupTime
 * then assign groups depending on optional rounding + field provided.
+* time threshold needs error handling
+* 60 minutes <-> 1 hour
+* warn if minutes are not divisible by 60 or if greater than 60
+* is "timeGroup" the best output column name
+* time zone handling since posixct
+
+wtf
+ 7: 2010-01-18 15:00:00 1263839401
+ 8: 2010-01-18 15:00:00 1263839400
+ 9: 2010-01-18 16:00:00 1263843001
+10: 2010-01-18 20:00:00 1263857401
+11: 2010-01-18 21:00:00 1263861000
+12: 2010-01-18 21:00:00 1263861001
+13: 2010-01-19 00:00:00 1263871800
+14: 2010-01-19 01:00:00 1263875400
+
+
 
 #### GroupPts
 * flex chaining or not?

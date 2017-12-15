@@ -36,6 +36,12 @@ data(locs)
 library(spatsoc)
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
+# locs[, datetime := datetime + (runif(.N, 0, 60) * 60)]
+GroupTimes(locs[order(datetime)], 'datetime',
+           '1 hour')[1:40]
+
+tz
+
 
 glins <- GroupPts(locs, bufferWidth = 50, projection = utm, timeField = 'datetime',
                     timeThreshold = '1 day')
