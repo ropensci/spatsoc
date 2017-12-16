@@ -36,7 +36,6 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
     DT[, timeGroup := .GRP, by = timeField]
   } else {
     if(grepl('hour', timeThreshold)){
-      if(data.table::tstrsplit(timeThreshold, ' ')[[1]] == 1){
         nTime <- 60
         newdates <- DT[, .(new =
         {new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
@@ -49,12 +48,14 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
         class(new) <- c("POSIXct", "POSIXct")
         new})]
 
-        # newdates[, timeGroup := .GRP, by = new]
-
-        # return(DT[, (colnames(newdates)) := newdates][])
-      } else {
+        newdates[, timeGroup := .GRP, by = new]
+        if(data.table::tstrsplit(timeThreshold, ' ')[[1]] == 1){
+          return(DT[, (colnames(newdates)) := newdates][])
+        } else {
         print(data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ')[[1]],
                              format = '%H'))
+
+
         stop('this function (hourly time group) is broken')
       }
 
@@ -116,3 +117,5 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
 
 # TODO: add daily, monthly, yearly, block? times
 # TODO: note results may be strange if you use something non-divisible by 60
+
+

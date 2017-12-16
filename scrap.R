@@ -39,8 +39,33 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 # locs[, datetime := datetime + (runif(.N, 0, 60) * 60)]
 GroupTimes(locs[order(datetime)], 'datetime',
            '1 hour')[1:40]
+GroupTimes(locs[order(datetime)], 'datetime',
+           '60 minutes')[1:40]
 
-tz
+z <- GroupTimes(locs[order(datetime)], 'datetime',
+           '1 hour')[1:40]
+
+# 3 hour interval
+nHours <- 3
+z[, .(hour = hour(new), ModMinHalf = hour(new) %% nHours > (nHours / 2),
+      Mod = hour(new) %% nHours, HalfN = nHours / 2)]
+z[, ifelse(hour(new) %% nHours > (nHours / 2),
+           hour(new) + (nHours - hour(new)),
+           hour(new) - (hour(new) %% nHours))]
+
+5 + (3 - 2)
+10 - 1
+
+newdates <- DT[, .(new =
+{new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
+               (as.POSIXct(get(timeField)) +
+                  (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60) -
+                 data.table::second(get(timeField)),
+               as.POSIXct(get(timeField)) -
+                 ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
+                 data.table::second(get(timeField)))
+class(new) <- c("POSIXct", "POSIXct")
+new})]
 
 
 glins <- GroupPts(locs, bufferWidth = 50, projection = utm, timeField = 'datetime',
