@@ -36,23 +36,137 @@ data(locs)
 library(spatsoc)
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-# locs[, datetime := datetime + (runif(.N, 0, 60) * 60)]
+# locs[, datetime := as.POSIXct(datetime + (runif(.N, 0, 60) * 60))]
 GroupTimes(locs[order(datetime)], 'datetime',
            '1 hour')[1:40]
 GroupTimes(locs[order(datetime)], 'datetime',
            '60 minutes')[1:40]
 
 z <- GroupTimes(locs[order(datetime)], 'datetime',
-           '1 hour')[1:40]
+           '1 hour')
+
+unclass
+
+z
 
 # 3 hour interval
 nHours <- 3
+
+z[, .(hr = hour(new),
+      nHours = nHours,
+      clean = hour(new) %% nHours == 0,
+      moddiv = unclass(as.ITime(new)) %/% (nHours * 3600L),
+      mult = nHours * ((unclass(as.ITime(new)) %/% (nHours * 3600L))))]
+
+z
+dtm <- z[, IDateTime(datetime)]
+dtm[, itime := itime + (runif(.N, 0, 60) * 60)]
+
+# if 1 hour
+dtm[minute(itime) > 30, hr := hour(itime) + 1L]
+dtm[minute(itime) < 30, hr := hour(itime)]
+dtm[, grp := .GRP, by = .(idate, hr)]
+
+# if 2 hour
+nHours <- 4
+if(!is.integer(nHours)) nHours <- as.integer(nHours)
+# ONLY THESE MAKE SENSE 1, 2, 3, 4, 6, 8, 12, 24
+dtm[, c('grp', 'hr') := NULL]
+
+# case 1
+dtm[minute(itime) < 30 & hour(itime) %% nHours == 0, hr := hour(itime)]#[order(-hr)]
+# case 2
+dtm[minute(itime) >= 30 & hour(itime) %% nHours < (nHours / 2) ,
+    hr := hour(itime)]#[order(-hr)]
+# case 3
+dtm[minute(itime) < 30 & hour(itime) %% nHours != 0,
+    hr := nHours * (hour(itime) %/% nHours)][1:50]
+# case 4
+dtm[minute(itime) >= 30 & hour(itime) %% nHours != 0,
+    hr := nHours * ((hour(itime) %/% nHours) + 1L)][1:50]
+
+dtm[1:50]
+
+# group em
+dtm[, grp := .GRP, by = .(idate, hr)]
+
+
+structure
+
+
+z[hour(new) %% nHours == 0 & minute(new) < 30, n := hour(new)]
+z[hour(new) %% nHours == 0 & minute(new) > 30, n := hour(new) + 1]
+z[hour(new) %% nHours < (nHours / 2) & minute(new) < 30, n := hour(new)]
+z[hour(new) %% nHours > (nHours / 2) & minute(new) < 30, n := hour(new)]
+z[hour(new) %% nHours < (nHours / 2) & minute(new) < 30, n := hour(new)]
+
 z[, .(hour = hour(new), ModMinHalf = hour(new) %% nHours > (nHours / 2),
       Mod = hour(new) %% nHours, HalfN = nHours / 2)]
-z[, ifelse(hour(new) %% nHours > (nHours / 2),
-           hour(new) + (nHours - hour(new)),
-           hour(new) - (hour(new) %% nHours))]
+z[, m := {m <- ifelse(hour(new) %% nHours > (nHours / 2),
+                      as.POSIXct(new) + ((hour(new) %/% nHours) + 1) * nHours,
+                  ((hour(new) %/% nHours)) * nHours)
+     class(m) <- c('POSIXct', 'POSIXct')
+     m}]
 
+z[, m := {m <- ifelse(hour(new) %% nHours > (nHours / 2),
+                      as.POSIXct(as.IDate(new),
+                                 as.ITime(
+                                   paste0(
+                                     ((hour(new) %/% nHours) + 1) * nHours,
+                                     ": 00")
+                                   )
+                                 ),
+                      as.POSIXct(as.IDate(new), as.ITime(paste0(((hour(new) %/% nHours)) * nHours, ": 00"))))
+class(m) <- c('POSIXct', 'POSIXct')
+m}]
+
+
+
+
+
+z
+# as.POSIXct(as.IDate(new), as.ITime(paste0(((hour(new) %/% nHours) + 1) * nHours, ": 00"),
+
+
+z[, .(hour(new), nHours, hour(new) %% nHours > (nHours / 2),
+      sub = nHours - hour(new),
+      mod = hour(new) %% nHours,
+      moddiv = hour(new) %/% nHours,
+      ((hour(new) %/% nHours) + 1) * nHours,
+      ((hour(new) %/% nHours)) * nHours,
+      )]
+
+
+
+
+z[, hour(new) <-((hour(new) %/% nHours) + 1) * nHours]
+(20 %/% 3 * 3) + 1
+
+((20 %/% 3) + 1) * 3
+(1 + (20 %/% 3)) * 3
+
+# 20 -> 21
+
+
+
+z[, .(m, timegrp, as.numeric(new))]
+z[, .(hour = hour(new), ModMinHalf = hour(new) %% nHours > (nHours / 2),
+      Mod = hour(new) %% nHours,
+      (nHours - hour(new)),
+      new,
+      as.POSIXct(new) + (hour(new) %% nHours * 3600),
+      as.POSIXct(new) - ((hour(new) %% nHours) * 3600))]
+(3 - 2) * 3600
+
+z[, as.POSIXct(new) + (nHours - hour(new) * 3600)]
+z[, .(hour(new), (nHours - hour(new) * 3600))]
+z[, (hour(new) %% nHours * 3600)]
+z[, as.POSIXct(new) - (hour(new) %% nHours * 3600)]
+z[, timegrp := .GRP, by = m]
+z
+data.table::yday
+
+`z[, data.table::second(new) ]
 5 + (3 - 2)
 10 - 1
 
