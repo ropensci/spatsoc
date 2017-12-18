@@ -6,7 +6,7 @@
 #' time.
 #'
 #' @inheritParams BuildPts
-#' @param timeThreshold The threshold for considering time groups, eg: '5 minutes' or
+#' @param threshold The threshold for considering time groups, eg: '5 minutes' or
 #'                     '1 hour'. If not provided, times will be matched exactly.
 #' @param spPts Alternatively, provide a SpatialPointsDataFrame created with the
 #'   sp package. If a spPts object is provided, groups cannot be calculated by
@@ -27,7 +27,7 @@
 #' data(locsPts)
 #'
 #' groups <- GroupPts(spPts = locsPts)
-GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL,
+GroupPts <- function(DT, bufferWidth, timeField = NULL, threshold = NULL,
                      projection, coordFields = c('EASTING', 'NORTHING'),
                      idField = 'ID', spPts = NULL){
 
@@ -53,7 +53,7 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL,
   } else {
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
 
-    if(is.null(timeThreshold)){
+    if(is.null(threshold)){
       DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
 
       buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
@@ -68,7 +68,7 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL,
       },
       by = timeField, .SDcols = c(coordFields, idField)]
     } else {
-      GroupTimes(DT, timeField, timeThreshold)[,
+      GroupTimes(DT, timeField, threshold)[,
             {spPts <- BuildPts(.SD, projection, coordFields, idField)
 
             buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
@@ -82,7 +82,7 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, timeThreshold = NULL,
                                      get(timeField)),
               c(coordFields, idField, 'group', timeField))
             },
-         by = timeGroup, .SDcols = c(coordFields, idField)]
+         by = timegroup, .SDcols = c(coordFields, idField)]
     }
   }
 }

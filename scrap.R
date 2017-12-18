@@ -34,6 +34,28 @@ updatePackageVersion()
 
 library(spatsoc)
 data(locs)
+
+
+# randomizations
+x <- GroupTimes(locs, 'datetime', '2 hours')
+z <- GroupPts(locs, 100, 'datetime', '2 hours')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### grouptime
 locs[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 # locs[, datetime := datetime + (runif(.N, 0, 60) * 60)]
@@ -229,7 +251,7 @@ glins[, {lsIDs <- unique(ID)
 
          # randIDs[.GRP]
          },
-      by = timeGroup][1:100]
+      by = timegroup][1:100]
 glins[1:100]
 
 
@@ -453,7 +475,7 @@ locs[, c('EASTING', 'NORTHING') := data.table::as.data.table(rgdal::project(cbin
 
 locs[, ihour := data.table::hour(itime)]
 
-locs[, timeGroup := paste(.BY[1], .BY[2], sep = '_'), by = .(idate, ihour)]
+locs[, timegroup := paste(.BY[1], .BY[2], sep = '_'), by = .(idate, ihour)]
 # group...
 locs[, c('group') := .(a$group)]
 
@@ -601,7 +623,7 @@ a
 a <- spatsoc::BuildPts(locs, projection = utm,
                        coordFields = proj.fields, idField = id.field)
 a
-a <- spatsoc::GroupPts(locs, 50, 'timeGroup', projection = utm,
+a <- spatsoc::GroupPts(locs, 50, 'timegroup', projection = utm,
                        coordFields = proj.fields, idField = id.field)
 a
 ### LINES ###############
@@ -657,18 +679,18 @@ a
 
 
 Mrlocs[, c("meanDistance", "distID") :=
-         MeanPairwiseDists(.SD), by = timeGroup,
+         MeanPairwiseDists(.SD), by = timegroup,
        .SDcols = c(id.col, east.col, north.col)]
 
 Mrlocs[, c("meanDistance", "distID") :=
-         MeanPairwiseDists(.SD), by = timeGroup,
+         MeanPairwiseDists(.SD), by = timegroup,
        .SDcols = c(id.col, east.col, north.col)]
 
 
 spatsoc::mean_pairwise_dist(locs, 'date', 'ANIMAL_ID')
 
 z <- locs[, .(
-  timeGroup, idate, itime, E = `utm-easting`, N = `utm-northing`,
+  timegroup, idate, itime, E = `utm-easting`, N = `utm-northing`,
   ID = `individual-local-identifier`, group)]
 
 

@@ -65,7 +65,7 @@ s <- split(subcols, by = 'spatialGroup')
 l <- lapply(s, FUN = function(s){
   foverlaps(s, s)
 })
-t <- rbindlist(l, idcol = 'timeGroup')
+t <- rbindlist(l, idcol = 'timegroup')
 
 t[spatialGroup ==2]
 
@@ -75,7 +75,7 @@ b <- t[spatialGroup == 2 | spatialGroup == 3,
   GroupPts(.SD, bufferSize, crs = utm21N,
                              coordFields = c("EASTING", "NORTHING"),
                              idField = id.field),
-  by = .(timeGroup, spatialGroup)]
+  by = .(timegroup, spatialGroup)]
 t
 
 

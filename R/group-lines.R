@@ -24,7 +24,7 @@
 #'
 #' groups <- GroupLines(spLines = locsLines)
 #' @import data.table
-GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NULL,
+GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, threshold = NULL,
                        projection, coordFields = c('EASTING', 'NORTHING'),
                        idField = 'ID', spLines = NULL) {
   if(!is.null(DT) && any(!(c(idField, timeField, coordFields) %in% colnames(DT)))){
@@ -51,7 +51,7 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NU
       stop("if providing a spLines, cannot provide a time field")
     }
 
-    if(is.null(timeThreshold)){
+    if(is.null(threshold)){
       DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
       if(is.null(spLines)) {
         message('some rows are dropped - unable to build lines with <3 locs')
@@ -70,7 +70,7 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NU
       },
       by = timeField, .SDcols = c(coordFields, idField)]
     } else {
-      GroupTimes(DT, timeField, timeThreshold)[, {
+      GroupTimes(DT, timeField, threshold)[, {
         spLines <- BuildLines(.SD, projection, coordFields, idField)
         if(is.null(spLines)) {
           message('some rows are dropped - unable to build lines with <3 locs')
@@ -87,7 +87,7 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NU
             c(idField, 'group'))
         }
         },
-        by = timeGroup, .SDcols = c(coordFields, idField)]
+        by = timegroup, .SDcols = c(coordFields, idField)]
     }
   }
 }
