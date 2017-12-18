@@ -48,6 +48,27 @@ z <- GroupTimes(locs[order(datetime)], 'datetime',
 
 GroupTimes(locs, 'datetime', '2 hours')[1:30]
 
+## 15 minute interval, following new dtm method
+dtm <- locs[, IDateTime(datetime)]
+dtm[, itime := itime + (runif(.N, 0, 60) * 60)]
+
+nMins <- 20
+if(!is.integer(nMins)) nMins <- as.integer(nMins)
+dtm[, c('grp', 'hr') := NULL]
+
+dtm[, .(minute(itime),
+        nMins,
+        mod = minute(itime) %% nMins,
+        isModLtHalf = minute(itime) %% nMins < (nMins / 2))][sample(.N, 5)]
+
+dtm[minute(itime) %% nMins < (nMins / 2) ,
+    hr := nMins * (minute(itime) %/% nMins)]
+dtm[minute(itime) %% nMins >= (nMins / 2),
+    hr := nMins * ((minute(itime) %/% nMins) + 1L)]
+
+dtm
+
+
 # ? hour interval
 nHours <- 3
 
