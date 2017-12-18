@@ -33,8 +33,9 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
   }
 
 
+
   if(is.null(threshold)) {
-    DT[, timeGroup := .GRP, by = timeField]
+    DT[, timegroup := .GRP, by = timeField]
   } else {
 
     dtm <- DT[, data.table::IDateTime(get(timeField))]
@@ -49,8 +50,8 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
 
         dtm[, timegroup := .GRP,
             by = .(minutes, data.table::hour(itime), idate)]
-        return(DT[, (colnames(dtm)) := dtm][])
 
+        return(DT[, (colnames(dtm)) := dtm][])
       } else {
         nHours <- data.table::tstrsplit(threshold, ' ')[[1]]
         if(!is.integer(nHours)) nHours <- as.integer(nHours)
@@ -83,7 +84,8 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
       if(!is.integer(nDays)) nDays <- as.integer(nDays)
       if(nDays == 1){
         dtm[, timegroup := data.table::yday(idate)]
-        return(dtm)
+        return(DT[, colnames(dtm) := dtm][])
+
       } else {
         minday <- dtm[, min(data.table::yday(idate))]
         maxday <- dtm[, max(data.table::yday(idate))]
@@ -96,6 +98,8 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
                            right = FALSE, labels = FALSE)]
         return(DT[, colnames(dtm) := dtm][])
       }
+    } else {
+      stop("must provide threshold in units of hour, day, or minute")
     }
   }
 }
