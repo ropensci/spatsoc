@@ -35,12 +35,73 @@ updatePackageVersion()
 library(spatsoc)
 data(locs)
 
+utm <- '+proj=utm +zone=21 ellps=WGS84'
 
 # randomizations
 x <- GroupTimes(locs, 'datetime', '2 hours')
-z <- GroupPts(locs, 100, 'datetime', '2 hours')
+z <- GroupPts(locs, 100, 'datetime', '2 hours', projection = utm)
+z[, .N, by = group][order(-N)]
+# between ids (hourly)
+# essentially just swapping the id of each point
+
+z[, uniqueN(ID), by = timegroup]
+z[, .(ID, randomID = sample(ID)), by = timegroup]
+fwrite(z[, .(ID, randomID = sample(ID)), by = timegroup],
+       'betweenIDsHourly.csv')
+
+# between ids (daily)
+# swap all IDs in the day with a randomly sampled other ID
+
+z[, uniqueN(ID), by = yday(datetime)]
+v <- z[, .(ID = unique(ID)), by = yday(datetime)]
+v[, randomID := sample(ID), by = yday]
+v[, uniqueN(ID), by = yday]
+
+z[, yday := yday(datetime)]
+s <- merge(z, v, on = 'yday')
+s[, uniqueN(randomID), by = .(yday, ID)]
 
 
+
+
+if(randomType == 'hourly'){
+  # TODO: this isn't really 'hourly' it's just not 'daily'
+  if(!is.null(dateField)) warning('dateField ignored since randomType is hourly')
+
+  lsIDs <- unique(DT[[idField]])
+  randIDs <- sample(lsIDs)
+
+  DT[, randomID := randIDs[.GRP], by = idField]
+
+} else if(randomType == 'daily'){
+  if(is.null(dateField)) stop('must provide a dateField if daily randomType chosen')
+  listIDs <- unique(DT[[idField]])
+  # TODO: is it just daily or should this flex to specified time?
+
+  # sample 1 id from the list and repeat it for the number of rows
+  # so the dimensions input are the same returned
+  DT[, .(randomID = rep(sample(listIDs, 1), .N), group = get(groupField)),
+     by = c(dateField, idField)]
+} else if(randomType == 'spiegel'){
+  randomDatesDT <- DT[, {d <- data.table(dates =  unique(get(dateField)))
+  d[, randomN :=  sample(1:length(dates), length(dates))]
+  .SD[, .(randomDate = rep(d[randomN == .GRP, dates], .N),
+          group = get(groupField)),
+      by = dateField]
+  },
+  by = idField]
+  # DT[randomDatesDT, on = c(idField, dateField)]
+
+} else {
+  stop('must provide either hourly or daily for randomType')
+}
+}
+
+# TODO: work on var names
+# TODO: remove old ID once we are satisfied?
+# TODO: change 'randomDatesDT'
+# TODO: optional N random iterations?
+# TODO: optionally return the original ID for checking?
 
 
 
