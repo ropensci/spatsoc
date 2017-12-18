@@ -6,8 +6,8 @@
 #' providing the threshold.
 #' Otherwise, rows are grouped by matching exact times.
 #'
-#' This function can also group rows on time intervals, such as blocks of 5 days.
-#' Simply provide the interval in the same manner eg: '5 days'.
+#' This function can also group rows on blocks of days.
+#' Simply provide the block length in the same manner as the threshold eg: '5 days'.
 #'
 #' @param DT input locs/rows
 #' @param timeField time column name
