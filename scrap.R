@@ -62,11 +62,11 @@ dtm[, .(minute(itime),
         isModLtHalf = minute(itime) %% nMins < (nMins / 2))][sample(.N, 5)]
 
 dtm[minute(itime) %% nMins < (nMins / 2) ,
-    hr := nMins * (minute(itime) %/% nMins)]
+    mint := nMins * (minute(itime) %/% nMins)]
 dtm[minute(itime) %% nMins >= (nMins / 2),
-    hr := nMins * ((minute(itime) %/% nMins) + 1L)]
+    mint := nMins * ((minute(itime) %/% nMins) + 1L)]
 
-dtm
+dtm[, .(itime, .GRP), by = .(mint, hour(itime), idate)]
 
 
 # ? hour interval
