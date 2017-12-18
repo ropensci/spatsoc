@@ -32,11 +32,13 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
     DT[, newtime := NULL]
   }
 
+
   if(is.null(timeThreshold)) {
     DT[, timeGroup := .GRP, by = timeField]
   } else {
     if(grepl('hour', timeThreshold)){
-        nTime <- 60
+      if(data.table::tstrsplit(timeThreshold, ' ')[[1]] == 1L){
+        nTime <- 60L
         newdates <- DT[, .(new =
         {new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
                        (as.POSIXct(get(timeField)) +
@@ -49,14 +51,20 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
         new})]
 
         newdates[, timeGroup := .GRP, by = new]
-        if(data.table::tstrsplit(timeThreshold, ' ')[[1]] == 1){
-          return(DT[, (colnames(newdates)) := newdates][])
-        } else {
-        print(data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ')[[1]],
-                             format = '%H'))
+        return(DT[, (colnames(newdates)) := newdates][])
 
+      } else {
+        nHours <- data.table::tstrsplit(timeThreshold, ' ', type.convert = TRUE)[[1]]
+        if(!is.integer(nHours)) nHours <- as.integer(timeThreshold)
 
-        stop('this function (hourly time group) is broken')
+        dtm <- DT[, IDateTime(get(timeField))]
+        dtm[hour(itime) %% nHours < (nHours / 2) ,
+            hr := nHours * (hour(itime) %/% nHours)]
+        dtm[hour(itime) %% nHours >= (nHours / 2),
+            hr := nHours * ((hour(itime) %/% nHours) + 1L)]
+
+        dtm[, timegroup := .GRP, by = .(hr, idate)]
+        return(DT[, (colnames(dtm)) := dtm])
       }
 
     } else if(grepl('minute', timeThreshold)){

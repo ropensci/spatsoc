@@ -32,11 +32,12 @@ updatePackageVersion <- function(packageLocation ="."){
 }
 updatePackageVersion()
 
-data(locs)
 library(spatsoc)
+data(locs)
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-# locs[, datetime := as.POSIXct(datetime + (runif(.N, 0, 60) * 60))]
+# locs[, datetime := datetime + (runif(.N, 0, 60) * 60)]
+# locs[, datetime := datetime + (runif(.N, 0, 3) * 3600)]
 GroupTimes(locs[order(datetime)], 'datetime',
            '1 hour')[1:40]
 GroupTimes(locs[order(datetime)], 'datetime',
@@ -45,11 +46,9 @@ GroupTimes(locs[order(datetime)], 'datetime',
 z <- GroupTimes(locs[order(datetime)], 'datetime',
            '1 hour')
 
-unclass
+GroupTimes(locs, 'datetime', '2 hours')[1:30]
 
-z
-
-# 3 hour interval
+# ? hour interval
 nHours <- 3
 
 z[, .(hr = hour(new),
@@ -61,6 +60,7 @@ z[, .(hr = hour(new),
 z
 dtm <- z[, IDateTime(datetime)]
 dtm[, itime := itime + (runif(.N, 0, 60) * 60)]
+dtm[, itime := itime + (runif(.N, 0, 3) * 3600)]
 
 # if 1 hour
 dtm[minute(itime) > 30, hr := hour(itime) + 1L]
@@ -68,25 +68,40 @@ dtm[minute(itime) < 30, hr := hour(itime)]
 dtm[, grp := .GRP, by = .(idate, hr)]
 
 # if 2 hour
-nHours <- 4
+nHours <- 12
 if(!is.integer(nHours)) nHours <- as.integer(nHours)
 # ONLY THESE MAKE SENSE 1, 2, 3, 4, 6, 8, 12, 24
 dtm[, c('grp', 'hr') := NULL]
 
-# case 1
-dtm[minute(itime) < 30 & hour(itime) %% nHours == 0, hr := hour(itime)]#[order(-hr)]
-# case 2
+# case 1 - Where minute floored, and hour is on the interval, return the hour
+# dtm[minute(itime) < 30 & hour(itime) %% nHours == 0, hr4 := hour(itime)]#[order(-hr)]
+dtm[minute(itime) < 30 & hour(itime) %% nHours < (nHours / 2),
+    hr4 := nHours * (hour(itime) %/% nHours)]#hour(itime)]#[order(-hr)]
+# case 2 - Where minute is > 30, but the hour is still less than half the nhours, return the hour
 dtm[minute(itime) >= 30 & hour(itime) %% nHours < (nHours / 2) ,
-    hr := hour(itime)]#[order(-hr)]
-# case 3
-dtm[minute(itime) < 30 & hour(itime) %% nHours != 0,
-    hr := nHours * (hour(itime) %/% nHours)][1:50]
-# case 4
-dtm[minute(itime) >= 30 & hour(itime) %% nHours != 0,
-    hr := nHours * ((hour(itime) %/% nHours) + 1L)][1:50]
+    hr4 := nHours * (hour(itime) %/% nHours)]#hour(itime)]#[order(-hr)]
+# case 3 - where minute is floored but hours is greater than half the nhours
+dtm[minute(itime) < 30 & hour(itime) %% nHours >= (nHours / 2),
+    hr4 := nHours * ((hour(itime) %/% nHours) + 1L)]
+# case 4 - where is >30 and
+dtm[minute(itime) >= 30 & hour(itime) %% nHours >= (nHours / 2), #hour(itime) %% nHours != 0,
+    hr4 := nHours * ((hour(itime) %/% nHours) + 1L)]
+
+# ARE THEY MUTUALLY EXCLUSIVE?
+dtm[hour(itime) %% nHours < (nHours / 2) ,
+    hr := nHours * (hour(itime) %/% nHours)]#[order(-hr)]
+dtm[hour(itime) %% nHours >= (nHours / 2),
+    hr := nHours * ((hour(itime) %/% nHours) + 1L)]
+
+dtm[, .(itime, hour = hour(itime),
+        hr, hr4,
+        mod = hour(itime) %% nHours,
+        nHours,
+        modDivHalf = hour(itime) %% nHours < (nHours / 2))][1:50]
+dtm[hr != hr4]
 
 dtm[1:50]
-
+dtm[is.na(hr)]
 # group em
 dtm[, grp := .GRP, by = .(idate, hr)]
 
