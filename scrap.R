@@ -34,7 +34,7 @@ updatePackageVersion()
 
 library(spatsoc)
 data(locs)
-
+locs[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 # locs[, datetime := datetime + (runif(.N, 0, 60) * 60)]
 # locs[, datetime := datetime + (runif(.N, 0, 3) * 3600)]

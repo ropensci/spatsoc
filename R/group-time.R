@@ -40,7 +40,6 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
     dtm <- DT[, data.table::IDateTime(get(timeField))]
 
 
-
     if(grepl('hour', timeThreshold)){
       if(data.table::tstrsplit(timeThreshold, ' ')[[1]] == 1L){
         nMins <- 60L
@@ -55,7 +54,7 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
 
       } else {
         nHours <- data.table::tstrsplit(timeThreshold, ' ', type.convert = TRUE)[[1]]
-        if(!is.integer(nHours)) nHours <- as.integer(timeThreshold)
+        if(!is.integer(nHours)) nHours <- as.integer(nHours)
 
         dtm <- DT[, IDateTime(get(timeField))]
         dtm[data.table::hour(itime) %% nHours < (nHours / 2) ,
@@ -68,26 +67,18 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
       }
 
     } else if(grepl('minute', timeThreshold)){
+      nMins <- data.table::tstrsplit(timeThreshold, ' ')[[1]]
+      if(!is.integer(nMins)) nMins <- as.integer(nMins)
 
-      nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ',
-                                            keep = 1, type.convert = TRUE))
+      dtm[data.table::minute(itime) %% nMins < (nMins / 2) ,
+          minutes := nMins * (data.table::minute(itime) %/% nMins)]
+      dtm[data.table::minute(itime) %% nMins >= (nMins / 2),
+          minutes := nMins * ((data.table::minute(itime) %/% nMins) + 1L)]
 
-      # alloc.col(DT, 1 )
+      dtm[, timegroup := .GRP,
+          by = .(minutes, data.table::hour(itime), idate)]
+      return(DT[, (colnames(dtm)) := dtm][])
 
-      newdates <- DT[, .(new =
-       {new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
-                      (as.POSIXct(get(timeField)) +
-                         (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60) -
-                         data.table::second(get(timeField)),
-                      as.POSIXct(get(timeField)) -
-                        ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
-                        data.table::second(get(timeField)))
-       class(new) <- c("POSIXct", "POSIXct")
-       new})]
-
-      newdates[, timeGroup := .GRP, by = new]
-
-      return(DT[, (colnames(newdates)) := newdates][])
     } else if(grepl('day', timeThreshold)){
       nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ',
                                             keep = 1, type.convert = TRUE))
