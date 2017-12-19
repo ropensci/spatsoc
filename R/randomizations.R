@@ -38,7 +38,7 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
     # DT[, .(randomID = rep(sample(listIDs, 1), .N), group = get(groupField)),
     #    by = c(dateField, idField)
 
-    if(length(intersect(c('IDate', 'Date'), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
+    if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
       stop('provided dateField is not of class POSIXct or IDate, for daily random type
             please provide a datetime column or IDate')
     }
@@ -49,22 +49,28 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
     return(merge(DT, dailyIDs, on = 'yday'))
 
   } else if(randomType == 'spiegel'){
-    randomDatesDT <- DT[, {d <- data.table(dates =  unique(get(dateField)))
-                           d[, randomN :=  sample(1:length(dates), length(dates))]
-                           .SD[, .(randomDate = rep(d[randomN == .GRP, dates], .N),
-                                   group = get(groupField)),
-                               by = dateField]
-                           },
-                        by = idField]
-    # DT[randomDatesDT, on = c(idField, dateField)]
+
+    z[, yday := yday(datetime)]
+    v <- z[, .(yday = unique(yday)), by = ID]
+    v[, randomYday := sample(yday)]
+    v
+
+    s <- merge(z, v, on = c('yday', 'ID'))
+    s[, .(uniqueN(yday), uniqueN(randomYday)), by = ID]
+
+    s[, uniqueN(randomYday) ,by = .(ID, yday)]
+
+
+    # randomDatesDT <- DT[, {d <- data.table(dates =  unique(get(dateField)))
+    #                        d[, randomN :=  sample(1:length(dates), length(dates))]
+    #                        .SD[, .(randomDate = rep(d[randomN == .GRP, dates], .N),
+    #                                group = get(groupField)),
+    #                            by = dateField]
+    #                        },
+    #                     by = idField]
+    # # DT[randomDatesDT, on = c(idField, dateField)]
 
   } else {
-    stop('must provide either hourly or daily for randomType')
+    stop('must provide either hourly, daily or speigel for randomType')
   }
 }
-
-# TODO: work on var names
-# TODO: remove old ID once we are satisfied?
-# TODO: change 'randomDatesDT'
-# TODO: optional N random iterations?
-# TODO: optionally return the original ID for checking?
