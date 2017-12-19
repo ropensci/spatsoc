@@ -81,6 +81,8 @@ s[, .(uniqueN(yday), uniqueN(randomYday)), by = ID]
 
 s[, uniqueN(randomYday) ,by = .(ID, yday)]
 
+Randomizations(z, 'ID', 'group', 'spiegel', 'datetime')
+
 
 
 
