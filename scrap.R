@@ -38,7 +38,7 @@ data(locs)
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
 # randomizations
-x <- GroupTimes(locs, 'datetime', '2 hours')
+# x <- GroupTimes(locs, 'datetime', '2 hours')
 z <- GroupPts(locs, 100, 'datetime', '2 hours', projection = utm)
 z[, .N, by = group][order(-N)]
 # between ids (hourly)
@@ -48,6 +48,8 @@ z[, uniqueN(ID), by = timegroup]
 z[, .(ID, randomID = sample(ID)), by = timegroup]
 fwrite(z[, .(ID, randomID = sample(ID)), by = timegroup],
        'betweenIDsHourly.csv')
+
+Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')
 
 # between ids (daily)
 # swap all IDs in the day with a randomly sampled other ID
@@ -60,6 +62,11 @@ v[, uniqueN(ID), by = yday]
 z[, yday := yday(datetime)]
 s <- merge(z, v, on = 'yday')
 s[, uniqueN(randomID), by = .(yday, ID)]
+
+j <- Randomizations(z, 'ID', 'group', 'daily', 'datetime')
+j[, uniqueN(randomID), by = .(yday, ID)]#[, max(V1)]
+
+#
 
 
 
