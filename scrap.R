@@ -63,10 +63,23 @@ z[, yday := yday(datetime)]
 s <- merge(z, v, on = 'yday')
 s[, uniqueN(randomID), by = .(yday, ID)]
 
-j <- Randomizations(z, 'ID', 'group', 'daily', 'datetime')
+j <- Randomizations(z, 'ID', 'group', 'daily', 'ID')
 j[, uniqueN(randomID), by = .(yday, ID)]#[, max(V1)]
 
+fwrite(j, 'betweenIDsDaily.csv')
 #
+
+## Speigel
+z
+z[, yday := yday(datetime)]
+v <- z[, .(yday = unique(yday)), by = ID]
+v[, randomYday := sample(yday)]
+v
+
+s <- merge(z, v, on = c('yday', 'ID'))
+s[, .(uniqueN(yday), uniqueN(randomYday)), by = ID]
+
+s[, uniqueN(randomYday) ,by = .(ID, yday)]
 
 
 
