@@ -37,10 +37,37 @@ data(locs)
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
+
 # randomizations
 # x <- GroupTimes(locs, 'datetime', '2 hours')
 z <- GroupPts(locs, 100, 'datetime', '2 hours', projection = utm)
 z[, .N, by = group][order(-N)]
+
+
+
+### now iterations
+iterations <- 10
+library(foreach)
+forIters <- foreach(i=1:iterations) %do% {
+  Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')[, iteration := i][]
+}
+ <- rbindlist(forIters)
+
+# forIters <- foreach(iter = 1:iterations) %do% {
+#   Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')[, iteration := iter]
+# }
+
+rbindlist(forIters)
+
+lapIters <- lapply(1:iterations, FUN = function(i){
+
+})
+
+
+
+
+
+
 # between ids (hourly)
 # essentially just swapping the id of each point
 
@@ -81,7 +108,8 @@ s[, .(uniqueN(yday), uniqueN(randomYday)), by = ID]
 
 s[, uniqueN(randomYday) ,by = .(ID, yday)]
 
-Randomizations(z, 'ID', 'group', 'spiegel', 'datetime')
+fwrite(Randomizations(z, 'ID', 'group', 'spiegel', 'datetime'),
+       'spiegel.csv')
 
 
 
