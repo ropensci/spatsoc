@@ -2,10 +2,6 @@
 Title: Group animal location data by their spatial and temporal relationship
 
 
-
-
-
-
 tests..
 
 test with readcsv 
@@ -39,7 +35,10 @@ do we want to return vertices strictly for kernel?
 * above occurs when the column name provided does not match any from the DT
 
 #### GroupTime
-* then assign groups depending on optional rounding + field provided.
+* time threshold needs error handling
+* warn if minutes are not divisible by 60 or if greater than 60
+* is "timegroup" the best output column name
+* time zone handling since posixct
 
 #### GroupPts
 * flex chaining or not?

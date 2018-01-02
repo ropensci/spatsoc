@@ -32,10 +32,324 @@ updatePackageVersion <- function(packageLocation ="."){
 }
 updatePackageVersion()
 
-data(locs)
 library(spatsoc)
+data(locs)
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
+
+
+# randomizations
+# x <- GroupTimes(locs, 'datetime', '2 hours')
+z <- GroupPts(locs, 100, 'datetime', '2 hours', projection = utm)
+z[, .N, by = group][order(-N)]
+
+
+
+### now iterations
+iterations <- 10
+library(foreach)
+forIters <- foreach(i=1:iterations) %do% {
+  Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')[, iteration := i][]
+}
+ <- rbindlist(forIters)
+
+# forIters <- foreach(iter = 1:iterations) %do% {
+#   Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')[, iteration := iter]
+# }
+
+rbindlist(forIters)
+
+lapIters <- lapply(1:iterations, FUN = function(i){
+
+})
+
+
+
+
+
+
+# between ids (hourly)
+# essentially just swapping the id of each point
+
+z[, uniqueN(ID), by = timegroup]
+z[, .(ID, randomID = sample(ID)), by = timegroup]
+fwrite(z[, .(ID, randomID = sample(ID)), by = timegroup],
+       'betweenIDsHourly.csv')
+
+Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')
+
+# between ids (daily)
+# swap all IDs in the day with a randomly sampled other ID
+
+z[, uniqueN(ID), by = yday(datetime)]
+v <- z[, .(ID = unique(ID)), by = yday(datetime)]
+v[, randomID := sample(ID), by = yday]
+v[, uniqueN(ID), by = yday]
+
+z[, yday := yday(datetime)]
+s <- merge(z, v, on = 'yday')
+s[, uniqueN(randomID), by = .(yday, ID)]
+
+j <- Randomizations(z, 'ID', 'group', 'daily', 'ID')
+j[, uniqueN(randomID), by = .(yday, ID)]#[, max(V1)]
+
+fwrite(j, 'betweenIDsDaily.csv')
+#
+
+## Speigel
+z
+z[, yday := yday(datetime)]
+v <- z[, .(yday = unique(yday)), by = ID]
+v[, randomYday := sample(yday)]
+v
+
+s <- merge(z, v, on = c('yday', 'ID'))
+s[, .(uniqueN(yday), uniqueN(randomYday)), by = ID]
+
+s[, uniqueN(randomYday) ,by = .(ID, yday)]
+
+fwrite(Randomizations(z, 'ID', 'group', 'spiegel', 'datetime'),
+       'spiegel.csv')
+
+
+
+
+if(randomType == 'hourly'){
+  # TODO: this isn't really 'hourly' it's just not 'daily'
+  if(!is.null(dateField)) warning('dateField ignored since randomType is hourly')
+
+  lsIDs <- unique(DT[[idField]])
+  randIDs <- sample(lsIDs)
+
+  DT[, randomID := randIDs[.GRP], by = idField]
+
+} else if(randomType == 'daily'){
+  if(is.null(dateField)) stop('must provide a dateField if daily randomType chosen')
+  listIDs <- unique(DT[[idField]])
+  # TODO: is it just daily or should this flex to specified time?
+
+  # sample 1 id from the list and repeat it for the number of rows
+  # so the dimensions input are the same returned
+  DT[, .(randomID = rep(sample(listIDs, 1), .N), group = get(groupField)),
+     by = c(dateField, idField)]
+} else if(randomType == 'spiegel'){
+  randomDatesDT <- DT[, {d <- data.table(dates =  unique(get(dateField)))
+  d[, randomN :=  sample(1:length(dates), length(dates))]
+  .SD[, .(randomDate = rep(d[randomN == .GRP, dates], .N),
+          group = get(groupField)),
+      by = dateField]
+  },
+  by = idField]
+  # DT[randomDatesDT, on = c(idField, dateField)]
+
+} else {
+  stop('must provide either hourly or daily for randomType')
+}
+}
+
+# TODO: work on var names
+# TODO: remove old ID once we are satisfied?
+# TODO: change 'randomDatesDT'
+# TODO: optional N random iterations?
+# TODO: optionally return the original ID for checking?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### grouptime
+locs[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+utm <- '+proj=utm +zone=21 ellps=WGS84'
+# locs[, datetime := datetime + (runif(.N, 0, 60) * 60)]
+# locs[, datetime := datetime + (runif(.N, 0, 3) * 3600)]
+GroupTimes(locs[order(datetime)], 'datetime',
+           '1 hour')[1:40]
+GroupTimes(locs[order(datetime)], 'datetime',
+           '60 minutes')[1:40]
+
+z <- GroupTimes(locs[order(datetime)], 'datetime',
+           '1 hour')
+
+GroupTimes(locs, 'datetime', '2 hours')[1:30]
+
+## 15 minute interval, following new dtm method
+dtm <- locs[, IDateTime(datetime)]
+dtm[, itime := itime + (runif(.N, 0, 60) * 60)]
+
+nMins <- 20
+if(!is.integer(nMins)) nMins <- as.integer(nMins)
+dtm[, c('grp', 'hr') := NULL]
+
+dtm[, .(minute(itime),
+        nMins,
+        mod = minute(itime) %% nMins,
+        isModLtHalf = minute(itime) %% nMins < (nMins / 2))][sample(.N, 5)]
+
+dtm[minute(itime) %% nMins < (nMins / 2) ,
+    mint := nMins * (minute(itime) %/% nMins)]
+dtm[minute(itime) %% nMins >= (nMins / 2),
+    mint := nMins * ((minute(itime) %/% nMins) + 1L)]
+
+dtm[, .(itime, .GRP), by = .(mint, hour(itime), idate)]
+
+
+# ? hour interval
+nHours <- 3
+
+z[, .(hr = hour(new),
+      nHours = nHours,
+      clean = hour(new) %% nHours == 0,
+      moddiv = unclass(as.ITime(new)) %/% (nHours * 3600L),
+      mult = nHours * ((unclass(as.ITime(new)) %/% (nHours * 3600L))))]
+
+z
+dtm <- z[, IDateTime(datetime)]
+dtm[, itime := itime + (runif(.N, 0, 60) * 60)]
+dtm[, itime := itime + (runif(.N, 0, 3) * 3600)]
+
+# if 1 hour
+dtm[minute(itime) > 30, hr := hour(itime) + 1L]
+dtm[minute(itime) < 30, hr := hour(itime)]
+dtm[, grp := .GRP, by = .(idate, hr)]
+
+# if 2 hour
+nHours <- 12
+if(!is.integer(nHours)) nHours <- as.integer(nHours)
+# ONLY THESE MAKE SENSE 1, 2, 3, 4, 6, 8, 12, 24
+dtm[, c('grp', 'hr') := NULL]
+
+# case 1 - Where minute floored, and hour is on the interval, return the hour
+# dtm[minute(itime) < 30 & hour(itime) %% nHours == 0, hr4 := hour(itime)]#[order(-hr)]
+dtm[minute(itime) < 30 & hour(itime) %% nHours < (nHours / 2),
+    hr4 := nHours * (hour(itime) %/% nHours)]#hour(itime)]#[order(-hr)]
+# case 2 - Where minute is > 30, but the hour is still less than half the nhours, return the hour
+dtm[minute(itime) >= 30 & hour(itime) %% nHours < (nHours / 2) ,
+    hr4 := nHours * (hour(itime) %/% nHours)]#hour(itime)]#[order(-hr)]
+# case 3 - where minute is floored but hours is greater than half the nhours
+dtm[minute(itime) < 30 & hour(itime) %% nHours >= (nHours / 2),
+    hr4 := nHours * ((hour(itime) %/% nHours) + 1L)]
+# case 4 - where is >30 and
+dtm[minute(itime) >= 30 & hour(itime) %% nHours >= (nHours / 2), #hour(itime) %% nHours != 0,
+    hr4 := nHours * ((hour(itime) %/% nHours) + 1L)]
+
+# ARE THEY MUTUALLY EXCLUSIVE?
+dtm[hour(itime) %% nHours < (nHours / 2) ,
+    hr := nHours * (hour(itime) %/% nHours)]#[order(-hr)]
+dtm[hour(itime) %% nHours >= (nHours / 2),
+    hr := nHours * ((hour(itime) %/% nHours) + 1L)]
+
+dtm[, .(itime, hour = hour(itime),
+        hr, hr4,
+        mod = hour(itime) %% nHours,
+        nHours,
+        modDivHalf = hour(itime) %% nHours < (nHours / 2))][1:50]
+dtm[hr != hr4]
+
+dtm[1:50]
+dtm[is.na(hr)]
+# group em
+dtm[, grp := .GRP, by = .(idate, hr)]
+
+
+structure
+
+
+z[hour(new) %% nHours == 0 & minute(new) < 30, n := hour(new)]
+z[hour(new) %% nHours == 0 & minute(new) > 30, n := hour(new) + 1]
+z[hour(new) %% nHours < (nHours / 2) & minute(new) < 30, n := hour(new)]
+z[hour(new) %% nHours > (nHours / 2) & minute(new) < 30, n := hour(new)]
+z[hour(new) %% nHours < (nHours / 2) & minute(new) < 30, n := hour(new)]
+
+z[, .(hour = hour(new), ModMinHalf = hour(new) %% nHours > (nHours / 2),
+      Mod = hour(new) %% nHours, HalfN = nHours / 2)]
+z[, m := {m <- ifelse(hour(new) %% nHours > (nHours / 2),
+                      as.POSIXct(new) + ((hour(new) %/% nHours) + 1) * nHours,
+                  ((hour(new) %/% nHours)) * nHours)
+     class(m) <- c('POSIXct', 'POSIXct')
+     m}]
+
+z[, m := {m <- ifelse(hour(new) %% nHours > (nHours / 2),
+                      as.POSIXct(as.IDate(new),
+                                 as.ITime(
+                                   paste0(
+                                     ((hour(new) %/% nHours) + 1) * nHours,
+                                     ": 00")
+                                   )
+                                 ),
+                      as.POSIXct(as.IDate(new), as.ITime(paste0(((hour(new) %/% nHours)) * nHours, ": 00"))))
+class(m) <- c('POSIXct', 'POSIXct')
+m}]
+
+
+
+
+
+z
+# as.POSIXct(as.IDate(new), as.ITime(paste0(((hour(new) %/% nHours) + 1) * nHours, ": 00"),
+
+
+z[, .(hour(new), nHours, hour(new) %% nHours > (nHours / 2),
+      sub = nHours - hour(new),
+      mod = hour(new) %% nHours,
+      moddiv = hour(new) %/% nHours,
+      ((hour(new) %/% nHours) + 1) * nHours,
+      ((hour(new) %/% nHours)) * nHours,
+      )]
+
+
+
+
+z[, hour(new) <-((hour(new) %/% nHours) + 1) * nHours]
+(20 %/% 3 * 3) + 1
+
+((20 %/% 3) + 1) * 3
+(1 + (20 %/% 3)) * 3
+
+# 20 -> 21
+
+
+
+z[, .(m, timegrp, as.numeric(new))]
+z[, .(hour = hour(new), ModMinHalf = hour(new) %% nHours > (nHours / 2),
+      Mod = hour(new) %% nHours,
+      (nHours - hour(new)),
+      new,
+      as.POSIXct(new) + (hour(new) %% nHours * 3600),
+      as.POSIXct(new) - ((hour(new) %% nHours) * 3600))]
+(3 - 2) * 3600
+
+z[, as.POSIXct(new) + (nHours - hour(new) * 3600)]
+z[, .(hour(new), (nHours - hour(new) * 3600))]
+z[, (hour(new) %% nHours * 3600)]
+z[, as.POSIXct(new) - (hour(new) %% nHours * 3600)]
+z[, timegrp := .GRP, by = m]
+z
+data.table::yday
+
+`z[, data.table::second(new) ]
+5 + (3 - 2)
+10 - 1
+
+newdates <- DT[, .(new =
+{new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
+               (as.POSIXct(get(timeField)) +
+                  (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60) -
+                 data.table::second(get(timeField)),
+               as.POSIXct(get(timeField)) -
+                 ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
+                 data.table::second(get(timeField)))
+class(new) <- c("POSIXct", "POSIXct")
+new})]
+
 
 glins <- GroupPts(locs, bufferWidth = 50, projection = utm, timeField = 'datetime',
                     timeThreshold = '1 day')
@@ -48,7 +362,7 @@ glins[, {lsIDs <- unique(ID)
 
          # randIDs[.GRP]
          },
-      by = timeGroup][1:100]
+      by = timegroup][1:100]
 glins[1:100]
 
 
@@ -272,7 +586,7 @@ locs[, c('EASTING', 'NORTHING') := data.table::as.data.table(rgdal::project(cbin
 
 locs[, ihour := data.table::hour(itime)]
 
-locs[, timeGroup := paste(.BY[1], .BY[2], sep = '_'), by = .(idate, ihour)]
+locs[, timegroup := paste(.BY[1], .BY[2], sep = '_'), by = .(idate, ihour)]
 # group...
 locs[, c('group') := .(a$group)]
 
@@ -420,7 +734,7 @@ a
 a <- spatsoc::BuildPts(locs, projection = utm,
                        coordFields = proj.fields, idField = id.field)
 a
-a <- spatsoc::GroupPts(locs, 50, 'timeGroup', projection = utm,
+a <- spatsoc::GroupPts(locs, 50, 'timegroup', projection = utm,
                        coordFields = proj.fields, idField = id.field)
 a
 ### LINES ###############
@@ -476,18 +790,18 @@ a
 
 
 Mrlocs[, c("meanDistance", "distID") :=
-         MeanPairwiseDists(.SD), by = timeGroup,
+         MeanPairwiseDists(.SD), by = timegroup,
        .SDcols = c(id.col, east.col, north.col)]
 
 Mrlocs[, c("meanDistance", "distID") :=
-         MeanPairwiseDists(.SD), by = timeGroup,
+         MeanPairwiseDists(.SD), by = timegroup,
        .SDcols = c(id.col, east.col, north.col)]
 
 
 spatsoc::mean_pairwise_dist(locs, 'date', 'ANIMAL_ID')
 
 z <- locs[, .(
-  timeGroup, idate, itime, E = `utm-easting`, N = `utm-northing`,
+  timegroup, idate, itime, E = `utm-easting`, N = `utm-northing`,
   ID = `individual-local-identifier`, group)]
 
 

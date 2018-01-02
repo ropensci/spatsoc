@@ -4,22 +4,23 @@
 \alias{GroupTimes}
 \title{Group Times}
 \usage{
-GroupTimes(DT, timeField, timeThreshold = NULL)
+GroupTimes(DT, timeField, threshold = NULL)
 }
 \arguments{
 \item{DT}{input locs/rows}
 
 \item{timeField}{time column name}
 
-\item{timeThreshold}{character defining the threshold for grouping times.
+\item{threshold}{character defining the threshold for grouping times.
 eg: '2 hours', '10 minutes', etc.
 if not provided, times will be matched exactly.
 Note that provided threshold must be in the expected format: '## unit'}
 }
 \description{
 Assign a numerical group for rows by provided time column. If
-using GPS collar data or other data with variability in concurrent measures across individuals,
-it is recommended to round this time column providing the timeThreshold.
+using GPS collar data or other data with variability in concurrent measures
+across individuals, it is recommended to round this time column
+providing the threshold.
 Otherwise, rows are grouped by matching exact times.
 }
 \details{

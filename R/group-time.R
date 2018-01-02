@@ -1,22 +1,23 @@
 #' Group Times
 #'
 #' Assign a numerical group for rows by provided time column. If
-#' using GPS collar data or other data with variability in concurrent measures across individuals,
-#' it is recommended to round this time column providing the timeThreshold.
+#' using GPS collar data or other data with variability in concurrent measures
+#' across individuals, it is recommended to round this time column
+#' providing the threshold.
 #' Otherwise, rows are grouped by matching exact times.
 #'
-#' This function can also group rows on time intervals, such as blocks of 5 days.
-#' Simply provide the interval in the same manner eg: '5 days'.
+#' This function can also group rows on blocks of days.
+#' Simply provide the block length in the same manner as the threshold eg: '5 days'.
 #'
 #' @param DT input locs/rows
 #' @param timeField time column name
-#' @param timeThreshold character defining the threshold for grouping times.
+#' @param threshold character defining the threshold for grouping times.
 #'                      eg: '2 hours', '10 minutes', etc.
 #'                      if not provided, times will be matched exactly.
 #'                      Note that provided threshold must be in the expected format: '## unit'
 #'
 #' @export
-GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
+GroupTimes <- function(DT, timeField, threshold = NULL) {
   if (!truelength(DT)){
     alloc.col(DT)
   }
@@ -31,68 +32,74 @@ GroupTimes <- function(DT, timeField, timeThreshold = NULL) {
     DT[, newtime := NULL]
   }
 
-  if(is.null(timeThreshold)) {
-    DT[, timeGroup := .GRP, by = timeField]
+
+
+  if(is.null(threshold)) {
+    DT[, timegroup := .GRP, by = timeField]
   } else {
-    if(grepl('hour', timeThreshold)){
-      data.table::as.ITime(data.table::tstrsplit(timeThreshold, ' ')[[1]],
-                           format = '%H')
-      stop('this function (hourly time group) is broken')
-    } else if(grepl('minute', timeThreshold)){
 
-      nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ',
-                                            keep = 1, type.convert = TRUE))
+    dtm <- DT[, data.table::IDateTime(get(timeField))]
 
-      # alloc.col(DT, 1 )
+    if(grepl('hour', threshold)){
+      if(data.table::tstrsplit(threshold, ' ')[[1]] == 1L){
+        nMins <- 60L
+        dtm[data.table::minute(itime) %% nMins < (nMins / 2) ,
+            minutes := nMins * (data.table::minute(itime) %/% nMins)]
+        dtm[data.table::minute(itime) %% nMins >= (nMins / 2),
+            minutes := nMins * ((data.table::minute(itime) %/% nMins) + 1L)]
 
-      newdates <- DT[, .(new =
-       {new <- ifelse((data.table::minute(get(timeField)) %% nTime) > (nTime / 2),
-                      (as.POSIXct(get(timeField)) +
-                         (nTime - (data.table::minute(get(timeField)) %% nTime)) * 60) -
-                         data.table::second(get(timeField)),
-                      as.POSIXct(get(timeField)) -
-                        ((data.table::minute(get(timeField)) %% (nTime)) * 60) -
-                        data.table::second(get(timeField)))
-       class(new) <- c("POSIXct", "POSIXct")
-       new})]
+        dtm[, timegroup := .GRP,
+            by = .(minutes, data.table::hour(itime), idate)]
 
-      newdates[, timeGroup := .GRP, by = new]
-
-      return(DT[, (colnames(newdates)) := newdates][])
-    } else if(grepl('day', timeThreshold)){
-      nTime <- unlist(data.table::tstrsplit(timeThreshold, ' ',
-                                            keep = 1, type.convert = TRUE))
-      if(nTime == 1){
-        # DT[, timeGroup := data.table::yday(get(timeField))]
-        data.table::setnames(
-          data.table::data.table(DT,
-                                 data.table::yday(DT[[timeField]]),
-                                 data.table::yday(DT[[timeField]])),
-          c(names(DT), 'day', 'timeGroup')
-        )
+        return(DT[, (colnames(dtm)) := dtm][])
       } else {
-        days <- DT[, data.table::yday(get(timeField))]
-        blockLength <- nTime
-        seqBlockCuts <- seq.int(min(days), max(days) + blockLength,
-                                by = blockLength)
+        nHours <- data.table::tstrsplit(threshold, ' ')[[1]]
+        if(!is.integer(nHours)) nHours <- as.integer(nHours)
 
-        if(((max(days) - min(days)) / blockLength) %% 1 != 0){
-          warning('the minimum and maximum days provided in DT are not evenly divisible by the block length')
-        }
+        dtm <- DT[, IDateTime(get(timeField))]
+        dtm[data.table::hour(itime) %% nHours < (nHours / 2) ,
+            hours := nHours * (data.table::hour(itime) %/% nHours)]
+        dtm[data.table::hour(itime) %% nHours >= (nHours / 2),
+            hours := nHours * ((data.table::hour(itime) %/% nHours) + 1L)]
 
-        data.table::setnames(
-          data.table::data.table(DT,
-                                 cut(days,
-                                     breaks = seqBlockCuts, right = FALSE,
-                                     labels = FALSE),
-                                 data.table::yday(DT[[timeField]])),
-          c(names(DT), 'timeGroup', 'day'))
-
-
+        dtm[, timegroup := .GRP, by = .(hours, idate)]
+        return(DT[, (colnames(dtm)) := dtm][])
       }
+
+    } else if(grepl('minute', threshold)){
+      nMins <- data.table::tstrsplit(threshold, ' ')[[1]]
+      if(!is.integer(nMins)) nMins <- as.integer(nMins)
+
+      dtm[data.table::minute(itime) %% nMins < (nMins / 2) ,
+          minutes := nMins * (data.table::minute(itime) %/% nMins)]
+      dtm[data.table::minute(itime) %% nMins >= (nMins / 2),
+          minutes := nMins * ((data.table::minute(itime) %/% nMins) + 1L)]
+
+      dtm[, timegroup := .GRP,
+          by = .(minutes, data.table::hour(itime), idate)]
+      return(DT[, (colnames(dtm)) := dtm][])
+
+    } else if(grepl('day', threshold)){
+      nDays <- data.table::tstrsplit(threshold, ' ')[[1]]
+      if(!is.integer(nDays)) nDays <- as.integer(nDays)
+      if(nDays == 1){
+        dtm[, timegroup := data.table::yday(idate)]
+        return(DT[, colnames(dtm) := dtm][])
+
+      } else {
+        minday <- dtm[, min(data.table::yday(idate))]
+        maxday <- dtm[, max(data.table::yday(idate))]
+        if(((maxday - minday) / nDays) %% 1 != 0){
+          warning('the minimum and maximum days in DT are not evenly divisible by the provided block length',
+                  '\n min day = ', as.character(minday), ', max day = ', as.character(maxday))
+        }
+        dtm[, block := cut(data.table::yday(idate),
+                           breaks = seq.int(minday, maxday + nDays, by = nDays),
+                           right = FALSE, labels = FALSE)]
+        return(DT[, colnames(dtm) := dtm][])
+      }
+    } else {
+      stop("must provide threshold in units of hour, day, or minute")
     }
   }
 }
-
-# TODO: add daily, monthly, yearly, block? times
-# TODO: note results may be strange if you use something non-divisible by 60

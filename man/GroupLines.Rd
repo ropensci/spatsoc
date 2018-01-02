@@ -4,7 +4,7 @@
 \alias{GroupLines}
 \title{Groups From Spatial Lines}
 \usage{
-GroupLines(DT, bufferWidth = 0, timeField = NULL, timeThreshold = NULL,
+GroupLines(DT, bufferWidth = 0, timeField = NULL, threshold = NULL,
   projection, coordFields = c("EASTING", "NORTHING"), idField = "ID",
   spLines = NULL)
 }
@@ -19,7 +19,7 @@ SpatialLines intersection}
 \item{timeField}{(optional) time field in the DT upon which the spatial grouping will be
 calculated}
 
-\item{timeThreshold}{The threshold for considering time groups, eg: '5 minutes' or
+\item{threshold}{The threshold for considering time groups, eg: '5 minutes' or
 '1 hour'. If not provided, times will be matched exactly.}
 
 \item{projection}{Character string for input to sp::CRS() and proj4string()}
