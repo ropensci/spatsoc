@@ -9,6 +9,7 @@
 #' @param groupField field indicating the group membership for each id
 #' @param timeField (optional) time field used for providing datetime or hour field or group time field
 #' @inheritParams BuildPts
+#' @param iterations The number of iterations to randomize
 #'
 #' @seealso
 #'   \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}

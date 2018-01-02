@@ -17,9 +17,9 @@ if not provided, times will be matched exactly.
 Note that provided threshold must be in the expected format: '## unit'}
 }
 \description{
-Assign a numerical group for rows by provided time column. If
+Assign an integer group for rows by provided time column. If
 using GPS collar data or other data with variability in concurrent measures
-across individuals, it is recommended to round this time column
+across individuals, it is usefuls to round this time column
 providing the threshold.
 Otherwise, rows are grouped by matching exact times.
 }
