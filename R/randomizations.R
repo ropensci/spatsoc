@@ -13,13 +13,14 @@
 #' @seealso
 #'   \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 #' @export
-Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL) {
+Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL, iterations = NULL) {
   if(any(!(c(idField, groupField, dateField) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
   if(!(randomType %in% c('hourly', 'daily', 'speigel'))) stop('must provide either hourly, daily or speigel for randomType')
 
   if(!is.numeric(iterations)) stop('must provide a numeric for iterations or NULL')
+  if(is.null(iterations)) iterations <- 1
 
   if(iterations == 1){
     if(randomType == 'hourly'){
