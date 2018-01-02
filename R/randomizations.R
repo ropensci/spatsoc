@@ -19,6 +19,7 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
   }
   if(randomType == 'hourly'){
     # if(!is.null(dateField)) warning('dateField ignored since randomType is hourly')
+    if(is.null(dateField)) stop('dateField required, please provide datetime field')
     #
     # lsIDs <- unique(DT[[idField]])
     # randIDs <- sample(lsIDs)
