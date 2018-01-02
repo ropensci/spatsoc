@@ -45,44 +45,8 @@ z[, .N, by = group][order(-N)]
 
 z
 # function(DT, idField, iterations, groupField, randomType, dateField = NULL) {
-Iterations(z, 'ID', 10, 'group', 'hourly', 'datetime')
-Randomizations(z, 'ID', 'group', 'hourly', 'datetime')
-
-
-### now iterations
-iterations <- 10
-library(foreach)
-forIters <- foreach(i=1:iterations) %do% {
-  Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')[, iteration := i][]
-}
- <- rbindlist(forIters)
-
-Iterations <- function(DT, idField, iterations, groupField, randomType, dateField = NULL) {
-  # Add rowID col
-  DT[, rowID := .I]
-
-  # Replicate the data.table (17mil rows with 100 iterations)
-  # This provides us with a preallocated space for filling in the randomIDs
-  replicated <- DT[rep(1:.N, iterations)][, iteration := 1:.N, by = rowID]
-
-  #~ 2.5 minutes to generate randomIDs for each iteration (by group)
-  dt.replicated[, randomID := spatsoc::Randomizations(.SD, 'ID', 'group', 'hourly')[,2],
-                by = .(season, HERD, Year, iteration)]
-
-}
-
-
-# forIters <- foreach(iter = 1:iterations) %do% {
-#   Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')[, iteration := iter]
-# }
-
-rbindlist(forIters)
-
-lapIters <- lapply(1:iterations, FUN = function(i){
-
-})
-
-
+# Iterations(z, 'ID', 10, 'group', 'hourly', 'datetime')
+Randomizations(z, 'ID', 'group', 'daily', 'datetime', 2)[timegroup ==10]
 
 
 

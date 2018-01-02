@@ -91,7 +91,7 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
       }
       replicated[, yday := data.table::yday(get(dateField))]
 
-      dailyIDs <- replicated[, .(ID = unique(ID)), by = yday(datetime)]
+      dailyIDs <- replicated[, .(ID = unique(ID)), by = .(iter, yday(datetime))]
       dailyIDs[, randomID := sample(ID), by = .(iter, yday)]
       return(merge(replicated, dailyIDs, on = c('iter', 'yday')))
 
