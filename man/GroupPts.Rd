@@ -4,9 +4,8 @@
 \alias{GroupPts}
 \title{Group Points By Buffer}
 \usage{
-GroupPts(DT, bufferWidth, timeField = NULL, threshold = NULL,
-  projection, coordFields = c("EASTING", "NORTHING"), idField = "ID",
-  spPts = NULL)
+GroupPts(DT, bufferWidth, timeField = NULL, threshold = NULL, projection,
+  coordFields = c("EASTING", "NORTHING"), idField = "ID", spPts = NULL)
 }
 \arguments{
 \item{DT}{Input data with coordinate and id fields. If not provided, fields

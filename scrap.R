@@ -45,8 +45,8 @@ z[, .N, by = group][order(-N)]
 
 z
 # function(DT, idField, iterations, groupField, randomType, dateField = NULL) {
-Iterations(z, 'ID', 10, 'group', 'daily', 'datetime')
-Randomizations(z, 'ID', 'group', 'hourly')
+Iterations(z, 'ID', 10, 'group', 'hourly', 'datetime')
+Randomizations(z, 'ID', 'group', 'hourly', 'datetime')
 
 
 ### now iterations
