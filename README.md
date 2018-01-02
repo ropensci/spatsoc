@@ -29,6 +29,16 @@ do we want to return vertices strictly for kernel?
 * remove comments from functions
 * function for get_group_by_individual speedup
 
+#### Randomizations/Iterations
+```
+Iterations(z, 'ID', 10, 'group', 'daily', 'datetime')
+ Hide Traceback
+ 
+ Rerun with Debug
+ Error in .subset2(x, i, exact = exact) : 
+  attempt to select less than one element in get1index
+```
+
 #### Nearest
 * `Error in [.data.table(dt, , FindNearest(.SD, coordFields, idField),  :
   column or expression 1 of 'by' or 'keyby' is type closure. Do not quote column names. Usage: DT[,sum(colC),by=list(colA,month(colB))]`
