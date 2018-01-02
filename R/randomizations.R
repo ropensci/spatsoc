@@ -77,11 +77,11 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
       }
   } else {
     DT[, rowID := .I]
-    replicated <- DT[rep(1:.N, iterations)][, iteration := 1:.N, by = rowID]
+    replicated <- DT[rep(1:.N, iterations)][, iter := 1:.N, by = rowID]
 
     if(randomType == 'hourly'){
       if(is.null(dateField)) stop('dateField required, please provide datetime field')
-      replicated[, randomID := sample(get(idField)), by = get(dateField)]
+      replicated[, randomID := sample(get(idField)), by = .(iter, get(dateField))]
 
       return(replicated[])
     } else if(randomType == 'daily'){
@@ -92,10 +92,11 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
       replicated[, yday := data.table::yday(get(dateField))]
 
       dailyIDs <- replicated[, .(ID = unique(ID)), by = yday(datetime)]
-      dailyIDs[, randomID := sample(ID), by = yday]
-      return(merge(replicated, dailyIDs, on = 'yday'))
+      dailyIDs[, randomID := sample(ID), by = .(iter, yday)]
+      return(merge(replicated, dailyIDs, on = c('iter', 'yday')))
 
       } else if(randomType == 'spiegel'){
+        # missing iterations integrated
         if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
           stop('provided dateField is not of class POSIXct or IDate, for daily random type
                please provide a datetime column or IDate')
