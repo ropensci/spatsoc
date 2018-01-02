@@ -28,6 +28,17 @@ do we want to return vertices strictly for kernel?
 * must check if provided columns are found in input data, otherwise non descript errors like type closure (since date col similar to date function)
 * remove comments from functions
 * function for get_group_by_individual speedup
+* check improvements in performance given the switch to an integer time group vs posixct
+
+#### Randomizations/Iterations
+```
+Iterations(z, 'ID', 10, 'group', 'daily', 'datetime')
+ Hide Traceback
+ 
+ Rerun with Debug
+ Error in .subset2(x, i, exact = exact) : 
+  attempt to select less than one element in get1index
+```
 
 #### Nearest
 * `Error in [.data.table(dt, , FindNearest(.SD, coordFields, idField),  :

@@ -4,7 +4,8 @@
 \alias{Randomizations}
 \title{Randomizations}
 \usage{
-Randomizations(DT, idField, groupField, randomType, dateField = NULL)
+Randomizations(DT, idField, groupField, randomType, dateField = NULL,
+  iterations = NULL)
 }
 \arguments{
 \item{DT}{input data.table with id, group fields and (optional) time fields}
@@ -18,7 +19,9 @@ for each individual 24hr trajector while 'hourly' simply randomly assigns
 an ID to each location. 'spiegel' will implement the daily movement
 trajectory randomizations (Spiegel et al. 2016).}
 
-\item{dateField}{(optional) date field used when randomType == 'daily' or 'spiegel'}
+\item{iterations}{The number of iterations to randomize}
+
+\item{timeField}{(optional) time field used for providing datetime or hour field or group time field}
 }
 \description{
 Randomizations

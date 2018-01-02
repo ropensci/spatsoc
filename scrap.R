@@ -43,27 +43,10 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 z <- GroupPts(locs, 100, 'datetime', '2 hours', projection = utm)
 z[, .N, by = group][order(-N)]
 
-
-
-### now iterations
-iterations <- 10
-library(foreach)
-forIters <- foreach(i=1:iterations) %do% {
-  Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')[, iteration := i][]
-}
- <- rbindlist(forIters)
-
-# forIters <- foreach(iter = 1:iterations) %do% {
-#   Randomizations(z, 'ID', 'group', 'hourly', 'timegroup')[, iteration := iter]
-# }
-
-rbindlist(forIters)
-
-lapIters <- lapply(1:iterations, FUN = function(i){
-
-})
-
-
+z
+# function(DT, idField, iterations, groupField, randomType, dateField = NULL) {
+# Iterations(z, 'ID', 10, 'group', 'hourly', 'datetime')
+Randomizations(z, 'ID', 'group', 'daily', 'datetime', 2)[timegroup ==10]
 
 
 
