@@ -47,7 +47,29 @@ z[, .N, by = group][order(-N)]
 z
 # function(DT, idField, iterations, groupField, randomType, dateField = NULL) {
 # Iterations(z, 'ID', 10, 'group', 'hourly', 'datetime')
-aa = Randomizations(z, 'ID', 'group', randomType = 'spiegel', dateField = 'datetime', 100) #[yday ==18 & ID == "A"]
+aa = Randomizations(z, 'ID', 'group', randomType = 'spiegel', dateField = 'datetime', 1) #[yday ==18 & ID == "A"]
+
+aa
+
+aa[, as.POSIXct(
+  paste0(year(datetime), "-",
+        month(datetime), "-",
+        randomYday, " ",
+        as.ITime(datetime)))
+  ]
+
+
+aa[, difday := randomYday - yday]
+
+aa[, .(datetime,
+       dtPlus = datetime + (86400 * difday),
+       ydayPlus = yday(datetime + (86400 * difday)),
+       yday,
+       randomYday)]
+
+
+
+aa[, as.ITime(datetime)]
 
 ggplot(aa[order(randomYday)]) +
   geom_path(aes(EASTING, NORTHING, color = yday, group = ID)) #+ guides(color = FALSE) +
