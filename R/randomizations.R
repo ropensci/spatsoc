@@ -64,7 +64,6 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
         DT[, yday := data.table::yday(get(dateField))]
         idDays <- DT[, .(yday = unique(yday)), by = ID]
         idDays[, randomYday := sample(yday)]
-        idDays
 
         return(merge(DT, idDays, on = c('yday', 'ID')))
         # randomDatesDT <- DT[, {d <- data.table(dates =  unique(get(dateField)))
@@ -103,9 +102,9 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
                please provide a datetime column or IDate')
         }
         replicated[, yday := data.table::yday(get(dateField))]
-        idDays <- replicated[, .(yday = unique(yday)), by = ID]
-        idDays[, randomYday := sample(yday)]
-        return(merge(replicated, idDays, on = c('yday', 'ID')))
+        idDays <- replicated[, .(yday = unique(yday)), by = .(ID, iter)]
+        idDays[, randomYday := sample(yday), by = iter]
+        return(merge(replicated, idDays, on = c('yday', 'ID', 'iter')))
       }
   }
 }

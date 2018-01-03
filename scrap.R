@@ -47,9 +47,15 @@ z[, .N, by = group][order(-N)]
 z
 # function(DT, idField, iterations, groupField, randomType, dateField = NULL) {
 # Iterations(z, 'ID', 10, 'group', 'hourly', 'datetime')
-Randomizations(z, 'ID', 'group', randomType = 'speigel', dateField = 'datetime', 2) #[timegroup ==10]
+aa = Randomizations(z, 'ID', 'group', randomType = 'spiegel', dateField = 'datetime', 100) #[yday ==18 & ID == "A"]
 
+ggplot(aa[order(randomYday)]) +
+  geom_path(aes(EASTING, NORTHING, color = yday, group = ID)) #+ guides(color = FALSE) +
+  facet_wrap(~ID)
+  #theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(),
+  #      legend.position = c(0, 1))
 
+aa[, .(range(yday), range(randomYday)), by = ID]
 
 
 # between ids (hourly)
