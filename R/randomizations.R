@@ -18,7 +18,7 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
   if(any(!(c(idField, groupField, dateField) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
-  if(!(randomType %in% c('hourly', 'daily', 'speigel'))) stop('must provide either hourly, daily or speigel for randomType')
+  if(!(randomType %in% c('hourly', 'daily', 'spiegel'))) stop('must provide either hourly, daily or spiegel for randomType')
 
   if(!is.numeric(iterations)) stop('must provide a numeric for iterations or NULL')
   if(is.null(iterations)) iterations <- 1

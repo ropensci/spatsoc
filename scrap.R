@@ -1,3 +1,4 @@
+
 updatePackageVersion <- function(packageLocation ="."){
   ## Read DESCRIPTION file
   desc <- readLines(file.path(packageLocation, "DESCRIPTION"))
@@ -46,7 +47,7 @@ z[, .N, by = group][order(-N)]
 z
 # function(DT, idField, iterations, groupField, randomType, dateField = NULL) {
 # Iterations(z, 'ID', 10, 'group', 'hourly', 'datetime')
-Randomizations(z, 'ID', 'group', 'daily', 'datetime', 2)[timegroup ==10]
+Randomizations(z, 'ID', 'group', randomType = 'speigel', dateField = 'datetime', 2) #[timegroup ==10]
 
 
 
