@@ -64,16 +64,10 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
         DT[, yday := data.table::yday(get(dateField))]
         idDays <- DT[, .(yday = unique(yday)), by = ID]
         idDays[, randomYday := sample(yday)]
-
-        return(merge(DT, idDays, on = c('yday', 'ID')))
-        # randomDatesDT <- DT[, {d <- data.table(dates =  unique(get(dateField)))
-        #                        d[, randomN :=  sample(1:length(dates), length(dates))]
-        #                        .SD[, .(randomDate = rep(d[randomN == .GRP, dates], .N),
-        #                                group = get(groupField)),
-        #                            by = dateField]
-        #                        },
-        #                     by = idField]
-        # # DT[randomDatesDT, on = c(idField, dateField)]
+        merged <- merge(DT, idDays, on = c('yday', 'ID'))[,
+          randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday))]
+        attr(merged$randomDateTime, 'tzone') <- ""
+        return(merged)
       }
   } else {
     DT[, rowID := .I]
@@ -96,7 +90,6 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
       return(merge(replicated, dailyIDs, on = c('iter', 'yday')))
 
       } else if(randomType == 'spiegel'){
-        # missing iterations integrated
         if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
           stop('provided dateField is not of class POSIXct or IDate, for daily random type
                please provide a datetime column or IDate')

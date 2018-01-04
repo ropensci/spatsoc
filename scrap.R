@@ -48,6 +48,8 @@ z
 # function(DT, idField, iterations, groupField, randomType, dateField = NULL) {
 # Iterations(z, 'ID', 10, 'group', 'hourly', 'datetime')
 aa = Randomizations(z, 'ID', 'group', randomType = 'spiegel', dateField = 'datetime', 2)
+aa[, GroupPts(.SD, 100, 'randomDateTime', '2 hours', projection = utm),
+   by = iter]
 GroupPts(aa, 100, 'randomDateTime', '2 hours', projection = utm)
 aa
 aa[, .(datetime, yday, randomYday, randomDateTime)]
