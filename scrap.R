@@ -47,9 +47,9 @@ z[, .N, by = group][order(-N)]
 z
 # function(DT, idField, iterations, groupField, randomType, dateField = NULL) {
 # Iterations(z, 'ID', 10, 'group', 'hourly', 'datetime')
-aa = Randomizations(z, 'ID', 'group', randomType = 'spiegel', dateField = 'datetime', 1) #[yday ==18 & ID == "A"]
+aa = Randomizations(z, 'ID', 'group', randomType = 'spiegel', dateField = 'datetime', 2)
 
-aa
+aa[, .(datetime, yday, randomYday, randomDateTime)]
 
 aa[, as.POSIXct(
   paste0(year(datetime), "-",

@@ -102,11 +102,11 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
                please provide a datetime column or IDate')
         }
         replicated[, yday := data.table::yday(datetime)]
-        idDays <- replicated[, .(yday = unique(yday), datetime), by = .(ID, iter)]
+        idDays <- replicated[, .(yday = unique(yday)), by = .(ID, iter)]
         idDays[, randomYday := sample(yday), by = iter]
-        idDays[, randomDateTime := datetime + (86400 * (randomYday - yday)),
-               by = iter]
-        return(merge(replicated, idDays, on = c('yday', 'ID', 'iter')))
+        return(merge(replicated, idDays,
+                     on = c('yday', 'ID', 'iter'))[, randomDateTime := datetime + (86400 * (randomYday - yday)),
+                                                                       by = iter])
       }
   }
 }
