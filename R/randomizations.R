@@ -101,12 +101,14 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
           stop('provided dateField is not of class POSIXct or IDate, for daily random type
                please provide a datetime column or IDate')
         }
-        replicated[, yday := data.table::yday(datetime)]
+        replicated[, yday := data.table::yday(get(dateField))]
         idDays <- replicated[, .(yday = unique(yday)), by = .(ID, iter)]
         idDays[, randomYday := sample(yday), by = iter]
-        return(merge(replicated, idDays,
-                     on = c('yday', 'ID', 'iter'))[, randomDateTime := datetime + (86400 * (randomYday - yday)),
-                                                                       by = iter])
+        merged <- merge(replicated, idDays,
+                        on = c('yday', 'ID', 'iter'))[, randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday)),
+                                                      by = iter][]
+        attr(merged$randomDateTime, 'tzone') <- ""
+        return(merged)
       }
   }
 }
