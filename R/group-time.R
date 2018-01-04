@@ -32,8 +32,6 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
     DT[, newtime := NULL]
   }
 
-
-
   if(is.null(threshold)) {
     DT[, timegroup := .GRP, by = timeField]
   } else {
@@ -51,7 +49,7 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
         dtm[, timegroup := .GRP,
             by = .(minutes, data.table::hour(itime), idate)]
 
-        return(DT[, (colnames(dtm)) := dtm][])
+        return(cbind(DT, dtm))#merge(DT, dtm))#DT[, (colnames(dtm)) := dtm][])
       } else {
         nHours <- data.table::tstrsplit(threshold, ' ')[[1]]
         if(!is.integer(nHours)) nHours <- as.integer(nHours)
@@ -63,7 +61,7 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
             hours := nHours * ((data.table::hour(itime) %/% nHours) + 1L)]
 
         dtm[, timegroup := .GRP, by = .(hours, idate)]
-        return(DT[, (colnames(dtm)) := dtm][])
+        return(cbind(DT, dtm)) #merge(dtm, DT))#DT[, (colnames(dtm)) := dtm][])
       }
 
     } else if(grepl('minute', threshold)){
@@ -77,14 +75,14 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
 
       dtm[, timegroup := .GRP,
           by = .(minutes, data.table::hour(itime), idate)]
-      return(DT[, (colnames(dtm)) := dtm][])
+      return(cbind(DT, dtm))#DT[, (colnames(dtm)) := dtm][])
 
     } else if(grepl('day', threshold)){
       nDays <- data.table::tstrsplit(threshold, ' ')[[1]]
       if(!is.integer(nDays)) nDays <- as.integer(nDays)
       if(nDays == 1){
         dtm[, timegroup := data.table::yday(idate)]
-        return(DT[, colnames(dtm) := dtm][])
+        return(cbind(DT, dtm))#DT[, colnames(dtm) := dtm][])
 
       } else {
         minday <- dtm[, min(data.table::yday(idate))]
@@ -96,7 +94,7 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
         dtm[, block := cut(data.table::yday(idate),
                            breaks = seq.int(minday, maxday + nDays, by = nDays),
                            right = FALSE, labels = FALSE)]
-        return(DT[, colnames(dtm) := dtm][])
+        return(cbind(DT, dtm))#DT[, colnames(dtm) := dtm][])
       }
     } else {
       stop("must provide threshold in units of hour, day, or minute")

@@ -51,7 +51,18 @@ aa = Randomizations(z, 'ID', 'group', randomType = 'spiegel', dateField = 'datet
 aa[, GroupPts(.SD, 100, 'randomDateTime', '2 hours', projection = utm),
    by = iter]
 GroupPts(aa, 100, 'randomDateTime', '2 hours', projection = utm)
-aa
+dtm <- DT[, IDateTime(get(timeField))]
+dtm[data.table::hour(itime) %% nHours < (nHours / 2) ,
+    hours := nHours * (data.table::hour(itime) %/% nHours)]
+dtm[data.table::hour(itime) %% nHours >= (nHours / 2),
+    hours := nHours * ((data.table::hour(itime) %/% nHours) + 1L)]
+
+dtm[, timegroup := .GRP, by = .(hours, idate)]
+return(merge(dtm, DT))
+
+aa[, GroupPts(.SD, 100, NULL, NULL, projection = utm), by = iter]
+
+
 aa[, .(datetime, yday, randomYday, randomDateTime)]
 
 aa[, as.POSIXct(
