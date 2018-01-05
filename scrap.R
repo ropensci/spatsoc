@@ -1,4 +1,3 @@
-
 updatePackageVersion <- function(packageLocation ="."){
   ## Read DESCRIPTION file
   desc <- readLines(file.path(packageLocation, "DESCRIPTION"))
@@ -50,6 +49,13 @@ z
 aa = Randomizations(z, 'ID', 'group', randomType = 'spiegel', dateField = 'datetime', 2)
 aa[, GroupPts(.SD, 100, 'randomDateTime', '2 hours', projection = utm),
    by = iter]
+
+
+x <- z[rep(1:.N, 2)][, iter := c(rep(1, .N/2), rep(2, .N/2))]
+x[, GroupTimes(.SD, 'datetime', '2 hours'), by = iter][timegroup == 1]
+
+GroupTimes(x, 'datetime', '2 hours')[]
+
 GroupPts(aa, 100, 'randomDateTime', '2 hours', projection = utm)
 dtm <- DT[, IDateTime(get(timeField))]
 dtm[data.table::hour(itime) %% nHours < (nHours / 2) ,
