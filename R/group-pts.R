@@ -6,8 +6,6 @@
 #' time.
 #'
 #' @inheritParams BuildPts
-#' @param threshold The threshold for considering time groups, eg: '5 minutes' or
-#'                     '1 hour'. If not provided, times will be matched exactly.
 #' @param spPts Alternatively, provide a SpatialPointsDataFrame created with the
 #'   sp package. If a spPts object is provided, groups cannot be calculated by
 #' @param bufferWidth The width of the buffer around the geometry in the units of the projection
@@ -27,7 +25,7 @@
 #' data(locsPts)
 #'
 #' groups <- GroupPts(spPts = locsPts)
-GroupPts <- function(DT, bufferWidth, timeField = NULL, threshold = NULL,
+GroupPts <- function(DT, bufferWidth, timeField = NULL, grouping = NULL,
                      projection, coordFields = c('EASTING', 'NORTHING'),
                      idField = 'ID', spPts = NULL){
 
@@ -50,39 +48,22 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, threshold = NULL,
                              spPts$id,
                              ovr),
       c(coordFields, idField, 'group'))
+
   } else {
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
 
-    if(is.null(threshold)){
-      DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
+    DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
 
-      buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
+    buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
 
-      ovr <- sp::over(spPts, sp::disaggregate(buffers))
+    ovr <- sp::over(spPts, sp::disaggregate(buffers))
 
-      data.table::setnames(
-        data.table::data.table(spPts@coords,
-                               spPts$id,
-                               paste(.GRP, ovr, sep = '_')),
-        c(coordFields, idField, 'group'))
-      },
-      by = timeField, .SDcols = c(coordFields, idField)]
-    } else {
-      GroupTimes(DT, timeField, threshold)[,
-            {spPts <- BuildPts(.SD, projection, coordFields, idField)
-
-            buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
-
-            ovr <- sp::over(spPts, sp::disaggregate(buffers))
-
-            data.table::setnames(
-              data.table::data.table(spPts@coords,
-                                     spPts$id,
-                                     paste(.GRP, ovr, sep = '_'),
-                                     get(timeField)),
-              c(coordFields, idField, 'group', timeField))
-            },
-         by = timegroup, .SDcols = c(coordFields, idField)]
-    }
+    data.table::setnames(
+      data.table::data.table(spPts@coords,
+                             spPts$id,
+                             paste(.GRP, ovr, sep = '_')),
+      c(coordFields, idField, 'group'))
+    },
+    by = timeField, .SDcols = c(coordFields, idField)]
   }
 }

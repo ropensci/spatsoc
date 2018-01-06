@@ -44,7 +44,7 @@ GroupTimes(l, 'datetime', '2 days')
 
 l
 
-
+GroupPts(l, 100, projection = utm)[]
 
 
 
