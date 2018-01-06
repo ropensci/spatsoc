@@ -25,13 +25,14 @@
 #' data(locsPts)
 #'
 #' groups <- GroupPts(spPts = locsPts)
-GroupPts <- function(DT, bufferWidth, timeField = NULL, grouping = NULL,
+GroupPts <- function(DT, bufferWidth, timeField = NULL, groupField = NULL,
                      projection, coordFields = c('EASTING', 'NORTHING'),
                      idField = 'ID', spPts = NULL){
 
   if(!is.null(DT) && any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
+  if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
   if(is.null(timeField)){
     if(is.null(spPts)){
       if(is.null(DT)){
