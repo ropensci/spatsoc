@@ -11,6 +11,7 @@
 #' @param bufferWidth The width of the buffer around the geometry in the units of the projection
 #' @param timeField (optional) time field in the DT upon which the spatial grouping will be
 #'   calculated
+#' @param groupField (optional) grouping field to be (optionally) combined with timeField
 #' @return Group by ID (by time) data.table
 #' @export
 #'
@@ -41,30 +42,14 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, groupField = NULL,
       spPts <- BuildPts(DT, projection, coordFields, idField)
     }
     buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
-
-    ovr <- sp::over(spPts, sp::disaggregate(buffers))
-
-    data.table::setnames(
-      data.table::data.table(spPts@coords,
-                             spPts$id,
-                             ovr),
-      c(coordFields, idField, 'group'))
-
+    DT[, group := sp::over(spPts, sp::disaggregate(buffers))]
   } else {
+    if(is.null(groupField)) byFields <- timeField else byFields <- c(groupField, timeField)
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
 
-    DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
-
-    buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
-
-    ovr <- sp::over(spPts, sp::disaggregate(buffers))
-
-    data.table::setnames(
-      data.table::data.table(spPts@coords,
-                             spPts$id,
-                             paste(.GRP, ovr, sep = '_')),
-      c(coordFields, idField, 'group'))
-    },
-    by = timeField, .SDcols = c(coordFields, idField)]
+    DT[, group := {spPts <- BuildPts(.SD, projection, coordFields, idField)
+                   buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
+                   sp::over(spPts, sp::disaggregate(buffers))},
+    by = byFields, .SDcols = c(coordFields, idField)]
   }
 }

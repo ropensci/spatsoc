@@ -19,9 +19,6 @@ SpatialLines intersection}
 \item{timeField}{(optional) time field in the DT upon which the spatial grouping will be
 calculated}
 
-\item{threshold}{The threshold for considering time groups, eg: '5 minutes' or
-'1 hour'. If not provided, times will be matched exactly.}
-
 \item{projection}{Character string for input to sp::CRS() and proj4string()}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y

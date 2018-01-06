@@ -43,10 +43,10 @@ l <- data.table(locs)
 GroupTimes(l, 'datetime', '2 days')
 
 l
-
-GroupPts(l, 100, projection = utm)[]
-
-
+l[, herd := sample(1:3, .N, replace = TRUE)]
+GroupPts(l, 100, 'block', projection = utm)
+GroupPts(l, 100, timeField = 'block', groupField = 'herd', projection = utm)
+l
 
 # randomizations
 # x <- GroupTimes(locs, 'datetime', '2 hours')
