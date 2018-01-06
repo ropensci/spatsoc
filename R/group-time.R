@@ -17,25 +17,22 @@
 #'                      Note that provided threshold must be in the expected format: '## unit'
 #'
 #' @export
-GroupTimes <- function(DT, timeField, threshold = NULL, returnAll = FALSE) {
-  if (!truelength(DT)){
-    alloc.col(DT)
-  }
-  if(any(!(c(timeField) %in% colnames(DT)))){
+GroupTimes <- function(DT, timeField, threshold = NULL) {
+  # if (!truelength(DT)){
+  #   alloc.col(DT)
+  # }
+  if(!(timeField) %in% colnames(DT)){
     stop('some fields provided are not present
          in data.table provided/colnames(DT)')
   }
 
-  if('newtime' %in% colnames(DT)){
-    warning('`newtime` column name found in input DT, it will be removed
-            before determining new time groups')
-    DT[, newtime := NULL]
+  if(any(c('hours', 'minutes', 'block', 'timegroup') %in% colnames(DT))){
+    warning('one/many of `hours`, `minutes`, `block`, and `timegroup` column names found in input DT and will be overwritten by this function')
   }
 
   if(is.null(threshold)) {
     DT[, timegroup := .GRP, by = timeField]
   } else {
-    # DT <- copy(DT)
     dtm <- DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
     setnames(dtm, c(timeField, 'idate', 'itime'))
 
@@ -49,9 +46,8 @@ GroupTimes <- function(DT, timeField, threshold = NULL, returnAll = FALSE) {
 
         dtm[, timegroup := .GRP,
             by = .(minutes, data.table::hour(itime), idate)]
-        setkeyv(DT, timeField)
-        setkeyv(dtm, timeField)
-        return(DT[dtm])
+
+        DT[, (colnames(dtm)) := dtm]
       } else {
         nHours <- data.table::tstrsplit(threshold, ' ')[[1]]
         if(!is.integer(nHours)) nHours <- as.integer(nHours)
@@ -62,9 +58,7 @@ GroupTimes <- function(DT, timeField, threshold = NULL, returnAll = FALSE) {
             hours := nHours * ((data.table::hour(itime) %/% nHours) + 1L)]
 
         dtm[, timegroup := .GRP, by = .(hours, idate)]
-        # setkeyv(DT, timeField)
-        # setkeyv(dtm, timeField)
-        return(dtm)#DT[dtm])
+        DT[, (colnames(dtm)) := dtm]
       }
 
     } else if(grepl('minute', threshold)){
@@ -78,20 +72,13 @@ GroupTimes <- function(DT, timeField, threshold = NULL, returnAll = FALSE) {
 
       dtm[, timegroup := .GRP,
           by = .(minutes, data.table::hour(itime), idate)]
-
-      setkeyv(DT, timeField)
-      setkeyv(dtm, timeField)
-      return(DT[dtm])
-
+      DT[, (colnames(dtm)) := dtm]
     } else if(grepl('day', threshold)){
       nDays <- data.table::tstrsplit(threshold, ' ')[[1]]
       if(!is.integer(nDays)) nDays <- as.integer(nDays)
       if(nDays == 1){
         dtm[, timegroup := data.table::yday(idate)]
-        setkeyv(DT, timeField)
-        setkeyv(dtm, timeField)
-        return(DT[dtm])
-
+        DT[, (colnames(dtm)) := dtm]
       } else {
         minday <- dtm[, min(data.table::yday(idate))]
         maxday <- dtm[, max(data.table::yday(idate))]
@@ -102,9 +89,7 @@ GroupTimes <- function(DT, timeField, threshold = NULL, returnAll = FALSE) {
         dtm[, block := cut(data.table::yday(idate),
                            breaks = seq.int(minday, maxday + nDays, by = nDays),
                            right = FALSE, labels = FALSE)]
-        setkeyv(DT, timeField)
-        setkeyv(dtm, timeField)
-        return(DT[dtm])
+        DT[, (colnames(dtm)) := dtm]
       }
     } else {
       stop("must provide threshold in units of hour, day, or minute")

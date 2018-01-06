@@ -33,14 +33,24 @@ updatePackageVersion <- function(packageLocation ="."){
 updatePackageVersion()
 
 library(spatsoc)
-data(locs)
+# data(locs)
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
+
+l <- data.table(locs)
+l[, yr := data.table::year(data.table::as.IDate(datetime))]
+
+GroupTimes(l, 'datetime', '20 minutes')
+
+l
+
+
+
 
 
 # randomizations
 # x <- GroupTimes(locs, 'datetime', '2 hours')
-z <- GroupPts(locs, 100, 'datetime', '2 hours', projection = utm)
+z <- GroupPts(l, 100, 'datetime', '2 hours', projection = utm)
 z[, .N, by = group][order(-N)]
 
 z
