@@ -68,12 +68,12 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL
             ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
             data.table::setnames(
               data.table::data.table(names(ovr),
-                                     ovr),
-              c(idField, 'group'))
+                                     unlist(ovr)),
+              c(idField, 'withinGroup'))
           }
     }, by = byFields, .SDcols = c(coordFields, idField)]
 
-    DT[ovrDT, group := group, on = c(idField, byFields)]
-
+    DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
+    DT[, group := .GRP, by = c(byFields, 'withinGroup')]
   }
 }

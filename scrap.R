@@ -52,7 +52,7 @@ GroupLines(l, 100, timeField = 'block', projection = utm)
 GroupLines(l, 100, timeField = 'block', groupFields = 'herd',
            projection = utm)
 l
-
+l[, .N, by = group]
 # retrieve the column names from b - without the key ('v_key')
 thecols = setdiff(colnames(b), key(b))
 
