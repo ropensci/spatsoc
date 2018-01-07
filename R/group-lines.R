@@ -24,7 +24,7 @@
 #'
 #' groups <- GroupLines(spLines = locsLines)
 #' @import data.table
-GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, threshold = NULL,
+GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL,
                        projection, coordFields = c('EASTING', 'NORTHING'),
                        idField = 'ID', spLines = NULL) {
   if(!is.null(DT) && any(!(c(idField, timeField, coordFields) %in% colnames(DT)))){
@@ -51,44 +51,24 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, threshold = NULL,
       stop("if providing a spLines, cannot provide a time field")
     }
 
-    if(is.null(threshold)){
-      DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
-      if(is.null(spLines)) {
-        message('some rows are dropped - unable to build lines with <3 locs')
-      } else {
-        if(bufferWidth == 0) {
-          merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
-        } else {
-          merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
-        }
-        ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
-        data.table::setnames(
-          data.table::data.table(names(ovr),
-                                 paste(ovr, .GRP, sep = '_')),
-          c(idField, 'group'))
-      }
-      },
-      by = timeField, .SDcols = c(coordFields, idField)]
-    } else {
-      GroupTimes(DT, timeField, threshold)[, {
-        spLines <- BuildLines(.SD, projection, coordFields, idField)
-        if(is.null(spLines)) {
-          message('some rows are dropped - unable to build lines with <3 locs')
-        } else {
-          if(bufferWidth == 0) {
-            merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+    if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupField, timeField)
+
+    DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
+          if(is.null(spLines)) {
+            message('some rows are dropped - unable to build lines with <3 locs')
           } else {
-            merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+            if(bufferWidth == 0) {
+              merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+            } else {
+              merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+            }
+            ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
+            data.table::setnames(
+              data.table::data.table(names(ovr),
+                                     paste(ovr, .GRP, sep = '_')),
+              c(idField, 'group'))
           }
-          ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
-          data.table::setnames(
-            data.table::data.table(names(ovr),
-                                   paste(ovr, .GRP, sep = '_')),
-            c(idField, 'group'))
-        }
-        },
-        by = timegroup, .SDcols = c(coordFields, idField)]
-    }
+    }, by = byFields, .SDcols = c(coordFields, idField)]
   }
 }
 # TODO: find alternative to 0.0001 buffer
