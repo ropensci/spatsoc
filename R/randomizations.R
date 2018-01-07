@@ -27,25 +27,10 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
     if(randomType == 'hourly'){
       # if(!is.null(dateField)) warning('dateField ignored since randomType is hourly')
       if(is.null(dateField)) stop('dateField required, please provide datetime field')
-      #
-      # lsIDs <- unique(DT[[idField]])
-      # randIDs <- sample(lsIDs)
-      #
-      # DT[, randomID := randIDs[.GRP], by = idField]
-
       DT[, randomID := sample(get(idField)), by = get(dateField)]
 
       return(DT[])
     } else if(randomType == 'daily'){
-      # if(is.null(dateField)) stop('must provide a dateField if daily randomType chosen')
-      # listIDs <- unique(DT[[idField]])
-      # # TODO: is it just daily or should this flex to specified time?
-      #
-      # # sample 1 id from the list and repeat it for the number of rows
-      # # so the dimensions input are the same returned
-      # DT[, .(randomID = rep(sample(listIDs, 1), .N), group = get(groupField)),
-      #    by = c(dateField, idField)
-
       if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
         stop('provided dateField is not of class POSIXct or IDate, for daily random type
              please provide a datetime column or IDate')
