@@ -23,7 +23,6 @@
 #' data(locsLines)
 #'
 #' groups <- GroupLines(spLines = locsLines)
-#' @import data.table
 GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL,
                        projection, coordFields = c('EASTING', 'NORTHING'),
                        idField = 'ID', spLines = NULL) {
@@ -31,6 +30,9 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL
     print(which(!(c(idField, timeField, coordFields) %in% colnames(DT))))
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
+  if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
+
+
   if(is.null(timeField)){
     if(is.null(spLines)){
       if(is.null(DT)) stop("must provide either spLines or DT")
@@ -42,10 +44,11 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL
       merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
     }
     ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = T)
-    data.table::setnames(
+    ovrDT <- data.table::setnames(
       data.table::data.table(names(ovr),
                              unlist(ovr)),
       c(idField, 'group'))
+    DT[ovrDT, group := group, on = idField]
   } else {
     if(!is.null(spLines)) {
       stop("if providing a spLines, cannot provide a time field")

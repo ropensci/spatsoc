@@ -36,7 +36,6 @@ library(spatsoc)
 # data(locs)
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
@@ -47,6 +46,18 @@ l[, herd := sample(1:3, .N, replace = TRUE)]
 GroupPts(l, 100, 'block', projection = utm)
 GroupPts(l, 100, timeField = 'block', groupField = 'herd', projection = utm)
 l
+
+# d <-
+GroupLines(l, 100, projection = utm)
+l[d, group := dgroup, on = 'ID']
+l
+
+
+# retrieve the column names from b - without the key ('v_key')
+thecols = setdiff(colnames(b), key(b))
+
+# assign them to a
+a[b, (thecols) := mget(thecols)]
 
 # randomizations
 # x <- GroupTimes(locs, 'datetime', '2 hours')
