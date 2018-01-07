@@ -54,9 +54,9 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL
       stop("if providing a spLines, cannot provide a time field")
     }
 
-    if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupField, timeField)
+    if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
 
-    DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
+    ovrDT <- DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
           if(is.null(spLines)) {
             message('some rows are dropped - unable to build lines with <3 locs')
           } else {
@@ -68,10 +68,12 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL
             ovr <- sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
             data.table::setnames(
               data.table::data.table(names(ovr),
-                                     paste(ovr, .GRP, sep = '_')),
+                                     ovr),
               c(idField, 'group'))
           }
     }, by = byFields, .SDcols = c(coordFields, idField)]
+
+    DT[ovrDT, group := group, on = c(idField, byFields)]
+
   }
 }
-# TODO: find alternative to 0.0001 buffer

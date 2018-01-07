@@ -47,11 +47,11 @@ GroupPts(l, 100, 'block', projection = utm)
 GroupPts(l, 100, timeField = 'block', groupField = 'herd', projection = utm)
 l
 
-# d <-
 GroupLines(l, 100, projection = utm)
-l[d, group := dgroup, on = 'ID']
+GroupLines(l, 100, timeField = 'block', projection = utm)
+GroupLines(l, 100, timeField = 'block', groupFields = 'herd',
+           projection = utm)
 l
-
 
 # retrieve the column names from b - without the key ('v_key')
 thecols = setdiff(colnames(b), key(b))
