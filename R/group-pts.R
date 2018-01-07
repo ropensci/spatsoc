@@ -44,7 +44,7 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
     buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
     DT[, group := sp::over(spPts, sp::disaggregate(buffers))]
   } else {
-    if(is.null(groupField)) byFields <- timeField else byFields <- c(groupField, timeField)
+    if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
 
     DT[, group := {spPts <- BuildPts(.SD, projection, coordFields, idField)
