@@ -48,7 +48,7 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL
       data.table::data.table(names(ovr),
                              unlist(ovr)),
       c(idField, 'group'))
-    DT[ovrDT, group := group, on = idField]
+    DT[ovrDT, group := group, on = idField][]
   } else {
     if(!is.null(spLines)) {
       stop("if providing a spLines, cannot provide a time field")
@@ -74,6 +74,6 @@ GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL
     }, by = byFields, .SDcols = c(coordFields, idField)]
 
     DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
-    DT[, group := .GRP, by = c(byFields, 'withinGroup')]
+    DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
   }
 }

@@ -51,6 +51,11 @@ GroupLines(l, 100, projection = utm)
 GroupLines(l, 100, timeField = 'block', projection = utm)
 GroupLines(l, 100, timeField = 'block', groupFields = 'herd',
            projection = utm)
+
+Randomizations(l, 'ID', 'group', 'hourly', 'block', 2)
+l
+
+
 l
 l[, .N, by = group]
 # retrieve the column names from b - without the key ('v_key')
