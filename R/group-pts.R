@@ -42,14 +42,22 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
       spPts <- BuildPts(DT, projection, coordFields, idField)
     }
     buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
-    DT[, group := sp::over(spPts, sp::disaggregate(buffers))]
+    DT[, group := sp::over(spPts, sp::disaggregate(buffers))][]
   } else {
     if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
 
-    DT[, group := {spPts <- BuildPts(.SD, projection, coordFields, idField)
+    ovrDT <- DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
                    buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
-                   sp::over(spPts, sp::disaggregate(buffers))},
+                   ovr <- sp::over(spPts, sp::disaggregate(buffers))
+                   data.table::setnames(
+                     data.table::data.table(names(ovr),
+                                            unlist(ovr)),
+                     c(idField, 'withinGroup'))
+                   },
     by = byFields, .SDcols = c(coordFields, idField)]
+
+    DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
+    DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
   }
 }
