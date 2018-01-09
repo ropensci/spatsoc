@@ -51,7 +51,7 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
                    buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
                    ovr <- sp::over(spPts, sp::disaggregate(buffers))
                    data.table::setnames(
-                     data.table::data.table(names(ovr),
+                     data.table::data.table(get(idField),
                                             unlist(ovr)),
                      c(idField, 'withinGroup'))
                    },

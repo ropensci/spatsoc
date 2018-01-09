@@ -4,7 +4,7 @@
 \alias{GroupPts}
 \title{Group Points By Buffer}
 \usage{
-GroupPts(DT, bufferWidth, timeField = NULL, groupField = NULL, projection,
+GroupPts(DT, bufferWidth, timeField = NULL, groupFields = NULL, projection,
   coordFields = c("EASTING", "NORTHING"), idField = "ID", spPts = NULL)
 }
 \arguments{
@@ -16,7 +16,7 @@ default to c('EASTING', 'NORTHING') and 'ID'}
 \item{timeField}{(optional) time field in the DT upon which the spatial grouping will be
 calculated}
 
-\item{groupField}{(optional) grouping field to be (optionally) combined with timeField}
+\item{groupFields}{(optional) grouping field(s) to be (optionally) combined with timeField, either character or list of strings}
 
 \item{projection}{Character string for input to sp::CRS() and proj4string()}
 
