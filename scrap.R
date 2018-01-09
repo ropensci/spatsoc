@@ -39,7 +39,7 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
-GroupTimes(l, 'datetime', '2 days')
+GroupTimes(l, 'datetime', '2 hours')
 
 l
 l[, herd := sample(1:3, .N, replace = TRUE)]
@@ -52,7 +52,13 @@ GroupLines(l, 100, timeField = 'block', projection = utm)
 GroupLines(l, 100, timeField = 'block', groupFields = 'herd',
            projection = utm)
 
-Randomizations(l, 'ID', 'group', 'hourly', 'block', 2)
+l[1:1000, season := 'winter']
+l[1000:.N, season := 'summer']
+
+aa <- Randomizations(l, idField = 'ID', dateField = 'timegroup',
+               groupField = 'group',
+               randomType = 'hourly', splitBy = 'season',
+               iterations = 2)
 l
 
 

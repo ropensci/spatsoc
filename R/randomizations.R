@@ -9,25 +9,29 @@
 #' @param groupField field indicating the group membership for each id
 #' @param timeField (optional) time field used for providing datetime or hour field or group time field
 #' @inheritParams BuildPts
+#' @param splitBy List of fields in DT to split the randomization process by
 #' @param iterations The number of iterations to randomize
 #'
 #' @seealso
 #'   \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 #' @export
-Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL, iterations = NULL) {
+Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL, splitBy = NULL, iterations = NULL) {
   if(any(!(c(idField, groupField, dateField) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
+
   if(!(randomType %in% c('hourly', 'daily', 'spiegel'))) stop('must provide either hourly, daily or spiegel for randomType')
 
   if(!is.numeric(iterations)) stop('must provide a numeric for iterations or NULL')
+
   if(is.null(iterations)) iterations <- 1
+
 
   if(iterations == 1){
     if(randomType == 'hourly'){
-      # if(!is.null(dateField)) warning('dateField ignored since randomType is hourly')
       if(is.null(dateField)) stop('dateField required, please provide datetime field')
-      DT[, randomID := sample(get(idField)), by = get(dateField)]
+      if(is.null(splitBy)) byFields <- dateField else byFields <- c(splitBy, dateField)
+      DT[, randomID := sample(get(idField)), by = byFields]
 
       return(DT[])
     } else if(randomType == 'daily'){
@@ -35,11 +39,11 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
         stop('provided dateField is not of class POSIXct or IDate, for daily random type
              please provide a datetime column or IDate')
       }
-      DT[, yday := data.table::yday(get(dateField))]
-
-      dailyIDs <- DT[, .(ID = unique(ID)), by = yday(datetime)]
-      dailyIDs[, randomID := sample(ID), by = yday]
-      return(merge(DT, dailyIDs, on = 'yday'))
+      DT[, yday := data.table::yday(get(dateField)), by = splitBy]
+      # is this dangerous if the splitBy is NULL?
+      dailyIDs <- DT[, .(ID = unique(ID)), by = c(splitBy, 'yday')]
+      dailyIDs[, randomID := sample(ID), by = c(splitBy, 'yday')]
+      return(merge(DT, dailyIDs, on = c('yday', splitBy)))
 
       } else if(randomType == 'spiegel'){
         if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
