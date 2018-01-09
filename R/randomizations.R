@@ -65,7 +65,7 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
     replicated[iter != 0, observed := 0]
     if(randomType == 'hourly'){
       if(is.null(dateField)) stop('dateField required, please provide datetime field')
-      replicated[observed != 1, randomID := sample(get(idField)), by = c('iter', dateField)]
+      replicated[observed != 1, randomID := sample(get(idField)), by = c('iter', dateField, splitBy)]
       replicated[observed == 1, randomID := get(idField)]
       return(replicated[])
       } else if(randomType == 'daily'){
