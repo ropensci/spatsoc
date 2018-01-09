@@ -88,13 +88,13 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
                please provide a datetime column or IDate')
         }
         replicated[, yday := data.table::yday(get(dateField))]
-        idDays <- replicated[, .(yday = unique(yday)), by = c(idField, 'iter')]
-        idDays[, randomYday := sample(yday), by = iter]
+        idDays <- replicated[, .(yday = unique(yday)), by = c(idField, 'iter', splitBy)]
+        idDays[, randomYday := sample(yday), by = c('iter', splitBy)]
         merged <- merge(replicated, idDays,
-                        on = c('yday', idField, 'iter'),
+                        on = c('yday', idField, 'iter', splitBy),
                         all = TRUE)[, randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday)),
-                                    by = iter]
-        merged[observed == 1, randomDateTime := get(dateField)]
+                                    by = iter] # why by = iter
+        merged[observed == 1, c('randomDateTime', 'randomYday') := .(get(dateField), yday(get(dateField)))]
         attr(merged$randomDateTime, 'tzone') <- ""
         return(merged)
       }

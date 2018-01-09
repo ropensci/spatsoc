@@ -55,10 +55,11 @@ GroupLines(l, 100, timeField = 'block', groupFields = 'herd',
 l[1:1000, season := 'winter']
 l[1000:.N, season := 'summer']
 
-aa <- Randomizations(l, idField = 'ID', dateField = 'timegroup',
+aa <- Randomizations(l, idField = 'ID', dateField = 'datetime',
                groupField = 'group',
-               randomType = 'hourly', splitBy = 'season',
+               randomType = 'spiegel', splitBy = 'season',
                iterations = 2)
+aa
 l
 
 
