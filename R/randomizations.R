@@ -51,9 +51,9 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
                please provide a datetime column or IDate')
         }
         DT[, yday := data.table::yday(get(dateField))]
-        idDays <- DT[, .(yday = unique(yday)), by = ID]
-        idDays[, randomYday := sample(yday)]
-        merged <- merge(DT, idDays, on = c('yday', 'ID'))[,
+        idDays <- DT[, .(yday = unique(yday)), by = c(idField, splitBy)]
+        idDays[, randomYday := sample(yday), by = splitBy]
+        merged <- merge(DT, idDays, on = c('yday', idField, splitBy))[,
           randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday))]
         attr(merged$randomDateTime, 'tzone') <- ""
         return(merged)
