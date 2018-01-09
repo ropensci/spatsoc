@@ -77,10 +77,10 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
         replicated[, yday := data.table::yday(get(dateField))]
 
         dailyIDs <- unique(replicated[, .(ID = get(idField), observed),
-                               by = .(iter, yday)])
-        dailyIDs[, randomID := sample(ID), by = .(iter, yday)]
+                               by = .(iter, yday, splitBy)])
+        dailyIDs[, randomID := sample(ID), by = .(iter, yday, splitBy)]
         dailyIDs[observed == 1, randomID := ID]
-        return(merge(replicated, dailyIDs, on = c('iter', 'yday'), all = TRUE))
+        return(merge(replicated, dailyIDs, on = c('iter', 'yday', splitBy), all = TRUE))
 
       } else if(randomType == 'spiegel'){
         if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
