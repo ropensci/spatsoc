@@ -41,9 +41,8 @@ l <- data.table(locs)
 
 GroupTimes(l, 'datetime', '2 hours')
 
-l
 l[, herd := sample(1:3, .N, replace = TRUE)]
-GroupPts(l, 100, 'block', projection = utm)
+GroupPts(l, 100, 'timegroup', projection = utm)
 GroupPts(l, 100, timeField = 'block', groupField = 'herd', projection = utm)
 l
 
@@ -52,13 +51,12 @@ GroupLines(l, 100, timeField = 'block', projection = utm)
 GroupLines(l, 100, timeField = 'block', groupFields = 'herd',
            projection = utm)
 
-l[1:1000, season := 'winter']
-l[1000:.N, season := 'summer']
-
+l[sample(.N/2), season := 'winter']
+l[is.na(season), season := 'summer']
+l
 aa <- Randomizations(l, idField = 'ID', dateField = 'datetime',
-               groupField = 'group',
-               randomType = 'spiegel', splitBy = 'season',
-               iterations = 2)
+                     groupField = 'group', randomType = 'spiegel',
+                     splitBy = 'season', iterations = 2)
 aa
 l
 
