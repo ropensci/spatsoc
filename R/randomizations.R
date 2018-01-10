@@ -92,8 +92,7 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
         idDays[, randomYday := sample(yday), by = c(idField, 'iter', splitBy)]
         merged <- merge(replicated, idDays,
                         on = c('yday', idField, 'iter', splitBy),
-                        all = TRUE)[, randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday)),
-                                    by = iter] # why by = iter
+                        all = TRUE)[, randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday))]
         merged[observed == 1, c('randomDateTime', 'randomYday') := .(get(dateField), yday(get(dateField)))]
         attr(merged$randomDateTime, 'tzone') <- ""
         return(merged)

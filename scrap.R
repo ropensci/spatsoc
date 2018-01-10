@@ -58,6 +58,8 @@ aa <- Randomizations(l, idField = 'ID', dateField = 'datetime',
                      groupField = 'group', randomType = 'spiegel',
                      splitBy = 'season', iterations = 2)
 aa
+pre <- readRDS('~/Documents/pre.Rds')
+all.equal(aa, pre)
 l
 
 
