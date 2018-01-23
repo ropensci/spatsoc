@@ -45,7 +45,7 @@ GroupTimes(l, 'datetime', '2 hours')
 ############# SF SF SF SF ################
 library(sf)
 DT <- l
-l <- l[EASTING < mean(EASTING) - 1500][NORTHING < mean(NORTHING) - 1500]
+l <- l[EASTING < mean(EASTING) - 2500][NORTHING < mean(NORTHING) - 1500]
 ## SF
 pts <- st_multipoint(as.matrix(
   DT[, .(EASTING, NORTHING)],
@@ -53,8 +53,14 @@ pts <- st_multipoint(as.matrix(
   ))
 foreign <- st_as_sf(DT, coords = c('EASTING', 'NORTHING'))
 fbufs <- st_buffer(foreign, 50)
-un <- st_union(fbufs, fbufs)
-int <- st_intersects(foreign, fbufs)
+plot(st_geometry(fbufs))
+
+un <- st_cast(st_union(fbufs), 'MULTIPOLYGON')
+plot(st_geometry(un))
+plot(st_geometry(foreign))
+st_intersects(foreign, un, sparse = TRUE)
+
+int <- st_intersects(foreign, un)
 
 sapply(st_intersects(foreign, fbufs),
        function(z) if (length(z)==0) NA_integer_ else z[1])
