@@ -41,10 +41,70 @@ l <- data.table(locs)
 
 GroupTimes(l, 'datetime', '2 hours')
 
-l[, herd := sample(1:3, .N, replace = TRUE)]
+
+############# SF SF SF SF ################
+library(sf)
+DT <- l
+l <- l[EASTING < mean(EASTING) - 1500][NORTHING < mean(NORTHING) - 1500]
+## SF
+pts <- st_multipoint(as.matrix(
+  DT[, .(EASTING, NORTHING)],
+  ncol = 2
+  ))
+foreign <- st_as_sf(DT, coords = c('EASTING', 'NORTHING'))
+fbufs <- st_buffer(foreign, 50)
+un <- st_union(fbufs, fbufs)
+int <- st_intersects(foreign, fbufs)
+
+sapply(st_intersects(foreign, fbufs),
+       function(z) if (length(z)==0) NA_integer_ else z[1])
+st_cast(fbufs)
+bufs <- st_buffer(pts, 50)
+plot(bufs)
+st_geometry(bufs)
+point(pts)
+## SP
+spPts <- BuildPts(DT, utm)
+buffers <- rgeos::gBuffer(spPts, width = 50, byid = FALSE)
+
+
+plot(pts)
+plot(bufs)
+int <- st_intersects(pts, bufs)
+
+sapply(st_intersects(bufs, pts),
+       function(z) if (length(z)==0) NA_integer_ else z[1])
+
+
+
+ovrDT <- DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
+buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
+ovr <- sp::over(spPts, sp::disaggregate(buffers))
+data.table::setnames(
+  data.table::data.table(get(idField),
+                         unlist(ovr)),
+  c(idField, 'withinGroup'))
+},
+by = byFields, .SDcols = c(coordFields, idField)]
+
+DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
+DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
+################# SF SFS FSF SF SF ########################
+
+
+
+
+
+
+
+
 GroupPts(l, 100, 'timegroup', projection = utm)
+
 GroupPts(l, 100, timeField = 'block', groupField = 'herd', projection = utm)
 l
+install.packages('sf')
+
+
 
 GroupLines(l, 100, projection = utm)
 GroupLines(l, 100, timeField = 'block', projection = utm)
@@ -54,10 +114,17 @@ GroupLines(l, 100, timeField = 'block', groupFields = 'herd',
 l[sample(.N/2), season := 'winter']
 l[is.na(season), season := 'summer']
 l
+profvis::profvis(
 aa <- Randomizations(l, idField = 'ID', dateField = 'datetime',
                      groupField = 'group', randomType = 'spiegel',
-                     splitBy = 'season', iterations = 2)
-aa
+                     splitBy = 'season', iterations = 25000)
+)
+GroupTimes(aa, 'randomDateTime', '2 hours')
+profvis::profvis(
+GroupPts(aa, buffer = 100, timeField = 'timegroup',
+         groupField = 'season', projection = utm)
+)
+
 pre <- readRDS('~/Documents/pre.Rds')
 all.equal(aa, pre)
 l
