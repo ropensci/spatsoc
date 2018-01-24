@@ -41,6 +41,26 @@ l <- data.table(locs)
 
 GroupTimes(l, 'datetime', '2 hours')
 
+######
+DT[, .(EASTING, NORTHING)]
+dist2 <- Rcpp::cppFunction('double dist2(NumericVector x, NumericVector y){
+  double d = sqrt( sum( pow(x - y, 2) ) );
+  return d;
+}')
+ddd <- dist2(DT$EASTING, DT$NORTHING)
+ddd
+
+dddd <- dist(DT[, .(EASTING, NORTHING)])
+dd <- as.matrix(dddd)
+dd
+dd[!upper.tri(dd)] <- NA
+dd
+dd[dd < 300]
+diag(dd) <-
+dddd < 30
+wh <- which(dd < 300, arr.ind = T)
+dwh <- data.table(wh)
+dwh[, as.character(row, col)]
 
 ############# SF SF SF SF ################
 library(sf)
@@ -51,23 +71,40 @@ DT <- l
 #   DT[, .(EASTING, NORTHING)],
 #   ncol = 2
 #   ))
-system.time({
+# system.time({
 pts <- st_as_sf(DT, coords = c('EASTING', 'NORTHING'))
+
+st_sf(DT[, (coords)])
 st_crs(pts) <- utm
 bufs <- st_buffer(pts, 50)
 un <- st_cast(st_union(bufs), 'POLYGON')
 int <- st_intersects(pts, un)
 OUT <- data.table::data.table(DT$ID,
                               unlist(int))
-})
+# })
 
 profvis::profvis({
 GroupPts(l, 100, timeField = 'timegroup', projection = utm)
 GroupPtsSF(l, 100, timeField = 'timegroup', projection = utm)
 })
 
+coordFields <- c('EASTING', 'NORTHING')
+st_sf(DT[, coordFields, with=FALSE])
 
-
+l[, withinGroup := {
+  pts <- sf::st_as_sf(.SD, coords = coordFields)
+  sf::st_crs(pts) <- utm
+  bufs <- sf::st_buffer(pts, 50)
+  un <- sf::st_cast(st_union(bufs), 'POLYGON')
+  # int <- sf::st_intersects(pts, un)
+  unlist(sf::st_intersects(pts, un))
+  # data.table::setnames(
+    # data.table::data.table(get(idField), unlist(int, FALSE, FALSE))#,
+  #   c(idField, 'withinGroup'))
+},
+by = timegroup, .SDcols = coordFields]
+l
+l[, withinGroup := NULL]
 microbenchmark::microbenchmark(
 GroupPts(l, 100, projection = utm)
 , times = 15)
