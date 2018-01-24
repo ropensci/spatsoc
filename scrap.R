@@ -44,54 +44,78 @@ GroupTimes(l, 'datetime', '2 hours')
 
 ############# SF SF SF SF ################
 library(sf)
+DT <- l[EASTING < 644180.4 & NORTHING < 5297469]
 DT <- l
-l <- l[EASTING < mean(EASTING) - 2500][NORTHING < mean(NORTHING) - 1500]
 ## SF
-pts <- st_multipoint(as.matrix(
-  DT[, .(EASTING, NORTHING)],
-  ncol = 2
-  ))
-foreign <- st_as_sf(DT, coords = c('EASTING', 'NORTHING'))
-fbufs <- st_buffer(foreign, 50)
-plot(st_geometry(fbufs))
+# pts <- st_multipoint(as.matrix(
+#   DT[, .(EASTING, NORTHING)],
+#   ncol = 2
+#   ))
+system.time({
+pts <- st_as_sf(DT, coords = c('EASTING', 'NORTHING'))
+st_crs(pts) <- utm
+bufs <- st_buffer(pts, 50)
+un <- st_cast(st_union(bufs), 'POLYGON')
+int <- st_intersects(pts, un)
+OUT <- data.table::data.table(DT$ID,
+                              unlist(int))
+})
 
-un <- st_cast(st_union(fbufs), 'MULTIPOLYGON')
+profvis::profvis({
+GroupPts(l, 100, timeField = 'timegroup', projection = utm)
+GroupPtsSF(l, 100, timeField = 'timegroup', projection = utm)
+})
+
+
+
+microbenchmark::microbenchmark(
+GroupPts(l, 100, projection = utm)
+, times = 15)
+microbenchmark::microbenchmark(
+GroupPtsSF(l, 100, projection = utm)
+, times = 15)
+
+system.time(
+  GroupPts(l, 100, projection = utm)
+)
+system.time(
+  GroupPtsSF(l, 100, projection = utm)
+)
+
+
+int
+un
+bufs
+st_cast(sf::st_union(bufs, by_feature = TRUE), 'MULTIPOLYGON')
+
+plot(st_geometry(pts))
+plot(st_geometry(bufs))
 plot(st_geometry(un))
-plot(st_geometry(foreign))
-st_intersects(foreign, un, sparse = TRUE)
+st_distinct
 
-int <- st_intersects(foreign, un)
+int <- st_intersects(pts, un)
 
-sapply(st_intersects(foreign, fbufs),
+sapply(st_intersects(pts, bufs),
        function(z) if (length(z)==0) NA_integer_ else z[1])
-st_cast(fbufs)
+st_cast(bufs)
 bufs <- st_buffer(pts, 50)
 plot(bufs)
 st_geometry(bufs)
 point(pts)
 ## SP
+system.time({
 spPts <- BuildPts(DT, utm)
 buffers <- rgeos::gBuffer(spPts, width = 50, byid = FALSE)
-
-
-plot(pts)
-plot(bufs)
-int <- st_intersects(pts, bufs)
-
-sapply(st_intersects(bufs, pts),
-       function(z) if (length(z)==0) NA_integer_ else z[1])
-
-
-
-ovrDT <- DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
-buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
 ovr <- sp::over(spPts, sp::disaggregate(buffers))
+OUT <- data.table::data.table(DT$ID,
+                       unlist(ovr))
+})
+
 data.table::setnames(
   data.table::data.table(get(idField),
                          unlist(ovr)),
   c(idField, 'withinGroup'))
-},
-by = byFields, .SDcols = c(coordFields, idField)]
+
 
 DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
 DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]

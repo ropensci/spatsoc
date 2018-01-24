@@ -4,7 +4,7 @@
 #' other uses.
 #'
 #' The parameter projection can be built by finding the EPSG code for your
-#' given projection at \url{http://spatialreference.org/ref/epsg/} and providing it with
+#' given projection at <http://spatialreference.org/ref/epsg/> and providing it with
 #' "+init=epsg:CODE" (eg: "+init=epsg:4326").
 #'
 #' @param DT Input data with coordinate and id fields. If not provided, fields

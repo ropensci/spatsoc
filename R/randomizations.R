@@ -13,9 +13,10 @@
 #' @param iterations The number of iterations to randomize
 #'
 #' @seealso
-#'   \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
+#'   <http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full>
 #' @export
-Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL, splitBy = NULL, iterations = NULL) {
+Randomizations <- function(DT, idField, groupField, randomType,
+                           dateField = NULL, splitBy = NULL, iterations = NULL) {
   if(any(!(c(idField, groupField, dateField) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
@@ -94,7 +95,8 @@ Randomizations <- function(DT, idField, groupField, randomType, dateField = NULL
                         on = c('yday', idField, 'iter', splitBy),
                         all = TRUE)[, randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday))]
         merged[observed == 1, c('randomDateTime', 'randomYday') := .(get(dateField), yday(get(dateField)))]
-        attr(merged$randomDateTime, 'tzone') <- ""
+        # this is needed until data.table 1.10.5 is released.. otherwise rm it
+        # attr(merged$randomDateTime, 'tzone') <- ""
         return(merged)
       }
   }

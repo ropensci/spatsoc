@@ -61,3 +61,53 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
     DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
   }
 }
+
+#' @export
+GroupPtsSF <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
+                     projection, coordFields = c('EASTING', 'NORTHING'),
+                     idField = 'ID', spPts = NULL){
+
+  if(!is.null(DT) && any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
+    stop('some fields provided are not present in data.table provided/colnames(DT)')
+  }
+  if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
+  if(is.null(timeField)){
+    if(is.null(spPts)){
+      if(is.null(DT)){
+        stop("must provide either pts or DT")
+      }
+      pts <- sf::st_as_sf(DT, coords = c('EASTING', 'NORTHING'))
+      sf::st_crs(pts) <- projection
+    }
+    bufs <- sf::st_buffer(pts, bufferWidth)
+    un <- sf::st_cast(sf::st_union(bufs), 'POLYGON')
+    DT[, group := unlist(sf::st_intersects(pts, un), FALSE, FALSE)][]
+  } else {
+    if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
+    if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
+
+
+    pts <- st_as_sf(DT, coords = c('EASTING', 'NORTHING'))
+    st_crs(pts) <- utm
+    bufs <- st_buffer(pts, 50)
+    un <- st_cast(st_union(bufs), 'POLYGON')
+    int <- st_intersects(pts, un)
+    OUT <- data.table::data.table(DT$ID,
+                                  unlist(int))
+    ovrDT <- DT[, {
+      pts <- sf::st_as_sf(.SD, coords = coordFields)
+      sf::st_crs(pts) <- projection
+      bufs <- sf::st_buffer(pts, 50)
+      un <- sf::st_cast(st_union(bufs), 'POLYGON')
+      int <- sf::st_intersects(pts, un)
+      data.table::setnames(
+        data.table::data.table(get(idField), unlist(int, FALSE, FALSE)),
+        c(idField, 'withinGroup'))
+    },
+    by = byFields, .SDcols = c(coordFields, idField)]
+
+    DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
+    DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
+  }
+}
+
