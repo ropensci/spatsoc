@@ -86,19 +86,16 @@ GroupPtsSF <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
     if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
 
-    ovrDT <- DT[, {
+    DT[, withinGroup := {
       pts <- sf::st_as_sf(.SD, coords = coordFields)
       sf::st_crs(pts) <- projection
       bufs <- sf::st_buffer(pts, 50)
-      un <- sf::st_cast(st_union(bufs), 'POLYGON')
-      int <- sf::st_intersects(pts, un)
-      data.table::setnames(
-        data.table::data.table(get(idField), unlist(int, FALSE, FALSE)),
-        c(idField, 'withinGroup'))
+      un <- sf::st_cast(sf::st_union(bufs), 'POLYGON')
+      unlist(sf::st_intersects(pts, un), FALSE, FALSE)
     },
     by = byFields, .SDcols = c(coordFields, idField)]
 
-    DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
+    # DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
     DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
   }
 }
