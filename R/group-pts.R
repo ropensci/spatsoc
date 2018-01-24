@@ -86,14 +86,6 @@ GroupPtsSF <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
     if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
 
-
-    pts <- st_as_sf(DT, coords = c('EASTING', 'NORTHING'))
-    st_crs(pts) <- utm
-    bufs <- st_buffer(pts, 50)
-    un <- st_cast(st_union(bufs), 'POLYGON')
-    int <- st_intersects(pts, un)
-    OUT <- data.table::data.table(DT$ID,
-                                  unlist(int))
     ovrDT <- DT[, {
       pts <- sf::st_as_sf(.SD, coords = coordFields)
       sf::st_crs(pts) <- projection
