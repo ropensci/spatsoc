@@ -111,7 +111,7 @@ GroupPtsIGRAPH <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL
   if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
   if(is.null(timeField)){
     distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
-    graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix < bufferWidth)
+    graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= bufferWidth)
     clstrs <- igraph::clusters(graphAdj)$membership
     data.table(ID = names(clstrs), clstrs)
 
