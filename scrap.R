@@ -52,15 +52,72 @@ ddd
 
 dddd <- dist(DT[, .(EASTING, NORTHING)])
 dd <- as.matrix(dddd)
-dd
-dd[!upper.tri(dd)] <- NA
-dd
-dd[dd < 300]
-diag(dd) <-
-dddd < 30
+# dd
+# dd[!upper.tri(dd)] <- NA
+# dd[diag(dd)] <- NULL
+# dd
+
+
+# tri <- Matrix::tril(dd)
+# sum <- Matrix::summary(tri)
+# sum[, 3]
+
+# dd[dd < 300]
+# diag(dd) <-
+# dddd < 30
 wh <- which(dd < 300, arr.ind = T)
 dwh <- data.table(wh)
-dwh[, as.character(row, col)]
+# dwh[, as.character(row, col)]
+
+dwh
+b <- data.table(row =1:nrow(DT))
+b[dwh, on = 'row']
+b[dwh, on = c(x = 'i', y = 'row')]
+
+dwh[, col, by = row]
+
+dwh[,.(dwh$col, dwh$col %in% col), by = row]
+Matrix::tcrossprod(dd < 300)
+dwh
+
+dwh
+# rbindlist(list(
+s<- #sapply(
+  split(dwh[row != col], by = 'col', keep.by = TRUE)#, function(x) as.character(unlist(x)))
+  # ), fill = TRUE)
+
+
+rbindlist(s)
+
+f <- data.table(c(dwh[row!=col]$col, dwh[row!=col]$row),
+                c(dwh[row!=col]$row, dwh[row!=col]$col))
+
+f[, uniqueN(V2), V1]
+
+dddd <- dist(DT[, .(EASTING, NORTHING)])
+dd <- as.matrix(dddd)
+igg <- (igraph::graph_from_adjacency_matrix(dd < 300))
+ig <- igraph::clusters(igg)$membership
+data.table(nm = names(ig), ig)
+
+dwh
+
+
+
+
+distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
+graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix < bufferWidth)
+clstrs <- igraph::clusters(graphAdj)$membership
+data.table(ID = names(clstrs), clstrs)
+
+
+saspply(dwh$col, function(x) unique(unlist(lst[
+  sapply(lst, function(y) any(x %in% y))]    )    )    )  ))
+unique(dwh$col[any(dwh$row %in% dwh$col)])
+
+unique(sapply(lst, function(x)
+  unique(unlist(lst[
+    sapply(lst, function(y) any(x %in% y))]    )    )    )  )
 
 ############# SF SF SF SF ################
 library(sf)
@@ -86,7 +143,10 @@ OUT <- data.table::data.table(DT$ID,
 profvis::profvis({
 GroupPts(l, 100, timeField = 'timegroup', projection = utm)
 GroupPtsSF(l, 100, timeField = 'timegroup', projection = utm)
+GroupPtsIGRAPH(l, 100, timeField = 'timegroup', projection = utm)
 })
+
+l
 
 coordFields <- c('EASTING', 'NORTHING')
 st_sf(DT[, coordFields, with=FALSE])
