@@ -48,13 +48,13 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
     if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
 
     ovrDT <- DT[, {spPts <- BuildPts(.SD, projection, coordFields, idField)
-                   buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
-                   ovr <- sp::over(spPts, sp::disaggregate(buffers))
-                   data.table::setnames(
-                     data.table::data.table(get(idField),
-                                            unlist(ovr)),
-                     c(idField, 'withinGroup'))
-                   },
+    buffers <- rgeos::gBuffer(spPts, width = bufferWidth, byid = FALSE)
+    ovr <- sp::over(spPts, sp::disaggregate(buffers))
+    data.table::setnames(
+      data.table::data.table(get(idField),
+                             unlist(ovr)),
+      c(idField, 'withinGroup'))
+    },
     by = byFields, .SDcols = c(coordFields, idField)]
 
     DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
@@ -64,8 +64,8 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
 
 #' @export
 GroupPtsSF <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
-                     projection, coordFields = c('EASTING', 'NORTHING'),
-                     idField = 'ID', spPts = NULL){
+                       projection, coordFields = c('EASTING', 'NORTHING'),
+                       idField = 'ID', spPts = NULL){
 
   if(!is.null(DT) && any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
@@ -96,7 +96,42 @@ GroupPtsSF <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
     by = byFields, .SDcols = c(coordFields, idField)]
 
     # DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
-    DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
+    DT[, groupSF := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
+  }
+}
+
+#' @export
+GroupPtsIGRAPH <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
+                           projection, coordFields = c('EASTING', 'NORTHING'),
+                           idField = 'ID', spPts = NULL){
+
+  if(!is.null(DT) && any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
+    stop('some fields provided are not present in data.table provided/colnames(DT)')
+  }
+  if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
+  if(is.null(timeField)){
+    distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
+    graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix < bufferWidth)
+    clstrs <- igraph::clusters(graphAdj)$membership
+    data.table(ID = names(clstrs), clstrs)
+
+  } else {
+    if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
+    if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
+
+    DT[, withinGroup := {
+      distMatrix <- as.matrix(dist(.SD[, coordFields, with = FALSE]))
+      graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= bufferWidth)
+      igraph::clusters(graphAdj)$membership
+      # clsts
+      # data.table::setnames(
+      # data.table::data.table(get(idField), clstrs)
+      # c(idField, 'withinGroup'))
+    },
+    by = byFields, .SDcols = c(coordFields, idField)]
+    # ovrDT
+    # DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
+    DT[, groupIG := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
   }
 }
 
