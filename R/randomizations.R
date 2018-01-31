@@ -23,7 +23,7 @@ Randomizations <- function(DT, idField, groupField, randomType,
 
   if(!(randomType %in% c('hourly', 'daily', 'spiegel'))) stop('must provide either hourly, daily or spiegel for randomType')
 
-  if(!is.numeric(iterations)) stop('must provide a numeric for iterations or NULL')
+  if(!is.numeric(iterations) & !is.null(iterations)) stop('must provide a numeric for iterations or NULL')
 
   if(is.null(iterations)) iterations <- 1
 
