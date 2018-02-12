@@ -17,15 +17,15 @@
 #'
 #' @examples
 #' data(locs)
-#' groups <- GroupPts(locs, '+init=epsg:4326', 50)
+#' groups <- GroupPts(locs, '+init=epsg:4326', distanceThreshold = 50)
 #'
-#' groups <- GroupPts(locs, 50, timeField = 'FIX_DATE',
+#' groups <- GroupPts(locs, distanceThreshold = 50, timeField = 'FIX_DATE',
 #'         projection = '+proj=utm +zone=21 ellps=WGS84',
 #'         idField = 'ID')
 #'
 #' data(locsPts)
 #'
-#' groups <- GroupPts(spPts = locsPts)
+#' groups <- GroupPts(spPts = locsPts, distanceThreshold = 50)
 GroupPts <- function(DT, distanceThreshold, timeField = NULL, groupFields = NULL,
                            projection, coordFields = c('EASTING', 'NORTHING'),
                            idField = 'ID', spPts = NULL){
