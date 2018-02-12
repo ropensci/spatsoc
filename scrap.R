@@ -39,7 +39,11 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
-GroupTimes(l, 'datetime', '2 hours')
+GroupTimes(l, 'datetime', '8 hours')
+
+l[, group := NULL]
+GroupLines(l, 100, 'timegroup', projection = utm)
+l[is.na(group)]
 
 ######
 DT[, .(EASTING, NORTHING)]
