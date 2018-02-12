@@ -8,7 +8,7 @@
 #' @inheritParams BuildPts
 #' @param spPts Alternatively, provide a SpatialPointsDataFrame created with the
 #'   sp package. If a spPts object is provided, groups cannot be calculated by
-#' @param bufferWidth The width of the buffer around the geometry in the units of the projection
+#' @param distanceThreshold The distance threshold for grouping points in the units of the projection
 #' @param timeField (optional) time field in the DT upon which the spatial grouping will be
 #'   calculated
 #' @param groupFields (optional) grouping field(s) to be (optionally) combined with timeField, either character or list of strings
@@ -26,7 +26,7 @@
 #' data(locsPts)
 #'
 #' groups <- GroupPts(spPts = locsPts)
-GroupPts <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
+GroupPts <- function(DT, distanceThreshold, timeField = NULL, groupFields = NULL,
                            projection, coordFields = c('EASTING', 'NORTHING'),
                            idField = 'ID', spPts = NULL){
 
@@ -36,7 +36,7 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
   if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
   if(is.null(timeField)){
     distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
-    graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= bufferWidth)
+    graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distanceThreshold)
     clstrs <- igraph::clusters(graphAdj)$membership
     data.table(ID = names(clstrs), clstrs)
 
@@ -46,7 +46,7 @@ GroupPts <- function(DT, bufferWidth, timeField = NULL, groupFields = NULL,
 
     DT[, withinGroup := {
       distMatrix <- as.matrix(dist(.SD[, coordFields, with = FALSE]))
-      graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= bufferWidth)
+      graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distanceThreshold)
       igraph::clusters(graphAdj)$membership
     },
     by = byFields, .SDcols = c(coordFields, idField)]

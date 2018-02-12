@@ -4,14 +4,15 @@
 \alias{GroupPts}
 \title{Group Points By Buffer}
 \usage{
-GroupPts(DT, bufferWidth, timeField = NULL, groupFields = NULL, projection,
-  coordFields = c("EASTING", "NORTHING"), idField = "ID", spPts = NULL)
+GroupPts(DT, distanceThreshold, timeField = NULL, groupFields = NULL,
+  projection, coordFields = c("EASTING", "NORTHING"), idField = "ID",
+  spPts = NULL)
 }
 \arguments{
 \item{DT}{Input data with coordinate and id fields. If not provided, fields
 default to c('EASTING', 'NORTHING') and 'ID'}
 
-\item{bufferWidth}{The width of the buffer around the geometry in the units of the projection}
+\item{distanceThreshold}{The distance threshold for grouping points in the units of the projection}
 
 \item{timeField}{(optional) time field in the DT upon which the spatial grouping will be
 calculated}
