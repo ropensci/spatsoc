@@ -4,34 +4,27 @@
 \alias{GroupPts}
 \title{Group Points By Buffer}
 \usage{
-GroupPts(DT, distanceThreshold, timeField = NULL, groupFields = NULL,
-  projection, coordFields = c("EASTING", "NORTHING"), idField = "ID",
-  spPts = NULL)
+GroupPts(DT, distance, time = NULL, groupFields = NULL,
+  coordFields = c("EASTING", "NORTHING"), idField = "ID")
 }
 \arguments{
 \item{DT}{Input data with coordinate and id fields. If not provided, fields
 default to c('EASTING', 'NORTHING') and 'ID'}
 
-\item{distanceThreshold}{The distance threshold for grouping points in the units of the projection}
+\item{distance}{The threshold distance for grouping points. The distance must be in the units of the projection.}
 
-\item{timeField}{(optional) time field in the DT upon which the spatial grouping will be
-calculated}
+\item{time}{(optional) time field in the DT upon which the spatial grouping will be calculated.}
 
-\item{groupFields}{(optional) grouping field(s) to be (optionally) combined with timeField, either character or list of strings}
-
-\item{projection}{Character string for input to sp::CRS() and proj4string()}
+\item{groupFields}{(optional) grouping field(s) to be combined with the time field, either character or list of strings.}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
 
 \item{idField}{Character string indicating the column name for the ID
 associated with each point}
-
-\item{spPts}{Alternatively, provide a SpatialPointsDataFrame created with the
-sp package. If a spPts object is provided, groups cannot be calculated by}
 }
 \value{
-Group by ID (by time) data.table
+Input DT with column "group" added.
 }
 \description{
 Group points by buffer overlap at equal time.
@@ -41,14 +34,12 @@ This function uses input spatial points to determine groups in space and
 time.
 }
 \examples{
-data(locs)
-groups <- GroupPts(locs, '+init=epsg:4326', distanceThreshold = 50)
 
-groups <- GroupPts(locs, distanceThreshold = 50, timeField = 'FIX_DATE',
-        projection = '+proj=utm +zone=21 ellps=WGS84',
-        idField = 'ID')
+GroupPts(locs, distance = 50)
 
-data(locsPts)
+GroupPts(locs, distance = 50, time = 'datetime')
 
-groups <- GroupPts(spPts = locsPts, distanceThreshold = 50)
+GroupPts(locs, distance = 50, time = 'timegroup')
+
+GroupPts(locs, distance = 50, time = 'timegroup', groupFields = 'season')
 }

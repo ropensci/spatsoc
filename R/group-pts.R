@@ -22,14 +22,19 @@
 #'
 #' GroupPts(locs, distance = 50, time = 'timegroup', groupFields = 'season')
 GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
-                           projection, coordFields = c('EASTING', 'NORTHING'),
-                           idField = 'ID', spPts = NULL){
+                     coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
 
-  if(!is.null(DT) && any(!(c(time, idField, coordFields) %in% colnames(DT)))){
-    stop('some fields provided are not present in data.table provided/colnames(DT)')
+  if(is.null(DT)) stop('input DT required')
+  if(is.null(distance)) stop('distance threshold required')
+
+  if(any(!(c(time, idField, coordFields) %in% colnames(DT)))){
+    stop('some fields provided are not present in input DT')
   }
-  if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
-  if(is.null(time)){
+
+  if(!is.null(DT) & "group" %in% colnames(DT)){
+    warning("`group` column will be overwritten by this function")
+    DT[, group := NULL]
+  }
 
   if(is.null(time) & is.null(groupFields)){
     distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
