@@ -30,13 +30,17 @@ GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
   }
   if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
   if(is.null(time)){
+
+  if(is.null(time) & is.null(groupFields)){
     distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
     graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distance)
     group <- igraph::clusters(graphAdj)$membership
     data.table(ID = names(group), group)
 
   } else {
-    if(is.null(groupFields)) byFields <- time else byFields <- c(groupFields, time)
+
+    byFields <- c(groupFields, time)
+
     DT[, withinGroup := {
       distMatrix <- as.matrix(dist(.SD[, coordFields, with = FALSE]))
       graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distance)
