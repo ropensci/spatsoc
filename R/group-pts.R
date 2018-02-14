@@ -37,8 +37,8 @@ GroupPts <- function(DT, distanceThreshold, timeField = NULL, groupFields = NULL
   if(is.null(timeField)){
     distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
     graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distanceThreshold)
-    clstrs <- igraph::clusters(graphAdj)$membership
-    data.table(ID = names(clstrs), clstrs)
+    group <- igraph::clusters(graphAdj)$membership
+    data.table(ID = names(group), group)
 
   } else {
     if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
