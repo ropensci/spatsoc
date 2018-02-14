@@ -6,8 +6,6 @@
 #' time.
 #'
 #' @inheritParams BuildPts
-#' @param spPts Alternatively, provide a SpatialPointsDataFrame created with the
-#'   sp package. If a spPts object is provided, groups cannot be calculated by
 #' @param timeField (optional) time field in the DT upon which the spatial grouping will be
 #'   calculated
 #' @param groupFields (optional) grouping field(s) to be (optionally) combined with timeField, either character or list of strings
@@ -43,8 +41,6 @@ GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
 
   } else {
     if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
-    if(!is.null(spPts)) stop("if providing a spPts, cannot provide a time field")
-
     DT[, withinGroup := {
       distMatrix <- as.matrix(dist(.SD[, coordFields, with = FALSE]))
       graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distance)
