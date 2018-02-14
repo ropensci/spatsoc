@@ -13,17 +13,14 @@
 #' @export
 #'
 #' @examples
-#' data(locs)
-#' groups <- GroupPts(locs, '+init=epsg:4326', distanceThreshold = 50)
 #'
-#' groups <- GroupPts(locs, distanceThreshold = 50, timeField = 'FIX_DATE',
-#'         projection = '+proj=utm +zone=21 ellps=WGS84',
-#'         idField = 'ID')
+#' GroupPts(locs, distance = 50)
 #'
-#' data(locsPts)
+#' GroupPts(locs, distance = 50, time = 'datetime')
 #'
-#' groups <- GroupPts(spPts = locsPts, distanceThreshold = 50)
-GroupPts <- function(DT, distanceThreshold, timeField = NULL, groupFields = NULL,
+#' GroupPts(locs, distance = 50, time = 'timegroup')
+#'
+#' GroupPts(locs, distance = 50, time = 'timegroup', groupFields = 'season')
 GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
                            projection, coordFields = c('EASTING', 'NORTHING'),
                            idField = 'ID', spPts = NULL){
