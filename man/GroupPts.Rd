@@ -27,11 +27,10 @@ associated with each point}
 Input DT with column "group" added.
 }
 \description{
-Group points by buffer overlap at equal time.
+Group points by spatial distance and temporal overlap.
 }
 \details{
-This function uses input spatial points to determine groups in space and
-time.
+This function finds spatialtemporal groups in input points.
 }
 \examples{
 
