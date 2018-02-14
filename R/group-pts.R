@@ -6,11 +6,10 @@
 #' time.
 #'
 #' @inheritParams BuildPts
-#' @param timeField (optional) time field in the DT upon which the spatial grouping will be
-#'   calculated
-#' @param groupFields (optional) grouping field(s) to be (optionally) combined with timeField, either character or list of strings
-#' @return Group by ID (by time) data.table
 #' @param distance The threshold distance for grouping points. The distance must be in the units of the projection.
+#' @param time (optional) time field in the DT upon which the spatial grouping will be calculated.
+#' @param groupFields (optional) grouping field(s) to be combined with the time field, either character or list of strings.
+#' @return Input DT with column "group" added.
 #' @export
 #'
 #' @examples
@@ -29,18 +28,18 @@ GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
                            projection, coordFields = c('EASTING', 'NORTHING'),
                            idField = 'ID', spPts = NULL){
 
-  if(!is.null(DT) && any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
+  if(!is.null(DT) && any(!(c(time, idField, coordFields) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
   if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
-  if(is.null(timeField)){
+  if(is.null(time)){
     distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
     graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distance)
     group <- igraph::clusters(graphAdj)$membership
     data.table(ID = names(group), group)
 
   } else {
-    if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
+    if(is.null(groupFields)) byFields <- time else byFields <- c(groupFields, time)
     DT[, withinGroup := {
       distMatrix <- as.matrix(dist(.SD[, coordFields, with = FALSE]))
       graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distance)
