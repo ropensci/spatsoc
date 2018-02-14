@@ -39,7 +39,7 @@ GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
   if(all(sapply(DT[, coordFields, with = FALSE], is.numeric))) stop('ensure that input coordFields are numeric')
 
   if(is.null(time) & is.null(groupFields)){
-    distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
+    distMatrix <- as.matrix(dist(DT[, ..coordFields]))
     graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distance)
     group <- igraph::clusters(graphAdj)$membership
     data.table(ID = names(group), group)
@@ -49,7 +49,7 @@ GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
     byFields <- c(groupFields, time)
 
     DT[, withinGroup := {
-      distMatrix <- as.matrix(dist(.SD[, coordFields, with = FALSE]))
+      distMatrix <- as.matrix(dist(.SD[, ..coordFields]))
       graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distance)
       igraph::clusters(graphAdj)$membership
     },
