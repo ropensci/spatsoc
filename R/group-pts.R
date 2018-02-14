@@ -8,11 +8,11 @@
 #' @inheritParams BuildPts
 #' @param spPts Alternatively, provide a SpatialPointsDataFrame created with the
 #'   sp package. If a spPts object is provided, groups cannot be calculated by
-#' @param distanceThreshold The distance threshold for grouping points in the units of the projection
 #' @param timeField (optional) time field in the DT upon which the spatial grouping will be
 #'   calculated
 #' @param groupFields (optional) grouping field(s) to be (optionally) combined with timeField, either character or list of strings
 #' @return Group by ID (by time) data.table
+#' @param distance The threshold distance for grouping points. The distance must be in the units of the projection.
 #' @export
 #'
 #' @examples
@@ -27,6 +27,7 @@
 #'
 #' groups <- GroupPts(spPts = locsPts, distanceThreshold = 50)
 GroupPts <- function(DT, distanceThreshold, timeField = NULL, groupFields = NULL,
+GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
                            projection, coordFields = c('EASTING', 'NORTHING'),
                            idField = 'ID', spPts = NULL){
 
@@ -36,7 +37,7 @@ GroupPts <- function(DT, distanceThreshold, timeField = NULL, groupFields = NULL
   if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
   if(is.null(timeField)){
     distMatrix <- as.matrix(dist(DT[, coordFields, with = FALSE]))
-    graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distanceThreshold)
+    graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distance)
     group <- igraph::clusters(graphAdj)$membership
     data.table(ID = names(group), group)
 
@@ -46,7 +47,7 @@ GroupPts <- function(DT, distanceThreshold, timeField = NULL, groupFields = NULL
 
     DT[, withinGroup := {
       distMatrix <- as.matrix(dist(.SD[, coordFields, with = FALSE]))
-      graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distanceThreshold)
+      graphAdj <- igraph::graph_from_adjacency_matrix(distMatrix <= distance)
       igraph::clusters(graphAdj)$membership
     },
     by = byFields, .SDcols = c(coordFields, idField)]
