@@ -36,7 +36,7 @@ GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
     DT[, group := NULL]
   }
 
-  if(all(sapply(DT[, coordFields, with = FALSE], is.numeric))) stop('ensure that input coordFields are numeric')
+  if(!all(sapply(DT[, coordFields, with = FALSE], is.numeric))) stop('ensure that input coordFields are numeric')
 
   if(is.null(time) & is.null(groupFields)){
     distMatrix <- as.matrix(dist(DT[, ..coordFields]))
