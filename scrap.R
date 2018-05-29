@@ -33,12 +33,47 @@ updatePackageVersion <- function(packageLocation ="."){
 updatePackageVersion()
 
 library(spatsoc)
+library(ggplot2)
 # data(locs)
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
+
+
+## BUFFALO ========
+DT <- fread('input/Buffalo.csv')
+DT[, idate := as.IDate(timestamp)]
+DT[, posix := as.POSIXct(timestamp)]
+DT[, ID := `individual-local-identifier`]
+DT[, X := `utm-easting`]
+DT[, Y := `utm-northing`]
+
+qplot(X, Y, data = DT, color = ID)
+GroupTimes(DT, 'posix', '10 minutes')
+DT[, uniqueN(posix)]
+GroupPts(DT, 1, time = 'timegroup', coordFields = c('X', 'Y'),
+         idField = 'individual-local-identifier')
+
+## DAILY ====...
+
+
+## DAILY ========
+DT <- fread('input/Daily')
+DT[, idate := as.IDate(timestamp)]
+DT[, posix := as.POSIXct(timestamp)]
+DT[, grp := tstrsplit(`individual-local-identifier`, '_')[[1]]]
+DT[, X := `location-long`]
+DT[, Y := `location-lat`]
+
+DT <- DT[grp == 'ngelleehon']
+
+GroupTimes(DT, 'posix', '10 minutes')
+DT[, uniqueN(posix)]
+GroupPts(DT, 1, time = 'timegroup', coordFields = c('X', 'Y'),
+         idField = 'individual-local-identifier')
+## DAILY ====...
 
 ############# SF SF SF SF ################
 library(sf)
