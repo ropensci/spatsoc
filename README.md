@@ -1,6 +1,8 @@
 # spatsoc [working.title]
 Title: Group animal location data by their spatial and temporal relationship
 
+https://github.com/Rdatatable/data.table/issues/2053
+
 
 ## Style
 * group polys or group HRs?
@@ -34,19 +36,17 @@ https://www.datarepository.movebank.org/handle/10255/move.609
 do we want to return vertices strictly for kernel?
 
 
-
-`Both 'coordFields' and '..coordFields' exist in calling scope. Please remove the '..coordFields' variable in calling scope for clarity.`
-
-
-
 Check that date column provided has more than one uniqueN and not more than 1million (ha)
-
 
 
 ## TODO
 * check that all functions have proper is null DT and colnames present / it didn't break anything
 * check for [] for DT and fix so outputs what we want
 * what are the incompatibilities between randomization + grouping methods
+
+
+* explain that returned objects are data.tables and could be converted back with `setDF`
+
 
 ## Vignettes
 * highlight build blocks
@@ -121,10 +121,11 @@ Iterations(z, 'ID', 10, 'group', 'daily', 'datetime')
 
 ## To Read
 ### Build
-* read about dt in functions/packages
-* wowowow: https://stackoverflow.com/questions/25898162/data-table-anonymous-function-in-j
-* suppressing intermediate... http://brooksandrew.github.io/simpleblog/articles/advanced-data-table/
 * https://stackoverflow.com/questions/28078640/adding-new-columns-to-a-data-table-by-reference-within-a-function-not-always-wor
 * https:/stackoverflow.com/questions/30601332/data-table-assignment-by-reference-within-function/
 * https://stackoverflow.com/questions/8030452/pass-by-reference-operator-in-the-data-table-package-modifies-another-data
 * https://stackoverflow.com/questions/10527072/using-data-table-package-inside-my-own-package
+
+
+
+* https://github.com/Rdatatable/data.table/issues/2053
