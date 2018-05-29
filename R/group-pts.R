@@ -21,11 +21,13 @@
 #'
 #' GroupPts(locs, distance = 50, time = 'timegroup', groupFields = 'season')
 GroupPts <- function(DT, distance, time = NULL, groupFields = NULL,
-                     coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
+                     coordFields = c('EASTING', 'NORTHING'), idField = NULL){
 
   if(is.null(DT)) stop('input DT required')
 
   if(is.null(distance)) stop('distance threshold required')
+
+  if(is.null(idField)) stop('ID field required')
 
   if(any(!(c(time, idField, coordFields) %in% colnames(DT)))){
     stop('some fields provided are not present in input DT')
