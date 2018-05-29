@@ -3,6 +3,11 @@ Title: Group animal location data by their spatial and temporal relationship
 
 
 ## Style
+* group polys or group HRs?
+* can't use spatsoc, too similar to spatstat (what about `socspat`, `socialspatial` )
+* (later) review all variable, function etc names for conflicts and for clarity/brevity
+* do we prefer grp_lines or GroupLines
+
 * group_points
 * grp_pts
 * GroupPts
@@ -15,8 +20,11 @@ R source code
 
 **single return per function**
 
+## Test data
+https://www.datarepository.movebank.org/handle/10255/move.619
+https://www.datarepository.movebank.org/handle/10255/move.609
 
-
+ 
 ## Tests
 
 * readcsv 
@@ -24,6 +32,16 @@ R source code
 
 
 do we want to return vertices strictly for kernel?
+
+
+
+`Both 'coordFields' and '..coordFields' exist in calling scope. Please remove the '..coordFields' variable in calling scope for clarity.`
+
+
+
+Check that date column provided has more than one uniqueN and not more than 1million (ha)
+
+
 
 ## TODO
 * check that all functions have proper is null DT and colnames present / it didn't break anything
@@ -100,15 +118,6 @@ Iterations(z, 'ID', 10, 'group', 'daily', 'datetime')
 * should we only return one or few columns so that the functions can integrate in dt[, grp := ...]
 * use @importFrom pkg fun to decrease cost of repeated function callsMV917540R0
 
-### Style/Naming
-* group polys or group HRs?
-* can't use spatsoc, too similar to spatstat
-* (later) review all variable, function etc names for conflicts and for clarity/brevity
-* do we prefer grp_lines or GroupLines
-
-### Testing
-* look at moveBank other forms of data
-
 
 ## To Read
 ### Build
@@ -119,10 +128,3 @@ Iterations(z, 'ID', 10, 'group', 'daily', 'datetime')
 * https:/stackoverflow.com/questions/30601332/data-table-assignment-by-reference-within-function/
 * https://stackoverflow.com/questions/8030452/pass-by-reference-operator-in-the-data-table-package-modifies-another-data
 * https://stackoverflow.com/questions/10527072/using-data-table-package-inside-my-own-package
-
-
-### Papers/Packages
-* http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2011.00169.x/epdf
-* wildlifeDI(/TG?)
-* asnipe
-* tim paco methods ecology evo paper
