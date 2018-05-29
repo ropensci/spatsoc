@@ -2,10 +2,25 @@
 Title: Group animal location data by their spatial and temporal relationship
 
 
-tests..
+## Style
+* group_points
+* grp_pts
+* GroupPts
+* GroupPoints
 
-test with readcsv 
-read_table
+R source code
+
+* group-pts
+* group_pts
+
+**single return per function**
+
+
+
+## Tests
+
+* readcsv 
+* read_table
 
 
 do we want to return vertices strictly for kernel?
