@@ -3,6 +3,8 @@ Title: Group animal location data by their spatial and temporal relationship
 
 https://github.com/Rdatatable/data.table/issues/2053
 
+https://rdatatable.gitlab.io/data.table/library/data.table/doc/datatable-importing.html
+
 
 ## Style
 * group polys or group HRs?
