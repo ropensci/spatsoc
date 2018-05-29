@@ -7,8 +7,8 @@
 CalcCentroids(DT, coordFields, groupField)
 }
 \arguments{
-\item{DT}{Input data with coordinate and id fields. If not provided, fields
-default to c('EASTING', 'NORTHING') and 'ID'}
+\item{DT}{Input data.table with coordinate and id fields. If not provided, fields
+default to c('EASTING', 'NORTHING') and 'ID'.}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}

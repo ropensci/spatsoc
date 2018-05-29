@@ -5,11 +5,11 @@
 \title{Group Points By Buffer}
 \usage{
 GroupPts(DT, distance, time = NULL, groupFields = NULL,
-  coordFields = c("EASTING", "NORTHING"), idField = "ID")
+  coordFields = c("EASTING", "NORTHING"), idField = NULL)
 }
 \arguments{
-\item{DT}{Input data with coordinate and id fields. If not provided, fields
-default to c('EASTING', 'NORTHING') and 'ID'}
+\item{DT}{Input data.table with coordinate and id fields. If not provided, fields
+default to c('EASTING', 'NORTHING') and 'ID'.}
 
 \item{distance}{The threshold distance for grouping points. The distance must be in the units of the projection.}
 
@@ -21,7 +21,7 @@ default to c('EASTING', 'NORTHING') and 'ID'}
 coordinate columns. eg: c('EASTING', 'NORTHING')}
 
 \item{idField}{Character string indicating the column name for the ID
-associated with each point}
+associated with each point.}
 }
 \value{
 Input DT with column "group" added.

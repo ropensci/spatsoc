@@ -8,8 +8,8 @@ Nearest(DT, timeField = NULL, groupField = NULL, proportions = FALSE,
   coordFields = c("EASTING", "NORTHING"), idField = "ID")
 }
 \arguments{
-\item{DT}{Input data with coordinate and id fields. If not provided, fields
-default to c('EASTING', 'NORTHING') and 'ID'}
+\item{DT}{Input data.table with coordinate and id fields. If not provided, fields
+default to c('EASTING', 'NORTHING') and 'ID'.}
 
 \item{timeField}{(optional) timeField in the DT upon which the neighbors'
 distance will be compared}
@@ -21,7 +21,7 @@ neighbors (eg: season, year, herd, known social groups, ...)}
 coordinate columns. eg: c('EASTING', 'NORTHING')}
 
 \item{idField}{Character string indicating the column name for the ID
-associated with each point}
+associated with each point.}
 }
 \description{
 Proportion/Frequency Nearest Neighbors
