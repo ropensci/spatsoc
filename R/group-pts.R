@@ -42,11 +42,15 @@ GroupPts <- function(DT,
     stop('ID field required')
   }
 
+  if (length(coordFields) != 2) {
+    stop('coordFields requires a vector of column names for coordinates X and Y')
+  }
+
   if (any(!(c(time, idField, coordFields, groupFields) %in% colnames(DT)))) {
     stop('some fields provided are not present in input DT')
   }
 
-  if (!is.null(DT) & "group" %in% colnames(DT)) {
+  if ("group" %in% colnames(DT)) {
     warning("`group` column will be overwritten by this function")
     DT[, group := NULL]
   }
