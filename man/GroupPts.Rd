@@ -4,8 +4,8 @@
 \alias{GroupPts}
 \title{Group Points By Buffer}
 \usage{
-GroupPts(DT, distance, time = NULL, groupFields = NULL,
-  coordFields = c("EASTING", "NORTHING"), idField = NULL)
+GroupPts(DT, distance = NULL, timeGroup = NULL, groupFields = NULL,
+  coordFields = NULL, idField = NULL)
 }
 \arguments{
 \item{DT}{Input data.table with coordinate and id fields. If not provided, fields
@@ -13,9 +13,9 @@ default to c('EASTING', 'NORTHING') and 'ID'.}
 
 \item{distance}{The threshold distance for grouping points. The distance must be in the units of the projection.}
 
-\item{time}{(optional) time field in the DT upon which the spatial grouping will be calculated.}
+\item{timeGroup}{(optional) time group field in the DT upon which the spatial grouping will be calculated.}
 
-\item{groupFields}{(optional) grouping field(s) to be combined with the time field, either character or list of strings.}
+\item{groupFields}{(optional) grouping field(s) to be combined with the timeGroup field, either character or list of strings.}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
@@ -36,9 +36,9 @@ This function finds spatialtemporal groups in input points.
 
 GroupPts(locs, distance = 50)
 
-GroupPts(locs, distance = 50, time = 'datetime')
+GroupPts(locs, distance = 50, timeGroup = 'datetime')
 
-GroupPts(locs, distance = 50, time = 'timegroup')
+GroupPts(locs, distance = 50, timeGroup = 'timegroup')
 
-GroupPts(locs, distance = 50, time = 'timegroup', groupFields = 'season')
+GroupPts(locs, distance = 50, timeGroup = 'timegroup', groupFields = 'season')
 }

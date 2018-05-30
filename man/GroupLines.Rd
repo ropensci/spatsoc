@@ -16,7 +16,7 @@ default to c('EASTING', 'NORTHING') and 'ID'.}
 of the projection. Optionally, exclude argument or supply 0 to compare
 SpatialLines intersection}
 
-\item{groupFields}{(optional) grouping field(s) to be combined with the time field, either character or list of strings.}
+\item{groupFields}{(optional) grouping field(s) to be combined with the timeGroup field, either character or list of strings.}
 
 \item{projection}{Character string for input to sp::CRS() and proj4string().}
 

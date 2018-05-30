@@ -6,8 +6,8 @@
 #'
 #' @inheritParams BuildPts
 #' @param distance The threshold distance for grouping points. The distance must be in the units of the projection.
-#' @param time (optional) time field in the DT upon which the spatial grouping will be calculated.
-#' @param groupFields (optional) grouping field(s) to be combined with the time field, either character or list of strings.
+#' @param timeGroup (optional) time group field in the DT upon which the spatial grouping will be calculated.
+#' @param groupFields (optional) grouping field(s) to be combined with the timeGroup field, either character or list of strings.
 #' @return Input DT with column "group" added.
 #' @export
 #'
@@ -15,14 +15,14 @@
 #'
 #' GroupPts(locs, distance = 50)
 #'
-#' GroupPts(locs, distance = 50, time = 'datetime')
+#' GroupPts(locs, distance = 50, timeGroup = 'datetime')
 #'
-#' GroupPts(locs, distance = 50, time = 'timegroup')
+#' GroupPts(locs, distance = 50, timeGroup = 'timegroup')
 #'
-#' GroupPts(locs, distance = 50, time = 'timegroup', groupFields = 'season')
+#' GroupPts(locs, distance = 50, timeGroup = 'timegroup', groupFields = 'season')
 GroupPts <- function(DT,
                      distance = NULL,
-                     time = NULL,
+                     timeGroup = NULL,
                      groupFields = NULL,
                      coordFields = NULL,
                      idField = NULL) {
@@ -46,7 +46,11 @@ GroupPts <- function(DT,
     stop('coordFields requires a vector of column names for coordinates X and Y')
   }
 
-  if (any(!(c(time, idField, coordFields, groupFields) %in% colnames(DT)))) {
+  if (length(coordFields) != 2) {
+    stop('coordFields requires a vector of column names for coordinates X and Y')
+  }
+
+  if (any(!(c(timeGroup, idField, coordFields, groupFields) %in% colnames(DT)))) {
     stop('some fields provided are not present in input DT')
   }
 
@@ -58,7 +62,7 @@ GroupPts <- function(DT,
   if (!all(sapply(DT[, coordFields, with = FALSE], is.numeric)))
     stop('ensure that input coordFields are numeric')
 
-  if (is.null(time) & is.null(groupFields)) {
+  if (is.null(timeGroup) & is.null(groupFields)) {
     distMatrix <- as.matrix(dist(DT[, ..coordFields]))
     graphAdj <-
       igraph::graph_from_adjacency_matrix(distMatrix < distance)
@@ -67,7 +71,7 @@ GroupPts <- function(DT,
     return(data.table(ID = names(group), group))
 
   } else {
-    byFields <- c(groupFields, time)
+    byFields <- c(groupFields, timeGroup)
     DT[, withinGroup := {
       distMatrix <-
         as.matrix(dist(
