@@ -50,6 +50,10 @@ Check that date column provided has more than one uniqueN and not more than 1mil
 * explain that returned objects are data.tables and could be converted back with `setDF`
 
 
+## GroupPts
+ID and distance are mandatory
+
+
 ## Vignettes
 * highlight build blocks
 
