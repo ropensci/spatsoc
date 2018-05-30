@@ -66,8 +66,9 @@ GroupPts <- function(DT,
     byFields <- c(groupFields, time)
     DT[, withinGroup := {
       distMatrix <-
-        as.matrix(dist(data.table(
-          get(coordFields[1]), get(coordFields[2])
+        as.matrix(dist(as.matrix(
+          get(coordFields[1]), get(coordFields[2]),
+          ncol = 2
         )))
       graphAdj <-
         igraph::graph_from_adjacency_matrix(distMatrix <= distance)
