@@ -57,7 +57,7 @@ GroupPts <- function(DT,
   if (is.null(time) & is.null(groupFields)) {
     distMatrix <- as.matrix(dist(DT[, ..coordFields]))
     graphAdj <-
-      igraph::graph_from_adjacency_matrix(distMatrix <= distance)
+      igraph::graph_from_adjacency_matrix(distMatrix < distance)
     group <- igraph::clusters(graphAdj)$membership
 
     return(data.table(ID = names(group), group))
