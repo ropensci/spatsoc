@@ -65,47 +65,9 @@ Check that date column provided has more than one uniqueN and not more than 1mil
 * function for get_group_by_individual speedup
 * check improvements in performance given the switch to an integer time group vs posixct
 
-#### Randomizations/Iterations
-```
-Iterations(z, 'ID', 10, 'group', 'daily', 'datetime')
- Hide Traceback
- 
- Rerun with Debug
- Error in .subset2(x, i, exact = exact) : 
-  attempt to select less than one element in get1index
-```
-
-#### Nearest
-* `Error in [.data.table(dt, , FindNearest(.SD, coordFields, idField),  :
-  column or expression 1 of 'by' or 'keyby' is type closure. Do not quote column names. Usage: DT[,sum(colC),by=list(colA,month(colB))]`
-* above occurs when the column name provided does not match any from the DT
-
-#### GroupTime
-* time threshold needs error handling
-* warn if minutes are not divisible by 60 or if greater than 60
-* is "timegroup" the best output column name
-* time zone handling since posixct
-
-#### GroupPts
-* flex chaining or not?
-* `list(split(spPts@coords, c(col(spPts@coords)))` compare this to `as.list(as.data.frame)` for speed
-* add optional return spatial + time groups
-
-#### GroupLines
-
-#### GroupHRs/Polys
-* proportional overlap
-* add a build polygons step in addition to the homerange
-* change group HRs to group Polys?
-* sub functions for build HR, build polys.. then group all resulting polys
-
-#### PairwiseDist
-* only mean? or flexible stat?
-
 #### Foverlaps
 * build clusters
 * output from clusters consistent (time start, end + xy)
-
 
 ### Man
 * Description...
