@@ -42,7 +42,7 @@ GroupPts <- function(DT,
     stop('ID field required')
   }
 
-  if (any(!(c(time, idField, coordFields) %in% colnames(DT)))) {
+  if (any(!(c(time, idField, coordFields, groupFields) %in% colnames(DT)))) {
     stop('some fields provided are not present in input DT')
   }
 
