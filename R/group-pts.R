@@ -46,21 +46,27 @@ GroupPts <- function(DT,
     stop('coordFields requires a vector of column names for coordinates X and Y')
   }
 
-  if (any(!(c(timeGroup, idField, coordFields, groupFields) %in% colnames(DT)))) {
+  if (any(!(
+    c(timeGroup, idField, coordFields, groupFields) %in% colnames(DT)
+  ))) {
     stop('some fields provided are not present in input DT')
   }
 
-  if (any(!(DT[, lapply(.SD, is.numeric), .SDcols = coordFields]))) {
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coordFields]))) {
     stop('coordFields must be numeric')
   }
 
-  if ("group" %in% colnames(DT)) {
-    warning("`group` column will be overwritten by this function")
-    DT[, group := NULL]
+  if (any(vapply(c('POSIXct', 'POSIXlt', 'Date', 'IDate',
+                   'ITime'),
+                 function(x) DT[, inherits(timestamp, x)],
+                 TRUE))){
+    warning('timeGroup provided is a date/time type, did you use GroupTimes?')
   }
 
-  if (!all(sapply(DT[, coordFields, with = FALSE], is.numeric)))
-    stop('ensure that input coordFields are numeric')
+    if ("group" %in% colnames(DT)) {
+      warning("`group` column will be overwritten by this function")
+      DT[, group := NULL]
+    }
 
   if (is.null(timeGroup) & is.null(groupFields)) {
     distMatrix <- as.matrix(dist(DT[, ..coordFields]))
@@ -74,9 +80,10 @@ GroupPts <- function(DT,
     byFields <- c(groupFields, timeGroup)
     DT[, withinGroup := {
       distMatrix <-
-        as.matrix(dist(
-          cbind(get(coordFields[1]), get(coordFields[2])),
-          method = "euclidean"))
+        as.matrix(dist(cbind(
+          get(coordFields[1]), get(coordFields[2])
+        ),
+        method = "euclidean"))
       graphAdj <-
         igraph::graph_from_adjacency_matrix(distMatrix <= distance)
       igraph::clusters(graphAdj)$membership
