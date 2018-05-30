@@ -21,10 +21,10 @@
 #'
 #' GroupPts(locs, distance = 50, time = 'timegroup', groupFields = 'season')
 GroupPts <- function(DT,
-                     distance,
+                     distance = NULL,
                      time = NULL,
                      groupFields = NULL,
-                     coordFields = c('EASTING', 'NORTHING'),
+                     coordFields = NULL,
                      idField = NULL) {
   if (is.null(DT)) {
     stop('input DT required')
