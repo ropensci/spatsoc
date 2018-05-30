@@ -64,8 +64,8 @@ test_that('coordFields are correctly provided or error detected', {
                'coordFields requires a vector')
 
   expect_error(GroupPts(DT, distance = 10, idField = 'ID',
-                        coordFields = c('X', NULL)),
-               'coordFields requires a vector')
+                        coordFields = c('X', 'ID')),
+               'coordFields must be numeric')
 })
 
 

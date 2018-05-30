@@ -46,12 +46,12 @@ GroupPts <- function(DT,
     stop('coordFields requires a vector of column names for coordinates X and Y')
   }
 
-  if (length(coordFields) != 2) {
-    stop('coordFields requires a vector of column names for coordinates X and Y')
-  }
-
   if (any(!(c(timeGroup, idField, coordFields, groupFields) %in% colnames(DT)))) {
     stop('some fields provided are not present in input DT')
+  }
+
+  if (any(!(DT[, lapply(.SD, is.numeric), .SDcols = coordFields]))) {
+    stop('coordFields must be numeric')
   }
 
   if ("group" %in% colnames(DT)) {
