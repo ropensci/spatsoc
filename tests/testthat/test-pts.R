@@ -3,7 +3,6 @@ context('test GroupPts')
 library(spatsoc)
 
 DT <- fread('../testdata/buffalo.csv')
-# DT <- fread('input/Buffalo.csv')
 
 ls.params <- list(DT = DT,
                   coordFields = c('X', 'Y'),
@@ -18,6 +17,7 @@ test_that('ID and distance column names must be provided', {
                'distance threshold required')
 })
 
+
 test_that('column names must exist in DT', {
   # where ID field doesn't exist in DT
   expect_error(GroupPts(DT, distance = 10, idField = 'potato',
@@ -29,24 +29,74 @@ test_that('column names must exist in DT', {
                         coordFields = c('potatoX', 'potatoY')),
                'some fields', fixed = FALSE)
 
-  # where time field doesn't exist
+  # where group fields doesn't exist
   expect_error(GroupPts(DT, distance = 10, idField = 'ID',
                         coordFields = c('X', 'Y'),
                         groupFields = 'potato'),
                'some fields', fixed = FALSE)
 
-  # expect_error(GroupPts(DT, distance = 10, idField = NULL, coordFields = NULL,
-  #                       time = NULL), 'some fields', fixed = FALSE)
-  # expect_silent(GroupPts(
-  #   DT,
-  #   idField = 'ID',
-  #   time = 'potato',
-  #   coordFields = c('X', 'Y')
-  # ))
-  # expect_error(GroupPts(DT, idField = 'potato'))
-  # expect_error(GroupPts(DT, time = 'potato'))
-  # expect_error(GroupPts(DT, coordFields = NULL, time = NULL))
-  # expect_error(GroupPts(DT, idField = NULL, time = NULL))
-  # expect_error(GroupPts(DT, idField = NULL, coordFields = NULL))
-  # expect_error(GroupPts(DT, idField = NULL, coordFields = NULL, time = NULL))
+  # where time field doesn't exist
+  expect_error(GroupPts(DT, distance = 10, idField = 'ID',
+                        coordFields = c('X', 'Y'),
+                        time = 'potato'),
+               'some fields', fixed = FALSE)
+
+})
+
+
+test_that('threshold correctly provided or error detected', {
+  expect_silent(GroupPts(DT, distance = 10, idField = 'ID',
+                         coordFields = c('X', 'Y')))
+
+  expect_error(GroupPts(DT, distance = -10, idField = 'ID'),
+               'distance must be greater than 0')
+
+  expect_error(GroupPts(DT, distance = 0, idField = 'ID'),
+               'distance must be greater than 0')
+
+
+})
+
+
+test_that('coordFields are correctly provided or error detected', {
+  expect_error(GroupPts(DT, distance = 10, idField = 'ID',
+                         coordFields = c('X', NULL)),
+               'coordFields requires a vector')
+})
+
+
+test_that('group column succesfully detected', {
+  copyDT <- copy(DT)[, group := 1]
+  expect_warning(GroupPts(copyDT,distance = 10, idField = 'ID',
+                          coordFields = c('X', 'Y')),
+                 '`group` column will be overwritten')
+})
+
+
+test_that('two column DT returned if time, group fields not provided', {
+  expect_equal(ncol(GroupPts(DT, distance = 10, idField = 'ID',
+                          coordFields = c('X', 'Y'))),
+               2)
+})
+
+
+test_that('withinGroup is not returned to the user', {
+  copyDT <- copy(DT)
+  expect_false('withinGroup' %in% colnames(
+    GroupPts(copyDT, distance = 10, idField = 'ID',
+             coordFields = c('X', 'Y'), time = 'posix')))
+})
+
+test_that('no rows are added to the result DT', {
+  copyDT <- copy(DT)
+  expect_equal(nrow(copyDT),
+               nrow(GroupPts(copyDT, distance = 10, idField = 'ID',
+                              coordFields = c('X', 'Y'), time = 'posix')))
+})
+
+test_that('only one column added to the result DT', {
+  copyDT <- copy(DT)
+  expect_equal(ncol(copyDT) + 1,
+               ncol(GroupPts(copyDT, distance = 10, idField = 'ID',
+                             coordFields = c('X', 'Y'), time = 'posix')))
 })
