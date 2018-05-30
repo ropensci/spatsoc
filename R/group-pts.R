@@ -34,6 +34,10 @@ GroupPts <- function(DT,
     stop('distance threshold required')
   }
 
+  if (distance <= 0) {
+    stop('distance must be greater than 0')
+  }
+
   if (is.null(idField)) {
     stop('ID field required')
   }
