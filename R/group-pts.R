@@ -66,9 +66,9 @@ GroupPts <- function(DT,
     byFields <- c(groupFields, time)
     DT[, withinGroup := {
       distMatrix <-
-        as.matrix(dist(cbind(
-          get(coordFields[1]), get(coordFields[2])
-        )))
+        as.matrix(dist(
+          cbind(get(coordFields[1]), get(coordFields[2])),
+          method = "euclidean"))
       graphAdj <-
         igraph::graph_from_adjacency_matrix(distMatrix <= distance)
       igraph::clusters(graphAdj)$membership
