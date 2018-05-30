@@ -49,12 +49,16 @@ DT[, posix := as.POSIXct(timestamp)]
 DT[, ID := `individual-local-identifier`]
 DT[, X := `utm-easting`]
 DT[, Y := `utm-northing`]
-
+# DT[, .SD, .SDcols = cF]
 qplot(X, Y, data = DT, color = ID)
 GroupTimes(DT, 'posix', '10 minutes')
 DT[, uniqueN(posix)]
-GroupPts(DT, 1, time = 'timegroup', coordFields = c('X', 'Y'),
+DT <- DT[1:1000]
+GroupPts(DT, 100, time = 'timegroup', coordFields = c('X', 'Y'),
          idField = 'individual-local-identifier')
+DT[, timegroup := NULL]
+
+fwrite(DT[, .(X, Y, ID, posix)], 'tests/testdata/buffalo.csv')
 
 ## DAILY ====...
 

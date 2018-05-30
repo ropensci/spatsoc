@@ -70,6 +70,7 @@ GroupPts <- function(DT,
       igraph::clusters(graphAdj)$membership
     },
     by = byFields, .SDcols = c(coordFields, idField)]
-    DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
+    DT[, group := .GRP,
+       by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
   }
 }
