@@ -35,6 +35,14 @@ test_that('time fields are already present', {
 
 
 # warn if greater than 60 minutes
+
+test_that('threshold with minutes fails with > 60', {
+  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
+  expect_error(GroupTimes(copyDT, timeField = 'posix', threshold = '70 minutes'),
+               '> 60 minutes', fixed = FALSE)
+})
+
+
 # warn if not divisible
 # warn if block isnt even
 # stop if threshold isnt in terms of hours, minutes, days

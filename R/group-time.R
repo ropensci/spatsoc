@@ -48,7 +48,7 @@ GroupTimes <- function(DT = NULL,
     DT[, timegroup := .GRP, by = timeField][]
   } else {
     dtm <- DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
-    setnames(dtm, c(timeField, 'idate', 'itime'))
+    data.table::setnames(dtm, c(timeField, 'idate', 'itime'))
 
     if(grepl('hour', threshold)){
       if(data.table::tstrsplit(threshold, ' ')[[1]] == 1L){
@@ -78,6 +78,10 @@ GroupTimes <- function(DT = NULL,
     } else if(grepl('minute', threshold)){
       nMins <- data.table::tstrsplit(threshold, ' ')[[1]]
       if(!is.integer(nMins)) nMins <- as.integer(nMins)
+
+      if(nMins > 60) {
+        stop('threshold provided with > 60 minutes')
+      }
 
       dtm[data.table::minute(itime) %% nMins < (nMins / 2) ,
           minutes := nMins * (data.table::minute(itime) %/% nMins)]
