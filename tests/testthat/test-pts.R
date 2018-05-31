@@ -76,21 +76,21 @@ test_that('two column DT returned if timeGroup, group fields not provided', {
 test_that('warns if timeGroup is a date/time or character instead of output from GroupTimes', {
   copyDT <- copy(DT)
 
-  # if posix is a character
+  # if datetime is a character
   expect_warning(GroupPts(copyDT, distance = 10, idField = 'ID',
                           coordFields = c('X', 'Y'),
-                          timeGroup = 'posix'),
+                          timeGroup = 'datetime'),
                'timeGroup provided is a', fixed = FALSE)
 
-  # if posix is a POSIXct
-  copyDT[, posix := as.POSIXct(posix)]
+  # if datetime is a POSIXct
+  copyDT[, datetime := as.POSIXct(datetime)]
   expect_warning(GroupPts(copyDT, distance = 10, idField = 'ID',
                           coordFields = c('X', 'Y'),
-                          timeGroup = 'posix'),
+                          timeGroup = 'datetime'),
                  'timeGroup provided is a', fixed = FALSE)
 
-  # if posix is an IDate
-  copyDT[, idate := as.IDate(posix)]
+  # if datetime is an IDate
+  copyDT[, idate := as.IDate(datetime)]
   expect_warning(GroupPts(copyDT, distance = 10, idField = 'ID',
                           coordFields = c('X', 'Y'),
                           timeGroup = 'idate'),
@@ -107,8 +107,8 @@ test_that('group column succesfully detected', {
 
 
 test_that('withinGroup is not returned to the user', {
-  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
-  GroupTimes(copyDT, timeField = 'posix', threshold = '5 minutes')
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '5 minutes')
 
   expect_false('withinGroup' %in% colnames(
     GroupPts(copyDT, distance = 10, idField = 'ID',
@@ -116,8 +116,8 @@ test_that('withinGroup is not returned to the user', {
 })
 
 test_that('no rows are added to the result DT', {
-  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
-  GroupTimes(copyDT, timeField = 'posix', threshold = '5 minutes')
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '5 minutes')
 
   expect_equal(nrow(copyDT),
                nrow(GroupPts(copyDT, distance = 10, idField = 'ID',
@@ -125,8 +125,8 @@ test_that('no rows are added to the result DT', {
 })
 
 test_that('only one column added to the result DT', {
-  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
-  GroupTimes(copyDT, timeField = 'posix', threshold = '5 minutes')
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '5 minutes')
 
   expect_equal(ncol(copyDT) + 1,
                ncol(GroupPts(copyDT, distance = 10, idField = 'ID',
