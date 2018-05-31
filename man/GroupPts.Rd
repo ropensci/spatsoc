@@ -24,7 +24,7 @@ coordinate columns. eg: c('EASTING', 'NORTHING')}
 associated with each point.}
 }
 \value{
-Input DT with column "group" added.
+Input DT with column 'group' added.
 }
 \description{
 Group points by spatial distance and temporal overlap.

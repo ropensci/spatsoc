@@ -8,7 +8,7 @@
 #' @param distance The threshold distance for grouping points. The distance must be in the units of the projection.
 #' @param timeGroup (optional) time group field in the DT upon which the spatial grouping will be calculated.
 #' @param groupFields (optional) grouping field(s) to be combined with the timeGroup field, either character or list of strings.
-#' @return Input DT with column "group" added.
+#' @return Input DT with column 'group' added.
 #' @export
 #'
 #' @examples
@@ -56,17 +56,20 @@ GroupPts <- function(DT,
     stop('coordFields must be numeric')
   }
 
-  if (any(vapply(c('POSIXct', 'POSIXlt', 'Date', 'IDate',
-                   'ITime'),
-                 function(x) DT[, inherits(timestamp, x)],
-                 TRUE))){
-    warning('timeGroup provided is a date/time type, did you use GroupTimes?')
+  if (!is.null(timeGroup)) {
+    if (any(vapply(c('POSIXct', 'POSIXlt', 'Date', 'IDate',
+                     'ITime'),
+                   function(x)
+                     DT[, inherits(.SD, x), .SDcols = timeGroup],
+                   TRUE))) {
+      warning('timeGroup provided is a date/time type, did you use GroupTimes?')
+    }
   }
 
-    if ("group" %in% colnames(DT)) {
-      warning("`group` column will be overwritten by this function")
-      DT[, group := NULL]
-    }
+  if ('group' %in% colnames(DT)) {
+    warning('`group` column will be overwritten by this function')
+    DT[, group := NULL]
+  }
 
   if (is.null(timeGroup) & is.null(groupFields)) {
     distMatrix <- as.matrix(dist(DT[, ..coordFields]))
@@ -83,7 +86,7 @@ GroupPts <- function(DT,
         as.matrix(dist(cbind(
           get(coordFields[1]), get(coordFields[2])
         ),
-        method = "euclidean"))
+        method = 'euclidean'))
       graphAdj <-
         igraph::graph_from_adjacency_matrix(distMatrix <= distance)
       igraph::clusters(graphAdj)$membership

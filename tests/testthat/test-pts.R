@@ -69,6 +69,16 @@ test_that('coordFields are correctly provided or error detected', {
 })
 
 
+test_that('warns if timeGroup is a date/time instead of output from GroupTimes', {
+  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
+
+  expect_warning(GroupPts(copyDT, distance = 10, idField = 'ID',
+                          coordFields = c('X', 'Y'),
+                          timeGroup = 'posix'),
+               'timeGroup provided is a', fixed = FALSE)
+})
+
+
 test_that('group column succesfully detected', {
   copyDT <- copy(DT)[, group := 1]
   expect_warning(GroupPts(copyDT,distance = 10, idField = 'ID',
