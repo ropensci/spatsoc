@@ -18,9 +18,6 @@
 #'
 #' @export
 GroupTimes <- function(DT, timeField, threshold = NULL) {
-  # if (!truelength(DT)){
-  #   alloc.col(DT)
-  # }
   if(!(timeField) %in% colnames(DT)){
     stop('some fields provided are not present
          in data.table provided/colnames(DT)')
@@ -28,9 +25,13 @@ GroupTimes <- function(DT, timeField, threshold = NULL) {
 
   checkCols <- c('hours', 'minutes', 'block', 'timegroup')
 
-  if(any(checkCols %in% colnames(DT))){
-    warning('one/many of `hours`, `minutes`, `block`, and `timegroup` column names found in input DT and will be overwritten by this function')
-    # print(intersect(colnames(DT), checkCols))
+  if (any(checkCols %in% colnames(DT))) {
+    warning(paste0(
+      paste(as.character(intersect(
+        colnames(DT), checkCols
+      )), collapse = ', '),
+      ' columns found in input DT and will be overwritten by this function'
+    ))
   }
 
   if(is.null(threshold)) {
