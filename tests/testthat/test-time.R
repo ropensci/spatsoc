@@ -42,7 +42,14 @@ test_that('threshold with minutes fails with > 60', {
                '> 60 minutes', fixed = FALSE)
 })
 
+test_that('threshold with minutes fails if not divisible by 60', {
+  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
+  expect_error(GroupTimes(copyDT, timeField = 'posix', threshold = '13 minutes'),
+               'threshold not evenly', fixed = FALSE)
+})
 
+
+# check that 60 minutes and 1 hour are the same result
 # warn if not divisible
 # warn if block isnt even
 # stop if threshold isnt in terms of hours, minutes, days
