@@ -69,12 +69,14 @@ GroupTimes <- function(DT = NULL,
       dtm <-
         DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
       data.table::setnames(dtm, c(timeField, 'idate', 'itime'))
-    } else if (length(timefield) &
+    } else if (length(timeField) &
                all(c('IDate', 'ITime') %in%
                    unlist(lapply(DT[, .SD, .SDcols = timeField],
                                  class)))) {
       dtm <- DT[, .SD, .SDcols = timeField]
       data.table::setnames(dtm, c('idate', 'itime'))
+    } else {
+      stop('time field provided must be either 1 column: POSIXct or 2 columns: IDate and ITime')
     }
 
 
