@@ -62,28 +62,44 @@ GroupTimes <- function(DT = NULL,
     warning('no threshold provided, using the time field directly to group')
     DT[, timegroup := .GRP, by = timeField][]
   } else {
-    dtm <- DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
-    data.table::setnames(dtm, c(timeField, 'idate', 'itime'))
+
+
+
+    if ('POSIXct' %in% unlist(lapply(DT[, .(get(timeField))], class))) {
+      dtm <-
+        DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
+      data.table::setnames(dtm, c(timeField, 'idate', 'itime'))
+    } else if (length(timefield) &
+               all(c('IDate', 'ITime') %in%
+                   unlist(lapply(DT[, .SD, .SDcols = timeField],
+                                 class)))) {
+      dtm <- DT[, .SD, .SDcols = timeField]
+      data.table::setnames(dtm, c('idate', 'itime'))
+    }
+
+
+
+
+
 
     if (grepl('hour', threshold) &
         data.table::tstrsplit(threshold, ' ')[[1]] == 1L) {
       threshold <- '60 minutes'
     }
 
-    if(grepl('hour', threshold)){
-        nHours <- data.table::tstrsplit(threshold, ' ')[[1]]
-        if (!is.integer(nHours)) {
-          nHours <- as.integer(nHours)
-        }
-
-        dtm[data.table::hour(itime) %% nHours < (nHours / 2) ,
-            hours := nHours * (data.table::hour(itime) %/% nHours)]
-        dtm[data.table::hour(itime) %% nHours >= (nHours / 2),
-            hours := nHours * ((data.table::hour(itime) %/% nHours) + 1L)]
-
-        dtm[, timegroup := .GRP, by = .(hours, idate)]
-        DT[, (colnames(dtm)) := dtm][]
+    if (grepl('hour', threshold)) {
+      nHours <- data.table::tstrsplit(threshold, ' ')[[1]]
+      if (!is.integer(nHours)) {
+        nHours <- as.integer(nHours)
       }
+
+      dtm[data.table::hour(itime) %% nHours < (nHours / 2) ,
+          hours := nHours * (data.table::hour(itime) %/% nHours)]
+      dtm[data.table::hour(itime) %% nHours >= (nHours / 2),
+          hours := nHours * ((data.table::hour(itime) %/% nHours) + 1L)]
+
+      dtm[, timegroup := .GRP, by = .(hours, idate)]
+      DT[, (colnames(dtm)) := dtm][]
 
     } else if(grepl('minute', threshold)){
       nMins <- data.table::tstrsplit(threshold, ' ')[[1]]
@@ -102,26 +118,37 @@ GroupTimes <- function(DT = NULL,
           minutes := nMins * (data.table::minute(itime) %/% nMins)]
       dtm[data.table::minute(itime) %% nMins >= (nMins / 2),
           minutes := nMins * ((data.table::minute(itime) %/% nMins) + 1L)]
-
       dtm[, timegroup := .GRP,
           by = .(minutes, data.table::hour(itime), idate)]
       DT[, (colnames(dtm)) := dtm][]
+
     } else if(grepl('day', threshold)){
       nDays <- data.table::tstrsplit(threshold, ' ')[[1]]
-      if(!is.integer(nDays)) nDays <- as.integer(nDays)
-      if(nDays == 1){
+      if (!is.integer(nDays)) {
+        nDays <- as.integer(nDays)
+      }
+      if (nDays == 1) {
         dtm[, timegroup := data.table::yday(idate)]
         DT[, (colnames(dtm)) := dtm][]
       } else {
         minday <- dtm[, min(data.table::yday(idate))]
         maxday <- dtm[, max(data.table::yday(idate))]
-        if(((maxday - minday) / nDays) %% 1 != 0){
-          warning('the minimum and maximum days in DT are not evenly divisible by the provided block length',
-                  '\n min day = ', as.character(minday), ', max day = ', as.character(maxday))
+        if (((maxday - minday) / nDays) %% 1 != 0) {
+          warning(
+            'the minimum and maximum days in DT are not
+            evenly divisible by the provided block length',
+            '\n min day = ',
+            as.character(minday),
+            ', max day = ',
+            as.character(maxday)
+          )
         }
-        dtm[, block := cut(data.table::yday(idate),
-                           breaks = seq.int(minday, maxday + nDays, by = nDays),
-                           right = FALSE, labels = FALSE)]
+        dtm[, block := cut(
+          data.table::yday(idate),
+          breaks = seq.int(minday, maxday + nDays, by = nDays),
+          right = FALSE,
+          labels = FALSE
+        )]
         DT[, (colnames(dtm)) := dtm][]
       }
     } else {
