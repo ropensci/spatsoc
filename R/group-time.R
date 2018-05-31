@@ -43,6 +43,21 @@ GroupTimes <- function(DT = NULL,
     ))
   }
 
+  # if (!is.null(timeField)) {
+  #   if (!(vapply(c('POSIXct', 'Date', 'IDate', 'ITime'),
+  #                         function(x)
+  #                           DT[, inherits(get(timeGroup), x)],
+  #                         TRUE))) {
+  #     warning('time field provided must be a POSIXct ')
+  #   }
+  # }
+  #
+  # if (DT[, inherits(get(timeField), 'POSIXlt')]) {
+  #   stop('time field cannot be of class POSIXlt')
+  # }
+
+
+
   if(is.null(threshold)) {
     warning('no threshold provided, using the time field directly to group')
     DT[, timegroup := .GRP, by = timeField][]
@@ -50,21 +65,16 @@ GroupTimes <- function(DT = NULL,
     dtm <- DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
     data.table::setnames(dtm, c(timeField, 'idate', 'itime'))
 
+    if (grepl('hour', threshold) &
+        data.table::tstrsplit(threshold, ' ')[[1]] == 1L) {
+      threshold <- '60 minutes'
+    }
+
     if(grepl('hour', threshold)){
-      if(data.table::tstrsplit(threshold, ' ')[[1]] == 1L){
-        nMins <- 60L
-        dtm[data.table::minute(itime) %% nMins < (nMins / 2) ,
-            minutes := nMins * (data.table::minute(itime) %/% nMins)]
-        dtm[data.table::minute(itime) %% nMins >= (nMins / 2),
-            minutes := nMins * ((data.table::minute(itime) %/% nMins) + 1L)]
-
-        dtm[, timegroup := .GRP,
-            by = .(minutes, data.table::hour(itime), idate)]
-
-        DT[, (colnames(dtm)) := dtm][]
-      } else {
         nHours <- data.table::tstrsplit(threshold, ' ')[[1]]
-        if(!is.integer(nHours)) nHours <- as.integer(nHours)
+        if (!is.integer(nHours)) {
+          nHours <- as.integer(nHours)
+        }
 
         dtm[data.table::hour(itime) %% nHours < (nHours / 2) ,
             hours := nHours * (data.table::hour(itime) %/% nHours)]
@@ -77,10 +87,15 @@ GroupTimes <- function(DT = NULL,
 
     } else if(grepl('minute', threshold)){
       nMins <- data.table::tstrsplit(threshold, ' ')[[1]]
-      if(!is.integer(nMins)) nMins <- as.integer(nMins)
+      if (!is.integer(nMins)) {
+        nMins <- as.integer(nMins)
+      }
 
-      if(nMins > 60) {
+      if (nMins > 60) {
         stop('threshold provided with > 60 minutes')
+      }
+      if (60 %% nMins) {
+        stop('threshold not evenly divisible by 60')
       }
 
       dtm[data.table::minute(itime) %% nMins < (nMins / 2) ,
