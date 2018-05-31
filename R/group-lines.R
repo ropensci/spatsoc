@@ -23,9 +23,22 @@
 #' data(locsLines)
 #'
 #' groups <- GroupLines(spLines = locsLines)
-GroupLines <- function(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL,
-                       projection, coordFields = c('EASTING', 'NORTHING'),
-                       idField = 'ID', spLines = NULL) {
+GroupLines <-
+  function(DT = NULL,
+           bufferWidth = NULL,
+           timeField = NULL,
+           groupFields = NULL,
+           projection = NULL,
+           coordFields = NULL,
+           idField = NULL,
+           spLines = NULL
+  ) {
+
+  # if sp lines and dt are null or both provided
+  # if splines not null, run it
+  # if dt not null, pass it to build
+
+
   if(!is.null(DT) && any(!(c(idField, timeField, coordFields) %in% colnames(DT)))){
     print(which(!(c(idField, timeField, coordFields) %in% colnames(DT))))
     stop('some fields provided are not present in data.table provided/colnames(DT)')
