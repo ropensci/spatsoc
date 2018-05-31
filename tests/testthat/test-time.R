@@ -86,7 +86,7 @@ test_that('warns if block is not even', {
 
   if (copyDT[, max(data.table::yday(datetime)) -
              min(data.table::yday(datetime))] %% 13 == 0) {
-    blockLength <- '14 days'
+    blockLength <- '17 days'
   } else {
     blockLength <- '13 days'
   }
