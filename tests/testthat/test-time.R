@@ -33,8 +33,20 @@ test_that('time fields are already present', {
                  'columns found in input DT', fixed = FALSE)
 })
 
+test_that('time field is appropriate format', {
+  copyDT <- copy(DT)
 
-# warn if greater than 60 minutes
+  # where character is provided
+  expect_error(GroupTimes(copyDT, timeField = 'posix', threshold = '60 minutes'),
+               'time field provided must be either', fixed = FALSE)
+
+  # where numeric is provided
+  copyDT[, datetime := 1]
+  expect_error(GroupTimes(copyDT, timeField = 'datetime', threshold = '60 minutes'),
+               'time field provided must be either', fixed = FALSE)
+
+
+})
 
 test_that('threshold with minutes fails with > 60', {
   copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
