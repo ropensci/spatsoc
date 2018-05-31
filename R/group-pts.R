@@ -57,12 +57,12 @@ GroupPts <- function(DT,
   }
 
   if (!is.null(timeGroup)) {
-    if (any(vapply(c('POSIXct', 'POSIXlt', 'Date', 'IDate',
-                     'ITime'),
+    if (TRUE %in% (vapply(c('POSIXct', 'POSIXlt', 'Date', 'IDate',
+                     'ITime', 'character'),
                    function(x)
-                     DT[, inherits(.SD, x), .SDcols = timeGroup],
+                     DT[, inherits(get(timeGroup), x)],
                    TRUE))) {
-      warning('timeGroup provided is a date/time type, did you use GroupTimes?')
+      warning('timeGroup provided is a date/time or character type, did you use GroupTimes?')
     }
   }
 
