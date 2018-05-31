@@ -68,14 +68,34 @@ test_that('coordFields are correctly provided or error detected', {
                'coordFields must be numeric')
 })
 
+test_that('two column DT returned if timeGroup, group fields not provided', {
+  expect_equal(ncol(GroupPts(DT, distance = 10, idField = 'ID',
+                             coordFields = c('X', 'Y'))),
+               2)
+})
 
-test_that('warns if timeGroup is a date/time instead of output from GroupTimes', {
-  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
+test_that('warns if timeGroup is a date/time or character instead of output from GroupTimes', {
+  copyDT <- copy(DT)
 
+  # if posix is a character
   expect_warning(GroupPts(copyDT, distance = 10, idField = 'ID',
                           coordFields = c('X', 'Y'),
                           timeGroup = 'posix'),
                'timeGroup provided is a', fixed = FALSE)
+
+  # if posix is a POSIXct
+  copyDT[, posix := as.POSIXct(posix)]
+  expect_warning(GroupPts(copyDT, distance = 10, idField = 'ID',
+                          coordFields = c('X', 'Y'),
+                          timeGroup = 'posix'),
+                 'timeGroup provided is a', fixed = FALSE)
+
+  # if posix is an IDate
+  copyDT[, idate := as.IDate(posix)]
+  expect_warning(GroupPts(copyDT, distance = 10, idField = 'ID',
+                          coordFields = c('X', 'Y'),
+                          timeGroup = 'idate'),
+                 'timeGroup provided is a', fixed = FALSE)
 })
 
 
