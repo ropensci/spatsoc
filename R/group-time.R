@@ -17,10 +17,19 @@
 #'                      Note that provided threshold must be in the expected format: '## unit'
 #'
 #' @export
-GroupTimes <- function(DT, timeField, threshold = NULL) {
-  if(!(timeField) %in% colnames(DT)){
-    stop('some fields provided are not present
-         in data.table provided/colnames(DT)')
+GroupTimes <- function(DT = NULL,
+                       timeField = NULL,
+                       threshold = NULL) {
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
+  if(is.null(timeField)) {
+    stop('time field required')
+  }
+
+  if (!(timeField) %in% colnames(DT)) {
+    stop('time field provided is not found in DT')
   }
 
   checkCols <- c('hours', 'minutes', 'block', 'timegroup')
