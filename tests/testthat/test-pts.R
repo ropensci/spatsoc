@@ -4,11 +4,10 @@ library(spatsoc)
 
 DT <- fread('../testdata/buffalo.csv')
 
-ls.params <- list(DT = DT,
-                  coordFields = c('X', 'Y'),
-                  idField = 'ID',
-                  timeGroup = 'posix')
-
+test_that('DT is required', {
+  expect_error(GroupPts(DT = NULL, distance = 10, idField = 'ID'),
+               'input DT required')
+})
 
 test_that('ID and distance column names must be provided', {
   expect_error(GroupPts(DT, distance = 10, idField = NULL),

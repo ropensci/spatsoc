@@ -20,7 +20,7 @@
 #' GroupPts(locs, distance = 50, timeGroup = 'timegroup')
 #'
 #' GroupPts(locs, distance = 50, timeGroup = 'timegroup', groupFields = 'season')
-GroupPts <- function(DT,
+GroupPts <- function(DT = NULL,
                      distance = NULL,
                      timeGroup = NULL,
                      groupFields = NULL,
