@@ -19,3 +19,8 @@ test_that('time field correctly provided or error detected', {
                'time field provided is not found in DT')
 })
 
+test_that('if threshold is null, warning returned', {
+  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
+  expect_warning(GroupTimes(copyDT, timeField = 'posix', threshold = NULL),
+                 'no threshold provided', fixed = FALSE)
+})

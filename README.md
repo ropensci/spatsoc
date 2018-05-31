@@ -93,7 +93,4 @@ ID and distance are mandatory
 * https:/stackoverflow.com/questions/30601332/data-table-assignment-by-reference-within-function/
 * https://stackoverflow.com/questions/8030452/pass-by-reference-operator-in-the-data-table-package-modifies-another-data
 * https://stackoverflow.com/questions/10527072/using-data-table-package-inside-my-own-package
-
-
-
 * https://github.com/Rdatatable/data.table/issues/2053

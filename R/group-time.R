@@ -24,11 +24,11 @@ GroupTimes <- function(DT = NULL,
     stop('input DT required')
   }
 
-  if(is.null(timeField)) {
+  if (is.null(timeField)) {
     stop('time field required')
   }
 
-  if (!(timeField) %in% colnames(DT)) {
+  if (!(timeField %in% colnames(DT))) {
     stop('time field provided is not found in DT')
   }
 
