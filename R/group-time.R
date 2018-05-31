@@ -43,21 +43,6 @@ GroupTimes <- function(DT = NULL,
     ))
   }
 
-  # if (!is.null(timeField)) {
-  #   if (!(vapply(c('POSIXct', 'Date', 'IDate', 'ITime'),
-  #                         function(x)
-  #                           DT[, inherits(get(timeGroup), x)],
-  #                         TRUE))) {
-  #     warning('time field provided must be a POSIXct ')
-  #   }
-  # }
-  #
-  # if (DT[, inherits(get(timeField), 'POSIXlt')]) {
-  #   stop('time field cannot be of class POSIXlt')
-  # }
-
-
-
   if(is.null(threshold)) {
     warning('no threshold provided, using the time field directly to group')
     DT[, timegroup := .GRP, by = timeField][]
