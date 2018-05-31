@@ -44,6 +44,7 @@ GroupTimes <- function(DT = NULL,
   }
 
   if(is.null(threshold)) {
+    warning('no threshold provided, using the time field directly to group')
     DT[, timegroup := .GRP, by = timeField][]
   } else {
     dtm <- DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
