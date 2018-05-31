@@ -107,30 +107,29 @@ test_that('group column succesfully detected', {
 })
 
 
-test_that('two column DT returned if timeGroup, group fields not provided', {
-  expect_equal(ncol(GroupPts(DT, distance = 10, idField = 'ID',
-                          coordFields = c('X', 'Y'))),
-               2)
-})
-
-
 test_that('withinGroup is not returned to the user', {
-  copyDT <- copy(DT)
+  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
+  GroupTimes(copyDT, timeField = 'posix', threshold = '5 minutes')
+
   expect_false('withinGroup' %in% colnames(
     GroupPts(copyDT, distance = 10, idField = 'ID',
-             coordFields = c('X', 'Y'), timeGroup = 'posix')))
+             coordFields = c('X', 'Y'), timeGroup = 'timegroup')))
 })
 
 test_that('no rows are added to the result DT', {
-  copyDT <- copy(DT)
+  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
+  GroupTimes(copyDT, timeField = 'posix', threshold = '5 minutes')
+
   expect_equal(nrow(copyDT),
                nrow(GroupPts(copyDT, distance = 10, idField = 'ID',
-                              coordFields = c('X', 'Y'), timeGroup = 'posix')))
+                              coordFields = c('X', 'Y'), timeGroup = 'timegroup')))
 })
 
 test_that('only one column added to the result DT', {
-  copyDT <- copy(DT)
+  copyDT <- copy(DT)[, posix := as.POSIXct(posix)]
+  GroupTimes(copyDT, timeField = 'posix', threshold = '5 minutes')
+
   expect_equal(ncol(copyDT) + 1,
                ncol(GroupPts(copyDT, distance = 10, idField = 'ID',
-                             coordFields = c('X', 'Y'), timeGroup = 'posix')))
+                             coordFields = c('X', 'Y'), timeGroup = 'timegroup')))
 })
