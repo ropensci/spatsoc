@@ -76,13 +76,9 @@ GroupTimes <- function(DT = NULL,
       dtm <- DT[, .SD, .SDcols = timeField]
       data.table::setnames(dtm, c('idate', 'itime'))
     } else {
-      stop('time field provided must be either 1 column: POSIXct or 2 columns: IDate and ITime')
+      stop('time field provided must be either
+           1 column: POSIXct or 2 columns: IDate and ITime')
     }
-
-
-
-
-
 
     if (grepl('hour', threshold) &
         data.table::tstrsplit(threshold, ' ')[[1]] == 1L) {
