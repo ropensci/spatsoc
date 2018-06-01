@@ -7,10 +7,17 @@
 #'
 #' @import data.table
 BuildLines <-
-  function(DT,
-           projection,
-           coordFields = c('EASTING', 'NORTHING'),
-           idField = 'ID') {
+  function(DT = NULL,
+           projection = NULL,
+           coordFields = NULL,
+           idField = NULL) {
+
+    if (is.null(DT)) {
+      stop('input DT required')
+    }
+
+
+
     # projection missing
     # any fields missing from DT
     # less than 2 warning (not in loop)
