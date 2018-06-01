@@ -54,8 +54,9 @@ BuildLines <-
     }
 
     if (sum(c('character', 'numeric', 'integer') %in%
-            unlist(lapply(DT[, .SD, .SDcols = c('ID', 'jul')], class))) == 2) {
-      stop('idField and/or byFields provided must be
+            unlist(lapply(DT[, .SD, .SDcols = byFields], class))) ==
+        length(byFields)) {
+      stop('idField (and byFields when provided) must be
            character, numeric or integer type')
     }
 

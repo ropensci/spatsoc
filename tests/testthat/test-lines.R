@@ -81,9 +81,9 @@ test_that('returns same number of lines as unique IDs/byFields provided', {
 
 test_that("build lines warns if < 2 locs per ID/byField", {
   # for ID (one row's ID is "potato")
-  DT[1, ID := 'potato']
+  copyDT <- copy(DT)[1, ID := 'potato']
 
-  expect_warning(BuildLines(DT = DT, idField = 'ID',
+  expect_warning(BuildLines(DT = copyDT, idField = 'ID',
                             coordFields = c('X', 'Y'),
                             projection = utm),
                  'some rows dropped, cannot build lines with less than two points')
@@ -101,8 +101,25 @@ test_that("build lines warns if < 2 locs per ID/byField", {
                  'some rows dropped, cannot build lines with less than two points')
 })
 
+test_that('byFields and idField provided are not correct format', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  expect_error(BuildLines(DT = copyDT, idField = 'datetime',
+                          coordFields = c('X', 'Y'),
+                          projection = utm),
+               'idField (and byFields when provided) must be', fixed = FALSE)
+
+  expect_error(BuildLines(DT = copyDT, idField = 'ID',
+                          coordFields = c('X', 'Y'),
+                          projection = utm, byFields = 'datetime'),
+               'idField (and byFields when provided) must be', fixed = FALSE)
+
+  expect_error(BuildLines(DT = copyDT, idField = 'ID',
+                          coordFields = c('X', 'Y'),
+                          projection = utm, byFields = 'X'),
+               'idField (and byFields when provided) must be', fixed = FALSE)
+})
+
 # if group provided, it isn't a datetime format
-# if group provided, same number of unique as above for ids
 
 
 
