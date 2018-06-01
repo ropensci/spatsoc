@@ -9,11 +9,16 @@ test_that('DT is required', {
                'input DT required')
 })
 
-test_that('ID and distance column names must be provided', {
+test_that('ID and distance column names must be provided (and correctly)', {
   expect_error(GroupPts(DT, distance = 10, idField = NULL),
                'ID field required')
+
   expect_error(GroupPts(DT, distance = NULL, idField = 'ID'),
                'distance threshold required')
+
+  expect_error(GroupPts(DT, distance = 10, idField = 'ID',
+                        coordFields = 'X'),
+               'coordFields requires a vector', fixed = FALSE)
 })
 
 
@@ -21,25 +26,24 @@ test_that('column names must exist in DT', {
   # where ID field doesn't exist in DT
   expect_error(GroupPts(DT, distance = 10, idField = 'potato',
                         coordFields = c('X', 'Y')),
-               'some fields', fixed = FALSE)
+               'not present in input DT', fixed = FALSE)
 
   # where coordFields don't exist
   expect_error(GroupPts(DT, distance = 10, idField = 'ID',
                         coordFields = c('potatoX', 'potatoY')),
-               'some fields', fixed = FALSE)
+               'not present in input DT', fixed = FALSE)
 
   # where group fields doesn't exist
   expect_error(GroupPts(DT, distance = 10, idField = 'ID',
                         coordFields = c('X', 'Y'),
                         groupFields = 'potato'),
-               'some fields', fixed = FALSE)
+               'not present in input DT', fixed = FALSE)
 
   # where timeGroup field doesn't exist
   expect_error(GroupPts(DT, distance = 10, idField = 'ID',
                         coordFields = c('X', 'Y'),
                         timeGroup = 'potato'),
-               'some fields', fixed = FALSE)
-
+               'not present in input DT', fixed = FALSE)
 })
 
 

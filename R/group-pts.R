@@ -49,7 +49,8 @@ GroupPts <- function(DT = NULL,
   if (any(!(
     c(timeGroup, idField, coordFields, groupFields) %in% colnames(DT)
   ))) {
-    stop('some fields provided are not present in input DT')
+    stop(paste0(as.character(paste(setdiff(c(timeGroup, idField, coordFields, groupFields), colnames(DT)), collapse = ', ')),
+      ' field(s) provided are not present in input DT'))
   }
 
   if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coordFields]))) {
