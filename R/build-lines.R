@@ -11,7 +11,6 @@ BuildLines <-
            projection = NULL,
            coordFields = NULL,
            idField = NULL) {
-
     if (is.null(DT)) {
       stop('input DT required')
     }
@@ -38,14 +37,19 @@ BuildLines <-
 
     if (any(!(c(idField, coordFields) %in% colnames(DT)))) {
       stop(paste0(
-        as.character(paste(setdiff(c(idField, coordFields), colnames(DT)),
-                           collapse = ', ')),
+        as.character(paste(setdiff(
+          c(idField, coordFields), colnames(DT)
+        ),
+        collapse = ', ')),
         ' field(s) provided are not present in input DT'
       ))
     }
 
+    if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coordFields]))) {
+      stop('coordFields must be numeric')
+    }
 
-    # Find any ids with only one loc (rgeos requires at least 2 locs for a line buffer)
+    # Find any ids with only one loc (rgeos requires at least 2 locs for a line)
     dropRows <- DT[, .(dropped = .N < 2), by = idField]
 
     # if(dropRows[(dropped), .N] > 0) {

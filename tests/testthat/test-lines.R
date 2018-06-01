@@ -13,11 +13,16 @@ test_that('DT is required', {
                'input DT required')
 })
 
-test_that('coordFields, idField, projection must be provided', {
+test_that('coordFields, idField, projection must be provided and proper format', {
   expect_error(BuildLines(DT = DT, idField = NULL,
                           coordFields = c('X', 'Y'),
                           projection = utm),
                'idField must be provided')
+
+  expect_error(BuildLines(DT = DT, idField = 'ID',
+                          coordFields = c('X', 'Y'),
+                          projection = NULL),
+               'projection must be provided')
 
   expect_error(BuildLines(DT = DT, idField = 'ID',
                           coordFields = NULL,
@@ -25,9 +30,9 @@ test_that('coordFields, idField, projection must be provided', {
                'coordFields must be provided')
 
   expect_error(BuildLines(DT = DT, idField = 'ID',
-                          coordFields = c('X', 'Y'),
-                          projection = NULL),
-               'projection must be provided')
+                          coordFields = c('ID', 'ID'),
+                          projection = utm),
+               'coordFields must be numeric')
 })
 
 
