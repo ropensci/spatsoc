@@ -16,7 +16,17 @@ BuildLines <-
       stop('input DT required')
     }
 
+    if (is.null(coordFields)) {
+      stop('coordFields must be provided')
+    }
 
+    if (is.null(idField)) {
+      stop('idField must be provided')
+    }
+
+    if (is.null(projection)) {
+      stop('projection must be provided')
+    }
 
     # projection missing
     # any fields missing from DT
