@@ -28,9 +28,6 @@ BuildLines <-
       stop('projection must be provided')
     }
 
-    # less than 2 warning (not in loop)
-    # TODO: one single warning with count of how many dropped
-
     if (length(coordFields) != 2) {
       stop('coordFields requires a vector of column names for coordinates X and Y')
     }
@@ -58,7 +55,7 @@ BuildLines <-
     dropRows <- DT[, .(dropped = .N < 2), by = byFields]
 
     if(dropRows[(dropped), .N] > 0) {
-      message('some rows dropped, cannot build lines with less than two points')}
+      warning('some rows dropped, cannot build lines with less than two points')}
 
     lst <- data.table:::split.data.table(DT[dropRows, on = byFields][!(dropped)],
                                   by = byFields)

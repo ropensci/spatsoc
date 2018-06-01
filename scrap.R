@@ -39,29 +39,25 @@ library(ggplot2)
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
+data.table::set
+
+D[, max(yday(datetime)) - min(yday(datetime))]
+
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 
 
 ## BUFFALO ========
-DT <- fread('input/Buffalo.csv')
+# DT <- fread('input/Buffalo.csv')
+DT <- fread('tests/testdata/buffalo.csv')
 DT[, idate := as.IDate(timestamp)]
-DT[, posix := as.POSIXct(timestamp)]
+DT[, posix := as.POSIXct(datetime)]
 DT[, ID := `individual-local-identifier`]
 DT[, X := `utm-easting`]
 DT[, Y := `utm-northing`]
-# DT[, .SD, .SDcols = cF]
-qplot(X, Y, data = DT, color = ID)
-GroupTimes(DT, 'posix', '10 minutes')
-DT[, uniqueN(posix)]
-DT <- DT[1:1000]
-GroupPts(DT, 100, time = 'timegroup', coordFields = c('X', 'Y'),
-         idField = 'individual-local-identifier')
-DT[, timegroup := NULL]
-
-fwrite(DT[, .(X, Y, ID, posix)], 'tests/testdata/buffalo.csv')
-
-## DAILY ====...
-
+# fwrite(DT[sample(.N, 2000), .(X, Y, ID, datetime = posix)],
+#        'tests/testdata/buffalo.csv')
+DT[, jul := yday(posix)]
 
 ## DAILY ========
 DT <- fread('input/Daily')

@@ -80,7 +80,6 @@ test_that('check that 60 minutes and 1 hour are the same result', {
   })
 })
 
-# warn if block isnt even
 test_that('warns if block is not even', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
 

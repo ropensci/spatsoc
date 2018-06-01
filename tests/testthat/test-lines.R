@@ -49,6 +49,7 @@ test_that('column names must exist in DT', {
 })
 
 test_that('returns same number of lines as unique IDs/byFields provided', {
+  # without byFields
   expect_equal(length(
     BuildLines(
       DT = DT,
@@ -57,21 +58,47 @@ test_that('returns same number of lines as unique IDs/byFields provided', {
       projection = utm
     )
   ),
-
   DT[, uniqueN(ID)])
+
+  # with byFields
   DT[, jul := data.table::yday(as.POSIXct(datetime))]
   byFields = c('ID', 'jul')
+  DT[, count := .N, by = byFields]
+  subDT <- DT[count >= 2]
 
   expect_equal(length(
     BuildLines(
-      DT = DT,
+      DT = subDT,
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = utm,
       byFields = 'jul'
     )
   ),
-  (DT[, .N, by = byFields][, sum(N >= 2)]))
+  nrow(unique(subDT[, .SD, .SDcols = byFields])))
+})
+
+
+test_that("build lines warns if < 2 locs per ID/byField", {
+  # for ID (one row's ID is "potato")
+  DT[1, ID := 'potato']
+
+  expect_warning(BuildLines(DT = DT, idField = 'ID',
+                            coordFields = c('X', 'Y'),
+                            projection = utm),
+                 'some rows dropped, cannot build lines with less than two points')
+
+
+  # for ID + byFields
+  byFields = c('ID', 'jul')
+  DT[, jul := data.table::yday(as.POSIXct(datetime))]
+  DT[, count := .N, by = byFields]
+  subDT <- DT[count < 2]
+
+  expect_warning(BuildLines(DT = subDT, idField = 'ID',
+                            coordFields = c('X', 'Y'),
+                            projection = utm, byFields = 'jul'),
+                 'some rows dropped, cannot build lines with less than two points')
 })
 
 # if group provided, it isn't a datetime format
