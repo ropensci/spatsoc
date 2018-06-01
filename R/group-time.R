@@ -43,13 +43,10 @@ GroupTimes <- function(DT = NULL,
     ))
   }
 
-  if(is.null(threshold)) {
+  if (is.null(threshold)) {
     warning('no threshold provided, using the time field directly to group')
     DT[, timegroup := .GRP, by = timeField][]
   } else {
-
-
-
     if ('POSIXct' %in% unlist(lapply(DT[, .(get(timeField))], class))) {
       dtm <-
         DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
@@ -84,7 +81,7 @@ GroupTimes <- function(DT = NULL,
       dtm[, timegroup := .GRP, by = .(hours, idate)]
       DT[, (colnames(dtm)) := dtm][]
 
-    } else if(grepl('minute', threshold)){
+    } else if (grepl('minute', threshold)) {
       nMins <- data.table::tstrsplit(threshold, ' ')[[1]]
       if (!is.integer(nMins)) {
         nMins <- as.integer(nMins)
@@ -105,7 +102,7 @@ GroupTimes <- function(DT = NULL,
           by = .(minutes, data.table::hour(itime), idate)]
       DT[, (colnames(dtm)) := dtm][]
 
-    } else if(grepl('day', threshold)){
+    } else if (grepl('day', threshold)) {
       nDays <- data.table::tstrsplit(threshold, ' ')[[1]]
       if (!is.integer(nDays)) {
         nDays <- as.integer(nDays)
@@ -137,5 +134,5 @@ GroupTimes <- function(DT = NULL,
     } else {
       stop("must provide threshold in units of hour, day, or minute")
     }
-  }
+    }
 }

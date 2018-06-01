@@ -47,9 +47,16 @@ BuildLines <-
     }
 
     if (!is.null(byFields)) {
+
       byFields <- c(idField, byFields)
     } else {
       byFields <- idField
+    }
+
+    if (sum(c('character', 'numeric', 'integer') %in%
+            unlist(lapply(DT[, .SD, .SDcols = c('ID', 'jul')], class))) == 2) {
+      stop('idField and/or byFields provided must be
+           character, numeric or integer type')
     }
 
     dropRows <- DT[, .(dropped = .N < 2), by = byFields]
