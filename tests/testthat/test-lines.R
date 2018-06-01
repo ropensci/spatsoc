@@ -48,6 +48,22 @@ test_that('column names must exist in DT', {
                'not present in input DT', fixed = FALSE)
 })
 
+test_that('returns same number of lines as unique IDs provided', {
+  expect_equal(length(
+    BuildLines(
+      DT = DT,
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    )
+  ),
+  DT[, uniqueN(ID)])
+})
+
+
+
+
+
 # BuildLines(
 #   DT = DT,
 #   idField = 'ID',
