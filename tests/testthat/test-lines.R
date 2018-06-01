@@ -31,9 +31,21 @@ test_that('coordFields, idField, projection must be provided', {
 })
 
 
+test_that('column names must exist in DT', {
+  expect_error(BuildLines(DT = DT, idField = 'ID',
+                          coordFields = c('potatoX', 'potatoY'),
+                          projection = utm),
+               'not present in input DT', fixed = FALSE)
 
+  expect_error(BuildLines(DT = DT, idField = 'potato',
+                          coordFields = c('X', 'Y'),
+                          projection = utm),
+               'not present in input DT', fixed = FALSE)
+})
 
-# expect_error(BuildLines(DT = DT, idField = 'ID',
-#                         coordFields = c('X', 'Y'),
-#                         projection = utm),
-#              'input DT required')
+# BuildLines(
+#   DT = DT,
+#   idField = 'ID',
+#   coordFields = c('X', 'Y'),
+#   projection = utm
+# )
