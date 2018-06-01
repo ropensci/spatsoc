@@ -48,7 +48,7 @@ test_that('column names must exist in DT', {
                'not present in input DT', fixed = FALSE)
 })
 
-test_that('returns same number of lines as unique IDs provided', {
+test_that('returns same number of lines as unique IDs/byFields provided', {
   expect_equal(length(
     BuildLines(
       DT = DT,
@@ -57,8 +57,25 @@ test_that('returns same number of lines as unique IDs provided', {
       projection = utm
     )
   ),
+
   DT[, uniqueN(ID)])
+  DT[, jul := data.table::yday(as.POSIXct(datetime))]
+  byFields = c('ID', 'jul')
+
+  expect_equal(length(
+    BuildLines(
+      DT = DT,
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm,
+      byFields = 'jul'
+    )
+  ),
+  (DT[, .N, by = byFields][, sum(N >= 2)]))
 })
+
+# if group provided, it isn't a datetime format
+# if group provided, same number of unique as above for ids
 
 
 
