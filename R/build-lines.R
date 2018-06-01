@@ -28,17 +28,23 @@ BuildLines <-
       stop('projection must be provided')
     }
 
-    # projection missing
-    # any fields missing from DT
     # less than 2 warning (not in loop)
     # TODO: one single warning with count of how many dropped
     # TODO: should this be flexible to time?
-    # set all default to NULL
 
+    if (length(coordFields) != 2) {
+      stop('coordFields requires a vector of column names for coordinates X and Y')
+    }
 
     if (any(!(c(idField, coordFields) %in% colnames(DT)))) {
-      stop('some fields provided are not present in data.table provided/colnames(DT)')
+      stop(paste0(
+        as.character(paste(setdiff(c(idField, coordFields), colnames(DT)),
+                           collapse = ', ')),
+        ' field(s) provided are not present in input DT'
+      ))
     }
+
+
     # Find any ids with only one loc (rgeos requires at least 2 locs for a line buffer)
     dropRows <- DT[, .(dropped = .N < 2), by = idField]
 
