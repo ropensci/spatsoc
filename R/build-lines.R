@@ -10,7 +10,8 @@ BuildLines <-
   function(DT = NULL,
            projection = NULL,
            coordFields = NULL,
-           idField = NULL) {
+           idField = NULL,
+           byFields = NULL) {
     if (is.null(DT)) {
       stop('input DT required')
     }
@@ -29,7 +30,6 @@ BuildLines <-
 
     # less than 2 warning (not in loop)
     # TODO: one single warning with count of how many dropped
-    # TODO: should this be flexible to time?
 
     if (length(coordFields) != 2) {
       stop('coordFields requires a vector of column names for coordinates X and Y')
@@ -49,18 +49,20 @@ BuildLines <-
       stop('coordFields must be numeric')
     }
 
-    # Find any ids with only one loc (rgeos requires at least 2 locs for a line)
-    dropRows <- DT[, .(dropped = .N < 2), by = idField]
+    if (!is.null(byFields)) {
+      byFields <- c(idField, byFields)
+    } else {
+      byFields <- idField
+    }
 
-    # if(dropRows[(dropped), .N] > 0) {
-    #   message('some rows dropped, cannot build lines with less than two points')}
+    dropRows <- DT[, .(dropped = .N < 2), by = byFields]
 
-    # Split up the data.table by collar ID into lists
-    lst <-
-      data.table:::split.data.table(DT[get(idField) %in% dropRows[!(dropped), get(idField)],
-                                       ..coordFields],
-                                    DT[get(idField) %in% dropRows[!(dropped), get(idField)],
-                                       .(get(idField))])
+    if(dropRows[(dropped), .N] > 0) {
+      message('some rows dropped, cannot build lines with less than two points')}
+
+    lst <- data.table:::split.data.table(DT[dropRows, on = byFields][!(dropped)],
+                                  by = byFields)
+
     if (length(lst) == 0) {
       return(NULL)
     } else {
