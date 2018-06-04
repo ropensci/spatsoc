@@ -51,7 +51,7 @@ GroupTimes <- function(DT = NULL,
       dtm <-
         DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
       data.table::setnames(dtm, c(timeField, 'idate', 'itime'))
-    } else if (length(timeField) &
+    } else if (length(timeField) == 2 &&
                all(c('IDate', 'ITime') %in%
                    unlist(lapply(DT[, .SD, .SDcols = timeField],
                                  class)))) {
@@ -123,7 +123,7 @@ GroupTimes <- function(DT = NULL,
             as.character(maxday)
           )
         }
-        dtm[, block := cut(
+        dtm[, timegroup := cut(
           data.table::yday(idate),
           breaks = seq.int(minday, maxday + nDays, by = nDays),
           right = FALSE,
