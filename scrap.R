@@ -45,36 +45,32 @@ D[, max(yday(datetime)) - min(yday(datetime))]
 
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
-## TYPE CHECK
-DT[, lapply(
-  .SD,
-  FUN = function(x) {
-    is.numeric(x) | is.character(x) | is.integer(x)
-  }
-), .SDcols = c('ID', 'datetime')]
-
-
-sum(c("character", 'numeric', 'integer') %in%
-      unlist(lapply(DT[, .SD, .SDcols = c('ID', 'jul')], class))) == length(c('ID', 'jul'))
-
-
 ## BUFFALO ========
 DT <- fread('input/Buffalo.csv')
 DT <- fread('tests/testdata/buffalo.csv')
-DT[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
-DT[, idate := as.IDate(timestamp)]
-DT[, datetime := as.POSIXct(timestamp)]
+# DT[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
+# DT[, idate := as.IDate(timestamp)]
+# DT[, datetime := as.POSIXct(timestamp)]
 DT[, datetime := as.POSIXct(datetime)]
-DT[, ID := `individual-local-identifier`]
-DT[, X := `utm-easting`]
-DT[, Y := `utm-northing`]
+# DT[, ID := `individual-local-identifier`]
+# DT[, X := `utm-easting`]
+# DT[, Y := `utm-northing`]
 # fwrite(DT[sample(.N, 2000), .(X, Y, ID, datetime)],
 #        'tests/testdata/buffalo.csv')
-DT[, jul := yday(posix)]
+# DT[, jul := yday(posix)]
 
 GroupTimes(DT, timeField = 'datetime', threshold = '10 minutes')
 GroupPts(DT, distance = 50, timeGroup = 'timegroup',
          coordFields = c('X', 'Y'), idField = 'ID')
+
+spl <- BuildLines(DT, projection = utm, coordFields = c('X', 'Y'),
+                  idField = 'ID')
+class(spl)
+sp::SpatialLines()
+GroupTimes(DT, timeField = 'datetime', threshold = '2 days')
+GroupLines(DT, bufferWidth = 50, timeGroup = 'datetime',
+           coordFields = c('X', 'Y'), idField = 'ID',
+           projection = utm)
 
 
 

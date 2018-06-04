@@ -1,4 +1,4 @@
-# Test Lines
+# Test Build Lines
 context('test BuildLines')
 library(spatsoc)
 
