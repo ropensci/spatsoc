@@ -32,10 +32,10 @@ BuildLines <-
       stop('coordFields requires a vector of column names for coordinates X and Y')
     }
 
-    if (any(!(c(idField, coordFields) %in% colnames(DT)))) {
+    if (any(!(c(idField, coordFields, byFields) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
-          c(idField, coordFields), colnames(DT)
+          c(idField, coordFields, byFields), colnames(DT)
         ),
         collapse = ', ')),
         ' field(s) provided are not present in input DT'
