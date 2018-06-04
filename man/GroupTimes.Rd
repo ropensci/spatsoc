@@ -4,7 +4,7 @@
 \alias{GroupTimes}
 \title{Group Times}
 \usage{
-GroupTimes(DT, timeField, threshold = NULL)
+GroupTimes(DT = NULL, timeField = NULL, threshold = NULL)
 }
 \arguments{
 \item{DT}{input locs/rows}

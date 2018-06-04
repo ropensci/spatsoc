@@ -4,8 +4,8 @@
 \alias{GroupPts}
 \title{Group Points By Buffer}
 \usage{
-GroupPts(DT, distance = NULL, timeGroup = NULL, groupFields = NULL,
-  coordFields = NULL, idField = NULL)
+GroupPts(DT = NULL, distance = NULL, timeGroup = NULL,
+  groupFields = NULL, coordFields = NULL, idField = NULL)
 }
 \arguments{
 \item{DT}{Input data.table with coordinate and id fields. If not provided, fields

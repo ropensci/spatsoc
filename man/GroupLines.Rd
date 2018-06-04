@@ -4,9 +4,9 @@
 \alias{GroupLines}
 \title{Groups From Spatial Lines}
 \usage{
-GroupLines(DT, bufferWidth = 0, timeField = NULL, groupFields = NULL,
-  projection, coordFields = c("EASTING", "NORTHING"), idField = "ID",
-  spLines = NULL)
+GroupLines(DT = NULL, bufferWidth = NULL, timeGroup = NULL,
+  groupFields = NULL, projection = NULL, coordFields = NULL,
+  idField = NULL, spLines = NULL)
 }
 \arguments{
 \item{DT}{Input data.table with coordinate and id fields. If not provided, fields
@@ -15,6 +15,8 @@ default to c('EASTING', 'NORTHING') and 'ID'.}
 \item{bufferWidth}{The width of the buffer around the geometry in the units
 of the projection. Optionally, exclude argument or supply 0 to compare
 SpatialLines intersection}
+
+\item{timeGroup}{(optional) time group field in the DT upon which the spatial grouping will be calculated.}
 
 \item{groupFields}{(optional) grouping field(s) to be combined with the timeGroup field, either character or list of strings.}
 
@@ -28,7 +30,7 @@ associated with each point.}
 
 \item{spLines}{Alternatively, provide a SpatialLines object created with the sp
 package. If a spLines object is provided, groups cannot be calculated by a
-timeField}
+timeGroup}
 }
 \value{
 Group by ID (by time) data.table
@@ -40,7 +42,7 @@ Groups From Spatial Lines
 data(locs)
 groups <- GroupLines(locs, 50)
 
-groups <- GroupLines(locs, 50, timeField = 'FIX_DATE',
+groups <- GroupLines(locs, 50, timeGroup = 'FIX_DATE',
         projection = '+proj=utm +zone=21 ellps=WGS84',
         idField = 'ID')
 

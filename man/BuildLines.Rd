@@ -4,8 +4,8 @@
 \alias{BuildLines}
 \title{Build Lines}
 \usage{
-BuildLines(DT, projection, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID")
+BuildLines(DT = NULL, projection = NULL, coordFields = NULL,
+  idField = NULL, byFields = NULL)
 }
 \arguments{
 \item{DT}{Input data.table with coordinate and id fields. If not provided, fields
