@@ -43,8 +43,12 @@ GroupLines <-
     print(which(!(c(idField, timeGroup, coordFields) %in% colnames(DT))))
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
-  if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
 
+
+  if ('group' %in% colnames(DT)) {
+    warning('`group` column will be overwritten by this function')
+    set(DT, j = 'group', value = NULL)
+  }
 
   if(is.null(timeGroup)){
     if(is.null(spLines)){
