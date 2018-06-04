@@ -72,7 +72,7 @@ GroupPts <- function(DT = NULL,
 
   if ('group' %in% colnames(DT)) {
     warning('`group` column will be overwritten by this function')
-    DT[, group := NULL]
+    set(DT, j = 'group', value = NULL)
   }
 
   if (is.null(timeGroup) & is.null(groupFields)) {
