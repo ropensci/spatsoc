@@ -1,5 +1,5 @@
 # Test Lines
-context('test Lines')
+context('test BuildLines')
 library(spatsoc)
 
 DT <- fread('../testdata/buffalo.csv')
@@ -120,12 +120,6 @@ test_that('byFields and idField provided are not correct format', {
                           projection = utm),
                'idField \\(and byFields when provided\\) must be', fixed = FALSE)
 })
-
-# if group provided, it isn't a datetime format
-
-
-
-
 
 # BuildLines(
 #   DT = DT,
