@@ -7,7 +7,7 @@
 #'   SpatialLines intersection
 #' @param spLines Alternatively, provide a SpatialLines object created with the sp
 #'   package. If a spLines object is provided, groups cannot be calculated by a
-#'   timeField
+#'   timeGroup
 #' @return Group by ID (by time) data.table
 #' @export
 #'
@@ -15,7 +15,7 @@
 #' data(locs)
 #' groups <- GroupLines(locs, 50)
 #'
-#' groups <- GroupLines(locs, 50, timeField = 'FIX_DATE',
+#' groups <- GroupLines(locs, 50, timeGroup = 'FIX_DATE',
 #'         projection = '+proj=utm +zone=21 ellps=WGS84',
 #'         idField = 'ID')
 #'
@@ -26,7 +26,7 @@
 GroupLines <-
   function(DT = NULL,
            bufferWidth = NULL,
-           timeField = NULL,
+           timeGroup = NULL,
            groupFields = NULL,
            projection = NULL,
            coordFields = NULL,
@@ -39,14 +39,14 @@ GroupLines <-
   # if dt not null, pass it to build
 
 
-  if(!is.null(DT) && any(!(c(idField, timeField, coordFields) %in% colnames(DT)))){
-    print(which(!(c(idField, timeField, coordFields) %in% colnames(DT))))
+  if(!is.null(DT) && any(!(c(idField, timeGroup, coordFields) %in% colnames(DT)))){
+    print(which(!(c(idField, timeGroup, coordFields) %in% colnames(DT))))
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
   if(!is.null(DT) & "group" %in% colnames(DT)) warning("`group` column will be overwritten by this function")
 
 
-  if(is.null(timeField)){
+  if(is.null(timeGroup)){
     if(is.null(spLines)){
       if(is.null(DT)) stop("must provide either spLines or DT")
       spLines <- BuildLines(DT, projection, coordFields, idField)
@@ -67,7 +67,7 @@ GroupLines <-
       stop("if providing a spLines, cannot provide a time field")
     }
 
-    if(is.null(groupFields)) byFields <- timeField else byFields <- c(groupFields, timeField)
+    if(is.null(groupFields)) byFields <- timeGroup else byFields <- c(groupFields, timeGroup)
 
     ovrDT <- DT[, {spLines <- BuildLines(.SD, projection, coordFields, idField)
           if(is.null(spLines)) {
