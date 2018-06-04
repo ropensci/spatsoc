@@ -46,19 +46,21 @@ BuildLines <-
       stop('coordFields must be numeric')
     }
 
-    if (!is.null(byFields)) {
-
-      byFields <- c(idField, byFields)
-    } else {
+    if (is.null(byFields)) {
       byFields <- idField
+    } else {
+      byFields <- c(idField, byFields)
     }
-
-    if (sum(c('character', 'numeric', 'integer') %in%
-            unlist(lapply(DT[, .SD, .SDcols = byFields], class))) ==
-        length(byFields)) {
+    if (any(!(DT[, lapply(
+      .SD,
+      FUN = function(x) {
+        is.numeric(x) | is.character(x) | is.integer(x)
+      }
+    ), .SDcols = byFields]))) {
       stop('idField (and byFields when provided) must be
            character, numeric or integer type')
     }
+
 
     dropRows <- DT[, .(dropped = .N < 2), by = byFields]
 

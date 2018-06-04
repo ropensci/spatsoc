@@ -106,17 +106,17 @@ test_that('byFields and idField provided are not correct format', {
   expect_error(BuildLines(DT = copyDT, idField = 'datetime',
                           coordFields = c('X', 'Y'),
                           projection = utm),
-               'idField (and byFields when provided) must be', fixed = FALSE)
+               'idField \\(and byFields when provided\\) must', fixed = FALSE)
 
   expect_error(BuildLines(DT = copyDT, idField = 'ID',
                           coordFields = c('X', 'Y'),
                           projection = utm, byFields = 'datetime'),
-               'idField (and byFields when provided) must be', fixed = FALSE)
+               'idField \\(and byFields when provided\\) must be', fixed = FALSE)
 
   expect_error(BuildLines(DT = copyDT, idField = 'ID',
                           coordFields = c('X', 'Y'),
                           projection = utm, byFields = 'X'),
-               'idField (and byFields when provided) must be', fixed = FALSE)
+               'idField \\(and byFields when provided\\) must be', fixed = FALSE)
 })
 
 # if group provided, it isn't a datetime format
