@@ -98,7 +98,7 @@ test_that("build lines warns if < 2 locs per ID/byField", {
   expect_warning(BuildLines(DT = subDT, idField = 'ID',
                             coordFields = c('X', 'Y'),
                             projection = utm, byFields = 'jul'),
-                 'some rows dropped, cannot build lines with less than two points')
+                 'some rows dropped, cannot build', fixed = FALSE)
 })
 
 test_that('byFields and idField provided are not correct format', {
@@ -113,9 +113,11 @@ test_that('byFields and idField provided are not correct format', {
                           projection = utm, byFields = 'datetime'),
                'idField \\(and byFields when provided\\) must be', fixed = FALSE)
 
+  # with factor IDs
+  copyDT <- copy(DT)[, ID := as.factor(ID)]
   expect_error(BuildLines(DT = copyDT, idField = 'ID',
                           coordFields = c('X', 'Y'),
-                          projection = utm, byFields = 'X'),
+                          projection = utm),
                'idField \\(and byFields when provided\\) must be', fixed = FALSE)
 })
 

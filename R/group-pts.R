@@ -63,12 +63,11 @@ GroupPts <- function(DT = NULL,
   }
 
   if (!is.null(timeGroup)) {
-    if (any(c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character') %in%
-            unlist(lapply(DT[, .(get(timeGroup))], class)))) {
-      warning('timeGroup provided is a date/time or character type,
-              did you use GroupTimes?')
+    if (any(DT[, class(get(timeGroup))] %in%
+            c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+      warning('timeGroup provided is a date/time or character type, did you use GroupTimes?')
     }
-  }
+    }
 
   if ('group' %in% colnames(DT)) {
     warning('`group` column will be overwritten by this function')
