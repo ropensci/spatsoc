@@ -10,10 +10,10 @@ DT[, datetime := as.POSIXct(datetime)]
 GroupTimes(DT, timeField = 'datetime', threshold = '14 days')
 
 test_that('one of DT or spLines is required, not both or neither', {
-  expect_error(GroupLines(DT = NULL, spLines = NULL),
+  expect_error(GroupLines(DT = NULL, bufferWidth = 10, spLines = NULL),
                'must provide either DT or spLines')
 
-  expect_error(GroupLines(DT = DT,
+  expect_error(GroupLines(DT = DT, bufferWidth = 10,
                           spLines = BuildLines(DT, projection = utm,
                                                coordFields = c('X', 'Y'),
                                                idField = 'ID')),
@@ -75,7 +75,7 @@ test_that('buffer width is correctly provided, or error', {
 
 
 test_that('spLines provied must be an S4 + spatial lines', {
-  expect_error(GroupLines(spLines = DT),
+  expect_error(GroupLines(spLines = DT, bufferWidth = 10),
                'spLines provided must be a SpatialLines object')
 })
 
