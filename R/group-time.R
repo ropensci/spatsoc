@@ -115,8 +115,7 @@ GroupTimes <- function(DT = NULL,
         maxday <- dtm[, max(data.table::yday(idate))]
         if (((maxday - minday) / nDays) %% 1 != 0) {
           warning(
-            'the minimum and maximum days in DT are not
-            evenly divisible by the provided block length',
+            'the minimum and maximum days in DT are not evenly divisible by the provided block length',
             '\n min day = ',
             as.character(minday),
             ', max day = ',
