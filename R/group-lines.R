@@ -90,18 +90,32 @@ GroupLines <-
     }
 
     if (is.null(timeGroup)) {
-      spLines <- BuildLines(DT, projection, coordFields, idField)
+      # spLines <- BuildLines(DT, projection, coordFields, idField)
+      tryCatch({
+        # spLines <- BuildLines(
+        #   DT,
+        #   projection = utm,
+        #   coordFields = c('X', 'Y'),
+        #   idField = 'ID')
+      },
+      warnings = {
+        drop <- DT[, .(dropped = .N < 2), by = .(jul, ID)]
+      }
+      , silent = TRUE)
+
       if (bufferWidth == 0) {
-        merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = F)
+        merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
       } else {
         merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
       }
       ovr <-
-        sp::over(spLines, sp::disaggregate(merged), returnList = T)
-      ovrDT <-
-        data.table::setnames(data.table::data.table(names(ovr),
-                                                    unlist(ovr)),
-                             c(idField, 'group'))
+        sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
+      ovrDT <- data.table::data.table(names(ovr),
+                                      unlist(ovr))
+
+      data.table::setnames(ovrDT,
+                           c(idField, 'group'))
+
       DT[ovrDT, group := group, on = idField][]
     } else {
       if (is.null(groupFields)) {
@@ -110,6 +124,9 @@ GroupLines <-
       else {
         byFields <- c(groupFields, timeGroup)
       }
+
+
+      # what gets returned when NULL??
 
       # suppressMessages()
       # from build lines
@@ -122,26 +139,31 @@ GroupLines <-
 
       ovrDT <-
         DT[, {
-          spLines <- BuildLines(.SD, projection, coordFields, idField)
-          if (is.null(spLines)) {
-            # message('some rows are dropped - unable to build lines with <3 locs')
+          tryCatch({
+            spLines <- BuildLines(DT, projection = utm,
+                              coordFields = c('X', 'Y'),
+                              idField = 'ID')
+          },
+          warnings = {
+            drop <- DT[, .(dropped = .N < 2), by = idField]
+          })
+
+          if (bufferWidth == 0) {
+            merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
           } else {
-            if (bufferWidth == 0) {
-              merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
-            } else {
-              merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
-            }
-            ovr <-
-              sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
-            data.table::setnames(data.table::data.table(names(ovr),
-                                                        unlist(ovr)),
-                                 c(idField, 'withinGroup'))
+            merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
           }
+          ovr <- sp::over(spLines, sp::disaggregate(merged),
+                          returnList = TRUE)
+          ovrDT <- data.table::data.table(names(ovr),
+                                          unlist(ovr))
+          data.table::setnames(ovrDT, c(idField, 'withinGroup'))
+          ovrDT <- ovrDT[drop, on = idField]
         }, by = byFields, .SDcols = c(coordFields, idField)]
 
       DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
-      DT[, group := .GRP, by = c(byFields, 'withinGroup')]
-      # [, withinGroup := NULL][] set instead
-      set(DT, j = 'withinGroup', value = NULL)[]
+      # DT[, group := .GRP, by = c(byFields, 'withinGroup')]
+      # # [, withinGroup := NULL][] set instead
+      # set(DT, j = 'withinGroup', value = NULL)[]
     }
   }
