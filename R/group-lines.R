@@ -32,6 +32,14 @@ GroupLines <-
            timeGroup = NULL,
            groupFields = NULL,
            spLines = NULL) {
+
+    if (is.null(bufferWidth)) {
+      warning('buffer width missing, using 0 by default')
+      bufferWidth <- 0
+    } else if (bufferWidth < 0) {
+      stop('cannot provide a negative bufferWidth')
+    }
+
     if (is.null(spLines) & !is.null(DT)) {
       if (is.null(projection)) {
         stop('projection must be provided when DT is')
@@ -60,27 +68,29 @@ GroupLines <-
         set(DT, j = 'group', value = NULL)
       }
     } else if (!is.null(spLines) & is.null(DT)) {
-        if(!('SpatialLines' %in% class(spLines) && isS4(spLines))) {
-          stop('spLines provided must be a SpatialLines object')
-        }
+      if (!('SpatialLines' %in% class(spLines) && isS4(spLines))) {
+        stop('spLines provided must be a SpatialLines object')
+      }
+
+      if (bufferWidth == 0) {
+        merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = F)
+      } else {
+        merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+      }
+      ovr <-
+        sp::over(spLines, sp::disaggregate(merged), returnList = T)
+      outDT <- data.table::data.table(names(ovr),
+                                      unlist(ovr))
+      return(data.table::setnames(outDT, c(idField, 'group')))
     } else if (!is.null(spLines) & !is.null(DT)) {
       stop('cannot provide both DT and spLines')
+
     } else {
       stop('must provide either DT or spLines')
     }
 
-    if (is.null(bufferWidth)) {
-      warning('buffer width missing, using 0 by default')
-      bufferWidth <- 0
-    } else if (bufferWidth < 0) {
-      stop('cannot provide a negative bufferWidth')
-    }
-
-
     if (is.null(timeGroup)) {
-      if (is.null(spLines)) {
-        spLines <- BuildLines(DT, projection, coordFields, idField)
-      }
+      spLines <- BuildLines(DT, projection, coordFields, idField)
       if (bufferWidth == 0) {
         merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = F)
       } else {
@@ -94,20 +104,27 @@ GroupLines <-
                              c(idField, 'group'))
       DT[ovrDT, group := group, on = idField][]
     } else {
-      if (!is.null(spLines)) {
-        stop("if providing a spLines, cannot provide a time field")
+      if (is.null(groupFields)) {
+        byFields <- timeGroup
+      }
+      else {
+        byFields <- c(groupFields, timeGroup)
       }
 
-      if (is.null(groupFields))
-        byFields <- timeGroup
-      else
-        byFields <- c(groupFields, timeGroup)
+      # suppressMessages()
+      # from build lines
+      #
+      # then create an output DT similar to
+      # build lines
+      # and print it out ??
+      # or at least summary
+      # or drop rows added as a field ***** YES YES YES
 
       ovrDT <-
         DT[, {
           spLines <- BuildLines(.SD, projection, coordFields, idField)
           if (is.null(spLines)) {
-            message('some rows are dropped - unable to build lines with <3 locs')
+            # message('some rows are dropped - unable to build lines with <3 locs')
           } else {
             if (bufferWidth == 0) {
               merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
@@ -123,6 +140,8 @@ GroupLines <-
         }, by = byFields, .SDcols = c(coordFields, idField)]
 
       DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
-      DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
+      DT[, group := .GRP, by = c(byFields, 'withinGroup')]
+      # [, withinGroup := NULL][] set instead
+      set(DT, j = 'withinGroup', value = NULL)[]
     }
   }

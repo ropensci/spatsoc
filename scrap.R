@@ -39,15 +39,11 @@ library(ggplot2)
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
-data.table::set
-
-D[, max(yday(datetime)) - min(yday(datetime))]
-
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 ## BUFFALO ========
 DT <- fread('input/Buffalo.csv')
 DT <- fread('tests/testdata/buffalo.csv')
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 # DT[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
 # DT[, idate := as.IDate(timestamp)]
 # DT[, datetime := as.POSIXct(timestamp)]
@@ -63,12 +59,25 @@ GroupTimes(DT, timeField = 'datetime', threshold = '10 minutes')
 GroupPts(DT, distance = 50, timeGroup = 'timegroup',
          coordFields = c('X', 'Y'), idField = 'ID')
 
+DT[, jul := yday(datetime)]
 spl <- BuildLines(DT, projection = utm, coordFields = c('X', 'Y'),
-                  idField = 'ID')
-class(spl)
-sp::SpatialLines()
+                  idField = 'ID', byFields = 'jul')
+GroupLines(spLines = spl, bufferWidth = 10)
+# if (bufferWidth == 0) {
+#   merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = F)
+# } else {
+merged <- rgeos::gBuffer(spl, width = 10, byid = FALSE)
+# }
+ovr <-
+  sp::over(spl, sp::disaggregate(merged), returnList = T)
+outDT <- data.table::data.table(names(ovr),
+                                unlist(ovr))
+data.table::setnames(outDT, c('ID', 'group'))
+
+DT
+
 GroupTimes(DT, timeField = 'datetime', threshold = '2 days')
-GroupLines(DT, bufferWidth = 50, timeGroup = 'datetime',
+GroupLines(DT, bufferWidth = 50, timeGroup = 'timegroup',
            coordFields = c('X', 'Y'), idField = 'ID',
            projection = utm)
 
