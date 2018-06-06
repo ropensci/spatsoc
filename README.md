@@ -2,31 +2,11 @@
 Title: Group animal location data by their spatial and temporal relationship
 
 
-
-
-## Style
-* group polys or group HRs?
-* can't use spatsoc, too similar to spatstat (what about `socspat`, `socialspatial` )
-* (later) review all variable, function etc names for conflicts and for clarity/brevity
-* do we prefer grp_lines or GroupLines
-
-* group_points
-* grp_pts
-* GroupPts
-* GroupPoints
-
-R source code
-
-* group-pts
-* group_pts
-
-**single return per function**
-
 ## Test data
 https://www.datarepository.movebank.org/handle/10255/move.619
 https://www.datarepository.movebank.org/handle/10255/move.609
 
-## To Read
+##
 ### Data.table awareness
 * https://stackoverflow.com/questions/28078640/adding-new-columns-to-a-data-table-by-reference-within-a-function-not-always-wor
 * https:/stackoverflow.com/questions/30601332/data-table-assignment-by-reference-within-function/

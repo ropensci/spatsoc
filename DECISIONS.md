@@ -4,6 +4,15 @@
 
 ## Decisions..
 
+* can't use spatsoc, too similar to spatstat (what about `socspat`, `socialspatial` )
+
+----
+
+* group polys or group HRs?
+
+
+----
+
 * alternative to returning a withinGroup where locs < 2 ??
 with withinGroup = NA
 
@@ -13,6 +22,7 @@ Column 2 of result for group 7 is type 'logical' but expecting type 'integer'. C
 
 * warn that date column provided has more than one uniqueN and not more than 1million (ha)/
 
+----
 
 * what are the incompatibilities between randomization + grouping methods
 
@@ -45,6 +55,10 @@ by separating byFields and idField, we emphasize the requirement of idField and 
 ----
 
 * for `GroupTimes`: return days, minutes, etc?
+
+----
+
+* (later) review all variable, function etc names for conflicts and for clarity/brevity
 
 
 ## History
