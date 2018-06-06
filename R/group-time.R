@@ -18,8 +18,8 @@
 #'
 #' @export
 GroupTimes <- function(DT = NULL,
-                       threshold = NULL,
-                       timeField = NULL) {
+                       timeField = NULL,
+                       threshold = NULL) {
   if (is.null(DT)) {
     stop('input DT required')
   }
@@ -49,7 +49,7 @@ GroupTimes <- function(DT = NULL,
   if (is.null(threshold)) {
     warning('no threshold provided, using the time field directly to group')
     DT[, timegroup := .GRP, by = timeField]
-    return(DT)
+    return(DT[])
   } else {
     if ('POSIXct' %in% unlist(lapply(DT[, .(get(timeField))], class))) {
       dtm <-
@@ -115,9 +115,9 @@ GroupTimes <- function(DT = NULL,
       if (nDays == 1) {
         dtm[, timegroup := .GRP,
             by = .(data.table::year(idate), data.table::yday(idate))]
-        DT[, (colnames(dtm)) := dtm][]
+        DT[, (colnames(dtm)) := dtm]
         # set(DT, j = colnames(dtm), value = dtm)
-        return(DT)
+        return(DT[])
       } else {
         minday <- dtm[, min(data.table::yday(idate))]
         maxday <- dtm[, max(data.table::yday(idate))]
@@ -130,15 +130,25 @@ GroupTimes <- function(DT = NULL,
             as.character(maxday)
           )
         }
-        dtm[, timegroup := cut(
+        dtm[, block := cut(
           data.table::yday(idate),
           breaks = seq.int(minday, maxday + nDays, by = nDays),
           right = FALSE,
           labels = FALSE
         )]
-        # return(DT[, (colnames(dtm)) := dtm][])
-        set(DT, j = colnames(dtm), value = dtm)
-        return(DT)
+
+        # if length year > 1
+        if(dtm[, uniqueN(data.table::year(idate))] > 1){
+          dtm[, timegroup := .GRP,
+              by = .(block, data.table::year(idate))]
+        } else {
+          dtm[, timegroup := .GRP,
+              by = block]
+        }
+
+        DT[, (colnames(dtm)) := dtm]
+        # set(DT, j = colnames(dtm), value = dtm)
+        return(DT[])
       }
     } else {
       stop("must provide threshold in units of hour, day, or minute")
