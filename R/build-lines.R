@@ -51,14 +51,11 @@ BuildLines <-
     } else {
       byFields <- c(idField, byFields)
     }
-    if (any(!(DT[, lapply(
-      .SD,
-      FUN = function(x) {
+    if (any(!(DT[, lapply(.SD, FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
     ), .SDcols = byFields]))) {
-      stop('idField (and byFields when provided) must be
-           character, numeric or integer type')
+      stop('idField (and byFields when provided) must be character, numeric or integer type')
     }
 
 

@@ -125,45 +125,39 @@ GroupLines <-
         byFields <- c(groupFields, timeGroup)
       }
 
-
-      # what gets returned when NULL??
-
-      # suppressMessages()
-      # from build lines
-      #
-      # then create an output DT similar to
-      # build lines
-      # and print it out ??
-      # or at least summary
-      # or drop rows added as a field ***** YES YES YES
-
       ovrDT <-
         DT[, {
-          tryCatch({
-            spLines <- BuildLines(DT, projection = utm,
-                              coordFields = c('X', 'Y'),
-                              idField = 'ID')
-          },
-          warnings = {
-            drop <- DT[, .(dropped = .N < 2), by = idField]
-          })
-
-          if (bufferWidth == 0) {
-            merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+          suppressWarnings(
+            spLines <- BuildLines(
+              .SD,
+              projection = projection,
+              coordFields = coordFields,
+              idField = idField
+            )
+          )
+          if (!is.null(spLines)) {
+            if (bufferWidth == 0) {
+              merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+            } else {
+              merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+            }
+            ovr <- sp::over(spLines, sp::disaggregate(merged),
+                            returnList = TRUE)
+            ovrDT <- data.table::data.table(names(ovr),
+                                            unlist(ovr))
+            data.table::setnames(ovrDT, c(idField, 'withinGroup'))
           } else {
-            merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+            data.table(ID = get(idField), withinGroup = -999L)
           }
-          ovr <- sp::over(spLines, sp::disaggregate(merged),
-                          returnList = TRUE)
-          ovrDT <- data.table::data.table(names(ovr),
-                                          unlist(ovr))
-          data.table::setnames(ovrDT, c(idField, 'withinGroup'))
-          ovrDT <- ovrDT[drop, on = idField]
         }, by = byFields, .SDcols = c(coordFields, idField)]
-
-      DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
-      # DT[, group := .GRP, by = c(byFields, 'withinGroup')]
-      # # [, withinGroup := NULL][] set instead
-      # set(DT, j = 'withinGroup', value = NULL)[]
+      DT[ovrDT, on = c(idField, byFields)][]
+      DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)][]
+      DT[, group := .GRP, by = c(byFields, 'withinGroup')]
+      DT[withinGroup == -999L, group := NA]
+      set(DT, j = 'withinGroup', value = NULL)
+      if (DT[is.na(group), .N] > 0) {
+        warning('some rows were dropped, cannot build a line with < 2 points. in this case, group set to NA.')
+      }
+      return(DT)
     }
   }
