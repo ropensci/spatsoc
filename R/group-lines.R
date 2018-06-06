@@ -89,33 +89,36 @@ GroupLines <-
       stop('must provide either DT or spLines')
     }
     if (is.null(timeGroup)) {
-      # spLines <- BuildLines(DT, projection, coordFields, idField)
-      tryCatch({
-        # spLines <- BuildLines(
-        #   DT,
-        #   projection = utm,
-        #   coordFields = c('X', 'Y'),
-        #   idField = 'ID')
-      },
-      warnings = {
-        drop <- DT[, .(dropped = .N < 2), by = .(jul, ID)]
-      }
-      , silent = TRUE)
-
-      if (bufferWidth == 0) {
-        merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+      suppressWarnings(
+        spLines <- BuildLines(
+          DT,
+          projection = projection,
+          coordFields = coordFields,
+          idField = idField
+        )
+      )
+      if (!is.null(spLines)) {
+        if (bufferWidth == 0) {
+          merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+        } else {
+          merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+        }
+        ovr <- sp::over(spLines, sp::disaggregate(merged),
+                        returnList = TRUE)
+        ovrDT <- data.table::data.table(names(ovr),
+                                        unlist(ovr))
       } else {
-        merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+        ovrDT <- data.table(ID = get(idField), group = NA)
       }
-      ovr <-
-        sp::over(spLines, sp::disaggregate(merged), returnList = TRUE)
-      ovrDT <- data.table::data.table(names(ovr),
-                                      unlist(ovr))
 
-      data.table::setnames(ovrDT,
-                           c(idField, 'group'))
+      data.table::setnames(ovrDT, c(idField, 'group'))
 
-      DT[ovrDT, group := group, on = idField][]
+      DT[ovrDT, group := group, on = idField]
+      # set(DT, j = 'withinGroup', value = NULL)
+      if (DT[is.na(group), .N] > 0) {
+        warning('some rows were dropped, cannot build a line with < 2 points. in this case, group set to NA.')
+      }
+      return(DT[])
     } else {
       if (is.null(groupFields)) {
         byFields <- timeGroup
@@ -149,7 +152,7 @@ GroupLines <-
             data.table(ID = get(idField), withinGroup = -999L)
           }
         }, by = byFields, .SDcols = c(coordFields, idField)]
-      DT[ovrDT, on = c(idField, byFields)]
+
       DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
       DT[, group := .GRP, by = c(byFields, 'withinGroup')]
       DT[withinGroup == -999L, group := NA]
@@ -157,6 +160,6 @@ GroupLines <-
       if (DT[is.na(group), .N] > 0) {
         warning('some rows were dropped, cannot build a line with < 2 points. in this case, group set to NA.')
       }
-      return(DT)
+      return(DT[])
     }
   }
