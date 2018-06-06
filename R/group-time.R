@@ -35,14 +35,15 @@ GroupTimes <- function(DT = NULL,
   checkCols <- c('hours', 'minutes', 'block', 'timegroup')
 
   if (any(checkCols %in% colnames(DT))) {
-    set(DT, j = intersect(colnames(DT), checkCols), value = NULL)
-    # DT[, (intersect(colnames(DT), checkCols)) :=  NULL]
     warning(paste0(
       paste(as.character(intersect(
         colnames(DT), checkCols
       )), collapse = ', '),
       ' columns found in input DT and will be overwritten by this function'
     ))
+    set(DT, j = intersect(colnames(DT), checkCols), value = NULL)
+    # DT[, (intersect(colnames(DT), checkCols)) :=  NULL]
+
   }
 
   if (is.null(threshold)) {
