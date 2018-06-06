@@ -136,3 +136,11 @@ test_that('only one column added to the result DT', {
                ncol(GroupPts(copyDT, distance = 10, idField = 'ID',
                              coordFields = c('X', 'Y'), timeGroup = 'timegroup')))
 })
+
+test_that('group column is added to result', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '5 minutes')
+  expect_true('group' %in%
+                colnames(GroupPts(copyDT, distance = 10, idField = 'ID',
+                         coordFields = c('X', 'Y'), timeGroup = 'timegroup')))
+})
