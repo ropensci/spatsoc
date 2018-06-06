@@ -106,7 +106,7 @@ test_that('group column succesfully detected', {
   copyDT <- copy(DT)[, group := 1]
   expect_warning(GroupPts(copyDT,distance = 10, idField = 'ID',
                           coordFields = c('X', 'Y')),
-                 '`group` column will be overwritten')
+                 'group column will be overwritten')
 })
 
 

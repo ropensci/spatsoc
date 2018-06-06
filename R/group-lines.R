@@ -27,8 +27,8 @@ GroupLines <-
   function(DT = NULL,
            bufferWidth = NULL,
            projection = NULL,
-           coordFields = NULL,
            idField = NULL,
+           coordFields = NULL,
            timeGroup = NULL,
            groupFields = NULL,
            spLines = NULL) {
@@ -81,14 +81,13 @@ GroupLines <-
         sp::over(spLines, sp::disaggregate(merged), returnList = T)
       outDT <- data.table::data.table(names(ovr),
                                       unlist(ovr))
-      return(data.table::setnames(outDT, c(idField, 'group')))
+      data.table::setnames(outDT, c(idField, 'group'))
+      return(outDT)
     } else if (!is.null(spLines) & !is.null(DT)) {
       stop('cannot provide both DT and spLines')
-
     } else {
       stop('must provide either DT or spLines')
     }
-
     if (is.null(timeGroup)) {
       # spLines <- BuildLines(DT, projection, coordFields, idField)
       tryCatch({
@@ -150,8 +149,8 @@ GroupLines <-
             data.table(ID = get(idField), withinGroup = -999L)
           }
         }, by = byFields, .SDcols = c(coordFields, idField)]
-      DT[ovrDT, on = c(idField, byFields)][]
-      DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)][]
+      DT[ovrDT, on = c(idField, byFields)]
+      DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
       DT[, group := .GRP, by = c(byFields, 'withinGroup')]
       DT[withinGroup == -999L, group := NA]
       set(DT, j = 'withinGroup', value = NULL)

@@ -18,8 +18,8 @@
 #'
 #' @export
 GroupTimes <- function(DT = NULL,
-                       timeField = NULL,
-                       threshold = NULL) {
+                       threshold = NULL,
+                       timeField = NULL) {
   if (is.null(DT)) {
     stop('input DT required')
   }

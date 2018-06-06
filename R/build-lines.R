@@ -9,8 +9,8 @@
 BuildLines <-
   function(DT = NULL,
            projection = NULL,
-           coordFields = NULL,
            idField = NULL,
+           coordFields = NULL,
            byFields = NULL) {
     if (is.null(DT)) {
       stop('input DT required')
@@ -58,11 +58,11 @@ BuildLines <-
       stop('idField (and byFields when provided) must be character, numeric or integer type')
     }
 
-
     dropRows <- DT[, .(dropped = .N < 2), by = byFields]
 
-    if(dropRows[(dropped), .N] > 0) {
-      warning('some rows dropped, cannot build lines with less than two points')}
+    if (dropRows[(dropped), .N] > 0) {
+      warning('some rows dropped, cannot build lines with less than two points')
+    }
 
     lst <- data.table:::split.data.table(DT[dropRows, on = byFields][!(dropped)],
                                   by = byFields)
@@ -78,6 +78,6 @@ BuildLines <-
         names(lst)[[i]])),
         proj4string = sp::CRS(projection))
       })
-      do.call(sp::rbind.SpatialLines, l)
+      return(do.call(sp::rbind.SpatialLines, l))
     }
   }
