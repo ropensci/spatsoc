@@ -22,10 +22,10 @@
 #' GroupPts(locs, distance = 50, timeGroup = 'timegroup', groupFields = 'season')
 GroupPts <- function(DT = NULL,
                      distance = NULL,
-                     timeGroup = NULL,
-                     groupFields = NULL,
+                     idField = NULL,
                      coordFields = NULL,
-                     idField = NULL) {
+                     timeGroup = NULL,
+                     groupFields = NULL) {
   if (is.null(DT)) {
     stop('input DT required')
   }
@@ -70,7 +70,7 @@ GroupPts <- function(DT = NULL,
     }
 
   if ('group' %in% colnames(DT)) {
-    warning('`group` column will be overwritten by this function')
+    warning('group column will be overwritten by this function')
     set(DT, j = 'group', value = NULL)
   }
 
@@ -96,6 +96,8 @@ GroupPts <- function(DT = NULL,
     },
     by = byFields, .SDcols = c(coordFields, idField)]
     DT[, group := .GRP,
-       by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
+       by = c(byFields, 'withinGroup')]
+    set(DT, j = 'withinGroup', value = NULL)
+    return(DT)
   }
 }
