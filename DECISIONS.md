@@ -4,6 +4,13 @@
 
 ## Decisions..
 
+* alternative to returning a withinGroup where locs < 2 ??
+with withinGroup = NA
+
+Column 2 of result for group 7 is type 'logical' but expecting type 'integer'. Column types must be consistent for each group.
+
+----
+
 * warn that date column provided has more than one uniqueN and not more than 1million (ha)/
 
 
@@ -29,8 +36,11 @@ by separating byFields and idField, we emphasize the requirement of idField and 
 
 ----
 
-* timegroup as returned variable?
+* timegroup as returned variable's name?
 
+----
+
+* check if polar coordinates are provided?
 
 ----
 

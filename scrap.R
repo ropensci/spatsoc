@@ -45,8 +45,8 @@ Dt <- fread('input/Buffalo.csv')
 Dt <- fread('tests/testdata/buffalo.csv')
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 # Dt[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
-Dt[, idate := as.IDate(timestamp)]
-Dt[, datetime := as.POSIXct(timestamp)]
+# Dt[, idate := as.IDate(timestamp)]
+# Dt[, datetime := as.POSIXct(timestamp)]
 Dt[, datetime := as.POSIXct(datetime)]
 # Dt[, ID := `individual-local-identifier`]
 # Dt[, X := `utm-easting`]
@@ -58,7 +58,8 @@ Dt[, jul := yday(datetime)]
 GroupTimes(Dt, timeField = 'datetime', threshold = '10 minutes')
 GroupPts(Dt, distance = 50, timeGroup = 'timegroup',
          coordFields = c('X', 'Y'), idField = 'ID')
-
+spatsoc::CalcCentroids(Dt, c('X', 'Y'), 'group')
+Dt[, uniqueN(.SD, by = c('ID', 'timegroup'))]
 GroupTimes(Dt, timeField = 'datetime', threshold = '2 days')
 GroupLines(Dt[1:100], bufferWidth = 50, timeGroup = 'timegroup',
            coordFields = c('X', 'Y'), idField = 'ID',
