@@ -100,9 +100,14 @@ test_that('group column is added to result', {
 
   expect_true('group' %in%
                 colnames(
-                  GroupLines(DT = copyDT, bufferWidth = 10,
-                             timeGroup = 'timegroup', idField = 'ID',
-                             coordFields = c('X', 'Y'), projection = utm)
+                  GroupLines(
+                    DT = copyDT,
+                    bufferWidth = 10,
+                    timeGroup = 'timegroup',
+                    idField = 'ID',
+                    coordFields = c('X', 'Y'),
+                    projection = utm
+                  )
                 ))
 })
 
@@ -125,6 +130,18 @@ test_that('no rows are added to the result DT', {
                                timeGroup = 'timegroup', idField = 'ID',
                                coordFields = c('X', 'Y'), projection = utm)))
 })
+
+
+test_that('withinGroup is not returned to the user', {
+  copyDT <- copy(DT)
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '14 days')
+
+  expect_false('withinGroup' %in% colnames(
+    GroupLines(DT = copyDT, bufferWidth = 10,
+                               timeGroup = 'timegroup', idField = 'ID',
+                               coordFields = c('X', 'Y'), projection = utm)))
+})
+
 
 # GroupLines(
 #   DT = DT,
