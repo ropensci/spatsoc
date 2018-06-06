@@ -35,12 +35,15 @@ GroupTimes <- function(DT = NULL,
   checkCols <- c('hours', 'minutes', 'block', 'timegroup')
 
   if (any(checkCols %in% colnames(DT))) {
+    # set(DT, j = intersect(colnames(DT), checkCols), value = NULL)
+    DT[, (intersect(colnames(DT), checkCols)) :=  NULL]
     warning(paste0(
       paste(as.character(intersect(
         colnames(DT), checkCols
       )), collapse = ', '),
       ' columns found in input DT and will be overwritten by this function'
     ))
+
   }
 
   if (is.null(threshold)) {
@@ -58,11 +61,10 @@ GroupTimes <- function(DT = NULL,
       dtm <- DT[, .SD, .SDcols = timeField]
       data.table::setnames(dtm, c('idate', 'itime'))
     } else {
-      stop('time field provided must be either
-           1 column: POSIXct or 2 columns: IDate and ITime')
+      stop('time field provided must be either 1 column: POSIXct or 2 columns: IDate and ITime')
     }
 
-    if (grepl('hour', threshold) &
+    if (grepl('hour', threshold) &&
         data.table::tstrsplit(threshold, ' ')[[1]] == 1L) {
       threshold <- '60 minutes'
     }
@@ -80,6 +82,7 @@ GroupTimes <- function(DT = NULL,
 
       dtm[, timegroup := .GRP, by = .(hours, idate)]
       DT[, (colnames(dtm)) := dtm][]
+      # set(DT, j = colnames(dtm), value = dtm)
 
     } else if (grepl('minute', threshold)) {
       nMins <- data.table::tstrsplit(threshold, ' ')[[1]]
@@ -101,6 +104,7 @@ GroupTimes <- function(DT = NULL,
       dtm[, timegroup := .GRP,
           by = .(minutes, data.table::hour(itime), idate)]
       DT[, (colnames(dtm)) := dtm][]
+      # set(DT, j = colnames(dtm), value = dtm)
 
     } else if (grepl('day', threshold)) {
       nDays <- data.table::tstrsplit(threshold, ' ')[[1]]
@@ -110,6 +114,7 @@ GroupTimes <- function(DT = NULL,
       if (nDays == 1) {
         dtm[, timegroup := data.table::yday(idate)]
         DT[, (colnames(dtm)) := dtm][]
+        # set(DT, j = colnames(dtm), value = dtm)
       } else {
         minday <- dtm[, min(data.table::yday(idate))]
         maxday <- dtm[, max(data.table::yday(idate))]
@@ -128,7 +133,8 @@ GroupTimes <- function(DT = NULL,
           right = FALSE,
           labels = FALSE
         )]
-        DT[, (colnames(dtm)) := dtm][]
+        return(DT[, (colnames(dtm)) := dtm][])
+        # set(DT, j = colnames(dtm), value = dtm)
       }
     } else {
       stop("must provide threshold in units of hour, day, or minute")
