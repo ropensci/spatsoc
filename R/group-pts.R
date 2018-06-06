@@ -98,6 +98,6 @@ GroupPts <- function(DT = NULL,
     DT[, group := .GRP,
        by = c(byFields, 'withinGroup')]
     set(DT, j = 'withinGroup', value = NULL)
-    return(DT)
+    return(DT[])
   }
 }

@@ -82,9 +82,9 @@ GroupTimes <- function(DT = NULL,
           hours := nHours * ((data.table::hour(itime) %/% nHours) + 1L)]
 
       dtm[, timegroup := .GRP, by = .(hours, idate)]
-      # DT[, (colnames(dtm)) := dtm][]
-      set(DT, j = colnames(dtm), value = dtm)
-      return(DT)
+      DT[, (colnames(dtm)) := dtm]
+      # set(DT, j = colnames(dtm), value = dtm)
+      return(DT[])
     } else if (grepl('minute', threshold)) {
       nMins <- data.table::tstrsplit(threshold, ' ')[[1]]
       if (!is.integer(nMins)) {
@@ -104,9 +104,9 @@ GroupTimes <- function(DT = NULL,
           minutes := nMins * ((data.table::minute(itime) %/% nMins) + 1L)]
       dtm[, timegroup := .GRP,
           by = .(minutes, data.table::hour(itime), idate)]
-      # DT[, (colnames(dtm)) := dtm][]
+      DT[, (colnames(dtm)) := dtm]
       set(DT, j = colnames(dtm), value = dtm)
-      return(DT)
+      return(DT[])
     } else if (grepl('day', threshold)) {
       nDays <- data.table::tstrsplit(threshold, ' ')[[1]]
       if (!is.integer(nDays)) {
