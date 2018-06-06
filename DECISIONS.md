@@ -4,15 +4,37 @@
 
 ## Decisions..
 
+* warn that date column provided has more than one uniqueN and not more than 1million (ha)/
+
+
+* what are the incompatibilities between randomization + grouping methods
+
+----
+
+* SearchTrees, adehabitatHR missing. Is Nearest a necessary function in the initial package publishing?
+
+----
+
 * for `BuildLines`: is byFields really just id + whatever.. is this one argument then?
 
 by separating byFields and idField, we emphasize the requirement of idField and extra byFields 
 
 ----
 
+* do we want to return vertices strictly for kernel?
+
+----
+
 * use @importFrom pkg fun to decrease cost of repeated function calls?
 
+----
 
+* timegroup as returned variable?
+
+
+----
+
+* for `GroupTimes`: return days, minutes, etc?
 
 
 ## History
@@ -38,3 +60,21 @@ by separating byFields and idField, we emphasize the requirement of idField and 
 * should we only return one or few columns so that the functions can integrate in dt[, grp := ...]
 
 **this is a given now, columns added directly**
+
+----
+
+* if ID is character vector, paste?? (as in ID, Year ---> AN1_2007)
+
+**provide byFields/groupFields**
+
+----
+
+* create example data in sp form for lines, points and multipolygons
+
+**not necessary**
+
+----
+
+* must check if provided columns are found in input data, otherwise non descript errors like type closure (since date col similar to date function)
+
+**columns checks + tests written**
