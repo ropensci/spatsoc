@@ -4,8 +4,8 @@
 \alias{GroupPts}
 \title{Group Points By Buffer}
 \usage{
-GroupPts(DT = NULL, distance = NULL, timeGroup = NULL,
-  groupFields = NULL, coordFields = NULL, idField = NULL)
+GroupPts(DT = NULL, distance = NULL, idField = NULL, coordFields = NULL,
+  timeGroup = NULL, groupFields = NULL)
 }
 \arguments{
 \item{DT}{Input data.table with coordinate and id fields. If not provided, fields
@@ -13,15 +13,15 @@ default to c('EASTING', 'NORTHING') and 'ID'.}
 
 \item{distance}{The threshold distance for grouping points. The distance must be in the units of the projection.}
 
-\item{timeGroup}{(optional) time group field in the DT upon which the spatial grouping will be calculated.}
-
-\item{groupFields}{(optional) grouping field(s) to be combined with the timeGroup field, either character or list of strings.}
+\item{idField}{Character string indicating the column name for the ID
+associated with each point.}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
 
-\item{idField}{Character string indicating the column name for the ID
-associated with each point.}
+\item{timeGroup}{(optional) time group field in the DT upon which the spatial grouping will be calculated.}
+
+\item{groupFields}{(optional) grouping field(s) to be combined with the timeGroup field, either character or list of strings.}
 }
 \value{
 Input DT with column 'group' added.

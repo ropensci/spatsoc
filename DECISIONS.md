@@ -20,6 +20,13 @@ Column 2 of result for group 7 is type 'logical' but expecting type 'integer'. C
 
 ----
 
+
+* use set(DT, j = colnames(dtm), value = dtm) instead of DT[, (colnames(dtm)) := dtm][]
+
+https://github.com/Rdatatable/data.table/issues/2788
+
+----
+
 * warn that date column provided has more than one uniqueN and not more than 1million (ha)/
 
 ----

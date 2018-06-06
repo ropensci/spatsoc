@@ -5,7 +5,7 @@
 \title{Groups From Spatial Lines}
 \usage{
 GroupLines(DT = NULL, bufferWidth = NULL, projection = NULL,
-  coordFields = NULL, idField = NULL, timeGroup = NULL,
+  idField = NULL, coordFields = NULL, timeGroup = NULL,
   groupFields = NULL, spLines = NULL)
 }
 \arguments{
@@ -18,11 +18,11 @@ SpatialLines intersection}
 
 \item{projection}{Character string for input to sp::CRS() and proj4string().}
 
-\item{coordFields}{Character vector indicating the X coordinate and Y
-coordinate columns. eg: c('EASTING', 'NORTHING')}
-
 \item{idField}{Character string indicating the column name for the ID
 associated with each point.}
+
+\item{coordFields}{Character vector indicating the X coordinate and Y
+coordinate columns. eg: c('EASTING', 'NORTHING')}
 
 \item{timeGroup}{(optional) time group field in the DT upon which the spatial grouping will be calculated.}
 

@@ -4,8 +4,8 @@
 \alias{BuildLines}
 \title{Build Lines}
 \usage{
-BuildLines(DT = NULL, projection = NULL, coordFields = NULL,
-  idField = NULL, byFields = NULL)
+BuildLines(DT = NULL, projection = NULL, idField = NULL,
+  coordFields = NULL, byFields = NULL)
 }
 \arguments{
 \item{DT}{Input data.table with coordinate and id fields. If not provided, fields
@@ -13,11 +13,11 @@ default to c('EASTING', 'NORTHING') and 'ID'.}
 
 \item{projection}{Character string for input to sp::CRS() and proj4string().}
 
-\item{coordFields}{Character vector indicating the X coordinate and Y
-coordinate columns. eg: c('EASTING', 'NORTHING')}
-
 \item{idField}{Character string indicating the column name for the ID
 associated with each point.}
+
+\item{coordFields}{Character vector indicating the X coordinate and Y
+coordinate columns. eg: c('EASTING', 'NORTHING')}
 }
 \value{
 SpatialLines for each ID provided

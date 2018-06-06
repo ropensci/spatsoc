@@ -54,6 +54,8 @@ Dt[, datetime := as.POSIXct(datetime)]
 # fwrite(Dt[sample(.N, 2000), .(X, Y, ID, datetime)],
 #        'tests/testdata/buffalo.csv')
 Dt[, jul := yday(datetime)]
+Dt[, yr := year(datetime)]
+
 
 GroupTimes(Dt, timeField = 'datetime', threshold = '10 minutes')
 GroupPts(Dt, distance = 50, timeGroup = 'timegroup',
