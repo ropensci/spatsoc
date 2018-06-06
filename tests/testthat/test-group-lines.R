@@ -116,6 +116,16 @@ test_that('only one column added to the result DT', {
                                coordFields = c('X', 'Y'), projection = utm)))
 })
 
+test_that('no rows are added to the result DT', {
+  copyDT <- copy(DT)
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '14 days')
+
+  expect_equal(nrow(copyDT),
+               nrow(GroupLines(DT = copyDT, bufferWidth = 10,
+                               timeGroup = 'timegroup', idField = 'ID',
+                               coordFields = c('X', 'Y'), projection = utm)))
+})
+
 # GroupLines(
 #   DT = DT,
 #   bufferWidth = 10,
