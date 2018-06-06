@@ -41,82 +41,92 @@ l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
 ## BUFFALO ========
-DT <- fread('input/Buffalo.csv')
-DT <- fread('tests/testdata/buffalo.csv')
+Dt <- fread('input/Buffalo.csv')
+Dt <- fread('tests/testdata/buffalo.csv')
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-# DT[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
-# DT[, idate := as.IDate(timestamp)]
-# DT[, datetime := as.POSIXct(timestamp)]
-DT[, datetime := as.POSIXct(datetime)]
-# DT[, ID := `individual-local-identifier`]
-# DT[, X := `utm-easting`]
-# DT[, Y := `utm-northing`]
-# fwrite(DT[sample(.N, 2000), .(X, Y, ID, datetime)],
+# Dt[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
+Dt[, idate := as.IDate(timestamp)]
+Dt[, datetime := as.POSIXct(timestamp)]
+Dt[, datetime := as.POSIXct(datetime)]
+# Dt[, ID := `individual-local-identifier`]
+# Dt[, X := `utm-easting`]
+# Dt[, Y := `utm-northing`]
+# fwrite(Dt[sample(.N, 2000), .(X, Y, ID, datetime)],
 #        'tests/testdata/buffalo.csv')
-# DT[, jul := yday(posix)]
+Dt[, jul := yday(datetime)]
 
-GroupTimes(DT, timeField = 'datetime', threshold = '10 minutes')
-GroupPts(DT, distance = 50, timeGroup = 'timegroup',
+GroupTimes(Dt, timeField = 'datetime', threshold = '10 minutes')
+GroupPts(Dt, distance = 50, timeGroup = 'timegroup',
          coordFields = c('X', 'Y'), idField = 'ID')
 
-DT[, jul := yday(datetime)]
-spl <- BuildLines(DT, projection = utm, coordFields = c('X', 'Y'),
-                  idField = 'ID', byFields = 'jul')
-GroupLines(spLines = spl, bufferWidth = 10)
+GroupTimes(Dt, timeField = 'datetime', threshold = '2 days')
+GroupLines(Dt[1:100], bufferWidth = 50, timeGroup = 'timegroup',
+           coordFields = c('X', 'Y'), idField = 'ID',
+           projection = utm)[]
+names(Dt)
+Dt
+# FIGURE OUT THE TRY CATCH
+tryCatch({
+lns <- BuildLines(Dt, projection = utm, coordFields = c('X', 'Y'),
+           idField = 'ID', byFields = 'jul')
+},
+warnings = {drop <- Dt[, .(dropped = .N < 2, V1 = paste(.BY, collapse= '.')), by = .(ID, jul)]}
+, silent = TRUE)
+rm(lns)
+
+Dt[, length(data.table:::split.data.table(.SD, by = 'timegroup')),
+   by = ID]
+
+
+
 # if (bufferWidth == 0) {
-#   merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = F)
+merged <- rgeos::gBuffer(lns, width = 0.0001, byid = F)
 # } else {
-merged <- rgeos::gBuffer(spl, width = 10, byid = FALSE)
+#   merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
 # }
 ovr <-
-  sp::over(spl, sp::disaggregate(merged), returnList = T)
-outDT <- data.table::data.table(names(ovr),
+  sp::over(lns, sp::disaggregate(merged), returnList = TRUE)
+ovrDt <- data.table::data.table(names(ovr),
                                 unlist(ovr))
-data.table::setnames(outDT, c('ID', 'group'))
 
-DT
-
-GroupTimes(DT, timeField = 'datetime', threshold = '2 days')
-GroupLines(DT, bufferWidth = 50, timeGroup = 'timegroup',
-           coordFields = c('X', 'Y'), idField = 'ID',
-           projection = utm)
-
+ovrDt <- ovrDt[drop, on = c('V1')]
+data.table::setnames(ovrDt, 'V2', 'withinGroup')
 
 
 ## DAILY ========
-DT <- fread('input/Daily')
-DT[, idate := as.IDate(timestamp)]
-DT[, posix := as.POSIXct(timestamp)]
-DT[, grp := tstrsplit(`individual-local-identifier`, '_')[[1]]]
-DT[, X := `location-long`]
-DT[, Y := `location-lat`]
+Dt <- fread('input/Daily')
+Dt[, idate := as.IDate(timestamp)]
+Dt[, posix := as.POSIXct(timestamp)]
+Dt[, grp := tstrsplit(`individual-local-identifier`, '_')[[1]]]
+Dt[, X := `location-long`]
+Dt[, Y := `location-lat`]
 
-DT <- DT[grp == 'ngelleehon']
+Dt <- Dt[grp == 'ngelleehon']
 
-GroupTimes(DT, 'posix', '10 minutes')
-DT[, uniqueN(posix)]
-GroupPts(DT, 100, time = 'timegroup', coordFields = c('X', 'Y'),
+GroupTimes(Dt, 'posix', '10 minutes')
+Dt[, uniqueN(posix)]
+GroupPts(Dt, 100, time = 'timegroup', coordFields = c('X', 'Y'),
          idField = 'individual-local-identifier')
 ## DAILY ====...
 
 ############# SF SF SF SF ################
 library(sf)
-DT <- l[EASTING < 644180.4 & NORTHING < 5297469]
-DT <- l
+Dt <- l[EASTING < 644180.4 & NORTHING < 5297469]
+Dt <- l
 ## SF
 # pts <- st_multipoint(as.matrix(
-#   DT[, .(EASTING, NORTHING)],
+#   Dt[, .(EASTING, NORTHING)],
 #   ncol = 2
 #   ))
 # system.time({
-pts <- st_as_sf(DT, coords = c('EASTING', 'NORTHING'))
+pts <- st_as_sf(Dt, coords = c('EASTING', 'NORTHING'))
 
-st_sf(DT[, (coords)])
+st_sf(Dt[, (coords)])
 st_crs(pts) <- utm
 bufs <- st_buffer(pts, 50)
 un <- st_cast(st_union(bufs), 'POLYGON')
 int <- st_intersects(pts, un)
-OUT <- data.table::data.table(DT$ID,
+OUT <- data.table::data.table(Dt$ID,
                               unlist(int))
 # })
 
@@ -129,7 +139,7 @@ GroupPtsIGRAPH(l, 100, timeField = 'timegroup', projection = utm)
 l
 
 coordFields <- c('EASTING', 'NORTHING')
-st_sf(DT[, coordFields, with=FALSE])
+st_sf(Dt[, coordFields, with=FALSE])
 
 l[, withinGroup := {
   pts <- sf::st_as_sf(.SD, coords = coordFields)
@@ -181,10 +191,10 @@ st_geometry(bufs)
 point(pts)
 ## SP
 system.time({
-spPts <- BuildPts(DT, utm)
+spPts <- BuildPts(Dt, utm)
 buffers <- rgeos::gBuffer(spPts, width = 50, byid = FALSE)
 ovr <- sp::over(spPts, sp::disaggregate(buffers))
-OUT <- data.table::data.table(DT$ID,
+OUT <- data.table::data.table(Dt$ID,
                        unlist(ovr))
 })
 
@@ -194,7 +204,7 @@ data.table::setnames(
   c(idField, 'withinGroup'))
 
 
-DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
-DT[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
+Dt[ovrDt, withinGroup := withinGroup, on = c(idField, byFields)]
+Dt[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
 ################# SF SFS FSF SF SF ########################
 
