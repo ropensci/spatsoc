@@ -121,6 +121,27 @@ test_that('byFields and idField provided are not correct format', {
                'idField \\(and byFields when provided\\) must be', fixed = FALSE)
 })
 
+test_that('BuildPts returns a SpatialLines', {
+  expect_true('SpatialLines' %in% class(
+    BuildLines(
+      DT = DT,
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    )
+  ))
+
+  expect_true(isS4(
+    BuildLines(
+      DT = DT,
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    )
+  ))
+})
+
+
 # BuildLines(
 #   DT = DT,
 #   idField = 'ID',
