@@ -27,7 +27,7 @@ https://github.com/Rdatatable/data.table/issues/2788
 
 ----
 
-* warn that date column provided has more than one uniqueN and not more than 1million (ha)/
+* warn that date column provided has more than one uniqueN and not more than 1million (ha)/ warn if timegroup not provided, GroupTimes/slow
 
 ----
 

@@ -112,9 +112,7 @@ GroupLines <-
       }
 
       data.table::setnames(ovrDT, c(idField, 'group'))
-
       DT[ovrDT, group := group, on = idField]
-      # set(DT, j = 'withinGroup', value = NULL)
       if (DT[is.na(group), .N] > 0) {
         warning('some rows were dropped, cannot build a line with < 2 points. in this case, group set to NA.')
       }

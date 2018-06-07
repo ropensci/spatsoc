@@ -140,7 +140,7 @@ test_that('timegroup column and fields are detected if already present', {
 
   expect_warning(
     GroupTimes(copyDT, timeField = 'datetime', threshold = '10 minutes'),
-    'hours, timegroup ',
+    'minutes, timegroup ',
     fixed = FALSE
   )
 
@@ -154,6 +154,12 @@ test_that('timegroup column and fields are detected if already present', {
   )
 })
 
+test_that('warns if no threshold provided', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
 
-
-  # warning('no threshold provided, using the time field directly to group')
+  expect_warning(
+    GroupTimes(copyDT, timeField = 'datetime'),
+    'no threshold provided',
+    fixed = FALSE
+  )
+})
