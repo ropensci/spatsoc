@@ -26,11 +26,11 @@
 #'
 #' groups <- GroupPolys(spPolys = locsPolys)
 GroupPolys <-
-  function(area = NULL,
-           DT = NULL,
+  function(DT = NULL,
            projection = NULL,
            hrType = NULL,
            hrParams = NULL,
+           area = NULL,
            coordFields = NULL,
            idField = NULL,
            byFields = NULL,
@@ -40,8 +40,11 @@ GroupPolys <-
       stop('must provide TRUE or FALSE for area parameter')
     }
 
-
-    if (is.null(DT) && !is.null(spPolys)) {
+    if (is.null(DT) && is.null(spPolys)) {
+    stop('must provide either DT or spLines')
+    } else if (!is.null(DT) && !is.null(spPolys)) {
+    stop('cannot provide both DT and spLines')
+    } else if (is.null(DT) && !is.null(spPolys)) {
       unionPolys <- rgeos::gUnaryUnion(spPolys)
       ovr <- sp::over(spPolys, sp::disaggregate(unionPolys))
       data.table::setnames(data.table::data.table(names(ovr),
@@ -52,8 +55,15 @@ GroupPolys <-
         stop('some fields provided are not present in data.table provided/colnames(DT)')
       }
       spPolys <-
-        BuildHRs(hrType, hrParams, DT, projection, coordFields, idField)
-    }
+        BuildHRs(DT = DT,
+                 projection = projection,
+                 hrType = hrType,
+                 hrParams = hrParams,
+                 coordFields = coordFields,
+                 idField = idField,
+                 byFields = byFields,
+                 spPts = NULL)
+      }
 
     if (area) {
       inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
@@ -73,10 +83,6 @@ GroupPolys <-
          ' ',
          type.convert = TRUE)][]
       # this is susceptible to error if ID field provided has spaces
-    } else if (is.null(DT) && is.null(spPolys)) {
-      stop('must provide either DT or spLines')
-    } else (!is.null(DT) && !is.null(spPolys)) {
-      stop('cannot provide both DT and spLines')
     }
 
 

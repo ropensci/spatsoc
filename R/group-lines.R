@@ -40,7 +40,11 @@ GroupLines <-
       stop('cannot provide a negative bufferWidth')
     }
 
-    if (is.null(spLines) & !is.null(DT)) {
+    if (!is.null(spLines) && !is.null(DT)) {
+      stop('cannot provide both DT and spLines')
+    } else if (is.null(spLines) && is.null(DT)) {
+      stop('must provide either DT or spLines')
+    } else if (is.null(spLines) & !is.null(DT)) {
       if (is.null(projection)) {
         stop('projection must be provided when DT is')
       }
@@ -83,10 +87,6 @@ GroupLines <-
                                       unlist(ovr))
       data.table::setnames(outDT, c(idField, 'group'))
       return(outDT)
-    } else if (!is.null(spLines) && !is.null(DT)) {
-      stop('cannot provide both DT and spLines')
-    } else {
-      stop('must provide either DT or spLines')
     }
     if (is.null(timeGroup)) {
       suppressWarnings(

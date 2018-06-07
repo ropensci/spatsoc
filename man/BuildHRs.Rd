@@ -5,7 +5,7 @@
 \title{Build Home Ranges for Individuals}
 \usage{
 BuildHRs(DT = NULL, projection = NULL, hrType = NULL, hrParams = NULL,
-  coordFields = NULL, idField = NULL, spPts = NULL)
+  coordFields = NULL, idField = NULL, byFields = NULL, spPts = NULL)
 }
 \arguments{
 \item{DT}{Input data.table with coordinate and id fields. If not provided, fields

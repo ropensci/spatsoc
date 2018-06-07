@@ -4,20 +4,20 @@
 \alias{GroupPolys}
 \title{Group Overlapping Polygons}
 \usage{
-GroupPolys(area = FALSE, hrType = "mcp", hrParams = NULL, DT = NULL,
-  projection = NULL, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID", spPolys = NULL)
+GroupPolys(area = NULL, DT = NULL, projection = NULL, hrType = NULL,
+  hrParams = NULL, coordFields = NULL, idField = NULL, byFields = NULL,
+  spPolys = NULL)
 }
 \arguments{
 \item{area}{boolean indicating either returning area of overlap
 of polygons or simply group}
 
-\item{hrType}{Type of HR estimation, defaults to 'mcp'}
-
 \item{DT}{Input data.table with coordinate and id fields. If not provided, fields
 default to c('EASTING', 'NORTHING') and 'ID'.}
 
 \item{projection}{Character string for input to sp::CRS() and proj4string().}
+
+\item{hrType}{Type of HR estimation, defaults to 'mcp'}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}
