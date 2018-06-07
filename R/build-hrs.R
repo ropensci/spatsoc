@@ -12,6 +12,7 @@ BuildHRs <- function(DT = NULL,
                      hrParams = NULL,
                      coordFields = NULL,
                      idField = NULL,
+                     byFields = NULL,
                      spPts = NULL) {
   if (is.null(DT) && is.null(spPts)) {
     stop('input DT or spPts required')
@@ -37,16 +38,33 @@ BuildHRs <- function(DT = NULL,
     stop('coordFields requires a vector of column names for coordinates X and Y')
   }
 
-  if (any(!(c(idField, coordFields, byFields) %in% colnames(DT)))) {
+  if (any(!(c(idField, coordFields) %in% colnames(DT)))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(idField, coordFields, byFields), colnames(DT)
+        c(idField, coordFields), colnames(DT)
       ),
       collapse = ', ')),
       ' field(s) provided are not present in input DT'
     ))
   }
 
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coordFields]))) {
+    stop('coordFields must be numeric')
+  }
+
+
+  if (is.null(byFields)) {
+    byFields <- idField
+  } else {
+    byFields <- c(idField, byFields)
+  }
+
+  if (any(!(DT[, lapply(.SD, FUN = function(x) {
+    is.numeric(x) | is.character(x) | is.integer(x)
+  }
+  ), .SDcols = byFields]))) {
+    stop('idField (and byFields when provided) must be character, numeric or integer type')
+  }
 
 
 

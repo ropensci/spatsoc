@@ -11,37 +11,68 @@ test_that('DT is required', {
                'input DT or spPts required')
 })
 
-# test_that('coordFields, idField, projection must be provided and proper format', {
-#   expect_error(BuildHRs(DT = DT, idField = NULL,
-#                           coordFields = c('X', 'Y'),
-#                           projection = utm),
-#                'idField must be provided')
-#
-#   expect_error(BuildHRs(DT = DT, idField = 'ID',
-#                           coordFields = c('X', 'Y'),
-#                           projection = NULL),
-#                'projection must be provided')
-#
-#   expect_error(BuildHRs(DT = DT, idField = 'ID',
-#                           coordFields = NULL,
-#                           projection = utm),
-#                'coordFields must be provided')
-#
-#   expect_error(BuildHRs(DT = DT, idField = 'ID',
-#                           coordFields = c('ID', 'ID'),
-#                           projection = utm),
-#                'coordFields must be numeric')
-# })
-#
-#
-# test_that('column names must exist in DT', {
-#   expect_error(BuildHRs(DT = DT, idField = 'ID',
-#                           coordFields = c('potatoX', 'potatoY'),
-#                           projection = utm),
-#                'not present in input DT', fixed = FALSE)
-#
-#   expect_error(BuildHRs(DT = DT, idField = 'potato',
-#                           coordFields = c('X', 'Y'),
-#                           projection = utm),
-#                'not present in input DT', fixed = FALSE)
-# })
+
+
+test_that('coordFields, idField, projection must be provided and proper format', {
+  expect_error(BuildHRs(DT = DT,
+                        projection = utm,
+                        hrType = 'mcp',
+                        coordFields = c('X', 'Y'),
+                        idField = NULL),
+               'idField must be provided')
+
+  expect_error(BuildHRs(DT = DT,
+                        projection = NULL,
+                        hrType = 'mcp',
+                        coordFields = c('X', 'Y'),
+                        idField = 'ID'),
+               'projection must be provided')
+
+  expect_error(BuildHRs(DT = DT,
+                        projection = utm,
+                        hrType = 'mcp',
+                        coordFields = NULL,
+                        idField = 'ID'),
+               'coordFields must be provided')
+
+  expect_error(BuildHRs(DT = DT,
+                        projection = utm,
+                        hrType = 'mcp',
+                        coordFields = 'X',
+                        idField = 'ID'),
+               'coordFields requires a vector of', fixed = FALSE)
+
+  copyDT <- copy(DT)
+  copyDT[, X := as.character(X)]
+  expect_error(BuildHRs(DT = copyDT,
+                        projection = utm,
+                        hrType = 'mcp',
+                        coordFields = c('X', 'Y'),
+                        idField = 'ID'),
+               'coordFields must be numeric')
+
+  expect_error(BuildHRs(DT = DT,
+                        projection = utm,
+                        hrType = NULL,
+                        coordFields = c('X', 'Y'),
+                        idField = 'ID'),
+               'hrType must be provided')
+
+})
+
+
+test_that('column names must exist in DT', {
+  expect_error(BuildHRs(DT = DT,
+                        projection = utm,
+                        hrType = 'mcp',
+                        coordFields = c('X', 'Y'),
+                        idField = 'potato'),
+               'not present in input DT', fixed = FALSE)
+
+  expect_error(BuildHRs(DT = DT,
+                        projection = utm,
+                        hrType = 'mcp',
+                        coordFields = c('potatoX', 'potatoY'),
+                        idField = 'ID'),
+               'not present in input DT', fixed = FALSE)
+})
