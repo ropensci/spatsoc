@@ -6,9 +6,12 @@ DT <- fread('../testdata/buffalo.csv')
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 
-test_that('DT is required', {
+test_that('DT or spPts are required but not both', {
   expect_error(BuildHRs(DT = NULL, spPts = NULL),
                'input DT or spPts required')
+
+  expect_error(BuildHRs(DT = DT, spPts = 10),
+               'cannot provide both DT and spPts')
 })
 
 
