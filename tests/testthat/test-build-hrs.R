@@ -76,3 +76,27 @@ test_that('column names must exist in DT', {
                         idField = 'ID'),
                'not present in input DT', fixed = FALSE)
 })
+
+test_that('hrParams returns error if params do not match function params', {
+  expect_error(
+    BuildHRs(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95, potato = TRUE),
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    ),
+    'hrParams provided do not match function parameters', fixed = FALSE)
+
+  expect_error(
+    BuildHRs(
+      DT = DT,
+      projection = utm,
+      hrType = 'kernel',
+      hrParams = list(grid = 60, potato = TRUE),
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    ),
+    'hrParams provided do not match function parameters', fixed = FALSE)
+})

@@ -75,9 +75,20 @@ BuildHRs <- function(DT = NULL,
   set(DT, j = 'bys', value = NULL)
   hrParams$xy <- spPts
   if (hrType == 'mcp') {
-    return(do.call(adehabitatHR::mcp, hrParams))
+    functionParams <- formals(adehabitatHR::mcp)
+
+    if (all(names(hrParams) %in% names(functionParams))) {
+      return(do.call(adehabitatHR::mcp, hrParams))
+    } else {
+      stop('hrParams provided do not match function parameters, see ?adehabitatHR::mcp')
+    }
   } else if (hrType == 'kernel') {
-    return(adehabitatHR::getverticeshr(do.call(adehabitatHR::kernelUD, hrParams)))
+    functionParams <- formals(adehabitatHR::kernelUD)
+    if (all(names(hrParams) %in% names(functionParams))) {
+      return(adehabitatHR::getverticeshr(do.call(adehabitatHR::kernelUD, hrParams)))
+    } else {
+      stop('hrParams provided do not match function parameters, see ?adehabitatHR::kernelUD')
+    }
   }
 }
 
