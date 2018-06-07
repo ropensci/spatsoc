@@ -109,3 +109,27 @@ by separating byFields and idField, we emphasize the requirement of idField and 
 * must check if provided columns are found in input data, otherwise non descript errors like type closure (since date col similar to date function)
 
 **columns checks + tests written**
+
+
+----
+
+* does it chain?
+
+**yes**
+
+```r
+GroupTimes(Dt, timeField = 'datetime', threshold = '3 hour')
+distThreshold <- 500
+GroupPts(Dt, distance = distThreshold, timeGroup = 'timegroup',
+         coordFields = c('X', 'Y'), idField = 'ID')
+Dt[, nByGroup := .N, by = group]
+Dt[nByGroup > 1, maxDist := max(dist(cbind(X,Y))), by = group]
+
+Dt[maxDist > distThreshold]
+dstMtrx <- as.matrix(Dt[maxDist > distThreshold, dist(cbind(X,Y))])
+igraph::clusters(igraph::graph_from_adjacency_matrix(dstMtrx < distThreshold))$membership
+
+ggplot(Dt[maxDist > distThreshold]) +
+  geom_point(aes(X, Y, color = ID, shape = factor(group))) +
+  facet_wrap(~yr)
+```
