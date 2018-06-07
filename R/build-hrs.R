@@ -13,6 +13,43 @@ BuildHRs <- function(DT = NULL,
                      coordFields = NULL,
                      idField = NULL,
                      spPts = NULL) {
+  if (is.null(DT) && is.null(spPts)) {
+    stop('input DT or spPts required')
+  }
+
+  if (is.null(coordFields)) {
+    stop('coordFields must be provided')
+  }
+
+  if (is.null(idField)) {
+    stop('idField must be provided')
+  }
+
+  if (is.null(projection)) {
+    stop('projection must be provided')
+  }
+
+  if (is.null(hrType)) {
+    stop('hrType must be provided')
+  }
+
+  if (length(coordFields) != 2) {
+    stop('coordFields requires a vector of column names for coordinates X and Y')
+  }
+
+  if (any(!(c(idField, coordFields, byFields) %in% colnames(DT)))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(idField, coordFields, byFields), colnames(DT)
+      ),
+      collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+
+
+
   if(is.null(spPts)){
     if(is.null(DT)){
       stop("must provide either spPts or DT")
