@@ -66,23 +66,18 @@ BuildHRs <- function(DT = NULL,
     stop('idField (and byFields when provided) must be character, numeric or integer type')
   }
 
-
-
-  if(is.null(spPts)){
-    if(is.null(DT)){
-      stop("must provide either spPts or DT")
-    }
-    if(any(!(c(idField, coordFields) %in% colnames(DT)))){
-      stop('some fields provided are not present in data.table provided/colnames(DT)')
-    }
-    spPts <- BuildPts(DT, projection, coordFields, idField)
+  DT[, bys := paste0(.BY, collapse = '-'), by = byFields]
+  if (is.null(spPts)) {
+    spPts <- sp::SpatialPointsDataFrame(DT[, ..coordFields],
+                                        proj4string = sp::CRS(projection),
+                                        data = DT[, .(id = bys)])
   }
+  set(DT, j = 'bys', value = NULL)
   hrParams$xy <- spPts
-  if(hrType == 'mcp'){
-    do.call(adehabitatHR::mcp, hrParams)
-  } else if(hrType == 'kernel') {
-    adehabitatHR::getverticeshr(
-      do.call(adehabitatHR::kernelUD, hrParams))
+  if (hrType == 'mcp') {
+    return(do.call(adehabitatHR::mcp, hrParams))
+  } else if (hrType == 'kernel') {
+    return(adehabitatHR::getverticeshr(do.call(adehabitatHR::kernelUD, hrParams)))
   }
 }
 
