@@ -15,6 +15,10 @@
 
 * drop BuildPts
 
+or Drop all Build?? 
+BuildHRs just calls adehabitat.. 
+BuildPts just calls spSpatialPtsDF.. 
+
 
 ----
 

@@ -95,7 +95,8 @@ BuildHRs <- function(DT = NULL,
   } else if (hrType == 'kernel') {
     functionParams <- formals(adehabitatHR::kernelUD)
     if (all(names(hrParams) %in% names(functionParams))) {
-      return(adehabitatHR::getverticeshr(do.call(adehabitatHR::kernelUD, hrParams)))
+      return(adehabitatHR::getverticeshr(
+        do.call(adehabitatHR::kernelUD, hrParams)))
     } else {
       stop(
         'hrParams provided do not match function parameters, see ?adehabitatHR::kernelUD'
