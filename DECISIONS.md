@@ -13,6 +13,20 @@
 
 ----
 
+* whats returned by GroupHRs/Polys differs from others, when we include area as an option
+
+before, we just add the group col (for lines/pts) and even if that's repeated throughout a line, no big deal
+
+when we deal with proportional, area overlap we imply a matrix data structure
+
+this will be the first and only? time a user has to do:
+
+`results <- GroupPolys(area = TRUE)`
+
+to capture results
+
+----
+
 * should GroupTimes(threshold = 1 month) ??
 
 this would just be 
@@ -23,10 +37,16 @@ easy, but worth it?
 
 ----
 
+* groupFields or byFields?
+
+
+----
+
 * for GroupPolys, is area the first arg?
 
 it's the only absolutely required, but that doesn't follow suit with previous functions being DT first
 
+also is it proportion instead?
 ----
 
 
