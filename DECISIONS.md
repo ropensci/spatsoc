@@ -20,6 +20,17 @@ Column 2 of result for group 7 is type 'logical' but expecting type 'integer'. C
 
 ----
 
+* handle niche/weird time thresholds
+
+if 90 minutes, group by 30 + hour?
+
+1 day? 24 hour rounded to next day? WEIRD CASES
+
+if 24 hours, change to one day?... but nearest day
+
+
+----
+
 
 * use set(DT, j = colnames(dtm), value = dtm) instead of DT[, (colnames(dtm)) := dtm][]
 
@@ -28,6 +39,9 @@ https://github.com/Rdatatable/data.table/issues/2788
 ----
 
 * warn that date column provided has more than one uniqueN and not more than 1million (ha)/ warn if timegroup not provided, GroupTimes/slow
+
+low: 1?
+high: uniqueN <= half nrows 
 
 ----
 
