@@ -124,3 +124,36 @@ test_that('timegroup column + time fields are added to result', {
                                  threshold = '10 minutes')
                     )))
 })
+
+test_that('timegroup column and fields are detected if already present', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '2 days')
+
+  expect_warning(
+    GroupTimes(copyDT, timeField = 'datetime', threshold = '1 day'),
+    'block, timegroup ',
+    fixed = FALSE
+  )
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '10 minutes')
+
+  expect_warning(
+    GroupTimes(copyDT, timeField = 'datetime', threshold = '10 minutes'),
+    'hours, timegroup ',
+    fixed = FALSE
+  )
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '2 hours')
+
+  expect_warning(
+    GroupTimes(copyDT, timeField = 'datetime', threshold = '2 hours'),
+    'hours, timegroup ',
+    fixed = FALSE
+  )
+})
+
+
+
+  # warning('no threshold provided, using the time field directly to group')
