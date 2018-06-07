@@ -4,18 +4,18 @@
 \alias{BuildHRs}
 \title{Build Home Ranges for Individuals}
 \usage{
-BuildHRs(hrType = "mcp", hrParams = NULL, DT = NULL, projection = NULL,
-  coordFields = c("EASTING", "NORTHING"), idField = "ID", spPts = NULL)
+BuildHRs(DT = NULL, projection = NULL, hrType = NULL, hrParams = NULL,
+  coordFields = NULL, idField = NULL, spPts = NULL)
 }
 \arguments{
-\item{hrType}{Type of HR estimation either 'mcp' or 'kernel'}
-
-\item{hrParams}{List of named arguments to be passed to adehabitatHR functions as determined by hrType}
-
 \item{DT}{Input data.table with coordinate and id fields. If not provided, fields
 default to c('EASTING', 'NORTHING') and 'ID'.}
 
 \item{projection}{Character string for input to sp::CRS() and proj4string().}
+
+\item{hrType}{Type of HR estimation either 'mcp' or 'kernel'}
+
+\item{hrParams}{List of named arguments to be passed to adehabitatHR functions as determined by hrType}
 
 \item{coordFields}{Character vector indicating the X coordinate and Y
 coordinate columns. eg: c('EASTING', 'NORTHING')}

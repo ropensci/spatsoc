@@ -6,11 +6,13 @@
 #'
 #' @return Home range polygons for each ID
 #' @export
-BuildHRs <- function(hrType = 'mcp', hrParams = NULL,
-                     DT = NULL, projection = NULL,
-                     coordFields = c('EASTING', 'NORTHING'), idField = 'ID',
-                     spPts = NULL){
-
+BuildHRs <- function(DT = NULL,
+                     projection = NULL,
+                     hrType = NULL,
+                     hrParams = NULL,
+                     coordFields = NULL,
+                     idField = NULL,
+                     spPts = NULL) {
   if(is.null(spPts)){
     if(is.null(DT)){
       stop("must provide either spPts or DT")
