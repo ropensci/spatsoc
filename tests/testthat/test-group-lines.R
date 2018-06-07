@@ -71,7 +71,7 @@ test_that('buffer width is correctly provided, or error', {
 })
 
 
-test_that('spLines provied must be an S4 + spatial lines', {
+test_that('spLines provided must be an S4 + spatial lines', {
   expect_error(GroupLines(spLines = DT, bufferWidth = 10),
                'spLines provided must be a SpatialLines object')
 })
@@ -141,6 +141,9 @@ test_that('withinGroup is not returned to the user', {
                                timeGroup = 'timegroup', idField = 'ID',
                                coordFields = c('X', 'Y'), projection = utm)))
 })
+
+
+
 
 
 # GroupLines(

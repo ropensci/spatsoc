@@ -95,3 +95,32 @@ test_that('warns if block is not even', {
                  'the minimum and maximum days in DT', fixed = FALSE)
 
 })
+
+
+test_that('timegroup column + time fields are added to result', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  expect_true('timegroup' %in%
+                colnames(
+                  GroupTimes(copyDT, timeField = 'datetime', threshold = '1 day')
+                ))
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  expect_true(all(c('timegroup', 'block') %in%
+                colnames(
+                  GroupTimes(copyDT, timeField = 'datetime', threshold = '2 days')
+                )))
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  expect_true(all(c('timegroup', 'hours') %in%
+                    colnames(
+                      GroupTimes(copyDT, timeField = 'datetime',
+                                 threshold = '2 hours')
+                    )))
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  expect_true(all(c('timegroup', 'minutes') %in%
+                    colnames(
+                      GroupTimes(copyDT, timeField = 'datetime',
+                                 threshold = '10 minutes')
+                    )))
+})
