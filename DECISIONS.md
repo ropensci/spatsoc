@@ -13,6 +13,17 @@
 
 ----
 
+* drop BuildPts
+
+
+----
+
+* anything other than MCP and kernel? for BuildHRs
+
+
+
+----
+
 * alternative to returning a withinGroup where locs < 2 ??
 with withinGroup = NA
 

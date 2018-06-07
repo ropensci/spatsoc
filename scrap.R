@@ -56,45 +56,24 @@ Dt[, datetime := as.POSIXct(datetime)]
 Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
 
-
-GroupTimes(Dt, timeField = 'datetime', threshold = '10 minutes')
-GroupPts(Dt, distance = 50, timeGroup = 'timegroup',
-         coordFields = c('X', 'Y'), idField = 'ID')
-spatsoc::CalcCentroids(Dt, c('X', 'Y'), 'group')
-Dt[, uniqueN(.SD, by = c('ID', 'timegroup'))]
-GroupTimes(Dt, timeField = 'datetime', threshold = '2 days')
-GroupLines(Dt[1:100], bufferWidth = 50, timeGroup = 'timegroup',
-           coordFields = c('X', 'Y'), idField = 'ID',
-           projection = utm)[]
-names(Dt)
+byF <- c('ID', 'yr')
+Dt[, bys := paste0(.BY, collapse='-'), by = byF]
 Dt
-# FIGURE OUT THE TRY CATCH
-tryCatch({
-lns <- BuildLines(Dt, projection = utm, coordFields = c('X', 'Y'),
-           idField = 'ID', byFields = 'jul')
-},
-warnings = {drop <- Dt[, .(dropped = .N < 2, V1 = paste(.BY, collapse= '.')), by = .(ID, jul)]}
-, silent = TRUE)
-rm(lns)
+library(ggplot2)
+BuildHRs(DT = Dt,
+         projection = utm,
+         hrType = 'mcp',
+         hrParams = list(percent = 95),
+         coordFields = c('X', 'Y'),
+         idField = 'ID',
+         byFields = 'yr',
+         spPts = NULL)
 
-Dt[, length(data.table:::split.data.table(.SD, by = 'timegroup')),
-   by = ID]
+## CHECK IF PARAMS MATCH FUNCTION
+hrparams <- list(percent = 95)
+funcparams <- formals(adehabitatHR::mcp)
 
-
-
-# if (bufferWidth == 0) {
-merged <- rgeos::gBuffer(lns, width = 0.0001, byid = F)
-# } else {
-#   merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
-# }
-ovr <-
-  sp::over(lns, sp::disaggregate(merged), returnList = TRUE)
-ovrDt <- data.table::data.table(names(ovr),
-                                unlist(ovr))
-
-ovrDt <- ovrDt[drop, on = c('V1')]
-data.table::setnames(ovrDt, 'V2', 'withinGroup')
-
+all(names(hrparams) %in% names(funcparams))
 
 ## DAILY ========
 Dt <- fread('input/Daily')

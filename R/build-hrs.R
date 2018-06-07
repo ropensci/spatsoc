@@ -53,27 +53,37 @@ BuildHRs <- function(DT = NULL,
   }
 
 
+  if (is.null(hrParams)) {
+    warning('hrParams is not provided, using defaults')
+  }
+
   if (is.null(byFields)) {
     byFields <- idField
   } else {
     byFields <- c(idField, byFields)
   }
 
-  if (any(!(DT[, lapply(.SD, FUN = function(x) {
-    is.numeric(x) | is.character(x) | is.integer(x)
-  }
+  if (any(!(DT[, lapply(
+    .SD,
+    FUN = function(x) {
+      is.numeric(x) | is.character(x) | is.integer(x)
+    }
   ), .SDcols = byFields]))) {
     stop('idField (and byFields when provided) must be character, numeric or integer type')
   }
 
   DT[, bys := paste0(.BY, collapse = '-'), by = byFields]
+
   if (is.null(spPts)) {
     spPts <- sp::SpatialPointsDataFrame(DT[, ..coordFields],
                                         proj4string = sp::CRS(projection),
                                         data = DT[, .(id = bys)])
   }
+
   set(DT, j = 'bys', value = NULL)
+
   hrParams$xy <- spPts
+
   if (hrType == 'mcp') {
     functionParams <- formals(adehabitatHR::mcp)
 
@@ -87,7 +97,9 @@ BuildHRs <- function(DT = NULL,
     if (all(names(hrParams) %in% names(functionParams))) {
       return(adehabitatHR::getverticeshr(do.call(adehabitatHR::kernelUD, hrParams)))
     } else {
-      stop('hrParams provided do not match function parameters, see ?adehabitatHR::kernelUD')
+      stop(
+        'hrParams provided do not match function parameters, see ?adehabitatHR::kernelUD'
+      )
     }
   }
 }

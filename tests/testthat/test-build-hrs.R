@@ -100,3 +100,18 @@ test_that('hrParams returns error if params do not match function params', {
     ),
     'hrParams provided do not match function parameters', fixed = FALSE)
 })
+
+test_that('if hrParams NULL, warngs', {
+  expect_warning(
+    BuildHRs(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = NULL,
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    ),
+    'hrParams is not provided, using defaults')
+
+})
+
