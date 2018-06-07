@@ -26,13 +26,14 @@
 #'
 #' groups <- GroupPolys(spPolys = locsPolys)
 GroupPolys <-
-  function(area = FALSE,
-           hrType = 'mcp',
-           hrParams = NULL,
-           DT = NULL,
+  function(DT = NULL,
            projection = NULL,
-           coordFields = c('EASTING', 'NORTHING'),
-           idField = 'ID',
+           hrType = NULL,
+           hrParams = NULL,
+           area = NULL,
+           coordFields = NULL,
+           idField = NULL,
+           byFields = NULL,
            spPolys = NULL) {
     if (is.null(spPolys)) {
       if (is.null(DT)) {
