@@ -75,6 +75,17 @@ funcparams <- formals(adehabitatHR::mcp)
 
 all(names(hrparams) %in% names(funcparams))
 
+GroupTimes(DT = Dt, timeField = 'datetime', threshold = '1 month')
+GroupLines(
+  DT = Dt,
+  bufferWidth = 100,
+  timeGroup = 'timegroup',
+  idField = 'ID',
+  coordFields = c('X', 'Y'),
+  projection = utm,
+  groupFields = 'yr'
+)
+
 ## DAILY ========
 Dt <- fread('input/Daily')
 Dt[, idate := as.IDate(timestamp)]

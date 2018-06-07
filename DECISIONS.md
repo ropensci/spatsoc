@@ -13,6 +13,16 @@
 
 ----
 
+* should GroupTimes(threshold = 1 month) ??
+
+this would just be 
+data.table::month()
+
+easy, but worth it?
+
+
+----
+
 * drop BuildPts
 
 or Drop all Build?? 

@@ -142,8 +142,31 @@ test_that('withinGroup is not returned to the user', {
                                coordFields = c('X', 'Y'), projection = utm)))
 })
 
+# test that
+test_that('only 1 unique timeGroup * groupFields', {
+  copyDT <- DT[, mnth := month(datetime)][, yr := year(datetime)]
 
+  GroupLines(
+    DT = copyDT,
+    bufferWidth = 100,
+    timeGroup = 'mnth',
+    idField = 'ID',
+    coordFields = c('X', 'Y'),
+    projection = utm,
+    groupFields = 'yr'
+  )
+  expect_equal(
+    copyDT[, .(uniqueMonths = uniqueN(mnth)),
+           by = .(group)][, max(uniqueMonths)],
+    1)
 
+  expect_equal(
+    copyDT[, .(uniqueYears = uniqueN(yr)),
+           by = .(group)][, max(uniqueYears)],
+    1)
+
+})
+# or uniquen(.SD, by = c(idField, groupFields))
 
 
 # GroupLines(
