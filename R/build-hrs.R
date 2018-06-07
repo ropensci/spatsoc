@@ -18,6 +18,10 @@ BuildHRs <- function(DT = NULL,
     stop('input DT or spPts required')
   }
 
+  if (!is.null(DT) && !is.null(spPts)) {
+    stop('cannot provide both DT and spPts')
+  }
+
   if (is.null(coordFields)) {
     stop('coordFields must be provided')
   }
