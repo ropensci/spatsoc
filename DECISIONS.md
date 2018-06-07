@@ -23,6 +23,13 @@ easy, but worth it?
 
 ----
 
+* for GroupPolys, is area the first arg?
+
+it's the only absolutely required, but that doesn't follow suit with previous functions being DT first
+
+----
+
+
 * drop BuildPts
 
 or Drop all Build?? 

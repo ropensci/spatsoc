@@ -67,7 +67,7 @@ GroupLines <-
         warning('`group` column will be overwritten by this function')
         set(DT, j = 'group', value = NULL)
       }
-    } else if (!is.null(spLines) & is.null(DT)) {
+    } else if (!is.null(spLines) && is.null(DT)) {
       if (!('SpatialLines' %in% class(spLines) && isS4(spLines))) {
         stop('spLines provided must be a SpatialLines object')
       }
@@ -83,7 +83,7 @@ GroupLines <-
                                       unlist(ovr))
       data.table::setnames(outDT, c(idField, 'group'))
       return(outDT)
-    } else if (!is.null(spLines) & !is.null(DT)) {
+    } else if (!is.null(spLines) && !is.null(DT)) {
       stop('cannot provide both DT and spLines')
     } else {
       stop('must provide either DT or spLines')

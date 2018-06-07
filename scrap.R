@@ -75,16 +75,19 @@ funcparams <- formals(adehabitatHR::mcp)
 
 all(names(hrparams) %in% names(funcparams))
 
-GroupTimes(DT = Dt, timeField = 'datetime', threshold = '1 month')
+# GroupTimes(DT = Dt, timeField = 'datetime', threshold = '1 month')
+Dt[, mnth := month(datetime)]
 GroupLines(
   DT = Dt,
   bufferWidth = 100,
-  timeGroup = 'timegroup',
+  timeGroup = 'mnth',
   idField = 'ID',
   coordFields = c('X', 'Y'),
   projection = utm,
   groupFields = 'yr'
 )
+
+Dt[, .(uniqueMonths = uniqueN(mnth)), by = group][, max(uniqueMonths)]
 
 ## DAILY ========
 Dt <- fread('input/Daily')
