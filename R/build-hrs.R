@@ -76,15 +76,18 @@ BuildHRs <- function(DT = NULL,
     stop('idField (and byFields when provided) must be character, numeric or integer type')
   }
 
-  DT[, bys := paste0(.BY, collapse = '-'), by = byFields]
+  # DT[, bys := paste0(.BY, collapse = '-'), by = byFields]
 
   if (is.null(spPts)) {
-    spPts <- sp::SpatialPointsDataFrame(DT[, ..coordFields],
-                                        proj4string = sp::CRS(projection),
-                                        data = DT[, .(id = bys)])
+    spPts <- sp::SpatialPointsDataFrame(
+      DT[, ..coordFields],
+      proj4string = sp::CRS(projection),
+      data = DT[, .(ID = do.call(paste,
+                                 c(.SD, sep = '-'))),
+                .SDcols = byFields])
   }
 
-  set(DT, j = 'bys', value = NULL)
+  # set(DT, j = 'bys', value = NULL)
 
   hrParams$xy <- spPts
 
