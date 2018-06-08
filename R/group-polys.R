@@ -105,7 +105,7 @@ GroupPolys <-
             suppressWarnings(
               spPolys <-
                 BuildHRs(
-                  DT = DT,
+                  DT = .SD,
                   projection = projection,
                   hrType = hrType,
                   hrParams = hrParams,
@@ -133,44 +133,51 @@ GroupPolys <-
         # DT[withinGroup == -999L, group := NA]
         set(DT, j = 'withinGroup', value = NULL)
         return(DT[])
-      } else {
-        #   ovrDT <-
-        #     DT[, {
-        #       suppressWarnings(
-        #         spLines <- BuildLines(
-        #           .SD,
-        #           projection = projection,
-        #           coordFields = coordFields,
-        #           idField = idField
-        #         )
-        #       )
-        #       if (!is.null(spLines)) {
-        #         if (bufferWidth == 0) {
-        #           merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
-        #         } else {
-        #           merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
-        #         }
-        #         ovr <- sp::over(spLines, sp::disaggregate(merged),
-        #                         returnList = TRUE)
-        #         ovrDT <- data.table::data.table(names(ovr),
-        #                                         unlist(ovr))
-        #         data.table::setnames(ovrDT, c(idField, 'withinGroup'))
-        #       } else {
-        #         data.table(ID = get(idField), withinGroup = -999L)
-        #       }
-        #     }, by = byFields, .SDcols = c(coordFields, idField)]
-        #
-        #   DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
-        #   DT[, group := .GRP, by = c(byFields, 'withinGroup')]
-        #   DT[withinGroup == -999L, group := NA]
-        #   set(DT, j = 'withinGroup', value = NULL)
-        # }
-        # DT[, {
-        #
-        # }, by = byFields]
+      } else if (area){
+          ovrDT <-
+            DT[, {
 
-        # ovr vor WIHTIN WIHTI
-        print('potato')
+              suppressWarnings(
+                spPolys <-
+                  BuildHRs(
+                    DT = .SD,
+                    projection = projection,
+                    hrType = hrType,
+                    hrParams = hrParams,
+                    coordFields = coordFields,
+                    idField = idField,
+                    byFields = NULL,
+                    spPts = NULL
+                  )
+              )
+              inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
+
+              outDT <- data.table::data.table(area = sapply(
+                inters@polygons,
+                FUN = function(x) {
+                  slot(x, 'area')
+                }
+              ))[,
+                       c('ID1', 'ID2') := data.table::tstrsplit(sapply(
+                         inters@polygons,
+                         FUN = function(x) {
+                           slot(x, 'ID')
+                         }
+                       ),
+                       ' ',
+                       type.convert = TRUE)]
+              #   ovrDT <- data.table::data.table(names(ovr),
+              #                                   unlist(ovr))
+              #   data.table::setnames(ovrDT, c(idField, 'withinGroup'))
+              # } else {
+              #   data.table(ID = get(idField), withinGroup = -999L)
+              # }
+            }, by = byFields, .SDcols = c(coordFields, idField)]
+
+          # DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
+          # DT[, group := .GRP, by = c(byFields, 'withinGroup')]
+          # DT[withinGroup == -999L, group := NA]
+          # set(DT, j = 'withinGroup', value = NULL)
       }
     }
   }
