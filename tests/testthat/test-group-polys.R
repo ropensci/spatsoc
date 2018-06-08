@@ -7,10 +7,10 @@ utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 test_that('DT or spPts are required but not both', {
   expect_error(GroupPolys(DT = NULL, spPolys = NULL, area = FALSE),
-               'input DT or spPts required')
+               'must provide either DT or spPolys')
 
   expect_error(GroupPolys(DT = DT, spPolys = 10, area = FALSE),
-               'cannot provide both DT and spPts')
+               'cannot provide both DT and spPolys')
 })
 
 test_that('area provided and logical, or error', {
@@ -20,8 +20,8 @@ test_that('area provided and logical, or error', {
    hrType = 'mcp',
    area = NULL,
    coordFields = c('X', 'Y'),
-   idField = 'ID',
- ), 'must provide TRUE or FALSE for area parameter')
+   idField = 'ID'
+ ), 'area must be provided', fixed = TRUE)
 
   expect_error(GroupPolys(
     DT = DT,
@@ -29,8 +29,8 @@ test_that('area provided and logical, or error', {
     hrType = 'mcp',
     area = 'potato',
     coordFields = c('X', 'Y'),
-    idField = 'ID',
-  ), 'must provide TRUE or FALSE for area parameter')
+    idField = 'ID'
+  ), 'area must be provided', fixed = TRUE)
 
   expect_error(GroupPolys(
     DT = DT,
@@ -38,8 +38,8 @@ test_that('area provided and logical, or error', {
     hrType = 'mcp',
     area = 10,
     coordFields = c('X', 'Y'),
-    idField = 'ID',
-  ), 'must provide TRUE or FALSE for area parameter')
+    idField = 'ID'
+  ), 'area must be provided', fixed = TRUE)
 })
 
 
@@ -74,6 +74,11 @@ test_that('column names must exist in DT', {
   )
 })
 
+
+# if byfields, not also spPolys
+# if area, returns different length
+# if not area, returns same length, appended group column
+# checks for - or spaces in idField
 
 # GroupPolys(
 #   DT = DT,

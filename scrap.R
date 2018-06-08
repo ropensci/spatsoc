@@ -60,14 +60,20 @@ byF <- c('ID', 'yr')
 Dt[, bys := paste0(.BY, collapse='-'), by = byF]
 Dt
 library(ggplot2)
-BuildHRs(DT = Dt,
-         projection = utm,
-         hrType = 'mcp',
-         hrParams = list(percent = 95),
-         coordFields = c('X', 'Y'),
-         idField = 'ID',
-         byFields = 'yr',
-         spPts = NULL)
+
+# GroupPolys
+GroupPolys(
+  DT = Dt,
+  projection = utm,
+  hrType = 'mcp',
+  hrParams = NULL,
+  area = FALSE,
+  coordFields = c('X', 'Y'),
+  idField = 'ID',
+  byFields = NULL,
+  spPolys = NULL
+)
+
 
 ## CHECK IF PARAMS MATCH FUNCTION
 hrparams <- list(percent = 95)
