@@ -55,17 +55,57 @@ Dt[, datetime := as.POSIXct(datetime)]
 #        'tests/testdata/buffalo.csv')
 Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
-Dt[, id := ID]
-profvis::profvis({
+Dt[, potato := ID]
 GroupTimes(Dt, timeField = 'datetime', threshold = '2 days')
 GroupLines(DT = Dt,
            bufferWidth = 10,
            projection = utm,
-           idField = 'id',
+           idField = 'potato',
            coordFields = c('X', 'Y'),
            timeGroup = 'timegroup',
            spLines = NULL)
-})
+
+
+polys <- BuildHRs(Dt, utm, 'mcp', coordFields = c('X', 'Y'),
+                  idField = 'ID', byFields = 'jul')
+#####
+###1
+microbenchmark::microbenchmark({
+inter <- rgeos::gIntersects(polys, polys, byid = TRUE)
+g <- igraph::graph_from_adjacency_matrix(inter)
+igraph::clusters(g)$membership
+}, times = 1000)
+
+# vs
+##2
+microbenchmark::microbenchmark({
+unionPolys <- rgeos::gUnaryUnion(polys)
+ovr <- sp::over(polys, sp::disaggregate(unionPolys))
+}, times = 1000)
+#######
+
+unionPolys <- rgeos::gUnaryUnion(polys)
+sp::over(polys, sp::disaggregate(unionPolys))
+rgeos::gIntersects(polys, polys, byid = TRUE)
+a <- rgeos::gUnion(polys, polys)
+names(a)
+
+outDT <- data.table::data.table(area = sapply(
+  inters@polygons,
+  FUN = function(x) {
+    slot(x, 'area')
+  }
+) / 1e6)[, # cant actually use 1e6, but how do we standardize units?
+         # this is susceptible to error if ID field provided has spaces
+         c('ID1', 'ID2') := data.table::tstrsplit(sapply(
+           inters@polygons,
+           FUN = function(x) {
+             slot(x, 'ID')
+           }
+         ),
+         ' ',
+         type.convert = TRUE)]
+return(outDT)
 
 # GroupPolys
 GroupPolys(
