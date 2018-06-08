@@ -39,6 +39,13 @@ easy, but worth it?
 
 ----
 
+* defaults for fields? 
+
+easier for user but error..
+
+
+----
+
 * groupFields or byFields?
 
 

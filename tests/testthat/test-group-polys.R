@@ -43,7 +43,6 @@ test_that('area provided and logical, or error', {
 })
 
 
-# if DT spPolys both, neither provided
 test_that('DT or spPolys, but not both', {
   expect_error(
     GroupPolys(
@@ -90,10 +89,17 @@ test_that('column names must exist in DT', {
   )
 })
 
-
 # if byfields, not also spPolys
-# if area, returns different length
-# if not area, returns same length, appended group column
+test_that('byFields and spPolys are not both provided', {
+  expect_error(
+    GroupPolys(
+      byFields = 'yr',
+      spPolys = 10,
+      area = TRUE
+    ),
+    'cannot provide spPolys if providing byFields')
+})
+
 
 test_that('ID field is alphanumeric and does not have spaces', {
   copyDT <- copy(DT)[, ID := gsub('e', ' ', ID)]
@@ -111,6 +117,30 @@ test_that('ID field is alphanumeric and does not have spaces', {
   )
 })
 
+test_that('lengths returned make sense', {
+  expect_lte(nrow(GroupPolys(
+    DT = DT,
+    projection = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    area = TRUE,
+    coordFields = c('X', 'Y'),
+    idField = 'ID'
+  )),
+  nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
+
+  expect_equal(nrow(GroupPolys(
+    DT = DT,
+    projection = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    area = TRUE,
+    coordFields = c('X', 'Y'),
+    idField = 'ID'
+  )),
+  nrow(DT)
+
+})
 # GroupPolys(
 #   DT = DT,
 #   projection = utm,

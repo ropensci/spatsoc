@@ -56,7 +56,7 @@ Dt[, datetime := as.POSIXct(datetime)]
 Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
 Dt[, potato := ID]
-GroupTimes(Dt, timeField = 'datetime', threshold = '2 days')
+GroupTimes(Dt, timeField = 'datetime', threshold = '14 days')
 
 # INSTEAD OF bufferWidth = 0.00001  ######
 lns <- BuildLines(DT = Dt,
