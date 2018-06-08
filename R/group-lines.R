@@ -139,7 +139,8 @@ GroupLines <-
             if (bufferWidth == 0) {
               merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
             } else {
-              merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+              merged <- rgeos::gBuffer(spLines, width = bufferWidth,
+                                       byid = FALSE)
             }
             ovr <- sp::over(spLines, sp::disaggregate(merged),
                             returnList = TRUE)
@@ -147,7 +148,6 @@ GroupLines <-
                                             unlist(ovr))
             data.table::setnames(ovrDT, c(idField, 'withinGroup'))
           } else {
-            # BUG: if idField isn't ID, these won't stack
             data.table(get(idField), withinGroup = as.integer(NA))
           }
         }, by = byFields, .SDcols = c(coordFields, idField)]

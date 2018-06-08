@@ -66,9 +66,11 @@ GroupPolys <-
         ovrDT <- data.table::data.table(names(ovr),
                                         ovr)
         data.table::setnames(ovrDT, c('ID', 'group'))
-        # check if null byfields, if it isnt null split the -
         return(ovrDT[])
       } else if (area) {
+        if(any(DT[, grepl('[^A-z0-9]', get(idField))])){
+          stop('please ensure IDs are alphanumeric and do not contain spaces')
+        }
         inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
         outDT <- data.table::data.table(area = sapply(
           inters@polygons,
@@ -76,7 +78,6 @@ GroupPolys <-
             slot(x, 'area')
           }
         ) / 1e6)[, # cant actually use 1e6, but how do we standardize units?
-                 # this is susceptible to error if ID field provided has spaces
                  c('ID1', 'ID2') := data.table::tstrsplit(sapply(
                    inters@polygons,
                    FUN = function(x) {

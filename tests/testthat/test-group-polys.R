@@ -78,7 +78,21 @@ test_that('column names must exist in DT', {
 # if byfields, not also spPolys
 # if area, returns different length
 # if not area, returns same length, appended group column
-# checks for - or spaces in idField
+
+test_that('ID field is alphanumeric and does not have spaces', {
+  copyDT <- copy(DT)[, ID := gsub('e', ' ', ID)]
+  expect_error(
+    GroupPolys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      area = TRUE,
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    ),
+    'please ensure IDs are alphanumeric and do not contain spaces'
+  )
+})
 
 # GroupPolys(
 #   DT = DT,
