@@ -57,6 +57,36 @@ Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
 Dt[, potato := ID]
 GroupTimes(Dt, timeField = 'datetime', threshold = '2 days')
+
+# INSTEAD OF bufferWidth = 0.00001  ######
+lns <- BuildLines(DT = Dt,
+                  projection = utm,
+                  idField = 'ID',
+                  coordFields = c('X', 'Y'),
+                  byFields = 'yr')
+
+# if buffer = 0
+rgeos::gIntersects(lns, lns, byid=TRUE)
+
+# else
+
+profvis::profvis({
+  merged <- rgeos::gBuffer(lns,
+                           width = 10, byid = FALSE)
+  dis <- sp::disaggregate(merged)
+  inter <- rgeos::gIntersects(lns,
+                              dis,
+                              byid = TRUE)
+})
+system.time(
+  ovr <-
+    sp::over(lns, sp::disaggregate(merged), returnList = T)
+)
+g <- igraph::graph_from_adjacency_matrix(inter)
+igraph::clusters(g)$membership
+
+######
+
 GroupLines(DT = Dt,
            bufferWidth = 10,
            projection = utm,
@@ -71,16 +101,16 @@ polys <- BuildHRs(Dt, utm, 'mcp', coordFields = c('X', 'Y'),
 #####
 ###1
 microbenchmark::microbenchmark({
-inter <- rgeos::gIntersects(polys, polys, byid = TRUE)
-g <- igraph::graph_from_adjacency_matrix(inter)
-igraph::clusters(g)$membership
+  inter <- rgeos::gIntersects(polys, polys, byid = TRUE)
+  g <- igraph::graph_from_adjacency_matrix(inter)
+  igraph::clusters(g)$membership
 }, times = 1000)
 
 # vs
 ##2
 microbenchmark::microbenchmark({
-unionPolys <- rgeos::gUnaryUnion(polys)
-ovr <- sp::over(polys, sp::disaggregate(unionPolys))
+  unionPolys <- rgeos::gUnaryUnion(polys)
+  ovr <- sp::over(polys, sp::disaggregate(unionPolys))
 }, times = 1000)
 #######
 
@@ -179,9 +209,9 @@ OUT <- data.table::data.table(Dt$ID,
 # })
 
 profvis::profvis({
-GroupPts(l, 100, timeField = 'timegroup', projection = utm)
-GroupPtsSF(l, 100, timeField = 'timegroup', projection = utm)
-GroupPtsIGRAPH(l, 100, timeField = 'timegroup', projection = utm)
+  GroupPts(l, 100, timeField = 'timegroup', projection = utm)
+  GroupPtsSF(l, 100, timeField = 'timegroup', projection = utm)
+  GroupPtsIGRAPH(l, 100, timeField = 'timegroup', projection = utm)
 })
 
 l
@@ -197,18 +227,18 @@ l[, withinGroup := {
   # int <- sf::st_intersects(pts, un)
   unlist(sf::st_intersects(pts, un))
   # data.table::setnames(
-    # data.table::data.table(get(idField), unlist(int, FALSE, FALSE))#,
+  # data.table::data.table(get(idField), unlist(int, FALSE, FALSE))#,
   #   c(idField, 'withinGroup'))
 },
 by = timegroup, .SDcols = coordFields]
 l
 l[, withinGroup := NULL]
 microbenchmark::microbenchmark(
-GroupPts(l, 100, projection = utm)
-, times = 15)
+  GroupPts(l, 100, projection = utm)
+  , times = 15)
 microbenchmark::microbenchmark(
-GroupPtsSF(l, 100, projection = utm)
-, times = 15)
+  GroupPtsSF(l, 100, projection = utm)
+  , times = 15)
 
 system.time(
   GroupPts(l, 100, projection = utm)
@@ -239,11 +269,11 @@ st_geometry(bufs)
 point(pts)
 ## SP
 system.time({
-spPts <- BuildPts(Dt, utm)
-buffers <- rgeos::gBuffer(spPts, width = 50, byid = FALSE)
-ovr <- sp::over(spPts, sp::disaggregate(buffers))
-OUT <- data.table::data.table(Dt$ID,
-                       unlist(ovr))
+  spPts <- BuildPts(Dt, utm)
+  buffers <- rgeos::gBuffer(spPts, width = 50, byid = FALSE)
+  ovr <- sp::over(spPts, sp::disaggregate(buffers))
+  OUT <- data.table::data.table(Dt$ID,
+                                unlist(ovr))
 })
 
 data.table::setnames(
