@@ -94,6 +94,11 @@ GroupPolys <-
         stop('cannot provide spPolys if providing byFields')
       }
 
+      if ('group' %in% colnames(DT)) {
+        warning('group column will be overwritten by this function')
+        set(DT, j = 'group', value = NULL)
+      }
+
       if (!area) {
         ovrDT <-
           DT[, {
