@@ -25,6 +25,8 @@ this will be the first and only? time a user has to do:
 
 to capture results
 
+is it another function?
+
 ----
 
 * should GroupTimes(threshold = 1 month) ??
@@ -47,6 +49,8 @@ easy, but worth it?
 it's the only absolutely required, but that doesn't follow suit with previous functions being DT first
 
 also is it proportion instead?
+
+
 ----
 
 

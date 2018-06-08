@@ -55,13 +55,8 @@ Dt[, datetime := as.POSIXct(datetime)]
 #        'tests/testdata/buffalo.csv')
 Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
-
-byF <- c('ID', 'yr')
-Dt[, bys := paste0(.BY, collapse='-'), by = byF]
-Dt
-library(ggplot2)
-
 Dt[, id := ID]
+
 GroupTimes(Dt, timeField = 'datetime', threshold = '2 days')
 GroupLines(DT = Dt,
            bufferWidth = 10,
@@ -70,16 +65,18 @@ GroupLines(DT = Dt,
            coordFields = c('X', 'Y'),
            timeGroup = 'timegroup',
            spLines = NULL)
+
+
 # GroupPolys
 GroupPolys(
   DT = Dt,
   projection = utm,
   hrType = 'mcp',
   hrParams = NULL,
-  area = TRUE,
+  area = FALSE,
   coordFields = c('X', 'Y'),
   idField = 'ID',
-  byFields = NULL,
+  byFields = 'yr',
   spPolys = NULL
 )
 
