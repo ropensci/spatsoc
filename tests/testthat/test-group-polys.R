@@ -61,6 +61,46 @@ test_that('DT or spPolys, but not both', {
     'cannot provide both DT and spPolys')
 })
 
+test_that('projection provided or error', {
+  expect_error(
+    GroupPolys(
+      DT = DT,
+      projection = NULL,
+      hrType = 'mcp',
+      area = FALSE,
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    ),
+    'projection must be provided')
+})
+
+test_that('mising hrParams warns default used', {
+  copyDT <- copy(DT)
+  expect_warning(
+    GroupPolys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      area = FALSE,
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    ),
+    'hrParams is not provided, using defaults')
+})
+
+test_that('missing hrType fails', {
+  expect_error(
+    GroupPolys(
+      DT = DT,
+      projection = utm,
+      hrType = NULL,
+      area = FALSE,
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    ),
+    'hrType must be provided')
+})
+
 test_that('column names must exist in DT', {
   expect_error(
     GroupPolys(
@@ -88,6 +128,8 @@ test_that('column names must exist in DT', {
     fixed = FALSE
   )
 })
+
+
 
 test_that('byFields and spPolys are not both provided', {
   expect_error(

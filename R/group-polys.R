@@ -60,6 +60,7 @@ GroupPolys <-
           )
       }
 
+
       if (!area) {
         unionPolys <- rgeos::gUnaryUnion(spPolys)
         ovr <- sp::over(spPolys, sp::disaggregate(unionPolys))
