@@ -5,19 +5,33 @@ library(spatsoc)
 DT <- fread('../testdata/buffalo.csv')
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
-DT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
 DT[, datetime := as.POSIXct(datetime)]
 DT[, jul := data.table::yday(datetime)]
+DT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
 
 test_that('one of DT or spLines is required, not both or neither', {
-  expect_error(GroupLines(DT = NULL, bufferWidth = 10, spLines = NULL),
-               'must provide either DT or spLines')
+  expect_error(
+    GroupLines(
+      DT = NULL,
+      bufferWidth = 10,
+      spLines = NULL
+    ),
+    'must provide either DT or spLines'
+  )
 
-  expect_error(GroupLines(DT = DT, bufferWidth = 10,
-                          spLines = BuildLines(DT, projection = utm,
-                                               coordFields = c('X', 'Y'),
-                                               idField = 'ID')),
-               'cannot provide both DT and spLines')
+  expect_error(
+    GroupLines(
+      DT = DT,
+      bufferWidth = 10,
+      spLines = BuildLines(
+        DT,
+        projection = utm,
+        coordFields = c('X', 'Y'),
+        idField = 'ID'
+      )
+    ),
+    'cannot provide both DT and spLines'
+  )
 })
 
 
@@ -44,30 +58,61 @@ test_that('coordFields, idField, projection provided and proper format', {
 
 
 test_that('column names must exist in DT', {
-  expect_error(GroupLines(DT = DT, bufferWidth = 10, timeGroup = 'timegroup',
-                          idField = 'potatoID', coordFields = c('X', 'Y'),
-                          projection = utm),
-               'not present in input DT', fixed = FALSE)
+  expect_error(
+    GroupLines(
+      DT = DT,
+      bufferWidth = 10,
+      timeGroup = 'timegroup',
+      idField = 'potatoID',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    ),
+    'not present in input DT',
+    fixed = FALSE
+  )
 
-  expect_error(GroupLines(DT = DT, bufferWidth = 10, timeGroup = 'timegroup',
-                          idField = 'ID', coordFields = c('potatoX', 'potatoY'),
-                          projection = utm),
-               'not present in input DT', fixed = FALSE)
+  expect_error(
+    GroupLines(
+      DT = DT,
+      bufferWidth = 10,
+      timeGroup = 'timegroup',
+      idField = 'ID',
+      coordFields = c('potatoX', 'potatoY'),
+      projection = utm
+    ),
+    'not present in input DT',
+    fixed = FALSE
+  )
 })
 
 
 test_that('buffer width is correctly provided, or error', {
   copyDT <- copy(DT)
   GroupTimes(copyDT, timeField = 'datetime', threshold = '14 days')
-  expect_warning(GroupLines(DT = copyDT, bufferWidth = NULL, timeGroup = 'timegroup',
-                          idField = 'ID', coordFields = c('X', 'Y'),
-                          projection = utm),
-               'buffer width missing, using 0 by default')
+  copyDT[, N := .N, by = .(ID, block)]
+  expect_warning(
+    GroupLines(
+      DT = copyDT[N > 2],
+      bufferWidth = NULL,
+      timeGroup = 'timegroup',
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    ),
+    'buffer width missing, using 0 by default'
+  )
 
-  expect_error(GroupLines(DT = DT, bufferWidth = -10, timeGroup = 'timegroup',
-                            idField = 'ID', coordFields = c('X', 'Y'),
-                            projection = utm),
-                 'cannot provide a negative bufferWidth')
+  expect_error(
+    GroupLines(
+      DT = DT,
+      bufferWidth = -10,
+      timeGroup = 'timegroup',
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    ),
+    'cannot provide a negative bufferWidth'
+  )
 })
 
 
@@ -97,11 +142,12 @@ test_that('group lines returns a single warning for <2 locs', {
 test_that('group column is added to result', {
   copyDT <- copy(DT)
   GroupTimes(copyDT, timeField = 'datetime', threshold = '14 days')
+  copyDT[, N := .N, by = .(ID, block)]
 
   expect_true('group' %in%
                 colnames(
                   GroupLines(
-                    DT = copyDT,
+                    DT = copyDT[N > 2],
                     bufferWidth = 10,
                     timeGroup = 'timegroup',
                     idField = 'ID',
@@ -114,9 +160,10 @@ test_that('group column is added to result', {
 test_that('only one column added to the result DT', {
   copyDT <- copy(DT)
   GroupTimes(copyDT, timeField = 'datetime', threshold = '14 days')
+  copyDT[, N := .N, by = .(ID, block)]
 
-  expect_equal(ncol(copyDT) + 1,
-               ncol(GroupLines(DT = copyDT, bufferWidth = 10,
+  expect_equal(ncol(copyDT[N > 2]) + 1,
+               ncol(GroupLines(DT = copyDT[N > 2], bufferWidth = 10,
                                timeGroup = 'timegroup', idField = 'ID',
                                coordFields = c('X', 'Y'), projection = utm)))
 })
@@ -124,7 +171,8 @@ test_that('only one column added to the result DT', {
 test_that('no rows are added to the result DT', {
   copyDT <- copy(DT)
   GroupTimes(copyDT, timeField = 'datetime', threshold = '14 days')
-
+  copyDT[, N := .N, by = .(ID, block)]
+  copyDT <- copyDT[N > 2]
   expect_equal(nrow(copyDT),
                nrow(GroupLines(DT = copyDT, bufferWidth = 10,
                                timeGroup = 'timegroup', idField = 'ID',
@@ -135,9 +183,9 @@ test_that('no rows are added to the result DT', {
 test_that('withinGroup is not returned to the user', {
   copyDT <- copy(DT)
   GroupTimes(copyDT, timeField = 'datetime', threshold = '14 days')
-
+  copyDT[, N := .N, by = .(ID, block)]
   expect_false('withinGroup' %in% colnames(
-    GroupLines(DT = copyDT, bufferWidth = 10,
+    GroupLines(DT = copyDT[N > 2], bufferWidth = 10,
                                timeGroup = 'timegroup', idField = 'ID',
                                coordFields = c('X', 'Y'), projection = utm)))
 })

@@ -44,7 +44,23 @@ test_that('area provided and logical, or error', {
 
 
 # if DT spPolys both, neither provided
+test_that('DT or spPolys, but not both', {
+  expect_error(
+    GroupPolys(
+      DT = NULL,
+      area = FALSE,
+      spPolys = NULL
+    ),
+    'must provide either DT or spPolys')
 
+  expect_error(
+    GroupPolys(
+      DT = DT,
+      area = FALSE,
+      spPolys = 10
+    ),
+    'cannot provide both DT and spPolys')
+})
 
 test_that('column names must exist in DT', {
   expect_error(
@@ -86,6 +102,7 @@ test_that('ID field is alphanumeric and does not have spaces', {
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
+      hrParams = list(percent = 95),
       area = TRUE,
       coordFields = c('X', 'Y'),
       idField = 'ID'
