@@ -143,12 +143,12 @@ GroupPolys(
   projection = utm,
   hrType = 'mcp',
   hrParams = NULL,
-  area = FALSE,
+  area = TRUE,
   coordFields = c('X', 'Y'),
   idField = 'ID',
-  byFields = 'yr',
+  # byFields = 'yr',
   spPolys = NULL
-)
+) %>% nrow()
 
 
 ## CHECK IF PARAMS MATCH FUNCTION

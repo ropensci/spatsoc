@@ -86,7 +86,7 @@ GroupPolys <-
                  ),
                  ' ',
                  type.convert = TRUE)]
-        return(outDT)
+        return(outDT[])
       }
     } else if (!is.null(byFields)) {
       if (!is.null(spPolys)) {
