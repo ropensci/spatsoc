@@ -116,13 +116,14 @@ GroupPolys <-
               data.table::setnames(ovrDT, c('ID', 'withinGroup'))
             } else {
               data.table(ID = get(idField),
-                         withinGroup = -999L)
+                         withinGroup = as.integer(NA))
             }
           }, by = byFields, .SDcols = c(coordFields, idField)]
 
         DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
-        DT[, group := .GRP, by = c(byFields, 'withinGroup')]
-        DT[withinGroup == -999L, group := NA]
+        DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
+           by = c(byFields, 'withinGroup')]
+        # DT[withinGroup == -999L, group := NA]
         set(DT, j = 'withinGroup', value = NULL)
         return(DT[])
       } else {

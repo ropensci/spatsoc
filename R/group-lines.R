@@ -148,13 +148,14 @@ GroupLines <-
             data.table::setnames(ovrDT, c(idField, 'withinGroup'))
           } else {
             # BUG: if idField isn't ID, these won't stack
-            data.table(get(idField), withinGroup = -999L)
+            data.table(get(idField), withinGroup = as.integer(NA))
           }
         }, by = byFields, .SDcols = c(coordFields, idField)]
 
       DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
-      DT[, group := .GRP, by = c(byFields, 'withinGroup')]
-      DT[withinGroup == -999L, group := NA]
+      DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
+         by = c(byFields, 'withinGroup')]
+      # DT[withinGroup == -999L, group := NA]
       set(DT, j = 'withinGroup', value = NULL)
       if (DT[is.na(group), .N] > 0) {
         warning('some rows were dropped, cannot build a line with < 2 points. in this case, group set to NA.')

@@ -203,3 +203,26 @@ ggplot(Dt[maxDist > distThreshold]) +
   geom_point(aes(X, Y, color = ID, shape = factor(group))) +
   facet_wrap(~yr)
 ```
+
+
+----
+
+* is GroupTimes the same as data.table:::round.IDate()
+
+**no**
+
+round.IDate rounds on units of weeks, months, quarters, years
+
+GroupTimes is more flexible, providing x days, x hours, x minutes
+
+```r
+function (x, digits = c("weeks", "months", "quarters", "years"), 
+  ...) 
+{
+  units <- match.arg(digits)
+  as.IDate(switch(units, weeks = round(x, "year") + 7L * (yday(x)%/%7L), 
+    months = ISOdate(year(x), month(x), 1L), quarters = ISOdate(year(x), 
+      3L * (quarter(x) - 1L) + 1L, 1L), years = ISOdate(year(x), 
+      1L, 1L)))
+}
+```

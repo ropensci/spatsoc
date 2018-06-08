@@ -137,7 +137,6 @@ GroupTimes <- function(DT = NULL,
           labels = FALSE
         )]
 
-        # if length year > 1
         if(dtm[, uniqueN(data.table::year(idate))] > 1){
           dtm[, timegroup := .GRP,
               by = .(block, data.table::year(idate))]

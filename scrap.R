@@ -56,7 +56,7 @@ Dt[, datetime := as.POSIXct(datetime)]
 Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
 Dt[, id := ID]
-
+profvis::profvis({
 GroupTimes(Dt, timeField = 'datetime', threshold = '2 days')
 GroupLines(DT = Dt,
            bufferWidth = 10,
@@ -65,7 +65,7 @@ GroupLines(DT = Dt,
            coordFields = c('X', 'Y'),
            timeGroup = 'timegroup',
            spLines = NULL)
-
+})
 
 # GroupPolys
 GroupPolys(
