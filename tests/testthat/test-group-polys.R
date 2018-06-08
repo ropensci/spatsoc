@@ -222,6 +222,24 @@ test_that('withinGroup is not returned to the user', {
 })
 
 
+test_that('group column succesfully detected', {
+  copyDT <- copy(DT)
+  copyDT[, group := 1][, mnth := month(datetime)]
+
+  expect_warning(
+    GroupPolys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = FALSE,
+      coordFields = c('X', 'Y'),
+      idField = 'ID',
+      byFields = 'mnth'
+    ),
+    'group column will be overwritten'
+  )
+})
 
 # GroupPolys(
 #   DT = DT,
