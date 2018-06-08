@@ -89,7 +89,6 @@ test_that('column names must exist in DT', {
   )
 })
 
-# if byfields, not also spPolys
 test_that('byFields and spPolys are not both provided', {
   expect_error(
     GroupPolys(
@@ -117,30 +116,71 @@ test_that('ID field is alphanumeric and does not have spaces', {
   )
 })
 
-test_that('lengths returned make sense', {
-  expect_lte(nrow(GroupPolys(
-    DT = DT,
-    projection = utm,
-    hrType = 'mcp',
-    hrParams = list(percent = 95),
-    area = TRUE,
-    coordFields = c('X', 'Y'),
-    idField = 'ID'
-  )),
+test_that('column and row lengths returned make sense', {
+  expect_lte(nrow(
+    GroupPolys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = TRUE,
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    )
+  ),
   nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
 
-  expect_equal(nrow(GroupPolys(
-    DT = DT,
-    projection = utm,
-    hrType = 'mcp',
-    hrParams = list(percent = 95),
-    area = TRUE,
-    coordFields = c('X', 'Y'),
-    idField = 'ID'
-  )),
-  nrow(DT)
+  copyDT <- copy(DT)[, yr := year(datetime)]
+  expect_equal(nrow(
+    GroupPolys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = FALSE,
+      coordFields = c('X', 'Y'),
+      idField = 'ID',
+      byFields = 'yr'
+    )
+  ),
+  nrow(copyDT))
 
+  copyDT <- copy(DT)
+  copyDT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
+  expect_equal(ncol(copyDT) + 1,
+               ncol(
+                 GroupPolys(
+                   DT = copyDT,
+                   projection = utm,
+                   hrType = 'mcp',
+                   hrParams = list(percent = 95),
+                   area = FALSE,
+                   coordFields = c('X', 'Y'),
+                   idField = 'ID',
+                   byFields = 'family'
+                 )
+               ))
 })
+
+
+test_that('withinGroup is not returned to the user', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  GroupTimes(copyDT, timeField = 'datetime', threshold = '14 days')
+  copyDT[, N := .N, by = .(ID, block)]
+  expect_false('withinGroup' %in% colnames(
+    GroupPolys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = FALSE,
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    )))
+})
+
+
+
 # GroupPolys(
 #   DT = DT,
 #   projection = utm,
