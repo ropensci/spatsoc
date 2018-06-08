@@ -129,7 +129,7 @@ GroupLines <-
         DT[, {
           suppressWarnings(
             spLines <- BuildLines(
-              .SD,
+              DT = .SD,
               projection = projection,
               coordFields = coordFields,
               idField = idField
@@ -147,7 +147,8 @@ GroupLines <-
                                             unlist(ovr))
             data.table::setnames(ovrDT, c(idField, 'withinGroup'))
           } else {
-            data.table(ID = get(idField), withinGroup = -999L)
+            # BUG: if idField isn't ID, these won't stack
+            data.table(get(idField), withinGroup = -999L)
           }
         }, by = byFields, .SDcols = c(coordFields, idField)]
 
