@@ -59,38 +59,31 @@ Dt[, potato := ID]
 GroupTimes(Dt, timeField = 'datetime', threshold = '14 days')
 
 # INSTEAD OF bufferWidth = 0.00001  ######
-lns <- BuildLines(DT = Dt,
+lns <- BuildLines(DT = Dt[block == 20],
                   projection = utm,
                   idField = 'ID',
                   coordFields = c('X', 'Y'),
                   byFields = 'yr')
 
 # if buffer = 0
-rgeos::gIntersects(lns, lns, byid=TRUE)
-
+inter0 <- rgeos::gIntersects(lns, lns, byid=TRUE)
+g0 <- igraph::graph_from_adjacency_matrix(inter0)
+igraph::clusters(g0)$membership
 # else
+DT2 <- Dt[block ==20]
 
-profvis::profvis({
-  merged <- rgeos::gBuffer(lns,
-                           width = 10, byid = FALSE)
-  dis <- sp::disaggregate(merged)
-  inter <- rgeos::gIntersects(lns,
-                              dis,
-                              byid = TRUE)
-})
-system.time(
-  ovr <-
-    sp::over(lns, sp::disaggregate(merged), returnList = T)
-)
+# system.time({
+buffered <- rgeos::gBuffer(lns, width = 10, byid = TRUE)
+inter <- rgeos::gIntersects(lns, buffered, byid = TRUE)
 g <- igraph::graph_from_adjacency_matrix(inter)
 igraph::clusters(g)$membership
 
-######
-
-GroupLines(DT = Dt,
+GroupLines(spLines = lns)
+DT2[1, timegroup := 999]
+GroupLines(DT = DT2,
            bufferWidth = 10,
            projection = utm,
-           idField = 'potato',
+           idField = 'ID',
            coordFields = c('X', 'Y'),
            timeGroup = 'timegroup',
            spLines = NULL)
@@ -146,9 +139,9 @@ GroupPolys(
   area = TRUE,
   coordFields = c('X', 'Y'),
   idField = 'ID',
-  # byFields = 'yr',
+  byFields = 'yr',
   spPolys = NULL
-) %>% nrow()
+)
 
 
 ## CHECK IF PARAMS MATCH FUNCTION

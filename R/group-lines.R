@@ -79,7 +79,7 @@ GroupLines <-
       if (bufferWidth == 0) {
         inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
       } else {
-        buffered <- rgeos::gBuffer(lns, width = bufferWidth, byid = TRUE)
+        buffered <- rgeos::gBuffer(spLines, width = bufferWidth, byid = TRUE)
         inter <- rgeos::gIntersects(spLines, buffered, byid=TRUE)
       }
       g <- igraph::graph_from_adjacency_matrix(inter)
@@ -102,15 +102,14 @@ GroupLines <-
         if (bufferWidth == 0) {
           inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
         } else {
-          buffered <- rgeos::gBuffer(lns, width = bufferWidth, byid = TRUE)
+          buffered <- rgeos::gBuffer(spLines, width = bufferWidth, byid = TRUE)
           inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
         }
         g <- igraph::graph_from_adjacency_matrix(inter)
         ovr <- igraph::clusters(g)$membership
-        out <- data.table::data.table(names(ovr),
-                                        unlist(ovr))
+        ovrDT <- data.table::data.table(ID = names(ovr), group = unlist(ovr))
       } else {
-        ovrDT <- data.table(ID = get(idField), group = as.integer(NA))
+        ovrDT <- data.table::data.table(ID = get(idField), group = as.integer(NA))
       }
 
       data.table::setnames(ovrDT, c(idField, 'group'))
@@ -120,13 +119,14 @@ GroupLines <-
       }
       return(DT[])
     } else {
+
+      ### CHECK THAT TIMEGROUP IS IN DT
       if (is.null(groupFields)) {
         byFields <- timeGroup
       }
       else {
         byFields <- c(groupFields, timeGroup)
       }
-
       ovrDT <-
         DT[, {
           suppressWarnings(
@@ -141,7 +141,7 @@ GroupLines <-
             if (bufferWidth == 0) {
               inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
             } else {
-              buffered <- rgeos::gBuffer(lns, width = bufferWidth,
+              buffered <- rgeos::gBuffer(spLines, width = bufferWidth,
                                          byid = TRUE)
               inter <- rgeos::gIntersects(spLines, buffered, byid=TRUE)
 
@@ -149,10 +149,14 @@ GroupLines <-
             g <- igraph::graph_from_adjacency_matrix(inter)
             ovr <- igraph::clusters(g)$membership
             out <- data.table::data.table(names(ovr),
-                                            unlist(ovr))
+                                          unlist(ovr))
+            # DROP THE SETNAMES AND JUST KEEP WITHINGROUP?
             data.table::setnames(out, c(idField, 'withinGroup'))
           } else {
-            data.table(get(idField), withinGroup = as.integer(NA))
+            # why is a double??
+            out <- data.table(get(idField), withinGroup = as.double(NA))
+            data.table::setnames(out, c(idField, 'withinGroup'))
+
           }
         }, by = byFields, .SDcols = c(coordFields, idField)]
 
