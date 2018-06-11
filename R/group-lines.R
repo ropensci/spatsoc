@@ -77,15 +77,16 @@ GroupLines <-
       }
 
       if (bufferWidth == 0) {
-        merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = F)
+        inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
       } else {
-        merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+        buffered <- rgeos::gBuffer(lns, width = bufferWidth, byid = TRUE)
+        inter <- rgeos::gIntersects(spLines, buffered, byid=TRUE)
       }
-      ovr <-
-        sp::over(spLines, sp::disaggregate(merged), returnList = T)
-      outDT <- data.table::data.table(names(ovr),
+      g <- igraph::graph_from_adjacency_matrix(inter)
+      ovr <- igraph::clusters(g)$membership
+      out <- data.table::data.table(names(ovr),
                                       unlist(ovr))
-      data.table::setnames(outDT, c(idField, 'group'))
+      data.table::setnames(outDT, c('ID', 'group'))
       return(outDT)
     }
     if (is.null(timeGroup)) {
@@ -99,16 +100,17 @@ GroupLines <-
       )
       if (!is.null(spLines)) {
         if (bufferWidth == 0) {
-          merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+          inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
         } else {
-          merged <- rgeos::gBuffer(spLines, width = bufferWidth, byid = FALSE)
+          buffered <- rgeos::gBuffer(lns, width = bufferWidth, byid = TRUE)
+          inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
         }
-        ovr <- sp::over(spLines, sp::disaggregate(merged),
-                        returnList = TRUE)
-        ovrDT <- data.table::data.table(names(ovr),
+        g <- igraph::graph_from_adjacency_matrix(inter)
+        ovr <- igraph::clusters(g)$membership
+        out <- data.table::data.table(names(ovr),
                                         unlist(ovr))
       } else {
-        ovrDT <- data.table(ID = get(idField), group = NA)
+        ovrDT <- data.table(ID = get(idField), group = as.integer(NA))
       }
 
       data.table::setnames(ovrDT, c(idField, 'group'))
@@ -137,16 +139,18 @@ GroupLines <-
           )
           if (!is.null(spLines)) {
             if (bufferWidth == 0) {
-              merged <- rgeos::gBuffer(spLines, width = 0.0001, byid = FALSE)
+              inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
             } else {
-              merged <- rgeos::gBuffer(spLines, width = bufferWidth,
-                                       byid = FALSE)
+              buffered <- rgeos::gBuffer(lns, width = bufferWidth,
+                                         byid = TRUE)
+              inter <- rgeos::gIntersects(spLines, buffered, byid=TRUE)
+
             }
-            ovr <- sp::over(spLines, sp::disaggregate(merged),
-                            returnList = TRUE)
-            ovrDT <- data.table::data.table(names(ovr),
+            g <- igraph::graph_from_adjacency_matrix(inter)
+            ovr <- igraph::clusters(g)$membership
+            out <- data.table::data.table(names(ovr),
                                             unlist(ovr))
-            data.table::setnames(ovrDT, c(idField, 'withinGroup'))
+            data.table::setnames(out, c(idField, 'withinGroup'))
           } else {
             data.table(get(idField), withinGroup = as.integer(NA))
           }
