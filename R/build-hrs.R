@@ -93,8 +93,10 @@ BuildHRs <- function(DT = NULL,
 
   if (hrType == 'mcp') {
     functionParams <- formals(adehabitatHR::mcp)
-
     if (all(names(hrParams) %in% names(functionParams))) {
+      if (!('unout' %in% names(hrParams))) {
+        hrParams$unout <- 'm2'
+      }
       return(do.call(adehabitatHR::mcp, hrParams))
     } else {
       stop('hrParams provided do not match function parameters, see ?adehabitatHR::mcp')
@@ -103,7 +105,8 @@ BuildHRs <- function(DT = NULL,
     functionParams <- formals(adehabitatHR::kernelUD)
     if (all(names(hrParams) %in% names(functionParams))) {
       return(adehabitatHR::getverticeshr(
-        do.call(adehabitatHR::kernelUD, hrParams)))
+        do.call(adehabitatHR::kernelUD, hrParams)),
+        unout = 'm2')
     } else {
       stop(
         'hrParams provided do not match function parameters, see ?adehabitatHR::kernelUD'
