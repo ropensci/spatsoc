@@ -89,9 +89,33 @@ GroupLines(DT = DT2,
            spLines = NULL)
 
 
+## proportions
+
 polys <- BuildHRs(Dt, utm, 'mcp', coordFields = c('X', 'Y'),
-                  idField = 'ID', byFields = 'jul')
-#####
+                  idField = 'ID')
+
+GroupPolys(Dt, projection = utm, 'mcp', area = FALSE,coordFields = c('X', 'Y'),
+           idField = 'ID')
+
+outDT <- data.table::data.table(
+  area = sapply(int@polygons, slot, 'area'),
+  IDs = sapply(int@polygons, slot, 'ID')
+)
+set(outDT, j = 'ID1', value = tstrsplit(outDT[['IDs']], ' ', keep = 1))
+set(outDT, j = 'ID2', value = tstrsplit(outDT[['IDs']], ' ', keep = 2))
+
+# outDT[data.table(polys@data), on = 'id']
+dd <- data.table:::merge.data.table(
+  outDT,
+  data.table(polys@data),
+  by.x = 'ID1',
+  by.y = 'id',
+  suffixes = c('', 'Total')
+)
+dd
+set(dd, j = 'prop', value = dd[['area']] / dd[['areaTotal']])
+dd
+  #####
 ###1
 microbenchmark::microbenchmark({
   inter <- rgeos::gIntersects(polys, polys, byid = TRUE)

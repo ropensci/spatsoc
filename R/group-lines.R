@@ -86,8 +86,8 @@ GroupLines <-
       ovr <- igraph::clusters(g)$membership
       out <- data.table::data.table(names(ovr),
                                       unlist(ovr))
-      data.table::setnames(outDT, c('ID', 'group'))
-      return(outDT)
+      data.table::setnames(out, c('ID', 'group'))
+      return(out[])
     }
     if (is.null(timeGroup)) {
       suppressWarnings(
