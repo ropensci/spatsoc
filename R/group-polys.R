@@ -62,32 +62,40 @@ GroupPolys <-
 
 
       if (!area) {
-        unionPolys <- rgeos::gUnaryUnion(spPolys)
-        ovr <- sp::over(spPolys, sp::disaggregate(unionPolys))
-        ovrDT <- data.table::data.table(names(ovr),
-                                        ovr)
-        data.table::setnames(ovrDT, c('ID', 'group'))
-        return(ovrDT[])
+        inter <- rgeos::gIntersects(spPolys, spPolys, byid = TRUE)
+        g <- igraph::graph_from_adjacency_matrix(inter)
+        ovr <- igraph::clusters(g)$membership
+        out <- data.table::data.table(names(ovr),
+                                      unlist(ovr))
+        data.table::setnames(out, c('ID', 'group'))
+        return(out[])
       } else if (area) {
-        if(any(DT[, grepl('[^A-z0-9]', get(idField))])){
-          stop('please ensure IDs are alphanumeric and do not contain spaces')
-        }
-        inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
-        outDT <- data.table::data.table(area = sapply(
-          inters@polygons,
-          FUN = function(x) {
-            slot(x, 'area')
+        if (!is.null(DT)) {
+          if (any(DT[, grepl('[^A-z0-9]', get(idField))])) {
+            stop('please ensure IDs are alphanumeric and do not contain spaces')
           }
-        ) / 1e6)[, # cant actually use 1e6, but how do we standardize units?
-                 c('ID1', 'ID2') := data.table::tstrsplit(sapply(
-                   inters@polygons,
-                   FUN = function(x) {
-                     slot(x, 'ID')
-                   }
-                 ),
-                 ' ',
-                 type.convert = TRUE)]
-        return(outDT[])
+        }
+        inters <-
+          rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
+        out <- data.table::data.table(
+          area = sapply(inters@polygons, slot, 'area'),
+          IDs = sapply(inters@polygons, slot, 'ID')
+        )
+
+        set(out, j = 'ID1', value = tstrsplit(out[['IDs']], ' ', keep = 1))
+        set(out, j = 'ID2', value = tstrsplit(out[['IDs']], ' ', keep = 2))
+
+        out <- data.table:::merge.data.table(
+          out,
+          data.table(spPolys@data),
+          by.x = 'ID1',
+          by.y = 'id',
+          suffixes = c('', 'Total')
+        )
+        set(out, j = 'proportion', value = dd[['area']] / dd[['areaTotal']])
+        set(out, j = c('IDs', 'areaTotal'),  value = NULL)
+        data.table::setcolorder(out, c('ID1', 'ID2', 'area', 'proportion'))
+        return(out[])
       }
     } else if (!is.null(byFields)) {
       if (!is.null(spPolys)) {
@@ -116,58 +124,85 @@ GroupPolys <-
                 )
             )
             if (!is.null(spPolys)) {
-              unionPolys <- rgeos::gUnaryUnion(spPolys)
-              ovr <-
-                sp::over(spPolys, sp::disaggregate(unionPolys))
-              ovrDT <- data.table::data.table(names(ovr), ovr)
-              data.table::setnames(ovrDT, c('ID', 'withinGroup'))
+              inter <- rgeos::gIntersects(spPolys, spPolys, byid = TRUE)
+              g <- igraph::graph_from_adjacency_matrix(inter)
+              ovr <- igraph::clusters(g)$membership
+              out <- data.table::data.table(names(ovr),
+                                            unlist(ovr))
+              data.table::setnames(out, c('ID', 'withinGroup'))
             } else {
               data.table(ID = get(idField),
                          withinGroup = as.integer(NA))
             }
           }, by = byFields, .SDcols = c(coordFields, idField)]
-
         DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
         DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
            by = c(byFields, 'withinGroup')]
-        # DT[withinGroup == -999L, group := NA]
         set(DT, j = 'withinGroup', value = NULL)
         return(DT[])
       } else if (area){
-          outDT <-
-            DT[, {
-
-              suppressWarnings(
-                spPolys <-
-                  BuildHRs(
-                    DT = .SD,
-                    projection = projection,
-                    hrType = hrType,
-                    hrParams = hrParams,
-                    coordFields = coordFields,
-                    idField = idField,
-                    byFields = NULL,
-                    spPts = NULL
-                  )
-              )
+        if (any(DT[, grepl('[^A-z0-9]', get(idField))])) {
+          stop('please ensure IDs are alphanumeric and do not contain spaces')
+        }
+        outDT <-
+          DT[, {
+            suppressWarnings(
+              spPolys <-
+                BuildHRs(
+                  DT = .SD,
+                  projection = projection,
+                  hrType = hrType,
+                  hrParams = hrParams,
+                  coordFields = coordFields,
+                  idField = idField,
+                  byFields = NULL,
+                  spPts = NULL
+                )
+            )
+            if (!is.null(spPolys)) {
               inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
+              out <- data.table::data.table(
+                area = sapply(inters@polygons, slot, 'area'),
+                IDs = sapply(inters@polygons, slot, 'ID')
+              )
 
-              outDT <- data.table::data.table(area = sapply(
-                inters@polygons,
-                FUN = function(x) {
-                  slot(x, 'area')
-                }
-              ))[, c('ID1', 'ID2') := data.table::tstrsplit(sapply(
-                inters@polygons,
-                FUN = function(x) {
-                  slot(x, 'ID')
-                }
-              ),
-              ' ',
-              type.convert = TRUE)]
-            }, by = byFields, .SDcols = c(coordFields, idField)]
+              set(out, j = 'ID1', value = tstrsplit(out[['IDs']], ' ', keep = 1))
+              set(out, j = 'ID2', value = tstrsplit(out[['IDs']], ' ', keep = 2))
 
-          return(outDT[])
+              out <- data.table:::merge.data.table(
+                out,
+                data.table(spPolys@data),
+                by.x = 'ID1',
+                by.y = 'id',
+                suffixes = c('', 'Total')
+              )
+              # set(out, j = 'proportion', value = dd[['area']] / dd[['areaTotal']])
+              # set(out, j = c('IDs', 'areaTotal'),  value = NULL)
+              # out
+            } else {
+              data.table(ID1 = get(idField),
+                         ID2 = as.character(NA),
+                         area = as.numeric(NA),
+                         proportion = as.numeric(NA))
+            }
+            # inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
+            #
+            # outDT <- data.table::data.table(area = sapply(
+            #   inters@polygons,
+            #   FUN = function(x) {
+            #     slot(x, 'area')
+            #   }
+            # ))[, c('ID1', 'ID2') := data.table::tstrsplit(sapply(
+            #   inters@polygons,
+            #   FUN = function(x) {
+            #     slot(x, 'ID')
+            #   }
+            # ),
+            # ' ',
+            # type.convert = TRUE)]
+          }, by = byFields, .SDcols = c(coordFields, idField)]
+
+        return(outDT[])
       }
     }
   }
