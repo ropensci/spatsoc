@@ -56,66 +56,8 @@ Dt[, datetime := as.POSIXct(datetime)]
 Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
 Dt[, potato := ID]
-GroupTimes(Dt, timeField = 'datetime', threshold = '14 days')
+GroupTimes(Dt, timeField = 'datetime', threshold = '30 days')
 
-# INSTEAD OF bufferWidth = 0.00001  ######
-lns <- BuildLines(DT = Dt[block == 20],
-                  projection = utm,
-                  idField = 'ID',
-                  coordFields = c('X', 'Y'),
-                  byFields = 'yr')
-
-# if buffer = 0
-inter0 <- rgeos::gIntersects(lns, lns, byid=TRUE)
-g0 <- igraph::graph_from_adjacency_matrix(inter0)
-igraph::clusters(g0)$membership
-# else
-DT2 <- Dt[block ==20]
-
-# system.time({
-buffered <- rgeos::gBuffer(lns, width = 10, byid = TRUE)
-inter <- rgeos::gIntersects(lns, buffered, byid = TRUE)
-g <- igraph::graph_from_adjacency_matrix(inter)
-igraph::clusters(g)$membership
-
-GroupLines(spLines = lns)
-DT2[1, timegroup := 999]
-GroupLines(DT = DT2,
-           bufferWidth = 10,
-           projection = utm,
-           idField = 'ID',
-           coordFields = c('X', 'Y'),
-           timeGroup = 'timegroup',
-           spLines = NULL)
-
-
-## proportions
-
-polys <- BuildHRs(Dt, utm, 'mcp', coordFields = c('X', 'Y'),
-                  idField = 'ID')
-
-GroupPolys(Dt, projection = utm, 'mcp', area = FALSE,coordFields = c('X', 'Y'),
-           idField = 'ID')
-
-outDT <- data.table::data.table(
-  area = sapply(int@polygons, slot, 'area'),
-  IDs = sapply(int@polygons, slot, 'ID')
-)
-set(outDT, j = 'ID1', value = tstrsplit(outDT[['IDs']], ' ', keep = 1))
-set(outDT, j = 'ID2', value = tstrsplit(outDT[['IDs']], ' ', keep = 2))
-
-# outDT[data.table(polys@data), on = 'id']
-dd <- data.table:::merge.data.table(
-  outDT,
-  data.table(polys@data),
-  by.x = 'ID1',
-  by.y = 'id',
-  suffixes = c('', 'Total')
-)
-dd
-set(dd, j = 'prop', value = dd[['area']] / dd[['areaTotal']])
-dd
-  #####
 ###1
 microbenchmark::microbenchmark({
   inter <- rgeos::gIntersects(polys, polys, byid = TRUE)
@@ -167,26 +109,45 @@ GroupPolys(
   spPolys = NULL
 )
 
+Dt[, nBy := .N, c('block', 'ID')]
+rbindlist(list(dropped, a), fill = TRUE)
+dropped <- unique(Dt[nBy <= 5, .(block, ID)])
+a <- Dt[nBy > 5, {
+  spPolys <-
+    BuildHRs(
+      DT = .SD,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      coordFields = c('X', 'Y'),
+      idField = 'ID',
+      byFields = NULL,
+      spPts = NULL)
+  inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
+  areaID <- data.table::data.table(
+    area = sapply(inters@polygons, slot, 'area'),
+    IDs = as.character(sapply(inters@polygons, slot, 'ID'))
+  )
 
-## CHECK IF PARAMS MATCH FUNCTION
-hrparams <- list(percent = 95)
-funcparams <- formals(adehabitatHR::mcp)
+  set(areaID, j = idField, value = tstrsplit(areaID[['IDs']], ' ', keep = 1))
+  set(areaID, j = paste0(idField, '2'), value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
 
-all(names(hrparams) %in% names(funcparams))
-
-# GroupTimes(DT = Dt, timeField = 'datetime', threshold = '1 month')
-Dt[, mnth := month(datetime)]
-GroupLines(
-  DT = Dt,
-  bufferWidth = 100,
-  timeGroup = 'mnth',
-  idField = 'ID',
-  coordFields = c('X', 'Y'),
-  projection = utm,
-  groupFields = 'yr'
-)
-
-Dt[, .(uniqueMonths = uniqueN(mnth)), by = group][, max(uniqueMonths)]
+  out <- data.table:::merge.data.table(
+    x = data.table(spPolys@data),
+    y = areaID,
+    by.y = idField,
+    by.x = 'id',
+    suffixes = c('Total', '')
+  )
+  set(out, j = 'proportion', value = out[['area']] / out[['areaTotal']])
+  set(out, j = c('IDs', 'areaTotal'),  value = NULL)
+  setnames(out, 'id', idField)
+  setcolorder(out, c(idField, paste0(idField, '2'), 'area', 'proportion'))
+  out
+}, by = 'block',
+.SDcols = c('X', 'Y', 'ID')]
+Dt
+a
 
 ## DAILY ========
 Dt <- fread('input/Daily')
