@@ -4,7 +4,17 @@
 
 ## Decisions..
 
-* can't use spatsoc, too similar to spatstat (what about `socspat`, `socialspatial` )
+* can't use spatsoc, too similar to spatstat
+
+`socspat`
+
+`socialspatial`
+
+`xysocial`, `socialxy`
+
+..`gps`..
+
+..`groups`..
 
 ----
 
