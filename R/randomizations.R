@@ -26,7 +26,7 @@ Randomizations <- function(DT, idField, groupField, randomType,
   if(!is.numeric(iterations) & !is.null(iterations)) stop('must provide a numeric for iterations or NULL')
 
   if(is.null(iterations)) iterations <- 1
-
+# warning
 
   if(iterations == 1){
     if(randomType == 'hourly'){
