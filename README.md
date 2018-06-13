@@ -1,6 +1,17 @@
 # spatsoc [working.title]
 Title: Group animal location data by their spatial and temporal relationship
 
+## Using `drat`
+
+```r
+# Author
+drat::insertPackage('path to tar',
+'~/Documents/Local-git/spatsoc.gitlab.io/static')
+
+# User
+drat::addRepo('LocalRepo', 'spatsoc.gitlab.io')
+install.packages('spatsoc')
+```
 
 ## Test data
 https://www.datarepository.movebank.org/handle/10255/move.619
