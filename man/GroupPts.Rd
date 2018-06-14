@@ -2,43 +2,41 @@
 % Please edit documentation in R/group-pts.R
 \name{GroupPts}
 \alias{GroupPts}
-\title{Group Points By Buffer}
+\title{Group Points}
 \usage{
-GroupPts(DT = NULL, distance = NULL, idField = NULL, coordFields = NULL,
-  timeGroup = NULL, groupFields = NULL)
+GroupPts(DT = NULL, threshold = NULL, idField = NULL,
+  coordFields = NULL, timeGroup = NULL, groupFields = NULL)
 }
 \arguments{
-\item{DT}{Input data.table with coordinate and id fields. If not provided, fields
-default to c('EASTING', 'NORTHING') and 'ID'.}
+\item{DT}{input data.table}
 
-\item{distance}{The threshold distance for grouping points. The distance must be in the units of the projection.}
+\item{threshold}{for grouping points, in the units of the projection}
 
-\item{idField}{Character string indicating the column name for the ID
-associated with each point.}
+\item{idField}{Character string of ID column name}
 
-\item{coordFields}{Character vector indicating the X coordinate and Y
-coordinate columns. eg: c('EASTING', 'NORTHING')}
+\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timeGroup}{(optional) time group field in the DT upon which the spatial grouping will be calculated.}
+\item{timeGroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
-\item{groupFields}{(optional) grouping field(s) to be combined with the timeGroup field, either character or list of strings.}
+\item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 }
 \value{
-Input DT with column 'group' added.
+Input data.table with column 'group' added.
 }
 \description{
-Group points by spatial distance and temporal overlap.
+Group points by spatial and temporal overlap.
 }
 \details{
-This function finds spatialtemporal groups in input points.
+This function finds spatialtemporal groups in input points. The threshold provided must be in the units of the projection of the coordinates. UTM coordinates (recommended) are in meters and threshold = 50 indicates a 50m threshold.
 }
 \examples{
 
-GroupPts(locs, distance = 50)
+GroupPts(locs, threshold = 5, idField = 'ID',
+         coordFields = c('X', 'Y'))
 
-GroupPts(locs, distance = 50, timeGroup = 'datetime')
+GroupPts(locs, threshold = 5, idField = 'ID',
+         coordFields = c('X', 'Y'), timeGroup = 'timegroup')
 
-GroupPts(locs, distance = 50, timeGroup = 'timegroup')
-
-GroupPts(locs, distance = 50, timeGroup = 'timegroup', groupFields = 'season')
+GroupPts(locs, threshold = 5, idField = 'ID', coordFields = c('X', 'Y'),
+         timeGroup = 'timegroup', groupFields = 'season')
 }
