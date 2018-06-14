@@ -5,7 +5,8 @@ Title: Group animal location data by their spatial and temporal relationship
 
 ```r
 # Author
-drat::insertPackage('path to tar',
+# build tar with `R CMD build spatsoc`
+drat::insertPackage('~/Documents/Local-git/spatsoc_0.0.0.9103.tar.gz',
 '~/Documents/Local-git/spatsoc.gitlab.io/static')
 
 # User
