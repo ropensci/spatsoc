@@ -41,7 +41,7 @@ or we can just return all locs with area = FALSE, adding group to all. but this 
 
 ----
 
-* should GroupTimes(threshold = 1 month) ??
+* should group_times(threshold = 1 month) ??
 
 this would just be 
 data.table::month()
@@ -113,7 +113,7 @@ https://github.com/Rdatatable/data.table/issues/2788
 
 ----
 
-* warn that date column provided has more than one uniqueN and not more than 1million (ha)/ warn if timegroup not provided, GroupTimes/slow
+* warn that date column provided has more than one uniqueN and not more than 1million (ha)/ warn if timegroup not provided, group_times/slow
 
 low: 1?
 high: uniqueN <= half nrows 
@@ -150,7 +150,7 @@ by separating byFields and idField, we emphasize the requirement of idField and 
 
 ----
 
-* for `GroupTimes`: return days, minutes, etc?
+* for `group_times`: return days, minutes, etc?
 
 ----
 
@@ -207,7 +207,7 @@ by separating byFields and idField, we emphasize the requirement of idField and 
 **yes**
 
 ```r
-GroupTimes(Dt, timeField = 'datetime', threshold = '3 hour')
+group_times(Dt, timeField = 'datetime', threshold = '3 hour')
 distThreshold <- 500
 GroupPts(Dt, threshold = distThreshold, timeGroup = 'timegroup',
          coordFields = c('X', 'Y'), idField = 'ID')
@@ -226,13 +226,13 @@ ggplot(Dt[maxDist > distThreshold]) +
 
 ----
 
-* is GroupTimes the same as data.table:::round.IDate()
+* is group_times the same as data.table:::round.IDate()
 
 **no**
 
 round.IDate rounds on units of weeks, months, quarters, years
 
-GroupTimes is more flexible, providing x days, x hours, x minutes
+group_times is more flexible, providing x days, x hours, x minutes
 
 ```r
 function (x, digits = c("weeks", "months", "quarters", "years"), 

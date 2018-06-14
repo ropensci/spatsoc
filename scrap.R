@@ -56,7 +56,7 @@ Dt[, datetime := as.POSIXct(datetime)]
 Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
 Dt[, potato := ID]
-GroupTimes(Dt, timeField = 'datetime', threshold = '30 days')
+group_times(Dt, timeField = 'datetime', threshold = '30 days')
 
 Randomizations(Dt, idField= 'ID', groupField = 'group',
                randomType = 'spiegel', dateField = 'datetime',
@@ -75,7 +75,7 @@ Dt[, Y := `location-lat`]
 
 Dt <- Dt[grp == 'ngelleehon']
 
-GroupTimes(Dt, 'posix', '10 minutes')
+group_times(Dt, 'posix', '10 minutes')
 Dt[, uniqueN(posix)]
 GroupPts(Dt, 100, time = 'timegroup', coordFields = c('X', 'Y'),
          idField = 'ID')

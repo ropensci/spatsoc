@@ -16,13 +16,13 @@
 #' @export
 #'
 #' @examples
-#' GroupTimes(locs, timeField = 'datetime', threshold = '5 minutes')
+#' group_times(locs, timeField = 'datetime', threshold = '5 minutes')
 #'
-#' GroupTimes(locs, timeField = 'datetime', threshold = '2 hours')
+#' group_times(locs, timeField = 'datetime', threshold = '2 hours')
 #'
-#' GroupTimes(locs, timeField = 'datetime', threshold = '10 days')
+#' group_times(locs, timeField = 'datetime', threshold = '10 days')
 #'
-GroupTimes <- function(DT = NULL,
+group_times <- function(DT = NULL,
                        timeField = NULL,
                        threshold = NULL) {
   if (is.null(DT)) {

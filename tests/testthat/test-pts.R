@@ -77,7 +77,7 @@ test_that('two column DT returned if timeGroup, group fields not provided', {
                2)
 })
 
-test_that('warns if timeGroup is a date/time or character instead of output from GroupTimes', {
+test_that('warns if timeGroup is a date/time or character instead of output from group_times', {
   copyDT <- copy(DT)
 
   # if datetime is a character
@@ -112,7 +112,7 @@ test_that('group column succesfully detected', {
 
 test_that('withinGroup is not returned to the user', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  GroupTimes(copyDT, timeField = 'datetime', threshold = '5 minutes')
+  group_times(copyDT, timeField = 'datetime', threshold = '5 minutes')
 
   expect_false('withinGroup' %in% colnames(
     GroupPts(copyDT, threshold = 10, idField = 'ID',
@@ -121,7 +121,7 @@ test_that('withinGroup is not returned to the user', {
 
 test_that('no rows are added to the result DT', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  GroupTimes(copyDT, timeField = 'datetime', threshold = '5 minutes')
+  group_times(copyDT, timeField = 'datetime', threshold = '5 minutes')
 
   expect_equal(nrow(copyDT),
                nrow(GroupPts(copyDT, threshold = 10, idField = 'ID',
@@ -130,7 +130,7 @@ test_that('no rows are added to the result DT', {
 
 test_that('only one column added to the result DT', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  GroupTimes(copyDT, timeField = 'datetime', threshold = '5 minutes')
+  group_times(copyDT, timeField = 'datetime', threshold = '5 minutes')
 
   expect_equal(ncol(copyDT) + 1,
                ncol(GroupPts(copyDT, threshold = 10, idField = 'ID',
@@ -139,7 +139,7 @@ test_that('only one column added to the result DT', {
 
 test_that('group column is added to result', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  GroupTimes(copyDT, timeField = 'datetime', threshold = '5 minutes')
+  group_times(copyDT, timeField = 'datetime', threshold = '5 minutes')
   expect_true('group' %in%
                 colnames(GroupPts(copyDT, threshold = 10, idField = 'ID',
                          coordFields = c('X', 'Y'), timeGroup = 'timegroup')))

@@ -66,7 +66,7 @@ GroupPts <- function(DT = NULL,
   if (!is.null(timeGroup)) {
     if (any(DT[, class(get(timeGroup))] %in%
             c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
-      warning('timeGroup provided is a date/time or character type, did you use GroupTimes?')
+      warning('timeGroup provided is a date/time or character type, did you use group_times?')
     }
     }
 
