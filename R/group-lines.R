@@ -2,7 +2,7 @@
 #'
 #' @inheritParams BuildPts
 #' @inheritParams GroupPts
-#' @param bufferWidth The width of the buffer around the geometry in the units
+#' @param threshold The width of the buffer around the geometry in the units
 #'   of the projection. Optionally, exclude argument or supply 0 to compare
 #'   SpatialLines intersection
 #' @param spLines Alternatively, provide a SpatialLines object created with the sp
@@ -25,7 +25,7 @@
 #' groups <- GroupLines(spLines = locsLines)
 GroupLines <-
   function(DT = NULL,
-           bufferWidth = NULL,
+           threshold = NULL,
            projection = NULL,
            idField = NULL,
            coordFields = NULL,
@@ -33,11 +33,11 @@ GroupLines <-
            groupFields = NULL,
            spLines = NULL) {
 
-    if (is.null(bufferWidth)) {
-      warning('buffer width missing, using 0 by default')
-      bufferWidth <- 0
-    } else if (bufferWidth < 0) {
-      stop('cannot provide a negative bufferWidth')
+    if (is.null(threshold)) {
+      warning('threshold missing, using 0 by default')
+      threshold <- 0
+    } else if (threshold < 0) {
+      stop('cannot provide a negative threshold')
     }
 
     if (!is.null(spLines) && !is.null(DT)) {
@@ -76,10 +76,10 @@ GroupLines <-
         stop('spLines provided must be a SpatialLines object')
       }
 
-      if (bufferWidth == 0) {
+      if (threshold == 0) {
         inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
       } else {
-        buffered <- rgeos::gBuffer(spLines, width = bufferWidth, byid = TRUE)
+        buffered <- rgeos::gBuffer(spLines, width = threshold, byid = TRUE)
         inter <- rgeos::gIntersects(spLines, buffered, byid=TRUE)
       }
       g <- igraph::graph_from_adjacency_matrix(inter)
@@ -99,10 +99,10 @@ GroupLines <-
         )
       )
       if (!is.null(spLines)) {
-        if (bufferWidth == 0) {
+        if (threshold == 0) {
           inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
         } else {
-          buffered <- rgeos::gBuffer(spLines, width = bufferWidth, byid = TRUE)
+          buffered <- rgeos::gBuffer(spLines, width = threshold, byid = TRUE)
           inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
         }
         g <- igraph::graph_from_adjacency_matrix(inter)
@@ -138,10 +138,10 @@ GroupLines <-
             )
           )
           if (!is.null(spLines)) {
-            if (bufferWidth == 0) {
+            if (threshold == 0) {
               inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
             } else {
-              buffered <- rgeos::gBuffer(spLines, width = bufferWidth,
+              buffered <- rgeos::gBuffer(spLines, width = threshold,
                                          byid = TRUE)
               inter <- rgeos::gIntersects(spLines, buffered, byid=TRUE)
 

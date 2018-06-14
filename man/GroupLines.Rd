@@ -4,29 +4,26 @@
 \alias{GroupLines}
 \title{Groups From Spatial Lines}
 \usage{
-GroupLines(DT = NULL, bufferWidth = NULL, projection = NULL,
+GroupLines(DT = NULL, threshold = NULL, projection = NULL,
   idField = NULL, coordFields = NULL, timeGroup = NULL,
   groupFields = NULL, spLines = NULL)
 }
 \arguments{
-\item{DT}{Input data.table with coordinate and id fields. If not provided, fields
-default to c('EASTING', 'NORTHING') and 'ID'.}
+\item{DT}{input data.table}
 
-\item{bufferWidth}{The width of the buffer around the geometry in the units
+\item{threshold}{The width of the buffer around the geometry in the units
 of the projection. Optionally, exclude argument or supply 0 to compare
 SpatialLines intersection}
 
-\item{projection}{Character string for input to sp::CRS() and proj4string().}
+\item{projection}{PROJ.4 charaster string}
 
-\item{idField}{Character string indicating the column name for the ID
-associated with each point.}
+\item{idField}{Character string of ID column name}
 
-\item{coordFields}{Character vector indicating the X coordinate and Y
-coordinate columns. eg: c('EASTING', 'NORTHING')}
+\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timeGroup}{(optional) time group field in the DT upon which the spatial grouping will be calculated.}
+\item{timeGroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
-\item{groupFields}{(optional) grouping field(s) to be combined with the timeGroup field, either character or list of strings.}
+\item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 
 \item{spLines}{Alternatively, provide a SpatialLines object created with the sp
 package. If a spLines object is provided, groups cannot be calculated by a

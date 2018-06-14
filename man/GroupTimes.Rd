@@ -7,23 +7,28 @@
 GroupTimes(DT = NULL, timeField = NULL, threshold = NULL)
 }
 \arguments{
-\item{DT}{input locs/rows}
+\item{DT}{input data.table}
 
-\item{timeField}{time column name}
+\item{timeField}{name of time column}
 
-\item{threshold}{character defining the threshold for grouping times.
+\item{threshold}{threshold for grouping times.
 eg: '2 hours', '10 minutes', etc.
 if not provided, times will be matched exactly.
 Note that provided threshold must be in the expected format: '## unit'}
 }
 \description{
-Assign an integer group for rows by provided time column. If
-using GPS collar data or other data with variability in concurrent measures
-across individuals, it is usefuls to round this time column
-providing the threshold.
-Otherwise, rows are grouped by matching exact times.
+Assign an integer timegroup.
+Provide the threshold to group on and rows will be grouped.
+If the threshold is NULL, rows are grouped by matching exact datetimes.
 }
 \details{
-This function can also group rows on blocks of days.
-Simply provide the block length in the same manner as the threshold eg: '5 days'.
+The threshold can be in units of minutes, hours or days.
+}
+\examples{
+GroupTimes(locs, timeField = 'datetime', threshold = '5 minutes')
+
+GroupTimes(locs, timeField = 'datetime', threshold = '2 hours')
+
+GroupTimes(locs, timeField = 'datetime', threshold = '10 days')
+
 }

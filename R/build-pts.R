@@ -6,18 +6,13 @@
 #' given projection at <http://spatialreference.org/ref/epsg/> and providing it with
 #' "+init=epsg:CODE" (eg: "+init=epsg:4326").
 #'
-#' @param DT Input data.table with coordinate and id fields. If not provided, fields
-#'   default to c('EASTING', 'NORTHING') and 'ID'.
-#' @param projection Character string for input to sp::CRS() and proj4string().
-#' @param coordFields Character vector indicating the X coordinate and Y
-#'   coordinate columns. eg: c('EASTING', 'NORTHING')
-#' @param idField Character string indicating the column name for the ID
-#'   associated with each point.
-#'
+#' @param DT input data.table
+#' @param projection PROJ.4 charaster string
+#' @param coordFields Character vector of X coordinate and Y coordinate column names
+#' @param idField Character string of ID column name
 #' @return SpatialPointsDataFrame
 #' @export
 #'
-#' @import data.table
 BuildPts <- function(DT, projection, coordFields = c('EASTING', 'NORTHING'), idField = 'ID'){
   if(any(!(c(idField, coordFields) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
