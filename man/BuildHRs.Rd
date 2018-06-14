@@ -8,20 +8,17 @@ BuildHRs(DT = NULL, projection = NULL, hrType = NULL, hrParams = NULL,
   coordFields = NULL, idField = NULL, byFields = NULL, spPts = NULL)
 }
 \arguments{
-\item{DT}{Input data.table with coordinate and id fields. If not provided, fields
-default to c('EASTING', 'NORTHING') and 'ID'.}
+\item{DT}{input data.table}
 
-\item{projection}{Character string for input to sp::CRS() and proj4string().}
+\item{projection}{PROJ.4 charaster string}
 
 \item{hrType}{Type of HR estimation either 'mcp' or 'kernel'}
 
 \item{hrParams}{List of named arguments to be passed to adehabitatHR functions as determined by hrType}
 
-\item{coordFields}{Character vector indicating the X coordinate and Y
-coordinate columns. eg: c('EASTING', 'NORTHING')}
+\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{idField}{Character string indicating the column name for the ID
-associated with each point.}
+\item{idField}{Character string of ID column name}
 }
 \value{
 Home range polygons for each ID

@@ -7,11 +7,9 @@
 CalcCentroids(DT, coordFields, groupField)
 }
 \arguments{
-\item{DT}{Input data.table with coordinate and id fields. If not provided, fields
-default to c('EASTING', 'NORTHING') and 'ID'.}
+\item{DT}{input data.table}
 
-\item{coordFields}{Character vector indicating the X coordinate and Y
-coordinate columns. eg: c('EASTING', 'NORTHING')}
+\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
 \item{groupField}{The group field generated}
 }

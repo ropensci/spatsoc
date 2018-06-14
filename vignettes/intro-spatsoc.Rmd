@@ -24,7 +24,7 @@ sublocs[, day := yday(datetime)]
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
-pt.grps <- GroupPts(sublocs, idField = 'ID', distanceThreshold = 50,
+pt.grps <- GroupPts(sublocs, idField = 'ID', threshold = 50,
                     projection = utm, timeField = 'datetime',
                     threshold = '10 minutes')
 pt.grps[, groupN := .N, by = group]

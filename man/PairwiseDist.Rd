@@ -8,17 +8,14 @@ PairwiseDist(DT, timeField, coordFields = c("EASTING", "NORTHING"),
   idField = "ID")
 }
 \arguments{
-\item{DT}{Input data.table with coordinate and id fields. If not provided, fields
-default to c('EASTING', 'NORTHING') and 'ID'.}
+\item{DT}{input data.table}
 
 \item{timeField}{time column upon which individuals are compared. recommended
 to use a rounded time, see SOME LINK.}
 
-\item{coordFields}{Character vector indicating the X coordinate and Y
-coordinate columns. eg: c('EASTING', 'NORTHING')}
+\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{idField}{Character string indicating the column name for the ID
-associated with each point.}
+\item{idField}{Character string of ID column name}
 }
 \value{
 mean pairwise distance data.table by ID and (optional) time field

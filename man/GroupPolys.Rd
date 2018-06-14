@@ -9,21 +9,18 @@ GroupPolys(DT = NULL, hrType = NULL, hrParams = NULL, area = NULL,
   byFields = NULL, spPolys = NULL)
 }
 \arguments{
-\item{DT}{Input data.table with coordinate and id fields. If not provided, fields
-default to c('EASTING', 'NORTHING') and 'ID'.}
+\item{DT}{input data.table}
 
 \item{hrType}{Type of HR estimation, defaults to 'mcp'}
 
 \item{area}{boolean indicating either returning area of overlap
 of polygons or simply group}
 
-\item{projection}{Character string for input to sp::CRS() and proj4string().}
+\item{projection}{PROJ.4 charaster string}
 
-\item{coordFields}{Character vector indicating the X coordinate and Y
-coordinate columns. eg: c('EASTING', 'NORTHING')}
+\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{idField}{Character string indicating the column name for the ID
-associated with each point.}
+\item{idField}{Character string of ID column name}
 
 \item{spPolys}{Alternatively, provide a SpatialPolygons object.}
 }
