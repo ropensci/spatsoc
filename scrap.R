@@ -58,96 +58,12 @@ Dt[, yr := year(datetime)]
 Dt[, potato := ID]
 GroupTimes(Dt, timeField = 'datetime', threshold = '30 days')
 
-###1
-microbenchmark::microbenchmark({
-  inter <- rgeos::gIntersects(polys, polys, byid = TRUE)
-  g <- igraph::graph_from_adjacency_matrix(inter)
-  igraph::clusters(g)$membership
-}, times = 1000)
-
-# vs
-##2
-microbenchmark::microbenchmark({
-  unionPolys <- rgeos::gUnaryUnion(polys)
-  ovr <- sp::over(polys, sp::disaggregate(unionPolys))
-}, times = 1000)
-#######
-
-unionPolys <- rgeos::gUnaryUnion(polys)
-sp::over(polys, sp::disaggregate(unionPolys))
-rgeos::gIntersects(polys, polys, byid = TRUE)
-a <- rgeos::gUnion(polys, polys)
-names(a)
-
-outDT <- data.table::data.table(area = sapply(
-  inters@polygons,
-  FUN = function(x) {
-    slot(x, 'area')
-  }
-) / 1e6)[, # cant actually use 1e6, but how do we standardize units?
-         # this is susceptible to error if ID field provided has spaces
-         c('ID1', 'ID2') := data.table::tstrsplit(sapply(
-           inters@polygons,
-           FUN = function(x) {
-             slot(x, 'ID')
-           }
-         ),
-         ' ',
-         type.convert = TRUE)]
-return(outDT)
-
-# GroupPolys
-GroupPolys(
-  DT = Dt,
-  projection = utm,
-  hrType = 'mcp',
-  hrParams = NULL,
-  area = TRUE,
-  coordFields = c('X', 'Y'),
-  idField = 'ID',
-  byFields = 'yr',
-  spPolys = NULL
-)
-
-Dt[, nBy := .N, c('block', 'ID')]
-rbindlist(list(dropped, a), fill = TRUE)
-dropped <- unique(Dt[nBy <= 5, .(block, ID)])
-a <- Dt[nBy > 5, {
-  spPolys <-
-    BuildHRs(
-      DT = .SD,
-      projection = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      coordFields = c('X', 'Y'),
-      idField = 'ID',
-      byFields = NULL,
-      spPts = NULL)
-  inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
-  areaID <- data.table::data.table(
-    area = sapply(inters@polygons, slot, 'area'),
-    IDs = as.character(sapply(inters@polygons, slot, 'ID'))
-  )
-
-  set(areaID, j = idField, value = tstrsplit(areaID[['IDs']], ' ', keep = 1))
-  set(areaID, j = paste0(idField, '2'), value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
-
-  out <- data.table:::merge.data.table(
-    x = data.table(spPolys@data),
-    y = areaID,
-    by.y = idField,
-    by.x = 'id',
-    suffixes = c('Total', '')
-  )
-  set(out, j = 'proportion', value = out[['area']] / out[['areaTotal']])
-  set(out, j = c('IDs', 'areaTotal'),  value = NULL)
-  setnames(out, 'id', idField)
-  setcolorder(out, c(idField, paste0(idField, '2'), 'area', 'proportion'))
-  out
-}, by = 'block',
-.SDcols = c('X', 'Y', 'ID')]
-Dt
-a
+Randomizations(Dt, idField= 'ID', groupField = 'group',
+               randomType = 'spiegel', dateField = 'datetime',
+               splitBy = 'yr', iterations = 10)
+GroupLines(Dt, bufferWidth = 0,
+           projection = utm,
+           coordFields = c('X', 'Y'), idField = 'ID')
 
 ## DAILY ========
 Dt <- fread('input/Daily')
@@ -162,7 +78,7 @@ Dt <- Dt[grp == 'ngelleehon']
 GroupTimes(Dt, 'posix', '10 minutes')
 Dt[, uniqueN(posix)]
 GroupPts(Dt, 100, time = 'timegroup', coordFields = c('X', 'Y'),
-         idField = 'individual-local-identifier')
+         idField = 'ID')
 ## DAILY ====...
 
 ############# SF SF SF SF ################

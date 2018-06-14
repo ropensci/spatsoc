@@ -37,6 +37,8 @@ to capture results
 
 is it another function?
 
+or we can just return all locs with area = FALSE, adding group to all. but this is pretty redundant
+
 ----
 
 * should GroupTimes(threshold = 1 month) ??
