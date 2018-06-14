@@ -48,7 +48,7 @@ group_polys <-
     if (is.null(byFields)) {
       if (!is.null(DT) && is.null(spPolys)) {
         spPolys <-
-          BuildHRs(
+          build_polys(
             DT = DT,
             projection = projection,
             hrType = hrType,
@@ -112,7 +112,7 @@ group_polys <-
           DT[, {
             suppressWarnings(
               spPolys <-
-                BuildHRs(
+                build_polys(
                   DT = .SD,
                   projection = projection,
                   hrType = hrType,
@@ -149,7 +149,7 @@ group_polys <-
           Dt[nBy > 5, {
             suppressWarnings(
               spPolys <-
-                BuildHRs(
+                build_polys(
                   DT = .SD,
                   projection = projection,
                   hrType = hrType,

@@ -1,5 +1,5 @@
 # Test Build HRs
-context('test BuildHRs')
+context('test build_polys')
 library(spatsoc)
 
 DT <- fread('../testdata/buffalo.csv')
@@ -7,38 +7,38 @@ utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 
 test_that('DT or spPts are required but not both', {
-  expect_error(BuildHRs(DT = NULL, spPts = NULL),
+  expect_error(build_polys(DT = NULL, spPts = NULL),
                'input DT or spPts required')
 
-  expect_error(BuildHRs(DT = DT, spPts = 10),
+  expect_error(build_polys(DT = DT, spPts = 10),
                'cannot provide both DT and spPts')
 })
 
 
 
 test_that('coordFields, idField, projection must be provided and proper format', {
-  expect_error(BuildHRs(DT = DT,
+  expect_error(build_polys(DT = DT,
                         projection = utm,
                         hrType = 'mcp',
                         coordFields = c('X', 'Y'),
                         idField = NULL),
                'idField must be provided')
 
-  expect_error(BuildHRs(DT = DT,
+  expect_error(build_polys(DT = DT,
                         projection = NULL,
                         hrType = 'mcp',
                         coordFields = c('X', 'Y'),
                         idField = 'ID'),
                'projection must be provided')
 
-  expect_error(BuildHRs(DT = DT,
+  expect_error(build_polys(DT = DT,
                         projection = utm,
                         hrType = 'mcp',
                         coordFields = NULL,
                         idField = 'ID'),
                'coordFields must be provided')
 
-  expect_error(BuildHRs(DT = DT,
+  expect_error(build_polys(DT = DT,
                         projection = utm,
                         hrType = 'mcp',
                         coordFields = 'X',
@@ -47,14 +47,14 @@ test_that('coordFields, idField, projection must be provided and proper format',
 
   copyDT <- copy(DT)
   copyDT[, X := as.character(X)]
-  expect_error(BuildHRs(DT = copyDT,
+  expect_error(build_polys(DT = copyDT,
                         projection = utm,
                         hrType = 'mcp',
                         coordFields = c('X', 'Y'),
                         idField = 'ID'),
                'coordFields must be numeric')
 
-  expect_error(BuildHRs(DT = DT,
+  expect_error(build_polys(DT = DT,
                         projection = utm,
                         hrType = NULL,
                         coordFields = c('X', 'Y'),
@@ -65,14 +65,14 @@ test_that('coordFields, idField, projection must be provided and proper format',
 
 
 test_that('column names must exist in DT', {
-  expect_error(BuildHRs(DT = DT,
+  expect_error(build_polys(DT = DT,
                         projection = utm,
                         hrType = 'mcp',
                         coordFields = c('X', 'Y'),
                         idField = 'potato'),
                'not present in input DT', fixed = FALSE)
 
-  expect_error(BuildHRs(DT = DT,
+  expect_error(build_polys(DT = DT,
                         projection = utm,
                         hrType = 'mcp',
                         coordFields = c('potatoX', 'potatoY'),
@@ -82,7 +82,7 @@ test_that('column names must exist in DT', {
 
 test_that('hrParams returns error if params do not match function params', {
   expect_error(
-    BuildHRs(
+    build_polys(
       DT = DT,
       projection = utm,
       hrType = 'mcp',
@@ -93,7 +93,7 @@ test_that('hrParams returns error if params do not match function params', {
     'hrParams provided do not match function parameters', fixed = FALSE)
 
   expect_error(
-    BuildHRs(
+    build_polys(
       DT = DT,
       projection = utm,
       hrType = 'kernel',
@@ -106,7 +106,7 @@ test_that('hrParams returns error if params do not match function params', {
 
 test_that('if hrParams NULL, warngs', {
   expect_warning(
-    BuildHRs(
+    build_polys(
       DT = DT,
       projection = utm,
       hrType = 'mcp',

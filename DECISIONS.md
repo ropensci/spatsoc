@@ -76,13 +76,13 @@ also is it proportion instead?
 * drop BuildPts
 
 or Drop all Build?? 
-BuildHRs just calls adehabitat.. 
+build_polys just calls adehabitat.. 
 BuildPts just calls spSpatialPtsDF.. 
 
 
 ----
 
-* anything other than MCP and kernel? for BuildHRs
+* anything other than MCP and kernel? for build_polys
 
 
 

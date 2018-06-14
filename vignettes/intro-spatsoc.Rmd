@@ -30,7 +30,7 @@ pt.grps <- group_pts(sublocs, idField = 'ID', threshold = 50,
 pt.grps[, groupN := .N, by = group]
 pt.grps[ID != 'A'][sample(5), groupN := 2]
 
-hrs <- BuildHRs(hrType = 'mcp', DT = sublocs, projection = utm)
+hrs <- build_polys(hrType = 'mcp', DT = sublocs, projection = utm)
 hr.grps <- group_polys(area = FALSE, hrType = 'mcp', DT = sublocs, projection = utm)
 hrs@data$grps <- hr.grps$group
 hr <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
@@ -113,7 +113,7 @@ gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2,
 <!-- * Helper functions -->
 <!--     * `BuildPts` -->
 <!--     * `BuildLines` -->
-<!--     * `BuildHRs` -->
+<!--     * `build_polys` -->
 <!--     * `BuildClusters` -->
 
 ## Grouping
