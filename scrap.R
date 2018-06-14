@@ -77,7 +77,7 @@ Dt <- Dt[grp == 'ngelleehon']
 
 group_times(Dt, 'posix', '10 minutes')
 Dt[, uniqueN(posix)]
-GroupPts(Dt, 100, time = 'timegroup', coordFields = c('X', 'Y'),
+group_pts(Dt, 100, time = 'timegroup', coordFields = c('X', 'Y'),
          idField = 'ID')
 ## DAILY ====...
 
@@ -103,9 +103,9 @@ OUT <- data.table::data.table(Dt$ID,
 # })
 
 profvis::profvis({
-  GroupPts(l, 100, timeField = 'timegroup', projection = utm)
-  GroupPtsSF(l, 100, timeField = 'timegroup', projection = utm)
-  GroupPtsIGRAPH(l, 100, timeField = 'timegroup', projection = utm)
+  group_pts(l, 100, timeField = 'timegroup', projection = utm)
+  group_ptsSF(l, 100, timeField = 'timegroup', projection = utm)
+  group_ptsIGRAPH(l, 100, timeField = 'timegroup', projection = utm)
 })
 
 l
@@ -128,17 +128,17 @@ by = timegroup, .SDcols = coordFields]
 l
 l[, withinGroup := NULL]
 microbenchmark::microbenchmark(
-  GroupPts(l, 100, projection = utm)
+  group_pts(l, 100, projection = utm)
   , times = 15)
 microbenchmark::microbenchmark(
-  GroupPtsSF(l, 100, projection = utm)
+  group_ptsSF(l, 100, projection = utm)
   , times = 15)
 
 system.time(
-  GroupPts(l, 100, projection = utm)
+  group_pts(l, 100, projection = utm)
 )
 system.time(
-  GroupPtsSF(l, 100, projection = utm)
+  group_ptsSF(l, 100, projection = utm)
 )
 
 

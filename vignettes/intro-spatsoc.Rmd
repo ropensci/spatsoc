@@ -24,7 +24,7 @@ sublocs[, day := yday(datetime)]
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
-pt.grps <- GroupPts(sublocs, idField = 'ID', threshold = 50,
+pt.grps <- group_pts(sublocs, idField = 'ID', threshold = 50,
                     projection = utm, timeField = 'datetime',
                     threshold = '10 minutes')
 pt.grps[, groupN := .N, by = group]
@@ -94,7 +94,7 @@ gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2,
 
 <!-- ## Functions -->
 <!-- * Grouping  -->
-<!--     * `GroupPts`   -->
+<!--     * `group_pts`   -->
 <!--     * `GroupLines`   -->
 <!--     * `GroupHRs` / `GroupPolys`  -->
 <!--     * `GroupClusters`  -->
@@ -131,27 +131,27 @@ pander::pander(locs[sample(.N, 5)])
 <!-- note this input/example data is just for now.. -->
 The data consist of relocations of `r locs[, uniqueN(ID)]` individuals over `r locs[, max(yday(datetime)) - min(yday(datetime))]` days. Relocations were recorded using GPS collars with fixes obtained every two hours. Using these data, we can compare the various grouping methods available in `spatsoc`.
 
-### `GroupPts`
-The `GroupPts` function compares the relocations of all individuals at each time step and groups individuals based on a distance threshold provided by the user.
+### `group_pts`
+The `group_pts` function compares the relocations of all individuals at each time step and groups individuals based on a distance threshold provided by the user.
 
 Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. For example, we will use a 5 minute threshold.
 
 ```{r grouppts, eval = FALSE}
-GroupPts(locs, 50, 'datetime', '5 minutes',
+group_pts(locs, 50, 'datetime', '5 minutes',
          '+proj=utm +zone=21 ellps=WGS84',
          c('EASTING', 'NORTHING'), 'ID')
 ```
 
 ```{r fake grouppts, echo=FALSE}
 pander::pander(
-  GroupPts(locs, 50, 'datetime', '5 minutes',
+  group_pts(locs, 50, 'datetime', '5 minutes',
          '+proj=utm +zone=21 ellps=WGS84',
          c('EASTING', 'NORTHING'), 'ID')[388:395])
 ```
 
 
 ### `GroupLines`
-The `GroupLines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `GroupPts` which can help understand shared space at daily, weekly or other temporal resolutions.
+The `GroupLines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
 
 ```{r fake grouplines, eval = FALSE}
 GroupLines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), idField = 'ID')
@@ -193,7 +193,7 @@ pander::pander(
 ## Notes
 Package dependencies for `spatsoc` are `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference.
 
-In addition, since the `rgeos` package is used in most functions (notably `GroupPts` and `GroupLines`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`.
+In addition, since the `rgeos` package is used in most functions (notably `group_pts` and `GroupLines`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`.
 
 
 ```{r, echo = FALSE}

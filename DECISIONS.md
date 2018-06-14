@@ -209,7 +209,7 @@ by separating byFields and idField, we emphasize the requirement of idField and 
 ```r
 group_times(Dt, timeField = 'datetime', threshold = '3 hour')
 distThreshold <- 500
-GroupPts(Dt, threshold = distThreshold, timeGroup = 'timegroup',
+group_pts(Dt, threshold = distThreshold, timeGroup = 'timegroup',
          coordFields = c('X', 'Y'), idField = 'ID')
 Dt[, nByGroup := .N, by = group]
 Dt[nByGroup > 1, maxDist := max(dist(cbind(X,Y))), by = group]

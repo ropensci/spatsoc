@@ -13,15 +13,15 @@
 #'
 #' @examples
 #'
-#' GroupPts(locs, threshold = 5, idField = 'ID',
+#' group_pts(locs, threshold = 5, idField = 'ID',
 #'          coordFields = c('X', 'Y'))
 #'
-#' GroupPts(locs, threshold = 5, idField = 'ID',
+#' group_pts(locs, threshold = 5, idField = 'ID',
 #'          coordFields = c('X', 'Y'), timeGroup = 'timegroup')
 #'
-#' GroupPts(locs, threshold = 5, idField = 'ID', coordFields = c('X', 'Y'),
+#' group_pts(locs, threshold = 5, idField = 'ID', coordFields = c('X', 'Y'),
 #'          timeGroup = 'timegroup', groupFields = 'season')
-GroupPts <- function(DT = NULL,
+group_pts <- function(DT = NULL,
                      threshold = NULL,
                      idField = NULL,
                      coordFields = NULL,

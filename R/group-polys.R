@@ -3,7 +3,7 @@
 #' Group individuals by polygon (eg: home ranges) overlap
 #'
 #' @inheritParams BuildPts
-#' @inheritParams GroupPts
+#' @inheritParams group_pts
 #' @param area boolean indicating either returning area of overlap
 #'                   of polygons or simply group
 #' @param hrType Type of HR estimation, defaults to 'mcp'
