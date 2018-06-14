@@ -36,15 +36,21 @@ Group by ID (by time) data.table
 Groups From Spatial Lines
 }
 \examples{
-data(locs)
-groups <- group_lines(locs, 50)
-
-groups <- group_lines(locs, 50, timeGroup = 'FIX_DATE',
-        projection = '+proj=utm +zone=21 ellps=WGS84',
-        idField = 'ID')
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 
-data(locsLines)
+group_lines(locs, threshold = 50, projection = utm,
+            idField = 'ID', coordFields = c('X', 'Y'))
 
-groups <- group_lines(spLines = locsLines)
+# Daily movement tracks
+group_times(locs, timeField = 'datetime', threshold = '1 day')
+group_lines(locs, threshold = 50, projection = utm,
+            idField = 'ID', coordFields = c('X', 'Y'),
+            timeGroup = 'timegroup')
+
+# Daily movement tracks by sex
+group_times(locs, timeField = 'datetime', threshold = '1 day')
+group_lines(locs, threshold = 50, projection = utm,
+            idField = 'ID', coordFields = c('X', 'Y'),
+            timeGroup = 'timegroup', groupFields = 'sex')
 }

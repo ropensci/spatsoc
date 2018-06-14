@@ -4,27 +4,22 @@
 #'
 #' @inheritParams BuildPts
 #' @inheritParams group_pts
-#' @param area boolean indicating either returning area of overlap
-#'                   of polygons or simply group
-#' @param hrType Type of HR estimation, defaults to 'mcp'
-#' @param spPolys Alternatively, provide a SpatialPolygons object.
+#' @param area boolean indicating either returning area and proportion of overlap or group
+#' @param hrType type of HR estimation, of 'mcp' or 'kernel'
+#' @param hrParams parameters for adehabitatHR functions, a named list passed to do.call
+#' @param spPolys Alternatively, provide solely a SpatialPolygons object.
 #'
 #' @return Group by ID (by time) data.table
 #' @export
 #'
 #' @examples
-#' # Build the HRs for a set of locs by individuals using mcp,
-#' # kernel density estimation...
-#' data(locs)
+#' groups <- group_polys(locs, area = FALSE, 'mcp', list(percent = 95),
+#'                       projection = utm,
+#'                       idField = 'ID', coordFields = c('X', 'Y'))
 #'
-#' groups <- group_polys('mcp', locs, 50, projection = '+proj=utm +zone=21 ellps=WGS84',
-#'                    idField = 'ID')
-#'
-#' # If you'd like to simply compare proportion or overlap of a set of polygons,
-#' # ...
-#' data(locsPolys)
-#'
-#' groups <- group_polys(spPolys = locsPolys)
+#' areaDT <- group_polys(locs, area = TRUE, 'mcp', list(percent = 95),
+#'                       projection = utm,
+#'                       idField = 'ID', coordFields = c('X', 'Y'))
 group_polys <-
   function(DT = NULL,
            area = NULL,

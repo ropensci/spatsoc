@@ -176,7 +176,7 @@ data.table::setnames(
   c(idField, 'withinGroup'))
 
 
-Dt[ovrDt, withinGroup := withinGroup, on = c(idField, byFields)]
-Dt[, group := .GRP, by = c(byFields, 'withinGroup')][, withinGroup := NULL][]
+Dt[ovrDt, withinGroup := withinGroup, on = c(idField, groupFields)]
+Dt[, group := .GRP, by = c(groupFields, 'withinGroup')][, withinGroup := NULL][]
 ################# SF SFS FSF SF SF ########################
 

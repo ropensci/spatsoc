@@ -11,10 +11,11 @@ group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
 \arguments{
 \item{DT}{input data.table}
 
-\item{area}{boolean indicating either returning area of overlap
-of polygons or simply group}
+\item{area}{boolean indicating either returning area and proportion of overlap or group}
 
-\item{hrType}{Type of HR estimation, defaults to 'mcp'}
+\item{hrType}{type of HR estimation, of 'mcp' or 'kernel'}
+
+\item{hrParams}{parameters for adehabitatHR functions, a named list passed to do.call}
 
 \item{projection}{PROJ.4 charaster string}
 
@@ -24,7 +25,7 @@ of polygons or simply group}
 
 \item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 
-\item{spPolys}{Alternatively, provide a SpatialPolygons object.}
+\item{spPolys}{Alternatively, provide solely a SpatialPolygons object.}
 }
 \value{
 Group by ID (by time) data.table
@@ -33,16 +34,11 @@ Group by ID (by time) data.table
 Group individuals by polygon (eg: home ranges) overlap
 }
 \examples{
-# Build the HRs for a set of locs by individuals using mcp,
-# kernel density estimation...
-data(locs)
+groups <- group_polys(locs, area = FALSE, 'mcp', list(percent = 95),
+                      projection = utm,
+                      idField = 'ID', coordFields = c('X', 'Y'))
 
-groups <- group_polys('mcp', locs, 50, projection = '+proj=utm +zone=21 ellps=WGS84',
-                   idField = 'ID')
-
-# If you'd like to simply compare proportion or overlap of a set of polygons,
-# ...
-data(locsPolys)
-
-groups <- group_polys(spPolys = locsPolys)
+areaDT <- group_polys(locs, area = TRUE, 'mcp', list(percent = 95),
+                      projection = utm,
+                      idField = 'ID', coordFields = c('X', 'Y'))
 }
