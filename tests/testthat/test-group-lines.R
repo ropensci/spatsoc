@@ -23,7 +23,7 @@ test_that('one of DT or spLines is required, not both or neither', {
     group_lines(
       DT = DT,
       threshold = 10,
-      spLines = BuildLines(
+      spLines = build_lines(
         DT,
         projection = utm,
         coordFields = c('X', 'Y'),

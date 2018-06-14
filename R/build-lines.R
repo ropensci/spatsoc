@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @import data.table
-BuildLines <-
+build_lines <-
   function(DT = NULL,
            projection = NULL,
            idField = NULL,

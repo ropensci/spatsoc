@@ -91,7 +91,7 @@ group_lines <-
     }
     if (is.null(timeGroup)) {
       suppressWarnings(
-        spLines <- BuildLines(
+        spLines <- build_lines(
           DT,
           projection = projection,
           coordFields = coordFields,
@@ -130,7 +130,7 @@ group_lines <-
       ovrDT <-
         DT[, {
           suppressWarnings(
-            spLines <- BuildLines(
+            spLines <- build_lines(
               DT = .SD,
               projection = projection,
               coordFields = coordFields,

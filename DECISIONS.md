@@ -128,7 +128,7 @@ high: uniqueN <= half nrows
 
 ----
 
-* for `BuildLines`: is byFields really just id + whatever.. is this one argument then?
+* for `build_lines`: is byFields really just id + whatever.. is this one argument then?
 
 by separating byFields and idField, we emphasize the requirement of idField and extra byFields 
 

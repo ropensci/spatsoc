@@ -112,7 +112,7 @@ gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2,
 
 <!-- * Helper functions -->
 <!--     * `BuildPts` -->
-<!--     * `BuildLines` -->
+<!--     * `build_lines` -->
 <!--     * `build_polys` -->
 <!--     * `BuildClusters` -->
 
