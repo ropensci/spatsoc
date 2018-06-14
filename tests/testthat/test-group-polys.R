@@ -3,62 +3,81 @@ context('test group_polys')
 library(spatsoc)
 
 DT <- fread('../testdata/buffalo.csv')
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+utm <-
+  '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 test_that('DT or spPts are required but not both', {
-  expect_error(group_polys(DT = NULL, spPolys = NULL, area = FALSE),
-               'must provide either DT or spPolys')
+  expect_error(group_polys(
+    DT = NULL,
+    spPolys = NULL,
+    area = FALSE
+  ),
+  'must provide either DT or spPolys')
 
-  expect_error(group_polys(DT = DT, spPolys = 10, area = FALSE),
-               'cannot provide both DT and spPolys')
+  expect_error(group_polys(
+    DT = DT,
+    spPolys = 10,
+    area = FALSE
+  ),
+  'cannot provide both DT and spPolys')
 })
 
 test_that('area provided and logical, or error', {
- expect_error(group_polys(
-   DT = DT,
-   projection = utm,
-   hrType = 'mcp',
-   area = NULL,
-   coordFields = c('X', 'Y'),
-   idField = 'ID'
- ), 'area must be provided', fixed = TRUE)
-
-  expect_error(group_polys(
-    DT = DT,
-    projection = utm,
-    hrType = 'mcp',
-    area = 'potato',
-    coordFields = c('X', 'Y'),
-    idField = 'ID'
-  ), 'area must be provided', fixed = TRUE)
-
-  expect_error(group_polys(
-    DT = DT,
-    projection = utm,
-    hrType = 'mcp',
-    area = 10,
-    coordFields = c('X', 'Y'),
-    idField = 'ID'
-  ), 'area must be provided', fixed = TRUE)
-})
-
-
-test_that('DT or spPolys, but not both', {
   expect_error(
     group_polys(
-      DT = NULL,
-      area = FALSE,
-      spPolys = NULL
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      area = NULL,
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
     ),
-    'must provide either DT or spPolys')
+    'area must be provided',
+    fixed = TRUE
+  )
 
   expect_error(
     group_polys(
       DT = DT,
-      area = FALSE,
-      spPolys = 10
+      projection = utm,
+      hrType = 'mcp',
+      area = 'potato',
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
     ),
-    'cannot provide both DT and spPolys')
+    'area must be provided',
+    fixed = TRUE
+  )
+
+  expect_error(
+    group_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      area = 10,
+      coordFields = c('X', 'Y'),
+      idField = 'ID'
+    ),
+    'area must be provided',
+    fixed = TRUE
+  )
+})
+
+
+test_that('DT or spPolys, but not both', {
+  expect_error(group_polys(
+    DT = NULL,
+    area = FALSE,
+    spPolys = NULL
+  ),
+  'must provide either DT or spPolys')
+
+  expect_error(group_polys(
+    DT = DT,
+    area = FALSE,
+    spPolys = 10
+  ),
+  'cannot provide both DT and spPolys')
 })
 
 test_that('projection provided or error', {
@@ -71,7 +90,8 @@ test_that('projection provided or error', {
       coordFields = c('X', 'Y'),
       idField = 'ID'
     ),
-    'projection must be provided')
+    'projection must be provided'
+  )
 })
 
 test_that('mising hrParams warns default used', {
@@ -85,7 +105,8 @@ test_that('mising hrParams warns default used', {
       coordFields = c('X', 'Y'),
       idField = 'ID'
     ),
-    'hrParams is not provided, using defaults')
+    'hrParams is not provided, using defaults'
+  )
 })
 
 test_that('missing hrType fails', {
@@ -98,7 +119,8 @@ test_that('missing hrType fails', {
       coordFields = c('X', 'Y'),
       idField = 'ID'
     ),
-    'hrType must be provided')
+    'hrType must be provided'
+  )
 })
 
 test_that('column names must exist in DT', {
@@ -138,7 +160,8 @@ test_that('byFields and spPolys are not both provided', {
       spPolys = 10,
       area = TRUE
     ),
-    'cannot provide spPolys if providing byFields')
+    'cannot provide spPolys if providing byFields'
+  )
 })
 
 
@@ -218,7 +241,8 @@ test_that('withinGroup is not returned to the user', {
       area = FALSE,
       coordFields = c('X', 'Y'),
       idField = 'ID'
-    )))
+    )
+  ))
 })
 
 

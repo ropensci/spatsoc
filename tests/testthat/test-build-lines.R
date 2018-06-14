@@ -3,49 +3,88 @@ context('test build_lines')
 library(spatsoc)
 
 DT <- fread('../testdata/buffalo.csv')
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+utm <-
+  '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 
 test_that('DT is required', {
-  expect_error(build_lines(DT = NULL, idField = 'ID',
-                          coordFields = c('X', 'Y'),
-                          projection = utm),
-               'input DT required')
+  expect_error(
+    build_lines(
+      DT = NULL,
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    ),
+    'input DT required'
+  )
 })
 
-test_that('coordFields, idField, projection must be provided and proper format', {
-  expect_error(build_lines(DT = DT, idField = NULL,
-                          coordFields = c('X', 'Y'),
-                          projection = utm),
-               'idField must be provided')
+test_that('coordFields, idField, projection must be provided and proper format',
+          {
+            expect_error(
+              build_lines(
+                DT = DT,
+                idField = NULL,
+                coordFields = c('X', 'Y'),
+                projection = utm
+              ),
+              'idField must be provided'
+            )
 
-  expect_error(build_lines(DT = DT, idField = 'ID',
-                          coordFields = c('X', 'Y'),
-                          projection = NULL),
-               'projection must be provided')
+            expect_error(
+              build_lines(
+                DT = DT,
+                idField = 'ID',
+                coordFields = c('X', 'Y'),
+                projection = NULL
+              ),
+              'projection must be provided'
+            )
 
-  expect_error(build_lines(DT = DT, idField = 'ID',
-                          coordFields = NULL,
-                          projection = utm),
-               'coordFields must be provided')
+            expect_error(
+              build_lines(
+                DT = DT,
+                idField = 'ID',
+                coordFields = NULL,
+                projection = utm
+              ),
+              'coordFields must be provided'
+            )
 
-  expect_error(build_lines(DT = DT, idField = 'ID',
-                          coordFields = c('ID', 'ID'),
-                          projection = utm),
-               'coordFields must be numeric')
-})
+            expect_error(
+              build_lines(
+                DT = DT,
+                idField = 'ID',
+                coordFields = c('ID', 'ID'),
+                projection = utm
+              ),
+              'coordFields must be numeric'
+            )
+          })
 
 
 test_that('column names must exist in DT', {
-  expect_error(build_lines(DT = DT, idField = 'ID',
-                          coordFields = c('potatoX', 'potatoY'),
-                          projection = utm),
-               'not present in input DT', fixed = FALSE)
+  expect_error(
+    build_lines(
+      DT = DT,
+      idField = 'ID',
+      coordFields = c('potatoX', 'potatoY'),
+      projection = utm
+    ),
+    'not present in input DT',
+    fixed = FALSE
+  )
 
-  expect_error(build_lines(DT = DT, idField = 'potato',
-                          coordFields = c('X', 'Y'),
-                          projection = utm),
-               'not present in input DT', fixed = FALSE)
+  expect_error(
+    build_lines(
+      DT = DT,
+      idField = 'potato',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    ),
+    'not present in input DT',
+    fixed = FALSE
+  )
 })
 
 test_that('returns same number of lines as unique IDs/byFields provided', {
@@ -83,10 +122,15 @@ test_that("build lines warns if < 2 locs per ID/byField", {
   # for ID (one row's ID is "potato")
   copyDT <- copy(DT)[1, ID := 'potato']
 
-  expect_warning(build_lines(DT = copyDT, idField = 'ID',
-                            coordFields = c('X', 'Y'),
-                            projection = utm),
-                 'some rows dropped, cannot build lines with less than two points')
+  expect_warning(
+    build_lines(
+      DT = copyDT,
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    ),
+    'some rows dropped, cannot build lines with less than two points'
+  )
 
 
   # for ID + byFields
@@ -95,30 +139,56 @@ test_that("build lines warns if < 2 locs per ID/byField", {
   DT[, count := .N, by = byFields]
   subDT <- DT[count < 2]
 
-  expect_warning(build_lines(DT = subDT, idField = 'ID',
-                            coordFields = c('X', 'Y'),
-                            projection = utm, byFields = 'jul'),
-                 'some rows dropped, cannot build', fixed = FALSE)
+  expect_warning(
+    build_lines(
+      DT = subDT,
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm,
+      byFields = 'jul'
+    ),
+    'some rows dropped, cannot build',
+    fixed = FALSE
+  )
 })
 
 test_that('byFields and idField provided are not correct format', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_error(build_lines(DT = copyDT, idField = 'datetime',
-                          coordFields = c('X', 'Y'),
-                          projection = utm),
-               'idField \\(and byFields when provided\\) must', fixed = FALSE)
+  expect_error(
+    build_lines(
+      DT = copyDT,
+      idField = 'datetime',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    ),
+    'idField \\(and byFields when provided\\) must',
+    fixed = FALSE
+  )
 
-  expect_error(build_lines(DT = copyDT, idField = 'ID',
-                          coordFields = c('X', 'Y'),
-                          projection = utm, byFields = 'datetime'),
-               'idField \\(and byFields when provided\\) must be', fixed = FALSE)
+  expect_error(
+    build_lines(
+      DT = copyDT,
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm,
+      byFields = 'datetime'
+    ),
+    'idField \\(and byFields when provided\\) must be',
+    fixed = FALSE
+  )
 
   # with factor IDs
   copyDT <- copy(DT)[, ID := as.factor(ID)]
-  expect_error(build_lines(DT = copyDT, idField = 'ID',
-                          coordFields = c('X', 'Y'),
-                          projection = utm),
-               'idField \\(and byFields when provided\\) must be', fixed = FALSE)
+  expect_error(
+    build_lines(
+      DT = copyDT,
+      idField = 'ID',
+      coordFields = c('X', 'Y'),
+      projection = utm
+    ),
+    'idField \\(and byFields when provided\\) must be',
+    fixed = FALSE
+  )
 })
 
 test_that('BuildPts returns a SpatialLines', {
