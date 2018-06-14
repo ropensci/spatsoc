@@ -10,7 +10,6 @@ LazyData: true
 Imports: data.table,
     sp,
     rgeos,
-    SearchTrees,
     adehabitatHR
 Suggests: testthat,
     knitr,
