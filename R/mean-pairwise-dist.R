@@ -5,9 +5,6 @@
 #'   to use a rounded time, see SOME LINK.
 #'
 #' @return mean pairwise distance data.table by ID and (optional) time field
-#' @export
-#'
-#' @import data.table
 PairwiseDist <- function(DT, timeField, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
   if(any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')

@@ -6,7 +6,7 @@
 #' @inheritParams BuildPts
 #' @param groupField The group field generated
 #'
-#' @export
+#'
 #' @examples
 CalcCentroids <- function(DT, coordFields, groupField){
   if(any(!(c(groupField, coordFields) %in% colnames(DT)))){
