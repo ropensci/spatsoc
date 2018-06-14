@@ -4,7 +4,7 @@
 
 ## Decisions..
 
-* can't use spatsoc, too similar to spatstat
+* can't use spatsoc, too similar to spatstat?
 
 `socspat`
 
@@ -18,10 +18,7 @@
 
 ----
 
-* group polys or group HRs?
 
-
-----
 
 * whats returned by GroupHRs/Polys differs from others, when we include area as an option
 
@@ -60,14 +57,8 @@ easier for user but error..
 
 * groupFields or byFields?
 
-
-----
-
-* for group_polys, is area the first arg?
-
-it's the only absolutely required, but that doesn't follow suit with previous functions being DT first
-
-also is it proportion instead?
+for now...
+**groupFields**
 
 
 ----
@@ -111,6 +102,9 @@ if 24 hours, change to one day?... but nearest day
 
 https://github.com/Rdatatable/data.table/issues/2788
 
+
+
+
 ----
 
 * warn that date column provided has more than one uniqueN and not more than 1million (ha)/ warn if timegroup not provided, group_times/slow
@@ -125,6 +119,8 @@ high: uniqueN <= half nrows
 ----
 
 * SearchTrees, adehabitatHR missing. Is Nearest a necessary function in the initial package publishing?
+
+** adehabitatHR added **
 
 ----
 
@@ -245,3 +241,22 @@ function (x, digits = c("weeks", "months", "quarters", "years"),
       1L, 1L)))
 }
 ```
+
+----
+
+* group polys or group HRs?
+
+**group_polys**
+
+----
+
+* for group_polys, is area the first arg?
+
+it's the only absolutely required, but that doesn't follow suit with previous functions being DT first
+
+also is it proportion instead?
+
+**it's the equivalent of threshold, so it's #2**
+
+----
+
