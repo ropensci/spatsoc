@@ -11,7 +11,7 @@ build_lines <-
            projection = NULL,
            idField = NULL,
            coordFields = NULL,
-           byFields = NULL) {
+           groupFields = NULL) {
     if (is.null(DT)) {
       stop('input DT required')
     }
@@ -32,10 +32,10 @@ build_lines <-
       stop('coordFields requires a vector of column names for coordinates X and Y')
     }
 
-    if (any(!(c(idField, coordFields, byFields) %in% colnames(DT)))) {
+    if (any(!(c(idField, coordFields, groupFields) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
-          c(idField, coordFields, byFields), colnames(DT)
+          c(idField, coordFields, groupFields), colnames(DT)
         ),
         collapse = ', ')),
         ' field(s) provided are not present in input DT'
@@ -46,26 +46,26 @@ build_lines <-
       stop('coordFields must be numeric')
     }
 
-    if (is.null(byFields)) {
-      byFields <- idField
+    if (is.null(groupFields)) {
+      groupFields <- idField
     } else {
-      byFields <- c(idField, byFields)
+      groupFields <- c(idField, groupFields)
     }
     if (any(!(DT[, lapply(.SD, FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
-    ), .SDcols = byFields]))) {
-      stop('idField (and byFields when provided) must be character, numeric or integer type')
+    ), .SDcols = groupFields]))) {
+      stop('idField (and groupFields when provided) must be character, numeric or integer type')
     }
 
-    dropRows <- DT[, .(dropped = .N < 2), by = byFields]
+    dropRows <- DT[, .(dropped = .N < 2), by = groupFields]
 
     if (dropRows[(dropped), .N] > 0) {
       warning('some rows dropped, cannot build lines with less than two points')
     }
 
-    lst <- data.table:::split.data.table(DT[dropRows, on = byFields][!(dropped)],
-                                  by = byFields)
+    lst <- data.table:::split.data.table(DT[dropRows, on = groupFields][!(dropped)],
+                                  by = groupFields)
 
     if (length(lst) == 0) {
       return(NULL)

@@ -1,4 +1,4 @@
-# Test Build Lines
+# Test build_lines
 context('test build_lines')
 library(spatsoc)
 
@@ -87,8 +87,8 @@ test_that('column names must exist in DT', {
   )
 })
 
-test_that('returns same number of lines as unique IDs/byFields provided', {
-  # without byFields
+test_that('returns same number of lines as unique IDs/groupFields provided', {
+  # without groupFields
   expect_equal(length(
     build_lines(
       DT = DT,
@@ -99,10 +99,10 @@ test_that('returns same number of lines as unique IDs/byFields provided', {
   ),
   DT[, uniqueN(ID)])
 
-  # with byFields
+  # with groupFields
   DT[, jul := data.table::yday(as.POSIXct(datetime))]
-  byFields = c('ID', 'jul')
-  DT[, count := .N, by = byFields]
+  groupFields = c('ID', 'jul')
+  DT[, count := .N, by = groupFields]
   subDT <- DT[count >= 2]
 
   expect_equal(length(
@@ -111,10 +111,10 @@ test_that('returns same number of lines as unique IDs/byFields provided', {
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = utm,
-      byFields = 'jul'
+      groupFields = 'jul'
     )
   ),
-  nrow(unique(subDT[, .SD, .SDcols = byFields])))
+  nrow(unique(subDT[, .SD, .SDcols = groupFields])))
 })
 
 
@@ -133,10 +133,10 @@ test_that("build lines warns if < 2 locs per ID/byField", {
   )
 
 
-  # for ID + byFields
-  byFields = c('ID', 'jul')
+  # for ID + groupFields
+  groupFields = c('ID', 'jul')
   DT[, jul := data.table::yday(as.POSIXct(datetime))]
-  DT[, count := .N, by = byFields]
+  DT[, count := .N, by = groupFields]
   subDT <- DT[count < 2]
 
   expect_warning(
@@ -145,14 +145,14 @@ test_that("build lines warns if < 2 locs per ID/byField", {
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = utm,
-      byFields = 'jul'
+      groupFields = 'jul'
     ),
     'some rows dropped, cannot build',
     fixed = FALSE
   )
 })
 
-test_that('byFields and idField provided are not correct format', {
+test_that('groupFields and idField provided are not correct format', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_error(
     build_lines(
@@ -161,7 +161,7 @@ test_that('byFields and idField provided are not correct format', {
       coordFields = c('X', 'Y'),
       projection = utm
     ),
-    'idField \\(and byFields when provided\\) must',
+    'idField \\(and groupFields when provided\\) must',
     fixed = FALSE
   )
 
@@ -171,9 +171,9 @@ test_that('byFields and idField provided are not correct format', {
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = utm,
-      byFields = 'datetime'
+      groupFields = 'datetime'
     ),
-    'idField \\(and byFields when provided\\) must be',
+    'idField \\(and groupFields when provided\\) must be',
     fixed = FALSE
   )
 
@@ -186,7 +186,7 @@ test_that('byFields and idField provided are not correct format', {
       coordFields = c('X', 'Y'),
       projection = utm
     ),
-    'idField \\(and byFields when provided\\) must be',
+    'idField \\(and groupFields when provided\\) must be',
     fixed = FALSE
   )
 })

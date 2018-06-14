@@ -1,4 +1,4 @@
-# Test Group Lines
+# Test group_lines
 context('test group_lines')
 library(spatsoc)
 

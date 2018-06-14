@@ -84,7 +84,7 @@ group_pts <- function(DT = NULL,
     return(data.table(ID = names(group), group))
 
   } else {
-    byFields <- c(groupFields, timeGroup)
+    groupFields <- c(groupFields, timeGroup)
     DT[, withinGroup := {
       distMatrix <-
         as.matrix(dist(cbind(
@@ -95,9 +95,9 @@ group_pts <- function(DT = NULL,
         igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
       igraph::clusters(graphAdj)$membership
     },
-    by = byFields, .SDcols = c(coordFields, idField)]
+    by = groupFields, .SDcols = c(coordFields, idField)]
     DT[, group := .GRP,
-       by = c(byFields, 'withinGroup')]
+       by = c(groupFields, 'withinGroup')]
     set(DT, j = 'withinGroup', value = NULL)
     return(DT[])
   }

@@ -1,4 +1,4 @@
-# Test Build HRs
+# Test build_polys
 context('test build_polys')
 library(spatsoc)
 

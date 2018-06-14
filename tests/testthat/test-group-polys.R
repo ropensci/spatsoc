@@ -153,14 +153,14 @@ test_that('column names must exist in DT', {
 
 
 
-test_that('byFields and spPolys are not both provided', {
+test_that('groupFields and spPolys are not both provided', {
   expect_error(
     group_polys(
-      byFields = 'yr',
+      groupFields = 'yr',
       spPolys = 10,
       area = TRUE
     ),
-    'cannot provide spPolys if providing byFields'
+    'cannot provide spPolys if providing groupFields'
   )
 })
 
@@ -205,7 +205,7 @@ test_that('column and row lengths returned make sense', {
       area = FALSE,
       coordFields = c('X', 'Y'),
       idField = 'ID',
-      byFields = 'yr'
+      groupFields = 'yr'
     )
   ),
   nrow(copyDT))
@@ -222,7 +222,7 @@ test_that('column and row lengths returned make sense', {
                    area = FALSE,
                    coordFields = c('X', 'Y'),
                    idField = 'ID',
-                   byFields = 'family'
+                   groupFields = 'family'
                  )
                ))
 })
@@ -259,7 +259,7 @@ test_that('group column succesfully detected', {
       area = FALSE,
       coordFields = c('X', 'Y'),
       idField = 'ID',
-      byFields = 'mnth'
+      groupFields = 'mnth'
     ),
     'group column will be overwritten'
   )
@@ -273,6 +273,6 @@ test_that('group column succesfully detected', {
 #   area = FALSE,
 #   coordFields = c('X', 'Y'),
 #   idField = 'ID',
-#   byFields = NULL,
+#   groupFields = NULL,
 #   spPolys = NULL
 # )

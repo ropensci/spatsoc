@@ -4,23 +4,25 @@
 \alias{group_polys}
 \title{Group Overlapping Polygons}
 \usage{
-group_polys(DT = NULL, hrType = NULL, hrParams = NULL, area = NULL,
+group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
   projection = NULL, coordFields = NULL, idField = NULL,
-  byFields = NULL, spPolys = NULL)
+  groupFields = NULL, spPolys = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
 
-\item{hrType}{Type of HR estimation, defaults to 'mcp'}
-
 \item{area}{boolean indicating either returning area of overlap
 of polygons or simply group}
+
+\item{hrType}{Type of HR estimation, defaults to 'mcp'}
 
 \item{projection}{PROJ.4 charaster string}
 
 \item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
 \item{idField}{Character string of ID column name}
+
+\item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 
 \item{spPolys}{Alternatively, provide a SpatialPolygons object.}
 }

@@ -122,10 +122,10 @@ group_lines <-
 
       ### CHECK THAT TIMEGROUP IS IN DT
       if (is.null(groupFields)) {
-        byFields <- timeGroup
+        groupFields <- timeGroup
       }
       else {
-        byFields <- c(groupFields, timeGroup)
+        groupFields <- c(groupFields, timeGroup)
       }
       ovrDT <-
         DT[, {
@@ -158,11 +158,11 @@ group_lines <-
             data.table::setnames(out, c(idField, 'withinGroup'))
 
           }
-        }, by = byFields, .SDcols = c(coordFields, idField)]
+        }, by = groupFields, .SDcols = c(coordFields, idField)]
 
-      DT[ovrDT, withinGroup := withinGroup, on = c(idField, byFields)]
+      DT[ovrDT, withinGroup := withinGroup, on = c(idField, groupFields)]
       DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
-         by = c(byFields, 'withinGroup')]
+         by = c(groupFields, 'withinGroup')]
       # DT[withinGroup == -999L, group := NA]
       set(DT, j = 'withinGroup', value = NULL)
       if (DT[is.na(group), .N] > 0) {

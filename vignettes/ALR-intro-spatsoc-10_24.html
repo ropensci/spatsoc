@@ -85,7 +85,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <!--     * `GroupHRs` / `group_polys`  -->
 <!--     * `GroupClusters`  -->
 <!--     * `CalcCentroids` -->
-<!--     * `GroupTime` -->
+<!--     * `group_times` -->
 <!-- * Mean pairwise distance -->
 <!--     * `PairwiseDist` -->
 <!-- * Nearest neighbor -->
@@ -151,8 +151,8 @@ locs</code></pre></div>
 <h3><code>group_pts</code></h3>
 <p>The <code>group_pts</code> function compares the relocations of all individuals at each time step and groups individuals based on a buffer distance provided by the user.</p>
 <p>Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (<code>threshold</code>), to consider all fixes within this threshold taken at the same time. For example, we will use a 5 minute threshold.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_pts</span>(locs, <span class="dv">50</span>, <span class="st">'datetime'</span>, <span class="st">'5 minutes'</span>, 
-         <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_pts</span>(locs, <span class="dv">50</span>, <span class="st">'datetime'</span>, <span class="st">'5 minutes'</span>,
+         <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>,
          <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>), <span class="st">'ID'</span>)</code></pre></div>
 <table>
 <thead>
@@ -227,7 +227,7 @@ locs</code></pre></div>
 <div id="grouplines" class="section level3">
 <h3><code>group_lines</code></h3>
 <p>The <code>group_lines</code> function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than <code>group_pts</code> which can help understand shared space at daily, weekly or other temporal resolutions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_lines</span>(locs, <span class="dt">bufferWidth =</span> <span class="dv">50</span>, <span class="dt">timeField =</span> <span class="st">'datetime'</span>, <span class="dt">threshold =</span> <span class="st">'1 day'</span>, <span class="dt">projection =</span> <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>, <span class="dt">coordFields =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>), 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_lines</span>(locs, <span class="dt">bufferWidth =</span> <span class="dv">50</span>, <span class="dt">timeField =</span> <span class="st">'datetime'</span>, <span class="dt">threshold =</span> <span class="st">'1 day'</span>, <span class="dt">projection =</span> <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>, <span class="dt">coordFields =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>),
            <span class="dt">idField =</span> <span class="st">'ID'</span>)</code></pre></div>
 <table>
 <thead>
@@ -279,7 +279,7 @@ locs</code></pre></div>
 <div id="grouppolys" class="section level3">
 <h3><code>group_polys</code></h3>
 <p>The <code>group_polys</code> function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using <code>adehabitatHR::kernelUD</code> or <code>adehabitatHR::mcp</code>. Alternatively, a <code>SpatialPolygonsDataFrame</code> can be input to the <code>spPolys</code> argument.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_polys</span>(<span class="dt">area =</span> <span class="ot">TRUE</span>, <span class="dt">hrType =</span> <span class="st">'mcp'</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_polys</span>(<span class="dt">area =</span> <span class="ot">TRUE</span>, <span class="dt">hrType =</span> <span class="st">'mcp'</span>,
            <span class="dt">hrParams =</span> <span class="kw">list</span>(<span class="st">'percent'</span> =<span class="st"> </span><span class="dv">95</span>),
            locs, <span class="dt">projection =</span> <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>,
            <span class="dt">coordFields =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>), <span class="dt">idField =</span> <span class="st">'ID'</span>)</code></pre></div>
@@ -320,7 +320,7 @@ locs</code></pre></div>
 </tbody>
 </table>
 <!-- timegroup needs to accomodate 10 hours  FR?
-     home ranges are calculated with adehabitat... 
+     home ranges are calculated with adehabitat...
      where in depends
 -->
 </div>

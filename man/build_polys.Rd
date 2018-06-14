@@ -5,8 +5,8 @@
 \title{Build Home Ranges for Individuals}
 \usage{
 build_polys(DT = NULL, projection = NULL, hrType = NULL,
-  hrParams = NULL, coordFields = NULL, idField = NULL, byFields = NULL,
-  spPts = NULL)
+  hrParams = NULL, coordFields = NULL, idField = NULL,
+  groupFields = NULL, spPts = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
