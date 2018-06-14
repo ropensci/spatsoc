@@ -36,7 +36,7 @@ hrs@data$grps <- hr.grps$group
 hr <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
             by = 'id')
 
-l <- GroupLines(sublocs, projection = utm, timeField = 'day')
+l <- group_lines(sublocs, projection = utm, timeField = 'day')
 l[, groupN := .N, by = group]
 
 v <- merge(sublocs, l)
@@ -95,7 +95,7 @@ gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2,
 <!-- ## Functions -->
 <!-- * Grouping  -->
 <!--     * `group_pts`   -->
-<!--     * `GroupLines`   -->
+<!--     * `group_lines`   -->
 <!--     * `GroupHRs` / `GroupPolys`  -->
 <!--     * `GroupClusters`  -->
 <!--     * `CalcCentroids` -->
@@ -150,16 +150,16 @@ pander::pander(
 ```
 
 
-### `GroupLines`
-The `GroupLines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
+### `group_lines`
+The `group_lines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
 
 ```{r fake grouplines, eval = FALSE}
-GroupLines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), idField = 'ID')
+group_lines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), idField = 'ID')
 ```
 
 ```{r grouplines, echo = FALSE}
 pander::pander(
-  GroupLines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'),
+  group_lines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'),
            idField = 'ID')[59:65])
 ```
 
@@ -193,7 +193,7 @@ pander::pander(
 ## Notes
 Package dependencies for `spatsoc` are `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference.
 
-In addition, since the `rgeos` package is used in most functions (notably `group_pts` and `GroupLines`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`.
+In addition, since the `rgeos` package is used in most functions (notably `group_pts` and `group_lines`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`.
 
 
 ```{r, echo = FALSE}

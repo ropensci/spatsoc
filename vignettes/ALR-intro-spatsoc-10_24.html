@@ -81,7 +81,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <!-- ## Functions -->
 <!-- * Grouping  -->
 <!--     * `group_pts`   -->
-<!--     * `GroupLines`   -->
+<!--     * `group_lines`   -->
 <!--     * `GroupHRs` / `GroupPolys`  -->
 <!--     * `GroupClusters`  -->
 <!--     * `CalcCentroids` -->
@@ -225,9 +225,9 @@ locs</code></pre></div>
 </table>
 </div>
 <div id="grouplines" class="section level3">
-<h3><code>GroupLines</code></h3>
-<p>The <code>GroupLines</code> function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than <code>group_pts</code> which can help understand shared space at daily, weekly or other temporal resolutions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">GroupLines</span>(locs, <span class="dt">bufferWidth =</span> <span class="dv">50</span>, <span class="dt">timeField =</span> <span class="st">'datetime'</span>, <span class="dt">threshold =</span> <span class="st">'1 day'</span>, <span class="dt">projection =</span> <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>, <span class="dt">coordFields =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>), 
+<h3><code>group_lines</code></h3>
+<p>The <code>group_lines</code> function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than <code>group_pts</code> which can help understand shared space at daily, weekly or other temporal resolutions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_lines</span>(locs, <span class="dt">bufferWidth =</span> <span class="dv">50</span>, <span class="dt">timeField =</span> <span class="st">'datetime'</span>, <span class="dt">threshold =</span> <span class="st">'1 day'</span>, <span class="dt">projection =</span> <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>, <span class="dt">coordFields =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>), 
            <span class="dt">idField =</span> <span class="st">'ID'</span>)</code></pre></div>
 <table>
 <thead>
@@ -328,7 +328,7 @@ locs</code></pre></div>
 <div id="notes" class="section level2">
 <h2>Notes</h2>
 <p>Package dependencies for <code>spatsoc</code> are <code>sp</code>, <code>rgeos</code>, and <code>data.table</code>. <code>data.table</code> provides efficient methods for manipulating large (or small) datasets. As a result, input <code>DT</code> for all <code>spatsoc</code> functions must be a <code>data.table</code> and if it isn’t, you can simply use <code>setDT(df)</code> to convert it by reference.</p>
-<p>In addition, since the <code>rgeos</code> package is used in most functions (notably <code>group_pts</code> and <code>GroupLines</code>) the input <code>DT</code>’s coordinate system is important. <code>rgeos</code> expects planar coordinates and this requirement is carried forward for <code>spatsoc</code>.</p>
+<p>In addition, since the <code>rgeos</code> package is used in most functions (notably <code>group_pts</code> and <code>group_lines</code>) the input <code>DT</code>’s coordinate system is important. <code>rgeos</code> expects planar coordinates and this requirement is carried forward for <code>spatsoc</code>.</p>
 </div>
 
 

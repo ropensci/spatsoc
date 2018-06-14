@@ -1,5 +1,5 @@
 # Test Group Lines
-context('test GroupLines')
+context('test group_lines')
 library(spatsoc)
 
 DT <- fread('../testdata/buffalo.csv')
@@ -11,7 +11,7 @@ DT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
 
 test_that('one of DT or spLines is required, not both or neither', {
   expect_error(
-    GroupLines(
+    group_lines(
       DT = NULL,
       threshold = 10,
       spLines = NULL
@@ -20,7 +20,7 @@ test_that('one of DT or spLines is required, not both or neither', {
   )
 
   expect_error(
-    GroupLines(
+    group_lines(
       DT = DT,
       threshold = 10,
       spLines = BuildLines(
@@ -38,18 +38,18 @@ test_that('one of DT or spLines is required, not both or neither', {
 test_that('coordFields, idField, projection provided and proper format', {
   copyDT <- copy(DT)
   group_times(copyDT, timeField = 'datetime', threshold = '14 days')
-  expect_error(GroupLines(DT = copyDT,
+  expect_error(group_lines(DT = copyDT,
                           threshold = 10, timeGroup = 'timegroup',
                           idField = NULL, coordFields = c('X', 'Y'),
                           projection = utm),
                'idField must be provided')
 
-  expect_error(GroupLines(DT = copyDT, threshold = 10, timeGroup = 'timegroup',
+  expect_error(group_lines(DT = copyDT, threshold = 10, timeGroup = 'timegroup',
                           idField = 'ID', coordFields = c('X', 'Y'),
                           projection = NULL),
                'projection must be provided', fixed = FALSE)
 
-  expect_error(GroupLines(DT = copyDT, threshold = 10, timeGroup = 'timegroup',
+  expect_error(group_lines(DT = copyDT, threshold = 10, timeGroup = 'timegroup',
                           idField = 'ID', coordFields = NULL,
                           projection = utm),
                'coordFields must be provided')
@@ -59,7 +59,7 @@ test_that('coordFields, idField, projection provided and proper format', {
 
 test_that('column names must exist in DT', {
   expect_error(
-    GroupLines(
+    group_lines(
       DT = DT,
       threshold = 10,
       timeGroup = 'timegroup',
@@ -72,7 +72,7 @@ test_that('column names must exist in DT', {
   )
 
   expect_error(
-    GroupLines(
+    group_lines(
       DT = DT,
       threshold = 10,
       timeGroup = 'timegroup',
@@ -91,7 +91,7 @@ test_that('threshold is correctly provided, or error', {
   group_times(copyDT, timeField = 'datetime', threshold = '14 days')
   copyDT[, N := .N, by = .(ID, block)]
   expect_warning(
-    GroupLines(
+    group_lines(
       DT = copyDT[N > 2],
       threshold = NULL,
       timeGroup = 'timegroup',
@@ -103,7 +103,7 @@ test_that('threshold is correctly provided, or error', {
   )
 
   expect_error(
-    GroupLines(
+    group_lines(
       DT = DT,
       threshold = -10,
       timeGroup = 'timegroup',
@@ -117,14 +117,14 @@ test_that('threshold is correctly provided, or error', {
 
 
 test_that('spLines provided must be an S4 + spatial lines', {
-  expect_error(GroupLines(spLines = DT, threshold = 10),
+  expect_error(group_lines(spLines = DT, threshold = 10),
                'spLines provided must be a SpatialLines object')
 })
 
 test_that('group lines returns a single warning for <2 locs', {
   copyDT <- copy(DT)
   group_times(copyDT, timeField = 'datetime', threshold = '2 days')
-  expect_warning(GroupLines(DT = copyDT, threshold = 10, timeGroup = 'timegroup',
+  expect_warning(group_lines(DT = copyDT, threshold = 10, timeGroup = 'timegroup',
                             idField = 'ID', coordFields = c('X', 'Y'),
                             projection = utm),
                'some rows were dropped, cannot build a line with', fixed = FALSE)
@@ -132,7 +132,7 @@ test_that('group lines returns a single warning for <2 locs', {
   # expect equal sum < 2
   # copyDT <- copy(DT)
   # group_times(copyDT, timeField = 'datetime', threshold = '2 days')
-  # expect_equal(length(GroupLines(DT = copyDT, threshold = 10,
+  # expect_equal(length(group_lines(DT = copyDT, threshold = 10,
   #                                timeGroup = 'timegroup',
   #                                idField = 'ID', coordFields = c('X', 'Y'),
   #                                projection = utm))[!is.na(group)],
@@ -146,7 +146,7 @@ test_that('group column is added to result', {
 
   expect_true('group' %in%
                 colnames(
-                  GroupLines(
+                  group_lines(
                     DT = copyDT[N > 2],
                     threshold = 10,
                     timeGroup = 'timegroup',
@@ -163,7 +163,7 @@ test_that('only one column added to the result DT', {
   copyDT[, N := .N, by = .(ID, block)]
 
   expect_equal(ncol(copyDT[N > 2]) + 1,
-               ncol(GroupLines(DT = copyDT[N > 2], threshold = 10,
+               ncol(group_lines(DT = copyDT[N > 2], threshold = 10,
                                timeGroup = 'timegroup', idField = 'ID',
                                coordFields = c('X', 'Y'), projection = utm)))
 })
@@ -174,7 +174,7 @@ test_that('no rows are added to the result DT', {
   copyDT[, N := .N, by = .(ID, block)]
   copyDT <- copyDT[N > 2]
   expect_equal(nrow(copyDT),
-               nrow(GroupLines(DT = copyDT, threshold = 10,
+               nrow(group_lines(DT = copyDT, threshold = 10,
                                timeGroup = 'timegroup', idField = 'ID',
                                coordFields = c('X', 'Y'), projection = utm)))
 })
@@ -185,7 +185,7 @@ test_that('withinGroup is not returned to the user', {
   group_times(copyDT, timeField = 'datetime', threshold = '14 days')
   copyDT[, N := .N, by = .(ID, block)]
   expect_false('withinGroup' %in% colnames(
-    GroupLines(DT = copyDT[N > 2], threshold = 10,
+    group_lines(DT = copyDT[N > 2], threshold = 10,
                                timeGroup = 'timegroup', idField = 'ID',
                                coordFields = c('X', 'Y'), projection = utm)))
 })
@@ -193,7 +193,7 @@ test_that('withinGroup is not returned to the user', {
 test_that('only 1 unique timeGroup * groupFields', {
   copyDT <- DT[, mnth := month(datetime)][, yr := year(datetime)]
 
-  GroupLines(
+  group_lines(
     DT = copyDT,
     threshold = 100,
     timeGroup = 'mnth',
@@ -221,7 +221,7 @@ test_that('group column succesfully detected', {
   copyDT[, mnth := month(datetime)][, yr := year(datetime)]
 
   expect_warning(
-    GroupLines(
+    group_lines(
       DT = copyDT,
       threshold = 100,
       timeGroup = 'mnth',
@@ -234,7 +234,7 @@ test_that('group column succesfully detected', {
   )
 })
 
-# GroupLines(
+# group_lines(
 #   DT = DT,
 #   threshold = 10,
 #   timeField = 'timegroup',

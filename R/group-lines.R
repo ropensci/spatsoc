@@ -13,17 +13,17 @@
 #'
 #' @examples
 #' data(locs)
-#' groups <- GroupLines(locs, 50)
+#' groups <- group_lines(locs, 50)
 #'
-#' groups <- GroupLines(locs, 50, timeGroup = 'FIX_DATE',
+#' groups <- group_lines(locs, 50, timeGroup = 'FIX_DATE',
 #'         projection = '+proj=utm +zone=21 ellps=WGS84',
 #'         idField = 'ID')
 #'
 #'
 #' data(locsLines)
 #'
-#' groups <- GroupLines(spLines = locsLines)
-GroupLines <-
+#' groups <- group_lines(spLines = locsLines)
+group_lines <-
   function(DT = NULL,
            threshold = NULL,
            projection = NULL,

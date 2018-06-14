@@ -1,5 +1,5 @@
 # Test Points
-context('test Points')
+context('test group_pts')
 library(spatsoc)
 
 DT <- fread('../testdata/buffalo.csv')

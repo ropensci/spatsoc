@@ -61,7 +61,7 @@ group_times(Dt, timeField = 'datetime', threshold = '30 days')
 Randomizations(Dt, idField= 'ID', groupField = 'group',
                randomType = 'spiegel', dateField = 'datetime',
                splitBy = 'yr', iterations = 10)
-GroupLines(Dt, bufferWidth = 0,
+group_lines(Dt, bufferWidth = 0,
            projection = utm,
            coordFields = c('X', 'Y'), idField = 'ID')
 
