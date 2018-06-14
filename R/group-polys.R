@@ -17,15 +17,15 @@
 #' # kernel density estimation...
 #' data(locs)
 #'
-#' groups <- GroupPolys('mcp', locs, 50, projection = '+proj=utm +zone=21 ellps=WGS84',
+#' groups <- group_polys('mcp', locs, 50, projection = '+proj=utm +zone=21 ellps=WGS84',
 #'                    idField = 'ID')
 #'
 #' # If you'd like to simply compare proportion or overlap of a set of polygons,
 #' # ...
 #' data(locsPolys)
 #'
-#' groups <- GroupPolys(spPolys = locsPolys)
-GroupPolys <-
+#' groups <- group_polys(spPolys = locsPolys)
+group_polys <-
   function(DT = NULL,
            hrType = NULL,
            hrParams = NULL,

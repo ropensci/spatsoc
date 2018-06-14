@@ -82,7 +82,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <!-- * Grouping  -->
 <!--     * `group_pts`   -->
 <!--     * `group_lines`   -->
-<!--     * `GroupHRs` / `GroupPolys`  -->
+<!--     * `GroupHRs` / `group_polys`  -->
 <!--     * `GroupClusters`  -->
 <!--     * `CalcCentroids` -->
 <!--     * `GroupTime` -->
@@ -277,9 +277,9 @@ locs</code></pre></div>
 </table>
 </div>
 <div id="grouppolys" class="section level3">
-<h3><code>GroupPolys</code></h3>
-<p>The <code>GroupPolys</code> function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using <code>adehabitatHR::kernelUD</code> or <code>adehabitatHR::mcp</code>. Alternatively, a <code>SpatialPolygonsDataFrame</code> can be input to the <code>spPolys</code> argument.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">GroupPolys</span>(<span class="dt">area =</span> <span class="ot">TRUE</span>, <span class="dt">hrType =</span> <span class="st">'mcp'</span>, 
+<h3><code>group_polys</code></h3>
+<p>The <code>group_polys</code> function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using <code>adehabitatHR::kernelUD</code> or <code>adehabitatHR::mcp</code>. Alternatively, a <code>SpatialPolygonsDataFrame</code> can be input to the <code>spPolys</code> argument.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_polys</span>(<span class="dt">area =</span> <span class="ot">TRUE</span>, <span class="dt">hrType =</span> <span class="st">'mcp'</span>, 
            <span class="dt">hrParams =</span> <span class="kw">list</span>(<span class="st">'percent'</span> =<span class="st"> </span><span class="dv">95</span>),
            locs, <span class="dt">projection =</span> <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>,
            <span class="dt">coordFields =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>), <span class="dt">idField =</span> <span class="st">'ID'</span>)</code></pre></div>

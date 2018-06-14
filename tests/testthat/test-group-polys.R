@@ -1,20 +1,20 @@
-# Test GroupPolys
-context('test GroupPolys')
+# Test group_polys
+context('test group_polys')
 library(spatsoc)
 
 DT <- fread('../testdata/buffalo.csv')
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 test_that('DT or spPts are required but not both', {
-  expect_error(GroupPolys(DT = NULL, spPolys = NULL, area = FALSE),
+  expect_error(group_polys(DT = NULL, spPolys = NULL, area = FALSE),
                'must provide either DT or spPolys')
 
-  expect_error(GroupPolys(DT = DT, spPolys = 10, area = FALSE),
+  expect_error(group_polys(DT = DT, spPolys = 10, area = FALSE),
                'cannot provide both DT and spPolys')
 })
 
 test_that('area provided and logical, or error', {
- expect_error(GroupPolys(
+ expect_error(group_polys(
    DT = DT,
    projection = utm,
    hrType = 'mcp',
@@ -23,7 +23,7 @@ test_that('area provided and logical, or error', {
    idField = 'ID'
  ), 'area must be provided', fixed = TRUE)
 
-  expect_error(GroupPolys(
+  expect_error(group_polys(
     DT = DT,
     projection = utm,
     hrType = 'mcp',
@@ -32,7 +32,7 @@ test_that('area provided and logical, or error', {
     idField = 'ID'
   ), 'area must be provided', fixed = TRUE)
 
-  expect_error(GroupPolys(
+  expect_error(group_polys(
     DT = DT,
     projection = utm,
     hrType = 'mcp',
@@ -45,7 +45,7 @@ test_that('area provided and logical, or error', {
 
 test_that('DT or spPolys, but not both', {
   expect_error(
-    GroupPolys(
+    group_polys(
       DT = NULL,
       area = FALSE,
       spPolys = NULL
@@ -53,7 +53,7 @@ test_that('DT or spPolys, but not both', {
     'must provide either DT or spPolys')
 
   expect_error(
-    GroupPolys(
+    group_polys(
       DT = DT,
       area = FALSE,
       spPolys = 10
@@ -63,7 +63,7 @@ test_that('DT or spPolys, but not both', {
 
 test_that('projection provided or error', {
   expect_error(
-    GroupPolys(
+    group_polys(
       DT = DT,
       projection = NULL,
       hrType = 'mcp',
@@ -77,7 +77,7 @@ test_that('projection provided or error', {
 test_that('mising hrParams warns default used', {
   copyDT <- copy(DT)
   expect_warning(
-    GroupPolys(
+    group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -90,7 +90,7 @@ test_that('mising hrParams warns default used', {
 
 test_that('missing hrType fails', {
   expect_error(
-    GroupPolys(
+    group_polys(
       DT = DT,
       projection = utm,
       hrType = NULL,
@@ -103,7 +103,7 @@ test_that('missing hrType fails', {
 
 test_that('column names must exist in DT', {
   expect_error(
-    GroupPolys(
+    group_polys(
       DT = DT,
       projection = utm,
       hrType = 'mcp',
@@ -116,7 +116,7 @@ test_that('column names must exist in DT', {
   )
 
   expect_error(
-    GroupPolys(
+    group_polys(
       DT = DT,
       projection = utm,
       hrType = 'mcp',
@@ -133,7 +133,7 @@ test_that('column names must exist in DT', {
 
 test_that('byFields and spPolys are not both provided', {
   expect_error(
-    GroupPolys(
+    group_polys(
       byFields = 'yr',
       spPolys = 10,
       area = TRUE
@@ -145,7 +145,7 @@ test_that('byFields and spPolys are not both provided', {
 test_that('ID field is alphanumeric and does not have spaces', {
   copyDT <- copy(DT)[, ID := gsub('e', ' ', ID)]
   expect_error(
-    GroupPolys(
+    group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -160,7 +160,7 @@ test_that('ID field is alphanumeric and does not have spaces', {
 
 test_that('column and row lengths returned make sense', {
   expect_lte(nrow(
-    GroupPolys(
+    group_polys(
       DT = DT,
       projection = utm,
       hrType = 'mcp',
@@ -174,7 +174,7 @@ test_that('column and row lengths returned make sense', {
 
   copyDT <- copy(DT)[, yr := year(datetime)]
   expect_equal(nrow(
-    GroupPolys(
+    group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -191,7 +191,7 @@ test_that('column and row lengths returned make sense', {
   copyDT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
   expect_equal(ncol(copyDT) + 1,
                ncol(
-                 GroupPolys(
+                 group_polys(
                    DT = copyDT,
                    projection = utm,
                    hrType = 'mcp',
@@ -210,7 +210,7 @@ test_that('withinGroup is not returned to the user', {
   group_times(copyDT, timeField = 'datetime', threshold = '14 days')
   copyDT[, N := .N, by = .(ID, block)]
   expect_false('withinGroup' %in% colnames(
-    GroupPolys(
+    group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -227,7 +227,7 @@ test_that('group column succesfully detected', {
   copyDT[, group := 1][, mnth := month(datetime)]
 
   expect_warning(
-    GroupPolys(
+    group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -241,7 +241,7 @@ test_that('group column succesfully detected', {
   )
 })
 
-# GroupPolys(
+# group_polys(
 #   DT = DT,
 #   projection = utm,
 #   hrType = 'mcp',

@@ -31,7 +31,7 @@ pt.grps[, groupN := .N, by = group]
 pt.grps[ID != 'A'][sample(5), groupN := 2]
 
 hrs <- BuildHRs(hrType = 'mcp', DT = sublocs, projection = utm)
-hr.grps <- GroupPolys(area = FALSE, hrType = 'mcp', DT = sublocs, projection = utm)
+hr.grps <- group_polys(area = FALSE, hrType = 'mcp', DT = sublocs, projection = utm)
 hrs@data$grps <- hr.grps$group
 hr <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
             by = 'id')
@@ -96,7 +96,7 @@ gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2,
 <!-- * Grouping  -->
 <!--     * `group_pts`   -->
 <!--     * `group_lines`   -->
-<!--     * `GroupHRs` / `GroupPolys`  -->
+<!--     * `GroupHRs` / `group_polys`  -->
 <!--     * `GroupClusters`  -->
 <!--     * `CalcCentroids` -->
 <!--     * `GroupTime` -->
@@ -164,11 +164,11 @@ pander::pander(
 ```
 
 
-### `GroupPolys`
-The `GroupPolys` function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`. Alternatively, a `SpatialPolygonsDataFrame` can be input to the `spPolys` argument.
+### `group_polys`
+The `group_polys` function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`. Alternatively, a `SpatialPolygonsDataFrame` can be input to the `spPolys` argument.
 
 ```{r fake grouppolys, eval=FALSE}
-GroupPolys(area = TRUE, hrType = 'mcp',
+group_polys(area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
            locs, projection = '+proj=utm +zone=21 ellps=WGS84',
            coordFields = c('EASTING', 'NORTHING'), idField = 'ID')
@@ -176,7 +176,7 @@ GroupPolys(area = TRUE, hrType = 'mcp',
 
 ```{r grouppolys, echo=FALSE}
 pander::pander(
-  GroupPolys(area = TRUE, hrType = 'mcp',
+  group_polys(area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
            locs, projection = '+proj=utm +zone=21 ellps=WGS84',
            coordFields = c('EASTING', 'NORTHING'), idField = 'ID'))

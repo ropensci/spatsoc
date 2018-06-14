@@ -31,7 +31,7 @@ when we deal with proportional, area overlap we imply a matrix data structure
 
 this will be the first and only? time a user has to do:
 
-`results <- GroupPolys(area = TRUE)`
+`results <- group_polys(area = TRUE)`
 
 to capture results
 
@@ -63,7 +63,7 @@ easier for user but error..
 
 ----
 
-* for GroupPolys, is area the first arg?
+* for group_polys, is area the first arg?
 
 it's the only absolutely required, but that doesn't follow suit with previous functions being DT first
 
