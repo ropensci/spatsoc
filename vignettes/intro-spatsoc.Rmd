@@ -15,7 +15,7 @@ The package contains grouping functions that are used for identifying spatially 
 
 The functions were developped for application across animal relocation data, for example, proximity based social network analyses and spatial and temporal clustering of points.
 
-```{r, echo = FALSE, fig.width= 8, fig.height=5, message = FALSE}
+```{r, echo = FALSE, fig.width= 8, fig.height=5, message = FALSE, eval = FALSE}
 library(ggplot2); library(data.table); library(spatsoc);
 library(gridExtra); library(ggthemes)
 data(locs)
@@ -24,9 +24,7 @@ sublocs[, day := yday(datetime)]
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
-pt.grps <- group_pts(sublocs, id = 'ID', threshold = 50,
-                    projection = utm, datetime = 'datetime',
-                    threshold = '10 minutes')
+pt.grpsgroup_pts(locs, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))
 pt.grps[, groupN := .N, by = group]
 pt.grps[ID != 'A'][sample(5), groupN := 2]
 
@@ -119,7 +117,7 @@ gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2,
 ## Grouping
 Let's read in `spatsoc`'s example data.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 library(spatsoc); library(data.table)
 data(locs)
 locs
@@ -131,54 +129,53 @@ pander::pander(locs[sample(.N, 5)])
 <!-- note this input/example data is just for now.. -->
 The data consist of relocations of `r locs[, uniqueN(ID)]` individuals over `r locs[, max(yday(datetime)) - min(yday(datetime))]` days. Relocations were recorded using GPS collars with fixes obtained every two hours. Using these data, we can compare the various grouping methods available in `spatsoc`.
 
+### `group_times`
+
+
 ### `group_pts`
 The `group_pts` function compares the relocations of all individuals at each time step and groups individuals based on a distance threshold provided by the user.
 
 Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. For example, we will use a 5 minute threshold.
 
 ```{r grouppts, eval = FALSE}
-group_pts(locs, 50, 'datetime', '5 minutes',
-         '+proj=utm +zone=21 ellps=WGS84',
-         c('EASTING', 'NORTHING'), 'ID')
+group_pts(locs, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))
 ```
 
-```{r fake grouppts, echo=FALSE}
+```{r fakegrouppts, echo=FALSE, eval = FALSE}
 pander::pander(
-  group_pts(locs, 50, 'datetime', '5 minutes',
-         '+proj=utm +zone=21 ellps=WGS84',
-         c('EASTING', 'NORTHING'), 'ID')[388:395])
+  group_pts(locs, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))[388:395])
 ```
 
 
 ### `group_lines`
 The `group_lines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
 
-```{r fake grouplines, eval = FALSE}
-group_lines(locs, bufferWidth = 50, datetime = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coords = c('EASTING', 'NORTHING'), id = 'ID')
+```{r fakegrouplines, eval = FALSE}
+utm <- '+proj=utm +zone=21 ellps=WGS84'
+group_lines(locs, threshold =50, projection = utm, id = 'ID', coords = c('EASTING', 'NORTHING'))
 ```
 
-```{r grouplines, echo = FALSE}
+```{r grouplines, echo = FALSE, eval = FALSE}
 pander::pander(
-  group_lines(locs, bufferWidth = 50, datetime = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coords = c('EASTING', 'NORTHING'),
-           id = 'ID')[59:65])
+  group_lines(locs, threshold =50, projection = utm, id = 'ID', coords = c('EASTING', 'NORTHING'))[59:65])
 ```
 
 
 ### `group_polys`
 The `group_polys` function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`. Alternatively, a `SpatialPolygonsDataFrame` can be input to the `spPolys` argument.
 
-```{r fake grouppolys, eval=FALSE}
-group_polys(area = TRUE, hrType = 'mcp',
+```{r fakegrouppolys, eval=FALSE}
+group_polys(DT = DT, area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
-           locs, projection = '+proj=utm +zone=21 ellps=WGS84',
+           projection = utm,
            coords = c('EASTING', 'NORTHING'), id = 'ID')
 ```
 
-```{r grouppolys, echo=FALSE}
+```{r grouppolys, echo=FALSE, eval = FALSE}
 pander::pander(
-  group_polys(area = TRUE, hrType = 'mcp',
+  group_polys(DT = DT, area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
-           locs, projection = '+proj=utm +zone=21 ellps=WGS84',
+           projection = utm,
            coords = c('EASTING', 'NORTHING'), id = 'ID'))
 ```
 
