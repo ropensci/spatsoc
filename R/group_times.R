@@ -53,18 +53,18 @@ group_times <- function(DT = NULL,
 
   if (is.null(threshold)) {
     warning('no threshold provided, using the time field directly to group')
-    DT[, timegroup := .GRP, by = timeField]
+    DT[, timegroup := .GRP, by = datetime]
     return(DT[])
   } else {
-    if ('POSIXct' %in% unlist(lapply(DT[, .(get(timeField))], class))) {
+    if ('POSIXct' %in% DT[, sapply(.SD, class), .SDcols = datetime]) {
       dtm <-
-        DT[, cbind(get(timeField), data.table::IDateTime(get(timeField)))]
-      data.table::setnames(dtm, c(timeField, 'idate', 'itime'))
-    } else if (length(timeField) == 2 &&
+        DT[, cbind(get(datetime), data.table::IDateTime(get(datetime)))]
+      data.table::setnames(dtm, c(datetime, 'idate', 'itime'))
+    } else if (length(datetime) == 2 &&
                all(c('IDate', 'ITime') %in%
-                   unlist(lapply(DT[, .SD, .SDcols = timeField],
+                   unlist(lapply(DT[, .SD, .SDcols = datetime],
                                  class)))) {
-      dtm <- DT[, .SD, .SDcols = timeField]
+      dtm <- DT[, .SD, .SDcols = datetime]
       data.table::setnames(dtm, c('idate', 'itime'))
     } else {
       stop('time field provided must be either 1 column: POSIXct or 2 columns: IDate and ITime')
