@@ -1,15 +1,15 @@
 #' Euclidean Pairwise Distance
 #'
 #' @inheritParams BuildPts
-#' @param timeField time column upon which individuals are compared. recommended
+#' @param datetime time column upon which individuals are compared. recommended
 #'   to use a rounded time, see SOME LINK.
 #'
 #' @return mean pairwise distance data.table by ID and (optional) time field
-PairwiseDist <- function(DT, timeField, coords = c('EASTING', 'NORTHING'), id = 'ID') {
-  if(any(!(c(timeField, id, coords) %in% colnames(DT)))){
+PairwiseDist <- function(DT, datetime, coords = c('EASTING', 'NORTHING'), id = 'ID') {
+  if(any(!(c(datetime, id, coords) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
-  if(is.null(timeField)) {
+  if(is.null(datetime)) {
     warning('time column not provided - pairwise distance will be computed across all locs')
 
     names <- DT[, get(id)]
@@ -26,7 +26,7 @@ PairwiseDist <- function(DT, timeField, coords = c('EASTING', 'NORTHING'), id = 
                                     longlat = FALSE)
           list(meanDistance = colMeans(distMatrix),
                id = names)},
-       by = timeField]
+       by = datetime]
   }
 }
 

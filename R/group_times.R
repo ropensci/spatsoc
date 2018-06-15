@@ -7,7 +7,7 @@
 #' The threshold can be in units of minutes, hours or days.
 #'
 #' @param DT input data.table
-#' @param timeField name of time column
+#' @param datetime name of time column
 #' @param threshold threshold for grouping times.
 #'                      eg: '2 hours', '10 minutes', etc.
 #'                      if not provided, times will be matched exactly.
@@ -16,24 +16,24 @@
 #' @export
 #'
 #' @examples
-#' group_times(locs, timeField = 'datetime', threshold = '5 minutes')
+#' group_times(locs, datetime = 'datetime', threshold = '5 minutes')
 #'
-#' group_times(locs, timeField = 'datetime', threshold = '2 hours')
+#' group_times(locs, datetime = 'datetime', threshold = '2 hours')
 #'
-#' group_times(locs, timeField = 'datetime', threshold = '10 days')
+#' group_times(locs, datetime = 'datetime', threshold = '10 days')
 #'
 group_times <- function(DT = NULL,
-                       timeField = NULL,
+                       datetime = NULL,
                        threshold = NULL) {
   if (is.null(DT)) {
     stop('input DT required')
   }
 
-  if (is.null(timeField)) {
+  if (is.null(datetime)) {
     stop('time field required')
   }
 
-  if (!(timeField %in% colnames(DT))) {
+  if (!(datetime %in% colnames(DT))) {
     stop('time field provided is not found in DT')
   }
 

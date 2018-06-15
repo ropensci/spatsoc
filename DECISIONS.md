@@ -55,13 +55,6 @@ easier for user but error..
 
 ----
 
-* splitBy or byFields?
-
-for now...
-**splitBy**
-
-
-----
 
 
 * drop BuildPts
@@ -70,12 +63,10 @@ or Drop all Build??
 build_polys just calls adehabitat.. 
 BuildPts just calls spSpatialPtsDF.. 
 
-
+**to unexported for now**
 ----
 
 * anything other than MCP and kernel? for build_polys
-
-
 
 ----
 
@@ -101,8 +92,6 @@ if 24 hours, change to one day?... but nearest day
 * use set(DT, j = colnames(dtm), value = dtm) instead of DT[, (colnames(dtm)) := dtm][]
 
 https://github.com/Rdatatable/data.table/issues/2788
-
-
 
 
 ----
@@ -203,7 +192,7 @@ by separating byFields and id, we emphasize the requirement of id and extra byFi
 **yes**
 
 ```r
-group_times(Dt, timeField = 'datetime', threshold = '3 hour')
+group_times(Dt, datetime = 'datetime', threshold = '3 hour')
 distThreshold <- 500
 group_pts(Dt, threshold = distThreshold, timegroup = 'timegroup',
          coords = c('X', 'Y'), id = 'ID')
@@ -260,3 +249,17 @@ also is it proportion instead?
 
 ----
 
+* splitBy or byFields?
+
+**splitBy**
+
+
+----
+
+
+* groupFields, idFields, coordFields -> splitBy, coords, id
+
+
+using get(datetime) or get(idField) will break if the column name is provided is 'datetime' or 'idField' etc
+
+so go to a .SDcols approach everywhere

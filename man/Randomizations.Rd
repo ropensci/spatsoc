@@ -18,9 +18,7 @@ Randomizations(DT = NULL, type = NULL, id = NULL, dateField = NULL,
 
 \item{iterations}{The number of iterations to randomize}
 
-\item{groupField}{field indicating the group membership for each id}
-
-\item{timeField}{(optional) time field used for providing datetime or hour field or group time field}
+\item{datetime}{(optional) time field used for providing datetime or hour field or group time field}
 }
 \description{
 Randomization

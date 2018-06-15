@@ -1,13 +1,13 @@
 #' Proportion/Frequency Nearest Neighbors
 #'
 #' @inheritParams BuildPts
-#' @param timeField (optional) timeField in the DT upon which the neighbors'
+#' @param datetime (optional) datetime in the DT upon which the neighbors'
 #'   distance will be compared
 #' @param groupField (optional) groupField in the DT which can be used to group
 #'   neighbors (eg: season, year, herd, known social groups, ...)
-Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE, coords = c('EASTING', 'NORTHING'),
+Nearest <- function(DT, datetime = NULL, groupField = NULL, proportions = FALSE, coords = c('EASTING', 'NORTHING'),
                     id = 'ID'){
-  if(any(!(c(timeField, groupField, coords) %in% colnames(DT)))){
+  if(any(!(c(datetime, groupField, coords) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
 
@@ -20,33 +20,33 @@ Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE
 
   # check if there is a groupField variable
   if(is.null(groupField)){
-    # if no timeField, calculate directly with all locs, else calc on by timeField
-    if(is.null(timeField)){
+    # if no datetime, calculate directly with all locs, else calc on by datetime
+    if(is.null(datetime)){
       data.table::rbindlist(list(FindNearest(DT, coords, id)))
     } else {
       d <- DT[, FindNearest(.SD, coords, id), ##!!!!!!!!!!!!!!!
-              by = timeField, .SDcols = c(coords, id)]
+              by = datetime, .SDcols = c(coords, id)]
       # optionally, return proportions or all matches
       if(!proportions){
         return(d)
       } else {
-        d[, nTime := data.table::uniqueN(get(timeField)), by = ID]
+        d[, nTime := data.table::uniqueN(get(datetime)), by = ID]
         unique(d[, .(prop = .N / nTime), by = .(ID, neighbor)])
       }
     }
   } else {
-  # if there is a groupField variable, but no timeField, return all pairs in each group
-    if(is.null(timeField)){
+  # if there is a groupField variable, but no datetime, return all pairs in each group
+    if(is.null(datetime)){
       DT[, FindNearest(.SD, coords, id),
               by = groupField]
     } else {
       # else, return either proportions or pairs by each group * time
       DT[, {d <- DT[, FindNearest(.SD, coords, id),
-                    by = timeField, .SDcols = c(coords, id)]
+                    by = datetime, .SDcols = c(coords, id)]
             if(!proportions){
               d
             } else {
-              d[, nTime := data.table::uniqueN(get(timeField)), by = ID]
+              d[, nTime := data.table::uniqueN(get(datetime)), by = ID]
               unique(d[, .(prop = .N / nTime), by = .(ID, neighbor)])
             }},
          by = groupField]

@@ -209,7 +209,7 @@ test_that('group column succesfully detected', {
 
 test_that('withinGroup is not returned to the user', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, timeField = 'datetime', threshold = '5 minutes')
+  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
 
   expect_false('withinGroup' %in% colnames(
     group_pts(
@@ -224,7 +224,7 @@ test_that('withinGroup is not returned to the user', {
 
 test_that('no rows are added to the result DT', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, timeField = 'datetime', threshold = '5 minutes')
+  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
 
   expect_equal(nrow(copyDT),
                nrow(
@@ -240,7 +240,7 @@ test_that('no rows are added to the result DT', {
 
 test_that('only one column added to the result DT', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, timeField = 'datetime', threshold = '5 minutes')
+  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
 
   expect_equal(ncol(copyDT) + 1,
                ncol(
@@ -256,7 +256,7 @@ test_that('only one column added to the result DT', {
 
 test_that('group column is added to result', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, timeField = 'datetime', threshold = '5 minutes')
+  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
   expect_true('group' %in%
                 colnames(
                   group_pts(

@@ -25,7 +25,7 @@ sublocs[, day := yday(datetime)]
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
 pt.grps <- group_pts(sublocs, id = 'ID', threshold = 50,
-                    projection = utm, timeField = 'datetime',
+                    projection = utm, datetime = 'datetime',
                     threshold = '10 minutes')
 pt.grps[, groupN := .N, by = group]
 pt.grps[ID != 'A'][sample(5), groupN := 2]
@@ -36,7 +36,7 @@ hrs@data$grps <- hr.grps$group
 hr <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
             by = 'id')
 
-l <- group_lines(sublocs, projection = utm, timeField = 'day')
+l <- group_lines(sublocs, projection = utm, datetime = 'day')
 l[, groupN := .N, by = group]
 
 v <- merge(sublocs, l)
@@ -154,12 +154,12 @@ pander::pander(
 The `group_lines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
 
 ```{r fake grouplines, eval = FALSE}
-group_lines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coords = c('EASTING', 'NORTHING'), id = 'ID')
+group_lines(locs, bufferWidth = 50, datetime = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coords = c('EASTING', 'NORTHING'), id = 'ID')
 ```
 
 ```{r grouplines, echo = FALSE}
 pander::pander(
-  group_lines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coords = c('EASTING', 'NORTHING'),
+  group_lines(locs, bufferWidth = 50, datetime = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coords = c('EASTING', 'NORTHING'),
            id = 'ID')[59:65])
 ```
 

@@ -56,7 +56,7 @@ Dt[, datetime := as.POSIXct(datetime)]
 Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
 Dt[, potato := ID]
-group_times(Dt, timeField = 'datetime', threshold = '30 days')
+group_times(Dt, datetime = 'datetime', threshold = '30 days')
 
 Randomizations(Dt, id= 'ID', groupField = 'group',
                randomType = 'spiegel', dateField = 'datetime',
@@ -111,9 +111,9 @@ OUT <- data.table::data.table(Dt$ID,
 # })
 
 profvis::profvis({
-  group_pts(l, 100, timeField = 'timegroup', projection = utm)
-  group_ptsSF(l, 100, timeField = 'timegroup', projection = utm)
-  group_ptsIGRAPH(l, 100, timeField = 'timegroup', projection = utm)
+  group_pts(l, 100, datetime = 'timegroup', projection = utm)
+  group_ptsSF(l, 100, datetime = 'timegroup', projection = utm)
+  group_ptsIGRAPH(l, 100, datetime = 'timegroup', projection = utm)
 })
 
 l

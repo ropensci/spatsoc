@@ -38,7 +38,7 @@ test_that('one of DT or spLines is required, not both or neither', {
 
 test_that('coords, id, projection provided and proper format', {
   copyDT <- copy(DT)
-  group_times(copyDT, timeField = 'datetime', threshold = '14 days')
+  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   expect_error(
     group_lines(
       DT = copyDT,
@@ -110,7 +110,7 @@ test_that('column names must exist in DT', {
 
 test_that('threshold is correctly provided, or error', {
   copyDT <- copy(DT)
-  group_times(copyDT, timeField = 'datetime', threshold = '14 days')
+  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   copyDT[, N := .N, by = .(ID, block)]
   expect_warning(
     group_lines(
@@ -147,7 +147,7 @@ test_that('spLines provided must be an S4 + spatial lines', {
 
 test_that('group lines returns a single warning for <2 locs', {
   copyDT <- copy(DT)
-  group_times(copyDT, timeField = 'datetime', threshold = '2 days')
+  group_times(copyDT, datetime = 'datetime', threshold = '2 days')
   expect_warning(
     group_lines(
       DT = copyDT,
@@ -163,7 +163,7 @@ test_that('group lines returns a single warning for <2 locs', {
 
   # expect equal sum < 2
   # copyDT <- copy(DT)
-  # group_times(copyDT, timeField = 'datetime', threshold = '2 days')
+  # group_times(copyDT, datetime = 'datetime', threshold = '2 days')
   # expect_equal(length(group_lines(DT = copyDT, threshold = 10,
   #                                timegroup = 'timegroup',
   #                                id = 'ID', coords = c('X', 'Y'),
@@ -173,7 +173,7 @@ test_that('group lines returns a single warning for <2 locs', {
 
 test_that('group column is added to result', {
   copyDT <- copy(DT)
-  group_times(copyDT, timeField = 'datetime', threshold = '14 days')
+  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   copyDT[, N := .N, by = .(ID, block)]
 
   expect_true('group' %in%
@@ -191,7 +191,7 @@ test_that('group column is added to result', {
 
 test_that('only one column added to the result DT', {
   copyDT <- copy(DT)
-  group_times(copyDT, timeField = 'datetime', threshold = '14 days')
+  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   copyDT[, N := .N, by = .(ID, block)]
 
   expect_equal(ncol(copyDT[N > 2]) + 1,
@@ -209,7 +209,7 @@ test_that('only one column added to the result DT', {
 
 test_that('no rows are added to the result DT', {
   copyDT <- copy(DT)
-  group_times(copyDT, timeField = 'datetime', threshold = '14 days')
+  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   copyDT[, N := .N, by = .(ID, block)]
   copyDT <- copyDT[N > 2]
   expect_equal(nrow(copyDT),
@@ -228,7 +228,7 @@ test_that('no rows are added to the result DT', {
 
 test_that('withinGroup is not returned to the user', {
   copyDT <- copy(DT)
-  group_times(copyDT, timeField = 'datetime', threshold = '14 days')
+  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   copyDT[, N := .N, by = .(ID, block)]
   expect_false('withinGroup' %in% colnames(
     group_lines(
@@ -287,7 +287,7 @@ test_that('group column succesfully detected', {
 # group_lines(
 #   DT = DT,
 #   threshold = 10,
-#   timeField = 'timegroup',
+#   datetime = 'timegroup',
 #   splitBy = 'family',
 #   id = 'ID',
 #   coords = c('X', 'Y'),

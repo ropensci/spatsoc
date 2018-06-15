@@ -6,62 +6,62 @@ DT <- fread('../testdata/buffalo.csv')
 
 
 test_that('DT is required', {
-  expect_error(group_times(DT = NULL, timeField = NULL, threshold = '10 minutes'),
+  expect_error(group_times(DT = NULL, datetime = NULL, threshold = '10 minutes'),
                'input DT required')
 })
 
 
 test_that('time field correctly provided or error detected', {
-  expect_error(group_times(DT, timeField = NULL, threshold = '10 minutes'),
+  expect_error(group_times(DT, datetime = NULL, threshold = '10 minutes'),
                'time field required')
 
-  expect_error(group_times(DT, timeField = 'potato', threshold = '10 minutes'),
+  expect_error(group_times(DT, datetime = 'potato', threshold = '10 minutes'),
                'time field provided is not found in DT')
 })
 
 test_that('if threshold is null, warning returned', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_warning(group_times(copyDT, timeField = 'datetime', threshold = NULL),
+  expect_warning(group_times(copyDT, datetime = 'datetime', threshold = NULL),
                  'no threshold provided', fixed = FALSE)
 })
 
 
 test_that('time fields are already present', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, timeField = 'datetime', threshold = '10 minutes')
-  expect_warning(group_times(copyDT, timeField = 'datetime', threshold = '10 minutes'),
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  expect_warning(group_times(copyDT, datetime = 'datetime', threshold = '10 minutes'),
                  'columns found in input DT', fixed = FALSE)
 })
 
 test_that('time field is appropriate format', {
   # where character is provided
   copyDT <- copy(DT)
-  expect_error(group_times(copyDT, timeField = 'datetime', threshold = '60 minutes'),
+  expect_error(group_times(copyDT, datetime = 'datetime', threshold = '60 minutes'),
                'time field provided must be either', fixed = FALSE)
 
   # where numeric is provided
   copyDT <- copy(DT)
   copyDT[, datetimenumeric := 1]
-  expect_error(group_times(copyDT, timeField = 'datetimenumeric',
+  expect_error(group_times(copyDT, datetime = 'datetimenumeric',
                           threshold = '60 minutes'),
                'time field provided must be either', fixed = FALSE)
 })
 
 test_that('threshold with minutes fails with > 60', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_error(group_times(copyDT, timeField = 'datetime', threshold = '70 minutes'),
+  expect_error(group_times(copyDT, datetime = 'datetime', threshold = '70 minutes'),
                '> 60 minutes', fixed = FALSE)
 })
 
 test_that('threshold with minutes fails if not divisible by 60', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_error(group_times(copyDT, timeField = 'datetime', threshold = '13 minutes'),
+  expect_error(group_times(copyDT, datetime = 'datetime', threshold = '13 minutes'),
                'threshold not evenly', fixed = FALSE)
 })
 
 test_that('threshold provided must be in units of hours, minutes, days', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_error(group_times(copyDT, timeField = 'datetime', threshold = '13 potatoes'),
+  expect_error(group_times(copyDT, datetime = 'datetime', threshold = '13 potatoes'),
                'must provide threshold in units', fixed = FALSE)
 })
 
@@ -70,12 +70,12 @@ test_that('check that 60 minutes and 1 hour are the same result', {
 
   expect_equal({
     copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-    group_times(copyDT, timeField = 'datetime',
+    group_times(copyDT, datetime = 'datetime',
                threshold = '1 hour')
   },
   {
     copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-    group_times(copyDT, timeField = 'datetime',
+    group_times(copyDT, datetime = 'datetime',
                threshold = '60 minutes')
   })
 })
@@ -90,7 +90,7 @@ test_that('warns if block is not even', {
     blockLength <- '13 days'
   }
 
-  expect_warning(group_times(copyDT, timeField = 'datetime',
+  expect_warning(group_times(copyDT, datetime = 'datetime',
                             threshold = blockLength),
                  'the minimum and maximum days in DT', fixed = FALSE)
 
@@ -101,54 +101,54 @@ test_that('timegroup column + time fields are added to result', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_true('timegroup' %in%
                 colnames(
-                  group_times(copyDT, timeField = 'datetime', threshold = '1 day')
+                  group_times(copyDT, datetime = 'datetime', threshold = '1 day')
                 ))
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_true(all(c('timegroup', 'block') %in%
                 colnames(
-                  group_times(copyDT, timeField = 'datetime', threshold = '2 days')
+                  group_times(copyDT, datetime = 'datetime', threshold = '2 days')
                 )))
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_true(all(c('timegroup', 'hours') %in%
                     colnames(
-                      group_times(copyDT, timeField = 'datetime',
+                      group_times(copyDT, datetime = 'datetime',
                                  threshold = '2 hours')
                     )))
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_true(all(c('timegroup', 'minutes') %in%
                     colnames(
-                      group_times(copyDT, timeField = 'datetime',
+                      group_times(copyDT, datetime = 'datetime',
                                  threshold = '10 minutes')
                     )))
 })
 
 test_that('timegroup column and fields are detected if already present', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, timeField = 'datetime', threshold = '2 days')
+  group_times(copyDT, datetime = 'datetime', threshold = '2 days')
 
   expect_warning(
-    group_times(copyDT, timeField = 'datetime', threshold = '1 day'),
+    group_times(copyDT, datetime = 'datetime', threshold = '1 day'),
     'block, timegroup ',
     fixed = FALSE
   )
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, timeField = 'datetime', threshold = '10 minutes')
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
 
   expect_warning(
-    group_times(copyDT, timeField = 'datetime', threshold = '10 minutes'),
+    group_times(copyDT, datetime = 'datetime', threshold = '10 minutes'),
     'minutes, timegroup ',
     fixed = FALSE
   )
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, timeField = 'datetime', threshold = '2 hours')
+  group_times(copyDT, datetime = 'datetime', threshold = '2 hours')
 
   expect_warning(
-    group_times(copyDT, timeField = 'datetime', threshold = '2 hours'),
+    group_times(copyDT, datetime = 'datetime', threshold = '2 hours'),
     'hours, timegroup ',
     fixed = FALSE
   )
@@ -158,7 +158,7 @@ test_that('warns if no threshold provided', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
 
   expect_warning(
-    group_times(copyDT, timeField = 'datetime'),
+    group_times(copyDT, datetime = 'datetime'),
     'no threshold provided',
     fixed = FALSE
   )

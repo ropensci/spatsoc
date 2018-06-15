@@ -4,13 +4,13 @@
 \alias{Nearest}
 \title{Proportion/Frequency Nearest Neighbors}
 \usage{
-Nearest(DT, timeField = NULL, groupField = NULL, proportions = FALSE,
+Nearest(DT, datetime = NULL, groupField = NULL, proportions = FALSE,
   coords = c("EASTING", "NORTHING"), id = "ID")
 }
 \arguments{
 \item{DT}{input data.table}
 
-\item{timeField}{(optional) timeField in the DT upon which the neighbors'
+\item{datetime}{(optional) datetime in the DT upon which the neighbors'
 distance will be compared}
 
 \item{groupField}{(optional) groupField in the DT which can be used to group

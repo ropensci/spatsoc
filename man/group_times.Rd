@@ -4,12 +4,12 @@
 \alias{group_times}
 \title{Group Times}
 \usage{
-group_times(DT = NULL, timeField = NULL, threshold = NULL)
+group_times(DT = NULL, datetime = NULL, threshold = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
 
-\item{timeField}{name of time column}
+\item{datetime}{name of time column}
 
 \item{threshold}{threshold for grouping times.
 eg: '2 hours', '10 minutes', etc.
@@ -25,10 +25,10 @@ If the threshold is NULL, rows are grouped by matching exact datetimes.
 The threshold can be in units of minutes, hours or days.
 }
 \examples{
-group_times(locs, timeField = 'datetime', threshold = '5 minutes')
+group_times(locs, datetime = 'datetime', threshold = '5 minutes')
 
-group_times(locs, timeField = 'datetime', threshold = '2 hours')
+group_times(locs, datetime = 'datetime', threshold = '2 hours')
 
-group_times(locs, timeField = 'datetime', threshold = '10 days')
+group_times(locs, datetime = 'datetime', threshold = '10 days')
 
 }

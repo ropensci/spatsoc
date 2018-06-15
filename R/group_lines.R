@@ -19,13 +19,13 @@
 #'             id = 'ID', coords = c('X', 'Y'))
 #'
 #' # Daily movement tracks
-#' group_times(locs, timeField = 'datetime', threshold = '1 day')
+#' group_times(locs, datetime = 'datetime', threshold = '1 day')
 #' group_lines(locs, threshold = 50, projection = utm,
 #'             id = 'ID', coords = c('X', 'Y'),
 #'             timegroup = 'timegroup')
 #'
 #' # Daily movement tracks by sex
-#' group_times(locs, timeField = 'datetime', threshold = '1 day')
+#' group_times(locs, datetime = 'datetime', threshold = '1 day')
 #' group_lines(locs, threshold = 50, projection = utm,
 #'             id = 'ID', coords = c('X', 'Y'),
 #'             timegroup = 'timegroup', splitBy = 'sex')
