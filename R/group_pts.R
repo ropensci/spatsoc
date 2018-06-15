@@ -6,7 +6,7 @@
 #'
 #' @inheritParams BuildPts
 #' @param  threshold for grouping points, in the units of the projection
-#' @param timegroup (optional) timegroup field in the DT upon which the grouping will be calculated
+#' @param time (optional) time field in the DT upon which the grouping will be calculated
 #' @param groupFields (optional) character string or vector of grouping field(s) upon which the grouping will be calculated
 #' @return Input data.table with column 'group' added.
 #' @export
@@ -17,15 +17,15 @@
 #'          coordFields = c('X', 'Y'))
 #'
 #' group_pts(locs, threshold = 5, idField = 'ID',
-#'          coordFields = c('X', 'Y'), timegroup = 'timegroup')
+#'          coordFields = c('X', 'Y'), time = 'time')
 #'
 #' group_pts(locs, threshold = 5, idField = 'ID', coordFields = c('X', 'Y'),
-#'          timegroup = 'timegroup', groupFields = 'season')
+#'          time = 'time', groupFields = 'season')
 group_pts <- function(DT = NULL,
                      threshold = NULL,
                      idField = NULL,
                      coordFields = NULL,
-                     timegroup = NULL,
+                     time = NULL,
                      groupFields = NULL) {
   if (is.null(DT)) {
     stop('input DT required')
@@ -48,11 +48,11 @@ group_pts <- function(DT = NULL,
   }
 
   if (any(!(
-    c(timegroup, idField, coordFields, groupFields) %in% colnames(DT)
+    c(time, idField, coordFields, groupFields) %in% colnames(DT)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timegroup, idField, coordFields, groupFields),
+        c(time, idField, coordFields, groupFields),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
@@ -63,10 +63,10 @@ group_pts <- function(DT = NULL,
     stop('coordFields must be numeric')
   }
 
-  if (!is.null(timegroup)) {
-    if (any(DT[, class(get(timegroup))] %in%
+  if (!is.null(time)) {
+    if (any(DT[, sapply(.SD, class), .SDcols = time] %in%
             c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
-      warning('timegroup provided is a date/time or character type, did you use group_times?')
+      warning('time provided is a date/time or character type, did you use group_times?')
     }
     }
 
