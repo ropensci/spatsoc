@@ -66,7 +66,7 @@ group_polys <-
         return(out[])
       } else if (area) {
         if (!is.null(DT)) {
-          if (any(DT[, grepl('[^A-z0-9]', get(id))])) {
+          if (any(DT[, grepl('[^A-z0-9]', .SD[[1]]), .SDcols = id])) {
             stop('please ensure IDs are alphanumeric and do not contain spaces')
           }
         }
@@ -136,7 +136,7 @@ group_polys <-
         set(DT, j = 'withinGroup', value = NULL)
         return(DT[])
       } else if (area) {
-        if (any(DT[, grepl('[^A-z0-9]', get(id))])) {
+        if (any(DT[, grepl('[^A-z0-9]', .SD[[1]]), .SDcols = id])) {
           stop('please ensure IDs are alphanumeric and do not contain spaces')
         }
         Dt[, nBy := .N, c(splitBy, id)]

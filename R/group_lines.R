@@ -157,10 +157,8 @@ group_lines <-
             ovr <- igraph::clusters(g)$membership
             out <- data.table::data.table(names(ovr),
                                           unlist(ovr))
-            # DROP THE SETNAMES AND JUST KEEP WITHINGROUP?
             data.table::setnames(out, c(id, 'withinGroup'))
           } else {
-            # why is a double??
             out <- data.table(get(id), withinGroup = as.double(NA))
             data.table::setnames(out, c(id, 'withinGroup'))
 
@@ -170,7 +168,6 @@ group_lines <-
       DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
       DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
          by = c(splitBy, 'withinGroup')]
-      # DT[withinGroup == -999L, group := NA]
       set(DT, j = 'withinGroup', value = NULL)
       if (DT[is.na(group), .N] > 0) {
         warning('some rows were dropped, cannot build a line with < 2 points. in this case, group set to NA.')
