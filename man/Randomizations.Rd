@@ -4,7 +4,7 @@
 \alias{Randomizations}
 \title{Randomizations}
 \usage{
-Randomizations(DT = NULL, type = NULL, idField = NULL, dateField = NULL,
+Randomizations(DT = NULL, type = NULL, id = NULL, dateField = NULL,
   splitBy = NULL, iterations = NULL)
 }
 \arguments{
@@ -12,7 +12,7 @@ Randomizations(DT = NULL, type = NULL, idField = NULL, dateField = NULL,
 
 \item{type}{one of 'daily', 'hourly' or 'spiegel' - see details}
 
-\item{idField}{field indicating the id in the input data.table}
+\item{id}{field indicating the id in the input data.table}
 
 \item{splitBy}{List of fields in DT to split the randomization process by}
 

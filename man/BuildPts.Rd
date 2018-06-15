@@ -4,8 +4,7 @@
 \alias{BuildPts}
 \title{Build Points}
 \usage{
-BuildPts(DT, projection, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID")
+BuildPts(DT, projection, coordFields = c("EASTING", "NORTHING"), id = "ID")
 }
 \arguments{
 \item{DT}{input data.table}
@@ -14,7 +13,7 @@ BuildPts(DT, projection, coordFields = c("EASTING", "NORTHING"),
 
 \item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{idField}{Character string of ID column name}
+\item{id}{Character string of ID column name}
 }
 \value{
 SpatialPointsDataFrame

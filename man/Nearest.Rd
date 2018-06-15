@@ -5,7 +5,7 @@
 \title{Proportion/Frequency Nearest Neighbors}
 \usage{
 Nearest(DT, timeField = NULL, groupField = NULL, proportions = FALSE,
-  coordFields = c("EASTING", "NORTHING"), idField = "ID")
+  coordFields = c("EASTING", "NORTHING"), id = "ID")
 }
 \arguments{
 \item{DT}{input data.table}
@@ -18,7 +18,7 @@ neighbors (eg: season, year, herd, known social groups, ...)}
 
 \item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{idField}{Character string of ID column name}
+\item{id}{Character string of ID column name}
 }
 \description{
 Proportion/Frequency Nearest Neighbors

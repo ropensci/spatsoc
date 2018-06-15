@@ -15,11 +15,11 @@
 #' @examples
 #' groups <- group_polys(locs, area = FALSE, 'mcp', list(percent = 95),
 #'                       projection = utm,
-#'                       idField = 'ID', coordFields = c('X', 'Y'))
+#'                       id = 'ID', coordFields = c('X', 'Y'))
 #'
 #' areaDT <- group_polys(locs, area = TRUE, 'mcp', list(percent = 95),
 #'                       projection = utm,
-#'                       idField = 'ID', coordFields = c('X', 'Y'))
+#'                       id = 'ID', coordFields = c('X', 'Y'))
 group_polys <-
   function(DT = NULL,
            area = NULL,
@@ -27,7 +27,7 @@ group_polys <-
            hrParams = NULL,
            projection = NULL,
            coordFields = NULL,
-           idField = NULL,
+           id = NULL,
            groupFields = NULL,
            spPolys = NULL) {
     if (is.null(area) | !is.logical(area)) {
@@ -49,7 +49,7 @@ group_polys <-
             hrType = hrType,
             hrParams = hrParams,
             coordFields = coordFields,
-            idField = idField,
+            id = id,
             groupFields = NULL,
             spPts = NULL
           )
@@ -66,7 +66,7 @@ group_polys <-
         return(out[])
       } else if (area) {
         if (!is.null(DT)) {
-          if (any(DT[, grepl('[^A-z0-9]', get(idField))])) {
+          if (any(DT[, grepl('[^A-z0-9]', get(id))])) {
             stop('please ensure IDs are alphanumeric and do not contain spaces')
           }
         }
@@ -113,7 +113,7 @@ group_polys <-
                   hrType = hrType,
                   hrParams = hrParams,
                   coordFields = coordFields,
-                  idField = idField,
+                  id = id,
                   groupFields = NULL,
                   spPts = NULL
                 )
@@ -126,20 +126,20 @@ group_polys <-
                                             unlist(ovr))
               data.table::setnames(out, c('ID', 'withinGroup'))
             } else {
-              data.table(ID = get(idField),
+              data.table(ID = get(id),
                          withinGroup = as.integer(NA))
             }
-          }, by = groupFields, .SDcols = c(coordFields, idField)]
-        DT[ovrDT, withinGroup := withinGroup, on = c(idField, groupFields)]
+          }, by = groupFields, .SDcols = c(coordFields, id)]
+        DT[ovrDT, withinGroup := withinGroup, on = c(id, groupFields)]
         DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
            by = c(groupFields, 'withinGroup')]
         set(DT, j = 'withinGroup', value = NULL)
         return(DT[])
       } else if (area) {
-        if (any(DT[, grepl('[^A-z0-9]', get(idField))])) {
+        if (any(DT[, grepl('[^A-z0-9]', get(id))])) {
           stop('please ensure IDs are alphanumeric and do not contain spaces')
         }
-        Dt[, nBy := .N, c(groupFields, idField)]
+        Dt[, nBy := .N, c(groupFields, id)]
         outDT <-
           Dt[nBy > 5, {
             suppressWarnings(
@@ -150,7 +150,7 @@ group_polys <-
                   hrType = hrType,
                   hrParams = hrParams,
                   coordFields = coordFields,
-                  idField = idField,
+                  id = id,
                   groupFields = NULL,
                   spPts = NULL
                 )
@@ -161,27 +161,27 @@ group_polys <-
               data.table::data.table(area = sapply(inters@polygons, slot, 'area'),
                                      IDs = as.character(sapply(inters@polygons, slot, 'ID')))
 
-            set(areaID, j = idField, value = tstrsplit(areaID[['IDs']], ' ', keep = 1))
+            set(areaID, j = id, value = tstrsplit(areaID[['IDs']], ' ', keep = 1))
             set(areaID,
-                j = paste0(idField, '2'),
+                j = paste0(id, '2'),
                 value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
 
             out <- data.table:::merge.data.table(
               x = data.table(spPolys@data),
               y = areaID,
-              by.y = idField,
+              by.y = id,
               by.x = 'id',
               suffixes = c('Total', '')
             )
             set(out, j = 'proportion', value = out[['area']] / out[['areaTotal']])
             set(out, j = c('IDs', 'areaTotal'),  value = NULL)
-            setnames(out, 'id', idField)
-            setcolorder(out, c(idField, paste0(idField, '2'), 'area', 'proportion'))
+            setnames(out, 'id', id)
+            setcolorder(out, c(id, paste0(id, '2'), 'area', 'proportion'))
             out
-          }, by = groupFields, .SDcols = c(coordFields, idField)]
+          }, by = groupFields, .SDcols = c(coordFields, id)]
 
         dropped <-
-          unique(DT[nBy <= 5, .SD, .SDcols = c(groupFields, idField)])
+          unique(DT[nBy <= 5, .SD, .SDcols = c(groupFields, id)])
         return(rbindlist(list(dropped, outDT), fill = TRUE))
       }
     }

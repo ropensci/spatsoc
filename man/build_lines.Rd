@@ -4,15 +4,15 @@
 \alias{build_lines}
 \title{Build Lines}
 \usage{
-build_lines(DT = NULL, projection = NULL, idField = NULL,
-  coordFields = NULL, groupFields = NULL)
+build_lines(DT = NULL, projection = NULL, id = NULL, coordFields = NULL,
+  groupFields = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
 
 \item{projection}{PROJ.4 charaster string}
 
-\item{idField}{Character string of ID column name}
+\item{id}{Character string of ID column name}
 
 \item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 }

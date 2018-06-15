@@ -5,8 +5,8 @@
 \title{Build Home Ranges for Individuals}
 \usage{
 build_polys(DT = NULL, projection = NULL, hrType = NULL,
-  hrParams = NULL, coordFields = NULL, idField = NULL,
-  groupFields = NULL, spPts = NULL)
+  hrParams = NULL, coordFields = NULL, id = NULL, groupFields = NULL,
+  spPts = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -19,7 +19,7 @@ build_polys(DT = NULL, projection = NULL, hrType = NULL,
 
 \item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{idField}{Character string of ID column name}
+\item{id}{Character string of ID column name}
 }
 \value{
 Home range polygons for each ID

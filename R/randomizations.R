@@ -12,7 +12,7 @@
 #'
 #' @param DT input data.table with id, group fields and (optional) time fields
 #' @param type one of 'daily', 'hourly' or 'spiegel' - see details
-#' @param idField field indicating the id in the input data.table
+#' @param id field indicating the id in the input data.table
 #' @param groupField field indicating the group membership for each id
 #' @param timeField (optional) time field used for providing datetime or hour field or group time field
 #' @inheritParams BuildPts
@@ -26,12 +26,12 @@
 #' @export
 Randomizations <- function(DT = NULL,
                            type = NULL,
-                           idField = NULL,
+                           id = NULL,
                            dateField = NULL,
                            splitBy = NULL,
                            iterations = NULL
 ) {
-  if(any(!(c(idField, groupField, dateField) %in% colnames(DT)))){
+  if(any(!(c(id, groupField, dateField) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
 
@@ -46,7 +46,7 @@ Randomizations <- function(DT = NULL,
     if(type == 'hourly'){
       if(is.null(dateField)) stop('dateField required, please provide datetime field')
       if(is.null(splitBy)) groupFields <- dateField else groupFields <- c(splitBy, dateField)
-      DT[, randomID := sample(get(idField)), by = groupFields]
+      DT[, randomID := sample(get(id)), by = groupFields]
 
       return(DT[])
     } else if(type == 'daily'){
@@ -65,9 +65,9 @@ Randomizations <- function(DT = NULL,
                please provide a datetime column or IDate')
         }
         DT[, yday := data.table::yday(get(dateField))]
-        idDays <- DT[, .(yday = unique(yday)), by = c(idField, splitBy)]
-        idDays[, randomYday := sample(yday), by = c(idField, splitBy)]
-        merged <- merge(DT, idDays, on = c('yday', idField, splitBy))[,
+        idDays <- DT[, .(yday = unique(yday)), by = c(id, splitBy)]
+        idDays[, randomYday := sample(yday), by = c(id, splitBy)]
+        merged <- merge(DT, idDays, on = c('yday', id, splitBy))[,
           randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday))]
         attr(merged$randomDateTime, 'tzone') <- ""
         return(merged)
@@ -79,8 +79,8 @@ Randomizations <- function(DT = NULL,
     replicated[iter != 0, observed := 0]
     if(type == 'hourly'){
       if(is.null(dateField)) stop('dateField required, please provide datetime field')
-      replicated[observed != 1, randomID := sample(get(idField)), by = c('iter', dateField, splitBy)]
-      replicated[observed == 1, randomID := get(idField)]
+      replicated[observed != 1, randomID := sample(get(id)), by = c('iter', dateField, splitBy)]
+      replicated[observed == 1, randomID := get(id)]
       return(replicated[])
       } else if(type == 'daily'){
 
@@ -90,7 +90,7 @@ Randomizations <- function(DT = NULL,
         }
         replicated[, yday := data.table::yday(get(dateField))]
 
-        dailyIDs <- unique(replicated[, .(ID = get(idField), observed),
+        dailyIDs <- unique(replicated[, .(ID = get(id), observed),
                                by = .(iter, yday, splitBy)])
         dailyIDs[, randomID := sample(ID), by = .(iter, yday, splitBy)]
         dailyIDs[observed == 1, randomID := ID]
@@ -102,10 +102,10 @@ Randomizations <- function(DT = NULL,
                please provide a datetime column or IDate')
         }
         replicated[, yday := data.table::yday(get(dateField))]
-        idDays <- replicated[, .(yday = unique(yday)), by = c(idField, 'iter', splitBy)]
-        idDays[, randomYday := sample(yday), by = c(idField, 'iter', splitBy)]
+        idDays <- replicated[, .(yday = unique(yday)), by = c(id, 'iter', splitBy)]
+        idDays[, randomYday := sample(yday), by = c(id, 'iter', splitBy)]
         merged <- merge(replicated, idDays,
-                        on = c('yday', idField, 'iter', splitBy),
+                        on = c('yday', id, 'iter', splitBy),
                         all = TRUE)[, randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday))]
         merged[observed == 1, c('randomDateTime', 'randomYday') := .(get(dateField), yday(get(dateField)))]
         # this is needed until data.table 1.10.5 is released.. otherwise rm it

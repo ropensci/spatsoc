@@ -5,14 +5,14 @@
 #'   to use a rounded time, see SOME LINK.
 #'
 #' @return mean pairwise distance data.table by ID and (optional) time field
-PairwiseDist <- function(DT, timeField, coordFields = c('EASTING', 'NORTHING'), idField = 'ID') {
-  if(any(!(c(timeField, idField, coordFields) %in% colnames(DT)))){
+PairwiseDist <- function(DT, timeField, coordFields = c('EASTING', 'NORTHING'), id = 'ID') {
+  if(any(!(c(timeField, id, coordFields) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
   if(is.null(timeField)) {
     warning('time column not provided - pairwise distance will be computed across all locs')
 
-    names <- DT[, get(idField)]
+    names <- DT[, get(id)]
 
     distMatrix <- sp::spDists(as.matrix(DT[ , ..coordFields]),
                               longlat = FALSE)
@@ -21,7 +21,7 @@ PairwiseDist <- function(DT, timeField, coordFields = c('EASTING', 'NORTHING'), 
     data.table(meanDistance = colMeans(distMatrix),
                id = names)
   } else {
-    DT[, {names <- .SD[, get(idField)]
+    DT[, {names <- .SD[, get(id)]
           distMatrix <- sp::spDists(as.matrix(.SD[ , ..coordFields]),
                                     longlat = FALSE)
           list(meanDistance = colMeans(distMatrix),

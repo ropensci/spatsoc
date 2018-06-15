@@ -30,7 +30,7 @@ test_that('area provided and logical, or error', {
       hrType = 'mcp',
       area = NULL,
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'area must be provided',
     fixed = TRUE
@@ -43,7 +43,7 @@ test_that('area provided and logical, or error', {
       hrType = 'mcp',
       area = 'potato',
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'area must be provided',
     fixed = TRUE
@@ -56,7 +56,7 @@ test_that('area provided and logical, or error', {
       hrType = 'mcp',
       area = 10,
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'area must be provided',
     fixed = TRUE
@@ -88,7 +88,7 @@ test_that('projection provided or error', {
       hrType = 'mcp',
       area = FALSE,
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'projection must be provided'
   )
@@ -103,7 +103,7 @@ test_that('mising hrParams warns default used', {
       hrType = 'mcp',
       area = FALSE,
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'hrParams is not provided, using defaults'
   )
@@ -117,7 +117,7 @@ test_that('missing hrType fails', {
       hrType = NULL,
       area = FALSE,
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'hrType must be provided'
   )
@@ -131,7 +131,7 @@ test_that('column names must exist in DT', {
       hrType = 'mcp',
       area = FALSE,
       coordFields = c('X', 'Y'),
-      idField = 'potato'
+      id = 'potato'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -144,7 +144,7 @@ test_that('column names must exist in DT', {
       hrType = 'mcp',
       area = FALSE,
       coordFields = c('potatoX', 'potatoY'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -175,7 +175,7 @@ test_that('ID field is alphanumeric and does not have spaces', {
       hrParams = list(percent = 95),
       area = TRUE,
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'please ensure IDs are alphanumeric and do not contain spaces'
   )
@@ -190,7 +190,7 @@ test_that('column and row lengths returned make sense', {
       hrParams = list(percent = 95),
       area = TRUE,
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     )
   ),
   nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
@@ -204,7 +204,7 @@ test_that('column and row lengths returned make sense', {
       hrParams = list(percent = 95),
       area = FALSE,
       coordFields = c('X', 'Y'),
-      idField = 'ID',
+      id = 'ID',
       groupFields = 'yr'
     )
   ),
@@ -221,7 +221,7 @@ test_that('column and row lengths returned make sense', {
                    hrParams = list(percent = 95),
                    area = FALSE,
                    coordFields = c('X', 'Y'),
-                   idField = 'ID',
+                   id = 'ID',
                    groupFields = 'family'
                  )
                ))
@@ -240,7 +240,7 @@ test_that('withinGroup is not returned to the user', {
       hrParams = list(percent = 95),
       area = FALSE,
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     )
   ))
 })
@@ -258,7 +258,7 @@ test_that('group column succesfully detected', {
       hrParams = list(percent = 95),
       area = FALSE,
       coordFields = c('X', 'Y'),
-      idField = 'ID',
+      id = 'ID',
       groupFields = 'mnth'
     ),
     'group column will be overwritten'
@@ -272,7 +272,7 @@ test_that('group column succesfully detected', {
 #   hrParams = NULL,
 #   area = FALSE,
 #   coordFields = c('X', 'Y'),
-#   idField = 'ID',
+#   id = 'ID',
 #   groupFields = NULL,
 #   spPolys = NULL
 # )

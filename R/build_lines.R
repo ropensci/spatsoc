@@ -9,7 +9,7 @@
 build_lines <-
   function(DT = NULL,
            projection = NULL,
-           idField = NULL,
+           id = NULL,
            coordFields = NULL,
            groupFields = NULL) {
     if (is.null(DT)) {
@@ -20,8 +20,8 @@ build_lines <-
       stop('coordFields must be provided')
     }
 
-    if (is.null(idField)) {
-      stop('idField must be provided')
+    if (is.null(id)) {
+      stop('id must be provided')
     }
 
     if (is.null(projection)) {
@@ -32,10 +32,10 @@ build_lines <-
       stop('coordFields requires a vector of column names for coordinates X and Y')
     }
 
-    if (any(!(c(idField, coordFields, groupFields) %in% colnames(DT)))) {
+    if (any(!(c(id, coordFields, groupFields) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
-          c(idField, coordFields, groupFields), colnames(DT)
+          c(id, coordFields, groupFields), colnames(DT)
         ),
         collapse = ', ')),
         ' field(s) provided are not present in input DT'
@@ -47,15 +47,15 @@ build_lines <-
     }
 
     if (is.null(groupFields)) {
-      groupFields <- idField
+      groupFields <- id
     } else {
-      groupFields <- c(idField, groupFields)
+      groupFields <- c(id, groupFields)
     }
     if (any(!(DT[, lapply(.SD, FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
     ), .SDcols = groupFields]))) {
-      stop('idField (and groupFields when provided) must be character, numeric or integer type')
+      stop('id (and groupFields when provided) must be character, numeric or integer type')
     }
 
     dropRows <- DT[, .(dropped = .N < 2), by = groupFields]

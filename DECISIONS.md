@@ -126,7 +126,7 @@ high: uniqueN <= half nrows
 
 * for `build_lines`: is byFields really just id + whatever.. is this one argument then?
 
-by separating byFields and idField, we emphasize the requirement of idField and extra byFields 
+by separating byFields and id, we emphasize the requirement of id and extra byFields 
 
 ----
 
@@ -206,7 +206,7 @@ by separating byFields and idField, we emphasize the requirement of idField and 
 group_times(Dt, timeField = 'datetime', threshold = '3 hour')
 distThreshold <- 500
 group_pts(Dt, threshold = distThreshold, timegroup = 'timegroup',
-         coordFields = c('X', 'Y'), idField = 'ID')
+         coordFields = c('X', 'Y'), id = 'ID')
 Dt[, nByGroup := .N, by = group]
 Dt[nByGroup > 1, maxDist := max(dist(cbind(X,Y))), by = group]
 

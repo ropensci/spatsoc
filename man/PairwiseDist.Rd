@@ -5,7 +5,7 @@
 \title{Euclidean Pairwise Distance}
 \usage{
 PairwiseDist(DT, timeField, coordFields = c("EASTING", "NORTHING"),
-  idField = "ID")
+  id = "ID")
 }
 \arguments{
 \item{DT}{input data.table}
@@ -15,7 +15,7 @@ to use a rounded time, see SOME LINK.}
 
 \item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{idField}{Character string of ID column name}
+\item{id}{Character string of ID column name}
 }
 \value{
 mean pairwise distance data.table by ID and (optional) time field

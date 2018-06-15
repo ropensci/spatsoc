@@ -5,8 +5,8 @@
 \title{Group Overlapping Polygons}
 \usage{
 group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
-  projection = NULL, coordFields = NULL, idField = NULL,
-  groupFields = NULL, spPolys = NULL)
+  projection = NULL, coordFields = NULL, id = NULL, groupFields = NULL,
+  spPolys = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -21,7 +21,7 @@ group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
 
 \item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{idField}{Character string of ID column name}
+\item{id}{Character string of ID column name}
 
 \item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 
@@ -36,9 +36,9 @@ Group individuals by polygon (eg: home ranges) overlap
 \examples{
 groups <- group_polys(locs, area = FALSE, 'mcp', list(percent = 95),
                       projection = utm,
-                      idField = 'ID', coordFields = c('X', 'Y'))
+                      id = 'ID', coordFields = c('X', 'Y'))
 
 areaDT <- group_polys(locs, area = TRUE, 'mcp', list(percent = 95),
                       projection = utm,
-                      idField = 'ID', coordFields = c('X', 'Y'))
+                      id = 'ID', coordFields = c('X', 'Y'))
 }

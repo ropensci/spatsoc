@@ -6,7 +6,7 @@
 #' @param groupField (optional) groupField in the DT which can be used to group
 #'   neighbors (eg: season, year, herd, known social groups, ...)
 Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
-                    idField = 'ID'){
+                    id = 'ID'){
   if(any(!(c(timeField, groupField, coordFields) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
@@ -22,10 +22,10 @@ Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE
   if(is.null(groupField)){
     # if no timeField, calculate directly with all locs, else calc on by timeField
     if(is.null(timeField)){
-      data.table::rbindlist(list(FindNearest(DT, coordFields, idField)))
+      data.table::rbindlist(list(FindNearest(DT, coordFields, id)))
     } else {
-      d <- DT[, FindNearest(.SD, coordFields, idField), ##!!!!!!!!!!!!!!!
-              by = timeField, .SDcols = c(coordFields, idField)]
+      d <- DT[, FindNearest(.SD, coordFields, id), ##!!!!!!!!!!!!!!!
+              by = timeField, .SDcols = c(coordFields, id)]
       # optionally, return proportions or all matches
       if(!proportions){
         return(d)
@@ -37,12 +37,12 @@ Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE
   } else {
   # if there is a groupField variable, but no timeField, return all pairs in each group
     if(is.null(timeField)){
-      DT[, FindNearest(.SD, coordFields, idField),
+      DT[, FindNearest(.SD, coordFields, id),
               by = groupField]
     } else {
       # else, return either proportions or pairs by each group * time
-      DT[, {d <- DT[, FindNearest(.SD, coordFields, idField),
-                    by = timeField, .SDcols = c(coordFields, idField)]
+      DT[, {d <- DT[, FindNearest(.SD, coordFields, id),
+                    by = timeField, .SDcols = c(coordFields, id)]
             if(!proportions){
               d
             } else {
@@ -55,5 +55,5 @@ Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE
 }
 
 
-# TODO: eval(idField) or the like for naming the list with input idField
+# TODO: eval(id) or the like for naming the list with input id
 #       https://stackoverflow.com/questions/17169475/create-list-programmatically-with-tags-from-character-vector

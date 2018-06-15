@@ -17,7 +17,7 @@ test_that('DT or spPts are required but not both', {
 
 
 
-test_that('coordFields, idField, projection must be provided and proper format',
+test_that('coordFields, id, projection must be provided and proper format',
           {
             expect_error(
               build_polys(
@@ -25,9 +25,9 @@ test_that('coordFields, idField, projection must be provided and proper format',
                 projection = utm,
                 hrType = 'mcp',
                 coordFields = c('X', 'Y'),
-                idField = NULL
+                id = NULL
               ),
-              'idField must be provided'
+              'id must be provided'
             )
 
             expect_error(
@@ -36,7 +36,7 @@ test_that('coordFields, idField, projection must be provided and proper format',
                 projection = NULL,
                 hrType = 'mcp',
                 coordFields = c('X', 'Y'),
-                idField = 'ID'
+                id = 'ID'
               ),
               'projection must be provided'
             )
@@ -47,7 +47,7 @@ test_that('coordFields, idField, projection must be provided and proper format',
                 projection = utm,
                 hrType = 'mcp',
                 coordFields = NULL,
-                idField = 'ID'
+                id = 'ID'
               ),
               'coordFields must be provided'
             )
@@ -58,7 +58,7 @@ test_that('coordFields, idField, projection must be provided and proper format',
                 projection = utm,
                 hrType = 'mcp',
                 coordFields = 'X',
-                idField = 'ID'
+                id = 'ID'
               ),
               'coordFields requires a vector of',
               fixed = FALSE
@@ -72,7 +72,7 @@ test_that('coordFields, idField, projection must be provided and proper format',
                 projection = utm,
                 hrType = 'mcp',
                 coordFields = c('X', 'Y'),
-                idField = 'ID'
+                id = 'ID'
               ),
               'coordFields must be numeric'
             )
@@ -83,7 +83,7 @@ test_that('coordFields, idField, projection must be provided and proper format',
                 projection = utm,
                 hrType = NULL,
                 coordFields = c('X', 'Y'),
-                idField = 'ID'
+                id = 'ID'
               ),
               'hrType must be provided'
             )
@@ -98,7 +98,7 @@ test_that('column names must exist in DT', {
       projection = utm,
       hrType = 'mcp',
       coordFields = c('X', 'Y'),
-      idField = 'potato'
+      id = 'potato'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -110,7 +110,7 @@ test_that('column names must exist in DT', {
       projection = utm,
       hrType = 'mcp',
       coordFields = c('potatoX', 'potatoY'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -125,7 +125,7 @@ test_that('hrParams returns error if params do not match function params', {
       hrType = 'mcp',
       hrParams = list(percent = 95, potato = TRUE),
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'hrParams provided do not match function parameters',
     fixed = FALSE
@@ -138,7 +138,7 @@ test_that('hrParams returns error if params do not match function params', {
       hrType = 'kernel',
       hrParams = list(grid = 60, potato = TRUE),
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'hrParams provided do not match function parameters',
     fixed = FALSE
@@ -153,7 +153,7 @@ test_that('if hrParams NULL, warngs', {
       hrType = 'mcp',
       hrParams = NULL,
       coordFields = c('X', 'Y'),
-      idField = 'ID'
+      id = 'ID'
     ),
     'hrParams is not provided, using defaults'
   )

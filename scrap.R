@@ -58,12 +58,12 @@ Dt[, yr := year(datetime)]
 Dt[, potato := ID]
 group_times(Dt, timeField = 'datetime', threshold = '30 days')
 
-Randomizations(Dt, idField= 'ID', groupField = 'group',
+Randomizations(Dt, id= 'ID', groupField = 'group',
                randomType = 'spiegel', dateField = 'datetime',
                splitBy = 'yr', iterations = 10)
 group_lines(Dt, bufferWidth = 0,
            projection = utm,
-           coordFields = c('X', 'Y'), idField = 'ID')
+           coordFields = c('X', 'Y'), id = 'ID')
 
 group_pts(Dt, 10, 'ID', c('X', 'Y'))
 
@@ -86,7 +86,7 @@ Dt <- Dt[grp == 'ngelleehon']
 group_times(Dt, 'posix', '10 minutes')
 Dt[, uniqueN(posix)]
 group_pts(Dt, 100, time = 'timegroup', coordFields = c('X', 'Y'),
-         idField = 'ID')
+         id = 'ID')
 ## DAILY ====...
 
 ############# SF SF SF SF ################
@@ -129,8 +129,8 @@ l[, withinGroup := {
   # int <- sf::st_intersects(pts, un)
   unlist(sf::st_intersects(pts, un))
   # data.table::setnames(
-  # data.table::data.table(get(idField), unlist(int, FALSE, FALSE))#,
-  #   c(idField, 'withinGroup'))
+  # data.table::data.table(get(id), unlist(int, FALSE, FALSE))#,
+  #   c(id, 'withinGroup'))
 },
 by = timegroup, .SDcols = coordFields]
 l
@@ -179,12 +179,12 @@ system.time({
 })
 
 data.table::setnames(
-  data.table::data.table(get(idField),
+  data.table::data.table(get(id),
                          unlist(ovr)),
-  c(idField, 'withinGroup'))
+  c(id, 'withinGroup'))
 
 
-Dt[ovrDt, withinGroup := withinGroup, on = c(idField, groupFields)]
+Dt[ovrDt, withinGroup := withinGroup, on = c(id, groupFields)]
 Dt[, group := .GRP, by = c(groupFields, 'withinGroup')][, withinGroup := NULL][]
 ################# SF SFS FSF SF SF ########################
 

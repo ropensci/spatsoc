@@ -13,17 +13,17 @@
 #'
 #' @examples
 #'
-#' group_pts(locs, threshold = 5, idField = 'ID',
+#' group_pts(locs, threshold = 5, id = 'ID',
 #'          coordFields = c('X', 'Y'))
 #'
-#' group_pts(locs, threshold = 5, idField = 'ID',
+#' group_pts(locs, threshold = 5, id = 'ID',
 #'          coordFields = c('X', 'Y'), timegroup = 'timegroup')
 #'
-#' group_pts(locs, threshold = 5, idField = 'ID', coordFields = c('X', 'Y'),
+#' group_pts(locs, threshold = 5, id = 'ID', coordFields = c('X', 'Y'),
 #'          timegroup = 'timegroup', groupFields = 'season')
 group_pts <- function(DT = NULL,
                      threshold = NULL,
-                     idField = NULL,
+                     id = NULL,
                      coordFields = NULL,
                      timegroup = NULL,
                      groupFields = NULL) {
@@ -39,7 +39,7 @@ group_pts <- function(DT = NULL,
     stop('threshold must be greater than 0')
   }
 
-  if (is.null(idField)) {
+  if (is.null(id)) {
     stop('ID field required')
   }
 
@@ -48,11 +48,11 @@ group_pts <- function(DT = NULL,
   }
 
   if (any(!(
-    c(timegroup, idField, coordFields, groupFields) %in% colnames(DT)
+    c(timegroup, id, coordFields, groupFields) %in% colnames(DT)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timegroup, idField, coordFields, groupFields),
+        c(timegroup, id, coordFields, groupFields),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
@@ -91,7 +91,7 @@ group_pts <- function(DT = NULL,
       igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
     igraph::clusters(graphAdj)$membership
   },
-  by = groupFields, .SDcols = c(coordFields, idField)]
+  by = groupFields, .SDcols = c(coordFields, id)]
   DT[, group := .GRP,
      by = c(groupFields, 'withinGroup')]
   set(DT, j = 'withinGroup', value = NULL)

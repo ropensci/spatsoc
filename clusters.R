@@ -51,7 +51,7 @@ library(spatsoc)
 bufferSize <- 300
 locs[, spatialGroup := group_pts(.SD, bufferSize, crs = utm21N,
                       coordFields = c("EASTING", "NORTHING"),
-                      idField = id.field)$spatialGroup]
+                      id = id.field)$spatialGroup]
 locs
 
 subcols <- locs[, .(lowTime, highTime, ANIMAL_ID, EASTING, NORTHING, spatialGroup)]
@@ -74,7 +74,7 @@ t[spatialGroup ==2]
 b <- t[spatialGroup == 2 | spatialGroup == 3,
   group_pts(.SD, bufferSize, crs = utm21N,
                              coordFields = c("EASTING", "NORTHING"),
-                             idField = id.field),
+                             id = id.field),
   by = .(timegroup, spatialGroup)]
 t
 
@@ -100,7 +100,7 @@ mx <- data.table(clusters(gx)$membership)
 
 group_pts(.SD, bufferSize, crs = utm21N,
          coordFields = c("EASTING", "NORTHING"),
-         idField = id.field)
+         id = id.field)
 
 
 

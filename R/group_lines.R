@@ -16,24 +16,24 @@
 #'
 #'
 #' group_lines(locs, threshold = 50, projection = utm,
-#'             idField = 'ID', coordFields = c('X', 'Y'))
+#'             id = 'ID', coordFields = c('X', 'Y'))
 #'
 #' # Daily movement tracks
 #' group_times(locs, timeField = 'datetime', threshold = '1 day')
 #' group_lines(locs, threshold = 50, projection = utm,
-#'             idField = 'ID', coordFields = c('X', 'Y'),
+#'             id = 'ID', coordFields = c('X', 'Y'),
 #'             timegroup = 'timegroup')
 #'
 #' # Daily movement tracks by sex
 #' group_times(locs, timeField = 'datetime', threshold = '1 day')
 #' group_lines(locs, threshold = 50, projection = utm,
-#'             idField = 'ID', coordFields = c('X', 'Y'),
+#'             id = 'ID', coordFields = c('X', 'Y'),
 #'             timegroup = 'timegroup', groupFields = 'sex')
 group_lines <-
   function(DT = NULL,
            threshold = NULL,
            projection = NULL,
-           idField = NULL,
+           id = NULL,
            coordFields = NULL,
            timegroup = NULL,
            groupFields = NULL,
@@ -59,14 +59,14 @@ group_lines <-
         stop('coordFields must be provided')
       }
 
-      if (is.null(idField)) {
-        stop('idField must be provided')
+      if (is.null(id)) {
+        stop('id must be provided')
       }
 
-      if (any(!(c(idField, coordFields) %in% colnames(DT)))) {
+      if (any(!(c(id, coordFields) %in% colnames(DT)))) {
         stop(paste0(
           as.character(paste(setdiff(
-            c(idField, coordFields), colnames(DT)
+            c(id, coordFields), colnames(DT)
           ),
           collapse = ', ')),
           ' field(s) provided are not present in input DT'
@@ -101,7 +101,7 @@ group_lines <-
           DT = DT,
           projection = projection,
           coordFields = coordFields,
-          idField = idField
+          id = id
         )
       )
       if (!is.null(spLines)) {
@@ -116,11 +116,11 @@ group_lines <-
         ovrDT <- data.table::data.table(ID = names(ovr),
                                         group = unlist(ovr))
       } else {
-        ovrDT <- data.table::data.table(ID = get(idField), group = as.integer(NA))
+        ovrDT <- data.table::data.table(ID = get(id), group = as.integer(NA))
       }
 
-      data.table::setnames(ovrDT, c(idField, 'group'))
-      DT[ovrDT, group := group, on = idField]
+      data.table::setnames(ovrDT, c(id, 'group'))
+      DT[ovrDT, group := group, on = id]
       if (DT[is.na(group), .N] > 0) {
         warning('some rows were dropped, cannot build a line with < 2 points. in this case, group set to NA.')
       }
@@ -141,7 +141,7 @@ group_lines <-
               DT = .SD,
               projection = projection,
               coordFields = coordFields,
-              idField = idField
+              id = id
             )
           )
           if (!is.null(spLines)) {
@@ -158,16 +158,16 @@ group_lines <-
             out <- data.table::data.table(names(ovr),
                                           unlist(ovr))
             # DROP THE SETNAMES AND JUST KEEP WITHINGROUP?
-            data.table::setnames(out, c(idField, 'withinGroup'))
+            data.table::setnames(out, c(id, 'withinGroup'))
           } else {
             # why is a double??
-            out <- data.table(get(idField), withinGroup = as.double(NA))
-            data.table::setnames(out, c(idField, 'withinGroup'))
+            out <- data.table(get(id), withinGroup = as.double(NA))
+            data.table::setnames(out, c(id, 'withinGroup'))
 
           }
-        }, by = groupFields, .SDcols = c(coordFields, idField)]
+        }, by = groupFields, .SDcols = c(coordFields, id)]
 
-      DT[ovrDT, withinGroup := withinGroup, on = c(idField, groupFields)]
+      DT[ovrDT, withinGroup := withinGroup, on = c(id, groupFields)]
       DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
          by = c(groupFields, 'withinGroup')]
       # DT[withinGroup == -999L, group := NA]
