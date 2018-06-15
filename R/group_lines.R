@@ -98,7 +98,7 @@ group_lines <-
     if (is.null(timegroup)) {
       suppressWarnings(
         spLines <- build_lines(
-          DT,
+          DT = DT,
           projection = projection,
           coordFields = coordFields,
           idField = idField
@@ -113,7 +113,8 @@ group_lines <-
         }
         g <- igraph::graph_from_adjacency_matrix(inter)
         ovr <- igraph::clusters(g)$membership
-        ovrDT <- data.table::data.table(ID = names(ovr), group = unlist(ovr))
+        ovrDT <- data.table::data.table(ID = names(ovr),
+                                        group = unlist(ovr))
       } else {
         ovrDT <- data.table::data.table(ID = get(idField), group = as.integer(NA))
       }

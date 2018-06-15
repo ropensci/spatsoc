@@ -65,6 +65,14 @@ group_lines(Dt, bufferWidth = 0,
            projection = utm,
            coordFields = c('X', 'Y'), idField = 'ID')
 
+group_pts(Dt, 10, 'ID', c('X', 'Y'))
+
+if (any(Dt[, lapply(.SD, class), .SDcols = 'datetime'] %in%
+        c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+  warning('timegroup provided is a date/time or character type, did you use group_times?')
+}
+
+
 ## DAILY ========
 Dt <- fread('input/Daily')
 Dt[, idate := as.IDate(timestamp)]

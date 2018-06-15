@@ -21,8 +21,6 @@ SpatialLines intersection}
 
 \item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
-
 \item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 
 \item{spLines}{Alternatively, provide a SpatialLines object created with the sp

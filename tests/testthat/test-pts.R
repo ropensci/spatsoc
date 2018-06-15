@@ -88,8 +88,9 @@ test_that('column names must exist in DT', {
 
 
 test_that('threshold correctly provided or error detected', {
+  copyDT <- copy(DT)
   expect_silent(group_pts(
-    DT,
+    copyDT,
     threshold = 10,
     idField = 'ID',
     coordFields = c('X', 'Y')
@@ -127,21 +128,27 @@ test_that('coordFields are correctly provided or error detected', {
   )
 })
 
-test_that('two column DT returned if timegroup, group fields not provided', {
-  expect_equal(ncol(group_pts(
-    DT,
-    threshold = 10,
-    idField = 'ID',
-    coordFields = c('X', 'Y')
-  )),
-  2)
+test_that('DT returned if timegroup, group fields not provided', {
+  copyDT <- copy(DT)
+  expect_equal(ncol(copyDT) + 1,
+               ncol(group_pts(
+                 copyDT,
+                 threshold = 10,
+                 idField = 'ID',
+                 coordFields = c('X', 'Y')
+               )))
+
+  # warns if > 1 ID row
+
+  # same but with timegroup
+
+  # and with groupFields
 })
 
 test_that('warns if timegroup is a date/time or character instead of output from group_times',
           {
-            copyDT <- copy(DT)
-
             # if datetime is a character
+            copyDT <- copy(DT)
             expect_warning(
               group_pts(
                 copyDT,
@@ -155,20 +162,22 @@ test_that('warns if timegroup is a date/time or character instead of output from
             )
 
             # if datetime is a POSIXct
-            copyDT[, datetime := as.POSIXct(datetime)]
+            copyDT <- copy(DT)
+            copyDT[, posix := as.POSIXct(datetime)]
             expect_warning(
               group_pts(
                 copyDT,
                 threshold = 10,
                 idField = 'ID',
                 coordFields = c('X', 'Y'),
-                timegroup = 'datetime'
+                timegroup = 'posix'
               ),
               'timegroup provided is a',
               fixed = FALSE
             )
 
             # if datetime is an IDate
+            copyDT <- copy(DT)
             copyDT[, idate := as.IDate(datetime)]
             expect_warning(
               group_pts(
