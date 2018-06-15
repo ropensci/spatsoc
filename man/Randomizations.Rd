@@ -4,29 +4,35 @@
 \alias{Randomizations}
 \title{Randomizations}
 \usage{
-Randomizations(DT, idField, groupField, randomType, dateField = NULL,
+Randomizations(DT = NULL, type = NULL, idField = NULL, dateField = NULL,
   splitBy = NULL, iterations = NULL)
 }
 \arguments{
 \item{DT}{input data.table with id, group fields and (optional) time fields}
 
+\item{type}{one of 'daily', 'hourly' or 'spiegel' - see details}
+
 \item{idField}{field indicating the id in the input data.table}
-
-\item{groupField}{field indicating the group membership for each id}
-
-\item{randomType}{one of 'daily', 'hourly' or 'spiegel'. 'daily' will randomize the ID
-for each individual 24hr trajector while 'hourly' simply randomly assigns
-an ID to each location. 'spiegel' will implement the daily movement
-trajectory randomizations (Spiegel et al. 2016).}
 
 \item{splitBy}{List of fields in DT to split the randomization process by}
 
 \item{iterations}{The number of iterations to randomize}
 
+\item{groupField}{field indicating the group membership for each id}
+
 \item{timeField}{(optional) time field used for providing datetime or hour field or group time field}
 }
 \description{
-Randomizations
+Randomization
+}
+\details{
+Randomization types:
+
+'daily' will randomize the ID for each individual 24hr trajector
+
+'hourly' simply randomly assigns an ID to each location.
+
+'spiegel' will implement the daily movement trajectory randomizations (Spiegel et al. 2016).
 }
 \seealso{
 \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
