@@ -50,7 +50,7 @@ group_lines <-
       stop('cannot provide both DT and spLines')
     } else if (is.null(spLines) && is.null(DT)) {
       stop('must provide either DT or spLines')
-    } else if (is.null(spLines) & !is.null(DT)) {
+    } else if (is.null(spLines) && !is.null(DT)) {
       if (is.null(projection)) {
         stop('projection must be provided when DT is')
       }
