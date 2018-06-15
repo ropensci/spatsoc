@@ -75,30 +75,25 @@ group_pts <- function(DT = NULL,
     set(DT, j = 'group', value = NULL)
   }
 
-  if (is.null(timegroup) & is.null(groupFields)) {
-    distMatrix <- as.matrix(dist(DT[, ..coordFields]))
-    graphAdj <-
-      igraph::graph_from_adjacency_matrix(distMatrix < threshold)
-    group <- igraph::clusters(graphAdj)$membership
-
-    return(data.table(ID = names(group), group))
-
+  if (is.null(time) & is.null(groupFields)) {
+    groupFields <- NULL
   } else {
-    groupFields <- c(groupFields, timegroup)
-    DT[, withinGroup := {
-      distMatrix <-
-        as.matrix(dist(cbind(
-          get(coordFields[1]), get(coordFields[2])
-        ),
-        method = 'euclidean'))
-      graphAdj <-
-        igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
-      igraph::clusters(graphAdj)$membership
-    },
-    by = groupFields, .SDcols = c(coordFields, idField)]
-    DT[, group := .GRP,
-       by = c(groupFields, 'withinGroup')]
-    set(DT, j = 'withinGroup', value = NULL)
-    return(DT[])
+    groupFields <- c(groupFields, time)
   }
+  # warn if multiple IDs by time/groupFields
+  DT[, withinGroup := {
+    distMatrix <-
+      as.matrix(dist(cbind(
+        get(coordFields[1]), get(coordFields[2])
+      ),
+      method = 'euclidean'))
+    graphAdj <-
+      igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
+    igraph::clusters(graphAdj)$membership
+  },
+  by = groupFields, .SDcols = c(coordFields, idField)]
+  DT[, group := .GRP,
+     by = c(groupFields, 'withinGroup')]
+  set(DT, j = 'withinGroup', value = NULL)
+  return(DT[])
 }
