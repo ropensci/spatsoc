@@ -87,8 +87,8 @@ test_that('column names must exist in DT', {
   )
 })
 
-test_that('returns same number of lines as unique IDs/groupFields provided', {
-  # without groupFields
+test_that('returns same number of lines as unique IDs/splitBy provided', {
+  # without splitBy
   expect_equal(length(
     build_lines(
       DT = DT,
@@ -99,10 +99,10 @@ test_that('returns same number of lines as unique IDs/groupFields provided', {
   ),
   DT[, uniqueN(ID)])
 
-  # with groupFields
+  # with splitBy
   DT[, jul := data.table::yday(as.POSIXct(datetime))]
-  groupFields = c('ID', 'jul')
-  DT[, count := .N, by = groupFields]
+  splitBy = c('ID', 'jul')
+  DT[, count := .N, by = splitBy]
   subDT <- DT[count >= 2]
 
   expect_equal(length(
@@ -111,10 +111,10 @@ test_that('returns same number of lines as unique IDs/groupFields provided', {
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
-      groupFields = 'jul'
+      splitBy = 'jul'
     )
   ),
-  nrow(unique(subDT[, .SD, .SDcols = groupFields])))
+  nrow(unique(subDT[, .SD, .SDcols = splitBy])))
 })
 
 
@@ -133,10 +133,10 @@ test_that("build lines warns if < 2 locs per ID/byField", {
   )
 
 
-  # for ID + groupFields
-  groupFields = c('ID', 'jul')
+  # for ID + splitBy
+  splitBy = c('ID', 'jul')
   DT[, jul := data.table::yday(as.POSIXct(datetime))]
-  DT[, count := .N, by = groupFields]
+  DT[, count := .N, by = splitBy]
   subDT <- DT[count < 2]
 
   expect_warning(
@@ -145,14 +145,14 @@ test_that("build lines warns if < 2 locs per ID/byField", {
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
-      groupFields = 'jul'
+      splitBy = 'jul'
     ),
     'some rows dropped, cannot build',
     fixed = FALSE
   )
 })
 
-test_that('groupFields and id provided are not correct format', {
+test_that('splitBy and id provided are not correct format', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_error(
     build_lines(
@@ -161,7 +161,7 @@ test_that('groupFields and id provided are not correct format', {
       coords = c('X', 'Y'),
       projection = utm
     ),
-    'id \\(and groupFields when provided\\) must',
+    'id \\(and splitBy when provided\\) must',
     fixed = FALSE
   )
 
@@ -171,9 +171,9 @@ test_that('groupFields and id provided are not correct format', {
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
-      groupFields = 'datetime'
+      splitBy = 'datetime'
     ),
-    'id \\(and groupFields when provided\\) must be',
+    'id \\(and splitBy when provided\\) must be',
     fixed = FALSE
   )
 
@@ -186,7 +186,7 @@ test_that('groupFields and id provided are not correct format', {
       coords = c('X', 'Y'),
       projection = utm
     ),
-    'id \\(and groupFields when provided\\) must be',
+    'id \\(and splitBy when provided\\) must be',
     fixed = FALSE
   )
 })

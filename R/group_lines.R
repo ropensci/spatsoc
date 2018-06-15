@@ -28,7 +28,7 @@
 #' group_times(locs, timeField = 'datetime', threshold = '1 day')
 #' group_lines(locs, threshold = 50, projection = utm,
 #'             id = 'ID', coords = c('X', 'Y'),
-#'             timegroup = 'timegroup', groupFields = 'sex')
+#'             timegroup = 'timegroup', splitBy = 'sex')
 group_lines <-
   function(DT = NULL,
            threshold = NULL,
@@ -36,7 +36,7 @@ group_lines <-
            id = NULL,
            coords = NULL,
            timegroup = NULL,
-           groupFields = NULL,
+           splitBy = NULL,
            spLines = NULL) {
 
     if (is.null(threshold)) {
@@ -128,11 +128,11 @@ group_lines <-
     } else {
 
       ### CHECK THAT TIMEGROUP IS IN DT
-      if (is.null(groupFields)) {
-        groupFields <- timegroup
+      if (is.null(splitBy)) {
+        splitBy <- timegroup
       }
       else {
-        groupFields <- c(groupFields, timegroup)
+        splitBy <- c(splitBy, timegroup)
       }
       ovrDT <-
         DT[, {
@@ -165,11 +165,11 @@ group_lines <-
             data.table::setnames(out, c(id, 'withinGroup'))
 
           }
-        }, by = groupFields, .SDcols = c(coords, id)]
+        }, by = splitBy, .SDcols = c(coords, id)]
 
-      DT[ovrDT, withinGroup := withinGroup, on = c(id, groupFields)]
+      DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
       DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
-         by = c(groupFields, 'withinGroup')]
+         by = c(splitBy, 'withinGroup')]
       # DT[withinGroup == -999L, group := NA]
       set(DT, j = 'withinGroup', value = NULL)
       if (DT[is.na(group), .N] > 0) {

@@ -5,7 +5,7 @@
 \title{Groups From Spatial Lines}
 \usage{
 group_lines(DT = NULL, threshold = NULL, projection = NULL, id = NULL,
-  coords = NULL, timegroup = NULL, groupFields = NULL, spLines = NULL)
+  coords = NULL, timegroup = NULL, splitBy = NULL, spLines = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -22,7 +22,7 @@ SpatialLines intersection}
 
 \item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
-\item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
+\item{splitBy}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 
 \item{spLines}{Alternatively, provide a SpatialLines object created with the sp
 package. If a spLines object is provided, groups cannot be calculated by a
@@ -51,5 +51,5 @@ group_lines(locs, threshold = 50, projection = utm,
 group_times(locs, timeField = 'datetime', threshold = '1 day')
 group_lines(locs, threshold = 50, projection = utm,
             id = 'ID', coords = c('X', 'Y'),
-            timegroup = 'timegroup', groupFields = 'sex')
+            timegroup = 'timegroup', splitBy = 'sex')
 }

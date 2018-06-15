@@ -5,7 +5,7 @@
 \title{Group Overlapping Polygons}
 \usage{
 group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
-  projection = NULL, coords = NULL, id = NULL, groupFields = NULL,
+  projection = NULL, coords = NULL, id = NULL, splitBy = NULL,
   spPolys = NULL)
 }
 \arguments{
@@ -23,7 +23,7 @@ group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
 
 \item{id}{Character string of ID column name}
 
-\item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
+\item{splitBy}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 
 \item{spPolys}{Alternatively, provide solely a SpatialPolygons object.}
 }

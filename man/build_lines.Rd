@@ -5,7 +5,7 @@
 \title{Build Lines}
 \usage{
 build_lines(DT = NULL, projection = NULL, id = NULL, coords = NULL,
-  groupFields = NULL)
+  splitBy = NULL)
 }
 \arguments{
 \item{DT}{input data.table}

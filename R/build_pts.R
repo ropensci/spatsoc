@@ -19,6 +19,6 @@ BuildPts <- function(DT, projection, coords = c('EASTING', 'NORTHING'), id = 'ID
   }
   sp::SpatialPointsDataFrame(DT[, ..coords],
                              proj4string = sp::CRS(projection),
-                             data = DT[, .(id = get(id))])
+                             data = DT[, .(id = .SD), .SDcols = id])
 }
 

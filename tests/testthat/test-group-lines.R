@@ -242,7 +242,7 @@ test_that('withinGroup is not returned to the user', {
   ))
 })
 
-test_that('only 1 unique timegroup * groupFields', {
+test_that('only 1 unique timegroup * splitBy', {
   copyDT <- DT[, mnth := month(datetime)][, yr := year(datetime)]
 
   group_lines(
@@ -252,7 +252,7 @@ test_that('only 1 unique timegroup * groupFields', {
     id = 'ID',
     coords = c('X', 'Y'),
     projection = utm,
-    groupFields = 'yr'
+    splitBy = 'yr'
   )
   expect_equal(copyDT[, .(uniqueMonths = uniqueN(mnth)),
                       by = .(group)][, max(uniqueMonths)],
@@ -263,7 +263,7 @@ test_that('only 1 unique timegroup * groupFields', {
                1)
 
 })
-# or uniquen(.SD, by = c(id, groupFields))
+# or uniquen(.SD, by = c(id, splitBy))
 
 
 test_that('group column succesfully detected', {
@@ -278,7 +278,7 @@ test_that('group column succesfully detected', {
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
-      groupFields = 'yr'
+      splitBy = 'yr'
     ),
     'group column will be overwritten'
   )
@@ -288,7 +288,7 @@ test_that('group column succesfully detected', {
 #   DT = DT,
 #   threshold = 10,
 #   timeField = 'timegroup',
-#   groupFields = 'family',
+#   splitBy = 'family',
 #   id = 'ID',
 #   coords = c('X', 'Y'),
 #   projection = utm

@@ -12,7 +12,7 @@ build_polys <- function(DT = NULL,
                      hrParams = NULL,
                      coords = NULL,
                      id = NULL,
-                     groupFields = NULL,
+                     splitBy = NULL,
                      spPts = NULL) {
   if (is.null(DT) && is.null(spPts)) {
     stop('input DT or spPts required')
@@ -61,10 +61,10 @@ build_polys <- function(DT = NULL,
     warning('hrParams is not provided, using defaults')
   }
 
-  if (is.null(groupFields)) {
-    groupFields <- id
+  if (is.null(splitBy)) {
+    splitBy <- id
   } else {
-    groupFields <- c(id, groupFields)
+    splitBy <- c(id, splitBy)
   }
 
   if (any(!(DT[, lapply(
@@ -72,11 +72,9 @@ build_polys <- function(DT = NULL,
     FUN = function(x) {
       is.numeric(x) | is.character(x) | is.integer(x)
     }
-  ), .SDcols = groupFields]))) {
-    stop('id (and groupFields when provided) must be character, numeric or integer type')
+  ), .SDcols = splitBy]))) {
+    stop('id (and splitBy when provided) must be character, numeric or integer type')
   }
-
-  # DT[, bys := paste0(.BY, collapse = '-'), by = groupFields]
 
   if (is.null(spPts)) {
     spPts <- sp::SpatialPointsDataFrame(
@@ -84,10 +82,8 @@ build_polys <- function(DT = NULL,
       proj4string = sp::CRS(projection),
       data = DT[, .(ID = do.call(paste,
                                  c(.SD, sep = '-'))),
-                .SDcols = groupFields])
+                .SDcols = splitBy])
   }
-
-  # set(DT, j = 'bys', value = NULL)
 
   hrParams$xy <- spPts
 

@@ -28,7 +28,7 @@ group_polys <-
            projection = NULL,
            coords = NULL,
            id = NULL,
-           groupFields = NULL,
+           splitBy = NULL,
            spPolys = NULL) {
     if (is.null(area) | !is.logical(area)) {
       stop('area must be provided (TRUE or FALSE)')
@@ -40,7 +40,7 @@ group_polys <-
       stop('cannot provide both DT and spPolys')
     }
 
-    if (is.null(groupFields)) {
+    if (is.null(splitBy)) {
       if (!is.null(DT) && is.null(spPolys)) {
         spPolys <-
           build_polys(
@@ -50,7 +50,7 @@ group_polys <-
             hrParams = hrParams,
             coords = coords,
             id = id,
-            groupFields = NULL,
+            splitBy = NULL,
             spPts = NULL
           )
       }
@@ -92,9 +92,9 @@ group_polys <-
         data.table::setcolorder(out, c('ID1', 'ID2', 'area', 'proportion'))
         return(out[])
       }
-    } else if (!is.null(groupFields)) {
+    } else if (!is.null(splitBy)) {
       if (!is.null(spPolys)) {
-        stop('cannot provide spPolys if providing groupFields')
+        stop('cannot provide spPolys if providing splitBy')
       }
 
       if ('group' %in% colnames(DT)) {
@@ -114,7 +114,7 @@ group_polys <-
                   hrParams = hrParams,
                   coords = coords,
                   id = id,
-                  groupFields = NULL,
+                  splitBy = NULL,
                   spPts = NULL
                 )
             )
@@ -129,17 +129,17 @@ group_polys <-
               data.table(ID = get(id),
                          withinGroup = as.integer(NA))
             }
-          }, by = groupFields, .SDcols = c(coords, id)]
-        DT[ovrDT, withinGroup := withinGroup, on = c(id, groupFields)]
+          }, by = splitBy, .SDcols = c(coords, id)]
+        DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
         DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
-           by = c(groupFields, 'withinGroup')]
+           by = c(splitBy, 'withinGroup')]
         set(DT, j = 'withinGroup', value = NULL)
         return(DT[])
       } else if (area) {
         if (any(DT[, grepl('[^A-z0-9]', get(id))])) {
           stop('please ensure IDs are alphanumeric and do not contain spaces')
         }
-        Dt[, nBy := .N, c(groupFields, id)]
+        Dt[, nBy := .N, c(splitBy, id)]
         outDT <-
           Dt[nBy > 5, {
             suppressWarnings(
@@ -151,7 +151,7 @@ group_polys <-
                   hrParams = hrParams,
                   coords = coords,
                   id = id,
-                  groupFields = NULL,
+                  splitBy = NULL,
                   spPts = NULL
                 )
             )
@@ -178,10 +178,10 @@ group_polys <-
             setnames(out, 'id', id)
             setcolorder(out, c(id, paste0(id, '2'), 'area', 'proportion'))
             out
-          }, by = groupFields, .SDcols = c(coords, id)]
+          }, by = splitBy, .SDcols = c(coords, id)]
 
         dropped <-
-          unique(DT[nBy <= 5, .SD, .SDcols = c(groupFields, id)])
+          unique(DT[nBy <= 5, .SD, .SDcols = c(splitBy, id)])
         return(rbindlist(list(dropped, outDT), fill = TRUE))
       }
     }

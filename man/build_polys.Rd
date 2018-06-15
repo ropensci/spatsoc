@@ -5,7 +5,7 @@
 \title{Build Home Ranges for Individuals}
 \usage{
 build_polys(DT = NULL, projection = NULL, hrType = NULL,
-  hrParams = NULL, coords = NULL, id = NULL, groupFields = NULL,
+  hrParams = NULL, coords = NULL, id = NULL, splitBy = NULL,
   spPts = NULL)
 }
 \arguments{

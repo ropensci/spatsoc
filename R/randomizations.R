@@ -45,8 +45,8 @@ Randomizations <- function(DT = NULL,
   if(iterations == 1){
     if(type == 'hourly'){
       if(is.null(dateField)) stop('dateField required, please provide datetime field')
-      if(is.null(splitBy)) groupFields <- dateField else groupFields <- c(splitBy, dateField)
-      DT[, randomID := sample(get(id)), by = groupFields]
+      if(is.null(splitBy)) splitBy <- dateField else splitBy <- c(splitBy, dateField)
+      DT[, randomID := sample(get(id)), by = splitBy]
 
       return(DT[])
     } else if(type == 'daily'){

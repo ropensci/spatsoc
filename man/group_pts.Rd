@@ -5,7 +5,7 @@
 \title{Group Points}
 \usage{
 group_pts(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
-  timegroup = NULL, groupFields = NULL)
+  timegroup = NULL, splitBy = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -18,7 +18,7 @@ group_pts(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
 
 \item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
-\item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
+\item{splitBy}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 }
 \value{
 Input data.table with column 'group' added.
@@ -38,5 +38,5 @@ group_pts(locs, threshold = 5, id = 'ID',
          coords = c('X', 'Y'), timegroup = 'timegroup')
 
 group_pts(locs, threshold = 5, id = 'ID', coords = c('X', 'Y'),
-         timegroup = 'timegroup', groupFields = 'season')
+         timegroup = 'timegroup', splitBy = 'season')
 }

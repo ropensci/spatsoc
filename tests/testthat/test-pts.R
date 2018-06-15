@@ -66,7 +66,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'Y'),
-      groupFields = 'potato'
+      splitBy = 'potato'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -142,7 +142,7 @@ test_that('DT returned if timegroup, group fields not provided', {
 
   # same but with timegroup
 
-  # and with groupFields
+  # and with splitBy
 })
 
 test_that('warns if timegroup is a date/time or character instead of output from group_times',

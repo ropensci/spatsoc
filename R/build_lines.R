@@ -11,7 +11,7 @@ build_lines <-
            projection = NULL,
            id = NULL,
            coords = NULL,
-           groupFields = NULL) {
+           splitBy = NULL) {
     if (is.null(DT)) {
       stop('input DT required')
     }
@@ -32,10 +32,10 @@ build_lines <-
       stop('coords requires a vector of column names for coordinates X and Y')
     }
 
-    if (any(!(c(id, coords, groupFields) %in% colnames(DT)))) {
+    if (any(!(c(id, coords, splitBy) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
-          c(id, coords, groupFields), colnames(DT)
+          c(id, coords, splitBy), colnames(DT)
         ),
         collapse = ', ')),
         ' field(s) provided are not present in input DT'
@@ -46,26 +46,26 @@ build_lines <-
       stop('coords must be numeric')
     }
 
-    if (is.null(groupFields)) {
-      groupFields <- id
+    if (is.null(splitBy)) {
+      splitBy <- id
     } else {
-      groupFields <- c(id, groupFields)
+      splitBy <- c(id, splitBy)
     }
     if (any(!(DT[, lapply(.SD, FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
-    ), .SDcols = groupFields]))) {
-      stop('id (and groupFields when provided) must be character, numeric or integer type')
+    ), .SDcols = splitBy]))) {
+      stop('id (and splitBy when provided) must be character, numeric or integer type')
     }
 
-    dropRows <- DT[, .(dropped = .N < 2), by = groupFields]
+    dropRows <- DT[, .(dropped = .N < 2), by = splitBy]
 
     if (dropRows[(dropped), .N] > 0) {
       warning('some rows dropped, cannot build lines with less than two points')
     }
 
-    lst <- data.table:::split.data.table(DT[dropRows, on = groupFields][!(dropped)],
-                                  by = groupFields)
+    lst <- data.table:::split.data.table(DT[dropRows, on = splitBy][!(dropped)],
+                                  by = splitBy)
 
     if (length(lst) == 0) {
       return(NULL)

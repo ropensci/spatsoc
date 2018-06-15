@@ -55,10 +55,10 @@ easier for user but error..
 
 ----
 
-* groupFields or byFields?
+* splitBy or byFields?
 
 for now...
-**groupFields**
+**splitBy**
 
 
 ----
@@ -181,7 +181,7 @@ by separating byFields and id, we emphasize the requirement of id and extra byFi
 
 * if ID is character vector, paste?? (as in ID, Year ---> AN1_2007)
 
-**provide byFields/groupFields**
+**provide byFields/splitBy**
 
 ----
 

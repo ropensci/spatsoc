@@ -7,7 +7,7 @@
 #' @inheritParams BuildPts
 #' @param  threshold for grouping points, in the units of the projection
 #' @param timegroup (optional) timegroup field in the DT upon which the grouping will be calculated
-#' @param groupFields (optional) character string or vector of grouping field(s) upon which the grouping will be calculated
+#' @param splitBy (optional) character string or vector of grouping field(s) upon which the grouping will be calculated
 #' @return Input data.table with column 'group' added.
 #' @export
 #'
@@ -20,13 +20,13 @@
 #'          coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
 #' group_pts(locs, threshold = 5, id = 'ID', coords = c('X', 'Y'),
-#'          timegroup = 'timegroup', groupFields = 'season')
+#'          timegroup = 'timegroup', splitBy = 'season')
 group_pts <- function(DT = NULL,
                      threshold = NULL,
                      id = NULL,
                      coords = NULL,
                      timegroup = NULL,
-                     groupFields = NULL) {
+                     splitBy = NULL) {
   if (is.null(DT)) {
     stop('input DT required')
   }
@@ -48,11 +48,11 @@ group_pts <- function(DT = NULL,
   }
 
   if (any(!(
-    c(timegroup, id, coords, groupFields) %in% colnames(DT)
+    c(timegroup, id, coords, splitBy) %in% colnames(DT)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timegroup, id, coords, groupFields),
+        c(timegroup, id, coords, splitBy),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
@@ -75,12 +75,12 @@ group_pts <- function(DT = NULL,
     set(DT, j = 'group', value = NULL)
   }
 
-  if (is.null(timegroup) & is.null(groupFields)) {
-    groupFields <- NULL
+  if (is.null(timegroup) & is.null(splitBy)) {
+    splitBy <- NULL
   } else {
-    groupFields <- c(groupFields, timegroup)
+    splitBy <- c(splitBy, timegroup)
   }
-  # warn if multiple IDs by timegroup/groupFields
+  # warn if multiple IDs by timegroup/splitBy
   DT[, withinGroup := {
     distMatrix <-
       as.matrix(dist(cbind(
@@ -91,9 +91,9 @@ group_pts <- function(DT = NULL,
       igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
     igraph::clusters(graphAdj)$membership
   },
-  by = groupFields, .SDcols = c(coords, id)]
+  by = splitBy, .SDcols = c(coords, id)]
   DT[, group := .GRP,
-     by = c(groupFields, 'withinGroup')]
+     by = c(splitBy, 'withinGroup')]
   set(DT, j = 'withinGroup', value = NULL)
   return(DT[])
 }
