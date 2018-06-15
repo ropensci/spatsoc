@@ -4,12 +4,12 @@
 \alias{CalcCentroids}
 \title{Calculate Centroids For Each Group}
 \usage{
-CalcCentroids(DT, coordFields, groupField)
+CalcCentroids(DT, coords, groupField)
 }
 \arguments{
 \item{DT}{input data.table}
 
-\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names}
 
 \item{groupField}{The group field generated}
 }

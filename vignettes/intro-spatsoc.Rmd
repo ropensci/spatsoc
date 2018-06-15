@@ -154,12 +154,12 @@ pander::pander(
 The `group_lines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
 
 ```{r fake grouplines, eval = FALSE}
-group_lines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'), id = 'ID')
+group_lines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coords = c('EASTING', 'NORTHING'), id = 'ID')
 ```
 
 ```{r grouplines, echo = FALSE}
 pander::pander(
-  group_lines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coordFields = c('EASTING', 'NORTHING'),
+  group_lines(locs, bufferWidth = 50, timeField = 'datetime', threshold = '1 day', projection = '+proj=utm +zone=21 ellps=WGS84', coords = c('EASTING', 'NORTHING'),
            id = 'ID')[59:65])
 ```
 
@@ -171,7 +171,7 @@ The `group_polys` function groups individuals whose home ranges intersect. This 
 group_polys(area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
            locs, projection = '+proj=utm +zone=21 ellps=WGS84',
-           coordFields = c('EASTING', 'NORTHING'), id = 'ID')
+           coords = c('EASTING', 'NORTHING'), id = 'ID')
 ```
 
 ```{r grouppolys, echo=FALSE}
@@ -179,7 +179,7 @@ pander::pander(
   group_polys(area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
            locs, projection = '+proj=utm +zone=21 ellps=WGS84',
-           coordFields = c('EASTING', 'NORTHING'), id = 'ID'))
+           coords = c('EASTING', 'NORTHING'), id = 'ID'))
 ```
 
 

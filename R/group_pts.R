@@ -14,17 +14,17 @@
 #' @examples
 #'
 #' group_pts(locs, threshold = 5, id = 'ID',
-#'          coordFields = c('X', 'Y'))
+#'          coords = c('X', 'Y'))
 #'
 #' group_pts(locs, threshold = 5, id = 'ID',
-#'          coordFields = c('X', 'Y'), timegroup = 'timegroup')
+#'          coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
-#' group_pts(locs, threshold = 5, id = 'ID', coordFields = c('X', 'Y'),
+#' group_pts(locs, threshold = 5, id = 'ID', coords = c('X', 'Y'),
 #'          timegroup = 'timegroup', groupFields = 'season')
 group_pts <- function(DT = NULL,
                      threshold = NULL,
                      id = NULL,
-                     coordFields = NULL,
+                     coords = NULL,
                      timegroup = NULL,
                      groupFields = NULL) {
   if (is.null(DT)) {
@@ -43,24 +43,24 @@ group_pts <- function(DT = NULL,
     stop('ID field required')
   }
 
-  if (length(coordFields) != 2) {
-    stop('coordFields requires a vector of column names for coordinates X and Y')
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
   }
 
   if (any(!(
-    c(timegroup, id, coordFields, groupFields) %in% colnames(DT)
+    c(timegroup, id, coords, groupFields) %in% colnames(DT)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timegroup, id, coordFields, groupFields),
+        c(timegroup, id, coords, groupFields),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coordFields]))) {
-    stop('coordFields must be numeric')
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
   }
 
   if (!is.null(timegroup)) {
@@ -84,14 +84,14 @@ group_pts <- function(DT = NULL,
   DT[, withinGroup := {
     distMatrix <-
       as.matrix(dist(cbind(
-        get(coordFields[1]), get(coordFields[2])
+        get(coords[1]), get(coords[2])
       ),
       method = 'euclidean'))
     graphAdj <-
       igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
     igraph::clusters(graphAdj)$membership
   },
-  by = groupFields, .SDcols = c(coordFields, id)]
+  by = groupFields, .SDcols = c(coords, id)]
   DT[, group := .GRP,
      by = c(groupFields, 'withinGroup')]
   set(DT, j = 'withinGroup', value = NULL)

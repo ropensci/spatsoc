@@ -50,7 +50,7 @@ locs[, (timeWindowFields) := .(datetime - (4*3600), datetime + (4*3600))]
 library(spatsoc)
 bufferSize <- 300
 locs[, spatialGroup := group_pts(.SD, bufferSize, crs = utm21N,
-                      coordFields = c("EASTING", "NORTHING"),
+                      coords = c("EASTING", "NORTHING"),
                       id = id.field)$spatialGroup]
 locs
 
@@ -73,7 +73,7 @@ t[spatialGroup ==2]
 
 b <- t[spatialGroup == 2 | spatialGroup == 3,
   group_pts(.SD, bufferSize, crs = utm21N,
-                             coordFields = c("EASTING", "NORTHING"),
+                             coords = c("EASTING", "NORTHING"),
                              id = id.field),
   by = .(timegroup, spatialGroup)]
 t
@@ -99,7 +99,7 @@ mx <- data.table(clusters(gx)$membership)
 
 
 group_pts(.SD, bufferSize, crs = utm21N,
-         coordFields = c("EASTING", "NORTHING"),
+         coords = c("EASTING", "NORTHING"),
          id = id.field)
 
 

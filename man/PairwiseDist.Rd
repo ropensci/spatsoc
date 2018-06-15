@@ -4,8 +4,7 @@
 \alias{PairwiseDist}
 \title{Euclidean Pairwise Distance}
 \usage{
-PairwiseDist(DT, timeField, coordFields = c("EASTING", "NORTHING"),
-  id = "ID")
+PairwiseDist(DT, timeField, coords = c("EASTING", "NORTHING"), id = "ID")
 }
 \arguments{
 \item{DT}{input data.table}
@@ -13,7 +12,7 @@ PairwiseDist(DT, timeField, coordFields = c("EASTING", "NORTHING"),
 \item{timeField}{time column upon which individuals are compared. recommended
 to use a rounded time, see SOME LINK.}
 
-\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names}
 
 \item{id}{Character string of ID column name}
 }

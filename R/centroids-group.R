@@ -8,12 +8,12 @@
 #'
 #'
 #' @examples
-CalcCentroids <- function(DT, coordFields, groupField){
-  if(any(!(c(groupField, coordFields) %in% colnames(DT)))){
+CalcCentroids <- function(DT, coords, groupField){
+  if(any(!(c(groupField, coords) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
-  DT[, .(centroidX = mean(coordFields[1], na.rm = TRUE),
-         centroidY = mean(coordFields[2], na.rm = TRUE)),
+  DT[, .(centroidX = mean(coords[1], na.rm = TRUE),
+         centroidY = mean(coords[2], na.rm = TRUE)),
      by = groupField]
 }
 

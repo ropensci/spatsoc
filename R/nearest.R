@@ -5,9 +5,9 @@
 #'   distance will be compared
 #' @param groupField (optional) groupField in the DT which can be used to group
 #'   neighbors (eg: season, year, herd, known social groups, ...)
-Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE, coordFields = c('EASTING', 'NORTHING'),
+Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE, coords = c('EASTING', 'NORTHING'),
                     id = 'ID'){
-  if(any(!(c(timeField, groupField, coordFields) %in% colnames(DT)))){
+  if(any(!(c(timeField, groupField, coords) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
 
@@ -22,10 +22,10 @@ Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE
   if(is.null(groupField)){
     # if no timeField, calculate directly with all locs, else calc on by timeField
     if(is.null(timeField)){
-      data.table::rbindlist(list(FindNearest(DT, coordFields, id)))
+      data.table::rbindlist(list(FindNearest(DT, coords, id)))
     } else {
-      d <- DT[, FindNearest(.SD, coordFields, id), ##!!!!!!!!!!!!!!!
-              by = timeField, .SDcols = c(coordFields, id)]
+      d <- DT[, FindNearest(.SD, coords, id), ##!!!!!!!!!!!!!!!
+              by = timeField, .SDcols = c(coords, id)]
       # optionally, return proportions or all matches
       if(!proportions){
         return(d)
@@ -37,12 +37,12 @@ Nearest <- function(DT, timeField = NULL, groupField = NULL, proportions = FALSE
   } else {
   # if there is a groupField variable, but no timeField, return all pairs in each group
     if(is.null(timeField)){
-      DT[, FindNearest(.SD, coordFields, id),
+      DT[, FindNearest(.SD, coords, id),
               by = groupField]
     } else {
       # else, return either proportions or pairs by each group * time
-      DT[, {d <- DT[, FindNearest(.SD, coordFields, id),
-                    by = timeField, .SDcols = c(coordFields, id)]
+      DT[, {d <- DT[, FindNearest(.SD, coords, id),
+                    by = timeField, .SDcols = c(coords, id)]
             if(!proportions){
               d
             } else {

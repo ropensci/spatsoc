@@ -227,7 +227,7 @@ locs</code></pre></div>
 <div id="grouplines" class="section level3">
 <h3><code>group_lines</code></h3>
 <p>The <code>group_lines</code> function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than <code>group_pts</code> which can help understand shared space at daily, weekly or other temporal resolutions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_lines</span>(locs, <span class="dt">bufferWidth =</span> <span class="dv">50</span>, <span class="dt">timeField =</span> <span class="st">'datetime'</span>, <span class="dt">threshold =</span> <span class="st">'1 day'</span>, <span class="dt">projection =</span> <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>, <span class="dt">coordFields =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_lines</span>(locs, <span class="dt">bufferWidth =</span> <span class="dv">50</span>, <span class="dt">timeField =</span> <span class="st">'datetime'</span>, <span class="dt">threshold =</span> <span class="st">'1 day'</span>, <span class="dt">projection =</span> <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>),
            <span class="dt">id =</span> <span class="st">'ID'</span>)</code></pre></div>
 <table>
 <thead>
@@ -282,7 +282,7 @@ locs</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_polys</span>(<span class="dt">area =</span> <span class="ot">TRUE</span>, <span class="dt">hrType =</span> <span class="st">'mcp'</span>,
            <span class="dt">hrParams =</span> <span class="kw">list</span>(<span class="st">'percent'</span> =<span class="st"> </span><span class="dv">95</span>),
            locs, <span class="dt">projection =</span> <span class="st">'+proj=utm +zone=21 ellps=WGS84'</span>,
-           <span class="dt">coordFields =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>), <span class="dt">id =</span> <span class="st">'ID'</span>)</code></pre></div>
+           <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">'EASTING'</span>, <span class="st">'NORTHING'</span>), <span class="dt">id =</span> <span class="st">'ID'</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">

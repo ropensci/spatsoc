@@ -4,7 +4,7 @@
 \alias{group_pts}
 \title{Group Points}
 \usage{
-group_pts(DT = NULL, threshold = NULL, id = NULL, coordFields = NULL,
+group_pts(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
   timegroup = NULL, groupFields = NULL)
 }
 \arguments{
@@ -14,7 +14,7 @@ group_pts(DT = NULL, threshold = NULL, id = NULL, coordFields = NULL,
 
 \item{id}{Character string of ID column name}
 
-\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names}
 
 \item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
@@ -32,11 +32,11 @@ This function finds spatialtemporal groups in input points. The threshold provid
 \examples{
 
 group_pts(locs, threshold = 5, id = 'ID',
-         coordFields = c('X', 'Y'))
+         coords = c('X', 'Y'))
 
 group_pts(locs, threshold = 5, id = 'ID',
-         coordFields = c('X', 'Y'), timegroup = 'timegroup')
+         coords = c('X', 'Y'), timegroup = 'timegroup')
 
-group_pts(locs, threshold = 5, id = 'ID', coordFields = c('X', 'Y'),
+group_pts(locs, threshold = 5, id = 'ID', coords = c('X', 'Y'),
          timegroup = 'timegroup', groupFields = 'season')
 }

@@ -63,7 +63,7 @@ Randomizations(Dt, id= 'ID', groupField = 'group',
                splitBy = 'yr', iterations = 10)
 group_lines(Dt, bufferWidth = 0,
            projection = utm,
-           coordFields = c('X', 'Y'), id = 'ID')
+           coords = c('X', 'Y'), id = 'ID')
 
 group_pts(Dt, 10, 'ID', c('X', 'Y'))
 
@@ -85,7 +85,7 @@ Dt <- Dt[grp == 'ngelleehon']
 
 group_times(Dt, 'posix', '10 minutes')
 Dt[, uniqueN(posix)]
-group_pts(Dt, 100, time = 'timegroup', coordFields = c('X', 'Y'),
+group_pts(Dt, 100, time = 'timegroup', coords = c('X', 'Y'),
          id = 'ID')
 ## DAILY ====...
 
@@ -118,11 +118,11 @@ profvis::profvis({
 
 l
 
-coordFields <- c('EASTING', 'NORTHING')
-st_sf(Dt[, coordFields, with=FALSE])
+coords <- c('EASTING', 'NORTHING')
+st_sf(Dt[, coords, with=FALSE])
 
 l[, withinGroup := {
-  pts <- sf::st_as_sf(.SD, coords = coordFields)
+  pts <- sf::st_as_sf(.SD, coords = coords)
   sf::st_crs(pts) <- utm
   bufs <- sf::st_buffer(pts, 50)
   un <- sf::st_cast(st_union(bufs), 'POLYGON')
@@ -132,7 +132,7 @@ l[, withinGroup := {
   # data.table::data.table(get(id), unlist(int, FALSE, FALSE))#,
   #   c(id, 'withinGroup'))
 },
-by = timegroup, .SDcols = coordFields]
+by = timegroup, .SDcols = coords]
 l
 l[, withinGroup := NULL]
 microbenchmark::microbenchmark(

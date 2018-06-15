@@ -16,25 +16,25 @@
 #'
 #'
 #' group_lines(locs, threshold = 50, projection = utm,
-#'             id = 'ID', coordFields = c('X', 'Y'))
+#'             id = 'ID', coords = c('X', 'Y'))
 #'
 #' # Daily movement tracks
 #' group_times(locs, timeField = 'datetime', threshold = '1 day')
 #' group_lines(locs, threshold = 50, projection = utm,
-#'             id = 'ID', coordFields = c('X', 'Y'),
+#'             id = 'ID', coords = c('X', 'Y'),
 #'             timegroup = 'timegroup')
 #'
 #' # Daily movement tracks by sex
 #' group_times(locs, timeField = 'datetime', threshold = '1 day')
 #' group_lines(locs, threshold = 50, projection = utm,
-#'             id = 'ID', coordFields = c('X', 'Y'),
+#'             id = 'ID', coords = c('X', 'Y'),
 #'             timegroup = 'timegroup', groupFields = 'sex')
 group_lines <-
   function(DT = NULL,
            threshold = NULL,
            projection = NULL,
            id = NULL,
-           coordFields = NULL,
+           coords = NULL,
            timegroup = NULL,
            groupFields = NULL,
            spLines = NULL) {
@@ -55,18 +55,18 @@ group_lines <-
         stop('projection must be provided when DT is')
       }
 
-      if (is.null(coordFields)) {
-        stop('coordFields must be provided')
+      if (is.null(coords)) {
+        stop('coords must be provided')
       }
 
       if (is.null(id)) {
         stop('id must be provided')
       }
 
-      if (any(!(c(id, coordFields) %in% colnames(DT)))) {
+      if (any(!(c(id, coords) %in% colnames(DT)))) {
         stop(paste0(
           as.character(paste(setdiff(
-            c(id, coordFields), colnames(DT)
+            c(id, coords), colnames(DT)
           ),
           collapse = ', ')),
           ' field(s) provided are not present in input DT'
@@ -100,7 +100,7 @@ group_lines <-
         spLines <- build_lines(
           DT = DT,
           projection = projection,
-          coordFields = coordFields,
+          coords = coords,
           id = id
         )
       )
@@ -140,7 +140,7 @@ group_lines <-
             spLines <- build_lines(
               DT = .SD,
               projection = projection,
-              coordFields = coordFields,
+              coords = coords,
               id = id
             )
           )
@@ -165,7 +165,7 @@ group_lines <-
             data.table::setnames(out, c(id, 'withinGroup'))
 
           }
-        }, by = groupFields, .SDcols = c(coordFields, id)]
+        }, by = groupFields, .SDcols = c(coords, id)]
 
       DT[ovrDT, withinGroup := withinGroup, on = c(id, groupFields)]
       DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),

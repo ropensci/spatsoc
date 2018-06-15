@@ -4,7 +4,7 @@
 \alias{build_lines}
 \title{Build Lines}
 \usage{
-build_lines(DT = NULL, projection = NULL, id = NULL, coordFields = NULL,
+build_lines(DT = NULL, projection = NULL, id = NULL, coords = NULL,
   groupFields = NULL)
 }
 \arguments{
@@ -14,7 +14,7 @@ build_lines(DT = NULL, projection = NULL, id = NULL, coordFields = NULL,
 
 \item{id}{Character string of ID column name}
 
-\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names}
 }
 \value{
 SpatialLines for each ID provided

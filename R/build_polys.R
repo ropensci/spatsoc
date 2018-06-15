@@ -10,7 +10,7 @@ build_polys <- function(DT = NULL,
                      projection = NULL,
                      hrType = NULL,
                      hrParams = NULL,
-                     coordFields = NULL,
+                     coords = NULL,
                      id = NULL,
                      groupFields = NULL,
                      spPts = NULL) {
@@ -22,8 +22,8 @@ build_polys <- function(DT = NULL,
     stop('cannot provide both DT and spPts')
   }
 
-  if (is.null(coordFields)) {
-    stop('coordFields must be provided')
+  if (is.null(coords)) {
+    stop('coords must be provided')
   }
 
   if (is.null(id)) {
@@ -38,22 +38,22 @@ build_polys <- function(DT = NULL,
     stop('hrType must be provided')
   }
 
-  if (length(coordFields) != 2) {
-    stop('coordFields requires a vector of column names for coordinates X and Y')
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
   }
 
-  if (any(!(c(id, coordFields) %in% colnames(DT)))) {
+  if (any(!(c(id, coords) %in% colnames(DT)))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(id, coordFields), colnames(DT)
+        c(id, coords), colnames(DT)
       ),
       collapse = ', ')),
       ' field(s) provided are not present in input DT'
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coordFields]))) {
-    stop('coordFields must be numeric')
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
   }
 
 
@@ -80,7 +80,7 @@ build_polys <- function(DT = NULL,
 
   if (is.null(spPts)) {
     spPts <- sp::SpatialPointsDataFrame(
-      DT[, ..coordFields],
+      DT[, ..coords],
       proj4string = sp::CRS(projection),
       data = DT[, .(ID = do.call(paste,
                                  c(.SD, sep = '-'))),

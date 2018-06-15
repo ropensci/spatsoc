@@ -15,18 +15,18 @@
 #' @examples
 #' groups <- group_polys(locs, area = FALSE, 'mcp', list(percent = 95),
 #'                       projection = utm,
-#'                       id = 'ID', coordFields = c('X', 'Y'))
+#'                       id = 'ID', coords = c('X', 'Y'))
 #'
 #' areaDT <- group_polys(locs, area = TRUE, 'mcp', list(percent = 95),
 #'                       projection = utm,
-#'                       id = 'ID', coordFields = c('X', 'Y'))
+#'                       id = 'ID', coords = c('X', 'Y'))
 group_polys <-
   function(DT = NULL,
            area = NULL,
            hrType = NULL,
            hrParams = NULL,
            projection = NULL,
-           coordFields = NULL,
+           coords = NULL,
            id = NULL,
            groupFields = NULL,
            spPolys = NULL) {
@@ -48,7 +48,7 @@ group_polys <-
             projection = projection,
             hrType = hrType,
             hrParams = hrParams,
-            coordFields = coordFields,
+            coords = coords,
             id = id,
             groupFields = NULL,
             spPts = NULL
@@ -112,7 +112,7 @@ group_polys <-
                   projection = projection,
                   hrType = hrType,
                   hrParams = hrParams,
-                  coordFields = coordFields,
+                  coords = coords,
                   id = id,
                   groupFields = NULL,
                   spPts = NULL
@@ -129,7 +129,7 @@ group_polys <-
               data.table(ID = get(id),
                          withinGroup = as.integer(NA))
             }
-          }, by = groupFields, .SDcols = c(coordFields, id)]
+          }, by = groupFields, .SDcols = c(coords, id)]
         DT[ovrDT, withinGroup := withinGroup, on = c(id, groupFields)]
         DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
            by = c(groupFields, 'withinGroup')]
@@ -149,7 +149,7 @@ group_polys <-
                   projection = projection,
                   hrType = hrType,
                   hrParams = hrParams,
-                  coordFields = coordFields,
+                  coords = coords,
                   id = id,
                   groupFields = NULL,
                   spPts = NULL
@@ -178,7 +178,7 @@ group_polys <-
             setnames(out, 'id', id)
             setcolorder(out, c(id, paste0(id, '2'), 'area', 'proportion'))
             out
-          }, by = groupFields, .SDcols = c(coordFields, id)]
+          }, by = groupFields, .SDcols = c(coords, id)]
 
         dropped <-
           unique(DT[nBy <= 5, .SD, .SDcols = c(groupFields, id)])

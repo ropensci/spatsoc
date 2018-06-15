@@ -5,8 +5,7 @@
 \title{Groups From Spatial Lines}
 \usage{
 group_lines(DT = NULL, threshold = NULL, projection = NULL, id = NULL,
-  coordFields = NULL, timegroup = NULL, groupFields = NULL,
-  spLines = NULL)
+  coords = NULL, timegroup = NULL, groupFields = NULL, spLines = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -19,7 +18,7 @@ SpatialLines intersection}
 
 \item{id}{Character string of ID column name}
 
-\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names}
 
 \item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
@@ -40,17 +39,17 @@ utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 
 group_lines(locs, threshold = 50, projection = utm,
-            id = 'ID', coordFields = c('X', 'Y'))
+            id = 'ID', coords = c('X', 'Y'))
 
 # Daily movement tracks
 group_times(locs, timeField = 'datetime', threshold = '1 day')
 group_lines(locs, threshold = 50, projection = utm,
-            id = 'ID', coordFields = c('X', 'Y'),
+            id = 'ID', coords = c('X', 'Y'),
             timegroup = 'timegroup')
 
 # Daily movement tracks by sex
 group_times(locs, timeField = 'datetime', threshold = '1 day')
 group_lines(locs, threshold = 50, projection = utm,
-            id = 'ID', coordFields = c('X', 'Y'),
+            id = 'ID', coords = c('X', 'Y'),
             timegroup = 'timegroup', groupFields = 'sex')
 }

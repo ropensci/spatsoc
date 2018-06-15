@@ -12,20 +12,20 @@ test_that('DT is required', {
     build_lines(
       DT = NULL,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm
     ),
     'input DT required'
   )
 })
 
-test_that('coordFields, id, projection must be provided and proper format',
+test_that('coords, id, projection must be provided and proper format',
           {
             expect_error(
               build_lines(
                 DT = DT,
                 id = NULL,
-                coordFields = c('X', 'Y'),
+                coords = c('X', 'Y'),
                 projection = utm
               ),
               'id must be provided'
@@ -35,7 +35,7 @@ test_that('coordFields, id, projection must be provided and proper format',
               build_lines(
                 DT = DT,
                 id = 'ID',
-                coordFields = c('X', 'Y'),
+                coords = c('X', 'Y'),
                 projection = NULL
               ),
               'projection must be provided'
@@ -45,20 +45,20 @@ test_that('coordFields, id, projection must be provided and proper format',
               build_lines(
                 DT = DT,
                 id = 'ID',
-                coordFields = NULL,
+                coords = NULL,
                 projection = utm
               ),
-              'coordFields must be provided'
+              'coords must be provided'
             )
 
             expect_error(
               build_lines(
                 DT = DT,
                 id = 'ID',
-                coordFields = c('ID', 'ID'),
+                coords = c('ID', 'ID'),
                 projection = utm
               ),
-              'coordFields must be numeric'
+              'coords must be numeric'
             )
           })
 
@@ -68,7 +68,7 @@ test_that('column names must exist in DT', {
     build_lines(
       DT = DT,
       id = 'ID',
-      coordFields = c('potatoX', 'potatoY'),
+      coords = c('potatoX', 'potatoY'),
       projection = utm
     ),
     'not present in input DT',
@@ -79,7 +79,7 @@ test_that('column names must exist in DT', {
     build_lines(
       DT = DT,
       id = 'potato',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm
     ),
     'not present in input DT',
@@ -93,7 +93,7 @@ test_that('returns same number of lines as unique IDs/groupFields provided', {
     build_lines(
       DT = DT,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm
     )
   ),
@@ -109,7 +109,7 @@ test_that('returns same number of lines as unique IDs/groupFields provided', {
     build_lines(
       DT = subDT,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm,
       groupFields = 'jul'
     )
@@ -126,7 +126,7 @@ test_that("build lines warns if < 2 locs per ID/byField", {
     build_lines(
       DT = copyDT,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm
     ),
     'some rows dropped, cannot build lines with less than two points'
@@ -143,7 +143,7 @@ test_that("build lines warns if < 2 locs per ID/byField", {
     build_lines(
       DT = subDT,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm,
       groupFields = 'jul'
     ),
@@ -158,7 +158,7 @@ test_that('groupFields and id provided are not correct format', {
     build_lines(
       DT = copyDT,
       id = 'datetime',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm
     ),
     'id \\(and groupFields when provided\\) must',
@@ -169,7 +169,7 @@ test_that('groupFields and id provided are not correct format', {
     build_lines(
       DT = copyDT,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm,
       groupFields = 'datetime'
     ),
@@ -183,7 +183,7 @@ test_that('groupFields and id provided are not correct format', {
     build_lines(
       DT = copyDT,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm
     ),
     'id \\(and groupFields when provided\\) must be',
@@ -196,7 +196,7 @@ test_that('BuildPts returns a SpatialLines', {
     build_lines(
       DT = DT,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm
     )
   ))
@@ -205,7 +205,7 @@ test_that('BuildPts returns a SpatialLines', {
     build_lines(
       DT = DT,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       projection = utm
     )
   ))
@@ -215,6 +215,6 @@ test_that('BuildPts returns a SpatialLines', {
 # build_lines(
 #   DT = DT,
 #   id = 'ID',
-#   coordFields = c('X', 'Y'),
+#   coords = c('X', 'Y'),
 #   projection = utm
 # )

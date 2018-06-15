@@ -8,16 +8,16 @@
 #'
 #' @param DT input data.table
 #' @param projection PROJ.4 charaster string
-#' @param coordFields Character vector of X coordinate and Y coordinate column names
+#' @param coords Character vector of X coordinate and Y coordinate column names
 #' @param id Character string of ID column name
 #' @return SpatialPointsDataFrame
 #' @export
 #'
-BuildPts <- function(DT, projection, coordFields = c('EASTING', 'NORTHING'), id = 'ID'){
-  if(any(!(c(id, coordFields) %in% colnames(DT)))){
+BuildPts <- function(DT, projection, coords = c('EASTING', 'NORTHING'), id = 'ID'){
+  if(any(!(c(id, coords) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
-  sp::SpatialPointsDataFrame(DT[, ..coordFields],
+  sp::SpatialPointsDataFrame(DT[, ..coords],
                              proj4string = sp::CRS(projection),
                              data = DT[, .(id = get(id))])
 }

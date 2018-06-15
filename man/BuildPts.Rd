@@ -4,14 +4,14 @@
 \alias{BuildPts}
 \title{Build Points}
 \usage{
-BuildPts(DT, projection, coordFields = c("EASTING", "NORTHING"), id = "ID")
+BuildPts(DT, projection, coords = c("EASTING", "NORTHING"), id = "ID")
 }
 \arguments{
 \item{DT}{input data.table}
 
 \item{projection}{PROJ.4 charaster string}
 
-\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names}
 
 \item{id}{Character string of ID column name}
 }

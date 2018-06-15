@@ -5,7 +5,7 @@
 \title{Build Home Ranges for Individuals}
 \usage{
 build_polys(DT = NULL, projection = NULL, hrType = NULL,
-  hrParams = NULL, coordFields = NULL, id = NULL, groupFields = NULL,
+  hrParams = NULL, coords = NULL, id = NULL, groupFields = NULL,
   spPts = NULL)
 }
 \arguments{
@@ -17,7 +17,7 @@ build_polys(DT = NULL, projection = NULL, hrType = NULL,
 
 \item{hrParams}{List of named arguments to be passed to adehabitatHR functions as determined by hrType}
 
-\item{coordFields}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names}
 
 \item{id}{Character string of ID column name}
 }

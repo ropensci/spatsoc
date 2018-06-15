@@ -13,7 +13,7 @@ test_that('DT is required', {
   'input DT required')
 })
 
-test_that('ID and coordFields column names, threshold must be provided (and correctly)',
+test_that('ID and coords column names, threshold must be provided (and correctly)',
           {
             expect_error(group_pts(DT, threshold = 10, id = NULL),
                          'ID field required')
@@ -26,9 +26,9 @@ test_that('ID and coordFields column names, threshold must be provided (and corr
                 DT,
                 threshold = 10,
                 id = 'ID',
-                coordFields = 'X'
+                coords = 'X'
               ),
-              'coordFields requires a vector',
+              'coords requires a vector',
               fixed = FALSE
             )
           })
@@ -41,19 +41,19 @@ test_that('column names must exist in DT', {
       DT,
       threshold = 10,
       id = 'potato',
-      coordFields = c('X', 'Y')
+      coords = c('X', 'Y')
     ),
     'not present in input DT',
     fixed = FALSE
   )
 
-  # where coordFields don't exist
+  # where coords don't exist
   expect_error(
     group_pts(
       DT,
       threshold = 10,
       id = 'ID',
-      coordFields = c('potatoX', 'potatoY')
+      coords = c('potatoX', 'potatoY')
     ),
     'not present in input DT',
     fixed = FALSE
@@ -65,7 +65,7 @@ test_that('column names must exist in DT', {
       DT,
       threshold = 10,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       groupFields = 'potato'
     ),
     'not present in input DT',
@@ -78,7 +78,7 @@ test_that('column names must exist in DT', {
       DT,
       threshold = 10,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       timegroup = 'potato'
     ),
     'not present in input DT',
@@ -93,7 +93,7 @@ test_that('threshold correctly provided or error detected', {
     copyDT,
     threshold = 10,
     id = 'ID',
-    coordFields = c('X', 'Y')
+    coords = c('X', 'Y')
   ))
 
   expect_error(group_pts(DT, threshold = -10, id = 'ID'),
@@ -106,15 +106,15 @@ test_that('threshold correctly provided or error detected', {
 })
 
 
-test_that('coordFields are correctly provided or error detected', {
+test_that('coords are correctly provided or error detected', {
   expect_error(
     group_pts(
       DT,
       threshold = 10,
       id = 'ID',
-      coordFields = c('X', NULL)
+      coords = c('X', NULL)
     ),
-    'coordFields requires a vector'
+    'coords requires a vector'
   )
 
   expect_error(
@@ -122,9 +122,9 @@ test_that('coordFields are correctly provided or error detected', {
       DT,
       threshold = 10,
       id = 'ID',
-      coordFields = c('X', 'ID')
+      coords = c('X', 'ID')
     ),
-    'coordFields must be numeric'
+    'coords must be numeric'
   )
 })
 
@@ -135,7 +135,7 @@ test_that('DT returned if timegroup, group fields not provided', {
                  copyDT,
                  threshold = 10,
                  id = 'ID',
-                 coordFields = c('X', 'Y')
+                 coords = c('X', 'Y')
                )))
 
   # warns if > 1 ID row
@@ -154,7 +154,7 @@ test_that('warns if timegroup is a date/time or character instead of output from
                 copyDT,
                 threshold = 10,
                 id = 'ID',
-                coordFields = c('X', 'Y'),
+                coords = c('X', 'Y'),
                 timegroup = 'datetime'
               ),
               'timegroup provided is a',
@@ -169,7 +169,7 @@ test_that('warns if timegroup is a date/time or character instead of output from
                 copyDT,
                 threshold = 10,
                 id = 'ID',
-                coordFields = c('X', 'Y'),
+                coords = c('X', 'Y'),
                 timegroup = 'posix'
               ),
               'timegroup provided is a',
@@ -184,7 +184,7 @@ test_that('warns if timegroup is a date/time or character instead of output from
                 copyDT,
                 threshold = 10,
                 id = 'ID',
-                coordFields = c('X', 'Y'),
+                coords = c('X', 'Y'),
                 timegroup = 'idate'
               ),
               'timegroup provided is a',
@@ -200,7 +200,7 @@ test_that('group column succesfully detected', {
       copyDT,
       threshold = 10,
       id = 'ID',
-      coordFields = c('X', 'Y')
+      coords = c('X', 'Y')
     ),
     'group column will be overwritten'
   )
@@ -216,7 +216,7 @@ test_that('withinGroup is not returned to the user', {
       copyDT,
       threshold = 10,
       id = 'ID',
-      coordFields = c('X', 'Y'),
+      coords = c('X', 'Y'),
       timegroup = 'timegroup'
     )
   ))
@@ -232,7 +232,7 @@ test_that('no rows are added to the result DT', {
                    copyDT,
                    threshold = 10,
                    id = 'ID',
-                   coordFields = c('X', 'Y'),
+                   coords = c('X', 'Y'),
                    timegroup = 'timegroup'
                  )
                ))
@@ -248,7 +248,7 @@ test_that('only one column added to the result DT', {
                    copyDT,
                    threshold = 10,
                    id = 'ID',
-                   coordFields = c('X', 'Y'),
+                   coords = c('X', 'Y'),
                    timegroup = 'timegroup'
                  )
                ))
@@ -263,7 +263,7 @@ test_that('group column is added to result', {
                     copyDT,
                     threshold = 10,
                     id = 'ID',
-                    coordFields = c('X', 'Y'),
+                    coords = c('X', 'Y'),
                     timegroup = 'timegroup'
                   )
                 ))
