@@ -13,7 +13,6 @@
 #' @param DT input data.table with id, group fields and (optional) time fields
 #' @param type one of 'daily', 'hourly' or 'spiegel' - see details
 #' @param id field indicating the id in the input data.table
-#' @param groupField field indicating the group membership for each id
 #' @param timeField (optional) time field used for providing datetime or hour field or group time field
 #' @inheritParams BuildPts
 #' @param splitBy List of fields in DT to split the randomization process by
@@ -31,7 +30,10 @@ Randomizations <- function(DT = NULL,
                            splitBy = NULL,
                            iterations = NULL
 ) {
-  if(any(!(c(id, groupField, dateField) %in% colnames(DT)))){
+
+  # match type to group (required/not), dateField (required/not) OR IS IT TIMEGROUP?
+
+  if(any(!(c(id, dateField) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
 
