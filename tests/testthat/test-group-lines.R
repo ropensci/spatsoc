@@ -43,7 +43,7 @@ test_that('coordFields, idField, projection provided and proper format', {
     group_lines(
       DT = copyDT,
       threshold = 10,
-      timeGroup = 'timegroup',
+      timegroup = 'timegroup',
       idField = NULL,
       coordFields = c('X', 'Y'),
       projection = utm
@@ -55,7 +55,7 @@ test_that('coordFields, idField, projection provided and proper format', {
     group_lines(
       DT = copyDT,
       threshold = 10,
-      timeGroup = 'timegroup',
+      timegroup = 'timegroup',
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = NULL
@@ -68,7 +68,7 @@ test_that('coordFields, idField, projection provided and proper format', {
     group_lines(
       DT = copyDT,
       threshold = 10,
-      timeGroup = 'timegroup',
+      timegroup = 'timegroup',
       idField = 'ID',
       coordFields = NULL,
       projection = utm
@@ -84,7 +84,7 @@ test_that('column names must exist in DT', {
     group_lines(
       DT = DT,
       threshold = 10,
-      timeGroup = 'timegroup',
+      timegroup = 'timegroup',
       idField = 'potatoID',
       coordFields = c('X', 'Y'),
       projection = utm
@@ -97,7 +97,7 @@ test_that('column names must exist in DT', {
     group_lines(
       DT = DT,
       threshold = 10,
-      timeGroup = 'timegroup',
+      timegroup = 'timegroup',
       idField = 'ID',
       coordFields = c('potatoX', 'potatoY'),
       projection = utm
@@ -116,7 +116,7 @@ test_that('threshold is correctly provided, or error', {
     group_lines(
       DT = copyDT[N > 2],
       threshold = NULL,
-      timeGroup = 'timegroup',
+      timegroup = 'timegroup',
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = utm
@@ -128,7 +128,7 @@ test_that('threshold is correctly provided, or error', {
     group_lines(
       DT = DT,
       threshold = -10,
-      timeGroup = 'timegroup',
+      timegroup = 'timegroup',
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = utm
@@ -152,7 +152,7 @@ test_that('group lines returns a single warning for <2 locs', {
     group_lines(
       DT = copyDT,
       threshold = 10,
-      timeGroup = 'timegroup',
+      timegroup = 'timegroup',
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = utm
@@ -165,7 +165,7 @@ test_that('group lines returns a single warning for <2 locs', {
   # copyDT <- copy(DT)
   # group_times(copyDT, timeField = 'datetime', threshold = '2 days')
   # expect_equal(length(group_lines(DT = copyDT, threshold = 10,
-  #                                timeGroup = 'timegroup',
+  #                                timegroup = 'timegroup',
   #                                idField = 'ID', coordFields = c('X', 'Y'),
   #                                projection = utm))[!is.na(group)],
   #              sum(copyDT[, .N >= 2, by = timegroup]))
@@ -181,7 +181,7 @@ test_that('group column is added to result', {
                   group_lines(
                     DT = copyDT[N > 2],
                     threshold = 10,
-                    timeGroup = 'timegroup',
+                    timegroup = 'timegroup',
                     idField = 'ID',
                     coordFields = c('X', 'Y'),
                     projection = utm
@@ -199,7 +199,7 @@ test_that('only one column added to the result DT', {
                  group_lines(
                    DT = copyDT[N > 2],
                    threshold = 10,
-                   timeGroup = 'timegroup',
+                   timegroup = 'timegroup',
                    idField = 'ID',
                    coordFields = c('X', 'Y'),
                    projection = utm
@@ -217,7 +217,7 @@ test_that('no rows are added to the result DT', {
                  group_lines(
                    DT = copyDT,
                    threshold = 10,
-                   timeGroup = 'timegroup',
+                   timegroup = 'timegroup',
                    idField = 'ID',
                    coordFields = c('X', 'Y'),
                    projection = utm
@@ -234,7 +234,7 @@ test_that('withinGroup is not returned to the user', {
     group_lines(
       DT = copyDT[N > 2],
       threshold = 10,
-      timeGroup = 'timegroup',
+      timegroup = 'timegroup',
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = utm
@@ -242,13 +242,13 @@ test_that('withinGroup is not returned to the user', {
   ))
 })
 
-test_that('only 1 unique timeGroup * groupFields', {
+test_that('only 1 unique timegroup * groupFields', {
   copyDT <- DT[, mnth := month(datetime)][, yr := year(datetime)]
 
   group_lines(
     DT = copyDT,
     threshold = 100,
-    timeGroup = 'mnth',
+    timegroup = 'mnth',
     idField = 'ID',
     coordFields = c('X', 'Y'),
     projection = utm,
@@ -274,7 +274,7 @@ test_that('group column succesfully detected', {
     group_lines(
       DT = copyDT,
       threshold = 100,
-      timeGroup = 'mnth',
+      timegroup = 'mnth',
       idField = 'ID',
       coordFields = c('X', 'Y'),
       projection = utm,

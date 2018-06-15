@@ -5,7 +5,7 @@
 \title{Groups From Spatial Lines}
 \usage{
 group_lines(DT = NULL, threshold = NULL, projection = NULL,
-  idField = NULL, coordFields = NULL, timeGroup = NULL,
+  idField = NULL, coordFields = NULL, timegroup = NULL,
   groupFields = NULL, spLines = NULL)
 }
 \arguments{
@@ -21,13 +21,13 @@ SpatialLines intersection}
 
 \item{coordFields}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timeGroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
+\item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
 \item{groupFields}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 
 \item{spLines}{Alternatively, provide a SpatialLines object created with the sp
 package. If a spLines object is provided, groups cannot be calculated by a
-timeGroup}
+timegroup}
 }
 \value{
 Group by ID (by time) data.table
@@ -46,11 +46,11 @@ group_lines(locs, threshold = 50, projection = utm,
 group_times(locs, timeField = 'datetime', threshold = '1 day')
 group_lines(locs, threshold = 50, projection = utm,
             idField = 'ID', coordFields = c('X', 'Y'),
-            timeGroup = 'timegroup')
+            timegroup = 'timegroup')
 
 # Daily movement tracks by sex
 group_times(locs, timeField = 'datetime', threshold = '1 day')
 group_lines(locs, threshold = 50, projection = utm,
             idField = 'ID', coordFields = c('X', 'Y'),
-            timeGroup = 'timegroup', groupFields = 'sex')
+            timegroup = 'timegroup', groupFields = 'sex')
 }

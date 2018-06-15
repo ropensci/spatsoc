@@ -7,7 +7,7 @@
 #'   SpatialLines intersection
 #' @param spLines Alternatively, provide a SpatialLines object created with the sp
 #'   package. If a spLines object is provided, groups cannot be calculated by a
-#'   timeGroup
+#'   timegroup
 #' @return Group by ID (by time) data.table
 #' @export
 #'
@@ -22,20 +22,20 @@
 #' group_times(locs, timeField = 'datetime', threshold = '1 day')
 #' group_lines(locs, threshold = 50, projection = utm,
 #'             idField = 'ID', coordFields = c('X', 'Y'),
-#'             timeGroup = 'timegroup')
+#'             timegroup = 'timegroup')
 #'
 #' # Daily movement tracks by sex
 #' group_times(locs, timeField = 'datetime', threshold = '1 day')
 #' group_lines(locs, threshold = 50, projection = utm,
 #'             idField = 'ID', coordFields = c('X', 'Y'),
-#'             timeGroup = 'timegroup', groupFields = 'sex')
+#'             timegroup = 'timegroup', groupFields = 'sex')
 group_lines <-
   function(DT = NULL,
            threshold = NULL,
            projection = NULL,
            idField = NULL,
            coordFields = NULL,
-           timeGroup = NULL,
+           timegroup = NULL,
            groupFields = NULL,
            spLines = NULL) {
 
@@ -95,7 +95,7 @@ group_lines <-
       data.table::setnames(out, c('ID', 'group'))
       return(out[])
     }
-    if (is.null(timeGroup)) {
+    if (is.null(timegroup)) {
       suppressWarnings(
         spLines <- build_lines(
           DT,
@@ -128,10 +128,10 @@ group_lines <-
 
       ### CHECK THAT TIMEGROUP IS IN DT
       if (is.null(groupFields)) {
-        groupFields <- timeGroup
+        groupFields <- timegroup
       }
       else {
-        groupFields <- c(groupFields, timeGroup)
+        groupFields <- c(groupFields, timegroup)
       }
       ovrDT <-
         DT[, {

@@ -6,7 +6,7 @@
 #'
 #' @inheritParams BuildPts
 #' @param  threshold for grouping points, in the units of the projection
-#' @param timeGroup (optional) timegroup field in the DT upon which the grouping will be calculated
+#' @param timegroup (optional) timegroup field in the DT upon which the grouping will be calculated
 #' @param groupFields (optional) character string or vector of grouping field(s) upon which the grouping will be calculated
 #' @return Input data.table with column 'group' added.
 #' @export
@@ -17,15 +17,15 @@
 #'          coordFields = c('X', 'Y'))
 #'
 #' group_pts(locs, threshold = 5, idField = 'ID',
-#'          coordFields = c('X', 'Y'), timeGroup = 'timegroup')
+#'          coordFields = c('X', 'Y'), timegroup = 'timegroup')
 #'
 #' group_pts(locs, threshold = 5, idField = 'ID', coordFields = c('X', 'Y'),
-#'          timeGroup = 'timegroup', groupFields = 'season')
+#'          timegroup = 'timegroup', groupFields = 'season')
 group_pts <- function(DT = NULL,
                      threshold = NULL,
                      idField = NULL,
                      coordFields = NULL,
-                     timeGroup = NULL,
+                     timegroup = NULL,
                      groupFields = NULL) {
   if (is.null(DT)) {
     stop('input DT required')
@@ -48,11 +48,11 @@ group_pts <- function(DT = NULL,
   }
 
   if (any(!(
-    c(timeGroup, idField, coordFields, groupFields) %in% colnames(DT)
+    c(timegroup, idField, coordFields, groupFields) %in% colnames(DT)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timeGroup, idField, coordFields, groupFields),
+        c(timegroup, idField, coordFields, groupFields),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
@@ -63,10 +63,10 @@ group_pts <- function(DT = NULL,
     stop('coordFields must be numeric')
   }
 
-  if (!is.null(timeGroup)) {
-    if (any(DT[, class(get(timeGroup))] %in%
+  if (!is.null(timegroup)) {
+    if (any(DT[, class(get(timegroup))] %in%
             c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
-      warning('timeGroup provided is a date/time or character type, did you use group_times?')
+      warning('timegroup provided is a date/time or character type, did you use group_times?')
     }
     }
 
@@ -75,7 +75,7 @@ group_pts <- function(DT = NULL,
     set(DT, j = 'group', value = NULL)
   }
 
-  if (is.null(timeGroup) & is.null(groupFields)) {
+  if (is.null(timegroup) & is.null(groupFields)) {
     distMatrix <- as.matrix(dist(DT[, ..coordFields]))
     graphAdj <-
       igraph::graph_from_adjacency_matrix(distMatrix < threshold)
@@ -84,7 +84,7 @@ group_pts <- function(DT = NULL,
     return(data.table(ID = names(group), group))
 
   } else {
-    groupFields <- c(groupFields, timeGroup)
+    groupFields <- c(groupFields, timegroup)
     DT[, withinGroup := {
       distMatrix <-
         as.matrix(dist(cbind(

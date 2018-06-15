@@ -28,9 +28,9 @@ Randomization
 \details{
 Randomization types:
 
-'daily' will randomize the ID for each individual 24hr trajector
-
 'hourly' simply randomly assigns an ID to each location.
+
+'daily' will randomize the ID for each individual 24hr trajectory
 
 'spiegel' will implement the daily movement trajectory randomizations (Spiegel et al. 2016).
 }

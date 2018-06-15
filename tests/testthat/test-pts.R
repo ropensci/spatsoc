@@ -72,14 +72,14 @@ test_that('column names must exist in DT', {
     fixed = FALSE
   )
 
-  # where timeGroup field doesn't exist
+  # where timegroup field doesn't exist
   expect_error(
     group_pts(
       DT,
       threshold = 10,
       idField = 'ID',
       coordFields = c('X', 'Y'),
-      timeGroup = 'potato'
+      timegroup = 'potato'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -127,7 +127,7 @@ test_that('coordFields are correctly provided or error detected', {
   )
 })
 
-test_that('two column DT returned if timeGroup, group fields not provided', {
+test_that('two column DT returned if timegroup, group fields not provided', {
   expect_equal(ncol(group_pts(
     DT,
     threshold = 10,
@@ -137,7 +137,7 @@ test_that('two column DT returned if timeGroup, group fields not provided', {
   2)
 })
 
-test_that('warns if timeGroup is a date/time or character instead of output from group_times',
+test_that('warns if timegroup is a date/time or character instead of output from group_times',
           {
             copyDT <- copy(DT)
 
@@ -148,9 +148,9 @@ test_that('warns if timeGroup is a date/time or character instead of output from
                 threshold = 10,
                 idField = 'ID',
                 coordFields = c('X', 'Y'),
-                timeGroup = 'datetime'
+                timegroup = 'datetime'
               ),
-              'timeGroup provided is a',
+              'timegroup provided is a',
               fixed = FALSE
             )
 
@@ -162,9 +162,9 @@ test_that('warns if timeGroup is a date/time or character instead of output from
                 threshold = 10,
                 idField = 'ID',
                 coordFields = c('X', 'Y'),
-                timeGroup = 'datetime'
+                timegroup = 'datetime'
               ),
-              'timeGroup provided is a',
+              'timegroup provided is a',
               fixed = FALSE
             )
 
@@ -176,9 +176,9 @@ test_that('warns if timeGroup is a date/time or character instead of output from
                 threshold = 10,
                 idField = 'ID',
                 coordFields = c('X', 'Y'),
-                timeGroup = 'idate'
+                timegroup = 'idate'
               ),
-              'timeGroup provided is a',
+              'timegroup provided is a',
               fixed = FALSE
             )
           })
@@ -208,7 +208,7 @@ test_that('withinGroup is not returned to the user', {
       threshold = 10,
       idField = 'ID',
       coordFields = c('X', 'Y'),
-      timeGroup = 'timegroup'
+      timegroup = 'timegroup'
     )
   ))
 })
@@ -224,7 +224,7 @@ test_that('no rows are added to the result DT', {
                    threshold = 10,
                    idField = 'ID',
                    coordFields = c('X', 'Y'),
-                   timeGroup = 'timegroup'
+                   timegroup = 'timegroup'
                  )
                ))
 })
@@ -240,7 +240,7 @@ test_that('only one column added to the result DT', {
                    threshold = 10,
                    idField = 'ID',
                    coordFields = c('X', 'Y'),
-                   timeGroup = 'timegroup'
+                   timegroup = 'timegroup'
                  )
                ))
 })
@@ -255,7 +255,7 @@ test_that('group column is added to result', {
                     threshold = 10,
                     idField = 'ID',
                     coordFields = c('X', 'Y'),
-                    timeGroup = 'timegroup'
+                    timegroup = 'timegroup'
                   )
                 ))
 })

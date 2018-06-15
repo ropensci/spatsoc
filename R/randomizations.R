@@ -55,7 +55,6 @@ Randomizations <- function(DT = NULL,
              please provide a datetime column or IDate')
       }
       DT[, yday := data.table::yday(get(dateField)), by = splitBy]
-      # is this dangerous if the splitBy is NULL?
       dailyIDs <- DT[, .(ID = unique(ID)), by = c(splitBy, 'yday')]
       dailyIDs[, randomID := sample(ID), by = c(splitBy, 'yday')]
       return(merge(DT, dailyIDs, on = c('yday', splitBy)))
