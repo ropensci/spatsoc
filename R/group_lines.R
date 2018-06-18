@@ -95,6 +95,7 @@ group_lines <-
       data.table::setnames(out, c('ID', 'group'))
       return(out[])
     }
+
     if (is.null(timegroup)) {
       suppressWarnings(
         spLines <- build_lines(
@@ -140,8 +141,8 @@ group_lines <-
             spLines <- build_lines(
               DT = .SD,
               projection = projection,
-              coords = coords,
-              id = id
+              coords = ..coords,
+              id = ..id
             )
           )
           if (!is.null(spLines)) {
@@ -157,10 +158,10 @@ group_lines <-
             ovr <- igraph::clusters(g)$membership
             out <- data.table::data.table(names(ovr),
                                           unlist(ovr))
-            data.table::setnames(out, c(id, 'withinGroup'))
+            data.table::setnames(out, c(..id, 'withinGroup'))
           } else {
-            out <- data.table(get(id), withinGroup = as.double(NA))
-            data.table::setnames(out, c(id, 'withinGroup'))
+            out <- data.table(get(..id), withinGroup = as.double(NA))
+            data.table::setnames(out, c(..id, 'withinGroup'))
 
           }
         }, by = splitBy, .SDcols = c(coords, id)]

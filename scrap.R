@@ -40,6 +40,33 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
+DT <- data.table(a = c(1, 2, 3),
+                 b = c(1, 1, 2))
+
+a <- list('a')
+
+f <- function(d, a){
+  d[, {
+    ..a
+    # eval(list(a))
+    # get(quote(a), envir = globalenv())
+  }, by = b]
+}
+f(DT, a)
+
+
+
+DT[, {
+  a <- 'a'
+  print(a)
+  print(..a)
+}, by = b]
+
+group_times(Dt, datetime = 'datetime', threshold = '2 days')
+group_lines(Dt, threshold = 50, projection = utm, id = 'id',
+            coords = c('X', 'X'),
+            timegroup = 'timegroup')
+
 ## BUFFALO ========
 Dt <- fread('input/Buffalo.csv')
 Dt <- fread('tests/testdata/buffalo.csv')
@@ -56,22 +83,22 @@ Dt[, datetime := as.POSIXct(datetime)]
 Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
 Dt[, potato := ID]
+Dt[, id := ID]
 group_times(Dt, datetime = 'datetime', threshold = '30 days')
 
 Randomizations(Dt, id= 'ID', groupField = 'group',
                randomType = 'spiegel', dateField = 'datetime',
                splitBy = 'yr', iterations = 10)
-group_lines(Dt, bufferWidth = 0,
+group_lines(Dt, threshold = 0,
            projection = utm,
            coords = c('X', 'Y'), id = 'ID')
 
-group_pts(Dt, 10, 'ID', c('X', 'Y'))
+group_times(Dt, datetime = 'datetime', threshold = '15 minutes')
+group_lines(Dt, threshold = 50, projection = utm, id = 'id',
+            coords = c('X', 'X'),
+            timegroup = 'timegroup')
 
-if (any(Dt[, lapply(.SD, class), .SDcols = 'datetime'] %in%
-        c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
-  warning('timegroup provided is a date/time or character type, did you use group_times?')
-}
-
+# if (as.list(sys.call(-5))[[1]] != 'group_lines') {
 
 ## DAILY ========
 Dt <- fread('input/Daily')
