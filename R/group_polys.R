@@ -136,13 +136,14 @@ group_polys <-
         DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
            by = c(splitBy, 'withinGroup')]
         set(DT, j = 'withinGroup', value = NULL)
+        # This isn't really returning NAs when we drop with nBy above
         return(DT[])
       } else if (area) {
         if (any(DT[, grepl('[^A-z0-9]', .SD[[1]]), .SDcols = id])) {
           stop('please ensure IDs are alphanumeric and do not contain spaces')
         }
         outDT <-
-          DT[nBy > 5, {
+          DT[, {
             suppressWarnings(
               spPolys <-
                 build_polys(
@@ -150,35 +151,49 @@ group_polys <-
                   projection = projection,
                   hrType = hrType,
                   hrParams = hrParams,
-                  coords = ..coords,
                   id = ..id,
+                  coords = ..coords,
                   splitBy = NULL,
                   spPts = NULL
                 )
             )
-            inters <-
-              rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
-            areaID <-
-              data.table::data.table(area = sapply(inters@polygons, slot, 'area'),
-                                     IDs = as.character(sapply(inters@polygons, slot, 'ID')))
+            if (!is.null(spPolys)) {
+              inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
+              areas <- rgeos::gArea(inters, byid = TRUE)
+              areaID <-
+                data.table::data.table(
+                  area = areas,
+                  IDs = names(areas))
 
-            set(areaID, j = ..id, value = tstrsplit(areaID[['IDs']], ' ', keep = 1))
-            set(areaID,
-                j = paste0(..id, '2'),
-                value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
+              set(areaID,
+                  j = ..id,
+                  value = tstrsplit(areaID[['IDs']], ' ', keep = 1))
 
-            out <- data.table:::merge.data.table(
-              x = data.table(spPolys@data),
-              y = areaID,
-              by.y = id,
-              by.x = 'id',
-              suffixes = c('Total', '')
-            )
-            set(out, j = 'proportion', value = out[['area']] / out[['areaTotal']])
-            set(out, j = c('IDs', 'areaTotal'),  value = NULL)
-            setnames(out, 'id', id)
-            setcolorder(out, c(id, paste0(id, '2'), 'area', 'proportion'))
-            out
+              set(areaID,
+                  j = paste0(..id, '2'),
+                  value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
+
+              out <- data.table:::merge.data.table(
+                x = data.table(spPolys@data),
+                y = areaID,
+                by.y = ..id,
+                by.x = 'id',
+                suffixes = c('Total', '')
+              )
+              set(out, j = 'proportion',
+                  value = out[['area']] / out[['areaTotal']])
+              set(out, j = c('IDs', 'areaTotal'),  value = NULL)
+              setnames(out, 'id', ..id)
+              setcolorder(out, c(..id, paste0(..id, '2'), 'area', 'proportion'))
+              out
+            } else {
+              out <- data.table(ID = get(..id),
+                                ID2 = as.character(NA),
+                                as.numeric(NA),
+                                as.numeric(NA))
+              setnames(out, c(..id, paste0(..id, '2'), 'area', 'proportion'))
+              out
+            }
           }, by = splitBy, .SDcols = c(coords, id)]
 
         dropped <-

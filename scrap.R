@@ -65,7 +65,7 @@ DT[, {
 group_times(Dt, datetime = 'datetime', threshold = '40 days')
 group_polys(Dt, area = FALSE, hrParams = list(percent =96), hrType = 'mcp',
             projection = utm, id = 'id',
-            coords = c('X', 'X'),
+            coords = c('X', 'Y'),
             splitBy = 'timegroup')
 
 ## BUFFALO ========
