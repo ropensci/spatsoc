@@ -32,15 +32,15 @@ build_lines <-
       stop('coords requires a vector of column names for coordinates X and Y')
     }
 
-    # if (any(!(c(id, coords, splitBy) %in% colnames(DT)))) {
-    #   stop(paste0(
-    #     as.character(paste(setdiff(
-    #       c(id, coords, splitBy), colnames(DT)
-    #     ),
-    #     collapse = ', ')),
-    #     ' field(s) provided are not present in input DT'
-    #   ))
-    # }
+    if (any(!(c(id, coords, splitBy) %in% colnames(DT)))) {
+      stop(paste0(
+        as.character(paste(setdiff(
+          c(id, coords, splitBy), colnames(DT)
+        ),
+        collapse = ', ')),
+        ' field(s) provided are not present in input DT'
+      ))
+    }
 
     if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
       stop('coords must be numeric')
