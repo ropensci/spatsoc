@@ -84,7 +84,7 @@ group_pts <- function(DT = NULL,
   DT[, withinGroup := {
     distMatrix <-
       as.matrix(dist(cbind(
-        get(coords[1]), get(coords[2])
+        get(..coords[1]), get(..coords[2])
       ),
       method = 'euclidean'))
     graphAdj <-
