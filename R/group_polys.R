@@ -13,9 +13,9 @@
 #' @export
 #'
 #' @examples
-#' groups <- group_polys(locs, area = FALSE, 'mcp', list(percent = 95),
-#'                       projection = utm,
-#'                       id = 'ID', coords = c('X', 'Y'))
+#' group_polys(locs, area = FALSE, 'mcp', list(percent = 95),
+#'             projection = utm,
+#'             id = 'ID', coords = c('X', 'Y'))
 #'
 #' areaDT <- group_polys(locs, area = TRUE, 'mcp', list(percent = 95),
 #'                       projection = utm,
@@ -26,8 +26,8 @@ group_polys <-
            hrType = NULL,
            hrParams = NULL,
            projection = NULL,
-           coords = NULL,
            id = NULL,
+           coords = NULL,
            splitBy = NULL,
            spPolys = NULL) {
     if (is.null(area) | !is.logical(area)) {
@@ -135,15 +135,14 @@ group_polys <-
         DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
         DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
            by = c(splitBy, 'withinGroup')]
-        set(DT, j = 'withinGroup', value = NULL)
-        # This isn't really returning NAs when we drop with nBy above
+        set(DT, j = c('withinGroup', 'nBy'), value = NULL)
         return(DT[])
       } else if (area) {
         if (any(DT[, grepl('[^A-z0-9]', .SD[[1]]), .SDcols = id])) {
           stop('please ensure IDs are alphanumeric and do not contain spaces')
         }
         outDT <-
-          DT[, {
+          DT[nBy > 5, {
             suppressWarnings(
               spPolys <-
                 build_polys(

@@ -6,6 +6,7 @@
 #'
 #' @return Home range polygons for each ID
 #' @export
+#'
 build_polys <- function(DT = NULL,
                      projection = NULL,
                      hrType = NULL,
