@@ -62,10 +62,11 @@ DT[, {
   print(..a)
 }, by = b]
 
-group_times(Dt, datetime = 'datetime', threshold = '2 days')
-group_lines(Dt, threshold = 50, projection = utm, id = 'id',
+group_times(Dt, datetime = 'datetime', threshold = '40 days')
+group_polys(Dt, area = FALSE, hrParams = list(percent =96), hrType = 'mcp',
+            projection = utm, id = 'id',
             coords = c('X', 'X'),
-            timegroup = 'timegroup')
+            splitBy = 'timegroup')
 
 ## BUFFALO ========
 Dt <- fread('input/Buffalo.csv')

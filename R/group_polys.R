@@ -102,9 +102,11 @@ group_polys <-
         set(DT, j = 'group', value = NULL)
       }
 
+      DT[, nBy := .N, c(splitBy, id)]
+
       if (!area) {
         ovrDT <-
-          DT[, {
+          DT[nBy > 5, {
             suppressWarnings(
               spPolys <-
                 build_polys(
@@ -112,8 +114,8 @@ group_polys <-
                   projection = projection,
                   hrType = hrType,
                   hrParams = hrParams,
-                  coords = coords,
-                  id = id,
+                  coords = ..coords,
+                  id = ..id,
                   splitBy = NULL,
                   spPts = NULL
                 )
@@ -124,9 +126,9 @@ group_polys <-
               ovr <- igraph::clusters(g)$membership
               out <- data.table::data.table(names(ovr),
                                             unlist(ovr))
-              data.table::setnames(out, c('ID', 'withinGroup'))
+              data.table::setnames(out, c(..id, 'withinGroup'))
             } else {
-              data.table(ID = get(id),
+              data.table(ID = get(..id),
                          withinGroup = as.integer(NA))
             }
           }, by = splitBy, .SDcols = c(coords, id)]
@@ -139,9 +141,8 @@ group_polys <-
         if (any(DT[, grepl('[^A-z0-9]', .SD[[1]]), .SDcols = id])) {
           stop('please ensure IDs are alphanumeric and do not contain spaces')
         }
-        Dt[, nBy := .N, c(splitBy, id)]
         outDT <-
-          Dt[nBy > 5, {
+          DT[nBy > 5, {
             suppressWarnings(
               spPolys <-
                 build_polys(
@@ -149,8 +150,8 @@ group_polys <-
                   projection = projection,
                   hrType = hrType,
                   hrParams = hrParams,
-                  coords = coords,
-                  id = id,
+                  coords = ..coords,
+                  id = ..id,
                   splitBy = NULL,
                   spPts = NULL
                 )
@@ -161,9 +162,9 @@ group_polys <-
               data.table::data.table(area = sapply(inters@polygons, slot, 'area'),
                                      IDs = as.character(sapply(inters@polygons, slot, 'ID')))
 
-            set(areaID, j = id, value = tstrsplit(areaID[['IDs']], ' ', keep = 1))
+            set(areaID, j = ..id, value = tstrsplit(areaID[['IDs']], ' ', keep = 1))
             set(areaID,
-                j = paste0(id, '2'),
+                j = paste0(..id, '2'),
                 value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
 
             out <- data.table:::merge.data.table(
