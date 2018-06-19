@@ -14,6 +14,7 @@ Imports: data.table (>= 1.10.5),
 Suggests: testthat,
     knitr,
     rmarkdown
+SystemRequirements: GEOS (>= 3.2.0)
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
