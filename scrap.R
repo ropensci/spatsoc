@@ -197,3 +197,77 @@ Dt[ovrDt, withinGroup := withinGroup, on = c(id, splitBy)]
 Dt[, group := .GRP, by = c(splitBy, 'withinGroup')][, withinGroup := NULL][]
 ################# SF SFS FSF SF SF ########################
 
+
+
+
+# from vignette ----
+library(ggplot2); library(data.table); library(spatsoc);
+library(gridExtra); library(ggthemes)
+data(DT)
+subDT <- DT[EASTING > 6e+05]
+subDT[, day := yday(datetime)]
+
+utm <- '+proj=utm +zone=21 ellps=WGS84'
+
+pt.grpsgroup_pts(DT, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))
+pt.grps[, groupN := .N, by = group]
+pt.grps[ID != 'A'][sample(5), groupN := 2]
+
+hrs <- build_polys(hrType = 'mcp', DT = subDT, projection = utm)
+hr.grps <- group_polys(area = FALSE, hrType = 'mcp', DT = subDT, projection = utm)
+hrs@data$grps <- hr.grps$group
+hr <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
+            by = 'id')
+
+l <- group_lines(subDT, projection = utm, datetime = 'day')
+l[, groupN := .N, by = group]
+
+v <- merge(subDT, l)
+
+g1 <- ggplot(subDT) +
+  geom_point(aes(EASTING, NORTHING, color = factor(ID), group = ID), alpha = 0.8) +
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(),
+        legend.position = c(0, 1), legend.justification = c(0, 1)) +
+  labs(color = 'ID') +
+  scale_color_brewer(type='qual', palette='Dark2')
+
+g2 <- ggplot(subDT) +
+  geom_path(aes(EASTING, NORTHING, color = ID, group = ID)) + guides(color = FALSE) +
+  theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(),
+        legend.position = c(0, 1)) +
+  scale_color_brewer(type='qual', palette='Dark2')
+
+g3 <- ggplot(broom::tidy(hrs)) +
+  geom_polygon(aes(long, lat, group = id, color = id, fill = factor(id)), alpha = 0.4) +
+  guides(color = FALSE, fill = FALSE ) + labs(fill = 'ID') +
+  theme(axis.title=element_blank(), axis.text=element_blank(),
+        axis.ticks=element_blank()) +
+  scale_color_brewer(type='qual', palette = 'Dark2') +
+  scale_fill_brewer(type='qual', palette = 'Dark2')
+
+g4 <- ggplot() +
+  geom_point(aes(EASTING, NORTHING, shape = ID), alpha = 0.4, data = pt.grps) +
+  scale_shape_manual(values = c(21, 22, 23)) +
+  geom_point(aes(EASTING, NORTHING, color = factor(groupN)),  pt.grps[groupN > 1]) +
+  guides(fill = FALSE, shape = FALSE, color = FALSE) +
+  theme(axis.title=element_blank(), axis.text=element_blank(),
+        axis.ticks=element_blank()) +
+  labs(color = 'Group') +
+  scale_color_manual(values = c('1' = '#b5b3b8', '2' = '#ff3333'))
+
+g5 <- ggplot(v[order(datetime)]) +
+  geom_path(aes(EASTING, NORTHING, group = ID, color = factor(groupN))) +
+  guides(color = FALSE) +
+  theme(axis.title=element_blank(), axis.text=element_blank(),
+        axis.ticks=element_blank(),
+        legend.position = c(0, 1)) +
+  scale_color_manual(values = c('1' = '#6a696b', '2' = '#ff3333'))
+
+g6 <- ggplot(hr) +
+  geom_polygon(aes(long, lat, group = group, fill = factor(grps)),color = 'grey') + labs(fill = 'Group', color = 'ID')  + guides(fill = FALSE, color = FALSE) +
+  theme(axis.title=element_blank(), axis.text=element_blank(),
+        axis.ticks=element_blank()) +
+  scale_fill_manual(values = c('1' = '#6a696b', '2' = '#ff3333'))
+
+gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2,
+                        top = 'Point                                                       Line                                                       Polygon')
