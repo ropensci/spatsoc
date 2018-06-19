@@ -26,71 +26,85 @@ The functions were developped for application across animal relocation data, for
 ## Grouping
 Let's read in `spatsoc`'s example data.
 
-```{r, eval = TRUE, messages = FALSE, include = FALSE}
-library(data.table)
+```{r, eval = TRUE, include = FALSE}
 library(spatsoc)
 data(DT)
-DT[, datetime := as.POSIXct(datetime)]
+DT[, datetime := as.POSIXct(date)]
 ```
 
-```{r, eval = FALSE}
-library(spatsoc); library(data.table)
+```{r, echo = TRUE}
+library(spatsoc)
 data(DT)
 ```
 
-```{r, echo=FALSE}
+```{r, eval = TRUE}
 pander::pander(DT[sample(.N, 5)])
 ```
 
 <!-- note this input/example data is just for now.. -->
-The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. <!--Relocations were recorded using GPS collars with fixes obtained every two hours. -->Using these data, we can compare the various grouping methods available in `spatsoc`.
+The data consist of relocations of `r DT[, uniqueN(id)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. <!--Relocations were recorded using GPS collars with fixes obtained every two hours. -->Using these data, we can compare the various grouping methods available in `spatsoc`.
 
 ### `group_times`
-The `group_times` function is used to group relocations in temporal groups. It is flexible to a threshold provided by the user, in units of minutes, hours or days. 
+The `group_times` function is used to group relocations temporally. It is flexible to a threshold provided in units of minutes, hours or days. Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. Alternatively, we may want to understand different scales of grouping, perhaps daily movement trajectories or seasonal home range overlap. 
 
-```{r groupmins, eval = FALSE}
-group_times(DT, threshold = '5 minutes', datetime = 'datetime')
+```{r groupmins, echo = TRUE}
+group_times(DT, datetime = 'date', threshold = '5 minutes')
 ```
 
-```{r tabgroupmins, eval = TRUE, echo = FALSE}
+```{r tableSetUp, eval = TRUE}
+nRows <- 9
+```
+
+```{r tabgroupmins, eval = TRUE}
 pander::pander(
-  group_times(DT, threshold = '5 minutes', datetime = 'datetime')
-[, .(ID, EASTING, NORTHING, datetime, timegroup)][order(datetime)][1:10])
+  group_times(DT, threshold = '5 minutes', datetime = 'date')[, 
+    .(id, x, y, date, timegroup)][
+      order(date)][
+        1:nRows])
 ```
 
-```{r grouphours, eval = FALSE}
-group_times(DT, threshold = '2 hours', datetime = 'datetime')
+```{r grouphours, echo = TRUE}
+group_times(DT, datetime = 'date', threshold = '2 hours')
 ```
 
-```{r tabgrouphours, eval = TRUE, echo = FALSE}
+```{r tabgrouphours, eval = TRUE}
 pander::pander(
-  group_times(DT, threshold = '2 hours', datetime = 'datetime')
-[, .(ID, EASTING, NORTHING, datetime, timegroup)][order(datetime)][1:10])
+  group_times(DT, threshold = '2 hours', datetime = 'date')[, 
+    .(id, x, y, date, timegroup)][
+      order(date)][
+        1:nRows])
 ```
 
-```{r groupdays, eval = FALSE}
-group_times(DT, threshold = '5 days', datetime = 'datetime')
+```{r groupdays, echo = TRUE}
+group_times(DT, datetime = 'date', threshold = '5 days')
 ```
 
-```{r tabgroupdays, eval = TRUE, echo = FALSE}
+```{r tabgroupdays, eval = TRUE}
 pander::pander(
-  group_times(DT, threshold = '8 days', datetime = 'datetime')
-[, .(ID, EASTING, NORTHING, datetime, timegroup)][sample(.N, 100)][order(datetime)][1:10])
+  group_times(DT, threshold = '5 days', datetime = 'date')[, 
+    .SD[c(1, sample(.N, 2))], by = timegroup][
+      order(date)][
+        1:nRows, .(id, x, y, date, timegroup)])
 ```
 
 
 ### `group_pts`
 The `group_pts` function compares the relocations of all individuals at each time step and groups individuals based on a distance threshold provided by the user.
 
-Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. For example, we will use a 5 minute threshold.
-
-```{r grouppts, eval = FALSE}
-group_pts(DT, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))
+```{r grouppts, echo = TRUE}
+group_pts(DT, threshold = 50, id = 'id', coords = c('x', 'y'))
 ```
 
-```{r fakegrouppts, echo=FALSE, eval = FALSE}
+```{r fakegrouppts, eval = TRUE}
 pander::pander(
-  group_pts(DT, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))[388:395])
+  group_pts(
+    DT = group_times(DT = DT, datetime = 'date', 
+                     threshold = '15 minutes'),
+    threshold = 50, id = 'id', coords = c('x', 'y'),
+    timegroup = 'timegroup')[
+      order(group)][
+        1:nRows, .(id, x, y, timegroup, group)]
+)
 ```
 
 
