@@ -10,7 +10,7 @@ drat::insertPackage('~/Documents/Local-git/spatsoc_0.0.0.9103.tar.gz',
 '~/Documents/Local-git/spatsoc.gitlab.io/static')
 
 # User
-drat::addRepo('LocalRepo', 'spatsoc.gitlab.io')
+drat::addRepo('LocalRepo', 'https://spatsoc.gitlab.io')
 install.packages('spatsoc')
 ```
 
