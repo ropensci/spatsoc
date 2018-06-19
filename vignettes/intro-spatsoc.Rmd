@@ -29,6 +29,7 @@ Let's read in `spatsoc`'s example data.
 ```{r, eval = TRUE, include = FALSE}
 library(spatsoc)
 data(DT)
+DT <- as.data.table(DT)
 DT[, datetime := as.POSIXct(date)]
 ```
 
@@ -89,9 +90,10 @@ pander::pander(
 
 
 ### `group_pts`
-The `group_pts` function compares the relocations of all individuals at each time step and groups individuals based on a distance threshold provided by the user.
+The `group_pts` function compares the relocations of all individuals in each timegroup and groups individuals based on a distance threshold provided by the user.
 
 ```{r grouppts, echo = TRUE}
+group_times(DT = DT, datetime = 'date', threshold = '15 minutes')
 group_pts(DT, threshold = 50, id = 'id', coords = c('x', 'y'))
 ```
 
@@ -109,44 +111,59 @@ pander::pander(
 
 
 ### `group_lines`
-The `group_lines` function groups individuals whose trajectories intersect in a specified time interval (eg: daily). This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
+The `group_lines` function groups individuals whose trajectories intersect in a specified time interval. This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
 
-```{r fakegrouplines, eval = FALSE}
+```{r fakegrouplines, echo = TRUE}
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-group_lines(DT, threshold =50, projection = utm, id = 'ID', coords = c('EASTING', 'NORTHING'))
+group_times(DT = DT, datetime = 'date', threshold = '1 day')
+group_lines(DT, threshold = 50, projection = utm, 
+            id = 'id', coords = c('x', 'y'),
+            timegroup = 'timegroup')
 ```
 
-```{r grouplines, echo = FALSE, eval = FALSE}
+```{r grouplines, eval = TRUE}
+utm <- '+proj=utm +zone=21 ellps=WGS84'
 pander::pander(
-  group_lines(DT, threshold =50, projection = utm, id = 'ID', coords = c('EASTING', 'NORTHING'))[59:65])
+  group_lines(
+    group_times(DT = DT, datetime = 'date', 
+                threshold = '1 day'), 
+    threshold = 50, projection = utm, 
+    id = 'id', coords = c('x', 'y')
+  )[order(group)][
+        1:nRows, .(id, x, y, timegroup, group)]
+)
 ```
 
 
 ### `group_polys`
 The `group_polys` function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`. Alternatively, a `SpatialPolygonsDataFrame` can be input to the `spPolys` argument.
 
-```{r fakegrouppolys, eval=FALSE}
+```{r fakegrouppolys, echo = TRUE}
+utm <- '+proj=utm +zone=21 ellps=WGS84'
+group_times(DT = DT, datetime = 'date', threshold = '8 days')
 group_polys(DT = DT, area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
            projection = utm,
-           coords = c('EASTING', 'NORTHING'), id = 'ID')
+           coords = c('x', 'y'), id = 'id')
 ```
 
-```{r grouppolys, echo=FALSE, eval = FALSE}
+```{r grouppolys, eval = TRUE}
+utm <- '+proj=utm +zone=21 ellps=WGS84'
+DT <- group_times(DT = DT, datetime = 'date', 
+                threshold = '8 days')
 pander::pander(
-  group_polys(DT = DT, area = TRUE, hrType = 'mcp',
+  data.frame(group_polys(
+    DT, 
+    area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
            projection = utm,
-           coords = c('EASTING', 'NORTHING'), id = 'ID'))
+           coords = c('x', 'y'), id = 'id')[
+             , .(ID1, ID2, area, proportion)])
+)
 ```
 
 
 ## Notes
-Package dependencies for `spatsoc` are `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference.
+Package dependencies for `spatsoc` are `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference. 
 
-In addition, since the `rgeos` package is used in most functions (notably `group_pts` and `group_lines`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`.
-
-
-```{r, echo = FALSE}
-# beepr::beep()
-```
+In addition, since the `rgeos` package is used in most functions (notably `group_pts` and `group_lines`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`. Since `rgeos` is used, system dependencies include `GEOS`. 
