@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The `spatsoc` package provides functionality for analyzing animal relocation data in time and space to identify potential interactions among individuals or social groups.
+The `spatsoc` package provides functionality for analyzing animal relocation data in time and space to identify potential interactions among individuals and build gambit-of-the-group data for constructing social networks. 
 
 The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. In addition, the package contains functions for determining the nearest neighbor and mean pairwise distance between individuals, optionally across time steps. Finally, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
 
@@ -18,35 +18,35 @@ The functions were developped for application across animal relocation data, for
 ```{r, echo = FALSE, fig.width= 8, fig.height=5, message = FALSE, eval = FALSE}
 library(ggplot2); library(data.table); library(spatsoc);
 library(gridExtra); library(ggthemes)
-data(locs)
-sublocs <- locs[EASTING > 6e+05]
-sublocs[, day := yday(datetime)]
+data(DT)
+subDT <- DT[EASTING > 6e+05]
+subDT[, day := yday(datetime)]
 
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 
-pt.grpsgroup_pts(locs, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))
+pt.grpsgroup_pts(DT, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))
 pt.grps[, groupN := .N, by = group]
 pt.grps[ID != 'A'][sample(5), groupN := 2]
 
-hrs <- build_polys(hrType = 'mcp', DT = sublocs, projection = utm)
-hr.grps <- group_polys(area = FALSE, hrType = 'mcp', DT = sublocs, projection = utm)
+hrs <- build_polys(hrType = 'mcp', DT = subDT, projection = utm)
+hr.grps <- group_polys(area = FALSE, hrType = 'mcp', DT = subDT, projection = utm)
 hrs@data$grps <- hr.grps$group
 hr <- merge(as.data.table(hrs@data), as.data.table(broom::tidy(hrs)),
             by = 'id')
 
-l <- group_lines(sublocs, projection = utm, datetime = 'day')
+l <- group_lines(subDT, projection = utm, datetime = 'day')
 l[, groupN := .N, by = group]
 
-v <- merge(sublocs, l)
+v <- merge(subDT, l)
 
-g1 <- ggplot(sublocs) +
+g1 <- ggplot(subDT) +
   geom_point(aes(EASTING, NORTHING, color = factor(ID), group = ID), alpha = 0.8) +
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(),
         legend.position = c(0, 1), legend.justification = c(0, 1)) +
   labs(color = 'ID') +
   scale_color_brewer(type='qual', palette='Dark2')
 
-g2 <- ggplot(sublocs) +
+g2 <- ggplot(subDT) +
   geom_path(aes(EASTING, NORTHING, color = ID, group = ID)) + guides(color = FALSE) +
   theme(axis.title=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(),
         legend.position = c(0, 1)) +
@@ -117,19 +117,56 @@ gridExtra::grid.arrange(g1, g2, g3, g4, g5, g6, nrow = 2,
 ## Grouping
 Let's read in `spatsoc`'s example data.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, messages = FALSE, include = FALSE}
 library(spatsoc); library(data.table)
-data(locs)
-locs
+data(DT)
 ```
+
+```{r, eval = FALSE}
+library(spatsoc); library(data.table)
+data(DT)
+```
+
 ```{r, echo=FALSE}
-pander::pander(locs[sample(.N, 5)])
+pander::pander(DT[sample(.N, 5)])
+DT[, datetime := as.POSIXct(datetime)]
 ```
 
 <!-- note this input/example data is just for now.. -->
-The data consist of relocations of `r locs[, uniqueN(ID)]` individuals over `r locs[, max(yday(datetime)) - min(yday(datetime))]` days. Relocations were recorded using GPS collars with fixes obtained every two hours. Using these data, we can compare the various grouping methods available in `spatsoc`.
+The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. <!--Relocations were recorded using GPS collars with fixes obtained every two hours. -->Using these data, we can compare the various grouping methods available in `spatsoc`.
 
 ### `group_times`
+The `group_times` function is used to group relocations in temporal groups. It is flexible to a threshold provided by the user, in units of minutes, hours or days. 
+
+```{r groupmins, eval = FALSE}
+group_times(DT, threshold = '5 minutes', datetime = 'datetime')
+```
+
+```{r tabgroupmins, eval = TRUE, echo = FALSE}
+pander::pander(
+  group_times(DT, threshold = '5 minutes', datetime = 'datetime')
+[, .(ID, EASTING, NORTHING, datetime, timegroup)][order(datetime)][1:10])
+```
+
+```{r grouphours, eval = FALSE}
+group_times(DT, threshold = '2 hours', datetime = 'datetime')
+```
+
+```{r tabgrouphours, eval = TRUE, echo = FALSE}
+pander::pander(
+  group_times(DT, threshold = '2 hours', datetime = 'datetime')
+[, .(ID, EASTING, NORTHING, datetime, timegroup)][order(datetime)][1:10])
+```
+
+```{r groupdays, eval = FALSE}
+group_times(DT, threshold = '5 days', datetime = 'datetime')
+```
+
+```{r tabgroupdays, eval = TRUE, echo = FALSE}
+pander::pander(
+  group_times(DT, threshold = '8 days', datetime = 'datetime')
+[, .(ID, EASTING, NORTHING, datetime, timegroup)][sample(.N, 100)][order(datetime)][1:10])
+```
 
 
 ### `group_pts`
@@ -138,12 +175,12 @@ The `group_pts` function compares the relocations of all individuals at each tim
 Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. For example, we will use a 5 minute threshold.
 
 ```{r grouppts, eval = FALSE}
-group_pts(locs, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))
+group_pts(DT, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))
 ```
 
 ```{r fakegrouppts, echo=FALSE, eval = FALSE}
 pander::pander(
-  group_pts(locs, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))[388:395])
+  group_pts(DT, threshold =50, id = 'ID', coords = c('EASTING', 'NORTHING'))[388:395])
 ```
 
 
@@ -152,12 +189,12 @@ The `group_lines` function groups individuals whose trajectories intersect in a 
 
 ```{r fakegrouplines, eval = FALSE}
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-group_lines(locs, threshold =50, projection = utm, id = 'ID', coords = c('EASTING', 'NORTHING'))
+group_lines(DT, threshold =50, projection = utm, id = 'ID', coords = c('EASTING', 'NORTHING'))
 ```
 
 ```{r grouplines, echo = FALSE, eval = FALSE}
 pander::pander(
-  group_lines(locs, threshold =50, projection = utm, id = 'ID', coords = c('EASTING', 'NORTHING'))[59:65])
+  group_lines(DT, threshold =50, projection = utm, id = 'ID', coords = c('EASTING', 'NORTHING'))[59:65])
 ```
 
 

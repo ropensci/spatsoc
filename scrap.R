@@ -40,28 +40,9 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
-DT <- data.table(a = c(1, 2, 3),
-                 b = c(1, 1, 2))
-
-a <- list('a')
-
-f <- function(d, a){
-  d[, {
-    ..a
-    # eval(list(a))
-    # get(quote(a), envir = globalenv())
-  }, by = b]
-}
-f(DT, a)
-
-
-
-DT[, {
-  a <- 'a'
-  print(a)
-  print(..a)
-}, by = b]
-
+Dt[, coords := X]
+group_pts(Dt, threshold = 50, id = 'id', timegroup = 'timegroup',
+          coords = c('coords', 'Y'))
 group_times(Dt, datetime = 'datetime', threshold = '40 days')
 group_polys(Dt, area = FALSE, hrParams = list(percent =96), hrType = 'mcp',
             projection = utm, id = 'id',
@@ -72,13 +53,13 @@ group_polys(Dt, area = FALSE, hrParams = list(percent =96), hrType = 'mcp',
 Dt <- fread('input/Buffalo.csv')
 Dt <- fread('tests/testdata/buffalo.csv')
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-# Dt[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
+Dt[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
 # Dt[, idate := as.IDate(timestamp)]
-# Dt[, datetime := as.POSIXct(timestamp)]
+Dt[, datetime := as.POSIXct(timestamp)]
 Dt[, datetime := as.POSIXct(datetime)]
-# Dt[, ID := `individual-local-identifier`]
-# Dt[, X := `utm-easting`]
-# Dt[, Y := `utm-northing`]
+Dt[, ID := `individual-local-identifier`]
+Dt[, X := `utm-easting`]
+Dt[, Y := `utm-northing`]
 # fwrite(Dt[sample(.N, 2000), .(X, Y, ID, datetime)],
 #        'tests/testdata/buffalo.csv')
 Dt[, jul := yday(datetime)]
@@ -96,7 +77,7 @@ group_lines(Dt, threshold = 0,
 
 group_times(Dt, datetime = 'datetime', threshold = '15 minutes')
 group_lines(Dt, threshold = 50, projection = utm, id = 'id',
-            coords = c('X', 'X'),
+            coords = c('X', 'Y'),
             timegroup = 'timegroup')
 
 # if (as.list(sys.call(-5))[[1]] != 'group_lines') {
