@@ -40,31 +40,65 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
-Dt[, coords := X]
-group_pts(Dt, threshold = 50, id = 'id', timegroup = 'timegroup',
-          coords = c('coords', 'Y'))
+group_times(Dt, datetime = 'datetime', threshold = '6 hours')
+group_pts(Dt, threshold = 600000000, id = 'id', timegroup = 'timegroup',
+          coords = c('X', 'Y'))
+Dt <- Dt[order(-datetime)]
+group_pts(DT = Dt, threshold = 1000, id = 'id', timegroup = 'timegroup',
+          coords = c('X', 'Y'))
+x <- x + 1
+Dt[, (paste0('groupSample', x)) := group]
+Dt
+library(ggplot2)
+x <- x + 1
+Dt[, .N, get(paste0('groupSample', x))][, qplot(N)]
+
+
+
+d <- data.table::dcast(df, formula = group ~ get(idField), fun.aggregate = length,
+                       value.var = 'group')
+
+gbi_df <- data.matrix(d[, !'group', with=FALSE])
+
+rownames(gbi_df) <- d$group
+
+gbi.net_df <- get_network(gbi_df, data_format="GBI",association_index="SRI")
+
+
+
+Dt[, .N, groupNoOrder][, qplot(groupNoOrder, N)]
+Dt[, .N, groupReverse][, qplot(groupReverse, N)]
+
+
+Dt[, qplot(groupRever)]
+Dt[, .N, groupRever]
+Dt[, .N, groupNoOrder]
+
+
 group_times(Dt, datetime = 'datetime', threshold = '40 days')
+
+
 group_polys(Dt, area = FALSE, hrParams = list(percent =96), hrType = 'mcp',
             projection = utm, id = 'id',
             coords = c('X', 'Y'),
             splitBy = 'timegroup')
 
 ## BUFFALO ========
-Dt <- fread('input/Buffalo.csv')
+# Dt <- fread('input/Buffalo.csv')
 Dt <- fread('tests/testdata/buffalo.csv')
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-Dt[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
-# Dt[, idate := as.IDate(timestamp)]
-Dt[, datetime := as.POSIXct(timestamp)]
+# Dt[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
+# # Dt[, idate := as.IDate(timestamp)]
+# Dt[, datetime := as.POSIXct(timestamp)]
 Dt[, datetime := as.POSIXct(datetime)]
-Dt[, ID := `individual-local-identifier`]
-Dt[, X := `utm-easting`]
-Dt[, Y := `utm-northing`]
+# Dt[, ID := `individual-local-identifier`]
+# Dt[, X := `utm-easting`]
+# Dt[, Y := `utm-northing`]
 # fwrite(Dt[sample(.N, 2000), .(X, Y, ID, datetime)],
 #        'tests/testdata/buffalo.csv')
-Dt[, jul := yday(datetime)]
-Dt[, yr := year(datetime)]
-Dt[, potato := ID]
+# Dt[, jul := yday(datetime)]
+# Dt[, yr := year(datetime)]
+# Dt[, potato := ID]
 Dt[, id := ID]
 group_times(Dt, datetime = 'datetime', threshold = '30 days')
 
@@ -196,6 +230,27 @@ data.table::setnames(
 Dt[ovrDt, withinGroup := withinGroup, on = c(id, splitBy)]
 Dt[, group := .GRP, by = c(splitBy, 'withinGroup')][, withinGroup := NULL][]
 ################# SF SFS FSF SF SF ########################
+
+
+library(magrittr)
+DT %>%
+  group_times(datetime = 'date', threshold = '15 minutes') %>%
+  group_pts(threshold = 50, id = 'id', coords = c('x', 'y'),
+            timegroup = 'timegroup')
+
+
+utm <- '+proj=utm +zone=21 ellps=WGS84'
+group_times(DT = DT, datetime = 'date', threshold = '1 day')
+group_lines(DT, threshold = 50, projection = utm,
+            id = 'id', coords = c('x', 'y'),
+            timegroup = 'timegroup')
+
+
+pander::pander(
+  group_pts(DT,
+            threshold = 50, id = 'id', coords = c('x', 'y'),
+            timegroup = 'timegroup')[order(group)][
+              1:nRows, .(id, x, y, timegroup, group)])
 
 
 
