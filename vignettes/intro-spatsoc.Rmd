@@ -1,6 +1,6 @@
 ---
 title: "Introduction to spatsoc"
-author: "Alec Robitaille"
+author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -39,7 +39,7 @@ data(DT)
 ```
 
 ```{r, eval = TRUE}
-pander::pander(DT[sample(.N, 5)])
+knitr::kable(DT[sample(.N, 5)])
 ```
 
 <!-- note this input/example data is just for now.. -->
@@ -57,7 +57,7 @@ nRows <- 9
 ```
 
 ```{r tabgroupmins, eval = TRUE}
-pander::pander(
+knitr::kable(
   group_times(DT, threshold = '5 minutes', datetime = 'date')[, 
     .(id, x, y, date, timegroup)][
       order(date)][
@@ -69,7 +69,7 @@ group_times(DT, datetime = 'date', threshold = '2 hours')
 ```
 
 ```{r tabgrouphours, eval = TRUE}
-pander::pander(
+knitr::kable(
   group_times(DT, threshold = '2 hours', datetime = 'date')[, 
     .(id, x, y, date, timegroup)][
       order(date)][
@@ -81,7 +81,7 @@ group_times(DT, datetime = 'date', threshold = '5 days')
 ```
 
 ```{r tabgroupdays, eval = TRUE}
-pander::pander(
+knitr::kable(
   group_times(DT, threshold = '5 days', datetime = 'date')[, 
     .SD[c(1, sample(.N, 2))], by = timegroup][
       order(date)][
@@ -98,7 +98,7 @@ group_pts(DT, threshold = 50, id = 'id', coords = c('x', 'y'))
 ```
 
 ```{r fakegrouppts, eval = TRUE}
-pander::pander(
+knitr::kable(
   group_pts(
     DT = group_times(DT = DT, datetime = 'date', 
                      threshold = '15 minutes'),
@@ -123,7 +123,7 @@ group_lines(DT, threshold = 50, projection = utm,
 
 ```{r grouplines, eval = TRUE}
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-pander::pander(
+knitr::kable(
   group_lines(
     group_times(DT = DT, datetime = 'date', 
                 threshold = '1 day'), 
@@ -151,7 +151,7 @@ group_polys(DT = DT, area = TRUE, hrType = 'mcp',
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 DT <- group_times(DT = DT, datetime = 'date', 
                 threshold = '8 days')
-pander::pander(
+knitr::kable(
   data.frame(group_polys(
     DT, 
     area = TRUE, hrType = 'mcp',
@@ -166,4 +166,4 @@ pander::pander(
 ## Notes
 Package dependencies for `spatsoc` are `sp`, `rgeos`, and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference. 
 
-In addition, since the `rgeos` package is used in most functions (notably `group_pts` and `group_lines`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`. Since `rgeos` is used, system dependencies include `GEOS`. 
+In addition, since the `rgeos` package is used in most functions (`group_lines` and `group_polys`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`. Since `rgeos` is used, system dependencies include `GEOS`. 
