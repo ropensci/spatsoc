@@ -103,7 +103,7 @@ Dt[, id := ID]
 group_times(Dt, datetime = 'datetime', threshold = '30 days')
 
 Randomizations(Dt, id= 'ID', groupField = 'group',
-               randomType = 'spiegel', dateField = 'datetime',
+               randomType = 'trajectory', dateField = 'datetime',
                splitBy = 'yr', iterations = 10)
 group_lines(Dt, threshold = 0,
            projection = utm,

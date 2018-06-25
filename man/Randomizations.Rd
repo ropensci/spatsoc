@@ -10,7 +10,7 @@ Randomizations(DT = NULL, type = NULL, id = NULL, dateField = NULL,
 \arguments{
 \item{DT}{input data.table with id, group fields and (optional) time fields}
 
-\item{type}{one of 'daily', 'hourly' or 'spiegel' - see details}
+\item{type}{one of 'daily', 'hourly' or 'trajectory' - see details}
 
 \item{id}{field indicating the id in the input data.table}
 
@@ -26,11 +26,11 @@ Randomization
 \details{
 Randomization types:
 
-'hourly' simply randomly assigns an ID to each location.
+'hourly' randomly assigns an ID to each location.
 
 'daily' will randomize the ID for each individual 24hr trajectory
 
-'spiegel' will implement the daily movement trajectory randomizations (Spiegel et al. 2016).
+'trajectory' will implement the daily movement trajectory randomizations (Spiegel et al. 2016).
 }
 \seealso{
 \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}

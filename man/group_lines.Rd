@@ -10,9 +10,8 @@ group_lines(DT = NULL, threshold = NULL, projection = NULL, id = NULL,
 \arguments{
 \item{DT}{input data.table}
 
-\item{threshold}{The width of the buffer around the geometry in the units
-of the projection. Optionally, exclude argument or supply 0 to compare
-SpatialLines intersection}
+\item{threshold}{The width of the buffer around the lines in the units
+of the projection. Alternatively, supply 0 to compare intersection without buffering.}
 
 \item{projection}{PROJ.4 charaster string}
 

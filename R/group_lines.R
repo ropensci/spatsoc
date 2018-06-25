@@ -2,9 +2,8 @@
 #'
 #' @inheritParams BuildPts
 #' @inheritParams group_pts
-#' @param threshold The width of the buffer around the geometry in the units
-#'   of the projection. Optionally, exclude argument or supply 0 to compare
-#'   SpatialLines intersection
+#' @param threshold The width of the buffer around the lines in the units
+#'   of the projection. Alternatively, supply 0 to compare intersection without buffering.
 #' @param spLines Alternatively, provide a SpatialLines object created with the sp
 #'   package. If a spLines object is provided, groups cannot be calculated by a
 #'   timegroup

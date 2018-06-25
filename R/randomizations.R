@@ -4,14 +4,14 @@
 #'
 #' Randomization types:
 #'
-#' 'hourly' simply randomly assigns an ID to each location.
+#' 'hourly' randomly assigns an ID to each location.
 #'
 #' 'daily' will randomize the ID for each individual 24hr trajectory
 #'
-#' 'spiegel' will implement the daily movement trajectory randomizations (Spiegel et al. 2016).
+#' 'trajectory' will implement the daily movement trajectory randomizations (Spiegel et al. 2016).
 #'
 #' @param DT input data.table with id, group fields and (optional) time fields
-#' @param type one of 'daily', 'hourly' or 'spiegel' - see details
+#' @param type one of 'daily', 'hourly' or 'trajectory' - see details
 #' @param id field indicating the id in the input data.table
 #' @param datetime (optional) time field used for providing datetime or hour field or group time field
 #' @inheritParams BuildPts
@@ -37,7 +37,7 @@ Randomizations <- function(DT = NULL,
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
 
-  if(!(type %in% c('hourly', 'daily', 'spiegel'))) stop('must provide either hourly, daily or spiegel for type')
+  if(!(type %in% c('hourly', 'daily', 'trajectory'))) stop('must provide either hourly, daily or trajectory for type')
 
   if(!is.numeric(iterations) & !is.null(iterations)) stop('must provide a numeric for iterations or NULL')
 
@@ -61,7 +61,7 @@ Randomizations <- function(DT = NULL,
       dailyIDs[, randomID := sample(ID), by = c(splitBy, 'yday')]
       return(merge(DT, dailyIDs, on = c('yday', splitBy)))
 
-      } else if(type == 'spiegel'){
+      } else if(type == 'trajectory'){
         if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
           stop('provided dateField is not of class POSIXct or IDate, for daily random type
                please provide a datetime column or IDate')
@@ -98,7 +98,7 @@ Randomizations <- function(DT = NULL,
         dailyIDs[observed == 1, randomID := ID]
         return(merge(replicated, dailyIDs, on = c('iter', 'yday', splitBy), all = TRUE))
 
-      } else if(type == 'spiegel'){
+      } else if(type == 'trajectory'){
         if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
           stop('provided dateField is not of class POSIXct or IDate, for daily random type
                please provide a datetime column or IDate')
