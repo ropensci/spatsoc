@@ -32,3 +32,9 @@ test_that('fields provided must be in DT', {
                               id = 'potato'),
                'id field provided are not present in input DT')
 })
+
+test_that('type must be one of options', {
+  expect_error(randomizations(DT = DT,
+                              type = 'potato'),
+               'type of randomization must be one of: hourly, daily or trajectory')
+})

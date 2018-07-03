@@ -36,6 +36,10 @@ randomizations <- function(DT = NULL,
     stop('type of randomization required')
   }
 
+  if (!(type %in% c('hourly', 'daily', 'trajectory'))) {
+    stop('type of randomization must be one of: hourly, daily or trajectory')
+  }
+
   if (is.null(id)) {
     stop('ID field required')
   }
@@ -44,14 +48,9 @@ randomizations <- function(DT = NULL,
     stop('id field provided are not present in input DT')
   }
 
-
   # match type to group (required/not), datetime (required/not) OR IS IT TIMEGROUP?
 
-  if(any(!(c(id, datetime) %in% colnames(DT)))){
-    stop('some fields provided are not present in data.table provided/colnames(DT)')
-  }
 
-  if(!(type %in% c('hourly', 'daily', 'trajectory'))) stop('must provide either hourly, daily or trajectory for type')
 
   if(!is.numeric(iterations) & !is.null(iterations)) stop('must provide a numeric for iterations or NULL')
 
