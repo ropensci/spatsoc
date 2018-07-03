@@ -83,39 +83,28 @@ randomizations <- function(DT = NULL,
   }
 
 
-  if(type == 'step') {
-    if(dateFormatted) {
-      warning('datetime provided is either POSIXct or IDate, ')
+  if (type == 'step') {
+    if (dateFormatted) {
+      warning(
+        'datetime provided is either POSIXct or IDate, step randomization will only be performed within each datetime - consider using group_times first and providing timegroup'
+      )
     }
-
-
-  } else if (type == 'daily') {
-    if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
-      stop('provided datetime is not of class POSIXct or IDate, for daily random type
-             please provide a datetime column or IDate')
+  } else if (type == 'daily' || type == 'trajectory') {
+    if (!dateFormatted) {
+      stop(
+        'datetime must be either POSIXct or IDate and ITime for daily and trajectory randomization'
+      )
     }
-  } else if (type == 'trajectory') {
-  #   if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
-  #     stop('provided datetime is not of class POSIXct or IDate, for daily random type
-  #              please provide a datetime column or IDate')
-  #   }
-  # }
+  }
 
-
-
-  # match type to group (required/not), datetime (required/not) OR IS IT TIMEGROUP?
 
   if(iterations == 1){
-    if(type == 'step'){
-
-      ##
+    if(type == 'step') {
       if (is.null(splitBy)) {
         splitBy <- datetime
       } else {
         splitBy <- c(datetime, splitBy)
       }
-      ##
-
       DT[, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
       return(DT[])
     } else if(type == 'daily'){
@@ -175,5 +164,5 @@ randomizations <- function(DT = NULL,
   #       # attr(merged$randomDateTime, 'tzone') <- ""
   #       return(merged)
   # }
-  # }
+  }
 }
