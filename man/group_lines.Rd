@@ -13,7 +13,7 @@ group_lines(DT = NULL, threshold = NULL, projection = NULL, id = NULL,
 \item{threshold}{The width of the buffer around the lines in the units
 of the projection. Alternatively, supply 0 to compare intersection without buffering.}
 
-\item{projection}{PROJ.4 charaster string}
+\item{projection}{PROJ.4 character string}
 
 \item{id}{Character string of ID column name}
 

@@ -1,7 +1,7 @@
 #' Groups From Spatial Lines
 #'
-#' @inheritParams BuildPts
 #' @inheritParams group_pts
+#' @param projection PROJ.4 character string
 #' @param threshold The width of the buffer around the lines in the units
 #'   of the projection. Alternatively, supply 0 to compare intersection without buffering.
 #' @param spLines Alternatively, provide a SpatialLines object created with the sp

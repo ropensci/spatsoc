@@ -7,7 +7,7 @@
 #' "+init=epsg:CODE" (eg: "+init=epsg:4326").
 #'
 #' @param DT input data.table
-#' @param projection PROJ.4 charaster string
+#' @param projection PROJ.4 character string
 #' @param coords Character vector of X coordinate and Y coordinate column names
 #' @param id Character string of ID column name
 #' @return SpatialPointsDataFrame

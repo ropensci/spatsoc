@@ -1,8 +1,6 @@
 #' Build Home Ranges for Individuals
 #'
-#' @param hrType Type of HR estimation either 'mcp' or 'kernel'
-#' @param hrParams List of named arguments to be passed to adehabitatHR functions as determined by hrType
-#' @inheritParams BuildPts
+#' @inheritParams group_polys
 #'
 #' @return Home range polygons for each ID
 #' @export

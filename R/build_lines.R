@@ -1,6 +1,6 @@
 #' Build Lines
 #'
-#' @inheritParams BuildPts
+#' @inheritParams group_lines
 #'
 #' @return SpatialLines for each ID provided
 #' @export

@@ -11,15 +11,17 @@ build_polys(DT = NULL, projection = NULL, hrType = NULL,
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{PROJ.4 charaster string}
+\item{projection}{PROJ.4 character string}
 
-\item{hrType}{Type of HR estimation either 'mcp' or 'kernel'}
+\item{hrType}{type of HR estimation, of 'mcp' or 'kernel'}
 
-\item{hrParams}{List of named arguments to be passed to adehabitatHR functions as determined by hrType}
+\item{hrParams}{parameters for adehabitatHR functions, a named list passed to do.call}
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
 \item{id}{Character string of ID column name}
+
+\item{splitBy}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 }
 \value{
 Home range polygons for each ID

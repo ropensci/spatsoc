@@ -11,10 +11,7 @@ group_times(DT = NULL, datetime = NULL, threshold = NULL)
 
 \item{datetime}{name of time column(s). either 1 POSIXct or 2 IDate and ITime. eg: 'datetime' or c('IDate', 'ITime')}
 
-\item{threshold}{threshold for grouping times.
-eg: '2 hours', '10 minutes', etc.
-if not provided, times will be matched exactly.
-Note that provided threshold must be in the expected format: '## unit'}
+\item{threshold}{threshold for grouping times. eg: '2 hours', '10 minutes', etc. if not provided, times will be matched exactly. Note that provided threshold must be in the expected format: '## unit'}
 }
 \description{
 Assign an integer timegroup.

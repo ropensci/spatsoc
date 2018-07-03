@@ -10,11 +10,13 @@ build_lines(DT = NULL, projection = NULL, id = NULL, coords = NULL,
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{PROJ.4 charaster string}
+\item{projection}{PROJ.4 character string}
 
 \item{id}{Character string of ID column name}
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
+
+\item{splitBy}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
 }
 \value{
 SpatialLines for each ID provided

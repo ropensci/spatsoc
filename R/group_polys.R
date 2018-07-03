@@ -2,8 +2,8 @@
 #'
 #' Group individuals by polygon (eg: home ranges) overlap
 #'
-#' @inheritParams BuildPts
 #' @inheritParams group_pts
+#' @inheritParams group_lines
 #' @param area boolean indicating either returning area and proportion of overlap or group
 #' @param hrType type of HR estimation, of 'mcp' or 'kernel'
 #' @param hrParams parameters for adehabitatHR functions, a named list passed to do.call

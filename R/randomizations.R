@@ -14,11 +14,9 @@
 #' @param type one of 'daily', 'hourly' or 'trajectory' - see details
 #' @param id field indicating the id in the input data.table
 #' @param datetime (optional) time field used for providing datetime or hour field or group time field
-#' @inheritParams BuildPts
+#' @inheritParams group_pts
 #' @param splitBy List of fields in DT to split the randomization process by
 #' @param iterations The number of iterations to randomize
-#'
-
 #'
 #' @seealso
 #'   <http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full>
@@ -26,7 +24,7 @@
 randomizations <- function(DT = NULL,
                            type = NULL,
                            id = NULL,
-                           dateField = NULL,
+                           datetime = NULL,
                            splitBy = NULL,
                            iterations = NULL
 ) {

@@ -4,7 +4,7 @@
 \alias{randomizations}
 \title{randomizations}
 \usage{
-randomizations(DT = NULL, type = NULL, id = NULL, dateField = NULL,
+randomizations(DT = NULL, type = NULL, id = NULL, datetime = NULL,
   splitBy = NULL, iterations = NULL)
 }
 \arguments{
@@ -14,11 +14,11 @@ randomizations(DT = NULL, type = NULL, id = NULL, dateField = NULL,
 
 \item{id}{field indicating the id in the input data.table}
 
+\item{datetime}{(optional) time field used for providing datetime or hour field or group time field}
+
 \item{splitBy}{List of fields in DT to split the randomization process by}
 
 \item{iterations}{The number of iterations to randomize}
-
-\item{datetime}{(optional) time field used for providing datetime or hour field or group time field}
 }
 \description{
 Randomization

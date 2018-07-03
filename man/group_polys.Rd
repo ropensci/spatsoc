@@ -17,7 +17,7 @@ group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
 
 \item{hrParams}{parameters for adehabitatHR functions, a named list passed to do.call}
 
-\item{projection}{PROJ.4 charaster string}
+\item{projection}{PROJ.4 character string}
 
 \item{id}{Character string of ID column name}
 

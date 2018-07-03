@@ -4,10 +4,14 @@
 #'
 #' This function finds spatialtemporal groups in input points. The threshold provided must be in the units of the projection of the coordinates. UTM coordinates (recommended) are in meters and threshold = 50 indicates a 50m threshold.
 #'
-#' @inheritParams BuildPts
-#' @param  threshold for grouping points, in the units of the projection
+#' @param DT input data.table
+#' @param threshold for grouping points, in the units of the projection
+#' @param id Character string of ID column name
+#' @param coords Character vector of X coordinate and Y coordinate column names
 #' @param timegroup (optional) timegroup field in the DT upon which the grouping will be calculated
 #' @param splitBy (optional) character string or vector of grouping field(s) upon which the grouping will be calculated
+#'
+#'
 #' @return Input data.table with column 'group' added.
 #' @export
 #'

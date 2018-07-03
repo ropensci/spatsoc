@@ -9,7 +9,7 @@ BuildPts(DT, projection, coords = c("EASTING", "NORTHING"), id = "ID")
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{PROJ.4 charaster string}
+\item{projection}{PROJ.4 character string}
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
