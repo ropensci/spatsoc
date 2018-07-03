@@ -12,7 +12,7 @@ group_pts(DT, threshold = 100, id = 'ID', timegroup = 'timegroup',
           coords = c('X', 'Y'))
 
 
-test_that('DT, type, id are required', {
+test_that('DT, type, id, datetime are required', {
   expect_error(randomizations(DT = NULL),
   'input DT required')
 
@@ -23,7 +23,14 @@ test_that('DT, type, id are required', {
   expect_error(randomizations(DT = DT,
                               type = 'hourly',
                               id = NULL),
-               'ID field', fixed = FALSE)
+               'id field required')
+
+  expect_error(randomizations(DT = DT,
+                              type = 'hourly',
+                              id = 'ID',
+                              datetime = NULL),
+               'datetime field required')
+
 })
 
 test_that('type must be one of options', {
@@ -35,20 +42,29 @@ test_that('type must be one of options', {
 test_that('fields provided must be in DT', {
   expect_error(randomizations(DT = DT,
                               type = 'hourly',
-                              id = 'potato'),
-               'id field provided are not present in input DT')
-})
+                              id = 'potato',
+                              datetime = 'datetime'),
+               'field(s) provided are not present', fixed = TRUE)
 
-test_that('iterations is NULL or correctly provided', {
   expect_error(randomizations(DT = DT,
                               type = 'hourly',
                               id = 'ID',
+                              datetime = 'potato'),
+               'field(s) provided are not present', fixed = TRUE)
+})
+
+test_that('iterations is NULL or correctly provided', {
+  expect_warning(randomizations(DT = DT,
+                              type = 'hourly',
+                              id = 'ID',
+                              datetime = 'datetime',
                               iterations = NULL),
                'iterations is not', fixed = FALSE)
 
   expect_error(randomizations(DT = DT,
                               type = 'hourly',
                               id = 'ID',
+                              datetime = 'datetime',
                               iterations = 'potato'),
                'either provide a numeric for iterations or NULL', fixed = FALSE)
 })

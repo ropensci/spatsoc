@@ -31,7 +31,7 @@ group_times <- function(DT = NULL,
   }
 
   if (!(datetime %in% colnames(DT))) {
-    stop('time field provided is not found in DT')
+    stop('datetime field provided is not found in DT')
   }
 
   checkCols <- c('hours', 'minutes', 'block', 'timegroup')
