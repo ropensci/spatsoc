@@ -48,14 +48,17 @@ randomizations <- function(DT = NULL,
     stop('id field provided are not present in input DT')
   }
 
+  if (is.null(iterations)) {
+    warning('iterations is not provided therefore iterations set to 1')
+    iterations <- 1L
+  }
+
+  if (!is.numeric(iterations)) {
+    stop('either provide a numeric for iterations or NULL')
+  }
+
+
   # match type to group (required/not), datetime (required/not) OR IS IT TIMEGROUP?
-
-
-
-  if(!is.numeric(iterations) & !is.null(iterations)) stop('must provide a numeric for iterations or NULL')
-
-  if(is.null(iterations)) iterations <- 1
-# warning
 
   if(iterations == 1){
     if(type == 'hourly'){

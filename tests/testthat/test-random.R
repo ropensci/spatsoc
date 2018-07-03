@@ -26,6 +26,12 @@ test_that('DT, type, id are required', {
                'ID field', fixed = FALSE)
 })
 
+test_that('type must be one of options', {
+  expect_error(randomizations(DT = DT,
+                              type = 'potato'),
+               'type of randomization must be one of: hourly, daily or trajectory')
+})
+
 test_that('fields provided must be in DT', {
   expect_error(randomizations(DT = DT,
                               type = 'hourly',
@@ -33,8 +39,17 @@ test_that('fields provided must be in DT', {
                'id field provided are not present in input DT')
 })
 
-test_that('type must be one of options', {
+test_that('iterations is NULL or correctly provided', {
   expect_error(randomizations(DT = DT,
-                              type = 'potato'),
-               'type of randomization must be one of: hourly, daily or trajectory')
+                              type = 'hourly',
+                              id = 'ID',
+                              iterations = NULL),
+               'iterations is not', fixed = FALSE)
+
+  expect_error(randomizations(DT = DT,
+                              type = 'hourly',
+                              id = 'ID',
+                              iterations = 'potato'),
+               'either provide a numeric for iterations or NULL', fixed = FALSE)
 })
+
