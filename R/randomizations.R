@@ -41,11 +41,23 @@ randomizations <- function(DT = NULL,
   }
 
   if (is.null(id)) {
-    stop('ID field required')
+    stop('id field required')
   }
 
-  if (!(id %in% colnames(DT))) {
-    stop('id field provided are not present in input DT')
+  if (is.null(datetime)) {
+    stop('datetime field required')
+  }
+
+  if (any(!(
+    c(id, datetime) %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(id, datetime),
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
   }
 
   if (is.null(iterations)) {
