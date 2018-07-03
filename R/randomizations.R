@@ -28,6 +28,10 @@ randomizations <- function(DT = NULL,
                            splitBy = NULL,
                            iterations = NULL
 ) {
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
 
   # match type to group (required/not), datetime (required/not) OR IS IT TIMEGROUP?
 

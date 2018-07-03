@@ -40,9 +40,14 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
-group_times(Dt, datetime = 'datetime', threshold = '6 hours')
-group_pts(Dt, threshold = 600000000, id = 'id', timegroup = 'timegroup',
+group_times(Dt, datetime = 'datetime', threshold = '2 hours')
+group_pts(Dt, threshold = 100, id = 'id', timegroup = 'timegroup',
           coords = c('X', 'Y'))
+randomizations(DT = Dt, type = 'hourly',
+               id = 'ID', splitBy = 'yr',
+               iterations = 10, datetime = 'datetime')
+
+
 Dt <- Dt[order(-datetime)]
 group_pts(DT = Dt, threshold = 1000, id = 'id', timegroup = 'timegroup',
           coords = c('X', 'Y'))
@@ -54,7 +59,7 @@ x <- x + 1
 Dt[, .N, get(paste0('groupSample', x))][, qplot(N)]
 
 
-
+##############
 d <- data.table::dcast(df, formula = group ~ get(idField), fun.aggregate = length,
                        value.var = 'group')
 
@@ -63,25 +68,9 @@ gbi_df <- data.matrix(d[, !'group', with=FALSE])
 rownames(gbi_df) <- d$group
 
 gbi.net_df <- get_network(gbi_df, data_format="GBI",association_index="SRI")
+################
 
 
-
-Dt[, .N, groupNoOrder][, qplot(groupNoOrder, N)]
-Dt[, .N, groupReverse][, qplot(groupReverse, N)]
-
-
-Dt[, qplot(groupRever)]
-Dt[, .N, groupRever]
-Dt[, .N, groupNoOrder]
-
-
-group_times(Dt, datetime = 'datetime', threshold = '40 days')
-
-
-group_polys(Dt, area = FALSE, hrParams = list(percent =96), hrType = 'mcp',
-            projection = utm, id = 'id',
-            coords = c('X', 'Y'),
-            splitBy = 'timegroup')
 
 ## BUFFALO ========
 # Dt <- fread('input/Buffalo.csv')
@@ -97,7 +86,7 @@ Dt[, datetime := as.POSIXct(datetime)]
 # fwrite(Dt[sample(.N, 2000), .(X, Y, ID, datetime)],
 #        'tests/testdata/buffalo.csv')
 # Dt[, jul := yday(datetime)]
-# Dt[, yr := year(datetime)]
+Dt[, yr := year(datetime)]
 # Dt[, potato := ID]
 Dt[, id := ID]
 group_times(Dt, datetime = 'datetime', threshold = '30 days')
