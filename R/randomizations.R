@@ -40,6 +40,11 @@ randomizations <- function(DT = NULL,
     stop('ID field required')
   }
 
+  if (!(id %in% colnames(DT))) {
+    stop('id field provided are not present in input DT')
+  }
+
+
   # match type to group (required/not), datetime (required/not) OR IS IT TIMEGROUP?
 
   if(any(!(c(id, datetime) %in% colnames(DT)))){

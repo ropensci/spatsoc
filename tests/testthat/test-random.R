@@ -25,3 +25,10 @@ test_that('DT, type, id are required', {
                               id = NULL),
                'ID field', fixed = FALSE)
 })
+
+test_that('fields provided must be in DT', {
+  expect_error(randomizations(DT = DT,
+                              type = 'hourly',
+                              id = 'potato'),
+               'id field provided are not present in input DT')
+})
