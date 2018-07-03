@@ -11,8 +11,6 @@
 #' @param coords Character vector of X coordinate and Y coordinate column names
 #' @param id Character string of ID column name
 #' @return SpatialPointsDataFrame
-#' @export
-#'
 BuildPts <- function(DT, projection, coords = c('EASTING', 'NORTHING'), id = 'ID'){
   if(any(!(c(id, coords) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
