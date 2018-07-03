@@ -21,12 +21,12 @@ test_that('DT, type, id, datetime are required', {
                'type of randomization', fixed = FALSE)
 
   expect_error(randomizations(DT = DT,
-                              type = 'hourly',
+                              type = 'step',
                               id = NULL),
                'id field required')
 
   expect_error(randomizations(DT = DT,
-                              type = 'hourly',
+                              type = 'step',
                               id = 'ID',
                               datetime = NULL),
                'datetime field required')
@@ -36,18 +36,18 @@ test_that('DT, type, id, datetime are required', {
 test_that('type must be one of options', {
   expect_error(randomizations(DT = DT,
                               type = 'potato'),
-               'type of randomization must be one of: hourly, daily or trajectory')
+               'type of randomization must be one of: step, daily or trajectory')
 })
 
 test_that('fields provided must be in DT', {
   expect_error(randomizations(DT = DT,
-                              type = 'hourly',
+                              type = 'step',
                               id = 'potato',
                               datetime = 'datetime'),
                'field(s) provided are not present', fixed = TRUE)
 
   expect_error(randomizations(DT = DT,
-                              type = 'hourly',
+                              type = 'step',
                               id = 'ID',
                               datetime = 'potato'),
                'field(s) provided are not present', fixed = TRUE)
@@ -55,17 +55,19 @@ test_that('fields provided must be in DT', {
 
 test_that('iterations is NULL or correctly provided', {
   expect_warning(randomizations(DT = DT,
-                              type = 'hourly',
+                              type = 'step',
                               id = 'ID',
                               datetime = 'datetime',
                               iterations = NULL),
                'iterations is not', fixed = FALSE)
 
   expect_error(randomizations(DT = DT,
-                              type = 'hourly',
+                              type = 'step',
                               id = 'ID',
                               datetime = 'datetime',
                               iterations = 'potato'),
                'either provide a numeric for iterations or NULL', fixed = FALSE)
 })
+
+
 

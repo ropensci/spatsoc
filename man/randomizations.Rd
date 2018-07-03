@@ -10,7 +10,7 @@ randomizations(DT = NULL, type = NULL, id = NULL, datetime = NULL,
 \arguments{
 \item{DT}{input data.table with id, group fields and (optional) time fields}
 
-\item{type}{one of 'daily', 'hourly' or 'trajectory' - see details}
+\item{type}{one of 'daily', 'step' or 'trajectory' - see details}
 
 \item{id}{field indicating the id in the input data.table}
 
@@ -26,7 +26,7 @@ Randomization
 \details{
 Randomization types:
 
-'hourly' randomly assigns an ID to each location.
+'step' randomly assigns an ID to each location.
 
 'daily' will randomize the ID for each individual 24hr trajectory
 
