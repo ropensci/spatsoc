@@ -12,13 +12,16 @@ group_pts(DT, threshold = 100, id = 'ID', timegroup = 'timegroup',
           coords = c('X', 'Y'))
 
 
-test_that('DT is required', {
+test_that('DT, type, id are required', {
   expect_error(randomizations(DT = NULL),
   'input DT required')
-})
 
-test_that('type is required', {
   expect_error(randomizations(DT = DT,
                               type = NULL),
                'type of randomization', fixed = FALSE)
+
+  expect_error(randomizations(DT = DT,
+                              type = 'hourly',
+                              id = NULL),
+               'ID field', fixed = FALSE)
 })
