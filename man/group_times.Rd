@@ -9,7 +9,7 @@ group_times(DT = NULL, datetime = NULL, threshold = NULL)
 \arguments{
 \item{DT}{input data.table}
 
-\item{datetime}{name of time column}
+\item{datetime}{name of time column(s). either 1 POSIXct or 2 IDate and ITime. eg: 'datetime' or c('IDate', 'ITime')}
 
 \item{threshold}{threshold for grouping times.
 eg: '2 hours', '10 minutes', etc.

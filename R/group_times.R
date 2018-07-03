@@ -7,7 +7,7 @@
 #' The threshold can be in units of minutes, hours or days.
 #'
 #' @param DT input data.table
-#' @param datetime name of time column
+#' @param datetime name of time column(s). either 1 POSIXct or 2 IDate and ITime. eg: 'datetime' or c('IDate', 'ITime')
 #' @param threshold threshold for grouping times.
 #'                      eg: '2 hours', '10 minutes', etc.
 #'                      if not provided, times will be matched exactly.
