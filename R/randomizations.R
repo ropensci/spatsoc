@@ -32,6 +32,9 @@ randomizations <- function(DT = NULL,
     stop('input DT required')
   }
 
+  if (is.null(type)) {
+    stop('type of randomization required')
+  }
 
   # match type to group (required/not), datetime (required/not) OR IS IT TIMEGROUP?
 
