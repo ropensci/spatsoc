@@ -102,7 +102,7 @@ Dt[, datetime := as.POSIXct(datetime)]
 Dt[, id := ID]
 group_times(Dt, datetime = 'datetime', threshold = '30 days')
 
-Randomizations(Dt, id= 'ID', groupField = 'group',
+randomizations(Dt, id= 'ID', groupField = 'group',
                randomType = 'trajectory', dateField = 'datetime',
                splitBy = 'yr', iterations = 10)
 group_lines(Dt, threshold = 0,

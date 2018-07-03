@@ -1,4 +1,4 @@
-#' Randomizations
+#' randomizations
 #'
 #' Randomization
 #'
@@ -23,7 +23,7 @@
 #' @seealso
 #'   <http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full>
 #' @export
-Randomizations <- function(DT = NULL,
+randomizations <- function(DT = NULL,
                            type = NULL,
                            id = NULL,
                            dateField = NULL,
