@@ -29,9 +29,9 @@ randomizations <- function(DT = NULL,
                            iterations = NULL
 ) {
 
-  # match type to group (required/not), dateField (required/not) OR IS IT TIMEGROUP?
+  # match type to group (required/not), datetime (required/not) OR IS IT TIMEGROUP?
 
-  if(any(!(c(id, dateField) %in% colnames(DT)))){
+  if(any(!(c(id, datetime) %in% colnames(DT)))){
     stop('some fields provided are not present in data.table provided/colnames(DT)')
   }
 
@@ -44,31 +44,31 @@ randomizations <- function(DT = NULL,
 
   if(iterations == 1){
     if(type == 'hourly'){
-      if(is.null(dateField)) stop('dateField required, please provide datetime field')
-      if(is.null(splitBy)) splitBy <- dateField else splitBy <- c(splitBy, dateField)
+      if(is.null(datetime)) stop('datetime required, please provide datetime field')
+      if(is.null(splitBy)) splitBy <- datetime else splitBy <- c(splitBy, datetime)
       DT[, randomID := sample(get(id)), by = splitBy]
 
       return(DT[])
     } else if(type == 'daily'){
-      if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
-        stop('provided dateField is not of class POSIXct or IDate, for daily random type
+      if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
+        stop('provided datetime is not of class POSIXct or IDate, for daily random type
              please provide a datetime column or IDate')
       }
-      DT[, yday := data.table::yday(get(dateField)), by = splitBy]
+      DT[, yday := data.table::yday(get(datetime)), by = splitBy]
       dailyIDs <- DT[, .(ID = unique(ID)), by = c(splitBy, 'yday')]
       dailyIDs[, randomID := sample(ID), by = c(splitBy, 'yday')]
       return(merge(DT, dailyIDs, on = c('yday', splitBy)))
 
       } else if(type == 'trajectory'){
-        if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
-          stop('provided dateField is not of class POSIXct or IDate, for daily random type
+        if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
+          stop('provided datetime is not of class POSIXct or IDate, for daily random type
                please provide a datetime column or IDate')
         }
-        DT[, yday := data.table::yday(get(dateField))]
+        DT[, yday := data.table::yday(get(datetime))]
         idDays <- DT[, .(yday = unique(yday)), by = c(id, splitBy)]
         idDays[, randomYday := sample(yday), by = c(id, splitBy)]
         merged <- merge(DT, idDays, on = c('yday', id, splitBy))[,
-          randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday))]
+          randomDateTime := as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
         attr(merged$randomDateTime, 'tzone') <- ""
         return(merged)
       }
@@ -78,17 +78,17 @@ randomizations <- function(DT = NULL,
     replicated[iter == 0, observed := 1]
     replicated[iter != 0, observed := 0]
     if(type == 'hourly'){
-      if(is.null(dateField)) stop('dateField required, please provide datetime field')
-      replicated[observed != 1, randomID := sample(get(id)), by = c('iter', dateField, splitBy)]
+      if(is.null(datetime)) stop('datetime required, please provide datetime field')
+      replicated[observed != 1, randomID := sample(get(id)), by = c('iter', datetime, splitBy)]
       replicated[observed == 1, randomID := get(id)]
       return(replicated[])
       } else if(type == 'daily'){
 
-        if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
-          stop('provided dateField is not of class POSIXct or IDate, for daily random type
+        if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
+          stop('provided datetime is not of class POSIXct or IDate, for daily random type
                please provide a datetime column or IDate')
         }
-        replicated[, yday := data.table::yday(get(dateField))]
+        replicated[, yday := data.table::yday(get(datetime))]
 
         dailyIDs <- unique(replicated[, .(ID = get(id), observed),
                                by = .(iter, yday, splitBy)])
@@ -97,17 +97,17 @@ randomizations <- function(DT = NULL,
         return(merge(replicated, dailyIDs, on = c('iter', 'yday', splitBy), all = TRUE))
 
       } else if(type == 'trajectory'){
-        if(length(intersect(class(DT[[dateField]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
-          stop('provided dateField is not of class POSIXct or IDate, for daily random type
+        if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
+          stop('provided datetime is not of class POSIXct or IDate, for daily random type
                please provide a datetime column or IDate')
         }
-        replicated[, yday := data.table::yday(get(dateField))]
+        replicated[, yday := data.table::yday(get(datetime))]
         idDays <- replicated[, .(yday = unique(yday)), by = c(id, 'iter', splitBy)]
         idDays[, randomYday := sample(yday), by = c(id, 'iter', splitBy)]
         merged <- merge(replicated, idDays,
                         on = c('yday', id, 'iter', splitBy),
-                        all = TRUE)[, randomDateTime := as.POSIXct(get(dateField)) + (86400 * (randomYday - yday))]
-        merged[observed == 1, c('randomDateTime', 'randomYday') := .(get(dateField), yday(get(dateField)))]
+                        all = TRUE)[, randomDateTime := as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
+        merged[observed == 1, c('randomDateTime', 'randomYday') := .(get(datetime), yday(get(datetime)))]
         # this is needed until data.table 1.10.5 is released.. otherwise rm it
         # attr(merged$randomDateTime, 'tzone') <- ""
         return(merged)
