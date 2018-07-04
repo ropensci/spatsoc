@@ -92,3 +92,16 @@ test_that('dateFormatted or not depending on randomization type', {
                               iterations = 1),
                  'datetime must be either POSIXct', fixed = FALSE)
 })
+
+
+test_that('jul column found and warn overwrite', {
+  DT[, jul := 1]
+  expect_warning(randomizations(DT = DT,
+                                type = 'daily',
+                                id = 'ID',
+                                datetime = 'datetime',
+                                iterations = 1),
+                 'column "jul" found in DT', fixed = FALSE)
+  DT[, jul := NULL]
+})
+

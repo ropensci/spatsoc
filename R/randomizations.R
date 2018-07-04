@@ -96,34 +96,41 @@ randomizations <- function(DT = NULL,
   }
 
 
-  if(iterations == 1){
-    if(type == 'step') {
+  if (iterations == 1) {
+    if (type == 'step') {
       if (is.null(splitBy)) {
         splitBy <- datetime
       } else {
         splitBy <- c(datetime, splitBy)
       }
+
       DT[, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
 
       return(DT[])
 
-    } else if(type == 'daily'){
-      DT[, jul := data.table::yday(get(datetime)), by = splitBy]
-      dailyIDs <- DT[, .(ID = unique(ID)), by = c(splitBy, 'jul')]
-      dailyIDs[, randomID := sample(ID), by = c(splitBy, 'jul')]
+    } else if (type == 'daily') {
 
-      return(merge(DT, dailyIDs, on = c('jul', splitBy)))
-
-      } else if(type == 'trajectory'){
-
-        DT[, yday := data.table::yday(get(datetime))]
-        idDays <- DT[, .(yday = unique(yday)), by = c(id, splitBy)]
-        idDays[, randomYday := sample(yday), by = c(id, splitBy)]
-        merged <- merge(DT, idDays, on = c('yday', id, splitBy))[,
-          randomDateTime := as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
-        attr(merged$randomDateTime, 'tzone') <- ""
-        return(merged)
+      if('jul' %in% colnames(DT)) {
+        warning('column "jul" found in DT, will be overwritten by this function')
       }
+
+      DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
+      dailyIDs <- DT[, unique(.SD[[1]]), by = c(splitBy, 'jul'), .SDcols = id]
+      setnames(dailyIDs, c('jul', id))
+      dailyIDs[, randomID := .SD[sample(.N)], by = c(splitBy, 'jul'), .SDcols = id]
+
+      return(merge(DT, dailyIDs, on = c(splitBy, 'jul')))
+
+    } else if(type == 'trajectory'){
+
+      DT[, yday := data.table::yday(get(datetime))]
+      idDays <- DT[, .(yday = unique(yday)), by = c(id, splitBy)]
+      idDays[, randomYday := sample(yday), by = c(id, splitBy)]
+      merged <- merge(DT, idDays, on = c('yday', id, splitBy))[,
+        randomDateTime := as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
+      attr(merged$randomDateTime, 'tzone') <- ""
+      return(merged)
+    }
   } #else {
   #   DT[, rowID := .I]
   #   replicated <- DT[rep(1:.N, iterations + 1)][, iter := seq(0, .N-1, 1), by = rowID]
