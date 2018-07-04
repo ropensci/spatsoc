@@ -75,8 +75,9 @@ randomizations <- function(DT = NULL,
   #   splitBy <- c(datetime, splitBy)
   # }
 
-  if (length(intersect(class(DT[[datetime]]),
-                       c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0) {
+  if (length(datetime) == 1 &&
+      any(class(DT[[datetime]]) %in%
+                c('POSIXct', 'POSIXt', 'IDate'))) {
     dateFormatted <- TRUE
   } else {
     dateFormatted <- FALSE
@@ -92,7 +93,7 @@ randomizations <- function(DT = NULL,
   } else if (type == 'daily' || type == 'trajectory') {
     if (!dateFormatted) {
       stop(
-        'datetime must be either POSIXct or IDate and ITime for daily and trajectory randomization'
+        'datetime must be either POSIXct or IDate for daily and trajectory randomization'
       )
     }
   }
