@@ -2,7 +2,7 @@
 % Please edit documentation in R/randomizations.R
 \name{randomizations}
 \alias{randomizations}
-\title{randomizations}
+\title{Randomizations}
 \usage{
 randomizations(DT = NULL, type = NULL, id = NULL, datetime = NULL,
   splitBy = NULL, iterations = NULL)
@@ -21,10 +21,10 @@ randomizations(DT = NULL, type = NULL, id = NULL, datetime = NULL,
 \item{iterations}{The number of iterations to randomize}
 }
 \description{
-Randomization
+Data stream randomization methods
 }
 \details{
-Randomization types:
+Three randomization methods are provided:
 
 'step' randomly assigns an ID to each location.
 

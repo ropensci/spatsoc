@@ -1,8 +1,8 @@
-#' randomizations
+#' Randomizations
 #'
-#' Randomization
+#' Data stream randomization methods
 #'
-#' Randomization types:
+#' Three randomization methods are provided:
 #'
 #' 'step' randomly assigns an ID to each location.
 #'
@@ -107,13 +107,15 @@ randomizations <- function(DT = NULL,
         splitBy <- c(datetime, splitBy)
       }
       DT[, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
-      return(DT[])
-    } else if(type == 'daily'){
 
-      DT[, yday := data.table::yday(get(datetime)), by = splitBy]
-      dailyIDs <- DT[, .(ID = unique(ID)), by = c(splitBy, 'yday')]
-      dailyIDs[, randomID := sample(ID), by = c(splitBy, 'yday')]
-      return(merge(DT, dailyIDs, on = c('yday', splitBy)))
+      return(DT[])
+
+    } else if(type == 'daily'){
+      DT[, jul := data.table::yday(get(datetime)), by = splitBy]
+      dailyIDs <- DT[, .(ID = unique(ID)), by = c(splitBy, 'jul')]
+      dailyIDs[, randomID := sample(ID), by = c(splitBy, 'jul')]
+
+      return(merge(DT, dailyIDs, on = c('jul', splitBy)))
 
       } else if(type == 'trajectory'){
 
@@ -165,5 +167,5 @@ randomizations <- function(DT = NULL,
   #       # attr(merged$randomDateTime, 'tzone') <- ""
   #       return(merged)
   # }
-  }
+  # }
 }
