@@ -48,9 +48,7 @@ randomizations <- function(DT = NULL,
     stop('datetime field required')
   }
 
-  if (any(!(
-    c(id, datetime) %in% colnames(DT)
-  ))) {
+  if (any(!(c(id, datetime) %in% colnames(DT)))) {
     stop(paste0(
       as.character(paste(setdiff(
         c(id, datetime),
@@ -76,8 +74,7 @@ randomizations <- function(DT = NULL,
   # }
 
   if (length(datetime) == 1 &&
-      any(class(DT[[datetime]]) %in%
-                c('POSIXct', 'POSIXt', 'IDate'))) {
+      any(class(DT[[datetime]]) %in% c('POSIXct', 'POSIXt', 'IDate'))) {
     dateFormatted <- TRUE
   } else {
     dateFormatted <- FALSE

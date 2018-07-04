@@ -69,5 +69,26 @@ test_that('iterations is NULL or correctly provided', {
                'either provide a numeric for iterations or NULL', fixed = FALSE)
 })
 
+test_that('dateFormatted or not depending on randomization type', {
+  expect_warning(randomizations(DT = DT,
+                                type = 'step',
+                                id = 'ID',
+                                datetime = 'datetime',
+                                iterations = 1),
+                 'datetime provided is either POSIXct or IDate', fixed = FALSE)
 
+  DT[, numDate := 1]
+  expect_error(randomizations(DT = DT,
+                              type = 'daily',
+                              id = 'ID',
+                              datetime = 'numDate',
+                              iterations = 1),
+                 'datetime must be either POSIXct', fixed = FALSE)
 
+  expect_error(randomizations(DT = DT,
+                              type = 'trajectory',
+                              id = 'ID',
+                              datetime = 'numDate',
+                              iterations = 1),
+                 'datetime must be either POSIXct', fixed = FALSE)
+})

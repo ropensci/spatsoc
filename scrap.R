@@ -43,10 +43,23 @@ l <- data.table(locs)
 group_times(Dt, datetime = 'datetime', threshold = '2 hours')
 group_pts(Dt, threshold = 100, id = 'id', timegroup = 'timegroup',
           coords = c('X', 'Y'))
-randomizations(DT = Dt, type = 'hourly',
-               id = 'ID', splitBy = 'yr',
-               iterations = 10, datetime = 'datetime')
+randomizations(DT = Dt, type = 'daily',
+               id = 'ID',
+               iterations = 1, datetime = 'timegroup')
+Dt[timegroup %in% Dt[ID != randomID, timegroup], .(timegroup, ID, randomID)][order(timegroup)]
 
+DT <- Dt
+####
+DT[, datee := datetime]
+datetime <- 'datee'
+splitBy <- NULL
+DT[, jul := data.table::yday(.SD[[1]]), by = splitBy, .SDcols = datetime]
+id <- 'ID'
+dailyIDs <- DT[, .(ID = unique(.SD[[1]])), by = c(splitBy, 'jul'), .SDcols = id]
+dailyIDs[, randomID := .SD[sample(.N)], by = c(splitBy, 'jul'), .SDcols = 'ID']
+return(merge(DT, dailyIDs, on = c('jul', splitBy)))
+# is jul already present?
+###
 
 Dt <- Dt[order(-datetime)]
 group_pts(DT = Dt, threshold = 1000, id = 'id', timegroup = 'timegroup',

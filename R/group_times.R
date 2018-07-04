@@ -27,7 +27,7 @@ group_times <- function(DT = NULL,
   }
 
   if (is.null(datetime)) {
-    stop('time field required')
+    stop('datetime field required')
   }
 
   if (!(datetime %in% colnames(DT))) {

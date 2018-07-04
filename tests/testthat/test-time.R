@@ -13,7 +13,7 @@ test_that('DT is required', {
 
 test_that('time field correctly provided or error detected', {
   expect_error(group_times(DT, datetime = NULL, threshold = '10 minutes'),
-               'time field required')
+               'datetime field required')
 
   expect_error(group_times(DT, datetime = 'potato', threshold = '10 minutes'),
                'time field provided is not found in DT')
