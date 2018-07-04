@@ -53,25 +53,28 @@ DT <- Dt
 
 ##
 
-id <- 'ID'
-splitBy <- NULL
-datetime <- 'datetime'
-DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
-dailyIDs <- DT[, unique(.SD[[1]]), by = c(splitBy, 'jul'), .SDcols = id]
-setnames(dailyIDs, c('jul', id))
-dailyIDs[, randomID := .SD[sample(.N)], by = c(splitBy, 'jul'), .SDcols = id]
-
-return(merge(DT, dailyIDs, on = c(splitBy, 'jul')))
+## !!! does daily return all the same IDs for each day ????d
 
 
 
 ##
-datetime
+datetime <- 'datetime'
 splitBy <- 'yr'
+id <- 'ID'
 DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
 idDays <- unique(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
-idDays[, randomYday := sample(jul), by = c(id, splitBy)]
+setnames(idDays, c(splitBy, 'jul', id))
+
+idDays[, randomJul := sample(jul), by = c(id, splitBy)]
 merged <- merge(DT, idDays, on = c('yday', id, splitBy))
+
+randomDateCol <- paste0('random', datetime)
+merged[, (randomDateCol) :=
+         as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
+       .SDcols = datetime]
+merged
+merged[randomJul != yday(randomdatetime)]
+
 
 merged[, idate := as.IDate(datetime)]
 merged[, .(randomTZ, idate + ((randomYday - jul)))]

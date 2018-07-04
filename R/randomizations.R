@@ -67,12 +67,6 @@ randomizations <- function(DT = NULL,
     stop('either provide a numeric for iterations or NULL')
   }
 
-  # if (is.null(splitBy)) {
-  #   splitBy <- datetime
-  # } else {
-  #   splitBy <- c(datetime, splitBy)
-  # }
-
   if (length(datetime) == 1 &&
       any(class(DT[[datetime]]) %in% c('POSIXct', 'POSIXt', 'IDate'))) {
     dateFormatted <- TRUE
@@ -122,13 +116,14 @@ randomizations <- function(DT = NULL,
       return(merge(DT, idDays, on = c(splitBy, 'jul'))[])
 
     } else if(type == 'trajectory'){
-      idDays[, randomYday := .SD[sample(.N)],
-             by = c(id, splitBy), .SDcols = 'jul']
-      merged <- merge(DT, idDays, on = c('jul', id, splitBy))
-      merged[, randomDateTime :=
-               as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
-      # attr(merged$randomDateTime, 'tzone') <- ""
-      return(merged)
+      idDays[, randomJul := sample(jul), by = c(id, splitBy)]
+      merged <- merge(DT, idDays, on = c('yday', id, splitBy))
+
+      randomDateCol <- paste0('random', datetime)
+      merged[, (randomDateCol) :=
+               as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
+             .SDcols = datetime]
+      return(merged[])
     }
   } #else {
   #   DT[, rowID := .I]
