@@ -109,23 +109,25 @@ randomizations <- function(DT = NULL,
 
       return(DT[])
 
-    } else if (type == 'daily') {
+    }
 
-      DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
-      dailyIDs <- unique(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
-      setnames(dailyIDs, c('jul', id))
-      dailyIDs[, randomID := .SD[sample(.N)], by = c(splitBy, 'jul'), .SDcols = id]
+    DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
+    idDays <- unique(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
+    setnames(idDays, c(splitBy, 'jul', id))
 
-      return(merge(DT, dailyIDs, on = c(splitBy, 'jul')))
+    if (type == 'daily') {
+      idDays[, randomID := .SD[sample(.N)],
+             by = c(splitBy, 'jul'), .SDcols = id]
+
+      return(merge(DT, idDays, on = c(splitBy, 'jul'))[])
 
     } else if(type == 'trajectory'){
-
-      DT[, yday := data.table::yday(get(datetime))]
-      idDays <- unique(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
-      idDays[, randomYday := sample(yday), by = c(id, splitBy)]
-      merged <- merge(DT, idDays, on = c('yday', id, splitBy))[,
-        randomDateTime := as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
-      attr(merged$randomDateTime, 'tzone') <- ""
+      idDays[, randomYday := .SD[sample(.N)],
+             by = c(id, splitBy), .SDcols = 'jul']
+      merged <- merge(DT, idDays, on = c('jul', id, splitBy))
+      merged[, randomDateTime :=
+               as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
+      # attr(merged$randomDateTime, 'tzone') <- ""
       return(merged)
     }
   } #else {
