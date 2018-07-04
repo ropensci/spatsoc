@@ -41,7 +41,7 @@ l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
 group_times(Dt, datetime = 'datetime', threshold = '2 hours')
-group_pts(Dt, threshold = 100, id = 'id', timegroup = 'timegroup',
+group_pts(Dt, threshold = 100, id = 'ID', timegroup = 'timegroup',
           coords = c('X', 'Y'))
 randomizations(DT = Dt, type = 'daily',
                id = 'ID',
@@ -53,18 +53,6 @@ DT <- Dt
 
 ##
 
-microbenchmark::microbenchmark({
-idDays <- DT[, .(jul = unique(jul)), by = c(id, splitBy)]
-},
-{dailyIDs <- DT[, unique(.SD[[1]]), by = c(splitBy, 'jul'), .SDcols = id]
-},{
-  some <- unique(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
-}, {
-  some <- data.table:::unique.data.table(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
-}
-)
-
-
 id <- 'ID'
 splitBy <- NULL
 datetime <- 'datetime'
@@ -74,13 +62,50 @@ setnames(dailyIDs, c('jul', id))
 dailyIDs[, randomID := .SD[sample(.N)], by = c(splitBy, 'jul'), .SDcols = id]
 
 return(merge(DT, dailyIDs, on = c(splitBy, 'jul')))
+
+
+
 ##
+datetime
+splitBy <- 'yr'
 DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
-idDays <- DT[, .(jul = unique(jul)), by = c(id, splitBy)]
-idDays[, randomYday := sample(yday), by = c(id, splitBy)]
-merged <- merge(DT, idDays, on = c('yday', id, splitBy))[,
-                                                         randomDateTime := as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
-attr(merged$randomDateTime, 'tzone') <- ""
+idDays <- unique(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
+idDays[, randomYday := sample(jul), by = c(id, splitBy)]
+merged <- merge(DT, idDays, on = c('yday', id, splitBy))
+
+merged[, idate := as.IDate(datetime)]
+merged[, .(randomTZ, idate + ((randomYday - jul)))]
+merged[, randomTZ := as.POSIXct(datetime + (86400 * (randomYday - jul)))]
+
+merged[, cbind(IDateTime(datetime + format(86400 * (randomYday - jul)),
+                   tz = attr(merged$datetime, 'tzone')),
+       datetime, randomDateTime)]
+
+merged[id == 'Pepper' & (jul == 10 | randomYday == 11)][order(jul)]
+
+merged[randomYday == 10 | randomYday == 11][order(jul)]
+attr(merged$randomDateTime, 'tzone')
+
+
+
+merged[, randomSD := as.POSIXct(.SD[[1]] + (86400 * (randomYday - jul)), tz = 'SAST'),
+       .SDcols = datetime]
+
+
+merged$datetime
+merged[yday(randomSD) != randomYday,
+       ]
+merged$datetime
+attr(merged[[datetime]], 'tzone')
+
+merged[ID == 'Queen'][jul == 1 | jul == 24 | jul == 8][order(jul)]
+
+
+merged[order(jul)][randomYday!= yday(randomDateTime), .(datetime, jul, randomDateTime, randomYday, yday(randomDateTime), (randomYday - jul))]
+
+setattr(merged$randomDateTime, 'tzone', 'POTATO')
+merged[, randdYDay := yday(randomDateTime)]
+merged[randomYday!=randdYDay, .(randomYday, randdYDay, randomDateTime,datetime)]
 return(merged)
 ###
 
@@ -115,7 +140,8 @@ utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 # Dt[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
 # # Dt[, idate := as.IDate(timestamp)]
 # Dt[, datetime := as.POSIXct(timestamp)]
-Dt[, datetime := as.POSIXct(datetime)]
+Dt[, datetime := as.POSIXct(datetime,
+                            tz = 'Africa/Johannesburg')]
 # Dt[, ID := `individual-local-identifier`]
 # Dt[, X := `utm-easting`]
 # Dt[, Y := `utm-northing`]
