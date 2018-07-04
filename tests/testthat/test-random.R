@@ -103,5 +103,14 @@ test_that('jul column found and warn overwrite', {
                                 iterations = 1),
                  'column "jul" found in DT', fixed = FALSE)
   DT[, jul := NULL]
+
+  DT[, jul := 1]
+  expect_warning(randomizations(DT = DT,
+                                type = 'trajectory',
+                                id = 'ID',
+                                datetime = 'datetime',
+                                iterations = 1),
+                 'column "jul" found in DT', fixed = FALSE)
+  DT[, jul := NULL]
 })
 

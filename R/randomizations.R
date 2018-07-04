@@ -89,9 +89,10 @@ randomizations <- function(DT = NULL,
     }
   } else if (type == 'daily' || type == 'trajectory') {
     if (!dateFormatted) {
-      stop(
-        'datetime must be either POSIXct or IDate for daily and trajectory randomization'
-      )
+      stop('datetime must be either POSIXct or IDate for daily and trajectory randomization')
+    }
+    if ('jul' %in% colnames(DT)) {
+      warning('column "jul" found in DT, will be overwritten by this function')
     }
   }
 
@@ -109,10 +110,6 @@ randomizations <- function(DT = NULL,
       return(DT[])
 
     } else if (type == 'daily') {
-
-      if('jul' %in% colnames(DT)) {
-        warning('column "jul" found in DT, will be overwritten by this function')
-      }
 
       DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
       dailyIDs <- DT[, unique(.SD[[1]]), by = c(splitBy, 'jul'), .SDcols = id]
