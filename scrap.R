@@ -50,15 +50,38 @@ Dt[timegroup %in% Dt[ID != randomID, timegroup], .(timegroup, ID, randomID)][ord
 
 DT <- Dt
 ####
-DT[, datee := datetime]
-datetime <- 'datee'
-splitBy <- NULL
-DT[, jul := data.table::yday(.SD[[1]]), by = splitBy, .SDcols = datetime]
+
+##
+
+microbenchmark::microbenchmark({
+idDays <- DT[, .(jul = unique(jul)), by = c(id, splitBy)]
+},
+{dailyIDs <- DT[, unique(.SD[[1]]), by = c(splitBy, 'jul'), .SDcols = id]
+},{
+  some <- unique(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
+}, {
+  some <- data.table:::unique.data.table(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
+}
+)
+
+
 id <- 'ID'
-dailyIDs <- DT[, .(ID = unique(.SD[[1]])), by = c(splitBy, 'jul'), .SDcols = id]
-dailyIDs[, randomID := .SD[sample(.N)], by = c(splitBy, 'jul'), .SDcols = 'ID']
-return(merge(DT, dailyIDs, on = c('jul', splitBy)))
-# is jul already present?
+splitBy <- NULL
+datetime <- 'datetime'
+DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
+dailyIDs <- DT[, unique(.SD[[1]]), by = c(splitBy, 'jul'), .SDcols = id]
+setnames(dailyIDs, c('jul', id))
+dailyIDs[, randomID := .SD[sample(.N)], by = c(splitBy, 'jul'), .SDcols = id]
+
+return(merge(DT, dailyIDs, on = c(splitBy, 'jul')))
+##
+DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
+idDays <- DT[, .(jul = unique(jul)), by = c(id, splitBy)]
+idDays[, randomYday := sample(yday), by = c(id, splitBy)]
+merged <- merge(DT, idDays, on = c('yday', id, splitBy))[,
+                                                         randomDateTime := as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
+attr(merged$randomDateTime, 'tzone') <- ""
+return(merged)
 ###
 
 Dt <- Dt[order(-datetime)]
