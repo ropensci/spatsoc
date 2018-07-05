@@ -43,9 +43,9 @@ l <- data.table(locs)
 group_times(Dt, datetime = 'datetime', threshold = '2 hours')
 group_pts(Dt, threshold = 100, id = 'ID', timegroup = 'timegroup',
           coords = c('X', 'Y'))
-randomizations(DT = Dt, type = 'daily',
+randomizations(DT = Dt, type = 'step',
                id = 'ID',
-               iterations = 2, datetime = 'datetime')
+               iterations = 2, datetime = 'timegroup')
 Dt[timegroup %in% Dt[ID != randomID, timegroup], .(timegroup, ID, randomID)][order(timegroup)]
 
 DT <- Dt
@@ -53,8 +53,10 @@ DT <- Dt
 
 ##
 
-## !!! does daily return all the same IDs for each day ????d
 
+traj <- randomizations(DT = Dt, type = 'trajectory',
+               id = 'ID',
+               iterations = 2, datetime = 'datetime')
 
 ##
 datetime <- 'datetime'

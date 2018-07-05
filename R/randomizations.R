@@ -117,7 +117,7 @@ randomizations <- function(DT = NULL,
 
     } else if(type == 'trajectory'){
       idDays[, randomJul := sample(jul), by = c(id, splitBy)]
-      merged <- merge(DT, idDays, on = c('yday', id, splitBy))
+      merged <- merge(DT, idDays, on = c('jul', id, splitBy))
 
       randomDateCol <- paste0('random', datetime)
       merged[, (randomDateCol) :=
@@ -126,25 +126,24 @@ randomizations <- function(DT = NULL,
       return(merged[])
     }
   } else {
-
     if ('rowID' %in% colnames(DT)) {
       warning('column "rowID" found in DT and will be overwritten by this function')
     }
 
     DT[, rowID := .I]
-    replicated <- DT[rep(1:.N, iterations + 1)]
-    replicated[, iteration := seq(0, .N - 1, 1), by = rowID]
-    replicated[iteration == 0, observed := 1]
-    replicated[iteration != 0, observed := 0]
+    repDT <- DT[rep(1:.N, iterations + 1)]
+    repDT[, iteration := seq(0, .N - 1, 1), by = rowID]
+    repDT[iteration == 0, observed := 1]
+    repDT[iteration != 0, observed := 0]
 
-    if(type == 'step'){
-      replicated[observed != 1, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
-      replicated[observed == 1, randomID := .SD, .SDcols = id]
-      return(replicated[])
-      }
+    if (type == 'step') {
+      repDT[observed != 1, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
+      repDT[observed == 1, randomID := .SD, .SDcols = id]
+      return(repDT[])
+    }
 
-    replicated[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
-    idDays <- unique(replicated[, .SD,
+    repDT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
+    idDays <- unique(repDT[, .SD,
                                 .SDcols = c(splitBy, id, 'jul', 'iteration', 'observed')])
     setnames(idDays, c(splitBy, id, 'jul', 'iteration', 'observed'))
 
@@ -152,23 +151,20 @@ randomizations <- function(DT = NULL,
       idDays[, randomID := .SD[sample(.N)],
              by = c(splitBy, 'jul'), .SDcols = id]
       idDays[observed == 1, randomID := .SD[[1]], .SDcols = id]
-      return(merge(replicated, idDays, on = c('iteration', 'jul', splitBy), all = TRUE))
+      return(merge(repDT, idDays, on = c('iteration', 'jul', splitBy), all = TRUE))
 
-    }# else if(type == 'trajectory'){
-  #       if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
-  #         stop('provided datetime is not of class POSIXct or IDate, for daily random type
-  #              please provide a datetime column or IDate')
-  #       }
-  #       replicated[, yday := data.table::yday(get(datetime))]
-  #       idDays <- replicated[, .(yday = unique(yday)), by = c(id, 'iteration', splitBy)]
-  #       idDays[, randomYday := sample(yday), by = c(id, 'iteration', splitBy)]
-  #       merged <- merge(replicated, idDays,
-  #                       on = c('yday', id, 'iteration', splitBy),
-  #                       all = TRUE)[, randomDateTime := as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
-  #       merged[observed == 1, c('randomDateTime', 'randomYday') := .(get(datetime), yday(get(datetime)))]
-  #       # this is needed until data.table 1.10.5 is released.. otherwise rm it
-  #       # attr(merged$randomDateTime, 'tzone') <- ""
-  #       return(merged)
-  # }
+    } else if(type == 'trajectory'){
+      idDays[, randomJul := sample(jul), by = c(id, splitBy, 'iteration')]
+      merged <- merge(repDT, idDays,
+                      on = c('jul', id, 'iteration', splitBy),
+                      all = TRUE)
+      randomDateCol <- paste0('random', datetime)
+      merged[, (randomDateCol) := as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
+             .SDcols = datetime]
+      merged[observed == 1,
+             c(randomDateCol, 'randomJul') := .SD,
+             .SDcols = c(datetime, 'jul')]
+      return(merged[])
+    }
   }
 }

@@ -152,3 +152,9 @@ test_that('daily randomization returns as expected', {
       by = .(jul, ID)][, max(N)],
     1)
 })
+
+
+# if iterations are > 1:
+# columns added,
+# observed == observed
+
