@@ -136,34 +136,34 @@ randomizations <- function(DT = NULL,
     replicated[, iteration := seq(0, .N - 1, 1), by = rowID]
     replicated[iteration == 0, observed := 1]
     replicated[iteration != 0, observed := 0]
+
     if(type == 'step'){
       replicated[observed != 1, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
       replicated[observed == 1, randomID := .SD, .SDcols = id]
       return(replicated[])
-      } #else if(type == 'daily'){
-  #
+      }
+
+    replicated[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
+    idDays <- unique(replicated[, .SD,
+                                .SDcols = c(splitBy, id, 'jul', 'iteration', 'observed')])
+    setnames(idDays, c(splitBy, id, 'jul', 'iteration', 'observed'))
+
+    if (type == 'daily') {
+      idDays[, randomID := .SD[sample(.N)],
+             by = c(splitBy, 'jul'), .SDcols = id]
+      idDays[observed == 1, randomID := .SD[[1]], .SDcols = id]
+      return(merge(replicated, idDays, on = c('iteration', 'jul', splitBy), all = TRUE))
+
+    }# else if(type == 'trajectory'){
   #       if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
   #         stop('provided datetime is not of class POSIXct or IDate, for daily random type
   #              please provide a datetime column or IDate')
   #       }
   #       replicated[, yday := data.table::yday(get(datetime))]
-  #
-  #       dailyIDs <- unique(replicated[, .(ID = get(id), observed),
-  #                              by = .(iter, yday, splitBy)])
-  #       dailyIDs[, randomID := sample(ID), by = .(iter, yday, splitBy)]
-  #       dailyIDs[observed == 1, randomID := ID]
-  #       return(merge(replicated, dailyIDs, on = c('iter', 'yday', splitBy), all = TRUE))
-  #
-  #     } else if(type == 'trajectory'){
-  #       if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
-  #         stop('provided datetime is not of class POSIXct or IDate, for daily random type
-  #              please provide a datetime column or IDate')
-  #       }
-  #       replicated[, yday := data.table::yday(get(datetime))]
-  #       idDays <- replicated[, .(yday = unique(yday)), by = c(id, 'iter', splitBy)]
-  #       idDays[, randomYday := sample(yday), by = c(id, 'iter', splitBy)]
+  #       idDays <- replicated[, .(yday = unique(yday)), by = c(id, 'iteration', splitBy)]
+  #       idDays[, randomYday := sample(yday), by = c(id, 'iteration', splitBy)]
   #       merged <- merge(replicated, idDays,
-  #                       on = c('yday', id, 'iter', splitBy),
+  #                       on = c('yday', id, 'iteration', splitBy),
   #                       all = TRUE)[, randomDateTime := as.POSIXct(get(datetime)) + (86400 * (randomYday - yday))]
   #       merged[observed == 1, c('randomDateTime', 'randomYday') := .(get(datetime), yday(get(datetime)))]
   #       # this is needed until data.table 1.10.5 is released.. otherwise rm it
