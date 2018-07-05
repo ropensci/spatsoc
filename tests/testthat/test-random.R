@@ -114,3 +114,41 @@ test_that('jul column found and warn overwrite', {
   DT[, jul := NULL]
 })
 
+
+test_that('rowID column found and warn overwrite', {
+  DT[, rowID := 1]
+  expect_warning(randomizations(DT = DT,
+                                type = 'daily',
+                                id = 'ID',
+                                datetime = 'datetime',
+                                iterations = 2),
+                 'column "rowID" found in DT', fixed = FALSE)
+  DT[, rowID := NULL]
+})
+
+
+test_that('step randomization returns as expected', {
+  expect_equal(
+    randomizations(
+      DT = DT,
+      type = 'step',
+      id = 'ID',
+      iterations = 1,
+      datetime = 'timegroup'
+    )[, uniqueN(randomID), by = timegroup],
+    DT[, uniqueN(ID), by = timegroup])
+})
+
+
+test_that('daily randomization returns as expected', {
+  expect_equal(
+    randomizations(
+      DT = DT,
+      type = 'daily',
+      id = 'ID',
+      iterations = 1,
+      datetime = 'datetime'
+    )[, .(N = uniqueN(randomID)),
+      by = .(jul, ID)][, max(N)],
+    1)
+})
