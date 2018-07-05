@@ -106,8 +106,8 @@ randomizations <- function(DT = NULL,
     }
 
     DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
-    idDays <- unique(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
-    setnames(idDays, c(splitBy, 'jul', id))
+    idDays <- unique(DT[, .SD, .SDcols = c(splitBy, id, 'jul')])
+    setnames(idDays, c(splitBy, id, 'jul'))
 
     if (type == 'daily') {
       idDays[, randomID := .SD[sample(.N)],
