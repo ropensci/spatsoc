@@ -1,18 +1,19 @@
 #' Build Home Ranges for Individuals
 #'
 #' @inheritParams group_polys
+#' @param spPts alternatively, provide solely a SpatialPointsDataFrame with one column representing the ID of each point.
 #'
 #' @return Home range polygons for each ID
 #' @export
 #'
 build_polys <- function(DT = NULL,
-                     projection = NULL,
-                     hrType = NULL,
-                     hrParams = NULL,
-                     coords = NULL,
-                     id = NULL,
-                     splitBy = NULL,
-                     spPts = NULL) {
+                        projection = NULL,
+                        hrType = NULL,
+                        hrParams = NULL,
+                        coords = NULL,
+                        id = NULL,
+                        splitBy = NULL,
+                        spPts = NULL) {
   if (is.null(DT) && is.null(spPts)) {
     stop('input DT or spPts required')
   }

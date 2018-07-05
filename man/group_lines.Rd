@@ -37,18 +37,18 @@ Groups From Spatial Lines
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 
-group_lines(locs, threshold = 50, projection = utm,
+group_lines(DT, threshold = 50, projection = utm,
             id = 'ID', coords = c('X', 'Y'))
 
 # Daily movement tracks
-group_times(locs, datetime = 'datetime', threshold = '1 day')
-group_lines(locs, threshold = 50, projection = utm,
+group_times(DT, datetime = 'datetime', threshold = '1 day')
+group_lines(DT, threshold = 50, projection = utm,
             id = 'ID', coords = c('X', 'Y'),
             timegroup = 'timegroup')
 
 # Daily movement tracks by sex
-group_times(locs, datetime = 'datetime', threshold = '1 day')
-group_lines(locs, threshold = 50, projection = utm,
+group_times(DT, datetime = 'datetime', threshold = '1 day')
+group_lines(DT, threshold = 50, projection = utm,
             id = 'ID', coords = c('X', 'Y'),
             timegroup = 'timegroup', splitBy = 'sex')
 }

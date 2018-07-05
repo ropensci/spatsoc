@@ -22,6 +22,8 @@ build_polys(DT = NULL, projection = NULL, hrType = NULL,
 \item{id}{Character string of ID column name}
 
 \item{splitBy}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
+
+\item{spPts}{alternatively, provide solely a SpatialPointsDataFrame with one column representing the ID of each point.}
 }
 \value{
 Home range polygons for each ID
