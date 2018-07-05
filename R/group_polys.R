@@ -15,6 +15,8 @@
 #'
 #' @export
 #'
+#' @importFrom methods slot
+#'
 #' @examples
 #' group_polys(locs, area = FALSE, 'mcp', list(percent = 95),
 #'             projection = utm,
