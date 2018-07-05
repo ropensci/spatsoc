@@ -52,8 +52,6 @@ group_times <- function(DT = NULL,
     alloc.col(DT)
   }
 
-
-
   if (is.null(threshold)) {
     warning('no threshold provided, using the time field directly to group')
     DT[, timegroup := .GRP, by = datetime]
@@ -78,7 +76,8 @@ group_times <- function(DT = NULL,
     }
 
     if (grepl('hour', threshold)) {
-      nHours <- data.table::tstrsplit(threshold, ' ')[[1]]
+      nHours <- data.table::tstrsplit(threshold, ' ',
+                                      type.convert = TRUE)[[1]]
       if (!is.integer(nHours)) {
         if (!(nHours %% 1)) {
           warning('number of hours provided cannot be a fractional - threshold will be rounded')
