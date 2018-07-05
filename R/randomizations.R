@@ -74,7 +74,6 @@ randomizations <- function(DT = NULL,
     dateFormatted <- FALSE
   }
 
-
   if (type == 'step') {
     if (dateFormatted) {
       warning(
@@ -89,7 +88,6 @@ randomizations <- function(DT = NULL,
       warning('column "jul" found in DT, will be overwritten by this function')
     }
   }
-
 
   if (iterations == 1) {
     if (type == 'step') {
@@ -115,7 +113,7 @@ randomizations <- function(DT = NULL,
 
       return(merge(DT, idDays, on = c(splitBy, 'jul'))[])
 
-    } else if(type == 'trajectory'){
+    } else if (type == 'trajectory') {
       idDays[, randomJul := sample(jul), by = c(id, splitBy)]
       merged <- merge(DT, idDays, on = c('jul', id, splitBy))
 
@@ -137,15 +135,17 @@ randomizations <- function(DT = NULL,
     repDT[iteration != 0, observed := 0]
 
     if (type == 'step') {
-      repDT[observed != 1, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
+      repDT[observed != 1, randomID := .SD[sample(.N)],
+            by = splitBy, .SDcols = id]
       repDT[observed == 1, randomID := .SD, .SDcols = id]
       return(repDT[])
     }
 
     repDT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
     idDays <- unique(repDT[, .SD,
-                                .SDcols = c(splitBy, id, 'jul', 'iteration', 'observed')])
-    setnames(idDays, c(splitBy, id, 'jul', 'iteration', 'observed'))
+                           .SDcols = c(splitBy, id, 'jul',
+                                       'iteration', 'observed')])
+    # setnames(idDays, c(splitBy, id, 'jul', 'iteration', 'observed'))
 
     if (type == 'daily') {
       idDays[, randomID := .SD[sample(.N)],

@@ -152,6 +152,18 @@ test_that('daily randomization returns as expected', {
     1)
 })
 
+test_that('trajectory randomization returns as expected', {
+  DT[, jul := NULL]
+  expect_equal(
+    randomizations(
+      DT = DT,
+      type = 'trajectory',
+      id = 'ID',
+      iterations = 1,
+      datetime = 'datetime'
+    )[, uniqueN(randomJul), by = .(ID, jul)][, max(V1)],
+    1)
+})
 
 # if iterations are > 1:
 # columns added,
