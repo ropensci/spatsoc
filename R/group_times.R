@@ -80,6 +80,9 @@ group_times <- function(DT = NULL,
     if (grepl('hour', threshold)) {
       nHours <- data.table::tstrsplit(threshold, ' ')[[1]]
       if (!is.integer(nHours)) {
+        if (!(nHours %% 1)) {
+          warning('number of hours provided cannot be a fractional - threshold will be rounded')
+        }
         nHours <- as.integer(nHours)
       }
 
