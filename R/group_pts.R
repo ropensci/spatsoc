@@ -79,12 +79,18 @@ group_pts <- function(DT = NULL,
     set(DT, j = 'group', value = NULL)
   }
 
-  if (is.null(timegroup) & is.null(splitBy)) {
+  if (is.null(timegroup) && is.null(splitBy)) {
     splitBy <- NULL
   } else {
     splitBy <- c(splitBy, timegroup)
   }
-  # warn if multiple IDs by timegroup/splitBy
+
+  if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
+    warning('found duplicate id in a timegroup (and splitBy) - does your group_times threshold match the fix rate?')
+  }
+
+
+
   DT[, withinGroup := {
     distMatrix <-
       as.matrix(dist(cbind(

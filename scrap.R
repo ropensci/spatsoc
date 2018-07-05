@@ -47,6 +47,10 @@ randomizations(DT = Dt, type = 'step',
                id = 'ID',
                iterations = 2, datetime = 'timegroup')
 
+Dt[, .N, by = .(ID, yr, timegroup)][N > 1, sum(N)]
+Dt[ID == 'Queen' & yr == 2005 & timegroup == 853]
+
+
 ##############
 d <- data.table::dcast(df, formula = group ~ get(idField), fun.aggregate = length,
                        value.var = 'group')
