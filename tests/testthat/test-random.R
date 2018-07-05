@@ -8,11 +8,8 @@ DT[, datetime := as.POSIXct(datetime)]
 DT[, yr := year(datetime)]
 
 group_times(DT, datetime = 'datetime', threshold = '1 hour')
-# since test data has one timegroup*ID with > 1 loc
-suppressWarnings(
-  group_pts(DT, threshold = 100, id = 'ID', timegroup = 'timegroup',
-          coords = c('X', 'Y'))
-)
+group_pts(DT, threshold = 100, id = 'ID', timegroup = 'timegroup',
+        coords = c('X', 'Y'))
 
 test_that('DT, type, id, datetime are required', {
   expect_error(randomizations(DT = NULL),
