@@ -27,7 +27,7 @@ The functions were developped for application across animal relocation data, for
 Let's read in `spatsoc`'s example data.
 
 ```{r, eval = TRUE, include = FALSE}
-library(spatsoc)
+library(spatsoc); library(data.table)
 data(DT)
 DT <- as.data.table(DT)
 DT[, datetime := as.POSIXct(date)]
