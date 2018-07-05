@@ -45,7 +45,7 @@ group_pts(Dt, threshold = 100, id = 'ID', timegroup = 'timegroup',
           coords = c('X', 'Y'))
 randomizations(DT = Dt, type = 'daily',
                id = 'ID',
-               iterations = 1, datetime = 'timegroup')
+               iterations = 2, datetime = 'datetime')
 Dt[timegroup %in% Dt[ID != randomID, timegroup], .(timegroup, ID, randomID)][order(timegroup)]
 
 DT <- Dt
@@ -56,7 +56,6 @@ DT <- Dt
 ## !!! does daily return all the same IDs for each day ????d
 
 
-
 ##
 datetime <- 'datetime'
 splitBy <- 'yr'
@@ -65,18 +64,6 @@ DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
 idDays <- unique(DT[, .SD, .SDcols = c(splitBy, 'jul', id)])
 setnames(idDays, c(splitBy, 'jul', id))
 
-idDays[, randomJul := sample(jul), by = c(id, splitBy)]
-merged <- merge(DT, idDays, on = c('yday', id, splitBy))
-
-randomDateCol <- paste0('random', datetime)
-merged[, (randomDateCol) :=
-         as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
-       .SDcols = datetime]
-merged
-merged[randomJul != yday(randomdatetime)]
-
-
-merged[, idate := as.IDate(datetime)]
 merged[, .(randomTZ, idate + ((randomYday - jul)))]
 merged[, randomTZ := as.POSIXct(datetime + (86400 * (randomYday - jul)))]
 

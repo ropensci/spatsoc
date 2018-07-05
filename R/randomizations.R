@@ -125,17 +125,22 @@ randomizations <- function(DT = NULL,
              .SDcols = datetime]
       return(merged[])
     }
-  } #else {
-  #   DT[, rowID := .I]
-  #   replicated <- DT[rep(1:.N, iterations + 1)][, iter := seq(0, .N-1, 1), by = rowID]
-  #   replicated[iter == 0, observed := 1]
-  #   replicated[iter != 0, observed := 0]
-  #   if(type == 'step'){
-  #     if(is.null(datetime)) stop('datetime required, please provide datetime field')
-  #     replicated[observed != 1, randomID := sample(get(id)), by = c('iter', datetime, splitBy)]
-  #     replicated[observed == 1, randomID := get(id)]
-  #     return(replicated[])
-  #     } else if(type == 'daily'){
+  } else {
+
+    if ('rowID' %in% colnames(DT)) {
+      warning('column "rowID" found in DT and will be overwritten by this function')
+    }
+
+    DT[, rowID := .I]
+    replicated <- DT[rep(1:.N, iterations + 1)]
+    replicated[, iteration := seq(0, .N - 1, 1), by = rowID]
+    replicated[iteration == 0, observed := 1]
+    replicated[iteration != 0, observed := 0]
+    if(type == 'step'){
+      replicated[observed != 1, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
+      replicated[observed == 1, randomID := .SD, .SDcols = id]
+      return(replicated[])
+      } #else if(type == 'daily'){
   #
   #       if(length(intersect(class(DT[[datetime]]), c('POSIXct', 'POSIXt', 'IDate', 'Date'))) == 0){
   #         stop('provided datetime is not of class POSIXct or IDate, for daily random type
@@ -165,5 +170,5 @@ randomizations <- function(DT = NULL,
   #       # attr(merged$randomDateTime, 'tzone') <- ""
   #       return(merged)
   # }
-  # }
+  }
 }
