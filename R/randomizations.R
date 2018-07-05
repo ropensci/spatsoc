@@ -18,7 +18,7 @@
 #' @param splitBy List of fields in DT to split the randomization process by
 #' @param iterations The number of iterations to randomize
 #'
-#' @seealso
+#' @references
 #'   <http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full>
 #' @export
 randomizations <- function(DT = NULL,
