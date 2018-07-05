@@ -15,6 +15,8 @@
 #' @return Input data.table with column 'group' added.
 #' @export
 #'
+#' @importFrom stats dist
+#'
 #' @examples
 #'
 #' group_pts(locs, threshold = 5, id = 'ID',
