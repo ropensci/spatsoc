@@ -163,3 +163,6 @@ test_that('warns if no threshold provided', {
     fixed = FALSE
   )
 })
+
+
+# warning('number of hours provided cannot be a fractional - threshold will be rounded')
