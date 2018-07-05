@@ -19,7 +19,7 @@ knitr::opts_chunk$set(message = FALSE,
 
 The `spatsoc` package provides functionality for analyzing animal relocation data in time and space to identify potential interactions among individuals and build gambit-of-the-group data for constructing social networks. 
 
-The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. In addition, the package contains functions for determining the nearest neighbor and mean pairwise distance between individuals, optionally across time steps. Finally, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
+The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. <!--In addition, the package contains functions for determining the nearest neighbor and mean pairwise distance between individuals, optionally across time steps.--> In addition, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
 
 The functions were developped for application across animal relocation data, for example, proximity based social network analyses and spatial and temporal clustering of points.
 
