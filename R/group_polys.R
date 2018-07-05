@@ -1,6 +1,7 @@
-#' Group Overlapping Polygons
+#' Group Polygons
 #'
 #' Group individuals by polygon (eg: home ranges) overlap
+#'
 #'
 #' @inheritParams group_pts
 #' @inheritParams group_lines
@@ -9,7 +10,9 @@
 #' @param hrParams parameters for adehabitatHR functions, a named list passed to do.call
 #' @param spPolys Alternatively, provide solely a SpatialPolygons object.
 #'
-#' @return Group by ID (by time) data.table
+#' @return If area is FALSE, a DT is returned with ID and spatialtemporal group. If area is TRUE, a DT is returned with ID and a proportional overlap. ID refers to the focal individual of which the total area is compared against the overlapping area of ID2.
+#'
+#'
 #' @export
 #'
 #' @examples
@@ -175,8 +178,8 @@ group_polys <-
               out <- data.table:::merge.data.table(
                 x = data.table(spPolys@data),
                 y = areaID,
-                by.y = ..id,
                 by.x = 'id',
+                by.y = ..id,
                 suffixes = c('Total', '')
               )
               set(out, j = 'proportion',

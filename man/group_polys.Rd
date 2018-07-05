@@ -2,7 +2,7 @@
 % Please edit documentation in R/group_polys.R
 \name{group_polys}
 \alias{group_polys}
-\title{Group Overlapping Polygons}
+\title{Group Polygons}
 \usage{
 group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
   projection = NULL, id = NULL, coords = NULL, splitBy = NULL,
@@ -28,7 +28,7 @@ group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
 \item{spPolys}{Alternatively, provide solely a SpatialPolygons object.}
 }
 \value{
-Group by ID (by time) data.table
+If area is FALSE, a DT is returned with ID and spatialtemporal group. If area is TRUE, a DT is returned with ID and a proportional overlap. ID refers to the focal individual of which the total area is compared against the overlapping area of ID2.
 }
 \description{
 Group individuals by polygon (eg: home ranges) overlap
