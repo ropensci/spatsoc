@@ -10,7 +10,9 @@ LazyData: true
 Imports: data.table (>= 1.10.5),
     sp,
     rgeos,
-    adehabitatHR
+    adehabitatHR,
+    igraph, 
+    methods
 Suggests: testthat,
     knitr,
     rmarkdown
