@@ -268,3 +268,16 @@ test_that('group column is added to result', {
                   )
                 ))
 })
+
+test_that('duplicate IDs in a timegroup detected', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '8 hours')
+  expect_warning(group_pts(
+                    copyDT,
+                    threshold = 10,
+                    id = 'ID',
+                    coords = c('X', 'Y'),
+                    timegroup = 'timegroup'
+                  ),
+                 'found duplicate id in a timegroup', fixed = FALSE)
+})
