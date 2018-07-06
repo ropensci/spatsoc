@@ -22,6 +22,9 @@
 group_times <- function(DT = NULL,
                        datetime = NULL,
                        threshold = NULL) {
+  # due to NSE notes in R CMD check
+  minutes = block = NULL
+
   if (is.null(DT)) {
     stop('input DT required')
   }
