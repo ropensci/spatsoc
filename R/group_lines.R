@@ -70,7 +70,7 @@ group_lines <-
         stop('id must be provided')
       }
 
-      if (any(!(c(id, coords) %in% colnames(DT)))) {
+      if (any(!(c(id, coords, timegroup) %in% colnames(DT)))) {
         stop(paste0(
           as.character(paste(setdiff(
             c(id, coords), colnames(DT)
@@ -136,7 +136,6 @@ group_lines <-
       return(DT[])
     } else {
 
-      ### CHECK THAT TIMEGROUP IS IN DT
       if (is.null(splitBy)) {
         splitBy <- timegroup
       }
