@@ -30,13 +30,22 @@ Group points by spatial and temporal overlap.
 This function finds spatialtemporal groups in input points. The threshold provided must be in the units of the projection of the coordinates. UTM coordinates (recommended) are in meters and threshold = 50 indicates a 50m threshold.
 }
 \examples{
+library(data.table)
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+DT[, datetime := as.POSIXct(datetime,
+                            tz = 'UTC')]
 
-group_pts(locs, threshold = 5, id = 'ID',
+# Spatial grouping without timegroup
+group_pts(DT, threshold = 5, id = 'ID',
          coords = c('X', 'Y'))
 
-group_pts(locs, threshold = 5, id = 'ID',
-         coords = c('X', 'Y'), timegroup = 'timegroup')
+# Temporal grouping
+group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+# Spatial grouping with timegroup
+group_pts(DT, threshold = 5, id = 'ID',
+          coords = c('X', 'Y'), timegroup = 'timegroup')
 
-group_pts(locs, threshold = 5, id = 'ID', coords = c('X', 'Y'),
-         timegroup = 'timegroup', splitBy = 'season')
+# Spatial grouping with timegroup and splitBy on population
+group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'),
+         timegroup = 'timegroup', splitBy = 'population')
 }

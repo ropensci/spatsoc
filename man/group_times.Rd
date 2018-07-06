@@ -22,10 +22,15 @@ If the threshold is NULL, rows are grouped by matching exact datetimes.
 The threshold can be in units of minutes, hours or days.
 }
 \examples{
-group_times(locs, datetime = 'datetime', threshold = '5 minutes')
+library(data.table)
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+DT[, datetime := as.POSIXct(datetime,
+                            tz = 'UTC')]
 
-group_times(locs, datetime = 'datetime', threshold = '2 hours')
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 
-group_times(locs, datetime = 'datetime', threshold = '10 days')
+group_times(DT, datetime = 'datetime', threshold = '2 hours')
+
+group_times(DT, datetime = 'datetime', threshold = '10 days')
 
 }
