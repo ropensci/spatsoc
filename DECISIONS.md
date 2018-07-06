@@ -40,7 +40,7 @@ or we can just return all locs with area = FALSE, adding group to all. but this 
 
 * should group_times(threshold = 1 month) ??
 
-this would just be 
+this would just be
 data.table::month()
 
 easy, but worth it?
@@ -48,22 +48,12 @@ easy, but worth it?
 
 ----
 
-* defaults for fields? 
+* defaults for fields?
 
 easier for user but error..
 
 
-----
 
-
-
-* drop BuildPts
-
-or Drop all Build?? 
-build_polys just calls adehabitat.. 
-BuildPts just calls spSpatialPtsDF.. 
-
-**to unexported for now**
 ----
 
 * anything other than MCP and kernel? for build_polys
@@ -99,7 +89,7 @@ https://github.com/Rdatatable/data.table/issues/2788
 * warn that date column provided has more than one uniqueN and not more than 1million (ha)/ warn if timegroup not provided, group_times/slow
 
 low: 1?
-high: uniqueN <= half nrows 
+high: uniqueN <= half nrows
 
 ----
 
@@ -107,23 +97,14 @@ high: uniqueN <= half nrows
 
 ----
 
-* SearchTrees, adehabitatHR missing. Is Nearest a necessary function in the initial package publishing?
-
-** adehabitatHR added **
-
-----
-
 * for `build_lines`: is byFields really just id + whatever.. is this one argument then?
 
-by separating byFields and id, we emphasize the requirement of id and extra byFields 
+by separating byFields and id, we emphasize the requirement of id and extra byFields
 
 ----
 
 * do we want to return vertices strictly for kernel?
 
-----
-
-* use @importFrom pkg fun to decrease cost of repeated function calls?
 
 ----
 
@@ -133,13 +114,6 @@ by separating byFields and id, we emphasize the requirement of id and extra byFi
 
 * check if polar coordinates are provided?
 
-----
-
-* for `group_times`: return days, minutes, etc?
-
-----
-
-* (later) review all variable, function etc names for conflicts and for clarity/brevity
 
 
 ## History
@@ -158,7 +132,7 @@ by separating byFields and id, we emphasize the requirement of id and extra byFi
 
 * is it acceptable for a user to be **required** to provide a data.table? https://stackoverflow.com/questions/26069219/using-setdt-inside-a-function
 
-**yes**, since `setDT` is a simple function to use and describe to a user.. 
+**yes**, since `setDT` is a simple function to use and describe to a user..
 
 ----
 
@@ -220,13 +194,13 @@ round.IDate rounds on units of weeks, months, quarters, years
 group_times is more flexible, providing x days, x hours, x minutes
 
 ```r
-function (x, digits = c("weeks", "months", "quarters", "years"), 
-  ...) 
+function (x, digits = c("weeks", "months", "quarters", "years"),
+  ...)
 {
   units <- match.arg(digits)
-  as.IDate(switch(units, weeks = round(x, "year") + 7L * (yday(x)%/%7L), 
-    months = ISOdate(year(x), month(x), 1L), quarters = ISOdate(year(x), 
-      3L * (quarter(x) - 1L) + 1L, 1L), years = ISOdate(year(x), 
+  as.IDate(switch(units, weeks = round(x, "year") + 7L * (yday(x)%/%7L),
+    months = ISOdate(year(x), month(x), 1L), quarters = ISOdate(year(x),
+      3L * (quarter(x) - 1L) + 1L, 1L), years = ISOdate(year(x),
       1L, 1L)))
 }
 ```
@@ -262,4 +236,35 @@ also is it proportion instead?
 
 using get(datetime) or get(idField) will break if the column name is provided is 'datetime' or 'idField' etc
 
-so go to a .SDcols approach everywhere
+**so go to a .SDcols approach everywhere**
+
+----
+
+* (later) review all variable, function etc names for conflicts and for clarity/brevity
+
+**done**
+
+----
+
+* for `group_times`: return days, minutes, etc?
+
+**no**
+----
+
+* use @importFrom pkg fun to decrease cost of repeated function calls?
+
+**not likely to make large differences**
+
+----
+
+* SearchTrees, adehabitatHR missing. Is Nearest a necessary function in the initial package publishing?
+
+**adehabitatHR added**
+----
+* drop BuildPts
+
+or Drop all Build??
+build_polys just calls adehabitat..
+BuildPts just calls spSpatialPtsDF..
+
+**to unexported for now**

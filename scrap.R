@@ -40,16 +40,12 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 l <- data.table(locs)
 # l[, yr := data.table::year(data.table::as.IDate(datetime))]
 
-group_times(Dt, datetime = 'datetime', threshold = '2 hours')
+group_times(Dt, datetime = 'datetime', threshold = '8 hours')
 group_pts(Dt, threshold = 100, id = 'ID', timegroup = 'timegroup',
           coords = c('X', 'Y'))
-randomizations(DT = Dt, type = 'step',
-               id = 'ID',
-               iterations = 2, datetime = 'timegroup')
-
-Dt[, .N, by = .(ID, yr, timegroup)][N > 1, sum(N)]
-Dt[ID == 'Queen' & yr == 2005 & timegroup == 853]
-
+randDT <- randomizations(DT = Dt, type = 'trajectory',
+                         id = 'ID',
+                         iterations = 1, datetime = 'datetime')
 
 ##############
 d <- data.table::dcast(df, formula = group ~ get(idField), fun.aggregate = length,
@@ -62,41 +58,29 @@ rownames(gbi_df) <- d$group
 gbi.net_df <- get_network(gbi_df, data_format="GBI",association_index="SRI")
 ################
 
-
-
 ## BUFFALO ========
 # Dt <- fread('input/Buffalo.csv')
-Dt <- fread('tests/testdata/buffalo.csv')
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-# Dt[, datetime := gsub('T', ' ', gsub('Z', '', timestamp))]
-# # Dt[, idate := as.IDate(timestamp)]
-# Dt[, datetime := as.POSIXct(timestamp)]
-Dt[, datetime := as.POSIXct(datetime,
-                            tz = 'Africa/Johannesburg')]
+# Dt[, datetime := as.POSIXct(timestamp,
+#                             tz = 'Africa/Johannesburg')]
 # Dt[, ID := `individual-local-identifier`]
 # Dt[, X := `utm-easting`]
 # Dt[, Y := `utm-northing`]
-# fwrite(Dt[sample(.N, 2000), .(X, Y, ID, datetime)],
+# group_times(DT = Dt, datetime = 'datetime', threshold = '1 hour')
+# Dt[, nByT := .N, .(ID, timegroup)]
+# fwrite(Dt[nByT < 2][sample(.N, 2000), .(X, Y, ID,
+#                                         datetime = as.character(datetime))],
 #        'tests/testdata/buffalo.csv')
+
+Dt <- fread('tests/testdata/buffalo.csv')
+Dt[, datetime := as.POSIXct(datetime,
+                            tz = 'Africa/Johannesburg')]
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 # Dt[, jul := yday(datetime)]
 Dt[, yr := year(datetime)]
 # Dt[, potato := ID]
 Dt[, id := ID]
-group_times(Dt, datetime = 'datetime', threshold = '30 days')
 
-randomizations(Dt, id= 'ID', groupField = 'group',
-               randomType = 'trajectory', dateField = 'datetime',
-               splitBy = 'yr', iterations = 10)
-group_lines(Dt, threshold = 0,
-           projection = utm,
-           coords = c('X', 'Y'), id = 'ID')
 
-group_times(Dt, datetime = 'datetime', threshold = '15 minutes')
-group_lines(Dt, threshold = 50, projection = utm, id = 'id',
-            coords = c('X', 'Y'),
-            timegroup = 'timegroup')
-
-# if (as.list(sys.call(-5))[[1]] != 'group_lines') {
 
 ## DAILY ========
 Dt <- fread('input/Daily')
@@ -212,7 +196,6 @@ data.table::setnames(
 Dt[ovrDt, withinGroup := withinGroup, on = c(id, splitBy)]
 Dt[, group := .GRP, by = c(splitBy, 'withinGroup')][, withinGroup := NULL][]
 ################# SF SFS FSF SF SF ########################
-
 
 library(magrittr)
 DT %>%
