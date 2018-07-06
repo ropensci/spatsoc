@@ -30,7 +30,7 @@ Let's read in `spatsoc`'s example data.
 library(spatsoc); library(data.table)
 data(DT)
 DT <- as.data.table(DT)
-DT[, datetime := as.POSIXct(date)]
+# DT[, datetime := as.POSIXct(date)]
 ```
 
 ```{r, echo = TRUE}
@@ -43,13 +43,13 @@ knitr::kable(DT[sample(.N, 5)])
 ```
 
 <!-- note this input/example data is just for now.. -->
-The data consist of relocations of `r DT[, uniqueN(id)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. <!--Relocations were recorded using GPS collars with fixes obtained every two hours. -->Using these data, we can compare the various grouping methods available in `spatsoc`.
+The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. <!--Relocations were recorded using GPS collars with fixes obtained every two hours. -->Using these data, we can compare the various grouping methods available in `spatsoc`.
 
 ### `group_times`
 The `group_times` function is used to group relocations temporally. It is flexible to a threshold provided in units of minutes, hours or days. Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. Alternatively, we may want to understand different scales of grouping, perhaps daily movement trajectories or seasonal home range overlap. 
 
 ```{r groupmins, echo = TRUE}
-group_times(DT, datetime = 'date', threshold = '5 minutes')
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 ```
 
 ```{r tableSetUp, eval = TRUE}
@@ -58,34 +58,34 @@ nRows <- 9
 
 ```{r tabgroupmins, eval = TRUE}
 knitr::kable(
-  group_times(DT, threshold = '5 minutes', datetime = 'date')[, 
-    .(id, x, y, date, timegroup)][
-      order(date)][
+  group_times(DT, threshold = '5 minutes', datetime = 'datetime')[, 
+    .(ID, X, Y, datetime, timegroup)][
+      order(datetime)][
         1:nRows])
 ```
 
 ```{r grouphours, echo = TRUE}
-group_times(DT, datetime = 'date', threshold = '2 hours')
+group_times(DT, datetime = 'datetime', threshold = '2 hours')
 ```
 
 ```{r tabgrouphours, eval = TRUE}
 knitr::kable(
-  group_times(DT, threshold = '2 hours', datetime = 'date')[, 
-    .(id, x, y, date, timegroup)][
-      order(date)][
+  group_times(DT, threshold = '2 hours', datetime = 'datetime')[, 
+    .(ID, X, Y, datetime, timegroup)][
+      order(datetime)][
         1:nRows])
 ```
 
 ```{r groupdays, echo = TRUE}
-group_times(DT, datetime = 'date', threshold = '5 days')
+group_times(DT, datetime = 'datetime', threshold = '5 days')
 ```
 
 ```{r tabgroupdays, eval = TRUE}
 knitr::kable(
-  group_times(DT, threshold = '5 days', datetime = 'date')[, 
+  group_times(DT, threshold = '5 days', datetime = 'datetime')[, 
     .SD[c(1, sample(.N, 2))], by = timegroup][
-      order(date)][
-        1:nRows, .(id, x, y, date, timegroup)])
+      order(datetime)][
+        1:nRows, .(ID, X, Y, datetime, timegroup)])
 ```
 
 
@@ -93,19 +93,19 @@ knitr::kable(
 The `group_pts` function compares the relocations of all individuals in each timegroup and groups individuals based on a distance threshold provided by the user.
 
 ```{r grouppts, echo = TRUE}
-group_times(DT = DT, datetime = 'date', threshold = '15 minutes')
-group_pts(DT, threshold = 50, id = 'id', coords = c('x', 'y'))
+group_times(DT = DT, datetime = 'datetime', threshold = '15 minutes')
+group_pts(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'))
 ```
 
 ```{r fakegrouppts, eval = TRUE}
 knitr::kable(
   group_pts(
-    DT = group_times(DT = DT, datetime = 'date', 
+    DT = group_times(DT = DT, datetime = 'datetime', 
                      threshold = '15 minutes'),
-    threshold = 50, id = 'id', coords = c('x', 'y'),
+    threshold = 50, id = 'ID', coords = c('X', 'Y'),
     timegroup = 'timegroup')[
       order(group)][
-        1:nRows, .(id, x, y, timegroup, group)]
+        1:nRows, .(ID, X, Y, timegroup, group)]
 )
 ```
 
@@ -115,9 +115,9 @@ The `group_lines` function groups individuals whose trajectories intersect in a 
 
 ```{r fakegrouplines, echo = TRUE}
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-group_times(DT = DT, datetime = 'date', threshold = '1 day')
+group_times(DT = DT, datetime = 'datetime', threshold = '1 day')
 group_lines(DT, threshold = 50, projection = utm, 
-            id = 'id', coords = c('x', 'y'),
+            id = 'ID', coords = c('X', 'Y'),
             timegroup = 'timegroup')
 ```
 
@@ -125,12 +125,12 @@ group_lines(DT, threshold = 50, projection = utm,
 utm <- '+proj=utm +zone=21 ellps=WGS84'
 knitr::kable(
   group_lines(
-    group_times(DT = DT, datetime = 'date', 
+    group_times(DT = DT, datetime = 'datetime', 
                 threshold = '1 day'), 
     threshold = 50, projection = utm, 
-    id = 'id', coords = c('x', 'y')
+    id = 'ID', coords = c('X', 'Y')
   )[order(group)][
-        1:nRows, .(id, x, y, timegroup, group)]
+        1:nRows, .(ID, X, Y, timegroup, group)]
 )
 ```
 
@@ -140,16 +140,16 @@ The `group_polys` function groups individuals whose home ranges intersect. This 
 
 ```{r fakegrouppolys, echo = TRUE}
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-group_times(DT = DT, datetime = 'date', threshold = '8 days')
+group_times(DT = DT, datetime = 'datetime', threshold = '8 days')
 group_polys(DT = DT, area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
            projection = utm,
-           coords = c('x', 'y'), id = 'id')
+           coords = c('X', 'Y'), id = 'ID')
 ```
 
 ```{r grouppolys, eval = TRUE}
 utm <- '+proj=utm +zone=21 ellps=WGS84'
-DT <- group_times(DT = DT, datetime = 'date', 
+DT <- group_times(DT = DT, datetime = 'datetime', 
                 threshold = '8 days')
 knitr::kable(
   data.frame(group_polys(
@@ -157,7 +157,7 @@ knitr::kable(
     area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
            projection = utm,
-           coords = c('x', 'y'), id = 'id')[
+           coords = c('X', 'Y'), id = 'ID')[
              , .(ID1, ID2, area, proportion)])
 )
 ```
