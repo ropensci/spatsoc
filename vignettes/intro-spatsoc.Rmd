@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r knitropts, include = FALSE}
 knitr::opts_chunk$set(message = FALSE, 
                       warning = FALSE,
                       eval = FALSE, 
@@ -26,16 +26,17 @@ The functions were developped for application across animal relocation data, for
 ## Grouping
 Let's read in `spatsoc`'s example data.
 
-```{r, eval = TRUE, include = FALSE}
+```{r libs, eval = TRUE, include = FALSE}
 library(spatsoc); library(data.table)
-data(DT)
-DT <- as.data.table(DT)
-# DT[, datetime := as.POSIXct(date)]
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
 
 ```{r, echo = TRUE}
 library(spatsoc)
-data(DT)
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+DT[, datetime := as.POSIXct(datetime,
+                            tz = 'UTC')]
 ```
 
 ```{r, eval = TRUE}
