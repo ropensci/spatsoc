@@ -12,6 +12,10 @@ build_lines <-
            id = NULL,
            coords = NULL,
            splitBy = NULL) {
+
+    # due to NSE notes in R CMD check
+    dropped = . = NULL
+
     if (is.null(DT)) {
       stop('input DT required')
     }
