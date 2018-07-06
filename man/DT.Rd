@@ -4,7 +4,7 @@
 \name{DT}
 \alias{DT}
 \title{Example relocation data}
-\format{A data.table with 4 columns: ID, x, y, date}
+\format{A data.table with 4 columns: ID, x, y, datetime}
 \source{
 to fill...
 }
@@ -12,6 +12,6 @@ to fill...
 DT
 }
 \description{
-An example dataset of three individuals
+An example dataset of three individuals' relocations
 }
 \keyword{datasets}
