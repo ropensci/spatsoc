@@ -14,6 +14,9 @@ build_polys <- function(DT = NULL,
                         id = NULL,
                         splitBy = NULL,
                         spPts = NULL) {
+  # due to NSE notes in R CMD check
+  ..coords = . = NULL
+
   if (is.null(DT) && is.null(spPts)) {
     stop('input DT or spPts required')
   }
