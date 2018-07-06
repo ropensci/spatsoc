@@ -13,6 +13,10 @@
 #' @examples
 #' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 #'
+#' library(data.table)
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#' DT[, datetime := as.POSIXct(datetime,
+#'                             tz = 'UTC')]
 #'
 #' group_lines(DT, threshold = 50, projection = utm,
 #'             id = 'ID', coords = c('X', 'Y'))
@@ -23,11 +27,12 @@
 #'             id = 'ID', coords = c('X', 'Y'),
 #'             timegroup = 'timegroup')
 #'
-#' # Daily movement tracks by sex
-#' group_times(DT, datetime = 'datetime', threshold = '1 day')
+#' # Daily movement tracks by year
+#' DT[, yr := year(datetime)]
 #' group_lines(DT, threshold = 50, projection = utm,
 #'             id = 'ID', coords = c('X', 'Y'),
-#'             timegroup = 'timegroup', splitBy = 'sex')
+#'             timegroup = 'timegroup',
+#'             splitBy = 'yr')
 group_lines <-
   function(DT = NULL,
            threshold = NULL,
