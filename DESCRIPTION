@@ -6,7 +6,11 @@ Authors@R: c(
   person("Quinn", "Webber", role = c("aut")),
   person("Eric", "Vander Wal", role = c("aut"))
   )
-Description: What the package does (one paragraph).
+Description: The spatsoc package detects spatial and temporal groups 
+  in GPS relocations. It can be used to convert GPS relocations to 
+  gambit-of-the-group format to build proximity-based social networks. 
+  In addition, the randomizations function provides data-stream 
+  randomization methods suitable for GPS data. 
 Depends: R (>= 3.4)
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
