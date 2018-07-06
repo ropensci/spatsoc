@@ -85,7 +85,7 @@ group_polys <-
         set(out, j = 'ID1', value = tstrsplit(out[['IDs']], ' ', keep = 1))
         set(out, j = 'ID2', value = tstrsplit(out[['IDs']], ' ', keep = 2))
 
-        out <- data.table:::merge.data.table(
+        out <- merge(
           out,
           data.table(spPolys@data),
           by.x = 'ID1',
@@ -177,7 +177,7 @@ group_polys <-
                   j = paste0(..id, '2'),
                   value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
 
-              out <- data.table:::merge.data.table(
+              out <- merge(
                 x = data.table(spPolys@data),
                 y = areaID,
                 by.x = 'id',
