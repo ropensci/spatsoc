@@ -18,6 +18,11 @@
 
 ----
 
+* ByteCompile: TRUE ??
+https://csgillespie.github.io/efficientR/7-4-the-byte-compiler.html
+
+----
+
 
 
 * whats returned by GroupHRs/Polys differs from others, when we include area as an option
@@ -35,6 +40,9 @@ to capture results
 is it another function?
 
 or we can just return all locs with area = FALSE, adding group to all. but this is pretty redundant
+
+**why not...** clarify that group_time/pts/lines appends columns to the same DT and group_polys returns a new data.table
+
 
 ----
 
