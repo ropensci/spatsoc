@@ -1,5 +1,5 @@
 Package: spatsoc
-Title: Group animal location data by their spatial and temporal relationship
+Title: Group animal relocation data by their spatial and temporal relationship
 Version: 0.0.0.9106
 Authors@R: c(
   person("Alec L.", "Robitaille", role = c("aut", "cre"), email = "robit.alec@gmail.com"),
