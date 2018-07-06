@@ -26,8 +26,11 @@ randomizations <- function(DT = NULL,
                            id = NULL,
                            datetime = NULL,
                            splitBy = NULL,
-                           iterations = NULL
-) {
+                           iterations = NULL) {
+  # due to NSE notes in R CMD check
+  randomID = jul = randomJul = rowID = iteration = observed = NULL
+
+
   if (is.null(DT)) {
     stop('input DT required')
   }
