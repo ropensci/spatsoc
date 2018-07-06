@@ -64,7 +64,7 @@ build_lines <-
       warning('some rows dropped, cannot build lines with less than two points')
     }
 
-    lst <- data.table:::split.data.table(DT[dropRows, on = splitBy][!(dropped)],
+    lst <- split(DT[dropRows, on = splitBy][!(dropped)],
                                   by = splitBy)
 
     if (length(lst) == 0) {
