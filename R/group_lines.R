@@ -11,12 +11,12 @@
 #' @export
 #'
 #' @examples
-#' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-#'
 #' library(data.table)
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #' DT[, datetime := as.POSIXct(datetime,
 #'                             tz = 'UTC')]
+#'
+#' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 #'
 #' group_lines(DT, threshold = 50, projection = utm,
 #'             id = 'ID', coords = c('X', 'Y'))

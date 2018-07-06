@@ -18,11 +18,16 @@
 #' @importFrom methods slot
 #'
 #' @examples
-#' group_polys(locs, area = FALSE, 'mcp', list(percent = 95),
+#' library(data.table)
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+#'
+#' group_polys(DT, area = FALSE, 'mcp', list(percent = 95),
 #'             projection = utm,
 #'             id = 'ID', coords = c('X', 'Y'))
 #'
-#' areaDT <- group_polys(locs, area = TRUE, 'mcp', list(percent = 95),
+#' areaDT <- group_polys(DT, area = TRUE, 'mcp', list(percent = 95),
 #'                       projection = utm,
 #'                       id = 'ID', coords = c('X', 'Y'))
 group_polys <-
