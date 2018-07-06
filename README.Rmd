@@ -34,10 +34,6 @@ group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 ```
 
 ### Spatial grouping
-```{r fig, echo = FALSE, eval = TRUE}
-knitr::include_graphics('vignettes/graph.png')
-```
-
 #### `group_pts`
 
 ```{r groupPts}
