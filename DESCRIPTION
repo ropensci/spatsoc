@@ -1,7 +1,11 @@
 Package: spatsoc
 Title: Group animal location data by their spatial and temporal relationship
 Version: 0.0.0.9106
-Authors@R: person("Alec L.", "Robitaille", email = "robit.alec@gmail.com", role = c("aut", "cre"))
+Authors@R: c(
+  person("Alec L.", "Robitaille", role = c("aut", "cre"), email = "robit.alec@gmail.com"),
+  person("Quinn", "Webber", role = c("aut")),
+  person("Eric", "Vander Wal", role = c("aut"))
+  )
 Description: What the package does (one paragraph).
 Depends: R (>= 3.4)
 License: GPL-3 | file LICENSE
