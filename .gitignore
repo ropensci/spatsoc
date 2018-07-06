@@ -3,7 +3,7 @@
 .RData
 .Ruserdata
 inst/doc
-testdata
+#testdata
 input
 
 spatsoc-asana\.pdf
