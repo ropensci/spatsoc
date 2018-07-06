@@ -35,6 +35,9 @@ group_polys <-
            coords = NULL,
            splitBy = NULL,
            spPolys = NULL) {
+    # due to NSE notes in R CMD check
+    nBy = ..coords = ..id = NULL
+
     if (is.null(area) | !is.logical(area)) {
       stop('area must be provided (TRUE or FALSE)')
     }
