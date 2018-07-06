@@ -14,13 +14,6 @@ drat::addRepo('LocalRepo', 'https://spatsoc.gitlab.io')
 install.packages('spatsoc')
 ```
 
-\#\#Using `drat`
-
-``` r
-drat::addRepo('LocalRepo', 'https://spatsoc.gitlab.io')
-install.packages('spatsoc')
-```
-
 ## Examples
 
 ``` r
@@ -30,11 +23,45 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
 
-### `group_times`
+### Temporal grouping
+
+#### `group_times`
 
 ``` r
-library(spatsoc)
-DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
-DT[, datetime := as.POSIXct(datetime,
-                            tz = 'UTC')]
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+```
+
+### Spatial grouping
+
+![](vignettes/graph.png)<!-- -->
+
+#### `group_pts`
+
+``` r
+group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+```
+
+### `group_lines`
+
+``` r
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+
+group_times(DT, datetime = 'datetime', threshold = '1 day')
+group_lines(DT, threshold = 50, projection = utm,
+            id = 'ID', coords = c('X', 'Y'),
+            timegroup = 'timegroup')
+```
+
+### `group_polys`
+
+``` r
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+
+group_polys(DT, area = FALSE, 'mcp', list(percent = 95),
+            projection = utm,
+            id = 'ID', coords = c('X', 'Y'))
+
+areaDT <- group_polys(DT, area = TRUE, 'mcp', list(percent = 95),
+                      projection = utm,
+                      id = 'ID', coords = c('X', 'Y'))
 ```
