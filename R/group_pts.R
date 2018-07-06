@@ -33,6 +33,9 @@ group_pts <- function(DT = NULL,
                      coords = NULL,
                      timegroup = NULL,
                      splitBy = NULL) {
+  # due to NSE notes in R CMD check
+  # N = withinGroup = ..id = ..coords = group = NULL
+
   if (is.null(DT)) {
     stop('input DT required')
   }
