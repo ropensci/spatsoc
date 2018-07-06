@@ -38,6 +38,9 @@ group_lines <-
            splitBy = NULL,
            spLines = NULL) {
 
+    # due to NSE notes in R CMD check
+    group = ..coords = ..id = withinGroup = NULL
+
     if (is.null(threshold)) {
       warning('threshold missing, using 0 by default')
       threshold <- 0
@@ -82,10 +85,11 @@ group_lines <-
       }
 
       if (threshold == 0) {
-        inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
+        inter <- rgeos::gIntersects(spLines, spLines, byid = TRUE)
       } else {
-        buffered <- rgeos::gBuffer(spLines, width = threshold, byid = TRUE)
-        inter <- rgeos::gIntersects(spLines, buffered, byid=TRUE)
+        buffered <- rgeos::gBuffer(spLines, width = threshold,
+                                   byid = TRUE)
+        inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
       }
       g <- igraph::graph_from_adjacency_matrix(inter)
       ovr <- igraph::clusters(g)$membership
