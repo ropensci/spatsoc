@@ -23,7 +23,7 @@ group_times <- function(DT = NULL,
                        datetime = NULL,
                        threshold = NULL) {
   # due to NSE notes in R CMD check
-  minutes = block = NULL
+  minutes = block = hours = itime = . = idate = timegroup = NULL
 
   if (is.null(DT)) {
     stop('input DT required')
