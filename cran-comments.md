@@ -1,3 +1,5 @@
+This is the first submission of `spatsoc` to CRAN. 
+
 ## Test environments
 * Linux: R 3.5
 * Windows 7: R 3.5
