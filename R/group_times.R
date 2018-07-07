@@ -67,7 +67,8 @@ group_times <- function(DT = NULL,
   } else {
     if ('POSIXct' %in% DT[, sapply(.SD, class), .SDcols = datetime]) {
       dtm <-
-        DT[, cbind(.SD[[1]], data.table::IDateTime(.SD[[1]])), .SDcols = datetime]
+        DT[, cbind(.SD[[1]], data.table::IDateTime(.SD[[1]])),
+           .SDcols = datetime]
       data.table::setnames(dtm, c(datetime, 'idate', 'itime'))
     } else if (length(datetime) == 2 &&
                all(c('IDate', 'ITime') %in%

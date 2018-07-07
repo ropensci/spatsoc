@@ -101,7 +101,7 @@ test_that('returns same number of lines as unique IDs/splitBy provided', {
 
   # with splitBy
   DT[, jul := data.table::yday(as.POSIXct(datetime))]
-  splitBy = c('ID', 'jul')
+  splitBy <- c('ID', 'jul')
   DT[, count := .N, by = splitBy]
   subDT <- DT[count >= 2]
 
@@ -134,7 +134,7 @@ test_that("build lines warns if < 2 locs per ID/byField", {
 
 
   # for ID + splitBy
-  splitBy = c('ID', 'jul')
+  splitBy <- c('ID', 'jul')
   DT[, jul := data.table::yday(as.POSIXct(datetime))]
   DT[, count := .N, by = splitBy]
   subDT <- DT[count < 2]

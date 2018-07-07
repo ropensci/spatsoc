@@ -153,7 +153,8 @@ randomizations <- function(DT = NULL,
       idDays[, randomID := .SD[sample(.N)],
              by = c(splitBy, 'jul'), .SDcols = id]
       idDays[observed == 1, randomID := .SD[[1]], .SDcols = id]
-      return(merge(repDT, idDays, on = c('iteration', 'jul', splitBy), all = TRUE))
+      return(merge(repDT, idDays, on = c('iteration', 'jul', splitBy),
+                   all = TRUE))
 
     } else if(type == 'trajectory'){
       idDays[, randomJul := sample(jul), by = c(id, splitBy, 'iteration')]
@@ -161,7 +162,8 @@ randomizations <- function(DT = NULL,
                       on = c('jul', id, 'iteration', splitBy),
                       all = TRUE)
       randomDateCol <- paste0('random', datetime)
-      merged[, (randomDateCol) := as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
+      merged[, (randomDateCol) :=
+               as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
              .SDcols = datetime]
       merged[observed == 1,
              c(randomDateCol, 'randomJul') := .SD,
