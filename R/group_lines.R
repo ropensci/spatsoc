@@ -44,7 +44,7 @@ group_lines <-
            spLines = NULL) {
 
     # due to NSE notes in R CMD check
-    group = ..coords = ..id = withinGroup = NULL
+    group <- ..coords <- ..id <- withinGroup <- NULL
 
     if (is.null(threshold)) {
       warning('threshold missing, using 0 by default')

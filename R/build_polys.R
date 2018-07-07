@@ -15,7 +15,7 @@ build_polys <- function(DT = NULL,
                         splitBy = NULL,
                         spPts = NULL) {
   # due to NSE notes in R CMD check
-  . = NULL
+  . <- NULL
 
   if (is.null(DT) && is.null(spPts)) {
     stop('input DT or spPts required')

@@ -14,7 +14,7 @@ build_lines <-
            splitBy = NULL) {
 
     # due to NSE notes in R CMD check
-    dropped = . = NULL
+    dropped <- . <- NULL
 
     if (is.null(DT)) {
       stop('input DT required')
