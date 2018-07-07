@@ -15,7 +15,7 @@ build_polys <- function(DT = NULL,
                         splitBy = NULL,
                         spPts = NULL) {
   # due to NSE notes in R CMD check
-  ..coords = . = NULL
+  . = NULL
 
   if (is.null(DT) && is.null(spPts)) {
     stop('input DT or spPts required')
@@ -85,7 +85,7 @@ build_polys <- function(DT = NULL,
 
   if (is.null(spPts)) {
     spPts <- sp::SpatialPointsDataFrame(
-      DT[, ..coords],
+      DT[, .SD, .SDcols = eval.parent(coords, n = 1)],
       proj4string = sp::CRS(projection),
       data = DT[, .(ID = do.call(paste,
                                  c(.SD, sep = '-'))),
