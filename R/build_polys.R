@@ -42,7 +42,13 @@ build_polys <- function(DT = NULL,
       stop('coords requires a vector of column names for coordinates X and Y')
     }
 
-    if (any(!(c(id, coords) %in% colnames(DT)))) {
+    if (is.null(splitBy)) {
+      splitBy <- id
+    } else {
+      splitBy <- c(id, splitBy)
+    }
+
+    if (any(!(c(splitBy, coords) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
           c(id, coords), colnames(DT)
@@ -55,12 +61,6 @@ build_polys <- function(DT = NULL,
     if (any(!(DT[, vapply(.SD, is.numeric, TRUE),
                  .SDcols = coords]))) {
       stop('coords must be numeric')
-    }
-
-    if (is.null(splitBy)) {
-      splitBy <- id
-    } else {
-      splitBy <- c(id, splitBy)
     }
 
     if (any(!(DT[, lapply(

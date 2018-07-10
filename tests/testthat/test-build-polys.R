@@ -17,7 +17,7 @@ test_that('DT or spPts are required but not both', {
 
 
 
-test_that('coords, id, projection must be provided and proper format',
+test_that('coords, id, projection must be provided and (splitBy) proper format',
           {
             expect_error(
               build_polys(
@@ -88,6 +88,20 @@ test_that('coords, id, projection must be provided and proper format',
               'hrType must be provided'
             )
 
+            copyDT <- copy(DT)
+            copyDT[, s := factor(1)]
+            expect_error(
+              build_polys(
+                DT = copyDT,
+                projection = utm,
+                hrType = NULL,
+                coords = c('X', 'Y'),
+                id = 'ID',
+                splitBy = 's'
+              ),
+              'and splitBy when provided', fixed = FALSE
+            )
+
           })
 
 
@@ -111,6 +125,19 @@ test_that('column names must exist in DT', {
       hrType = 'mcp',
       coords = c('potatoX', 'potatoY'),
       id = 'ID'
+    ),
+    'not present in input DT',
+    fixed = FALSE
+  )
+
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'potato'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -143,9 +170,21 @@ test_that('hrParams returns error if params do not match function params', {
     'hrParams provided do not match function parameters',
     fixed = FALSE
   )
+
+  expect_s4_class(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ),
+    'SpatialPolygonsDataFrame'
+  )
 })
 
-test_that('if hrParams NULL, warngs', {
+test_that('if hrParams NULL, warns', {
   expect_warning(
     build_polys(
       DT = DT,
@@ -159,3 +198,5 @@ test_that('if hrParams NULL, warngs', {
   )
 
 })
+
+
