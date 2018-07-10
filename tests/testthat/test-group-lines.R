@@ -220,7 +220,7 @@ test_that('group lines returns a single warning for <2 locs', {
   #              sum(copyDT[, .N >= 2, by = timegroup]))
 })
 
-test_that('group column is added to result', {
+test_that('group column is added to result or NA if < 2 locs', {
   copyDT <- copy(DT)
   group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   copyDT[, N := .N, by = .(ID, timegroup)]
@@ -236,6 +236,18 @@ test_that('group column is added to result', {
                     projection = utm
                   )
                 ))
+
+  copyDT <- copy(DT)
+  copyDT[1, ID := 'Z']
+  expect_true(suppressWarnings(
+    group_lines(
+      DT = copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm
+    )[is.na(group), .N] != 0)
+  )
 })
 
 test_that('only one column added to the result DT', {
@@ -322,7 +334,7 @@ test_that('group column succesfully detected', {
   expect_warning(
     group_lines(
       DT = copyDT,
-      threshold = 100,
+      threshold = 0,
       timegroup = 'mnth',
       id = 'ID',
       coords = c('X', 'Y'),
