@@ -69,7 +69,14 @@ build_polys <- function(DT = NULL,
         is.numeric(x) | is.character(x) | is.integer(x)
       }
     ), .SDcols = splitBy]))) {
-      stop('id (and splitBy when provided) must be character, numeric or integer type')
+      stop(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'id (and splitBy when provided)
+          must be character, numeric or integer type'
+        )
+      )
     }
 
   }
@@ -102,7 +109,14 @@ build_polys <- function(DT = NULL,
       }
       return(do.call(adehabitatHR::mcp, hrParams))
     } else {
-      stop('hrParams provided do not match function parameters, see ?adehabitatHR::mcp')
+      stop(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'hrParams provided do not match function parameters,
+               see ?adehabitatHR::mcp'
+        )
+      )
     }
   } else if (hrType == 'kernel') {
     functionParams <- formals(adehabitatHR::kernelUD)
@@ -110,7 +124,14 @@ build_polys <- function(DT = NULL,
       kern <- do.call(adehabitatHR::kernelUD, hrParams)
       return(adehabitatHR::getverticeshr(kern, unout = 'm2'))
     } else {
-      stop('hrParams provided do not match function parameters, see ?adehabitatHR::kernelUD')
+      stop(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'hrParams provided do not match
+          function parameters, see ?adehabitatHR::kernelUD'
+        )
+      )
     }
   }
 }

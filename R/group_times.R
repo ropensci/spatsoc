@@ -77,7 +77,14 @@ group_times <- function(DT = NULL,
       dtm <- DT[, .SD, .SDcols = datetime]
       data.table::setnames(dtm, c('idate', 'itime'))
     } else {
-      stop('time field provided must be either 1 column: POSIXct or 2 columns: IDate and ITime')
+      stop(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'time field provided must be
+          either 1 column: POSIXct or 2 columns: IDate and ITime'
+        )
+      )
     }
 
     if (grepl('hour', threshold) &&
@@ -90,12 +97,19 @@ group_times <- function(DT = NULL,
                                       type.convert = TRUE)[[1]]
       if (!is.integer(nHours)) {
         if (nHours %% 1 != 0) {
-          warning('number of hours provided cannot be a fractional - threshold will be rounded')
+          warning(
+            strwrap(
+              prefix = " ",
+              initial = "",
+              x = 'number of hours provided
+              cannot be a fractional - threshold will be rounded'
+            )
+          )
         }
         nHours <- as.integer(nHours)
       }
 
-      dtm[data.table::hour(itime) %% nHours < (nHours / 2) ,
+      dtm[data.table::hour(itime) %% nHours < (nHours / 2),
           hours := nHours * (data.table::hour(itime) %/% nHours)]
       dtm[data.table::hour(itime) %% nHours >= (nHours / 2),
           hours := nHours * ((data.table::hour(itime) %/% nHours) + 1L)]
@@ -146,11 +160,16 @@ group_times <- function(DT = NULL,
         maxday <- dtm[, max(data.table::yday(idate))]
         if (((maxday - minday) / nDays) %% 1 != 0) {
           warning(
-            'the minimum and maximum days in DT are not evenly divisible by the provided block length',
-            '\n min day = ',
-            as.character(minday),
-            ', max day = ',
-            as.character(maxday)
+            strwrap(
+              prefix = " ",
+              initial = "",
+              x = 'the minimum and maximum days in
+              DT are not evenly divisible by the provided block length',
+              '\n min day = ',
+              as.character(minday),
+              ', max day = ',
+              as.character(maxday)
+            )
           )
         }
         dtm[, block := cut(

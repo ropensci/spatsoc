@@ -59,7 +59,12 @@ build_lines <-
         is.numeric(x) | is.character(x) | is.integer(x)
       }
     ), .SDcols = splitBy]))) {
-      stop('id (and splitBy when provided) must be character, numeric or integer type')
+      stop(
+        strwrap(prefix = " ", initial = "",
+          x = 'id (and splitBy when provided)
+          must be character, numeric or integer type'
+        )
+      )
     }
 
     dropRows <- DT[, .(dropped = .N < 2), by = splitBy]

@@ -84,7 +84,14 @@ group_pts <- function(DT = NULL,
   if (!is.null(timegroup)) {
     if (any(DT[, sapply(.SD, class), .SDcols = timegroup] %in%
             c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
-      warning('timegroup provided is a date/time or character type, did you use group_times?')
+      warning(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'timegroup provided is a d
+          ate/time or character type, did you use group_times?'
+        )
+      )
     }
     }
 
@@ -98,7 +105,15 @@ group_pts <- function(DT = NULL,
   } else {
     splitBy <- c(splitBy, timegroup)
     if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
-      warning('found duplicate id in a timegroup and/or splitBy - does your group_times threshold match the fix rate?')
+      warning(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'found duplicate id in a
+          timegroup and/or splitBy -
+          does your group_times threshold match the fix rate?'
+        )
+      )
     }
   }
 

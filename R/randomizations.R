@@ -79,12 +79,26 @@ randomizations <- function(DT = NULL,
   if (type == 'step') {
     if (dateFormatted) {
       warning(
-        'datetime provided is either POSIXct or IDate, step randomization will only be performed within each datetime - consider using group_times first and providing timegroup'
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'datetime provided is either POSIXct or IDate,
+          step randomization will only be
+          performed within each datetime -
+          consider using group_times first and providing timegroup'
+        )
       )
     }
   } else if (type == 'daily' || type == 'trajectory') {
     if (!dateFormatted) {
-      stop('datetime must be either POSIXct or IDate for daily and trajectory randomization')
+      stop(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'datetime must be either
+          POSIXct or IDate for daily and trajectory randomization'
+        )
+      )
     }
     if ('jul' %in% colnames(DT)) {
       warning('column "jul" found in DT, will be overwritten by this function')
@@ -127,7 +141,14 @@ randomizations <- function(DT = NULL,
     }
   } else {
     if ('rowID' %in% colnames(DT)) {
-      warning('column "rowID" found in DT and will be overwritten by this function')
+      warning(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'column "rowID" found in DT
+          and will be overwritten by this function'
+        )
+      )
     }
 
     DT[, rowID := .I]

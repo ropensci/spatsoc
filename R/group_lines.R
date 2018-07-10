@@ -131,7 +131,15 @@ group_lines <-
       data.table::setnames(ovrDT, c(id, 'group'))
       DT[ovrDT, group := group, on = id]
       if (DT[is.na(group), .N] > 0) {
-        warning('some rows were dropped, cannot build a line with < 2 points. in this case, group set to NA.')
+        warning(
+          strwrap(
+            prefix = " ",
+            initial = "",
+            x = 'some rows were dropped,
+            cannot build a line with < 2 points.
+            in this case, group set to NA.'
+          )
+        )
       }
       return(DT[])
     } else {
@@ -178,7 +186,15 @@ group_lines <-
          by = c(splitBy, 'withinGroup')]
       set(DT, j = 'withinGroup', value = NULL)
       if (DT[is.na(group), .N] > 0) {
-        warning('some rows were dropped, cannot build a line with < 2 points. in this case, group set to NA.')
+        warning(
+          strwrap(
+            prefix = " ",
+            initial = "",
+            x = 'some rows were dropped,
+            cannot build a line with < 2 points.
+            in this case, group set to NA.'
+          )
+        )
       }
       return(DT[])
     }
