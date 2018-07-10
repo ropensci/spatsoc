@@ -1,4 +1,4 @@
-#' Groups From Spatial Lines
+#' Groups Lines
 #'
 #' @inheritParams group_pts
 #' @param projection PROJ.4 character string
