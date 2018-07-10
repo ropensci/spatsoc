@@ -26,6 +26,8 @@ install.packages('spatsoc')
 
 ## Usage
 
+### Import package, read data
+
 ``` r
 library(spatsoc)
 library(data.table)
@@ -38,7 +40,11 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #### group\_times
 
 ``` r
-group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+group_times(
+  DT, 
+  datetime = 'datetime', 
+  threshold = '5 minutes'
+)
 ```
 
 ### Spatial grouping
@@ -46,18 +52,35 @@ group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 #### group\_pts
 
 ``` r
-group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+group_pts(
+  DT,
+  threshold = 5,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+)
 ```
 
 #### group\_lines
 
 ``` r
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+utm <-
+  '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+  
+group_times(
+  DT, 
+  datetime = 'datetime', 
+  threshold = '1 day'
+)
 
-group_times(DT, datetime = 'datetime', threshold = '1 day')
-group_lines(DT, threshold = 50, projection = utm,
-            id = 'ID', coords = c('X', 'Y'),
-            timegroup = 'timegroup')
+group_lines(
+  DT,
+  threshold = 50,
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+)
 ```
 
 #### group\_polys
@@ -65,11 +88,23 @@ group_lines(DT, threshold = 50, projection = utm,
 ``` r
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
-group_polys(DT, area = FALSE, 'mcp', list(percent = 95),
-            projection = utm,
-            id = 'ID', coords = c('X', 'Y'))
-
-areaDT <- group_polys(DT, area = TRUE, 'mcp', list(percent = 95),
-                      projection = utm,
-                      id = 'ID', coords = c('X', 'Y'))
+group_polys(
+  DT,
+  area = FALSE,
+  'mcp',
+  list(percent = 95),
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y')
+)
+  
+areaDT <- group_polys(
+  DT,
+  area = TRUE,
+  'mcp',
+  list(percent = 95),
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y')
+)
 ```

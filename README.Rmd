@@ -18,7 +18,7 @@ The spatsoc package detects spatial and temporal groups in GPS relocations. It c
 
 See below for installation and basic usage. 
 
-For more detailed function descriptions, see the vignette. 
+For more detailed function descriptions, see the vignettes. 
 
 ## Installation
 <!-- geos sudo apt debian, arch, mac, windows-->
@@ -28,6 +28,7 @@ install.packages('spatsoc')
 ```
 
 ## Usage
+### Import package, read data
 ```{r library}
 library(spatsoc)
 library(data.table)
@@ -38,26 +39,47 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 #### group_times
 ```{r groupTimes}
-group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+group_times(
+  DT, 
+  datetime = 'datetime', 
+  threshold = '5 minutes'
+)
 ```
 
 ### Spatial grouping
 #### group_pts
 
 ```{r groupPts}
-group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+group_pts(
+  DT,
+  threshold = 5,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+)
 ```
 
 
 #### group_lines
 
 ```{r groupLines}
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+utm <-
+  '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+  
+group_times(
+  DT, 
+  datetime = 'datetime', 
+  threshold = '1 day'
+)
 
-group_times(DT, datetime = 'datetime', threshold = '1 day')
-group_lines(DT, threshold = 50, projection = utm,
-            id = 'ID', coords = c('X', 'Y'),
-            timegroup = 'timegroup')
+group_lines(
+  DT,
+  threshold = 50,
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+)
 ```
 
 
@@ -66,12 +88,24 @@ group_lines(DT, threshold = 50, projection = utm,
 ```{r groupPolys}
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
-group_polys(DT, area = FALSE, 'mcp', list(percent = 95),
-            projection = utm,
-            id = 'ID', coords = c('X', 'Y'))
-
-areaDT <- group_polys(DT, area = TRUE, 'mcp', list(percent = 95),
-                      projection = utm,
-                      id = 'ID', coords = c('X', 'Y'))
+group_polys(
+  DT,
+  area = FALSE,
+  'mcp',
+  list(percent = 95),
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y')
+)
+  
+areaDT <- group_polys(
+  DT,
+  area = TRUE,
+  'mcp',
+  list(percent = 95),
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y')
+)
 ```
 
