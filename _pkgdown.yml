@@ -1,0 +1,54 @@
+pandoc: 2.2.1
+pkgdown: 1.1.0
+pkgdown_sha: ~
+articles:
+  intro-spatsoc: intro-spatsoc.html
+
+destination: ../spatsoc.gitlab.io/public
+url: spatsoc.gitlab.io
+
+
+template:
+  params:
+    bootswatch: yeti
+
+reference:
+  - title: Temporal grouping
+    desc: ~
+    contents:
+    - '`group_times`'
+  - title: Spatial grouping
+    desc: ~
+    contents:
+    - '`group_lines`'
+    - '`group_polys`'
+    - '`group_pts`'
+  - title: Data-stream randomization
+    desc: ~
+    contents:
+    - '`randomizations`'
+  - title: Build functions
+    desc: ~
+    contents:
+    - '`build_lines`'
+    - '`build_polys`'
+
+navbar:
+  left:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: "Reference"
+      href: reference/index.html
+    articles:
+      text: "Vignettes"
+      menu:
+      - text: Introduction to spatsoc
+        href: articles/intro-spatsoc.html
+    news:
+      text: "News"
+      href: news/index.html
+
+news:
+- one_page: true
