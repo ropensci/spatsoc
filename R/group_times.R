@@ -89,7 +89,7 @@ group_times <- function(DT = NULL,
       nHours <- data.table::tstrsplit(threshold, ' ',
                                       type.convert = TRUE)[[1]]
       if (!is.integer(nHours)) {
-        if (!(nHours %% 1)) {
+        if (nHours %% 1 != 0) {
           warning('number of hours provided cannot be a fractional - threshold will be rounded')
         }
         nHours <- as.integer(nHours)
@@ -105,8 +105,12 @@ group_times <- function(DT = NULL,
       # set(DT, j = colnames(dtm), value = dtm)
       return(DT[])
     } else if (grepl('minute', threshold)) {
-      nMins <- data.table::tstrsplit(threshold, ' ')[[1]]
+      nMins <- data.table::tstrsplit(threshold, ' ',
+                                     type.convert = TRUE)[[1]]
       if (!is.integer(nMins)) {
+        if (nMins %% 1 != 0) {
+          warning('number of minutes provided cannot be a fractional - threshold will be rounded')
+        }
         nMins <- as.integer(nMins)
       }
 
@@ -156,7 +160,7 @@ group_times <- function(DT = NULL,
           labels = FALSE
         )]
 
-        if(dtm[, uniqueN(data.table::year(idate))] > 1){
+        if (dtm[, uniqueN(data.table::year(idate))] > 1) {
           dtm[, timegroup := .GRP,
               by = .(block, data.table::year(idate))]
         } else {
