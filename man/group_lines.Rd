@@ -2,7 +2,7 @@
 % Please edit documentation in R/group_lines.R
 \name{group_lines}
 \alias{group_lines}
-\title{Groups From Spatial Lines}
+\title{Groups Lines}
 \usage{
 group_lines(DT = NULL, threshold = NULL, projection = NULL, id = NULL,
   coords = NULL, timegroup = NULL, splitBy = NULL, spLines = NULL)
@@ -31,7 +31,7 @@ timegroup}
 Group by ID (by time) data.table
 }
 \description{
-Groups From Spatial Lines
+Groups Lines
 }
 \examples{
 library(data.table)
