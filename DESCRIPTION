@@ -1,6 +1,6 @@
 Package: spatsoc
 Title: Group Animal Relocation Data By Spatial and Temporal Relationship
-Version: 0.0.0.9107
+Version: 0.1.0
 Authors@R: c(
     person("Alec L.", "Robitaille", role = c("aut", "cre"), email = "robit.alec@gmail.com"),
     person("Quinn", "Webber", role = c("aut")),
@@ -28,3 +28,4 @@ SystemRequirements: GEOS (>= 3.2.0)
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
+BugReports: www.gitlab.com/robit.a/spatsoc/issues
