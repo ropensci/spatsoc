@@ -179,6 +179,21 @@ test_that('ID field is alphanumeric and does not have spaces', {
     ),
     'please ensure IDs are alphanumeric and do not contain spaces'
   )
+
+  copyDT[, population := 1]
+  expect_error(
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = TRUE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'population'
+    ),
+    'please ensure IDs are alphanumeric and do not contain spaces'
+  )
 })
 
 test_that('column and row lengths returned make sense', {
@@ -264,6 +279,53 @@ test_that('group column succesfully detected', {
     'group column will be overwritten'
   )
 })
+
+
+test_that('area provided with splitBy does not return errors', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
+  copyDT[, N := .N, by = .(ID, block)]
+  copyDT[, population := 1]
+  expect_false('withinGroup' %in% colnames(
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = TRUE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'population'
+    )
+  ))
+
+  expect_true('area' %in% colnames(
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = TRUE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'population'
+    )
+  ))
+
+  expect_true('proportion' %in% colnames(
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = TRUE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'population'
+    )
+  ))
+})
+
 
 # group_polys(
 #   DT = DT,

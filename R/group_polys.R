@@ -110,6 +110,16 @@ group_polys <-
         stop('cannot provide spPolys if providing splitBy')
       }
 
+      if (any(!(c(id, splitBy) %in% colnames(DT)))) {
+        stop(paste0(
+          as.character(paste(setdiff(
+            c(id, splitBy), colnames(DT)
+          ),
+          collapse = ', ')),
+          ' field(s) provided are not present in input DT'
+        ))
+      }
+
       if ('group' %in% colnames(DT)) {
         warning('group column will be overwritten by this function')
         set(DT, j = 'group', value = NULL)
