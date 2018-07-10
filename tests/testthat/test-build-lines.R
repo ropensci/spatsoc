@@ -60,6 +60,15 @@ test_that('coords, id, projection must be provided and proper format',
               ),
               'coords must be numeric'
             )
+            expect_error(
+              build_lines(
+                DT = DT,
+                id = 'ID',
+                coords = c('X'),
+                projection = utm
+              ),
+              'coords requires a vector', fixed = FALSE
+            )
           })
 
 
