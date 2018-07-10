@@ -108,6 +108,37 @@ test_that('column names must exist in DT', {
 })
 
 
+
+test_that('timegroup is correctly provided but is not required', {
+  copyDT <- copy(DT)
+  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
+  copyDT[, N := .N, by = .(ID, timegroup)]
+  expect_error(
+    group_lines(
+      DT = copyDT[N > 2],
+      threshold = 10,
+      timegroup = 'potato',
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm
+    ),
+    'provided are not present', fixed = FALSE
+  )
+
+  expect_true('data.table' %in% class(
+    group_lines(
+      DT = copyDT,
+      threshold = 10,
+      timegroup = NULL,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm
+    ))
+  )
+})
+
+
+
 test_that('threshold is correctly provided, or error', {
   copyDT <- copy(DT)
   group_times(copyDT, datetime = 'datetime', threshold = '14 days')
@@ -135,15 +166,19 @@ test_that('threshold is correctly provided, or error', {
     ),
     'cannot provide a negative threshold'
   )
-})
 
-
-test_that('spLines provided must be an S4 + spatial lines', {
-  expect_error(
-    group_lines(spLines = DT, threshold = 10),
-    'spLines provided must be a SpatialLines object'
+  expect_silent(
+    group_lines(
+      DT = copyDT[N > 2],
+      threshold = 0,
+      timegroup = 'timegroup',
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm
+    )
   )
 })
+
 
 test_that('group lines returns a single warning for <2 locs', {
   copyDT <- copy(DT)
@@ -159,6 +194,20 @@ test_that('group lines returns a single warning for <2 locs', {
     ),
     'some rows were dropped, cannot build a line with',
     fixed = FALSE
+  )
+
+  copyDT <- copy(DT)
+  copyDT[1, ID := 'Z']
+  expect_warning(
+    group_lines(
+      DT = copyDT,
+      threshold = 10,
+      timegroup = NULL,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm
+    ),
+    'some rows were dropped, cannot build a line with', fixed = FALSE
   )
 
   # expect equal sum < 2
@@ -284,6 +333,7 @@ test_that('group column succesfully detected', {
   )
 })
 
+
 # group_lines(
 #   DT = DT,
 #   threshold = 10,
@@ -293,3 +343,38 @@ test_that('group column succesfully detected', {
 #   coords = c('X', 'Y'),
 #   projection = utm
 # )
+
+
+test_that('spLines provided must be an S4 + spatial lines', {
+  expect_error(
+    group_lines(spLines = DT, threshold = 10),
+    'spLines provided must be a SpatialLines object'
+  )
+})
+
+test_that('spLines provided returns data.table', {
+  spLines <- build_lines(
+    DT = DT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    projection = utm
+  )
+
+  expect_true(
+    'data.table' %in%
+      class(group_lines(spLines = spLines, threshold = 10))
+  )
+
+  expect_true(
+    'data.table' %in%
+      class(group_lines(spLines = spLines, threshold = 0))
+  )
+
+  expect_equal(
+    nrow((group_lines(spLines = spLines, threshold = 10))),
+    length(spLines)
+  )
+
+})
+
+
