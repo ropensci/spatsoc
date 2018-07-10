@@ -123,7 +123,14 @@ group_times <- function(DT = NULL,
                                      type.convert = TRUE)[[1]]
       if (!is.integer(nMins)) {
         if (nMins %% 1 != 0) {
-          warning('number of minutes provided cannot be a fractional - threshold will be rounded')
+          warning(
+            strwrap(
+              prefix = " ",
+              initial = "",
+              x = 'number of minutes provided
+              cannot be a fractional - threshold will be rounded'
+            )
+          )
         }
         nMins <- as.integer(nMins)
       }
@@ -163,13 +170,13 @@ group_times <- function(DT = NULL,
             strwrap(
               prefix = " ",
               initial = "",
-              x = 'the minimum and maximum days in
-              DT are not evenly divisible by the provided block length',
-              '\n min day = ',
+              x = paste0('the minimum and maximum days in
+              DT are not evenly divisible by the provided block length: ',
+              'min day = ',
               as.character(minday),
               ', max day = ',
               as.character(maxday)
-            )
+            ))
           )
         }
         dtm[, block := cut(

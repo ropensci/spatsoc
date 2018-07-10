@@ -16,7 +16,9 @@ test_that('time field correctly provided or error detected', {
   expect_error(group_times(DT, datetime = NULL, threshold = '10 minutes'),
                'datetime field required')
 
-  expect_error(group_times(DT, datetime = 'potato', threshold = '10 minutes'),
+  expect_error(group_times(DT,
+                           datetime = 'potato',
+                           threshold = '10 minutes'),
                'time field provided is not found in DT')
 })
 
@@ -73,7 +75,9 @@ test_that('threshold with minutes fails if not divisible by 60', {
 
 test_that('threshold provided must be in units of hours, minutes, days', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_error(group_times(copyDT, datetime = 'datetime', threshold = '13 potatoes'),
+  expect_error(group_times(copyDT,
+                           datetime = 'datetime',
+                           threshold = '13 potatoes'),
                'must provide threshold in units', fixed = FALSE)
 })
 
@@ -104,7 +108,7 @@ test_that('warns if block is not even', {
 
   expect_warning(group_times(copyDT, datetime = 'datetime',
                             threshold = blockLength),
-                 'the minimum and maximum days in DT', fixed = FALSE)
+                 'the minimum and maximum days', fixed = FALSE)
 
 })
 

@@ -161,7 +161,14 @@ group_polys <-
            by = c(splitBy, 'withinGroup')]
         set(DT, j = c('withinGroup', 'nBy'), value = NULL)
         if (DT[is.na(group), .N] > 0) {
-          warning('build_polys failed for some rows, check `DT[is.na(group)]` and choice of hrParams')
+          warning(
+            strwrap(
+              prefix = " ",
+              initial = "",
+              x = 'build_polys failed for some rows,
+              check `DT[is.na(group)]` and choice of hrParams'
+            )
+          )
         }
         return(DT[])
       } else if (area) {
@@ -219,7 +226,8 @@ group_polys <-
                                 ID2 = as.character(NA),
                                 as.numeric(NA),
                                 as.numeric(NA))
-              setnames(out, c(..id, paste0(..id, '2'), 'area', 'proportion'))
+              setnames(out, c(..id, paste0(..id, '2'),
+                              'area', 'proportion'))
               out
             }
           }, by = splitBy, .SDcols = c(coords, id)]
@@ -227,7 +235,14 @@ group_polys <-
           unique(DT[nBy <= 5, .SD, .SDcols = c(splitBy, id)])
         out <- rbindlist(list(dropped, outDT), fill = TRUE)
         if (out[is.na(area), .N] > 0) {
-          warning('build_polys failed for some rows, check `DT[is.na(group)]` and choice of hrParams')
+          warning(
+            strwrap(
+              prefix = " ",
+              initial = "",
+              x = 'build_polys failed for some rows,
+              check `DT[is.na(group)]` and choice of hrParams'
+            )
+          )
         }
         return(out)
       }

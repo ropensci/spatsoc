@@ -343,6 +343,18 @@ test_that('group column succesfully detected', {
     ),
     'group column will be overwritten'
   )
+
+  expect_warning(
+    group_lines(
+      DT = copyDT,
+      threshold = 0,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      splitBy = 'yr'
+    ),
+    'group column will be overwritten'
+  )
 })
 
 
