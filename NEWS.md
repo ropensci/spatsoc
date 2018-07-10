@@ -1,4 +1,4 @@
-# v0.1.0 
+# spatsoc 0.1.0 
 
 ## Initial release
 
@@ -6,4 +6,3 @@
 * spatial grouping functions: `group_pts`, `group_lines`, `group_polys`
 * data-stream randomization function: `randomizations`
 * spatial build functions: `build_lines`, `build_polys`
-
