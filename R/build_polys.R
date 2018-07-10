@@ -107,13 +107,10 @@ build_polys <- function(DT = NULL,
   } else if (hrType == 'kernel') {
     functionParams <- formals(adehabitatHR::kernelUD)
     if (all(names(hrParams) %in% names(functionParams))) {
-      return(adehabitatHR::getverticeshr(
-        do.call(adehabitatHR::kernelUD, hrParams)),
-        unout = 'm2')
+      kern <- do.call(adehabitatHR::kernelUD, hrParams)
+      return(adehabitatHR::getverticeshr(kern, unout = 'm2'))
     } else {
-      stop(
-        'hrParams provided do not match function parameters, see ?adehabitatHR::kernelUD'
-      )
+      stop('hrParams provided do not match function parameters, see ?adehabitatHR::kernelUD')
     }
   }
 }
