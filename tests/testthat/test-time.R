@@ -22,7 +22,8 @@ test_that('time field correctly provided or error detected', {
 
 test_that('if threshold is null, warning returned', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_warning(group_times(copyDT, datetime = 'datetime', threshold = NULL),
+  expect_warning(group_times(copyDT, datetime = 'datetime',
+                             threshold = NULL),
                  'no threshold provided', fixed = FALSE)
 })
 
@@ -30,7 +31,8 @@ test_that('if threshold is null, warning returned', {
 test_that('time fields are already present', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
-  expect_warning(group_times(copyDT, datetime = 'datetime', threshold = '10 minutes'),
+  expect_warning(group_times(copyDT, datetime = 'datetime',
+                             threshold = '10 minutes'),
                  'columns found in input DT', fixed = FALSE)
 })
 
@@ -46,11 +48,14 @@ test_that('time field is appropriate format', {
   expect_error(group_times(copyDT, datetime = 'datetimenumeric',
                           threshold = '60 minutes'),
                'time field provided must be either', fixed = FALSE)
+
+
 })
 
 test_that('threshold with minutes fails with > 60', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_error(group_times(copyDT, datetime = 'datetime', threshold = '70 minutes'),
+  copyDT <- copy(DT)[, c('idate', 'itime') := IDateTime(datetime)]
+  expect_error(group_times(copyDT, datetime = c('idate', 'itime'),
+                           threshold = '70 minutes'),
                '> 60 minutes', fixed = FALSE)
 })
 
@@ -102,7 +107,8 @@ test_that('timegroup column + time fields are added to result', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_true('timegroup' %in%
                 colnames(
-                  group_times(copyDT, datetime = 'datetime', threshold = '1 day')
+                  group_times(copyDT, datetime = 'datetime',
+                              threshold = '1 day')
                 ))
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
@@ -165,5 +171,45 @@ test_that('warns if no threshold provided', {
   )
 })
 
+test_that('warns if threshold is fractional', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
 
-# warning('number of hours provided cannot be a fractional - threshold will be rounded')
+  expect_warning(
+    group_times(copyDT, datetime = 'datetime', threshold = '2.5 hours'),
+    'number of hours provided cannot be a fractional',
+    fixed = FALSE
+  )
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  expect_warning(
+    group_times(copyDT, datetime = 'datetime', threshold = '2.5 minutes'),
+    'number of minutes provided cannot be a fractional',
+    fixed = FALSE
+  )
+
+})
+
+
+test_that('multiyear blocks are well handled', {
+  copyDT <- copy(DT)
+  copyDT[, isoDate := as.POSIXct(
+    ISOdatetime(2006, 10, 10, 10, 10, 10)
+  )]
+  expect_equal(group_times(copyDT, datetime = 'isoDate',
+                           threshold = '1 day')[, .N,
+                                                by = timegroup]$N,
+               copyDT[, .N,
+                by = .(data.table::yday(isoDate))]$N)
+
+  copyDT[1, isoDate := as.POSIXct(
+    ISOdatetime(2010, 10, 10, 10, 10, 10)
+  )]
+  copyDT[, timegroup := NULL]
+  expect_equal(group_times(copyDT, datetime = 'isoDate',
+                           threshold = '1 day')[, .N,
+                                                by = timegroup]$N,
+               copyDT[, .N, by = .(data.table::yday(isoDate),
+                                   data.table::year(isoDate))]$N)
+
+})
+
