@@ -50,6 +50,13 @@ test_that('fields provided must be in DT', {
                               id = 'ID',
                               datetime = 'potato'),
                'field(s) provided are not present', fixed = TRUE)
+
+  expect_error(randomizations(DT = DT,
+                              type = 'step',
+                              id = 'ID',
+                              datetime = 'datetime',
+                              splitBy = 'potato'),
+               'field(s) provided are not present', fixed = TRUE)
 })
 
 test_that('iterations is NULL or correctly provided', {
@@ -136,6 +143,17 @@ test_that('step randomization returns as expected', {
       datetime = 'timegroup'
     )[, uniqueN(randomID), by = timegroup],
     DT[, uniqueN(ID), by = timegroup])
+
+  expect_equal(
+    nrow(randomizations(
+      DT = DT,
+      type = 'step',
+      id = 'ID',
+      iterations = 3,
+      datetime = 'timegroup'
+    )),
+    nrow(DT) * (3 + 1))
+
 })
 
 
@@ -153,16 +171,29 @@ test_that('daily randomization returns as expected', {
 })
 
 test_that('trajectory randomization returns as expected', {
-  DT[, jul := NULL]
+  copyDT <- copy(DT)
+  copyDT[, jul := NULL]
   expect_equal(
     randomizations(
-      DT = DT,
+      DT = copyDT,
       type = 'trajectory',
       id = 'ID',
       iterations = 1,
       datetime = 'datetime'
     )[, uniqueN(randomJul), by = .(ID, jul)][, max(V1)],
     1)
+
+  copyDT <- copy(DT)
+  copyDT[, jul := NULL][, rowID := NULL]
+  expect_equal(
+    nrow(randomizations(
+      DT = copyDT,
+      type = 'trajectory',
+      id = 'ID',
+      iterations = 3,
+      datetime = 'datetime'
+    )),
+    nrow(DT) * (3 + 1))
 })
 
 # if iterations are > 1:
