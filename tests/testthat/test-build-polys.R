@@ -101,7 +101,6 @@ test_that('coords, id, projection must be provided and (splitBy) proper format',
               ),
               'and splitBy when provided', fixed = FALSE
             )
-
           })
 
 
@@ -200,3 +199,50 @@ test_that('if hrParams NULL, warns', {
 })
 
 
+test_that('build_polys returns SpatialPolygons', {
+  expect_true('SpatialPolygonsDataFrame' %in%
+                class(
+                  build_polys(
+                    DT = DT,
+                    projection = utm,
+                    hrType = 'mcp',
+                    hrParams = list(percent = 95),
+                    coords = c('X', 'Y'),
+                    id = 'ID'
+                  )
+                ))
+
+  expect_true(isS4(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      coords = c('X', 'Y'),
+      id = 'ID'
+    )
+  ))
+
+  expect_true('SpatialPolygonsDataFrame' %in%
+                class(
+                  build_polys(
+                    DT = DT,
+                    projection = utm,
+                    hrType = 'kernel',
+                    hrParams = list(grid = 60),
+                    coords = c('X', 'Y'),
+                    id = 'ID'
+                  )
+                ))
+
+  expect_true(isS4(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'kernel',
+      hrParams = list(grid = 60),
+      coords = c('X', 'Y'),
+      id = 'ID'
+    )
+  ))
+})
