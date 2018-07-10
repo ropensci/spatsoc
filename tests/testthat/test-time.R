@@ -39,8 +39,11 @@ test_that('time fields are already present', {
 test_that('time field is appropriate format', {
   # where character is provided
   copyDT <- copy(DT)
-  expect_error(group_times(copyDT, datetime = 'datetime', threshold = '60 minutes'),
-               'time field provided must be either', fixed = FALSE)
+  expect_error(
+    group_times(copyDT, datetime = 'datetime', threshold = '60 minutes'),
+    'time field provided must be either',
+    fixed = FALSE
+  )
 
   # where numeric is provided
   copyDT <- copy(DT)
@@ -61,8 +64,11 @@ test_that('threshold with minutes fails with > 60', {
 
 test_that('threshold with minutes fails if not divisible by 60', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_error(group_times(copyDT, datetime = 'datetime', threshold = '13 minutes'),
-               'threshold not evenly', fixed = FALSE)
+  expect_error(
+    group_times(copyDT, datetime = 'datetime', threshold = '13 minutes'),
+    'threshold not evenly',
+    fixed = FALSE
+  )
 })
 
 test_that('threshold provided must be in units of hours, minutes, days', {
@@ -106,15 +112,17 @@ test_that('warns if block is not even', {
 test_that('timegroup column + time fields are added to result', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_true('timegroup' %in%
-                colnames(
-                  group_times(copyDT, datetime = 'datetime',
-                              threshold = '1 day')
-                ))
+                colnames(group_times(
+                  copyDT, datetime = 'datetime',
+                  threshold = '1 day'
+                )))
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_true(all(c('timegroup', 'block') %in%
                 colnames(
-                  group_times(copyDT, datetime = 'datetime', threshold = '2 days')
+                  group_times(copyDT,
+                              datetime = 'datetime',
+                              threshold = '2 days')
                 )))
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]

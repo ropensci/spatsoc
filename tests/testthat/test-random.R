@@ -35,7 +35,7 @@ test_that('DT, type, id, datetime are required', {
 test_that('type must be one of options', {
   expect_error(randomizations(DT = DT,
                               type = 'potato'),
-               'type of randomization must be one of: step, daily or trajectory')
+               'type of randomization must be one of', fixed = FALSE)
 })
 
 test_that('fields provided must be in DT', {

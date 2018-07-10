@@ -13,7 +13,7 @@ test_that('DT is required', {
   'input DT required')
 })
 
-test_that('ID and coords column names, threshold must be provided (and correctly)',
+test_that('ID and coords column names, threshold correctly provided',
           {
             expect_error(group_pts(DT, threshold = 10, id = NULL),
                          'ID field required')
@@ -145,7 +145,7 @@ test_that('DT returned if timegroup, group fields not provided', {
   # and with splitBy
 })
 
-test_that('warns if timegroup is a date/time or character instead of output from group_times',
+test_that('warns if timegroup is a datetime or character',
           {
             # if datetime is a character
             copyDT <- copy(DT)
