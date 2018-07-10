@@ -130,7 +130,7 @@ group_polys <-
       if (!area) {
         ovrDT <-
           DT[nBy > 5, {
-            suppressWarnings(
+            try(
               spPolys <-
                 build_polys(
                   DT = .SD,
@@ -141,7 +141,8 @@ group_polys <-
                   id = ..id,
                   splitBy = NULL,
                   spPts = NULL
-                )
+                ),
+              silent = TRUE
             )
             if (!is.null(spPolys)) {
               inter <- rgeos::gIntersects(spPolys, spPolys, byid = TRUE)
@@ -159,6 +160,9 @@ group_polys <-
         DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
            by = c(splitBy, 'withinGroup')]
         set(DT, j = c('withinGroup', 'nBy'), value = NULL)
+        if (DT[is.na(group), .N] > 0) {
+          warning('build_polys failed for some rows, check `DT[is.na(group)]` and choice of hrParams')
+        }
         return(DT[])
       } else if (area) {
         if (any(DT[, grepl('[^A-z0-9]', .SD[[1]]), .SDcols = id])) {
@@ -166,7 +170,7 @@ group_polys <-
         }
         outDT <-
           DT[nBy > 5, {
-            suppressWarnings(
+            try(
               spPolys <-
                 build_polys(
                   DT = .SD,
@@ -177,7 +181,8 @@ group_polys <-
                   coords = ..coords,
                   splitBy = NULL,
                   spPts = NULL
-                )
+                ),
+              silent = TRUE
             )
             if (!is.null(spPolys)) {
               inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
@@ -206,7 +211,8 @@ group_polys <-
                   value = out[['area']] / out[['areaTotal']])
               set(out, j = c('IDs', 'areaTotal'),  value = NULL)
               setnames(out, 'id', ..id)
-              setcolorder(out, c(..id, paste0(..id, '2'), 'area', 'proportion'))
+              setcolorder(out, c(..id, paste0(..id, '2'),
+                                 'area', 'proportion'))
               out
             } else {
               out <- data.table(ID = get(..id),
@@ -217,10 +223,13 @@ group_polys <-
               out
             }
           }, by = splitBy, .SDcols = c(coords, id)]
-
         dropped <-
           unique(DT[nBy <= 5, .SD, .SDcols = c(splitBy, id)])
-        return(rbindlist(list(dropped, outDT), fill = TRUE))
+        out <- rbindlist(list(dropped, outDT), fill = TRUE)
+        if (out[is.na(area), .N] > 0) {
+          warning('build_polys failed for some rows, check `DT[is.na(group)]` and choice of hrParams')
+        }
+        return(out)
       }
     }
   }

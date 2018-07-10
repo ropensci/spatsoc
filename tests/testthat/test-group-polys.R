@@ -149,6 +149,20 @@ test_that('column names must exist in DT', {
     'not present in input DT',
     fixed = FALSE
   )
+
+  expect_error(
+    group_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      area = FALSE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'potato'
+    ),
+    'not present in input DT',
+    fixed = FALSE
+  )
 })
 
 
@@ -283,9 +297,7 @@ test_that('group column succesfully detected', {
 
 test_that('area provided with splitBy does not return errors', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
-  copyDT[, N := .N, by = .(ID, block)]
-  copyDT[, population := 1]
+  copyDT[, yr := year(datetime)]
   expect_false('withinGroup' %in% colnames(
     group_polys(
       DT = copyDT,
@@ -295,7 +307,7 @@ test_that('area provided with splitBy does not return errors', {
       area = TRUE,
       coords = c('X', 'Y'),
       id = 'ID',
-      splitBy = 'population'
+      splitBy = 'yr'
     )
   ))
 
@@ -308,7 +320,7 @@ test_that('area provided with splitBy does not return errors', {
       area = TRUE,
       coords = c('X', 'Y'),
       id = 'ID',
-      splitBy = 'population'
+      splitBy = 'yr'
     )
   ))
 
@@ -321,11 +333,72 @@ test_that('area provided with splitBy does not return errors', {
       area = TRUE,
       coords = c('X', 'Y'),
       id = 'ID',
-      splitBy = 'population'
+      splitBy = 'yr'
     )
   ))
 })
 
+
+test_that('less than 5 locs returns NAs and warning', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  copyDT[, yr := year(datetime)]
+  copyDT[1, yr := 2020]
+  expect_warning(
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = TRUE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'yr'
+    ),
+    'build_polys failed for some rows', fixed = FALSE
+  )
+
+  expect_warning(
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = FALSE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'yr'
+    ),
+    'build_polys failed for some rows', fixed = FALSE
+  )
+
+  expect_true(suppressWarnings(
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = FALSE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'yr'
+    )[is.na(group), .N] != 0)
+  )
+
+  expect_true(suppressWarnings(
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = TRUE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'yr'
+    )[is.na(area), .N] != 0)
+  )
+
+
+})
 
 # group_polys(
 #   DT = DT,
