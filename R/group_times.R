@@ -38,7 +38,7 @@ group_times <- function(DT = NULL,
     stop('datetime field required')
   }
 
-  if (!(datetime %in% colnames(DT))) {
+  if (all(!(datetime %in% colnames(DT)))) {
     stop('datetime field provided is not found in DT')
   }
 
@@ -72,7 +72,8 @@ group_times <- function(DT = NULL,
       data.table::setnames(dtm, c(datetime, 'idate', 'itime'))
     } else if (length(datetime) == 2 &&
                all(c('IDate', 'ITime') %in%
-                   DT[, sapply(.SD, class), .SDcols = datetime])) {
+                   unlist(sapply(DT[, .SD, .SDcols = datetime],
+                                 class)))) {
       dtm <- DT[, .SD, .SDcols = datetime]
       data.table::setnames(dtm, c('idate', 'itime'))
     } else {
