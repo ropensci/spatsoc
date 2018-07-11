@@ -5,15 +5,16 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repo
 
 # spatsoc
 
-The spatsoc package detects spatial and temporal groups in GPS
-relocations. It can be used to convert GPS relocations to
-gambit-of-the-group format to build proximity-based social networks. In
-addition, the randomizations function provides data-stream randomization
-methods suitable for GPS data.
+spatsoc is a package for the R programming language for detecting
+spatial and temporal groups in GPS relocations. It can be used to
+convert GPS relocations to gambit-of-the-group format to build
+proximity-based social networks. In addition, the randomizations
+function provides data-stream randomization methods suitable for GPS
+data.
 
 See below for installation and basic usage.
 
-For more detailed function descriptions, see the vignette.
+For more detailed function descriptions, see the vignettes.
 
 ## Installation
 
