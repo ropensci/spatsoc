@@ -28,5 +28,5 @@ SystemRequirements: GEOS (>= 3.2.0)
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
-BugReports: www.gitlab.com/robit.a/spatsoc/issues
+BugReports: https://www.gitlab.com/robit.a/spatsoc/issues
 URL: https://spatsoc.gitlab.io

@@ -52,8 +52,6 @@ group_times <- function(DT = NULL,
       ' columns found in input DT and will be overwritten by this function'
     ))
     set(DT, j = intersect(colnames(DT), checkCols), value = NULL)
-    # DT[, (intersect(colnames(DT), checkCols)) :=  NULL]
-
   }
 
   if (!truelength(DT)) {
