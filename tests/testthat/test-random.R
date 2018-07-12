@@ -168,6 +168,20 @@ test_that('daily randomization returns as expected', {
     )[, .(N = uniqueN(randomID)),
       by = .(jul, ID)][, max(N)],
     1)
+
+  DT[, population := 1][1:50, population := 2][, jul := NULL]
+  expect_equal(
+    randomizations(
+      DT = DT,
+      type = 'daily',
+      id = 'ID',
+      iterations = 1,
+      datetime = 'datetime',
+      splitBy = 'population'
+    )[, .(N = uniqueN(randomID)),
+      by = .(jul, ID, population)][, max(N)],
+    1)
+
 })
 
 test_that('trajectory randomization returns as expected', {
@@ -195,6 +209,9 @@ test_that('trajectory randomization returns as expected', {
     )),
     nrow(DT) * (3 + 1))
 })
+
+
+
 
 # if iterations are > 1:
 # columns added,
