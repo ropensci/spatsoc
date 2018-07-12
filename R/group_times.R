@@ -54,10 +54,6 @@ group_times <- function(DT = NULL,
     set(DT, j = intersect(colnames(DT), checkCols), value = NULL)
   }
 
-  if (!truelength(DT)) {
-    alloc.col(DT)
-  }
-
   if (is.null(threshold)) {
     warning('no threshold provided, using the time field directly to group')
     DT[, timegroup := .GRP, by = datetime]
