@@ -86,8 +86,8 @@ group_polys <-
         inters <-
           rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
         out <- data.table::data.table(
-          area = sapply(inters@polygons, slot, 'area'),
-          IDs = sapply(inters@polygons, slot, 'ID')
+          area = vapply(inters@polygons, slot, 'area', FUN.VALUE = 1),
+          IDs = vapply(inters@polygons, slot, 'ID', FUN.VALUE = "")
         )
 
         set(out, j = 'ID1', value = tstrsplit(out[['IDs']], ' ', keep = 1))
