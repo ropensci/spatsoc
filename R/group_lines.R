@@ -125,7 +125,7 @@ group_lines <-
         ovrDT <- data.table::data.table(ID = names(ovr),
                                         group = unlist(ovr))
       } else {
-        ovrDT <- data.table::data.table(ID = get(id), group = as.integer(NA))
+        ovrDT <- data.table::data.table(ID = DT[[id]], group = as.integer(NA))
       }
 
       data.table::setnames(ovrDT, c(id, 'group'))

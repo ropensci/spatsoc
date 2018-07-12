@@ -248,6 +248,17 @@ test_that('group column is added to result or NA if < 2 locs', {
       projection = utm
     )[is.na(group), .N] != 0)
   )
+
+  copyDT <- DT[, .SD[1], by = ID]
+  expect_true(suppressWarnings(
+    group_lines(
+      DT = copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm
+    )[is.na(group), .N] != 0)
+  )
 })
 
 test_that('only one column added to the result DT', {
