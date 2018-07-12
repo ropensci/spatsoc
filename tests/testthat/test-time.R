@@ -22,11 +22,21 @@ test_that('time field correctly provided or error detected', {
                'time field provided is not found in DT')
 })
 
-test_that('if threshold is null, warning returned', {
+test_that('threshold properly provided', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_warning(group_times(copyDT, datetime = 'datetime',
-                             threshold = NULL),
-                 'no threshold provided', fixed = FALSE)
+  expect_warning(
+    group_times(copyDT, datetime = 'datetime',
+                threshold = NULL),
+    'no threshold provided',
+    fixed = FALSE
+  )
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  expect_error(
+    group_times(copyDT, datetime = 'datetime',
+                threshold = '50 potato'),
+    'must provide threshold in units of hour, day, or minute'
+  )
 })
 
 
