@@ -13,4 +13,6 @@ RUN apt-get update \
     adehabitatHR \
     igraph \
     knitr \
-    devtools
+    devtools \
+    rmarkdown \
+    testthat
