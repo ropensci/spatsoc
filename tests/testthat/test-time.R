@@ -138,6 +138,15 @@ test_that('timegroup column + time fields are added to result', {
                               datetime = 'datetime',
                               threshold = '2 days')
                 )))
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  copyDT <- copyDT[year(datetime) == unique(year(datetime))[1]]
+  expect_true(all(c('timegroup', 'block') %in%
+                    colnames(
+                      group_times(copyDT,
+                                  datetime = 'datetime',
+                                  threshold = '2 days')
+                    )))
+
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   expect_true(all(c('timegroup', 'hours') %in%

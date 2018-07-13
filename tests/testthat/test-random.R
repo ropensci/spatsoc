@@ -154,6 +154,18 @@ test_that('step randomization returns as expected', {
     )),
     nrow(DT) * (3 + 1))
 
+
+  DT[, population := 1][1:50, population := 2]
+  expect_equal(
+    randomizations(
+      DT = DT,
+      type = 'step',
+      id = 'ID',
+      iterations = 1,
+      datetime = 'timegroup',
+      splitBy = 'population'
+    )[, uniqueN(randomID), by = timegroup],
+    DT[, uniqueN(ID), by = timegroup])
 })
 
 
@@ -167,19 +179,6 @@ test_that('daily randomization returns as expected', {
       datetime = 'datetime'
     )[, .(N = uniqueN(randomID)),
       by = .(jul, ID)][, max(N)],
-    1)
-
-  DT[, population := 1][1:50, population := 2][, jul := NULL]
-  expect_equal(
-    randomizations(
-      DT = DT,
-      type = 'daily',
-      id = 'ID',
-      iterations = 1,
-      datetime = 'datetime',
-      splitBy = 'population'
-    )[, .(N = uniqueN(randomID)),
-      by = .(jul, ID, population)][, max(N)],
     1)
 
 })
