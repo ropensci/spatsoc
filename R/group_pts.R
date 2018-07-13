@@ -82,18 +82,18 @@ group_pts <- function(DT = NULL,
   }
 
   if (!is.null(timegroup)) {
-    if (any(DT[, sapply(.SD, class), .SDcols = timegroup] %in%
-            c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+    if (unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+            c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character')) {
       warning(
         strwrap(
           prefix = " ",
           initial = "",
-          x = 'timegroup provided is a d
-          ate/time or character type, did you use group_times?'
+          x = 'timegroup provided is a date/time
+          or character type, did you use group_times?'
         )
       )
     }
-    }
+  }
 
   if ('group' %in% colnames(DT)) {
     warning('group column will be overwritten by this function')
