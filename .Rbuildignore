@@ -4,3 +4,5 @@
 ^README\.Rmd$
 ^NEWS.md$
 ^_pkgdown\.yml$
+^\.gitlab-ci\.yml$
+^Dockerfile$
