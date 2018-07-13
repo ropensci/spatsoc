@@ -59,15 +59,16 @@ group_times <- function(DT = NULL,
     DT[, timegroup := .GRP, by = datetime]
     return(DT[])
   } else {
-    if ('POSIXct' %in% DT[, sapply(.SD, class), .SDcols = datetime]) {
+    if ('POSIXct' %in%
+        unlist(lapply(DT[, .SD, .SDcols = datetime], class))) {
       dtm <-
         DT[, cbind(.SD[[1]], data.table::IDateTime(.SD[[1]])),
            .SDcols = datetime]
       data.table::setnames(dtm, c(datetime, 'idate', 'itime'))
     } else if (length(datetime) == 2 &&
                all(c('IDate', 'ITime') %in%
-                   unlist(sapply(DT[, .SD, .SDcols = datetime],
-                                 class)))) {
+                   unlist(
+                     lapply(DT[, .SD, .SDcols = datetime], class)))) {
       dtm <- DT[, .SD, .SDcols = datetime]
       data.table::setnames(dtm, c('idate', 'itime'))
     } else {
