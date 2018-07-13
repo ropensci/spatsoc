@@ -165,8 +165,6 @@ test_that('column names must exist in DT', {
   )
 })
 
-
-
 test_that('splitBy and spPolys are not both provided', {
   expect_error(
     group_polys(
