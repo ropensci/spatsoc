@@ -6,11 +6,6 @@ DT <- fread('../testdata/buffalo.csv')
 utm <-
   '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
-test_that('this breaks gitlab ci', {
-  expect_equal(1, 2)
-})
-
-
 test_that('DT is required', {
   expect_error(
     build_lines(
