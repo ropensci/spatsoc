@@ -6,6 +6,7 @@ RUN apt-get update \
     libgeos-dev \
     libssl-dev \
     libcurl4-openssl-dev \
+    libxml2-dev \
   && install2.r --error \
     rgeos \
     sp \
@@ -15,4 +16,5 @@ RUN apt-get update \
     knitr \
     devtools \
     rmarkdown \
-    testthat
+    testthat \
+    roxygen2
