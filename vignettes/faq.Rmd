@@ -1,0 +1,36 @@
+---
+title: "FAQ about spatsoc"
+author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{FAQ}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitropts, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, 
+                      warning = FALSE,
+                      eval = FALSE, 
+                      echo = TRUE)
+```
+
+# 
+## Don't I need to reassign to save the output?
+(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The expection is `group_polys(area = TRUE)`. 
+
+
+
+## Why does a function print the result, but columns aren't added to my DT?
+
+Check that your data.table has columns allocated (with `data.table::truelength`) and if not, use `data.table::setDT`. This can happen if you are reading your data from `RDS` or `RData` files [1](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-faq.html#reading-data.table-from-rds-or-rdata-file). 
+
+```{r alloc}
+if (truelength(DT) == 0) {
+  setDT(DT)
+}
+```
+
