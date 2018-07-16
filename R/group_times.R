@@ -158,36 +158,37 @@ group_times <- function(DT = NULL,
         # set(DT, j = colnames(dtm), value = dtm)
         return(DT[])
       } else {
-        minday <- dtm[, min(data.table::yday(idate))]
-        maxday <- dtm[, max(data.table::yday(idate))]
-        if (((maxday - minday) / nDays) %% 1 != 0) {
+
+        dtm[, minday := min(data.table::yday(idate)), by = year(idate)]
+        dtm[, maxday := max(data.table::yday(idate)), by = year(idate)]
+        dtm[, rangeday := maxday - minday, by = year(idate)]
+
+        dtm[, block := cut(
+          data.table::yday(idate),
+          breaks = seq.int(minday[1], maxday[1] + nDays, by = nDays),
+          right = FALSE,
+          labels = FALSE
+        ), by = year(idate)]
+        dtm[, timegroup := .GRP, .(year(idate), block)]
+
+        if (any(!(dtm[, unique(rangeday)] %% nDays == 0))) {
           warning(
             strwrap(
               prefix = " ",
               initial = "",
               x = paste0('the minimum and maximum days in
-              DT are not evenly divisible by the provided block length: ',
-              'min day = ',
-              as.character(minday),
-              ', max day = ',
-              as.character(maxday)
-            ))
+              DT are not evenly divisible by the provided block length'
+              ))
           )
         }
         dtm[, block := cut(
           data.table::yday(idate),
-          breaks = seq.int(minday, maxday + nDays, by = nDays),
+          breaks = seq.int(minday[1], maxday[1] + nDays, by = nDays),
           right = FALSE,
           labels = FALSE
-        )]
+        ), by = year(idate)]
 
-        if (dtm[, uniqueN(data.table::year(idate))] > 1) {
-          dtm[, timegroup := .GRP,
-              by = .(block, data.table::year(idate))]
-        } else {
-          dtm[, timegroup := .GRP,
-              by = block]
-        }
+        dtm[, timegroup := .GRP, .(year(idate), block)]
 
         DT[, (colnames(dtm)) := dtm]
         # set(DT, j = colnames(dtm), value = dtm)
