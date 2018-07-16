@@ -132,12 +132,13 @@ test_that('timegroup column + time fields are added to result', {
                 )))
 
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  # to avoid block length warning
   expect_true(all(c('timegroup', 'block') %in%
-                colnames(
-                  group_times(copyDT,
-                              datetime = 'datetime',
-                              threshold = '2 days')
-                )))
+                    colnames(suppressWarnings(
+                      group_times(copyDT,
+                                  datetime = 'datetime',
+                                  threshold = '2 days')
+                    ))))
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   copyDT <- copyDT[year(datetime) == unique(year(datetime))[1]]
   expect_true(all(c('timegroup', 'block') %in%
@@ -165,7 +166,9 @@ test_that('timegroup column + time fields are added to result', {
 
 test_that('timegroup column and fields are detected if already present', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '2 days')
+  # to avoid block length warning
+  suppressWarnings(
+    group_times(copyDT, datetime = 'datetime', threshold = '2 days'))
 
   expect_warning(
     group_times(copyDT, datetime = 'datetime', threshold = '1 day'),
@@ -243,4 +246,3 @@ test_that('multiyear blocks are well handled', {
                                    data.table::year(isoDate))]$N)
 
 })
-

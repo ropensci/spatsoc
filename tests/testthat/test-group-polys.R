@@ -257,7 +257,10 @@ test_that('column and row lengths returned make sense', {
 
 test_that('withinGroup is not returned to the user', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '14 days')
+  # to avoid block length warning
+  suppressWarnings(
+    group_times(copyDT, datetime = 'datetime', threshold = '14 days')
+  )
   copyDT[, N := .N, by = .(ID, block)]
   expect_false('withinGroup' %in% colnames(
     group_polys(
