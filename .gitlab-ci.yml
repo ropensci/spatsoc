@@ -2,6 +2,7 @@ image: registry.gitlab.com/robit.a/spatsoc
 
 stages:
  - test
+ - coverage
 
 test_job:
   stage: test
@@ -11,3 +12,13 @@ test_job:
   - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual --as-cran
   only:
   - master
+
+coverage_job:
+  stage: coverage
+  when: on_success
+  only:
+    - master
+  script:
+    - install2.r covr
+    - r -e 'devtools::install()'
+    - r -e 'covr::codecov(type = c("tests", "examples"), quiet = FALSE)'
