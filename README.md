@@ -15,7 +15,10 @@ methods suitable for GPS data.
 
 See below for installation and basic usage.
 
-For more detailed function descriptions, see the vignettes.
+For more detailed function descriptions, see the vignettes:
+
+  - [Introduction to
+    spatsoc](https://spatsoc.gitlab.io/articles/intro-spatsoc.html)
 
 ## Installation
 
