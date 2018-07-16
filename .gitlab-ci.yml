@@ -1,8 +1,13 @@
 image: registry.gitlab.com/robit.a/spatsoc
-test:
-   script:
-    - R CMD build . --no-build-vignettes --no-manual
-    - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
-    - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual --as-cran
-    only:
-    - master
+
+stages:
+ - test
+
+test_job:
+  stage: test
+  script:
+  - R CMD build . --no-build-vignettes --no-manual
+  - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
+  - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual --as-cran
+  only:
+  - master
