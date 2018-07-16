@@ -15,14 +15,22 @@ knitr::opts_chunk$set(message = FALSE,
 
 
 # spatsoc 
-spatsoc is a package for the R programming language for detecting spatial and temporal groups in GPS relocations. It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks. In addition, the randomizations function provides data-stream randomization methods suitable for GPS data. 
+spatsoc is a package for the R programming language for detecting spatial and temporal groups in GPS relocations. It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks. In addition, the randomization function provides data-stream randomization methods suitable for GPS data. 
 
 See below for installation and basic usage. 
 
 For more detailed function descriptions, see the vignettes. 
 
 ## Installation
-<!-- geos sudo apt debian, arch, mac, windows-->
+`spatsoc` depends on `rgeos` and requires [GEOS](https://trac.osgeo.org/geos/) installed on the system. 
+
+* Debian/Ubuntu: `apt-get install libgeos-dev`
+* Arch: `pacman -S geos`
+* Fedora: `dnf install geos geos-devel`
+* Mac: `brew install geos`
+* Windows: see [here](https://trac.osgeo.org/osgeo4w/)
+
+
 ```{r install}
 drat::addRepo('LocalRepo', 'https://spatsoc.gitlab.io')
 install.packages('spatsoc')
