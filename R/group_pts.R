@@ -82,7 +82,7 @@ group_pts <- function(DT = NULL,
   }
 
   if (!is.null(timegroup)) {
-    if (any(!(unlist(lapply(DT[, .SD, .SDcols = timegroup], class))) %in%
+    if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
             c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
       warning(
         strwrap(
