@@ -7,6 +7,7 @@ RUN apt-get update \
     libssl-dev \
     libcurl4-openssl-dev \
     libxml2-dev \
+    git \
   && install2.r --error \
     rgeos \
     sp \
