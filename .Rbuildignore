@@ -2,7 +2,6 @@
 ^\.Rproj\.user$
 ^cran-comments.md$
 ^README\.Rmd$
-^NEWS.md$
 ^_pkgdown\.yml$
 ^\.gitlab-ci\.yml$
 ^Dockerfile$
