@@ -35,8 +35,12 @@ For more detailed function descriptions, see the vignettes:
 <!-- end list -->
 
 ``` r
+# Using drat
 drat::addRepo('LocalRepo', 'https://spatsoc.gitlab.io')
 install.packages('spatsoc')
+
+# Using devtools
+devtools::install_git('https://gitlab.com/robit.a/spatsoc.git')
 ```
 
 ## Usage
