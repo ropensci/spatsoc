@@ -64,22 +64,6 @@ test_that('area provided and logical, or error', {
 })
 
 
-test_that('DT or spPolys, but not both', {
-  expect_error(group_polys(
-    DT = NULL,
-    area = FALSE,
-    spPolys = NULL
-  ),
-  'must provide either DT or spPolys')
-
-  expect_error(group_polys(
-    DT = DT,
-    area = FALSE,
-    spPolys = 10
-  ),
-  'cannot provide both DT and spPolys')
-})
-
 test_that('projection provided or error', {
   expect_error(
     group_polys(
