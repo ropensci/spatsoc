@@ -19,8 +19,15 @@ knitr::opts_chunk$set(message = FALSE,
 ```
 
 
-how do i use randomizations? 
-how do i build a graph with the outputs?
+
+* how do i use randomizations? 
+* how do i build a graph with the outputs?
+* my timegroup changes when i reorder
+* GEOS
+* gbi
+* passing to igraph/asnipe
+* not a moving window
+* direction of proportion
 
 
 # Usage
