@@ -226,10 +226,10 @@ test_that('warns if threshold is fractional', {
 test_that('error if threshold not divisible by 24 hours', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
 
-  expect_warning(
+  expect_error(
     group_times(copyDT, datetime = 'datetime', threshold = '5 hours'),
-    'number of hours provided
-                 does not evenly divide into 24'
+    'does not evenly divide into 24',
+    fixed = FALSE
   )
 
 })
