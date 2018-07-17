@@ -25,11 +25,11 @@
 #' group_times(DT, datetime = 'datetime', threshold = '10 days')
 #'
 group_times <- function(DT = NULL,
-                       datetime = NULL,
-                       threshold = NULL) {
+                        datetime = NULL,
+                        threshold = NULL) {
   # due to NSE notes in R CMD check
   minutes <- block <- hours <- itime <- . <- idate <- timegroup <- NULL
-  minday <- maxday <- rangeday <- NULL
+  minday <- maxday <- rangeday <- adjIDate <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -110,9 +110,14 @@ group_times <- function(DT = NULL,
       dtm[data.table::hour(itime) %% nHours >= (nHours / 2),
           hours := nHours * ((data.table::hour(itime) %/% nHours) + 1L)]
 
-      dtm[, timegroup := .GRP, by = .(hours, idate)]
+      dtm[, adjIDate := idate]
+      dtm[hours == 24, c('adjIDate', 'hours') := .(idate + 1, 0)]
+
+      dtm[, timegroup := .GRP, by = .(hours, adjIDate)]
+      set(dtm, j = 'adjIDate', value = NULL)
+
       DT[, (colnames(dtm)) := dtm]
-      # set(DT, j = colnames(dtm), value = dtm)
+
       return(DT[])
     } else if (grepl('minute', threshold)) {
       nMins <- data.table::tstrsplit(threshold, ' ',
@@ -198,5 +203,5 @@ group_times <- function(DT = NULL,
     } else {
       stop("must provide threshold in units of hour, day, or minute")
     }
-    }
+  }
 }
