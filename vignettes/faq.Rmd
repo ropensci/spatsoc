@@ -18,10 +18,35 @@ knitr::opts_chunk$set(message = FALSE,
                       echo = TRUE)
 ```
 
-# 
-## Don't I need to reassign to save the output?
-(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The expection is `group_polys(area = TRUE)`. 
 
+how do i use randomizations? 
+how do i build a graph with the outputs?
+
+
+# Usage
+## `group_times`
+
+### `datetime` format
+The `group_times` function expects either one column: `POSIXct` or two columns: `IDate` and `ITime`. These are provided to the function using the names of the column in the input data. 
+
+`group_times(DT, datetime = 'datetime', threshold = '5 minutes')`
+
+`group_times(DT, datetime = c('idate', 'itime'), threshold = '5 minutes')`
+
+
+### `threshold` recommendations
+The `threshold` provided to `group_times` should be related to the fix rate of the input dataset or to the specific study system and species. If relocations are recorded every two hours, a `threshold = '2 hours'` will group all rows to the nearest two hour group (10am, 12pm, 2pm, 4pm, ...). This, however, means that the relocations can be up to one hour apart from each other. Picking a smaller threshold, e.g.: `threshold = '15 minutes'` may be more relevant. The flexibility of `spatsoc`'s threshold argument means the user must carefully consider what threshold is reasonable to their specific system. 
+
+### Limitations of `threshold`
+Because there is no 
+
+
+# Package design
+`spatsoc` leverages `data.table` to modify-by-reference and iteratively work on subsets of the input data. 
+
+## Don't I need to reassign to save the output?
+
+(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The exception is `group_polys(area = TRUE)`. 
 
 
 ## Why does a function print the result, but columns aren't added to my DT?
