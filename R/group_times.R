@@ -105,6 +105,17 @@ group_times <- function(DT = NULL,
         nHours <- as.integer(nHours)
       }
 
+      if (24 %% nHours != 0) {
+        stop(
+          strwrap(
+            prefix = " ",
+            initial = "",
+            x = 'number of hours provided
+                 does not evenly divide into 24'
+          )
+        )
+      }
+
       dtm[data.table::hour(itime) %% nHours < (nHours / 2),
           hours := nHours * (data.table::hour(itime) %/% nHours)]
       dtm[data.table::hour(itime) %% nHours >= (nHours / 2),
@@ -139,7 +150,7 @@ group_times <- function(DT = NULL,
       if (nMins > 60) {
         stop('threshold provided with > 60 minutes')
       }
-      if (60 %% nMins) {
+      if (60 %% nMins != 0) {
         stop('threshold not evenly divisible by 60')
       }
 
@@ -147,10 +158,19 @@ group_times <- function(DT = NULL,
           minutes := nMins * (data.table::minute(itime) %/% nMins)]
       dtm[data.table::minute(itime) %% nMins >= (nMins / 2),
           minutes := nMins * ((data.table::minute(itime) %/% nMins) + 1L)]
+
+      dtm[, c('adjMinute', 'adjHour', 'adjDate') :=
+            .(minutes, data.table::hour(itime), idate)]
+      dtm[data.table::hour(itime) == 23 &
+            minutes == 60,
+          c('adjMinute', 'adjHour', 'adjDate') :=
+            .(0, 0, idate + 1)]
+
       dtm[, timegroup := .GRP,
-          by = .(minutes, data.table::hour(itime), idate)]
+          by = c('adjMinute', 'adjHour', 'adjDate')]
+
+      set(dtm, j = c('adjMinute', 'adjHour', 'adjDate'), value = NULL)
       DT[, (colnames(dtm)) := dtm]
-      set(DT, j = colnames(dtm), value = dtm)
       return(DT[])
     } else if (grepl('day', threshold)) {
       nDays <- data.table::tstrsplit(threshold, ' ')[[1]]
