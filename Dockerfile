@@ -18,4 +18,5 @@ RUN apt-get update \
     devtools \
     rmarkdown \
     testthat \
-    roxygen2
+    roxygen2 \
+    covr
