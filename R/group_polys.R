@@ -41,7 +41,7 @@ group_polys <-
            splitBy = NULL,
            spPolys = NULL) {
     # due to NSE notes in R CMD check
-    nBy <- ..coords <- ..id <- withinGroup <- group <- NULL
+    nBy <- ..coords <- ..id <- withinGroup <- group <- outGroup <- NULL
 
     if (is.null(area) | !is.logical(area)) {
       stop('area must be provided (TRUE or FALSE)')
@@ -55,6 +55,10 @@ group_polys <-
 
     if (is.null(splitBy)) {
       if (!is.null(DT) && is.null(spPolys)) {
+        if ('group' %in% colnames(DT)) {
+          warning('group column will be overwritten by this function')
+          set(DT, j = 'group', value = NULL)
+        }
         spPolys <-
           build_polys(
             DT = DT,
@@ -74,9 +78,10 @@ group_polys <-
         g <- igraph::graph_from_adjacency_matrix(inter)
         ovr <- igraph::clusters(g)$membership
         out <- data.table::data.table(names(ovr),
-                                      unlist(ovr))
-        data.table::setnames(out, c('ID', 'group'))
-        return(out[])
+                                      as.integer(unlist(ovr)))
+        data.table::setnames(out, c(id, 'outGroup'))
+        DT[out, group := outGroup, on = id]
+        return(DT[])
       } else if (area) {
         if (!is.null(DT)) {
           if (any(DT[, grepl('[^A-z0-9]', .SD[[1]]), .SDcols = id])) {
