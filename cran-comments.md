@@ -1,4 +1,5 @@
-This is the first submission of `spatsoc` to CRAN. 
+## Resubmission
+Removed redundant "The spatsoc package" from DESCRIPTION. 
 
 ## Test environments
 * Linux: R 3.5
