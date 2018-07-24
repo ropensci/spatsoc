@@ -24,6 +24,7 @@ test_devel:
   - master
 
 coverage_job:
+  image: registry.gitlab.com/robit.a/spatsoc:latest
   stage: coverage
   when: on_success
   only:
