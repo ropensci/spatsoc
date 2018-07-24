@@ -4,4 +4,7 @@
 ^README\.Rmd$
 ^_pkgdown\.yml$
 ^\.gitlab-ci\.yml$
-^Dockerfile$
+^Dockerfiles/latest/Dockerfile$
+^Dockerfiles/devel/Dockerfile$
+^README\.md$
+^NEWS\.md$
