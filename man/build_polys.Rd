@@ -15,7 +15,7 @@ build_polys(DT = NULL, projection = NULL, hrType = NULL,
 
 \item{hrType}{type of HR estimation, of 'mcp' or 'kernel'}
 
-\item{hrParams}{parameters for adehabitatHR functions, a named list passed to do.call}
+\item{hrParams}{parameters for \code{adehabitatHR} functions, a named list passed to do.call}
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 

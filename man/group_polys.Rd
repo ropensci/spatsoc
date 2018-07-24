@@ -15,7 +15,7 @@ group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
 
 \item{hrType}{type of HR estimation, of 'mcp' or 'kernel'}
 
-\item{hrParams}{parameters for adehabitatHR functions, a named list passed to do.call}
+\item{hrParams}{parameters for \code{adehabitatHR} functions, a named list passed to do.call}
 
 \item{projection}{PROJ.4 character string}
 
@@ -28,10 +28,10 @@ group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
 \item{spPolys}{Alternatively, provide solely a SpatialPolygons object.}
 }
 \value{
-If area is FALSE, a DT is returned with ID and spatialtemporal group. If area is TRUE, a DT is returned with ID and a proportional overlap. ID refers to the focal individual of which the total area is compared against the overlapping area of ID2.
+If area is FALSE, a DT is returned with ID and spatial-temporal group. If area is TRUE, a DT is returned with ID and a proportional overlap. ID refers to the focal individual of which the total area is compared against the overlapping area of ID2.
 }
 \description{
-Group individuals by polygon (eg: home ranges) overlap
+Group individuals by polygon (home range) overlap
 }
 \examples{
 library(data.table)

@@ -2,7 +2,7 @@
 #'
 #' Group points by spatial and temporal overlap.
 #'
-#' This function finds spatialtemporal groups in input points. The threshold provided must be in the units of the projection of the coordinates. UTM coordinates (recommended) are in meters and threshold = 50 indicates a 50m threshold.
+#' This function finds spatial-temporal groups in input points. The threshold provided must be in the units of the projection of the coordinates. UTM coordinates (recommended) are in meters and threshold = 50 indicates a 50m threshold.
 #'
 #' @param DT input data.table
 #' @param threshold for grouping points, in the units of the projection

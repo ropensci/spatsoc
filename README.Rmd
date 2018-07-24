@@ -22,7 +22,7 @@ spatsoc is an R package for detecting spatial and temporal groups in GPS relocat
 
 See below for installation and basic usage. 
 
-For more detailed function descriptions, see the vignettes:
+For more details, see the vignette:
 
 * [Introduction to spatsoc](https://spatsoc.gitlab.io/articles/intro-spatsoc.html)
 

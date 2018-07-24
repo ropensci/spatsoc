@@ -2,13 +2,13 @@
 #'
 #' Assign an integer timegroup.
 #' Provide the threshold to group on and rows will be grouped.
-#' If the threshold is NULL, rows are grouped by matching exact datetimes.
+#' If the threshold is NULL, rows are grouped by the `datetime` column directly.
 #'
 #' The threshold can be in units of minutes, hours or days.
 #'
 #' @inheritParams group_pts
-#' @param datetime name of time column(s). either 1 POSIXct or 2 IDate and ITime. eg: 'datetime' or c('IDate', 'ITime')
-#' @param threshold threshold for grouping times. eg: '2 hours', '10 minutes', etc. if not provided, times will be matched exactly. Note that provided threshold must be in the expected format: '## unit'
+#' @param datetime name of time column(s). either 1 POSIXct or 2 IDate and ITime. e.g.: 'datetime' or c('IDate', 'ITime')
+#' @param threshold threshold for grouping times. e.g.: '2 hours', '10 minutes', etc. if not provided, times will be matched exactly. Note that provided threshold must be in the expected format: '## unit'
 #'
 #' @export
 #'

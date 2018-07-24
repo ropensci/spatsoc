@@ -9,14 +9,14 @@ group_times(DT = NULL, datetime = NULL, threshold = NULL)
 \arguments{
 \item{DT}{input data.table}
 
-\item{datetime}{name of time column(s). either 1 POSIXct or 2 IDate and ITime. eg: 'datetime' or c('IDate', 'ITime')}
+\item{datetime}{name of time column(s). either 1 POSIXct or 2 IDate and ITime. e.g.: 'datetime' or c('IDate', 'ITime')}
 
-\item{threshold}{threshold for grouping times. eg: '2 hours', '10 minutes', etc. if not provided, times will be matched exactly. Note that provided threshold must be in the expected format: '## unit'}
+\item{threshold}{threshold for grouping times. e.g.: '2 hours', '10 minutes', etc. if not provided, times will be matched exactly. Note that provided threshold must be in the expected format: '## unit'}
 }
 \description{
 Assign an integer timegroup.
 Provide the threshold to group on and rows will be grouped.
-If the threshold is NULL, rows are grouped by matching exact datetimes.
+If the threshold is NULL, rows are grouped by the \code{datetime} column directly.
 }
 \details{
 The threshold can be in units of minutes, hours or days.
