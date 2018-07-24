@@ -10,6 +10,8 @@
 #' @return Group by ID (by time) data.table
 #' @export
 #'
+#' @importFrom rgeos gIntersects gBuffer
+#' @importFrom igraph graph_from_adjacency_matrix clusters
 #' @examples
 #' library(data.table)
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))

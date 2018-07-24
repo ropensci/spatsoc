@@ -16,6 +16,7 @@
 #' @export
 #'
 #' @importFrom stats dist
+#' @importFrom igraph graph_from_adjacency_matrix clusters
 #'
 #' @examples
 #' library(data.table)

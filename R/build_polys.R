@@ -6,6 +6,8 @@
 #' @return Home range polygons for each ID
 #' @export
 #'
+#' @importFrom sp SpatialPointsDataFrame CRS
+#' @importFrom adehabitatHR mcp kernelUD getverticeshr
 build_polys <- function(DT = NULL,
                         projection = NULL,
                         hrType = NULL,

@@ -16,6 +16,8 @@
 #' @export
 #'
 #' @importFrom methods slot
+#' @importFrom rgeos gIntersects gIntersection gBuffer
+#' @importFrom igraph graph_from_adjacency_matrix clusters
 #'
 #' @examples
 #' library(data.table)

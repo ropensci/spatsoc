@@ -6,6 +6,7 @@
 #' @export
 #'
 #' @import data.table
+#' @importFrom sp SpatialLines Lines Line CRS rbind.SpatialLines
 build_lines <-
   function(DT = NULL,
            projection = NULL,
