@@ -1,10 +1,20 @@
-image: registry.gitlab.com/robit.a/spatsoc
-
 stages:
  - test
  - coverage
 
-test_job:
+test_latest:
+  image: registry.gitlab.com/robit.a/spatsoc:latest
+  stage: test
+  script:
+  - R CMD build . --no-manual
+  - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
+  - R CMD check "${PKG_FILE_NAME}" --no-manual
+  only:
+  - master
+
+
+test_devel:
+  image: registry.gitlab.com/robit.a/spatsoc:devel
   stage: test
   script:
   - R CMD build . --no-manual
