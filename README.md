@@ -6,6 +6,7 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repo
 [![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
 [![pipeline
 status](https://gitlab.com/robit.a/spatsoc/badges/master/pipeline.svg)](https://gitlab.com/robit.a/spatsoc/commits/master)
+[![](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/onboarding/issues/237)
 
 # spatsoc
 
