@@ -72,7 +72,7 @@ knitr::kable(DT[order(group, timegroup)][1:5, .(ID, X, Y, datetime, timegroup, g
 * `datetime`: date time column name in input data.table
 * `threshold`: threshold for grouping 
 
-### DT
+### `DT`
 A `data.table` with a date time formatted column. The input `DT` will be returned with columns appended. The `timegroup` column corresponds to the temporal group assigned to each row. Please note that the actual value of the time group is meaningless. Reordered data will return a different time group. What is meaningful, however,  is the contents of each group. Each group will contain all rows nearest to the threshold provided. 
 
 
@@ -123,17 +123,17 @@ This message is returned to the user when the `threshold` is NULL. This is the d
   
 * `DT`: input `data.table`
 * `threshold`: threshold for grouping 
-* `id`: 
-* `coords`:
-* `timegroup`:
-* `splitBy`: 
+* `id`: column name of IDs in `DT`
+* `coords`: column names of x and y coordinates in `DT`
+* `timegroup`: (optional) column name of time group
+* `splitBy`: (optional) column names of extra variables to group on
 
 ### `DT`
 The input `data.table`. It will returned with a column named group appended, which represents the spatial (and temporal if `timegroup` is provided) group. 
 
 
 ## `group_lines`
-`group_pts(DT, threshold, projection, id, coords, timegroup, splitBy, spLines)`
+`group_lines(DT, threshold, projection, id, coords, timegroup, splitBy, spLines)`
   
 * `DT`: input `data.table`
 * `threshold`: threshold for grouping 
@@ -149,13 +149,31 @@ See 2.2.1.
 
 
 ### `threshold`
+The `threshold` argument represents a buffer area around each line. When `threshold = 0`, the lines are grouped by spatial overlap. If the threshold is greater than 0, the lines buffered, then grouped by spatial overlap. 
+
 
 ## `group_polys`
+`group_polys(DT, area, hrType, hrParams, projection, id, coords, timegroup, splitBy, spLines)`
+  
+* `DT`: input `data.table`
+* `area`: boolean argument if proportional area should be returned
+* `hrType`: type of home range created 
+* `hrParams`: parameters relevant to the type of home range created
+* `projection`: projection of coordinates in `DT`
+* `id`: column name of IDs in `DT`
+* `coords`: column names of x and y coordinates in `DT`
+* `timegroup`: (optional) column name of time group
+* `splitBy`: (optional) column names of extra variables to group on
+* `spPolys`: alternatively, provide solely a `SpatialPolygons` object
 
 
-### `DT`
+### `DT` and `area`
 If `area = FALSE`, see 2.2.1. If `area = TRUE`, the DT will not be appended with a group column instead a `data.table` with IDs and proportional area overlap will be returned. 
 
+The default unit for area overlap is square meters. 
+
+### `hrType` and `hrParams`
+Currently, `spatsoc` offers two types of home ranges provided by the `adehabitatHR` package: `mcp` and `kernel`. The parameters must match the arguments of those functions. 
 
 ## `randomizations`
 
