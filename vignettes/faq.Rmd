@@ -1,5 +1,5 @@
 ---
-title: "FAQ about spatsoc"
+title: "Frequently asked questions about spatsoc"
 author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
 date: "`r Sys.Date()`"
 output: 
