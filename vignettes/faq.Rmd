@@ -109,7 +109,13 @@ The `threshold` of `group_times` is considered only within the scope of 24 hours
 
 * "columns found in input DT and will be overwritten by this function"
 
-This message 
+This message is returned to the user when a column matching those returned by `group_times` is found in the input DT. This is commonly the case when `group_times` is run multiple times consecutively. 
+
+
+* "no threshold provided, using the time field directly to group"
+
+This message is returned to the user when the `threshold` is NULL. This is the default setting of `threshold` and, at times, may be suitable. In this case, the date times in the `datetime` column will be grouped exactly. Usually, a threshold should be provided. 
+
 
 
 
