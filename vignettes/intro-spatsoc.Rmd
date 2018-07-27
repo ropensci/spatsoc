@@ -34,6 +34,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 ```{r, echo = TRUE}
 library(spatsoc)
+library(data.table)
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime,
                             tz = 'UTC')]
