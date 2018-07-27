@@ -150,6 +150,19 @@ See 2.2.1.
 
 ### `threshold`
 
+## `group_polys`
+
+
+### `DT`
+If `area = FALSE`, see 2.2.1. If `area = TRUE`, the DT will not be appended with a group column instead a `data.table` with IDs and proportional area overlap will be returned. 
+
+
+## `randomizations`
+
+
+
+
+
 # Package design
 `spatsoc` leverages `data.table` to modify-by-reference and iteratively work on subsets of the input data. 
 
