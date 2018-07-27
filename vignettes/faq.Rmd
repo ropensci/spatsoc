@@ -116,6 +116,20 @@ This message is returned to the user when a column matching those returned by `g
 
 This message is returned to the user when the `threshold` is NULL. This is the default setting of `threshold` and, at times, may be suitable. In this case, the date times in the `datetime` column will be grouped exactly. Usually, a threshold should be provided. 
 
+## `group_pts`
+
+
+`group_pts(DT, threshold, id, coords, timegroup, splitBy)`
+  
+* `DT`: input `data.table`
+* `threshold`: threshold for grouping 
+* `id`: 
+* `coords`:
+* `timegroup`:
+* `splitBy`: 
+
+### `DT`
+The input `data.table`. It will returned with a column named group appended, which represents the spatial (and temporal if `timegroup` is provided) group. 
 
 
 
