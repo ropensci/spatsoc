@@ -46,6 +46,8 @@ navbar:
       menu:
       - text: Introduction to spatsoc
         href: articles/intro-spatsoc.html
+      - text: Frequently asked questions
+        href: articles/faq.html
     news:
       text: "News"
       href: news/index.html
