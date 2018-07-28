@@ -80,7 +80,7 @@ test_that('projection provided or error', {
 
 test_that('mising hrParams warns default used', {
   copyDT <- copy(DT)
-  expect_warning(
+  expect_message(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -264,7 +264,7 @@ test_that('group column succesfully detected', {
   copyDT <- copy(DT)
   copyDT[, group := 1][, mnth := month(datetime)]
 
-  expect_warning(
+  expect_message(
     group_polys(
       DT = copyDT,
       projection = utm,

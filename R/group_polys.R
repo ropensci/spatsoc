@@ -58,7 +58,7 @@ group_polys <-
     if (is.null(splitBy)) {
       if (!is.null(DT) && is.null(spPolys)) {
         if ('group' %in% colnames(DT)) {
-          warning('group column will be overwritten by this function')
+          message('group column will be overwritten by this function')
           set(DT, j = 'group', value = NULL)
         }
         spPolys <-
@@ -128,7 +128,7 @@ group_polys <-
       }
 
       if ('group' %in% colnames(DT)) {
-        warning('group column will be overwritten by this function')
+        message('group column will be overwritten by this function')
         set(DT, j = 'group', value = NULL)
       }
 
