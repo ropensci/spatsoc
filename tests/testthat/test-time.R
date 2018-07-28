@@ -24,7 +24,7 @@ test_that('time field correctly provided or error detected', {
 
 test_that('threshold properly provided', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  expect_warning(
+  expect_message(
     group_times(copyDT, datetime = 'datetime',
                 threshold = NULL),
     'no threshold provided',
@@ -43,7 +43,7 @@ test_that('threshold properly provided', {
 test_that('time fields are already present', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
-  expect_warning(group_times(copyDT, datetime = 'datetime',
+  expect_message(group_times(copyDT, datetime = 'datetime',
                              threshold = '10 minutes'),
                  'columns found in input DT', fixed = FALSE)
 })
@@ -170,7 +170,7 @@ test_that('timegroup column and fields are detected if already present', {
   suppressWarnings(
     group_times(copyDT, datetime = 'datetime', threshold = '2 days'))
 
-  expect_warning(
+  expect_message(
     group_times(copyDT, datetime = 'datetime', threshold = '1 day'),
     'block, timegroup ',
     fixed = FALSE
@@ -179,7 +179,7 @@ test_that('timegroup column and fields are detected if already present', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
 
-  expect_warning(
+  expect_message(
     group_times(copyDT, datetime = 'datetime', threshold = '10 minutes'),
     'minutes, timegroup ',
     fixed = FALSE
@@ -188,7 +188,7 @@ test_that('timegroup column and fields are detected if already present', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '2 hours')
 
-  expect_warning(
+  expect_message(
     group_times(copyDT, datetime = 'datetime', threshold = '2 hours'),
     'hours, timegroup ',
     fixed = FALSE
@@ -198,7 +198,7 @@ test_that('timegroup column and fields are detected if already present', {
 test_that('warns if no threshold provided', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
 
-  expect_warning(
+  expect_message(
     group_times(copyDT, datetime = 'datetime'),
     'no threshold provided',
     fixed = FALSE

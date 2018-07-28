@@ -46,7 +46,7 @@ group_times <- function(DT = NULL,
   checkCols <- c('hours', 'minutes', 'block', 'timegroup')
 
   if (any(checkCols %in% colnames(DT))) {
-    warning(paste0(
+    message(paste0(
       paste(as.character(intersect(
         colnames(DT), checkCols
       )), collapse = ', '),
@@ -56,7 +56,7 @@ group_times <- function(DT = NULL,
   }
 
   if (is.null(threshold)) {
-    warning('no threshold provided, using the time field directly to group')
+    message('no threshold provided, using the time field directly to group')
     DT[, timegroup := .GRP, by = datetime]
     return(DT[])
   } else {
