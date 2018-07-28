@@ -184,7 +184,7 @@ test_that('hrParams returns error if params do not match function params', {
 })
 
 test_that('if hrParams NULL, warns', {
-  expect_warning(
+  expect_message(
     build_polys(
       DT = DT,
       projection = utm,

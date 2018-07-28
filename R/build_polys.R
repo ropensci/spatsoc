@@ -89,7 +89,7 @@ build_polys <- function(DT = NULL,
   }
 
   if (is.null(hrParams)) {
-    warning('hrParams is not provided, using defaults')
+    message('hrParams is not provided, using defaults')
   }
 
   if (is.null(spPts)) {
