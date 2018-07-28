@@ -128,6 +128,12 @@ The `threshold` of `group_times` is considered only within the scope of 24 hours
 * number of minutes cannot exceed 60
 * `threshold` cannot be fractional
 
+### Columns returned by group_times
+The main column returned by `group_times` is "timegroup". It represents the temporal group of each row, where those nearest (either above or below) within the threshold are grouped. It does not have any meaning, but the contents of each group do. That means if the data is reordered, a row may have a different time group, but the other rows in that group should not change.  
+
+The other columns are provided to help the user investigate, troubleshoot and interpret the timegroup. These may be "minutes", "hours", "day", "minday" or "maxday". 
+
+
 ### Warnings and messages
 
 * "columns found in input DT and will be overwritten by this function"
@@ -168,7 +174,7 @@ The input `data.table`. It will returned with a column named group appended, whi
 * `spLines`: alternatively, provide solely a `SpatialLines` object
 
 ### DT
-See 2.2.1. 
+See 3.2.1. 
 
 
 ### threshold
@@ -191,9 +197,11 @@ The `threshold` argument represents a buffer area around each line. When `thresh
 
 
 ### DT and area
-If `area = FALSE`, see 2.2.1. If `area = TRUE`, the DT will not be appended with a group column instead a `data.table` with IDs and proportional area overlap will be returned. 
+If `area = FALSE`, see 3.2.1. If `area = TRUE`, the DT will not be appended with a group column instead a `data.table` with IDs and proportional area overlap will be returned. 
 
 The default unit for area overlap is square meters. 
+
+<!-- direction of proportion -->
 
 ### hrType and hrParams
 Currently, `spatsoc` offers two types of home ranges provided by the `adehabitatHR` package: `mcp` and `kernel`. The parameters must match the arguments of those functions. 
