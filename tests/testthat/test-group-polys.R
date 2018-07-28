@@ -263,7 +263,7 @@ test_that('withinGroup is not returned to the user', {
 test_that('group column succesfully detected', {
   copyDT <- copy(DT)
   copyDT[, group := 1][, mnth := month(datetime)]
-
+  copyDT <- copyDT[, nBy := .N, by = .(mnth, ID)][nBy > 30]
   expect_message(
     group_polys(
       DT = copyDT,

@@ -355,6 +355,8 @@ test_that('only 1 unique timegroup * splitBy', {
 test_that('group column succesfully detected', {
   copyDT <- copy(DT)[, group := 1]
   copyDT[, mnth := month(datetime)][, yr := year(datetime)]
+  copyDT[, nBy := .N, by = .(yr, mnth, ID)]
+  copyDT <- copyDT[nBy > 2]
 
   expect_message(
     group_lines(
