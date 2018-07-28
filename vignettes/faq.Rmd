@@ -1,0 +1,234 @@
+---
+title: "Frequently asked questions about spatsoc"
+author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{FAQ}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitropts, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, 
+                      warning = FALSE,
+                      eval = FALSE, 
+                      echo = TRUE)
+```
+
+
+# Usage
+## Spatial and temporal grouping
+
+`spatsoc` is designed to work in two steps: temporal followed by spatial grouping. Considering your specific study species and system, determine a relevant temporal and spatial grouping threshold. This may be 5 minutes and 50 meters or 2 days and 100 meters or any other thresholds - that decision is left to you. In some cases, the spatial grouping function selected is only relevant with certain temporal grouping thresholds. For example, we wouldn't expect a threshold of 5 minutes with `group_polys`. 
+
+```{r, eval = TRUE, results = 'hide'}
+# Load packages
+library(spatsoc)
+library(data.table)
+
+# Read data as a data.table
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+
+# Cast datetime column to POSIXct
+DT[, datetime := as.POSIXct(datetime)]
+
+# Temporal groups
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+
+# Spatial groups
+group_pts(
+  DT,
+  threshold = 50,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+)
+```
+
+```{r, eval = TRUE, echo = FALSE}
+knitr::kable(DT[order(group, timegroup)][1:5, .(ID, X, Y, datetime, timegroup, group)])
+```
+
+<!-- ## Social network analysis -->
+
+<!-- ### Grouping -->
+
+<!-- ### Randomizations -->
+
+<!-- ### group by individual matrix -->
+
+<!-- ### igraph -->
+
+
+# Installation
+
+## System dependencies
+
+### GEOS
+Install `GEOS`:
+
+- Debian/Ubuntu: `apt-get install libgeos-dev`
+- Arch: `pacman -S geos`
+- Fedora: `dnf install geos geos-devel`
+- Mac: `brew install geos`
+- Windows: see [here](https://trac.osgeo.org/osgeo4w/)
+
+## Package dependencies
+
+* `data.table`
+* `igraph`
+* `sp`
+* `adehabitatHR`
+
+
+
+# Functions
+## group_times
+
+`group_times(DT, datetime, threshold)`
+
+* `DT`: input `data.table`
+* `datetime`: date time column name in input data.table
+* `threshold`: threshold for grouping 
+
+### DT
+A `data.table` with a date time formatted column. The input `DT` will be returned with columns appended. The `timegroup` column corresponds to the temporal group assigned to each row. Please note that the actual value of the time group is meaningless. Reordered data will return a different time group. What is meaningful, however,  is the contents of each group. Each group will contain all rows nearest to the threshold provided. 
+
+
+### datetime format
+The `group_times` function expects either one column (`POSIXct`) or two columns (`IDate` and `ITime`). 
+
+Given a character column representing the date time, convert it to `POSIXct` or `IDate` and `ITime`:
+
+```{r posixct}
+DT[, datetime := as.POSIXct(datetime)]
+```
+
+These are provided to the function using the names of the column in the input data. 
+
+`group_times(DT, datetime = 'datetime', threshold = '5 minutes')`
+
+or
+
+`group_times(DT, datetime = c('idate', 'itime'), threshold = '5 minutes')`
+
+
+### threshold recommendations
+The `threshold` provided to `group_times` should be related to the fix rate of the input dataset or to the specific study system and species. If relocations are recorded every two hours, a `threshold = '2 hours'` will group all rows to the nearest two hour group (10am, 12pm, 2pm, 4pm, ...). This, however, means that the relocations can be up to one hour apart from each other. Picking a smaller threshold, e.g.: `threshold = '15 minutes'` may be more relevant. The flexibility of `spatsoc`'s threshold argument means the user must carefully consider what threshold is reasonable to their specific system. 
+
+### Limitations of threshold
+The `threshold` of `group_times` is considered only within the scope of 24 hours and this poses limitations on it:
+
+* `threshold` must evenly divide into 60 minutes or 24 hours
+* multi-day blocks should divide evenly into the range of days in the `DT`
+* number of minutes cannot exceed 60
+* `threshold` cannot be fractional
+
+### Columns returned by group_times
+The main column returned by `group_times` is "timegroup". It represents the temporal group of each row, where those nearest (either above or below) within the threshold are grouped. It does not have any meaning, but the contents of each group do. That means if the data is reordered, a row may have a different time group, but the other rows in that group should not change.  
+
+The other columns are provided to help the user investigate, troubleshoot and interpret the timegroup. These may be "minutes", "hours", "day", "minday" or "maxday". 
+
+
+### Warnings and messages
+
+* "columns found in input DT and will be overwritten by this function"
+
+This message is returned to the user when a column matching those returned by `group_times` is found in the input DT. This is commonly the case when `group_times` is run multiple times consecutively. 
+
+
+* "no threshold provided, using the time field directly to group"
+
+This message is returned to the user when the `threshold` is NULL. This is the default setting of `threshold` and, at times, may be suitable. In this case, the date times in the `datetime` column will be grouped exactly. Usually, a threshold should be provided. 
+
+## group_pts
+
+
+`group_pts(DT, threshold, id, coords, timegroup, splitBy)`
+  
+* `DT`: input `data.table`
+* `threshold`: threshold for grouping 
+* `id`: column name of IDs in `DT`
+* `coords`: column names of x and y coordinates in `DT`
+* `timegroup`: (optional) column name of time group
+* `splitBy`: (optional) column names of extra variables to group on
+
+### DT
+The input `data.table`. It will returned with a column named group appended, which represents the spatial (and temporal if `timegroup` is provided) group. 
+
+
+## group_lines
+`group_lines(DT, threshold, projection, id, coords, timegroup, splitBy, spLines)`
+  
+* `DT`: input `data.table`
+* `threshold`: threshold for grouping 
+* `projection`: projection of coordinates in `DT`
+* `id`: column name of IDs in `DT`
+* `coords`: column names of x and y coordinates in `DT`
+* `timegroup`: (optional) column name of time group
+* `splitBy`: (optional) column names of extra variables to group on
+* `spLines`: alternatively, provide solely a `SpatialLines` object
+
+### DT
+See 3.2.1. 
+
+
+### threshold
+The `threshold` argument represents a buffer area around each line. When `threshold = 0`, the lines are grouped by spatial overlap. If the threshold is greater than 0, the lines buffered, then grouped by spatial overlap. 
+
+
+## group_polys
+`group_polys(DT, area, hrType, hrParams, projection, id, coords, timegroup, splitBy, spLines)`
+  
+* `DT`: input `data.table`
+* `area`: boolean argument if proportional area should be returned
+* `hrType`: type of home range created 
+* `hrParams`: parameters relevant to the type of home range created
+* `projection`: projection of coordinates in `DT`
+* `id`: column name of IDs in `DT`
+* `coords`: column names of x and y coordinates in `DT`
+* `timegroup`: (optional) column name of time group
+* `splitBy`: (optional) column names of extra variables to group on
+* `spPolys`: alternatively, provide solely a `SpatialPolygons` object
+
+
+### DT and area
+If `area = FALSE`, see 3.2.1. If `area = TRUE`, the DT will not be appended with a group column instead a `data.table` with IDs and proportional area overlap will be returned. 
+
+The default unit for area overlap is square meters. 
+
+<!-- direction of proportion -->
+
+### hrType and hrParams
+Currently, `spatsoc` offers two types of home ranges provided by the `adehabitatHR` package: `mcp` and `kernel`. The parameters must match the arguments of those functions. 
+
+## randomizations
+
+
+
+
+
+# Package design
+`spatsoc` leverages `data.table` to modify-by-reference and iteratively work on subsets of the input data. 
+
+## Don't I need to reassign to save the output?
+
+(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The exception is `group_polys(area = TRUE)`. 
+
+
+## Why does a function print the result, but columns aren't added to my DT?
+
+Check that your `data.table` has columns allocated (with `data.table::truelength`) and if not, use `data.table::setDT`. This can happen if you are reading your data from `RDS` or `RData` files.  [See here.](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-faq.html#reading-data.table-from-rds-or-rdata-file)
+
+```{r alloc}
+if (truelength(DT) == 0) {
+  setDT(DT)
+}
+# then go to spatsoc
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+```
+
