@@ -20,19 +20,9 @@ knitr::opts_chunk$set(message = FALSE,
 ```
 
 
-
-* how do i use randomizations? 
-* how do i build a graph with the outputs?
-* my timegroup changes when i reorder
-* GEOS
-* gbi
-* passing to igraph/asnipe
-* not a moving window
-* direction of proportion
-* incentive/reasoning/purpose/why does spatsoc exist
-
-
 # Usage
+## Spatial and temporal grouping
+
 `spatsoc` is designed to work in two steps: temporal followed by spatial grouping. Considering your specific study species and system, determine a relevant temporal and spatial grouping threshold. This may be 5 minutes and 50 meters or 2 days and 100 meters or any other thresholds - that decision is left to you. In some cases, the spatial grouping function selected is only relevant with certain temporal grouping thresholds. For example, we wouldn't expect a threshold of 5 minutes with `group_polys`. 
 
 ```{r, eval = TRUE, results = 'hide'}
