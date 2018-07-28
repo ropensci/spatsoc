@@ -49,7 +49,7 @@ group_lines <-
     group <- ..coords <- ..id <- withinGroup <- NULL
 
     if (is.null(threshold)) {
-      warning('threshold missing, using 0 by default')
+      message('threshold missing, using 0 by default')
       threshold <- 0
     } else if (threshold < 0) {
       stop('cannot provide a negative threshold')
@@ -83,7 +83,7 @@ group_lines <-
       }
 
       if ('group' %in% colnames(DT)) {
-        warning('group column will be overwritten by this function')
+        message('group column will be overwritten by this function')
         set(DT, j = 'group', value = NULL)
       }
     } else if (!is.null(spLines) && is.null(DT)) {

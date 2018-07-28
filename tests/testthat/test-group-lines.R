@@ -149,7 +149,7 @@ test_that('threshold is correctly provided, or error', {
     group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   )
   copyDT[, N := .N, by = .(ID, timegroup)]
-  expect_warning(
+  expect_message(
     group_lines(
       DT = copyDT[N > 2],
       threshold = NULL,
@@ -356,7 +356,7 @@ test_that('group column succesfully detected', {
   copyDT <- copy(DT)[, group := 1]
   copyDT[, mnth := month(datetime)][, yr := year(datetime)]
 
-  expect_warning(
+  expect_message(
     group_lines(
       DT = copyDT,
       threshold = 0,
@@ -369,7 +369,7 @@ test_that('group column succesfully detected', {
     'group column will be overwritten'
   )
 
-  expect_warning(
+  expect_message(
     group_lines(
       DT = copyDT,
       threshold = 0,
