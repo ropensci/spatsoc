@@ -18,10 +18,12 @@ methods suitable for GPS data.
 
 See below for installation and basic usage.
 
-For more details, see the vignette:
+For more details, see the vignettes:
 
   - [Introduction to
     spatsoc](https://spatsoc.gitlab.io/articles/intro-spatsoc.html)
+  - [Frequently asked
+    questions](https://spatsoc.gitlab.io/articles/faq.html)
 
 ## Installation
 

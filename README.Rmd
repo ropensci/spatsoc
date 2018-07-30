@@ -22,9 +22,10 @@ spatsoc is an R package for detecting spatial and temporal groups in GPS relocat
 
 See below for installation and basic usage. 
 
-For more details, see the vignette:
+For more details, see the vignettes:
 
 * [Introduction to spatsoc](https://spatsoc.gitlab.io/articles/intro-spatsoc.html)
+* [Frequently asked questions](https://spatsoc.gitlab.io/articles/faq.html)
 
 ## Installation
 `spatsoc` depends on `rgeos` and requires [GEOS](https://trac.osgeo.org/geos/) installed on the system. 
