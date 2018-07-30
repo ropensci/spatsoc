@@ -22,4 +22,5 @@
 #'
 #' @docType package
 #' @name spatsoc
+#' @aliases spatsoc-package
 NULL
