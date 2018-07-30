@@ -32,6 +32,12 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
 
+`spatsoc` expects a `data.table` for all of its functions. If you have a `data.frame`, you can use `data.table::setDT()` to convert it by reference. If your data is a CSV, you can use `data.table::fread()` to import it as a `data.table`. 
+
+<!-- note this input/example data is just for now.. -->
+The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. <!--Relocations were recorded using GPS collars with fixes obtained every two hours. -->Using these data, we can compare the various grouping methods available in `spatsoc`.
+
+
 ```{r, echo = TRUE}
 library(spatsoc)
 library(data.table)
