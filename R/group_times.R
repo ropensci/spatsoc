@@ -129,7 +129,7 @@ group_times <- function(DT = NULL,
 
       dtm[, timegroup := .GRP, by = .(hours, adjIDate)]
       set(dtm, j = 'adjIDate', value = NULL)
-
+      set(dtm, j = c('idate', 'itime'), value = NULL)
       DT[, (colnames(dtm)) := dtm]
 
       return(DT[])
@@ -173,6 +173,8 @@ group_times <- function(DT = NULL,
           by = c('adjMinute', 'adjHour', 'adjDate')]
 
       set(dtm, j = c('adjMinute', 'adjHour', 'adjDate'), value = NULL)
+      set(dtm, j = c('idate', 'itime'), value = NULL)
+
       DT[, (colnames(dtm)) := dtm]
       return(DT[])
     } else if (grepl('day', threshold)) {
@@ -183,8 +185,9 @@ group_times <- function(DT = NULL,
       if (nDays == 1) {
         dtm[, timegroup := .GRP,
             by = .(data.table::year(idate), data.table::yday(idate))]
+
+        set(dtm, j = c('idate', 'itime'), value = NULL)
         DT[, (colnames(dtm)) := dtm]
-        # set(DT, j = colnames(dtm), value = dtm)
         return(DT[])
       } else {
 
@@ -218,9 +221,8 @@ group_times <- function(DT = NULL,
         ), by = year(idate)]
 
         dtm[, timegroup := .GRP, .(year(idate), block)]
-
+        set(dtm, j = c('idate', 'itime'), value = NULL)
         DT[, (colnames(dtm)) := dtm]
-        # set(DT, j = colnames(dtm), value = dtm)
         return(DT[])
       }
     } else {
