@@ -12,6 +12,9 @@
 #'
 #' @export
 #'
+#'
+#' @family Temporal grouping
+#'
 #' @examples
 #' library(data.table)
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))

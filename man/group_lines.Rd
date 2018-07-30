@@ -4,8 +4,9 @@
 \alias{group_lines}
 \title{Groups Lines}
 \usage{
-group_lines(DT = NULL, threshold = NULL, projection = NULL, id = NULL,
-  coords = NULL, timegroup = NULL, splitBy = NULL, spLines = NULL)
+group_lines(DT = NULL, threshold = NULL, projection = NULL,
+  id = NULL, coords = NULL, timegroup = NULL, splitBy = NULL,
+  spLines = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -57,3 +58,8 @@ group_lines(DT, threshold = 50, projection = utm,
             timegroup = 'timegroup',
             splitBy = 'yr')
 }
+\seealso{
+Other Spatial grouping: \code{\link{group_polys}},
+  \code{\link{group_pts}}
+}
+\concept{Spatial grouping}

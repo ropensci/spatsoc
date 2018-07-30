@@ -24,3 +24,7 @@ SpatialLines for each ID provided
 \description{
 Build Lines
 }
+\seealso{
+Other Build functions: \code{\link{build_polys}}
+}
+\concept{Build functions}

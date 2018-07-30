@@ -10,6 +10,8 @@
 #' @return Group by ID (by time) data.table
 #' @export
 #'
+#' @family Spatial grouping
+#'
 #' @importFrom rgeos gIntersects gBuffer
 #' @importFrom igraph graph_from_adjacency_matrix clusters
 #' @examples

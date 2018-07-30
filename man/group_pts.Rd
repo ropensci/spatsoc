@@ -49,3 +49,8 @@ group_pts(DT, threshold = 5, id = 'ID',
 group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'),
          timegroup = 'timegroup', splitBy = 'population')
 }
+\seealso{
+Other Spatial grouping: \code{\link{group_lines}},
+  \code{\link{group_polys}}
+}
+\concept{Spatial grouping}

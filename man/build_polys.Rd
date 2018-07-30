@@ -31,3 +31,7 @@ Home range polygons for each ID
 \description{
 Build Home Ranges for Individuals
 }
+\seealso{
+Other Build functions: \code{\link{build_lines}}
+}
+\concept{Build functions}

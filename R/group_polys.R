@@ -19,6 +19,8 @@
 #' @importFrom rgeos gIntersects gIntersection gBuffer
 #' @importFrom igraph graph_from_adjacency_matrix clusters
 #'
+#' @family Spatial grouping
+#'
 #' @examples
 #' library(data.table)
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))

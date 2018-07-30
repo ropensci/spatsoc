@@ -47,3 +47,8 @@ areaDT <- group_polys(DT, area = TRUE, 'mcp', list(percent = 95),
                       projection = utm,
                       id = 'ID', coords = c('X', 'Y'))
 }
+\seealso{
+Other Spatial grouping: \code{\link{group_lines}},
+  \code{\link{group_pts}}
+}
+\concept{Spatial grouping}

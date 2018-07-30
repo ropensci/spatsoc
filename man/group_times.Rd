@@ -34,3 +34,4 @@ group_times(DT, datetime = 'datetime', threshold = '2 hours')
 group_times(DT, datetime = 'datetime', threshold = '10 days')
 
 }
+\concept{Temporal grouping}

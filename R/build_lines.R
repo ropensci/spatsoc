@@ -5,6 +5,8 @@
 #' @return SpatialLines for each ID provided
 #' @export
 #'
+#' @family Build functions
+#'
 #' @import data.table
 #' @importFrom sp SpatialLines Lines Line CRS rbind.SpatialLines
 build_lines <-
