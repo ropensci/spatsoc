@@ -129,9 +129,15 @@ The `threshold` of `group_times` is considered only within the scope of 24 hours
 * `threshold` cannot be fractional
 
 ### Columns returned by group_times
-The main column returned by `group_times` is "timegroup". It represents the temporal group of each row, where those nearest (either above or below) within the threshold are grouped. It does not have any meaning, but the contents of each group do. That means if the data is reordered, a row may have a different time group, but the other rows in that group should not change.  
+The main column returned by `group_times` is "timegroup". It represents the temporal group of each row, where those nearest (either above or below) within the threshold are grouped. Its actual value does not have any meaning, but the contents of each group do. That means if the data is reordered, a row may have a different time group, but the other rows in that group should not change.  
 
-The other columns are provided to help the user investigate, troubleshoot and interpret the timegroup. These may be "minutes", "hours", "day", "minday" or "maxday". 
+The extra columns are provided to help the user investigate, troubleshoot and interpret the timegroup. 
+
+| threshold unit | column(s) added |
+|----------------|-----------------|
+| minute         | "minutes" column added identifying the nearest minute group for each row.      |
+| hour           | "hours" column added identifying the nearest hour group for each row.         |
+| day            | "block", "minday", "maxday" columns added identifying the multiday block for each row. "block" refers to the specific multiday block, defined by the minimum day "minday" and maximum day "maxday".          |
 
 
 ### Warnings and messages
