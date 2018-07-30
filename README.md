@@ -51,6 +51,11 @@ install.packages('spatsoc')
 
 ### Import package, read data
 
+`spatsoc` expects a `data.table` for all of its functions. If you have a
+`data.frame`, you can use `data.table::setDT()` to convert it by
+reference. If your data is a CSV, you can use `data.table::fread()` to
+import it as a `data.table`.
+
 ``` r
 library(spatsoc)
 library(data.table)

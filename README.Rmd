@@ -48,14 +48,17 @@ install.packages('spatsoc')
 
 ## Usage
 ### Import package, read data
+`spatsoc` expects a `data.table` for all of its functions. If you have a `data.frame`, you can use `data.table::setDT()` to convert it by reference. If your data is a CSV, you can use `data.table::fread()` to import it as a `data.table`. 
+
 ```{r library}
 library(spatsoc)
 library(data.table)
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
-### Temporal grouping
 
+
+### Temporal grouping
 #### group_times
 ```{r groupTimes}
 group_times(
