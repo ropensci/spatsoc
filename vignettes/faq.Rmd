@@ -21,6 +21,8 @@ knitr::opts_chunk$set(message = FALSE,
 
 
 # Usage
+`spatsoc` leverages `data.table` to modify by reference and iteratively work on subsets of the input data. The first input for all functions in `spatsoc` is `DT`, an input `data.table`. If your data is a `data.frame`, you can convert it by reference using `setDT(DF)`. 
+
 ## Spatial and temporal grouping
 
 `spatsoc` is designed to work in two steps: temporal followed by spatial grouping. Considering your specific study species and system, determine a relevant temporal and spatial grouping threshold. This may be 5 minutes and 50 meters or 2 days and 100 meters or any other thresholds - that decision is left to you. In some cases, the spatial grouping function selected is only relevant with certain temporal grouping thresholds. For example, we wouldn't expect a threshold of 5 minutes with `group_polys`. 
@@ -219,8 +221,6 @@ Currently, `spatsoc` offers two types of home ranges provided by the `adehabitat
 
 
 # Package design
-`spatsoc` leverages `data.table` to modify-by-reference and iteratively work on subsets of the input data. 
-
 ## Don't I need to reassign to save the output?
 
 (Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The exception is `group_polys(area = TRUE)`. 
