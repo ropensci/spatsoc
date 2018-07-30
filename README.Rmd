@@ -38,7 +38,8 @@ For more details, see the vignette:
 
 ```{r install}
 # Development version
-devtools::install_git('https://gitlab.com/robit.a/spatsoc.git')
+devtools::install_git('https://gitlab.com/robit.a/spatsoc.git',
+                      build_vignettes = TRUE)
 
 # CRAN
 install.packages('spatsoc')
