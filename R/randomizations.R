@@ -1,19 +1,28 @@
 #' Randomizations
 #'
-#' Data stream randomization methods
+#' \code{randomizations} performs data-stream social network randomization. The function accepts a \code{data.table} with relocation data, individual identifiers and a randomization \code{type}. The \code{data.table} is randomized either using \code{step} or \code{daily} between-individual methods, or within-individual daily \code{trajectory} method described by Spiegel et al. (2016).
 #'
 #' Three randomization methods are provided:
+#' \enumerate{
+#'   \item step - randomizes identities of relocations between individuals within each time step.
+#'   \item daily - randomizes identities of relocations between individuals within each day.
+#'   \item trajectory - randomizes daily trajectories within individuals (Spiegel et al. 2016).
+#' }
 #'
-#' 'step' randomly assigns an ID to each location.
+#' The \code{type} must be one of the above methods. Depending on the \code{type}, the \code{datetime} must be a certain format:
 #'
-#' 'daily' will randomize the ID for each individual 24hr trajectory
+#' \itemize{
+#'   \item step - datetime is integer group created by \code{group_times}
+#'   \item daily - datetime is \code{POSIXct} format
+#'   \item trajectory - datetime is \code{POSIXct} format
+#' }
 #'
-#' 'trajectory' will implement the daily movement trajectory randomizations (Spiegel et al. 2016).
+#' The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns.
 #'
-#' @param DT input data.table with id, group fields and (optional) time fields
+#' The \code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
+#'
 #' @param type one of 'daily', 'step' or 'trajectory' - see details
-#' @param id field indicating the id in the input data.table
-#' @param datetime (optional) time field used for providing date time or hour field or timegroup field
+#' @param datetime (optional) time field used for providing date time - see details
 #' @inheritParams group_pts
 #' @param splitBy List of fields in DT to split the randomization process by
 #' @param iterations The number of iterations to randomize
@@ -21,6 +30,31 @@
 #' @references
 #'   \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 #' @export
+#'
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+#'
+#' # Spatial grouping without timegroup
+#' group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+#'
+#' # Randomization: step
+#' randomizations(DT, type = 'step', id = 'ID', datetime = 'timegroup')
+#'
+#' # Randomization: daily
+#' randomizations(DT, type = 'daily', id = 'ID', datetime = 'datetime')
+#'
+#' # Randomization: trajectory
+#' randomizations(DT, type = 'trajectory', id = 'ID', datetime = 'datetime')
 randomizations <- function(DT = NULL,
                            type = NULL,
                            id = NULL,
