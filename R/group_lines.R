@@ -11,7 +11,7 @@
 #'
 #' The \code{timegroup} argument is optional, but recommended to pair with \code{\link{group_times}}. The intended framework is to group rows temporally with \code{\link{group_times}} then spatially with \code{group_lines} (or \code{\link{group_pts}}, \code{\link{group_polys}}). With \code{group_lines}, pick a relevant \code{group_times} \code{threshold} such as \code{'1 day'} or \code{'7 days'} which is informed by your study species and system.
 #'
-#' The \code{splitBy} argument offers further control over grouping. If within your \code{DT}, you have multiple populations, subgroups or other distinct parts, you can provide the name of the column which identifies them to \code{splitBy}. The grouping performed by \code{group_pts} will only consider rows within each \code{splitBy} subgroup.
+#' The \code{splitBy} argument offers further control over grouping. If within your \code{DT}, you have multiple populations, subgroups or other distinct parts, you can provide the name of the column which identifies them to \code{splitBy}. The grouping performed by \code{group_lines} will only consider rows within each \code{splitBy} subgroup.
 #'
 #' @return \code{group_lines} returns the input \code{DT} appended with a \code{group} column. This column represents the spatial (and if \code{timegroup} was provided - spatiotemporal) group calculated by overlapping lines. As with \code{\link{group_times}}, the actual value of \code{group} is meaningless, rather the contents of the group. If the data was reordered, the \code{group} may change, but the contents of each \code{group} would not.
 #'
