@@ -51,6 +51,7 @@ build_lines <-
            projection = NULL,
            id = NULL,
            coords = NULL,
+           sortBy = NULL,
            splitBy = NULL) {
 
     # due to NSE notes in R CMD check
