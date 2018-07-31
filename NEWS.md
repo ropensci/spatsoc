@@ -1,4 +1,13 @@
-# spatsoc 0.1.0 
+# v 0.1.1
+
+## Development version
+
+* improvements to function documentation
+* [FAQ](https://spatsoc.gitlab.io/articles/faq.html) vignette added
+
+
+
+# v 0.1.0 
 
 ## Initial release
 
