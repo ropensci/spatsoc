@@ -122,7 +122,7 @@ utm <- '+proj=utm +zone=21 ellps=WGS84'
 group_times(DT = DT, datetime = 'datetime', threshold = '1 day')
 group_lines(DT, threshold = 50, projection = utm, 
             id = 'ID', coords = c('X', 'Y'),
-            timegroup = 'timegroup')
+            timegroup = 'timegroup', sortBy = 'datetime')
 ```
 
 ```{r grouplines, eval = TRUE}
@@ -132,7 +132,7 @@ knitr::kable(
     group_times(DT = DT, datetime = 'datetime', 
                 threshold = '1 day'), 
     threshold = 50, projection = utm, 
-    id = 'ID', coords = c('X', 'Y')
+    id = 'ID', coords = c('X', 'Y'), sortBy = 'datetime'
   )[order(group)][
         1:nRows, .(ID, X, Y, timegroup, group)]
 )

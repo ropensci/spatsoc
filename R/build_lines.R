@@ -18,7 +18,6 @@
 #' An error is returned when an individual has less than 2 relocations, making it impossible to build a line.
 #'
 #' @inheritParams group_lines
-#' @param sortBy name of date time column(s) to sort rows by. either 1 POSIXct or 2 IDate and ITime. e.g.: 'datetime' or c('idate', 'itime').
 #'
 #' @export
 #'
@@ -42,11 +41,13 @@
 #' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 #'
 #' # Build lines for each individual
-#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'), sortBy = 'datetime')
+#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
+#'             sortBy = 'datetime')
 #'
 #' # Build lines for each individual by year
 #' DT[, yr := year(datetime)]
-#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'), sortBy = 'datetime', splitBy = 'yr')
+#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
+#'             sortBy = 'datetime', splitBy = 'yr')
 #'
 build_lines <-
   function(DT = NULL,
