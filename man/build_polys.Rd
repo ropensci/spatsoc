@@ -32,6 +32,8 @@ Home range polygons for each ID
 Build Home Ranges for Individuals
 }
 \seealso{
+\code{\link{group_polys}}
+
 Other Build functions: \code{\link{build_lines}}
 }
 \concept{Build functions}

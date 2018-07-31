@@ -48,6 +48,8 @@ areaDT <- group_polys(DT, area = TRUE, 'mcp', list(percent = 95),
                       id = 'ID', coords = c('X', 'Y'))
 }
 \seealso{
+\code{\link{build_polys}} \code{\link{group_times}}
+
 Other Spatial grouping: \code{\link{group_lines}},
   \code{\link{group_pts}}
 }

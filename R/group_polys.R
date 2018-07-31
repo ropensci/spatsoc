@@ -20,6 +20,7 @@
 #' @importFrom igraph graph_from_adjacency_matrix clusters
 #'
 #' @family Spatial grouping
+#' @seealso \code{\link{build_polys}} \code{\link{group_times}}
 #'
 #' @examples
 #' library(data.table)
