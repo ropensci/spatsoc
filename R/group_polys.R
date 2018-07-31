@@ -1,17 +1,25 @@
 #' Group Polygons
 #'
-#' Group individuals by polygon (home range) overlap
+#' \code{group_polys} groups rows into spatial groups by overlapping polygons (home ranges). The function accepts a \code{data.table} with relocation data, individual identifiers and an \code{area} argument.  The relocation data is transformed into home range \code{SpatialPolygons}. If the \code{area} argument is \code{FALSE}, \code{group_polys} returns grouping calculated by overlap. If the \code{area} argument is \code{TRUE}, the area and proportion of overlap is calculated. Relocation data should be in two columns representing the latitude and longitude.
 #'
+#' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, latitude and longitude, and additional grouping columns.
+#'
+#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{spatialreference.org}).
+#'
+#' The \code{hrType} must be either one of "kernel" or "mcp". The \code{hrParams} must be a named list of arguments matching those of \code{adehabitatHR::kernelUD} or \code{adehabitatHR::mcp}.
+#'
+#' The \code{splitBy} argument offers further control over grouping. If within your \code{DT}, you have multiple populations, subgroups or other distinct parts, you can provide the name of the column which identifies them to \code{splitBy}. The grouping performed by \code{group_polys} will only consider rows within each \code{splitBy} subgroup.
+#'
+#' @return When \code{area} is \code{FALSE}, \code{group_polys} returns the input \code{DT} appended with a \code{group} column. The group represents the spatial overlap group. When \code{area} is \code{TRUE}, \code{group_polys} returns a proportional area overlap \code{data.table}. In this case, ID refers to the focal individual of which the total area is compared against the overlapping area of ID2.
+#'
+#' If \code{area} is \code{FALSE}, a message is returned when a column named \code{group} already exists in the input \code{DT}, because it will be overwritten.
 #'
 #' @inheritParams group_pts
 #' @inheritParams group_lines
-#' @param area boolean indicating either returning area and proportion of overlap or group
-#' @param hrType type of HR estimation, of 'mcp' or 'kernel'
-#' @param hrParams parameters for `adehabitatHR` functions, a named list passed to do.call
-#' @param spPolys Alternatively, provide solely a SpatialPolygons object.
-#'
-#' @return If area is FALSE, a DT is returned with ID and spatial-temporal group. If area is TRUE, a DT is returned with ID and a proportional overlap. ID refers to the focal individual of which the total area is compared against the overlapping area of ID2.
-#'
+#' @param area boolean indicating either overlap group (when \code{FALSE}) or area and proportion of overlap (when \code{TRUE})
+#' @param hrType type of HR estimation, either 'mcp' or 'kernel'
+#' @param hrParams a named list of parameters for `adehabitatHR` functions
+#' @param spPolys Alternatively, provide solely a SpatialPolygons object
 #'
 #' @export
 #'
@@ -23,9 +31,16 @@
 #' @seealso \code{\link{build_polys}} \code{\link{group_times}}
 #'
 #' @examples
+#' # Load data.table
 #' library(data.table)
+#'
+#' # Read example data
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Proj4 string for example data
 #' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 #'
 #' group_polys(DT, area = FALSE, 'mcp', list(percent = 95),
