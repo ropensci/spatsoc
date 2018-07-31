@@ -16,12 +16,12 @@
 #' An error is returned when an individual has less than 2 relocations, making it impossible to build a line.
 #'
 #' @inheritParams group_lines
+#' @param sortBy name of date time column(s) to sort rows by. either 1 POSIXct or 2 IDate and ITime. e.g.: 'datetime' or c('idate', 'itime').
 #'
 #' @export
 #'
 #' @family Build functions
 #' @seealso \code{\link{group_lines}}
-#'
 #'
 #' @import data.table
 #' @importFrom sp SpatialLines Lines Line CRS rbind.SpatialLines
@@ -73,11 +73,15 @@ build_lines <-
       stop('projection must be provided')
     }
 
+    if (is.null(sortBy)) {
+      stop('sortBy must be provided')
+    }
+
     if (length(coords) != 2) {
       stop('coords requires a vector of column names for coordinates X and Y')
     }
 
-    if (any(!(c(id, coords, splitBy) %in% colnames(DT)))) {
+    if (any(!(c(id, coords, splitBy, sortBy) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
           c(id, coords, splitBy), colnames(DT)
@@ -108,6 +112,12 @@ build_lines <-
       )
     }
 
+    if (!('POSIXct' %in%
+          unlist(lapply(DT[, .SD, .SDcols = sortBy], class)))) {
+      stop('sortBy provided must be 1 column of type POSIXct')
+    }
+
+
     dropRows <- DT[, .(dropped = .N < 2), by = splitBy]
 
     if (dropRows[(dropped), .N] > 0) {
@@ -115,7 +125,7 @@ build_lines <-
     }
 
     lst <- split(DT[dropRows, on = splitBy][!(dropped)],
-                                  by = splitBy)
+                 by = splitBy)
 
     if (length(lst) == 0) {
       return(NULL)
