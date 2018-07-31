@@ -20,7 +20,7 @@
 #' @param id Character string of ID column name
 #' @param coords Character vector of X coordinate and Y coordinate column names
 #' @param timegroup (optional) timegroup field in the DT upon which the grouping will be calculated
-#' @param splitBy (optional) character string or vector of grouping field(s) upon which the grouping will be calculated
+#' @param splitBy (optional) character string or vector of grouping column name(s) upon which the grouping will be calculated
 #'
 #' @export
 #'

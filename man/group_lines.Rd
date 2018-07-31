@@ -22,7 +22,7 @@ of the projection. Alternatively, supply 0 to compare intersection without buffe
 
 \item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
-\item{splitBy}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
+\item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 
 \item{spLines}{Alternatively, provide a SpatialLines object created with the sp
 package. If a spLines object is provided, groups cannot be calculated by a

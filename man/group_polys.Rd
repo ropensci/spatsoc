@@ -23,7 +23,7 @@ group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{splitBy}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
+\item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 
 \item{spPolys}{Alternatively, provide solely a SpatialPolygons object}
 }

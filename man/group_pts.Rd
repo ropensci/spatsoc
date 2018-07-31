@@ -18,7 +18,7 @@ group_pts(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
 
 \item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
-\item{splitBy}{(optional) character string or vector of grouping field(s) upon which the grouping will be calculated}
+\item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 }
 \value{
 \code{group_pts} returns the input \code{DT} appended with a \code{group} column. This column represents the spatial (and if \code{timegroup} was provided - spatiotemporal) group. As with \code{\link{group_times}}, the actual value of \code{group} is meaningless, rather the contents of the group. If the data was reordered, the \code{group} may change, but the contents of each \code{group} would not.
