@@ -4,7 +4,7 @@
 
 * improvements to function documentation
 * [FAQ](https://spatsoc.gitlab.io/articles/faq.html) vignette added
-
+* fixed `build_lines` ordering bug to ensure rows are ordered by date time when building lines
 
 
 # v 0.1.0 
