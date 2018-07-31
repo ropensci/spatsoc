@@ -19,7 +19,7 @@ group_times(DT = NULL, datetime = NULL, threshold = NULL)
 \itemize{
 \item \code{threshold} with unit minutes: "minutes" column added identifying the nearest minute group for each row.
 \item \code{threshold} with unit hours: "hours" column added identifying the nearest hour group for each row.
-\item \code{threshold} with unit days: "block", "minday", "maxday" columns added identifying the multiday block for each row. "block" refers to the specific multiday block, defined by the minimum day "minday" and maximum day "maxday".
+\item \code{threshold} with unit days: "block" columns added identifying the multiday block for each row.
 }
 
 A message is returned when any of these columns already exist in the input \code{DT}, because they will be overwritten.
@@ -61,5 +61,8 @@ group_times(DT, datetime = 'datetime', threshold = '2 hours')
 
 group_times(DT, datetime = 'datetime', threshold = '10 days')
 
+}
+\seealso{
+\code{\link{group_pts}} \code{\link{group_lines}} \code{\link{group_polys}}
 }
 \concept{Temporal grouping}

@@ -1,14 +1,51 @@
 #' Build Lines
 #'
+#'
+#' \code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}. The function accepts a \code{data.table} with relocation data, individual identifiers and a \code{projection}. The relocation data is transformed into \code{SpatialLines} for each individual and optionally, each \code{splitBy}. Relocation data should be in two columns representing the latitude and longitude.
+#'
+#' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, latitude and longitude, and additional splitting columns.
+#'
+#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{spatialreference.org}).
+#'
+#' The \code{splitBy} argument offers further control building \code{SpatialLines}. If in your \code{DT}, you have multiple temporal groups (e.g.: years) for example, you can provide the name of the column which identifies them and build \code{SpatialLines} for each individual in each year.
+#'
+#' \code{build_lines} is used by \code{group_lines} for grouping overlapping lines created from relocations.
+#'
+#' @return \code{build_lines} returns a \code{SpatialLines} object with a line for each individual (and optionally \code{splitBy} combination).
+#'
+#' An error is returned when an individual has less than 2 relocations, making it impossible to build a line.
+#'
 #' @inheritParams group_lines
 #'
-#' @return SpatialLines for each ID provided
 #' @export
 #'
 #' @family Build functions
+#' @seealso \code{\link{group_lines}}
+#'
 #'
 #' @import data.table
 #' @importFrom sp SpatialLines Lines Line CRS rbind.SpatialLines
+#'
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Proj4 string for example data
+#' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+#'
+#' # Build lines for each individual
+#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'))
+#'
+#' # Build lines for each individual by year
+#' DT[, yr := year(datetime)]
+#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
+#'
 build_lines <-
   function(DT = NULL,
            projection = NULL,
