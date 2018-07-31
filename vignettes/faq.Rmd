@@ -139,7 +139,7 @@ The extra columns are provided to help the user investigate, troubleshoot and in
 |----------------|-----------------|
 | minute         | "minutes" column added identifying the nearest minute group for each row.      |
 | hour           | "hours" column added identifying the nearest hour group for each row.         |
-| day            | "block", "minday", "maxday" columns added identifying the multiday block for each row. "block" refers to the specific multiday block, defined by the minimum day "minday" and maximum day "maxday".          |
+| day            | "block" columns added identifying the multiday block for each row. |
 
 
 ### Warnings and messages

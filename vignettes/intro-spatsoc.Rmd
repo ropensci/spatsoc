@@ -10,21 +10,19 @@ vignette: >
 ---
 
 ```{r knitropts, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, 
+knitr::opts_chunk$set(message = TRUE, 
                       warning = FALSE,
                       eval = FALSE, 
                       echo = FALSE)
 ```
 
-
 The `spatsoc` package provides functionality for analyzing animal relocation data in time and space to identify potential interactions among individuals and build gambit-of-the-group data for constructing social networks. 
 
-The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. <!--In addition, the package contains functions for determining the nearest neighbor and mean pairwise distance between individuals, optionally across time steps.--> In addition, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
+The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. In addition, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
 
 The functions were developed for application across animal relocation data, for example, proximity based social network analyses and spatial and temporal clustering of points.
 
 ## Grouping
-Let's read in `spatsoc`'s example data.
 
 ```{r libs, eval = TRUE, include = FALSE}
 library(spatsoc); library(data.table)
@@ -34,8 +32,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 `spatsoc` expects a `data.table` for all of its functions. If you have a `data.frame`, you can use `data.table::setDT()` to convert it by reference. If your data is a CSV, you can use `data.table::fread()` to import it as a `data.table`. 
 
-<!-- note this input/example data is just for now.. -->
-The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. <!--Relocations were recorded using GPS collars with fixes obtained every two hours. -->Using these data, we can compare the various grouping methods available in `spatsoc`.
+The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. Using these data, we can compare the various grouping methods available in `spatsoc`.
 
 
 ```{r, echo = TRUE}
@@ -50,8 +47,6 @@ DT[, datetime := as.POSIXct(datetime,
 knitr::kable(DT[sample(.N, 5)])
 ```
 
-<!-- note this input/example data is just for now.. -->
-The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. <!--Relocations were recorded using GPS collars with fixes obtained every two hours. -->Using these data, we can compare the various grouping methods available in `spatsoc`.
 
 ### `group_times`
 The `group_times` function is used to group relocations temporally. It is flexible to a threshold provided in units of minutes, hours or days. Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. Alternatively, we may want to understand different scales of grouping, perhaps daily movement trajectories or seasonal home range overlap. 
@@ -67,10 +62,13 @@ nRows <- 9
 ```{r tabgroupmins, eval = TRUE}
 knitr::kable(
   group_times(DT, threshold = '5 minutes', datetime = 'datetime')[, 
-    .(ID, X, Y, datetime, timegroup)][
+    .(ID, X, Y, datetime, minutes, timegroup)][
       order(datetime)][
         1:nRows])
 ```
+
+
+A message is returned when `group_times` is run again on the same `DT`, as the columns already exist in the input `DT` and will be overwritten. 
 
 ```{r grouphours, echo = TRUE}
 group_times(DT, datetime = 'datetime', threshold = '2 hours')
@@ -79,7 +77,7 @@ group_times(DT, datetime = 'datetime', threshold = '2 hours')
 ```{r tabgrouphours, eval = TRUE}
 knitr::kable(
   group_times(DT, threshold = '2 hours', datetime = 'datetime')[, 
-    .(ID, X, Y, datetime, timegroup)][
+    .(ID, X, Y, datetime, hours, timegroup)][
       order(datetime)][
         1:nRows])
 ```
@@ -90,10 +88,8 @@ group_times(DT, datetime = 'datetime', threshold = '5 days')
 
 ```{r tabgroupdays, eval = TRUE}
 knitr::kable(
-  group_times(DT, threshold = '5 days', datetime = 'datetime')[, 
-    .SD[c(1, sample(.N, 2))], by = timegroup][
-      order(datetime)][
-        1:nRows, .(ID, X, Y, datetime, timegroup)])
+  group_times(DT, threshold = '5 days', datetime = 'datetime')[, .SD[sample(.N, 3)], by = .(timegroup, block)][order(datetime)][
+        1:nRows, .(ID, X, Y, datetime, block, timegroup)])
 ```
 
 
