@@ -40,11 +40,11 @@
 #' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 #'
 #' # Build lines for each individual
-#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'))
+#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'), sortBy = 'datetime')
 #'
 #' # Build lines for each individual by year
 #' DT[, yr := year(datetime)]
-#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
+#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'), sortBy = 'datetime', splitBy = 'yr')
 #'
 build_lines <-
   function(DT = NULL,
