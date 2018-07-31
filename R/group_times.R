@@ -90,8 +90,8 @@ group_times <- function(DT = NULL,
     DT[, timegroup := .GRP, by = datetime]
     return(DT[])
   } else {
-    if ('POSIXct' %in%
-        unlist(lapply(DT[, .SD, .SDcols = datetime], class))) {
+    if (length(datetime) == 1 &&
+        'POSIXct' %in% unlist(lapply(DT[, .SD, .SDcols = datetime], class))) {
       dtm <-
         DT[, cbind(.SD[[1]], data.table::IDateTime(.SD[[1]])),
            .SDcols = datetime]

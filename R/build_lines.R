@@ -86,7 +86,7 @@ build_lines <-
     if (any(!(c(id, coords, splitBy, sortBy) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
-          c(id, coords, splitBy), colnames(DT)
+          c(id, coords, splitBy, sortBy), colnames(DT)
         ),
         collapse = ', ')),
         ' field(s) provided are not present in input DT'

@@ -5,8 +5,8 @@
 \title{Groups Lines}
 \usage{
 group_lines(DT = NULL, threshold = NULL, projection = NULL,
-  id = NULL, coords = NULL, timegroup = NULL, splitBy = NULL,
-  spLines = NULL)
+  id = NULL, coords = NULL, timegroup = NULL, sortBy = NULL,
+  splitBy = NULL, spLines = NULL)
 }
 \arguments{
 \item{DT}{input data.table}

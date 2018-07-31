@@ -67,11 +67,12 @@ group_lines <-
            id = NULL,
            coords = NULL,
            timegroup = NULL,
+           sortBy = NULL,
            splitBy = NULL,
            spLines = NULL) {
 
     # due to NSE notes in R CMD check
-    group <- ..coords <- ..id <- withinGroup <- NULL
+    group <- ..coords <- ..id <- ..sortBy <- withinGroup <- NULL
 
     if (is.null(threshold)) {
       message('threshold missing, using 0 by default')
@@ -97,7 +98,11 @@ group_lines <-
         stop('id must be provided')
       }
 
-      if (any(!(c(id, coords, timegroup) %in% colnames(DT)))) {
+      if (is.null(sortBy)) {
+        stop('sortBy must be provided')
+      }
+
+      if (any(!(c(id, coords, timegroup, sortBy) %in% colnames(DT)))) {
         stop(paste0(
           as.character(paste(setdiff(
             c(id, coords), colnames(DT)
@@ -137,7 +142,8 @@ group_lines <-
           DT = DT,
           projection = projection,
           coords = coords,
-          id = id
+          id = id,
+          sortBy = sortBy
         )
       )
       if (!is.null(spLines)) {
@@ -184,16 +190,17 @@ group_lines <-
               DT = .SD,
               projection = projection,
               coords = ..coords,
-              id = ..id
+              id = ..id,
+              sortBy = ..sortBy
             )
           )
           if (!is.null(spLines)) {
             if (threshold == 0) {
-              inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
+              inter <- rgeos::gIntersects(spLines, spLines, byid = TRUE)
             } else {
               buffered <- rgeos::gBuffer(spLines, width = threshold,
                                          byid = TRUE)
-              inter <- rgeos::gIntersects(spLines, buffered, byid=TRUE)
+              inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
 
             }
             g <- igraph::graph_from_adjacency_matrix(inter)
@@ -206,7 +213,7 @@ group_lines <-
             data.table::setnames(out, c(..id, 'withinGroup'))
 
           }
-        }, by = splitBy, .SDcols = c(coords, id)]
+        }, by = splitBy, .SDcols = c(coords, id, sortBy)]
 
       DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
       DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
