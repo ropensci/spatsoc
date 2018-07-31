@@ -5,7 +5,7 @@
 \title{Build Lines}
 \usage{
 build_lines(DT = NULL, projection = NULL, id = NULL, coords = NULL,
-  splitBy = NULL)
+  sortBy = NULL, splitBy = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -16,6 +16,8 @@ build_lines(DT = NULL, projection = NULL, id = NULL, coords = NULL,
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
+\item{sortBy}{name of date time column(s) to sort rows by. either 1 POSIXct or 2 IDate and ITime. e.g.: 'datetime' or c('idate', 'itime').}
+
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 }
 \value{
@@ -24,12 +26,14 @@ build_lines(DT = NULL, projection = NULL, id = NULL, coords = NULL,
 An error is returned when an individual has less than 2 relocations, making it impossible to build a line.
 }
 \description{
-\code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}. The function accepts a \code{data.table} with relocation data, individual identifiers and a \code{projection}. The relocation data is transformed into \code{SpatialLines} for each individual and optionally, each \code{splitBy}. Relocation data should be in two columns representing the latitude and longitude.
+\code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}. The function accepts a \code{data.table} with relocation data, individual identifiers a sorting column and a \code{projection}. The relocation data is transformed into \code{SpatialLines} for each individual and optionally, each \code{splitBy}. Relocation data should be in two columns representing the latitude and longitude.
 }
 \details{
-The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, latitude and longitude, and additional splitting columns.
+The \code{id}, \code{coords}, \code{sortBy} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, latitude and longitude, sorting column, and additional splitting columns.
 
 The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{spatialreference.org}).
+
+The \code{sortBy} is used to order the input \code{data.table} when creating \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted by date time.
 
 The \code{splitBy} argument offers further control building \code{SpatialLines}. If in your \code{DT}, you have multiple temporal groups (e.g.: years) for example, you can provide the name of the column which identifies them and build \code{SpatialLines} for each individual in each year.
 
@@ -49,11 +53,11 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 # Build lines for each individual
-build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'))
+build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'), sortBy = 'datetime')
 
 # Build lines for each individual by year
 DT[, yr := year(datetime)]
-build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
+build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'), sortBy = 'datetime', splitBy = 'yr')
 
 }
 \seealso{
