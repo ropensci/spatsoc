@@ -1,25 +1,52 @@
 #' Group Times
 #'
-#' Assign an integer timegroup.
-#' Provide the threshold to group on and rows will be grouped.
-#' If the threshold is NULL, rows are grouped by the `datetime` column directly.
+#' \code{group_times} groups rows into time groups. The function accepts date time formatted data and a threshold argument. The threshold argument is used to specify a time window within which rows are grouped.
 #'
-#' The threshold can be in units of minutes, hours or days.
+#' The \code{datetime} argument expects the name of a column in \code{DT} which is of type \code{POSIXct} or the name of two columns in \code{DT} which are of type \code{IDate} and \code{ITime}.
+#'
+#' \code{threshold} must be provided in units of minutes, hours or days. The character string should start with an integer followed by a unit, separated by a space. It is interpreted in terms of 24 hours which poses the following limitations:
+#'
+#' \itemize{
+#'   \item minutes, hours and days cannot be fractional
+#'   \item minutes must divide evenly into 60
+#'   \item minutes must not exceed 60
+#'   \item minutes, hours which reach are nearer to the next day, are grouped as such
+#'   \item hours must divide evenly into 24
+#'   \item multi-day blocks should divide into the range of days, else the blocks may not be the same length
+#' }
+#'
+#' In addition, the \code{threshold} is considered a fixed window throughout the time series and the rows are grouped to the nearest interval.
+#'
+#' If \code{threshold} is NULL, rows are grouped using the \code{datetime} column directly.
+#'
+#' @return \code{group_times} returns the input \code{DT} appended with a \code{timegroup} column and additional temporal grouping columns to help investigate, troubleshoot and interpret the timegroup. These temporal grouping columns depend on the \code{threshold} provided:
+#'
+#' \itemize{
+#'   \item \code{threshold} with unit minutes: "minutes" column added identifying the nearest minute group for each row.
+#'   \item \code{threshold} with unit hours: "hours" column added identifying the nearest hour group for each row.
+#'   \item \code{threshold} with unit days: "block", "minday", "maxday" columns added identifying the multiday block for each row. "block" refers to the specific multiday block, defined by the minimum day "minday" and maximum day "maxday".
+#' }
+#'
+#' A message is returned when any of these columns already exist in the input \code{DT}, because they will be overwritten.
+#'
 #'
 #' @inheritParams group_pts
-#' @param datetime name of time column(s). either 1 POSIXct or 2 IDate and ITime. e.g.: 'datetime' or c('IDate', 'ITime')
+#' @param datetime name of date time column(s). either 1 POSIXct or 2 IDate and ITime. e.g.: 'datetime' or c('idate', 'itime')
 #' @param threshold threshold for grouping times. e.g.: '2 hours', '10 minutes', etc. if not provided, times will be matched exactly. Note that provided threshold must be in the expected format: '## unit'
 #'
 #' @export
 #'
-#'
 #' @family Temporal grouping
 #'
 #' @examples
+#' # Load data.table
 #' library(data.table)
+#'
+#' # Read example data
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
-#' DT[, datetime := as.POSIXct(datetime,
-#'                             tz = 'UTC')]
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
 #' group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 #'
@@ -221,7 +248,7 @@ group_times <- function(DT = NULL,
         ), by = year(idate)]
 
         dtm[, timegroup := .GRP, .(year(idate), block)]
-        set(dtm, j = c('idate', 'itime'), value = NULL)
+        set(dtm, j = c('idate', 'itime', 'rangeday', 'minday', 'maxday'), value = NULL)
         DT[, (colnames(dtm)) := dtm]
         return(DT[])
       }
