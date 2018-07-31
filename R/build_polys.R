@@ -1,9 +1,25 @@
-#' Build Home Ranges for Individuals
+#' Build Polygons
+#'
+#' \code{build_polys} creates a \code{SpatialPolygons} object from a \code{data.table}. The function accepts a \code{data.table} with relocation data, individual identifiers, a \code{projection}, \code{hrType} and \code{hrParams}. The relocation data is transformed into \code{SpatialPolygons} for each individual and optionally, each \code{splitBy}. Relocation data should be in two columns representing the latitude and longitude.
+#'
+#' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, latitude and longitude, and additional grouping columns.
+#'
+#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{spatialreference.org}).
+#'
+#' The \code{hrType} must be either one of "kernel" or "mcp". The \code{hrParams} must be a named list of arguments matching those of \code{adehabitatHR::kernelUD} or \code{adehabitatHR::mcp}.
+#'
+#' The \code{splitBy} argument offers further control building \code{SpatialPolygons}. If in your \code{DT}, you have multiple temporal groups (e.g.: years) for example, you can provide the name of the column which identifies them and build \code{SpatialPolygons} for each individual in each year.
+#'
+#' \code{group_polys} uses \code{build_polys} for grouping overlapping polygons created from relocations.
+#'
+#' @return \code{build_polys} returns a \code{SpatialPolygons} object with a polyon for each individual (and optionally \code{splitBy} combination).
+#'
+#' An error is returned when \code{hrParams} do not match the arguments of the \code{hrType} \code{adehabitatHR} function.
+#'
 #'
 #' @inheritParams group_polys
 #' @param spPts alternatively, provide solely a SpatialPointsDataFrame with one column representing the ID of each point.
 #'
-#' @return Home range polygons for each ID
 #' @export
 #'
 #' @family Build functions
