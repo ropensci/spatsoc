@@ -124,8 +124,8 @@ build_lines <-
       warning('some rows dropped, cannot build lines with less than two points')
     }
 
-    lst <- split(DT[dropRows, on = splitBy][!(dropped)],
-                 by = splitBy)
+    lst <- split(DT[dropRows, on = splitBy][!(dropped)][order(get(sortBy))],
+                 by = splitBy, sorted = TRUE)
 
     if (length(lst) == 0) {
       return(NULL)
