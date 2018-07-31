@@ -6,69 +6,98 @@ DT <- fread('../testdata/buffalo.csv')
 utm <-
   '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
+DT[, datetime := as.POSIXct(datetime)]
+
 test_that('DT is required', {
   expect_error(
     build_lines(
       DT = NULL,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm
+      projection = utm,
+      sortBy = 'datetime'
     ),
     'input DT required'
   )
 })
 
-test_that('coords, id, projection must be provided and proper format',
-          {
-            expect_error(
-              build_lines(
-                DT = DT,
-                id = NULL,
-                coords = c('X', 'Y'),
-                projection = utm
-              ),
-              'id must be provided'
-            )
+test_that('coords, id, projection, sortBy must be provided, proper format', {
+  expect_error(
+    build_lines(
+      DT = DT,
+      id = NULL,
+      coords = c('X', 'Y'),
+      projection = utm,
+      sortBy = 'datetime'
+    ),
+    'id must be provided'
+  )
 
-            expect_error(
-              build_lines(
-                DT = DT,
-                id = 'ID',
-                coords = c('X', 'Y'),
-                projection = NULL
-              ),
-              'projection must be provided'
-            )
+  expect_error(
+    build_lines(
+      DT = DT,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = NULL,
+      sortBy = 'datetime'
+    ),
+    'projection must be provided'
+  )
 
-            expect_error(
-              build_lines(
-                DT = DT,
-                id = 'ID',
-                coords = NULL,
-                projection = utm
-              ),
-              'coords must be provided'
-            )
+  expect_error(
+    build_lines(
+      DT = DT,
+      id = 'ID',
+      coords = NULL,
+      projection = utm,
+      sortBy = 'datetime'
+    ),
+    'coords must be provided'
+  )
 
-            expect_error(
-              build_lines(
-                DT = DT,
-                id = 'ID',
-                coords = c('ID', 'ID'),
-                projection = utm
-              ),
-              'coords must be numeric'
-            )
-            expect_error(
-              build_lines(
-                DT = DT,
-                id = 'ID',
-                coords = c('X'),
-                projection = utm
-              ),
-              'coords requires a vector', fixed = FALSE
-            )
-          })
+  expect_error(
+    build_lines(
+      DT = DT,
+      id = 'ID',
+      coords = c('ID', 'ID'),
+      projection = utm,
+      sortBy = 'datetime'
+    ),
+    'coords must be numeric'
+  )
+  expect_error(
+    build_lines(
+      DT = DT,
+      id = 'ID',
+      coords = c('X'),
+      projection = utm,
+      sortBy = 'datetime'
+    ),
+    'coords requires a vector', fixed = FALSE
+  )
+
+  expect_error(
+    build_lines(
+      DT = DT,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      sortBy = NULL
+    ),
+    'sortBy must be provided'
+  )
+  expect_error(
+    build_lines(
+      DT = DT,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      sortBy = 'ID'
+    ),
+    'sortBy provided must be', fixed = FALSE
+  )
+
+})
 
 
 test_that('column names must exist in DT', {
@@ -77,7 +106,8 @@ test_that('column names must exist in DT', {
       DT = DT,
       id = 'ID',
       coords = c('potatoX', 'potatoY'),
-      projection = utm
+      projection = utm,
+      sortBy = 'datetime'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -88,7 +118,20 @@ test_that('column names must exist in DT', {
       DT = DT,
       id = 'potato',
       coords = c('X', 'Y'),
-      projection = utm
+      projection = utm,
+      sortBy = 'datetime'
+    ),
+    'not present in input DT',
+    fixed = FALSE
+  )
+
+  expect_error(
+    build_lines(
+      DT = DT,
+      id = 'potato',
+      coords = c('X', 'Y'),
+      projection = utm,
+      sortBy = 'potato'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -102,7 +145,8 @@ test_that('returns same number of lines as unique IDs/splitBy provided', {
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm
+      projection = utm,
+      sortBy = 'datetime'
     )
   ),
   DT[, uniqueN(ID)])
@@ -119,7 +163,8 @@ test_that('returns same number of lines as unique IDs/splitBy provided', {
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
-      splitBy = 'jul'
+      splitBy = 'jul',
+      sortBy = 'datetime'
     )
   ),
   nrow(unique(subDT[, .SD, .SDcols = splitBy])))
@@ -135,7 +180,8 @@ test_that("build lines warns if < 2 locs per ID/byField", {
       DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm
+      projection = utm,
+      sortBy = 'datetime'
     ),
     'some rows dropped, cannot build lines with less than two points'
   )
@@ -153,7 +199,8 @@ test_that("build lines warns if < 2 locs per ID/byField", {
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
-      splitBy = 'jul'
+      splitBy = 'jul',
+      sortBy = 'datetime'
     ),
     'some rows dropped, cannot build',
     fixed = FALSE
@@ -167,7 +214,8 @@ test_that('splitBy and id provided are not correct format', {
       DT = copyDT,
       id = 'datetime',
       coords = c('X', 'Y'),
-      projection = utm
+      projection = utm,
+      sortBy = 'datetime'
     ),
     'id \\(and splitBy when provided\\) must',
     fixed = FALSE
@@ -179,7 +227,8 @@ test_that('splitBy and id provided are not correct format', {
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
-      splitBy = 'datetime'
+      splitBy = 'datetime',
+      sortBy = 'datetime'
     ),
     'id \\(and splitBy when provided\\) must be',
     fixed = FALSE
@@ -192,7 +241,8 @@ test_that('splitBy and id provided are not correct format', {
       DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm
+      projection = utm,
+      sortBy = 'datetime'
     ),
     'id \\(and splitBy when provided\\) must be',
     fixed = FALSE
@@ -205,7 +255,8 @@ test_that('BuildPts returns a SpatialLines', {
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm
+      projection = utm,
+      sortBy = 'datetime'
     )
   ))
 
@@ -214,10 +265,32 @@ test_that('BuildPts returns a SpatialLines', {
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm
+      projection = utm,
+      sortBy = 'datetime'
     )
   ))
 })
+
+test_that('build_lines builds ordered lines', {
+  expect_equal(
+    build_lines(
+      DT = DT,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      sortBy = 'datetime'
+    ),
+    build_lines(
+      DT = DT[sample(.N, .N)],
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      sortBy = 'datetime'
+    )
+  )
+})
+
+
 
 
 # build_lines(
