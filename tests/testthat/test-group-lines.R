@@ -77,6 +77,19 @@ test_that('coords, id, projection provided and proper format', {
     'coords must be provided'
   )
 
+  expect_error(
+    group_lines(
+      DT = copyDT,
+      threshold = 10,
+      timegroup = 'timegroup',
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      sortBy = NULL
+    ),
+    'sortBy must be provided'
+  )
+
 })
 
 
