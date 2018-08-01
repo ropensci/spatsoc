@@ -108,9 +108,11 @@ Given a character column representing the date time, convert it to `POSIXct` or 
 
 ```{r posixct}
 DT[, datetime := as.POSIXct(datetime)]
+DT[, c('idate', 'itime') := IDateTime(datetime)]
 ```
 
-These are provided to the function using the names of the column in the input data. 
+
+These are then provided to the function using the names of the column in the input data. 
 
 `group_times(DT, datetime = 'datetime', threshold = '5 minutes')`
 
@@ -120,7 +122,7 @@ or
 
 
 ### threshold recommendations
-The `threshold` provided to `group_times` should be related to the fix rate of the input dataset or to the specific study system and species. If relocations are recorded every two hours, a `threshold = '2 hours'` will group all rows to the nearest two hour group (10am, 12pm, 2pm, 4pm, ...). This, however, means that the relocations can be up to one hour apart from each other. Picking a smaller threshold, e.g.: `threshold = '15 minutes'` may be more relevant. The flexibility of `spatsoc`'s threshold argument means the user must carefully consider what threshold is reasonable to their specific system. 
+The `threshold` provided to `group_times` should be related to the fix rate of the input dataset and to the specific study system and species. If relocations are recorded every two hours, a `threshold = '2 hours'` will group all rows to the nearest two hour group (10am, 12pm, 2pm, 4pm, ...). This, however, means that the relocations can be up to one hour apart from each other. Picking a smaller threshold, e.g.: `threshold = '15 minutes'` may be more relevant in some cases. The flexibility of `spatsoc`'s threshold argument means the user must carefully consider what threshold is reasonable to their specific system. 
 
 ### Limitations of threshold
 The `threshold` of `group_times` is considered only within the scope of 24 hours and this poses limitations on it:
@@ -165,7 +167,7 @@ This message is returned to the user when the `threshold` is NULL. This is the d
 * `timegroup`: (optional) column name of time group
 * `splitBy`: (optional) column names of extra variables to group on
 
-### DT
+### <a name="group_pts DT"></a>DT
 The input `data.table`. It will returned with a column named group appended, which represents the spatial (and temporal if `timegroup` is provided) group. 
 
 ### threshold
@@ -188,7 +190,7 @@ The coordinates must be planar, such as UTM (of whichever zone your relocations 
 * `spLines`: alternatively, provide solely a `SpatialLines` object
 
 ### DT
-See 3.2.1. 
+See [3.2.1](#dt-1). 
 
 ### threshold
 The `threshold` argument represents a buffer area around each line. When `threshold = 0`, the lines are grouped by spatial overlap. If the threshold is greater than 0, the lines buffered, then grouped by spatial overlap. 
@@ -212,7 +214,7 @@ The `sortBy` argument expects a date time formatted column name, which is used t
 
 
 ### DT and area
-If `area = FALSE`, see 3.2.1. If `area = TRUE`, the DT will not be appended with a group column instead a `data.table` with IDs and proportional area overlap will be returned. 
+If `area = FALSE`, see [3.2.1](#dt-1). If `area = TRUE`, the DT will not be appended with a group column instead a `data.table` with IDs and proportional area overlap will be returned. 
 
 The default unit for area overlap is square meters. 
 
