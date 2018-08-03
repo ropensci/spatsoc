@@ -10,7 +10,7 @@
 #'   \item minutes, hours and days cannot be fractional
 #'   \item minutes must divide evenly into 60
 #'   \item minutes must not exceed 60
-#'   \item minutes, hours which reach are nearer to the next day, are grouped as such
+#'   \item minutes, hours which are nearer to the next day, are grouped as such
 #'   \item hours must divide evenly into 24
 #'   \item multi-day blocks should divide into the range of days, else the blocks may not be the same length
 #' }
