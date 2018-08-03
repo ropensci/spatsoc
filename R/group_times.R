@@ -19,7 +19,9 @@
 #'
 #' If \code{threshold} is NULL, rows are grouped using the \code{datetime} column directly.
 #'
-#' @return \code{group_times} returns the input \code{DT} appended with a \code{timegroup} column and additional temporal grouping columns to help investigate, troubleshoot and interpret the timegroup. These temporal grouping columns depend on the \code{threshold} provided:
+#' @return \code{group_times} returns the input \code{DT} appended with a \code{timegroup} column and additional temporal grouping columns to help investigate, troubleshoot and interpret the timegroup. The actual value of \code{timegroup} is arbitrary and represents the identity of a given \code{timegroup} which 1 or more individuals are assigned to. If the data was reordered, the group may change, but the contents of each group would not.
+#'
+#' The temporal grouping columns added depend on the \code{threshold} provided:
 #'
 #' \itemize{
 #'   \item \code{threshold} with unit minutes: "minutes" column added identifying the nearest minute group for each row.

@@ -29,7 +29,7 @@ of the projection. Supply 0 to compare intersection without buffering.}
 \item{spLines}{Alternatively to providing a DT, provide a SpatialLines object created with the sp package. If a spLines object is provided, groups cannot be calculated by a    timegroup or splitBy.}
 }
 \value{
-\code{group_lines} returns the input \code{DT} appended with a \code{group} column. This column represents the spatial (and if \code{timegroup} was provided - spatiotemporal) group calculated by overlapping lines. As with \code{\link{group_times}}, the actual value of \code{group} is meaningless, rather the contents of the group. If the data was reordered, the \code{group} may change, but the contents of each \code{group} would not.
+\code{group_lines} returns the input \code{DT} appended with a \code{group} column. This column represents the spatial (and if \code{timegroup} was provided - spatiotemporal) group calculated by overlapping lines. As with the other grouping functions,  the actual value of group is arbitrary and represents the identity of a given group where 1 or more individuals are assigned to a group. If the data was reordered, the group may change, but the contents of each group would not.
 
 A message is returned when a column named \code{group} already exists in the input \code{DT}, because it will be overwritten.
 }

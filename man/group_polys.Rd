@@ -28,7 +28,7 @@ group_polys(DT = NULL, area = NULL, hrType = NULL, hrParams = NULL,
 \item{spPolys}{Alternatively, provide solely a SpatialPolygons object}
 }
 \value{
-When \code{area} is \code{FALSE}, \code{group_polys} returns the input \code{DT} appended with a \code{group} column. The group represents the spatial overlap group. When \code{area} is \code{TRUE}, \code{group_polys} returns a proportional area overlap \code{data.table}. In this case, ID refers to the focal individual of which the total area is compared against the overlapping area of ID2.
+When \code{area} is \code{FALSE}, \code{group_polys} returns the input \code{DT} appended with a \code{group} column. As with the other grouping functions,  the actual value of \code{group} is arbitrary and represents the identity of a given group where 1 or more individuals are assigned to a group. If the data was reordered, the \code{group} may change, but the contents of each group would not. When \code{area} is \code{TRUE}, \code{group_polys} returns a proportional area overlap \code{data.table}. In this case, ID refers to the focal individual of which the total area is compared against the overlapping area of ID2.
 
 If \code{area} is \code{FALSE}, a message is returned when a column named \code{group} already exists in the input \code{DT}, because it will be overwritten.
 }

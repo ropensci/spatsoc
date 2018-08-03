@@ -10,7 +10,7 @@
 #'
 #' The \code{splitBy} argument offers further control over grouping. If within your \code{DT}, you have multiple populations, subgroups or other distinct parts, you can provide the name of the column which identifies them to \code{splitBy}. The grouping performed by \code{group_pts} will only consider rows within each \code{splitBy} subgroup.
 #'
-#' @return \code{group_pts} returns the input \code{DT} appended with a \code{group} column. This column represents the spatial (and if \code{timegroup} was provided - spatiotemporal) group. As with \code{\link{group_times}}, the actual value of \code{group} is meaningless, rather the contents of the group. If the data was reordered, the \code{group} may change, but the contents of each \code{group} would not.
+#' @return \code{group_pts} returns the input \code{DT} appended with a \code{group} column. This column represents the spatial (and if \code{timegroup} was provided - spatiotemporal) group. As with the other grouping functions,  the actual value of \code{group} is arbitrary and represents the identity of a given group where 1 or more individuals are assigned to a group. If the data was reordered, the \code{group} may change, but the contents of each group would not.
 #'
 #' A message is returned when a column named \code{group} already exists in the input \code{DT}, because it will be overwritten.
 #'
