@@ -5,7 +5,7 @@
 \title{Build Polygons}
 \usage{
 build_polys(DT = NULL, projection = NULL, hrType = NULL,
-  hrParams = NULL, coords = NULL, id = NULL, splitBy = NULL,
+  hrParams = NULL, id = NULL, coords = NULL, splitBy = NULL,
   spPts = NULL)
 }
 \arguments{
@@ -17,9 +17,9 @@ build_polys(DT = NULL, projection = NULL, hrType = NULL,
 
 \item{hrParams}{a named list of parameters for \code{adehabitatHR} functions}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
-
 \item{id}{Character string of ID column name}
+
+\item{coords}{Character vector of X coordinate and Y coordinate column names}
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 
@@ -43,6 +43,40 @@ The \code{hrType} must be either one of "kernel" or "mcp". The \code{hrParams} m
 The \code{splitBy} argument offers further control building \code{SpatialPolygons}. If in your \code{DT}, you have multiple temporal groups (e.g.: years) for example, you can provide the name of the column which identifies them and build \code{SpatialPolygons} for each individual in each year.
 
 \code{group_polys} uses \code{build_polys} for grouping overlapping polygons created from relocations.
+}
+\examples{
+# Load data.table
+library(data.table)
+
+# Read example data
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+
+# Cast the character column to POSIXct
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+
+# Proj4 string for example data
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+
+# Build polygons for each individual
+build_polys(DT, projection = utm, hrType = 'mcp', hrParams = list(percent = 95),
+            id = 'ID', coords = c('X', 'Y'))
+
+# Build polygons for each individual by year
+DT[, yr := year(datetime)]
+build_polys(DT, projection = utm, hrType = 'mcp', hrParams = list(percent = 95),
+            id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
+
+# Build polygons from SpatialPointsDataFrame
+library(sp)
+pts <- SpatialPointsDataFrame(coords = DT[, .(X, Y)],
+                              proj4string = CRS(utm),
+                              data = DT[, .(ID)]
+)
+
+build_polys(spPts = pts, hrType = 'mcp', hrParams = list(percent = 95))
+
+
+
 }
 \seealso{
 \code{\link{group_polys}}
