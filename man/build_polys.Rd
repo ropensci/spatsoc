@@ -75,8 +75,6 @@ pts <- SpatialPointsDataFrame(coords = DT[, .(X, Y)],
 
 build_polys(spPts = pts, hrType = 'mcp', hrParams = list(percent = 95))
 
-
-
 }
 \seealso{
 \code{\link{group_polys}}

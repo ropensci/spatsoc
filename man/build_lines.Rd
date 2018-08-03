@@ -16,7 +16,7 @@ build_lines(DT = NULL, projection = NULL, id = NULL, coords = NULL,
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{sortBy}{name of date time column(s) to sort rows by. either 1 POSIXct or 2 IDate and ITime. e.g.: 'datetime' or c('idate', 'itime').}
+\item{sortBy}{Character string of date time column(s) to sort rows by. Must be a POSIXct.}
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 }

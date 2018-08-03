@@ -21,11 +21,9 @@
 #' @inheritParams group_pts
 #' @param projection PROJ.4 character string
 #' @param threshold The width of the buffer around the lines in the units
-#'   of the projection. Alternatively, supply 0 to compare intersection without buffering.
-#' @param spLines Alternatively, provide a SpatialLines object created with the sp
-#'   package. If a spLines object is provided, groups cannot be calculated by a
-#'   timegroup or splitBy.
-#' @param sortBy name of date time column(s) to sort rows by. either 1 POSIXct or 2 IDate and ITime. e.g.: 'datetime' or c('idate', 'itime').
+#'   of the projection. Supply 0 to compare intersection without buffering.
+#' @param spLines Alternatively to providing a DT, provide a SpatialLines object created with the sp package. If a spLines object is provided, groups cannot be calculated by a    timegroup or splitBy.
+#' @param sortBy Character string of date time column(s) to sort rows by. Must be a POSIXct.
 #'
 #' @export
 #'
