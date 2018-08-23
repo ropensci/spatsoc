@@ -131,3 +131,10 @@ areaDT <- group_polys(
 )
 ```
 
+
+# Contributing
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+  
+Development of `spatsoc` welcomes contribution of feature requests, bug reports and suggested improvements through the [issue board](https://gitlab.com/robit.a/spatsoc/issues). 
+
+See details in [CONTRIBUTING.md](CONTRIBUTING.md). 

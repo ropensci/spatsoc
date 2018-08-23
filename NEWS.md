@@ -2,9 +2,10 @@
 
 ## Development version
 
-* improvements to function documentation
+* improvements to package, function documentation
 * [FAQ](https://spatsoc.gitlab.io/articles/faq.html) vignette added
 * fixed `build_lines` ordering bug to ensure rows are ordered by date time when building lines
+* added CODE_OF_CONDUCT.md and CONTRIBUTING.md
 
 
 # v 0.1.0 
