@@ -2,6 +2,8 @@
 #'
 #' \code{group_times} groups rows into time groups. The function accepts date time formatted data and a threshold argument. The threshold argument is used to specify a time window within which rows are grouped.
 #'
+#' The \code{DT} must be a \code{data.table}. If your data is a \code{data.frame}, you can convert it by reference using \code{\link[data.table:setDT]{data.table::setDT}}.
+#'
 #' The \code{datetime} argument expects the name of a column in \code{DT} which is of type \code{POSIXct} or the name of two columns in \code{DT} which are of type \code{IDate} and \code{ITime}.
 #'
 #' \code{threshold} must be provided in units of minutes, hours or days. The character string should start with an integer followed by a unit, separated by a space. It is interpreted in terms of 24 hours which poses the following limitations:
@@ -19,7 +21,9 @@
 #'
 #' If \code{threshold} is NULL, rows are grouped using the \code{datetime} column directly.
 #'
-#' @return \code{group_times} returns the input \code{DT} appended with a \code{timegroup} column and additional temporal grouping columns to help investigate, troubleshoot and interpret the timegroup. The actual value of \code{timegroup} is arbitrary and represents the identity of a given \code{timegroup} which 1 or more individuals are assigned to. If the data was reordered, the group may change, but the contents of each group would not.
+#' @return \code{group_times} returns the input \code{DT} appended with a \code{timegroup} column and additional temporal grouping columns to help investigate, troubleshoot and interpret the timegroup.
+#'
+#' The actual value of \code{timegroup} is arbitrary and represents the identity of a given \code{timegroup} which 1 or more individuals are assigned to. If the data was reordered, the group may change, but the contents of each group would not.
 #'
 #' The temporal grouping columns added depend on the \code{threshold} provided:
 #'

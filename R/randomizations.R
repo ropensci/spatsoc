@@ -2,6 +2,8 @@
 #'
 #' \code{randomizations} performs data-stream social network randomization. The function accepts a \code{data.table} with relocation data, individual identifiers and a randomization \code{type}. The \code{data.table} is randomized either using \code{step} or \code{daily} between-individual methods, or within-individual daily \code{trajectory} method described by Spiegel et al. (2016).
 #'
+#' The \code{DT} must be a \code{data.table}. If your data is a \code{data.frame}, you can convert it by reference using \code{\link[data.table:setDT]{data.table::setDT}}.
+#'
 #' Three randomization \code{type}s are provided:
 #' \enumerate{
 #'   \item step - randomizes identities of relocations between individuals within each time step.
@@ -9,7 +11,7 @@
 #'   \item trajectory - randomizes daily trajectories within individuals (Spiegel et al. 2016).
 #' }
 #'
-#' The \code{type} must be one of the above methods. Depending on the \code{type}, the \code{datetime} must be a certain format:
+#' Depending on the \code{type}, the \code{datetime} must be a certain format:
 #'
 #' \itemize{
 #'   \item step - datetime is integer group created by \code{group_times}
