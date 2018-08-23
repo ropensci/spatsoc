@@ -1,6 +1,6 @@
-#' spatsoc: A package for detecting spatial and temporal groups in GPS relocations.
+#' spatsoc
 #'
-#' spatsoc can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks. In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
+#' spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks. In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
 #'
 #'
 #' The spatsoc package provides one temporal grouping function:
@@ -23,4 +23,4 @@
 #' @docType package
 #' @name spatsoc
 #' @aliases spatsoc-package
-NULL
+"_PACKAGE"

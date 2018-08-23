@@ -3,10 +3,11 @@
 \docType{package}
 \name{spatsoc}
 \alias{spatsoc}
+\alias{_PACKAGE}
 \alias{spatsoc-package}
-\title{spatsoc: A package for detecting spatial and temporal groups in GPS relocations.}
+\title{spatsoc}
 \description{
-spatsoc can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks. In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
+spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks. In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
 }
 \details{
 The spatsoc package provides one temporal grouping function:
@@ -25,4 +26,22 @@ and one social network data-stream randomization function:
 \itemize{
 \item \code{\link{randomizations}}
 }
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://spatsoc.gitlab.io}
+  \item Report bugs at \url{https://www.gitlab.com/robit.a/spatsoc/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Alec L. Robitaille \email{robit.alec@gmail.com}
+
+Authors:
+\itemize{
+  \item Quinn Webber
+  \item Eric Vander Wal
+}
+
 }
