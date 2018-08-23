@@ -22,7 +22,7 @@
 #' The \code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
 #'
 #' @param type one of 'daily', 'step' or 'trajectory' - see details
-#' @param datetime (optional) time field used for providing date time - see details
+#' @param datetime field used for providing date time or time group - see details
 #' @inheritParams group_pts
 #' @param splitBy List of fields in DT to split the randomization process by
 #' @param iterations The number of iterations to randomize

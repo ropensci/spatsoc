@@ -14,7 +14,7 @@ randomizations(DT = NULL, type = NULL, id = NULL, datetime = NULL,
 
 \item{id}{Character string of ID column name}
 
-\item{datetime}{(optional) time field used for providing date time - see details}
+\item{datetime}{field used for providing date time or time group - see details}
 
 \item{splitBy}{List of fields in DT to split the randomization process by}
 
