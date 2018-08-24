@@ -106,7 +106,7 @@ randomizations <- function(DT = NULL,
   }
 
   if (length(datetime) == 1 &&
-      any(class(DT[[datetime]]) %in% c('POSIXct', 'POSIXt', 'IDate'))) {
+      any(class(DT[[datetime]]) %in% c('POSIXct', 'POSIXt'))) {
     dateFormatted <- TRUE
   } else {
     dateFormatted <- FALSE
@@ -118,7 +118,7 @@ randomizations <- function(DT = NULL,
         strwrap(
           prefix = " ",
           initial = "",
-          x = 'datetime provided is either POSIXct or IDate,
+          x = 'datetime provided is POSIXct,
           step randomization will only be
           performed within each datetime -
           consider using group_times first and providing timegroup'
@@ -131,8 +131,7 @@ randomizations <- function(DT = NULL,
         strwrap(
           prefix = " ",
           initial = "",
-          x = 'datetime must be either
-          POSIXct or IDate for daily and trajectory randomization'
+          x = 'datetime must be POSIXct for daily and trajectory randomization'
         )
       )
     }
