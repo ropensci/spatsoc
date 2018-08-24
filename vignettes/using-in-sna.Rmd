@@ -17,7 +17,7 @@ knitr::opts_chunk$set(message = TRUE,
 ```
 
 
-
+#
 since multi year 
 we'll add splitby year
 
@@ -30,6 +30,9 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
 # Cast datetime column to POSIXct
 DT[, datetime := as.POSIXct(datetime)]
+
+# Year of row 
+DT[, yr := year(datetime)]
 
 # Temporal groups
 group_times(DT, datetime = 'datetime', threshold = '5 minutes')
