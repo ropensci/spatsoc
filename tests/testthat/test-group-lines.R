@@ -213,6 +213,8 @@ test_that('group lines returns a single warning for <2 locs', {
   suppressWarnings(
     group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   )
+
+  copyDT[1, ID := 'Z']
   expect_warning(
     group_lines(
       DT = copyDT,
