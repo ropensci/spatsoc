@@ -6,7 +6,7 @@
 * [FAQ](https://spatsoc.gitlab.io/articles/faq.html) vignette added
 * fixed `build_lines` ordering bug to ensure rows are ordered by date time when building lines
 * added CODE_OF_CONDUCT.md and CONTRIBUTING.md
-
+* `randomizations` improvements: warnings/messages, man, narrow DT used when iterations > 1, boolean observed column
 
 # v 0.1.0 
 
