@@ -20,6 +20,27 @@ randomizations(DT = NULL, type = NULL, id = NULL, datetime = NULL,
 
 \item{iterations}{The number of iterations to randomize}
 }
+\value{
+\code{randomizations} returns the random date time or random id along with the original \code{DT}, depending on the randomization \code{type}.
+
+In the case where \code{iterations = 1}:
+
+\itemize{
+\item step - \code{randomID} each time step
+\item daily - \code{randomID} for each day and \code{jul} indicating julian day
+\item trajectory - a random date time ("random" prefixed to \code{datetime} argument), observed \code{jul} and \code{randomJul} indicating the random day relocations are swapped to.
+}
+
+If \code{iterations > 1}, two more columns are returned.
+and return must be reassigned
+
+\itemize{
+\item observed - if the rows represent the observed (TRUE/FALSE)
+\item iteration - iteration of rows (where 0 is the observed)
+}
+
+A message is returned when any of these columns already exist in the input \code{DT}, because they will be overwritten.
+}
 \description{
 \code{randomizations} performs data-stream social network randomization. The function accepts a \code{data.table} with relocation data, individual identifiers and a randomization \code{type}. The \code{data.table} is randomized either using \code{step} or \code{daily} between-individual methods, or within-individual daily \code{trajectory} method described by Spiegel et al. (2016).
 }
@@ -43,6 +64,15 @@ Depending on the \code{type}, the \code{datetime} must be a certain format:
 
 The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns.
 
+Please note that if the data extends over multiple years, a column indicating the year should be provided to the \code{splitBy} argument. This will ensure randomizations only occur within each year.
+
+For example, using \code{\link[data.table:year]{data.table::year}}:
+
+\preformatted{
+DT[, yr := year(datetime)]
+randomizations(DT, type = 'step', id = 'ID', datetime = 'timegroup', splitBy = 'yr')
+}
+
 The \code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
 }
 \examples{
@@ -61,6 +91,7 @@ group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 # Spatial grouping without timegroup
 group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 
+## Iterations = 1
 # Randomization: step
 randomizations(DT, type = 'step', id = 'ID', datetime = 'timegroup')
 
@@ -69,6 +100,10 @@ randomizations(DT, type = 'daily', id = 'ID', datetime = 'datetime')
 
 # Randomization: trajectory
 randomizations(DT, type = 'trajectory', id = 'ID', datetime = 'datetime')
+
+
+
+
 }
 \references{
 \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
