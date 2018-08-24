@@ -70,6 +70,8 @@
 #' # Read example data
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #'
+#' # Date time columns
+#' DT[, datetime := as.POSIXct(datetime)]
 #' DT[, yr := year(datetime)]
 #'
 #' # Temporal grouping

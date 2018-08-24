@@ -82,27 +82,56 @@ library(data.table)
 # Read example data
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
-# Cast the character column to POSIXct
-DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+# Date time columns
+DT[, datetime := as.POSIXct(datetime)]
+DT[, yr := year(datetime)]
 
 # Temporal grouping
 group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 
-# Spatial grouping without timegroup
+# Spatial grouping with timegroup
 group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 
 ## Iterations = 1
+randomizations(
+    DT,
+    type = 'step',
+    id = 'ID',
+    datetime = 'timegroup',
+    iterations = 1,
+    splitBy = 'yr'
+)
+
+## Iterations > 1
 # Randomization: step
-randomizations(DT, type = 'step', id = 'ID', datetime = 'timegroup')
+randStep <- randomizations(
+    DT,
+    type = 'step',
+    id = 'ID',
+    datetime = 'timegroup',
+    splitBy = 'yr',
+    iterations = 2
+)
 
 # Randomization: daily
-randomizations(DT, type = 'daily', id = 'ID', datetime = 'datetime')
+randDaily <- randomizations(
+    DT,
+    type = 'daily',
+    id = 'ID',
+    datetime = 'datetime',
+    splitBy = 'yr',
+    iterations = 2
+)
 
 # Randomization: trajectory
-randomizations(DT, type = 'trajectory', id = 'ID', datetime = 'datetime')
-
-
-
+randTraj <- randomizations(
+    DT,
+    type = 'trajectory',
+    id = 'ID',
+    datetime = 'datetime',
+    splitBy = 'yr',
+    iterations = 2
+)
 
 }
 \references{
