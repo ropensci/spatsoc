@@ -136,7 +136,7 @@ randomizations <- function(DT = NULL,
       )
     }
     if ('jul' %in% colnames(DT)) {
-      warning('column "jul" found in DT, will be overwritten by this function')
+      warning('column jul found in DT, will be overwritten by this function')
     }
   }
 
