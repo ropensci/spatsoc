@@ -193,10 +193,10 @@ randomizations <- function(DT = NULL,
     repDT[iteration != 0, observed := FALSE]
 
     if (type == 'step') {
-      repDT[!observed, randomID := .SD[sample(.N)],
+      repDT[!(observed), randomID := .SD[sample(.N)],
             by = splitBy, .SDcols = id]
-      repDT[observed, randomID := .SD, .SDcols = id]
-      return(repDT[])
+      repDT[(observed), randomID := .SD, .SDcols = id]
+      return(repDT)
     }
 
     repDT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
@@ -208,7 +208,7 @@ randomizations <- function(DT = NULL,
     if (type == 'daily') {
       idDays[, randomID := .SD[sample(.N)],
              by = c(splitBy, 'jul'), .SDcols = id]
-      idDays[observed, randomID := .SD[[1]], .SDcols = id]
+      idDays[(observed), randomID := .SD[[1]], .SDcols = id]
       return(merge(repDT, idDays, on = c('iteration', 'jul', splitBy),
                    all = TRUE))
 
@@ -221,10 +221,10 @@ randomizations <- function(DT = NULL,
       merged[, (randomDateCol) :=
                as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
              .SDcols = datetime]
-      merged[observed,
+      merged[(observed),
              c(randomDateCol, 'randomJul') := .SD,
              .SDcols = c(datetime, 'jul')]
-      return(merged[])
+      return(merged)
     }
   }
 }
