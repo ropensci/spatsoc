@@ -189,13 +189,13 @@ randomizations <- function(DT = NULL,
     DT[, rowID := .I]
     repDT <- DT[rep(1:.N, iterations + 1)]
     repDT[, iteration := seq(0, .N - 1, 1), by = rowID]
-    repDT[iteration == 0, observed := 1]
-    repDT[iteration != 0, observed := 0]
+    repDT[iteration == 0, observed := TRUE]
+    repDT[iteration != 0, observed := FALSE]
 
     if (type == 'step') {
-      repDT[observed != 1, randomID := .SD[sample(.N)],
+      repDT[!observed, randomID := .SD[sample(.N)],
             by = splitBy, .SDcols = id]
-      repDT[observed == 1, randomID := .SD, .SDcols = id]
+      repDT[observed, randomID := .SD, .SDcols = id]
       return(repDT[])
     }
 
@@ -208,7 +208,7 @@ randomizations <- function(DT = NULL,
     if (type == 'daily') {
       idDays[, randomID := .SD[sample(.N)],
              by = c(splitBy, 'jul'), .SDcols = id]
-      idDays[observed == 1, randomID := .SD[[1]], .SDcols = id]
+      idDays[observed, randomID := .SD[[1]], .SDcols = id]
       return(merge(repDT, idDays, on = c('iteration', 'jul', splitBy),
                    all = TRUE))
 
@@ -221,7 +221,7 @@ randomizations <- function(DT = NULL,
       merged[, (randomDateCol) :=
                as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
              .SDcols = datetime]
-      merged[observed == 1,
+      merged[observed,
              c(randomDateCol, 'randomJul') := .SD,
              .SDcols = c(datetime, 'jul')]
       return(merged[])
