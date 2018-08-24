@@ -168,6 +168,6 @@ knitr::kable(
 
 
 ## Notes
-Package dependencies for `spatsoc` are `sp`, `rgeos`, `igraph`, `adehabitatHR` and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `setDT(df)` to convert it by reference. 
+Package dependencies for `spatsoc` are `sp`, `rgeos`, `igraph`, `adehabitatHR` and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `data.table::setDT(df)` to convert it by reference. 
 
 In addition, since the `rgeos` package is used in most functions (`group_lines` and `group_polys`) the input `DT`'s coordinate system is important. `rgeos` expects planar coordinates and this requirement is carried forward for `spatsoc`. Since `rgeos` is used, system dependencies include `GEOS`. 
