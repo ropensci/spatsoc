@@ -2,7 +2,7 @@
 context('test group_times')
 library(spatsoc)
 
-DT <- fread('../testdata/buffalo.csv')
+DT <- fread('../testdata/DT.csv')
 # Sys.setenv(TZ='GMT')
 
 test_that('DT is required', {

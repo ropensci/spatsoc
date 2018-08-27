@@ -2,7 +2,8 @@
 context('test build_lines')
 library(spatsoc)
 
-DT <- fread('../testdata/buffalo.csv')
+DT <- fread('../testdata/DT.csv')
+
 utm <-
   '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
@@ -186,20 +187,14 @@ test_that("build lines warns if < 2 locs per ID/byField", {
     'some rows dropped, cannot build lines with less than two points'
   )
 
-
-  # for ID + splitBy
-  splitBy <- c('ID', 'jul')
-  DT[, jul := data.table::yday(as.POSIXct(datetime))]
-  DT[, count := .N, by = splitBy]
-  subDT <- DT[count < 2]
-
+  copyDT <- copy(DT)[1, ID := 'potato']
   expect_warning(
     build_lines(
-      DT = subDT,
+      DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
-      splitBy = 'jul',
+      splitBy = 'population',
       sortBy = 'datetime'
     ),
     'some rows dropped, cannot build',

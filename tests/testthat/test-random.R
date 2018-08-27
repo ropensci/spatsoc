@@ -2,7 +2,7 @@
 context('test randomizations')
 library(spatsoc)
 
-DT <- fread('../testdata/buffalo.csv')
+DT <- fread('../testdata/DT.csv')
 
 DT[, datetime := as.POSIXct(datetime)]
 DT[, yr := year(datetime)]

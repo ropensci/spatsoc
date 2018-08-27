@@ -2,7 +2,7 @@
 context('test group_pts')
 library(spatsoc)
 
-DT <- fread('../testdata/buffalo.csv')
+DT <- fread('../testdata/DT.csv')
 
 test_that('DT is required', {
   expect_error(group_pts(

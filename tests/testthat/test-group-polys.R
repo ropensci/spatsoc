@@ -2,7 +2,8 @@
 context('test group_polys')
 library(spatsoc)
 
-DT <- fread('../testdata/buffalo.csv')
+DT <- fread('../testdata/DT.csv')
+
 utm <-
   '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
@@ -162,7 +163,7 @@ test_that('splitBy and spPolys are not both provided', {
 
 
 test_that('ID field is alphanumeric and does not have spaces', {
-  copyDT <- copy(DT)[, ID := gsub('e', ' ', ID)]
+  copyDT <- copy(DT)[ID == unique(ID)[1], ID := paste(ID, ID)]
   expect_error(
     group_polys(
       DT = copyDT,
