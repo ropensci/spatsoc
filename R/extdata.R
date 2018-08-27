@@ -1,0 +1,23 @@
+#' Movement of 10 "Newfoundland Bog Cows"
+#'
+#' A dataset containing the GPS relocations of 10 individuals in winter 2016-2017.
+#'
+#' @format A data.table with 14297 rows and 5 variables:
+#' \describe{
+#'   \item{ID}{individual identifier}
+#'   \item{X}{X coordinate of the relocation (UTM 21N)}
+#'   \item{Y}{Y coordinate of the relocation (UTM 21N)}
+#'   \item{datetime}{character string representing the date time}
+#'   \item{population}{sub population within the 7 individuals}
+#' }
+#'
+#' @name DT
+#' @section DT.csv:
+#'
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+NULL
