@@ -12,7 +12,6 @@
 #' }
 #'
 #' @name DT
-#' @section DT.csv:
 #'
 #' @examples
 #' # Load data.table

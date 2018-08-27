@@ -44,9 +44,6 @@
 #' # Cast the character column to POSIXct
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
-#' # Spatial grouping without timegroup
-#' group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'))
-#'
 #' # Temporal grouping
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #' # Spatial grouping with timegroup
