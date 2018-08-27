@@ -14,10 +14,6 @@
 \description{
 A dataset containing the GPS relocations of 10 individuals in winter 2016-2017.
 }
-\section{DT.csv}{
-
-}
-
 \examples{
 # Load data.table
 library(data.table)
