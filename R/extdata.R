@@ -8,7 +8,7 @@
 #'   \item{X}{X coordinate of the relocation (UTM 21N)}
 #'   \item{Y}{Y coordinate of the relocation (UTM 21N)}
 #'   \item{datetime}{character string representing the date time}
-#'   \item{population}{sub population within the 7 individuals}
+#'   \item{population}{sub population within the individuals}
 #' }
 #'
 #' @name DT

@@ -262,8 +262,7 @@ test_that('withinGroup is not returned to the user', {
 
 
 test_that('group column succesfully detected', {
-  copyDT <- copy(DT)
-  copyDT[, group := 1][, mnth := month(datetime)]
+  copyDT <- copy(DT)[, group := 1][, mnth := month(datetime)]
   copyDT <- copyDT[, nBy := .N, by = .(mnth, ID)][nBy > 30]
   expect_message(
     group_polys(
@@ -275,6 +274,21 @@ test_that('group column succesfully detected', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'mnth'
+    ),
+    'group column will be overwritten'
+  )
+
+  copyDT <- copy(DT)[, group := 1][, mnth := month(datetime)]
+  copyDT <- copyDT[, nBy := .N, by = .(mnth, ID)][nBy > 30]
+  expect_message(
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = FALSE,
+      coords = c('X', 'Y'),
+      id = 'ID'
     ),
     'group column will be overwritten'
   )
