@@ -78,10 +78,6 @@ group_polys <-
 
     if (is.null(splitBy)) {
       if (!is.null(DT) && is.null(spPolys)) {
-        if ('group' %in% colnames(DT)) {
-          message('group column will be overwritten by this function')
-          set(DT, j = 'group', value = NULL)
-        }
         spPolys <-
           build_polys(
             DT = DT,
@@ -97,6 +93,10 @@ group_polys <-
 
 
       if (!area) {
+        if ('group' %in% colnames(DT)) {
+          message('group column will be overwritten by this function')
+          set(DT, j = 'group', value = NULL)
+        }
         inter <- rgeos::gIntersects(spPolys, spPolys, byid = TRUE)
         g <- igraph::graph_from_adjacency_matrix(inter)
         ovr <- igraph::clusters(g)$membership
@@ -148,14 +148,13 @@ group_polys <-
         ))
       }
 
-      if ('group' %in% colnames(DT)) {
-        message('group column will be overwritten by this function')
-        set(DT, j = 'group', value = NULL)
-      }
-
       DT[, nBy := .N, c(splitBy, id)]
 
       if (!area) {
+        if ('group' %in% colnames(DT)) {
+          message('group column will be overwritten by this function')
+          set(DT, j = 'group', value = NULL)
+        }
         ovrDT <-
           DT[nBy > 5, {
             try(
