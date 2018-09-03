@@ -107,7 +107,8 @@ group_lines(
   projection = utm,
   id = 'ID',
   coords = c('X', 'Y'),
-  timegroup = 'timegroup'
+  timegroup = 'timegroup',
+  sortBy = 'datetime'
 )
 ```
 
