@@ -1,8 +1,11 @@
 ---
-title: "Using spatsoc for social network analysis"
+title: "Using spatsoc in social network analysis"
 author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: false
 vignette: >
   %\VignetteIndexEntry{Using spatsoc for social network analysis}
   %\VignetteEngine{knitr::knitr}
