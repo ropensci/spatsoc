@@ -50,7 +50,7 @@ DT[, datetime := as.POSIXct(datetime)]
 ```
 
 
-Next, we will group relocations temporally with `group_times` and spatially with one of `group_pts`, `group_lines`, `group_polys`. Note that these are mutually exclusive, only select one spatial grouping function at a time. 
+Next, we will group relocations temporally with `group_times` and spatially with one of `group_pts`, `group_lines`, `group_polys`. Note: these are mutually exclusive, only select one spatial grouping function at a time. 
 
 <!-- based... maybe scope? scale?-->
 ## 2. a) Point based grouping 
@@ -80,13 +80,10 @@ Longer temporal threshold to create, for example, daily trajectories that are op
 # UTM zone for relocation
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
-# Create yr column since data spans multiple years, will use yr as 'splitBy' argument
-DT[, yr := year(datetime)]
-
 # Group relocations by julian day
 group_times(DT, datetime = 'datetime', threshold = '1 day')
 
-# Group lines for each individual and julian day, splitting multi-year data by year ('yr')
+# Group lines for each individual and julian day
 group_lines(
   DT,
   threshold = 50,
@@ -94,8 +91,7 @@ group_lines(
   id = 'ID',
   coords = c('X', 'Y'),
   timegroup = 'timegroup',
-  sortBy = 'datetime',
-  splitBy = 'yr'
+  sortBy = 'datetime'
 )
 ```
 
@@ -112,8 +108,8 @@ utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 group_polys(
   DT,
   area = FALSE,
-  'mcp',
-  list(percent = 95),
+  hrType = 'mcp',
+  hrParams = list(percent = 95),
   projection = utm,
   id = 'ID',
   coords = c('X', 'Y')
@@ -124,8 +120,8 @@ group_polys(
 areaDT <- group_polys(
   DT,
   area = TRUE,
-  'mcp',
-  list(percent = 95),
+  hrType = 'mcp',
+  hrParams = list(percent = 95),
   projection = utm,
   id = 'ID',
   coords = c('X', 'Y')
