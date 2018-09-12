@@ -16,11 +16,11 @@ vignette: >
 knitr::opts_chunk$set(message = TRUE, 
                       warning = FALSE,
                       eval = FALSE, 
-                      echo = FALSE)
+                      echo = TRUE)
 ```
 
 
-`spatsoc` can be used in social network analysis to generate gambit of the group format data from GPS relocation data and perform data stream randomization.
+`spatsoc` can be used in social network analysis to generate gambit of the group format data from GPS relocation data and perform data stream randomization. Gambit of the group format data can be used to generate social networks. 
 
 Gambit of the group format data is generated using the grouping functions:
 
@@ -31,29 +31,107 @@ Gambit of the group format data is generated using the grouping functions:
 
 Data stream randomization is performed using the `randomization` function. 
 
-<!-- better this.. -->
-
-# Grouping functions
-spatsoc provides users with one temporal (`group_times`) and three spatial (`group_pts`, `group_lines`, `group_polys`) functions. Users can consider spatial grouping at 3 different scales combined with an appropriate temporal grouping threshold. 
-
-For example...
+# Generate network
+spatsoc provides users with one temporal (`group_times`) and three spatial (`group_pts`, `group_lines`, `group_polys`) functions to generate gambit of the group data from GPS relocations. Users can consider spatial grouping at 3 different scales combined with an appropriate temporal grouping threshold. The gambit of the group data is then used to generate a group by individual matrix and build the network. 
 
 
-## Point based grouping
-Pick a temporal threshold and spatial distance threshold to define grouping, depending on species and study specific <!--blah.-->
+## 1. Import packages and prepare data
 
-<!-- code-->
+```{r}
+# Load packages
+library(spatsoc)
+library(data.table)
+
+# Read data as a data.table
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+
+# Cast datetime column to POSIXct
+DT[, datetime := as.POSIXct(datetime)]
+```
 
 
-## Line based grouping
+Next, we will group relocations temporally with `group_times` and spatially with one of `group_pts`, `group_lines`, `group_polys`. Note that these are mutually exclusive, only select one spatial grouping function at a time. 
+
+<!-- based... maybe scope? scale?-->
+## 2. a) Point based grouping 
+
+Depending on species and study system, relevant temporal and spatial grouping thresholds are used. In this case, relocations within 5 minutes and 50 meters are grouped together. 
+
+```{r}
+# Temporal groups
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+
+# Spatial groups
+group_pts(
+  DT,
+  threshold = 50,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+)
+
+```
+
+## 2. b) Line based grouping 
+
 Longer temporal threshold to create, for example, daily trajectories that are optionally buffered. 
 
-<!-- code-->
+```{r}
+# UTM zone for relocation
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+
+# Create yr column since data spans multiple years, will use yr as 'splitBy' argument
+DT[, yr := year(datetime)]
+
+# Group relocations by julian day
+group_times(DT, datetime = 'datetime', threshold = '1 day')
+
+# Group lines for each individual and julian day, splitting multi-year data by year ('yr')
+group_lines(
+  DT,
+  threshold = 50,
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup',
+  sortBy = 'datetime',
+  splitBy = 'yr'
+)
+```
 
 
-## Polygon based grouping
+## 2. c) Polygon based grouping 
 
-<!-- code-->
+Longer temporal threshold to create seasonal, monthly, yearly home ranges and compare intersection or proportional overlap.
+
+```{r}
+# Proj4 string for example data
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+
+# Option 1: area = FALSE and home range intersection 'group' column added to DT 
+group_polys(
+  DT,
+  area = FALSE,
+  'mcp',
+  list(percent = 95),
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y')
+)
+
+# Option 2: area = TRUE and results must be assigned to a new variable
+#      data.table returned has ID 1, ID 2 and proportion and area overlap
+areaDT <- group_polys(
+  DT,
+  area = TRUE,
+  'mcp',
+  list(percent = 95),
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y')
+)
+
+```
 
 # Data stream randomization
 
