@@ -36,10 +36,7 @@ spatsoc provides users with one temporal (`group_times`) and three spatial (`gro
 
 
 ## 1. Import packages and prepare data
-
-<!-- data.table, posixct -->
-
-
+`spatsoc` expects a `data.table` for all `DT` arguments and date time columns to be formatted `POSIXct`. 
 
 ```{r}
 # Load packages
@@ -56,7 +53,6 @@ DT[, datetime := as.POSIXct(datetime)]
 
 Next, we will group relocations temporally with `group_times` and spatially with one of `group_pts`, `group_lines`, `group_polys`. Note: these are mutually exclusive, only select one spatial grouping function at a time. 
 
-<!-- based... maybe scope? scale? or just group_pts-->
 ## 2. a) `group_pts` 
 
 Point based grouping by calculating distance between relocations in each timegroup. Depending on species and study system, relevant temporal and spatial grouping thresholds are used. In this case, relocations within 5 minutes and 50 meters are grouped together. 
@@ -141,23 +137,19 @@ Three types of data stream randomization are provided by `spatsoc`'s `randomizat
 * daily: randomizes identities of relocations between individuals within each day.
 * trajectory: randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12553)).
 
-Note: if `iterations = 1`, columns are added to the `DT`. If `iterations` is greater than 1, the results must be assigned.  
+Note: if `iterations = 1`, columns are added to the `DT`. If `iterations` is greater than 1, the results must be assigned. In addition, if `iterations` is greater than 1, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed). <!-- rowID -->
+
 As with spatial grouping functions, these methods are mutually exclusive. Pick one `type` and rebuild the network after randomization. 
 
-<!-- multi year note?  -->
-
-
-<!-- or.. step randomization -->
 ## 3. a) `type = 'step'`
 `'step'` randomizes identities of relocations between individuals within each time step. The `datetime` argument expects an integer group created by `group_times`. 
 
-The first example shows where `iterations = 1`. A column named 'randomID' is appended corresponding to randomly selected ID from IDs within each time step. 
+This example shows where `iterations = 1`. One column is returned when `type = 'step'`:
 
-If `iterations` is greater than 1, columns 'observed' and 'iteration' are included indicating observed rows and which iteration rows correspond to (where 0 is the observed).
-
+* 'randomID' - randomly selected ID from IDs within each time step
 
 ```{r}
-# Iterations = 1
+# Iterations = 1 therefore the results are appended to DT
 randomizations(
    DT,
    type = 'step',
@@ -166,20 +158,25 @@ randomizations(
    iterations = 1,
    splitBy = 'yr'
 )
-
 ```
 
 
 ## 3. b) `type = 'daily'`
 `'daily'` randomizes identities of relocations between individuals within each day. The `datetime` argument expects a datetime `POSIXct` format column. 
 
-* daily - `randomID` for each day and `jul` indicating julian day
+Two column is returned when `type = 'daily'`:
+
+* 'randomID' - randomly selected ID for each day
+* 'jul' - julian day
+
+Since `iterations` is greater than 1, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed).
 
 ```{r}
 # Calculate year column to ensure randomization only occurs within years since data spans multiple years
 DT[, yr := year(datetime)]
 
 # splitBy = 'yr' to force randomization only within year
+# Iterations > 1, results must be reassigned
 randDaily <- randomizations(
    DT,
    type = 'daily',
@@ -188,15 +185,18 @@ randDaily <- randomizations(
    splitBy = 'yr',
    iterations = 20
 )
-
 ```
 
 ## 3. c) `type = 'trajectory'`
 `'trajectory'` randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12553)). The `datetime` argument expects a datetime `POSIXct` format column. 
 
-* trajectory - a random date time ("random" prefixed to *datetime* argument), observed *jul* and *randomJul* indicating the random day relocations are swapped to.
-* observed - if the rows represent the observed (TRUE/FALSE)
-* iteration - iteration of rows (where 0 is the observed)
+Three column is returned when `type = 'trajectory'`:
+
+* random date time ("random" prefixed to *datetime* argument)
+* 'jul' - observed julian day
+* 'randomJul' - random julian day relocations are swapped to
+
+Since `iterations` is greater than 1, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed).
 
 ```{r}
 # Calculate year column to ensure randomization only occurs within years since data spans multiple years
@@ -213,63 +213,4 @@ randTraj <- randomizations(
 ```
 
 
-# Example
-Here is an example of point based spatial grouping with `spatsoc`'s "Newfoundland Bog Cow" example data. 
-
-The data has a relocation rate of 2 hours but we will use a temporal threshold of 5 minutes. <!-- It is important to note that the temporal window is fixed in terms of 24 hours AND EXPLAIN LIMITATIONS?--> In addition, we will use a spatial distance threshold of 50 meters to accommodate the size and behaviour of the study species. The combination of spatial and temporal thresholds means that any individuals within 50 meters of each other within 5 minutes will be assigned to the same group.
-
-## Generate network
-
-```{r}
-# Load packages
-library(spatsoc)
-library(data.table)
-
-# Read data as a data.table
-DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
-
-# Cast datetime column to POSIXct
-DT[, datetime := as.POSIXct(datetime)]
-
-# Year of row 
-DT[, yr := year(datetime)]
-
-# Temporal groups
-group_times(DT, datetime = 'datetime', threshold = '5 minutes')
-
-# Spatial groups
-group_pts(
-  DT,
-  threshold = 50,
-  id = 'ID',
-  coords = c('X', 'Y'),
-  timegroup = 'timegroup'
-)
-d <- dcast(DT, formula = group ~ ID, 
-           fun.aggregate = length, value.var = 'group')
-
-gbi <- as.matrix(d[, .SD, .SDcols = colnames(d)[!grepl('group', colnames(d))]])
-rownames(gbi) <- d$group
-
-library(asnipe)
-net <- get_network(gbi, data_format = "GBI", association_index = "SRI")
-
-randDT <-
-  randomizations(
-    DT,
-    type = 'step',
-    id = 'ID',
-    datetime = 'timegroup',
-    iterations = 500
-  )
-
-group_pts(
-  randDT,
-  threshold = 50,
-  id = 'randomID',
-  coords = c('X', 'Y'),
-  timegroup = 'timegroup',
-  splitBy = 'iteration'
-)
-
-```
+<!-- example with NL bog cow -->
