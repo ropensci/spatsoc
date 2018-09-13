@@ -1,0 +1,216 @@
+---
+title: "Using spatsoc in social network analysis"
+author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: false
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{Using spatsoc for social network analysis}
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r knitropts, include = FALSE}
+knitr::opts_chunk$set(message = TRUE, 
+                      warning = FALSE,
+                      eval = FALSE, 
+                      echo = TRUE)
+```
+
+
+`spatsoc` can be used in social network analysis to generate gambit of the group format data from GPS relocation data and perform data stream randomization. Gambit of the group format data can be used to generate social networks. 
+
+Gambit of the group format data is generated using the grouping functions:
+
+* `group_times`
+* `group_pts`
+* `group_lines`
+* `group_polys`
+
+Data stream randomization is performed using the `randomization` function. 
+
+# Generate network
+spatsoc provides users with one temporal (`group_times`) and three spatial (`group_pts`, `group_lines`, `group_polys`) functions to generate gambit of the group data from GPS relocations. Users can consider spatial grouping at 3 different scales combined with an appropriate temporal grouping threshold. The gambit of the group data is then used to generate a group by individual matrix and build the network. 
+
+
+## 1. Import packages and prepare data
+`spatsoc` expects a `data.table` for all `DT` arguments and date time columns to be formatted `POSIXct`. 
+
+```{r}
+# Load packages
+library(spatsoc)
+library(data.table)
+
+# Read data as a data.table
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+
+# Cast datetime column to POSIXct
+DT[, datetime := as.POSIXct(datetime)]
+```
+
+
+Next, we will group relocations temporally with `group_times` and spatially with one of `group_pts`, `group_lines`, `group_polys`. Note: these are mutually exclusive, only select one spatial grouping function at a time. 
+
+## 2. a) `group_pts` 
+
+Point based grouping by calculating distance between relocations in each timegroup. Depending on species and study system, relevant temporal and spatial grouping thresholds are used. In this case, relocations within 5 minutes and 50 meters are grouped together. 
+
+```{r}
+# Temporal groups
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+
+# Spatial groups
+group_pts(
+  DT,
+  threshold = 50,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+)
+
+```
+
+## 2. b) `group_lines`
+
+Line based grouping by measuring intersection of, optionally buffered, trajectories for each individual in each timegroup. Longer temporal thresholds are used to measure, for example, intersecting daily trajectories. 
+
+```{r}
+# UTM zone for relocation
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+
+# Group relocations by julian day
+group_times(DT, datetime = 'datetime', threshold = '1 day')
+
+# Group lines for each individual and julian day
+group_lines(
+  DT,
+  threshold = 50,
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup',
+  sortBy = 'datetime'
+)
+```
+
+
+## 2. c) `group_polys`
+
+Polygon based grouping by generating home ranges using `adehabitatHR` and measuring intersection or proportional overlap. Longer temporal thresholds are used to create seasonal, monthly, yearly home ranges.
+
+```{r}
+# Proj4 string for example data
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+
+# Option 1: area = FALSE and home range intersection 'group' column added to DT 
+group_polys(
+  DT,
+  area = FALSE,
+  hrType = 'mcp',
+  hrParams = list(percent = 95),
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y')
+)
+
+# Option 2: area = TRUE and results must be assigned to a new variable
+#      data.table returned has ID 1, ID 2 and proportion and area overlap
+areaDT <- group_polys(
+  DT,
+  area = TRUE,
+  hrType = 'mcp',
+  hrParams = list(percent = 95),
+  projection = utm,
+  id = 'ID',
+  coords = c('X', 'Y')
+)
+
+```
+
+# Data stream randomization
+Three types of data stream randomization are provided by `spatsoc`'s `randomization` function:
+
+
+* step: randomizes identities of relocations between individuals within each time step.
+* daily: randomizes identities of relocations between individuals within each day.
+* trajectory: randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12553)).
+
+Note: if `iterations = 1`, columns are added to the `DT`. If `iterations` is greater than 1, the results must be assigned. In addition, if `iterations` is greater than 1, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed). <!-- rowID -->
+
+As with spatial grouping functions, these methods are mutually exclusive. Pick one `type` and rebuild the network after randomization. 
+
+## 3. a) `type = 'step'`
+`'step'` randomizes identities of relocations between individuals within each time step. The `datetime` argument expects an integer group created by `group_times`. 
+
+This example shows where `iterations = 1`. One column is returned when `type = 'step'`:
+
+* 'randomID' - randomly selected ID from IDs within each time step
+
+```{r}
+# Iterations = 1 therefore the results are appended to DT
+randomizations(
+   DT,
+   type = 'step',
+   id = 'ID',
+   datetime = 'timegroup',
+   iterations = 1,
+   splitBy = 'yr'
+)
+```
+
+
+## 3. b) `type = 'daily'`
+`'daily'` randomizes identities of relocations between individuals within each day. The `datetime` argument expects a datetime `POSIXct` format column. 
+
+Two column is returned when `type = 'daily'`:
+
+* 'randomID' - randomly selected ID for each day
+* 'jul' - julian day
+
+Since `iterations` is greater than 1, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed).
+
+```{r}
+# Calculate year column to ensure randomization only occurs within years since data spans multiple years
+DT[, yr := year(datetime)]
+
+# splitBy = 'yr' to force randomization only within year
+# Iterations > 1, results must be reassigned
+randDaily <- randomizations(
+   DT,
+   type = 'daily',
+   id = 'ID',
+   datetime = 'datetime',
+   splitBy = 'yr',
+   iterations = 20
+)
+```
+
+## 3. c) `type = 'trajectory'`
+`'trajectory'` randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12553)). The `datetime` argument expects a datetime `POSIXct` format column. 
+
+Three column is returned when `type = 'trajectory'`:
+
+* random date time ("random" prefixed to *datetime* argument)
+* 'jul' - observed julian day
+* 'randomJul' - random julian day relocations are swapped to
+
+Since `iterations` is greater than 1, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed).
+
+```{r}
+# Calculate year column to ensure randomization only occurs within years since data spans multiple years
+DT[, yr := year(datetime)]
+
+randTraj <- randomizations(
+   DT,
+   type = 'trajectory',
+   id = 'ID',
+   datetime = 'datetime',
+   splitBy = 'yr',
+   iterations = 20
+)
+```
+
+
+<!-- example with NL bog cow -->
