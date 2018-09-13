@@ -9,6 +9,7 @@ RUN apt-get update \
     libssl-dev \
     libcurl4-openssl-dev \
     libxml2-dev \
+    zlib1g-dev \
     git \
   && install2.r --error \
     rgeos \

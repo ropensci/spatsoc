@@ -1,4 +1,4 @@
-# Development R with dependencies installed
+# Devel R with dependencies installed
 
 FROM rocker/r-ver:devel
 MAINTAINER Alec L. Robitaille
@@ -9,8 +9,8 @@ RUN apt-get update \
     libssl-dev \
     libcurl4-openssl-dev \
     libxml2-dev \
-    git \
     zlib1g-dev \
+    git \
   && install2.r --error \
     rgeos \
     sp \
