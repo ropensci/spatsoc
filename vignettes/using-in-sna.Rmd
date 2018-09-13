@@ -57,9 +57,9 @@ DT[, datetime := as.POSIXct(datetime)]
 Next, we will group relocations temporally with `group_times` and spatially with one of `group_pts`, `group_lines`, `group_polys`. Note: these are mutually exclusive, only select one spatial grouping function at a time. 
 
 <!-- based... maybe scope? scale? or just group_pts-->
-## 2. a) Point based grouping 
+## 2. a) `group_pts` 
 
-Depending on species and study system, relevant temporal and spatial grouping thresholds are used. In this case, relocations within 5 minutes and 50 meters are grouped together. 
+Point based grouping by calculating distance between relocations in each timegroup. Depending on species and study system, relevant temporal and spatial grouping thresholds are used. In this case, relocations within 5 minutes and 50 meters are grouped together. 
 
 ```{r}
 # Temporal groups
@@ -76,9 +76,9 @@ group_pts(
 
 ```
 
-## 2. b) Line based grouping 
+## 2. b) `group_lines`
 
-Longer temporal threshold to create, for example, daily trajectories that are optionally buffered. 
+Line based grouping by measuring intersection of, optionally buffered, trajectories for each individual in each timegroup. Longer temporal thresholds are used to measure, for example, intersecting daily trajectories. 
 
 ```{r}
 # UTM zone for relocation
@@ -100,9 +100,9 @@ group_lines(
 ```
 
 
-## 2. c) Polygon based grouping 
+## 2. c) `group_polys`
 
-Longer temporal threshold to create seasonal, monthly, yearly home ranges and compare intersection or proportional overlap.
+Polygon based grouping by generating home ranges using `adehabitatHR` and measuring intersection or proportional overlap. Longer temporal thresholds are used to create seasonal, monthly, yearly home ranges.
 
 ```{r}
 # Proj4 string for example data
