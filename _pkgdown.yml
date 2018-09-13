@@ -32,6 +32,10 @@ reference:
     contents:
     - '`build_lines`'
     - '`build_polys`'
+  - title: Package data
+    desc: ~
+    contents:
+    - '`DT`'
 
 navbar:
   left:
@@ -48,6 +52,8 @@ navbar:
         href: articles/intro-spatsoc.html
       - text: Frequently asked questions
         href: articles/faq.html
+      - text: Using spatsoc in social network analysis
+        href: articles/using-in-sna.html
     news:
       text: "News"
       href: news/index.html
