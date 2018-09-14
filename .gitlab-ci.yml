@@ -30,6 +30,5 @@ coverage_job:
   only:
     - master
   script:
-    - install2.r covr
     - r -e 'devtools::install()'
     - r -e 'covr::codecov(type = c("tests", "examples"), quiet = FALSE, token = "028df4b6-36a6-4a68-8a70-e69d4dd79fc1")'
