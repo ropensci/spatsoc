@@ -2,7 +2,7 @@
 context('test group_lines')
 library(spatsoc)
 
-DT <- fread('../testdata/DT.csv')[ID %in% c('A', 'B', 'C')]
+DT <- fread('../testdata/DT.csv')
 
 utm <-
   '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
