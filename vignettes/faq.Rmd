@@ -237,7 +237,7 @@ Currently, `spatsoc` offers two types of home ranges provided by the `adehabitat
 
 ## Why does a function print the result, but columns aren't added to my DT?
 
-Check that your `data.table` has columns allocated (with `data.table::truelength`) and if not, use `data.table::setDT`. This can happen if you are reading your data from `RDS` or `RData` files.  [See here.](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-faq.html#reading-data.table-from-rds-or-rdata-file)
+Check that your `data.table` has columns allocated (with `data.table::truelength`) and if not, use `data.table::setDT`. This can happen if you are reading your data from `RDS` or `RData` files.  [See here.](https://cran.r-project.org/package=data.table/vignettes/datatable-faq.html#reading-data.table-from-rds-or-rdata-file)
 
 ```{r alloc}
 if (truelength(DT) == 0) {
