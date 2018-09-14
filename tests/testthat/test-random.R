@@ -13,7 +13,7 @@ group_pts(DT, threshold = 100, id = 'ID', timegroup = 'timegroup',
 
 test_that('DT, type, id, datetime are required', {
   expect_error(randomizations(DT = NULL),
-  'input DT required')
+               'input DT required')
 
   expect_error(randomizations(DT = DT,
                               type = NULL),
