@@ -52,8 +52,8 @@
 #' # Proj4 string for example data
 #' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 #'
-#' group_lines(DT, threshold = 50, projection = utm, sortBy = 'datetime',
-#'             id = 'ID', coords = c('X', 'Y'))
+#' \donttest{group_lines(DT, threshold = 50, projection = utm, sortBy = 'datetime',
+#'             id = 'ID', coords = c('X', 'Y'))}
 #'
 #' ## Daily movement tracks
 #' # Temporal grouping

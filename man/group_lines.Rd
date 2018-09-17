@@ -59,22 +59,31 @@ library(data.table)
 # Read example data
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
+# Subset only individuals A, B, and C
+DT <- DT[ID \%in\% c('A', 'B', 'C')]
+
 # Cast the character column to POSIXct
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 # Proj4 string for example data
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
-group_lines(DT, threshold = 50, projection = utm, sortBy = 'datetime',
-            id = 'ID', coords = c('X', 'Y'))
+\donttest{group_lines(DT, threshold = 50, projection = utm, sortBy = 'datetime',
+            id = 'ID', coords = c('X', 'Y'))}
 
-# Daily movement tracks
+## Daily movement tracks
+# Temporal grouping
 group_times(DT, datetime = 'datetime', threshold = '1 day')
+
+# Subset only first 50 days
+DT <- DT[timegroup < 25]
+
+# Spatial grouping
 group_lines(DT, threshold = 50, projection = utm,
             id = 'ID', coords = c('X', 'Y'),
             timegroup = 'timegroup', sortBy = 'datetime')
 
-# Daily movement tracks by population
+## Daily movement tracks by population
 group_lines(DT, threshold = 50, projection = utm,
             id = 'ID', coords = c('X', 'Y'),
             timegroup = 'timegroup', sortBy = 'datetime',
