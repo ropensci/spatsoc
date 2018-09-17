@@ -1,6 +1,9 @@
-# v 0.1.1
+# v 0.1.2
 
 ## Development version
+
+
+# v 0.1.1
 
 * improvements to package, function documentation
 * [FAQ](https://spatsoc.gitlab.io/articles/faq.html) vignette added
