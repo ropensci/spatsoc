@@ -47,14 +47,32 @@ get_gbi <-
       ))
     }
 
-    if (type == 'point') {
 
-    } else if (type == 'line') {
+    uDT <- unique(DT[, .SD, .SDcols = c(group, id)])
 
-    } else if (type == 'polygon') {
+    d <-
+      data.table::dcast(
+        uDT,
+        formula = reformulate(id, group),
+        fun.aggregate = length,
+        value.var = group
+      )
 
-    } else {
-      stop('type must be one of "point", "line", "polygon"')
-    }
+    ids <- colnames(d)[!grepl(group, colnames(d))]
+
+    gbi_df <- as.matrix(d[!is.na(get(group)), .SD, .SDcols = ids])
+
+    rownames(gbi_df) <- d[!is.na(get(group)), get(group)]
+    return(gbi_df)
+
+    # if (type == 'point') {
+    #
+    # } else if (type == 'line') {
+    #
+    # } else if (type == 'polygon') {
+    #
+    # } else {
+    #   stop('type must be one of "point", "line", "polygon"')
+    # }
 
   }

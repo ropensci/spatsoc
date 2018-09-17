@@ -48,24 +48,24 @@ test_that('ID and group column names provided', {
 })
 
 
-test_that('type provided, and correctly', {
-  expect_error(get_gbi(
-    DT = DT,
-    group = 'group',
-    id = 'ID',
-    type = NULL
-  ),
-  'type required')
-
-  expect_error(get_gbi(
-    DT = DT,
-    group = 'group',
-    id = 'ID',
-    type = 'potato'
-  ),
-  'type must be one of', fixed = FALSE)
-
-})
+# test_that('type provided, and correctly', {
+#   expect_error(get_gbi(
+#     DT = DT,
+#     group = 'group',
+#     id = 'ID',
+#     type = NULL
+#   ),
+#   'type required')
+#
+#   expect_error(get_gbi(
+#     DT = DT,
+#     group = 'group',
+#     id = 'ID',
+#     type = 'potato'
+#   ),
+#   'type must be one of', fixed = FALSE)
+#
+# })
 
 test_that('columns in DT', {
   expect_error(get_gbi(
@@ -93,9 +93,20 @@ test_that('matrix returned', {
     get_gbi(
       DT = DT,
       group = 'group',
-      id = 'id',
+      id = 'ID',
+      type = 'point'
+    ),
+    'integer'
+  )
+
+  expect_s3_class(
+    get_gbi(
+      DT = DT,
+      group = 'group',
+      id = 'ID',
       type = 'point'
     ),
     'matrix'
   )
+
 })
