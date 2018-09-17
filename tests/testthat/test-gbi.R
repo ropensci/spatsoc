@@ -4,6 +4,19 @@ library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
+# Cast the character column to POSIXct
+DT[, datetime := as.POSIXct(datetime)]
+DT[, yr := year(datetime)]
+
+utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+
+group_polys(DT, area = FALSE, hrType = 'mcp',
+            hrParams = list(percent = 95),
+            projection = utm, id = 'ID', coords = c('X', 'Y'),
+            splitBy = 'yr')
+
+DT <- unique(DT[, .(ID, group, yr)])
+
 test_that('DT is required', {
   expect_error(get_gbi(
     DT = NULL,
@@ -52,4 +65,37 @@ test_that('type provided, and correctly', {
   ),
   'type must be one of', fixed = FALSE)
 
+})
+
+test_that('columns in DT', {
+  expect_error(get_gbi(
+    DT = DT,
+    group = 'potato',
+    id = 'ID',
+    type = 'point'
+  ),
+  'provided are not present in input DT', fixed = FALSE)
+
+  expect_error(get_gbi(
+    DT = DT,
+    group = 'group',
+    id = 'potato',
+    type = 'point'
+  ),
+  'provided are not present in input DT', fixed = FALSE)
+
+})
+
+
+
+test_that('matrix returned', {
+  expect_type(
+    get_gbi(
+      DT = DT,
+      group = 'group',
+      id = 'id',
+      type = 'point'
+    ),
+    'matrix'
+  )
 })
