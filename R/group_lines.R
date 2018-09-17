@@ -89,6 +89,8 @@ group_lines <-
     if (is.null(threshold)) {
       message('threshold missing, using 0 by default')
       threshold <- 0
+    } else if (!is.numeric(threshold)) {
+      stop('threshold must be numeric')
     } else if (threshold < 0) {
       stop('cannot provide a negative threshold')
     }

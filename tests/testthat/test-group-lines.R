@@ -205,6 +205,19 @@ test_that('threshold is correctly provided, or error', {
       sortBy = 'datetime'
     )
   )
+
+  expect_error(
+    group_lines(
+      DT = DT,
+      threshold = '0',
+      timegroup = 'timegroup',
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      sortBy = 'datetime'
+    ),
+    'threshold must be numeric'
+  )
 })
 
 
