@@ -6,13 +6,25 @@
 \usage{
 get_gbi(DT = NULL, group = "group", id = NULL, type = NULL)
 }
+\arguments{
+\item{DT}{input data.table}
+
+\item{group}{Character string of group column (generated from spatsoc's spatial grouping functions)}
+
+\item{id}{Character string of ID column name}
+
+\item{type}{Character string indicating which spatial grouping function was used. \code{\link{group_pts}}: 'point', \code{\link{group_lines}}: 'line', \code{\link{group_polys}}: 'polygon'}
+}
 \description{
-inheritParams group_pts
-param
+Generate group by individual matrix
+}
+\examples{
+# GBI
 }
 \seealso{
 \code{\link{group_pts}} \code{\link{group_lines}} \code{\link{group_polys}}
-family
-importFrom
-examples
+
+Other Spatial grouping: \code{\link{group_lines}},
+  \code{\link{group_polys}}, \code{\link{group_pts}}
 }
+\concept{Spatial grouping}
