@@ -70,6 +70,10 @@ group_pts <- function(DT = NULL,
     stop('threshold required')
   }
 
+  if (!is.numeric(threshold)) {
+    stop('threshold must be numeric')
+  }
+
   if (threshold <= 0) {
     stop('threshold must be greater than 0')
   }

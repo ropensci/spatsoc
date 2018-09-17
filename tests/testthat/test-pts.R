@@ -102,7 +102,8 @@ test_that('threshold correctly provided or error detected', {
   expect_error(group_pts(DT, threshold = 0, id = 'ID'),
                'threshold must be greater than 0')
 
-
+  expect_error(group_pts(DT, threshold = '0', id = 'ID'),
+               'threshold must be numeric')
 })
 
 
