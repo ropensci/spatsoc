@@ -12,6 +12,7 @@ param
 }
 \seealso{
 \code{\link{group_pts}} \code{\link{group_lines}} \code{\link{group_polys}}
+family
 importFrom
 examples
 }
