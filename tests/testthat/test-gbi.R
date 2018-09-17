@@ -32,5 +32,24 @@ test_that('ID and group column names provided', {
   ),
   'ID field required')
 
+})
+
+
+test_that('type provided, and correctly', {
+  expect_error(get_gbi(
+    DT = DT,
+    group = 'group',
+    id = 'ID',
+    type = NULL
+  ),
+  'type required')
+
+  expect_error(get_gbi(
+    DT = DT,
+    group = 'group',
+    id = 'ID',
+    type = 'potato'
+  ),
+  'type must be one of', fixed = FALSE)
 
 })

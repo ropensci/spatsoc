@@ -30,4 +30,19 @@ get_gbi <-
       stop('ID field required')
     }
 
+    if (is.null(type)) {
+      stop('type required')
+    }
+
+
+    if (type == 'point') {
+
+    } else if (type == 'line') {
+
+    } else if (type == 'polygon') {
+
+    } else {
+      stop('type must be one of "point", "line", "polygon"')
+    }
+
   }
