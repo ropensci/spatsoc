@@ -24,6 +24,8 @@ For more details, see the vignettes:
     spatsoc](https://spatsoc.gitlab.io/articles/intro-spatsoc.html)
   - [Frequently asked
     questions](https://spatsoc.gitlab.io/articles/faq.html)
+  - [Using spatsoc in social network
+    analysis](http://spatsoc.gitlab.io/articles/using-in-sna.html)
 
 ## Installation
 
