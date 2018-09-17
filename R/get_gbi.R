@@ -15,11 +15,13 @@
 
 get_gbi <-
   function(DT = NULL,
-           threshold = NULL,
-           projection = NULL,
+           group = 'group',
            id = NULL,
-           coords = NULL,
-           timegroup = NULL,
-           sortBy = NULL,
-           splitBy = NULL,
-           spLines = NULL) {
+           type = NULL) {
+
+
+
+
+
+
+  }
