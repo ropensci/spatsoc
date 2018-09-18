@@ -74,7 +74,7 @@ test_that('matrix returned and type integer', {
     'integer'
   )
 
-  expect_s3_class(
+  expect_is(
     get_gbi(
       DT = DT,
       group = 'group',
