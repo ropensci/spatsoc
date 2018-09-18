@@ -59,9 +59,7 @@ get_gbi <-
       stop('ID field required')
     }
 
-    if (any(!(
-      c(group, id) %in% colnames(DT)
-    ))) {
+    if (any(!(c(group, id) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
           c(group, id),
@@ -77,27 +75,21 @@ get_gbi <-
     }
 
     uDT <-
-      na.omit(
-        unique(
-          DT[, .SD, .SDcols = c(group, id)]),
-        cols = group)
+      na.omit(unique(DT[, .SD, .SDcols = c(group, id)]),
+              cols = group)
 
-    d <-
+    cDT <-
       data.table::dcast(
         uDT,
-        formula = reformulate(id, group),
+        formula = stats::reformulate(id, group),
         fun.aggregate = length,
         value.var = group
       )
 
-    ids <- colnames(d)[!grepl(group, colnames(d))]
+    ids <- colnames(cDT)[!grepl(group, colnames(cDT))]
 
-    gbi_df <- as.matrix(d[, .SD, .SDcols = ids])
+    m <- as.matrix(cDT[, .SD, .SDcols = ids])
 
-    rownames(gbi_df) <- d[[group]]
-    return(gbi_df)
-
-
-
-
+    rownames(m) <- cDT[[group]]
+    return(m)
   }

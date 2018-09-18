@@ -86,8 +86,6 @@ test_that('matrix returned and type integer', {
 })
 
 
-
-
 test_that('gbi length returned makes sense', {
   expect_equal(sum(get_gbi(
     DT = DT,
