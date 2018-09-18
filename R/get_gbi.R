@@ -44,6 +44,11 @@ get_gbi <-
 
 
     uDT <- unique(DT[, .SD, .SDcols = c(group, id)])
+    uDT <-
+      na.omit(
+        unique(
+          DT[, .SD, .SDcols = c(group, id)]),
+        cols = group)
 
     d <-
       data.table::dcast(
@@ -55,8 +60,12 @@ get_gbi <-
 
     ids <- colnames(d)[!grepl(group, colnames(d))]
 
-    gbi_df <- as.matrix(d[!is.na(get(group)), .SD, .SDcols = ids])
+    gbi_df <- as.matrix(d[, .SD, .SDcols = ids])
 
-    rownames(gbi_df) <- d[!is.na(get(group)), get(group)]
+    rownames(gbi_df) <- d[, get(group)]
     return(gbi_df)
+
+
+
+
   }
