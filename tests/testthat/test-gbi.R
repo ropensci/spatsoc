@@ -21,8 +21,7 @@ test_that('DT is required', {
   expect_error(get_gbi(
     DT = NULL,
     group = 'group',
-    id = 'ID',
-    type = 'point'
+    id = 'ID'
   ),
   'input DT required')
 })
@@ -32,55 +31,32 @@ test_that('ID and group column names provided', {
   expect_error(get_gbi(
     DT = DT,
     group = NULL,
-    id = 'ID',
-    type = 'point'
+    id = 'ID'
   ),
   'group field required')
 
   expect_error(get_gbi(
     DT = DT,
     group = 'group',
-    id = NULL,
-    type = 'point'
+    id = NULL
   ),
   'ID field required')
 
 })
 
 
-# test_that('type provided, and correctly', {
-#   expect_error(get_gbi(
-#     DT = DT,
-#     group = 'group',
-#     id = 'ID',
-#     type = NULL
-#   ),
-#   'type required')
-#
-#   expect_error(get_gbi(
-#     DT = DT,
-#     group = 'group',
-#     id = 'ID',
-#     type = 'potato'
-#   ),
-#   'type must be one of', fixed = FALSE)
-#
-# })
-
 test_that('columns in DT', {
   expect_error(get_gbi(
     DT = DT,
     group = 'potato',
-    id = 'ID',
-    type = 'point'
+    id = 'ID'
   ),
   'provided are not present in input DT', fixed = FALSE)
 
   expect_error(get_gbi(
     DT = DT,
     group = 'group',
-    id = 'potato',
-    type = 'point'
+    id = 'potato'
   ),
   'provided are not present in input DT', fixed = FALSE)
 
@@ -88,13 +64,12 @@ test_that('columns in DT', {
 
 
 
-test_that('matrix returned', {
+test_that('matrix returned and type integer', {
   expect_type(
     get_gbi(
       DT = DT,
       group = 'group',
-      id = 'ID',
-      type = 'point'
+      id = 'ID'
     ),
     'integer'
   )
@@ -103,8 +78,7 @@ test_that('matrix returned', {
     get_gbi(
       DT = DT,
       group = 'group',
-      id = 'ID',
-      type = 'point'
+      id = 'ID'
     ),
     'matrix'
   )

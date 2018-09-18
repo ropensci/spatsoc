@@ -4,7 +4,7 @@
 \alias{get_gbi}
 \title{Generate group by individual matrix}
 \usage{
-get_gbi(DT = NULL, group = "group", id = NULL, type = NULL)
+get_gbi(DT = NULL, group = "group", id = NULL)
 }
 \arguments{
 \item{DT}{input data.table}

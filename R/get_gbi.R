@@ -16,8 +16,7 @@
 get_gbi <-
   function(DT = NULL,
            group = 'group',
-           id = NULL,
-           type = NULL) {
+           id = NULL) {
 
     if (is.null(DT)) {
       stop('input DT required')
@@ -29,10 +28,6 @@ get_gbi <-
 
     if (is.null(id)) {
       stop('ID field required')
-    }
-
-    if (is.null(type)) {
-      stop('type required')
     }
 
     if (any(!(
@@ -64,15 +59,4 @@ get_gbi <-
 
     rownames(gbi_df) <- d[!is.na(get(group)), get(group)]
     return(gbi_df)
-
-    # if (type == 'point') {
-    #
-    # } else if (type == 'line') {
-    #
-    # } else if (type == 'polygon') {
-    #
-    # } else {
-    #   stop('type must be one of "point", "line", "polygon"')
-    # }
-
   }
