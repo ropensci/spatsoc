@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @seealso \code{\link{group_pts}} \code{\link{group_lines}} \code{\link{group_polys}}
-#' @family Spatial grouping
+#' @family Social network tools
 #' @importFrom data.table dcast
 #'
 #'

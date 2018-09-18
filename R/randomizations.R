@@ -1,4 +1,4 @@
-#' Randomizations
+#' Data-stream randomizations
 #'
 #' \code{randomizations} performs data-stream social network randomization. The function accepts a \code{data.table} with relocation data, individual identifiers and a randomization \code{type}. The \code{data.table} is randomized either using \code{step} or \code{daily} between-individual methods, or within-individual daily \code{trajectory} method described by Spiegel et al. (2016).
 #'
@@ -62,6 +62,8 @@
 #' @references
 #'   \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 #' @export
+#'
+#' @family Social network tools
 #'
 #' @examples
 #' # Load data.table
