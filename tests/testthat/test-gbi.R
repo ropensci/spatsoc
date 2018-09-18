@@ -85,6 +85,18 @@ test_that('matrix returned and type integer', {
 
 })
 
+
+
+
+test_that('gbi length returned makes sense', {
+  expect_equal(sum(get_gbi(
+    DT = DT,
+    group = 'group',
+    id = 'ID'
+  )),
+  unique(DT[, .(ID, group)])[, .N])
+})
+
 test_that('NAs detected', {
   copyDT <- copy(DT)[1, group := NA]
 
