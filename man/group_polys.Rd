@@ -70,7 +70,7 @@ areaDT <- group_polys(DT, area = TRUE, 'mcp', list(percent = 95),
 \seealso{
 \code{\link{build_polys}} \code{\link{group_times}}
 
-Other Spatial grouping: \code{\link{get_gbi}},
-  \code{\link{group_lines}}, \code{\link{group_pts}}
+Other Spatial grouping: \code{\link{group_lines}},
+  \code{\link{group_pts}}
 }
 \concept{Spatial grouping}

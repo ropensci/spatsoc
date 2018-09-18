@@ -64,7 +64,7 @@ group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'),
 \seealso{
 \code{\link{group_times}}
 
-Other Spatial grouping: \code{\link{get_gbi}},
-  \code{\link{group_lines}}, \code{\link{group_polys}}
+Other Spatial grouping: \code{\link{group_lines}},
+  \code{\link{group_polys}}
 }
 \concept{Spatial grouping}
