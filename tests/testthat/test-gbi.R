@@ -84,3 +84,14 @@ test_that('matrix returned and type integer', {
   )
 
 })
+
+test_that('NAs detected', {
+  copyDT <- copy(DT)[1, group := NA]
+
+  expect_warning(get_gbi(
+    DT = copyDT,
+    group = 'group',
+    id = 'ID'
+  ),
+  'DT contains NA', fixed = FALSE)
+})

@@ -43,7 +43,10 @@ get_gbi <-
     }
 
 
-    uDT <- unique(DT[, .SD, .SDcols = c(group, id)])
+    if (anyNA(DT[[group]])) {
+      warning('DT contains NA(s) in group column')
+    }
+
     uDT <-
       na.omit(
         unique(
