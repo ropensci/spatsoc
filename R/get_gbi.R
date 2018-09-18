@@ -65,7 +65,7 @@ get_gbi <-
 
     gbi_df <- as.matrix(d[, .SD, .SDcols = ids])
 
-    rownames(gbi_df) <- d[, get(group)]
+    rownames(gbi_df) <- d[[group]]
     return(gbi_df)
 
 
