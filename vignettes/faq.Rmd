@@ -51,7 +51,7 @@ group_pts(
 )
 ```
 
-```{r, eval = TRUE, echo = FALSE}
+```{r, eval = FALSE, echo = FALSE}
 knitr::kable(DT[order(group, timegroup)][1:5, .(ID, X, Y, datetime, timegroup, group)])
 ```
 
