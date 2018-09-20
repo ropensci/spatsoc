@@ -19,6 +19,7 @@ knitr::opts_chunk$set(message = FALSE,
                       echo = TRUE)
 ```
 
+spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks. In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
 
 # Usage
 `spatsoc` leverages `data.table` to modify by reference and iteratively work on subsets of the input data. The first input for all functions in `spatsoc` is `DT`, an input `data.table`. If your data is a `data.frame`, you can convert it by reference using `setDT(DF)`. 
@@ -51,19 +52,13 @@ group_pts(
 )
 ```
 
-```{r, eval = FALSE, echo = FALSE}
+```{r, eval = TRUE, echo = FALSE}
 knitr::kable(DT[order(group, timegroup)][1:5, .(ID, X, Y, datetime, timegroup, group)])
 ```
 
-<!-- ## Social network analysis -->
 
-<!-- ### Grouping -->
-
-<!-- ### Randomizations -->
-
-<!-- ### group by individual matrix -->
-
-<!-- ### igraph -->
+## Social network analysis
+See the vignette about [using spatsoc in social network analysis!](https://cran.r-project.org/package=spatsoc/vignettes/using-in-sna.html)
 
 
 # Installation
@@ -223,16 +218,25 @@ The default unit for area overlap is square meters.
 ### hrType and hrParams
 Currently, `spatsoc` offers two types of home ranges provided by the `adehabitatHR` package: `mcp` and `kernel`. The parameters must match the arguments of those functions. 
 
-<!-- ## randomizations -->
+
+## randomizations
+`randomizations(DT, type, id, datetime, splitBy, iterations)`
+  
+* `DT`: input `data.table`
+* `type`: one of 'daily', 'step' or 'trajectory' 
+* `id`: Character string of ID column name
+* `datetime`: field used for providing date time or time group - see details
+* `splitBy`: List of fields in DT to split the randomization process by
+* `iterations`: The number of iterations to randomize
 
 
-
+**See the vignette [Using spatsoc in social network analysis](https://cran.r-project.org/package=spatsoc/vignettes/using-in-sna.html) for details about the `randomizations` function (specifically the section 'Data stream randomization')**
 
 
 # Package design
 ## Don't I need to reassign to save the output?
 
-(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The exception is `group_polys(area = TRUE)`. 
+(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The exceptions are `group_polys(area = TRUE)` and `randomizations` with `iterations` greater than 1. 
 
 
 ## Why does a function print the result, but columns aren't added to my DT?
