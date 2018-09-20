@@ -31,8 +31,7 @@ In the case where \code{iterations = 1}:
 \item trajectory - a random date time ("random" prefixed to \code{datetime} argument), observed \code{jul} and \code{randomJul} indicating the random day relocations are swapped to.
 }
 
-If \code{iterations > 1}, two more columns are returned.
-and return must be reassigned
+If \code{iterations > 1}, two additional columns are returned.
 
 \itemize{
 \item observed - if the rows represent the observed (TRUE/FALSE)
