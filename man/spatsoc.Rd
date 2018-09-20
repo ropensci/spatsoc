@@ -31,6 +31,8 @@ and one social network data-stream randomization function:
 Useful links:
 \itemize{
   \item \url{https://spatsoc.gitlab.io}
+  \item \url{https://www.gitlab.com/robit.a/spatsoc}
+  \item \url{https://github.com/robitalec/spatsoc}
   \item Report bugs at \url{https://www.gitlab.com/robit.a/spatsoc/issues}
 }
 
