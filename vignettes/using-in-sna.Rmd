@@ -29,9 +29,9 @@ Gambit of the group format data is generated using the grouping functions:
 * `group_lines`
 * `group_polys`
 
-Data stream randomization is performed using the `randomization` function. 
+Data stream randomization is performed using the `randomizations` function. 
 
-# Generate network
+# Generate gambit of the group data
 spatsoc provides users with one temporal (`group_times`) and three spatial (`group_pts`, `group_lines`, `group_polys`) functions to generate gambit of the group data from GPS relocations. Users can consider spatial grouping at 3 different scales combined with an appropriate temporal grouping threshold. The gambit of the group data is then used to generate a group by individual matrix and build the network. 
 
 
@@ -42,12 +42,16 @@ spatsoc provides users with one temporal (`group_times`) and three spatial (`gro
 # Load packages
 library(spatsoc)
 library(data.table)
+library(asnipe)
 
 # Read data as a data.table
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
 # Cast datetime column to POSIXct
 DT[, datetime := as.POSIXct(datetime)]
+
+# Calculate the year of the relocation 
+DT[, yr := year(datetime)]
 ```
 
 
@@ -76,7 +80,7 @@ group_pts(
 
 Line based grouping by measuring intersection of, optionally buffered, trajectories for each individual in each timegroup. Longer temporal thresholds are used to measure, for example, intersecting daily trajectories. 
 
-```{r}
+```{r, eval = FALSE}
 # UTM zone for relocation
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
@@ -100,8 +104,8 @@ group_lines(
 
 Polygon based grouping by generating home ranges using `adehabitatHR` and measuring intersection or proportional overlap. Longer temporal thresholds are used to create seasonal, monthly, yearly home ranges.
 
-```{r}
-# Proj4 string for example data
+```{r, eval = FALSE}
+# UTM zone for relocation
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 # Option 1: area = FALSE and home range intersection 'group' column added to DT 
