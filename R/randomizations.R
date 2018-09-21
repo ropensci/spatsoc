@@ -220,6 +220,8 @@ randomizations <- function(DT = NULL,
   repDT[iteration == 0, observed := TRUE]
   repDT[iteration != 0, observed := FALSE]
 
+  set(repDT, j = 'rowID', value = NULL)
+
   if (type == 'step') {
     repDT[!(observed), randomID := .SD[sample(.N)],
           by = splitBy, .SDcols = id]
