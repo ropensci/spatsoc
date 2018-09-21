@@ -123,6 +123,7 @@
 randomizations <- function(DT = NULL,
                            type = NULL,
                            id = NULL,
+                           coords = NULL,
                            datetime = NULL,
                            splitBy = NULL,
                            iterations = NULL) {
