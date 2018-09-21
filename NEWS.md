@@ -2,6 +2,7 @@
 
 ## Development version
 
+* **major change to randomizations**: when `iterations = 1`, `randomizations` no longer returns the DT with appended columns. Regardless of the value of iterations, `randomizations` always returns observed rows followed by randomized rows in a long `data.table`. 
 
 # v 0.1.1
 
