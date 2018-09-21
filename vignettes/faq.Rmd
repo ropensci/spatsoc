@@ -58,7 +58,7 @@ knitr::kable(DT[order(group, timegroup)][1:5, .(ID, X, Y, datetime, timegroup, g
 
 
 ## Social network analysis
-See the vignette about [using spatsoc in social network analysis!](https://cran.r-project.org/package=spatsoc/vignettes/using-in-sna.html)
+See the vignette about [using spatsoc in social network analysis!](http://spatsoc.gitlab.io/articles/using-in-sna.html)
 
 
 # Installation
@@ -230,7 +230,7 @@ Currently, `spatsoc` offers two types of home ranges provided by the `adehabitat
 * `iterations`: The number of iterations to randomize
 
 
-**See the vignette [Using spatsoc in social network analysis](https://cran.r-project.org/package=spatsoc/vignettes/using-in-sna.html) for details about the `randomizations` function (specifically the section 'Data stream randomization')**
+**See the vignette [Using spatsoc in social network analysis](http://spatsoc.gitlab.io/articles/using-in-sna.html) for details about the `randomizations` function (specifically the section 'Data stream randomization')**
 
 
 # Package design
