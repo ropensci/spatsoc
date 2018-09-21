@@ -92,17 +92,6 @@ group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 # Spatial grouping with timegroup
 group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 
-## Iterations = 1
-randomizations(
-    DT,
-    type = 'step',
-    id = 'ID',
-    datetime = 'timegroup',
-    iterations = 1,
-    splitBy = 'yr'
-)
-
-## Iterations > 1
 # Randomization: step
 randStep <- randomizations(
     DT,
@@ -128,7 +117,7 @@ randTraj <- randomizations(
     DT,
     type = 'trajectory',
     id = 'ID',
-    coords = c('X', 'Y')
+    coords = c('X', 'Y'),
     datetime = 'datetime',
     splitBy = 'yr',
     iterations = 2

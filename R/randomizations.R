@@ -48,8 +48,6 @@
 #'   \item trajectory - a random date time ("random" prefixed to \code{datetime} argument), observed \code{jul} and \code{randomJul} indicating the random day relocations are swapped to.
 #' }
 #'
-#' A message is returned when any of these columns already exist in the input \code{DT}, because they will be overwritten.
-#'
 #'
 #' @param type one of 'daily', 'step' or 'trajectory' - see details
 #' @param datetime field used for providing date time or time group - see details
@@ -103,7 +101,7 @@
 #'     DT,
 #'     type = 'trajectory',
 #'     id = 'ID',
-#'     coords = c('X', 'Y')
+#'     coords = c('X', 'Y'),
 #'     datetime = 'datetime',
 #'     splitBy = 'yr',
 #'     iterations = 2
@@ -149,13 +147,13 @@ randomizations <- function(DT = NULL,
     ))
   }
 
-  if (!is.numeric(iterations)) {
-    stop('either provide a numeric for iterations or NULL')
-  }
-
   if (is.null(iterations)) {
     warning('iterations is not provided therefore iterations set to 1')
     iterations <- 1L
+  }
+
+  if (!is.numeric(iterations)) {
+    stop('either provide a numeric for iterations or NULL')
   }
 
   if (length(datetime) == 1 &&

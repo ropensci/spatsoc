@@ -96,45 +96,26 @@ test_that('dateFormatted or not depending on randomization type', {
   expect_error(randomizations(DT = DT,
                               type = 'trajectory',
                               id = 'ID',
+                              coords = c('X', 'Y'),
                               datetime = 'numDate',
                               iterations = 1),
                  'datetime must be POSIXct', fixed = FALSE)
 })
 
 
-test_that('jul column found and warn overwrite', {
-  copyDT <- copy(DT)
-  copyDT[, jul := 1][, datetime := as.POSIXct(datetime)]
-  expect_message(randomizations(DT = copyDT,
-                                type = 'daily',
-                                id = 'ID',
-                                datetime = 'datetime',
-                                iterations = 1),
-                 'column jul found in DT', fixed = FALSE)
-
-  copyDT <- copy(DT)
-  copyDT[, jul := 1]
-  expect_message(randomizations(DT = copyDT,
-                                type = 'trajectory',
-                                id = 'ID',
-                                datetime = 'datetime',
-                                iterations = 1),
-                 'column jul found in DT', fixed = FALSE)
-})
-
-
 test_that('step randomization returns as expected', {
-  copyDT <- copy(DT)
-  expect_equal(
-    randomizations(
-      DT = copyDT,
-      type = 'step',
-      id = 'ID',
-      iterations = 1,
-      datetime = 'timegroup'
-    )[, uniqueN(randomID), by = timegroup],
-    DT[, uniqueN(ID), by = timegroup])
+  # copyDT <- copy(DT)
+  # expect_equal(
+  #   randomizations(
+  #     DT = copyDT,
+  #     type = 'step',
+  #     id = 'ID',
+  #     iterations = 1,
+  #     datetime = 'timegroup'
+  #   )[, uniqueN(randomID), by = timegroup],
+  #   DT[, uniqueN(ID), by = timegroup])
 
+  # N rows in output is * iterations + 1
   copyDT <- copy(DT)
   expect_equal(
     nrow(randomizations(
@@ -144,60 +125,75 @@ test_that('step randomization returns as expected', {
       iterations = 3,
       datetime = 'timegroup'
     )),
-    nrow(DT) * (3 + 1))
+    nrow(DT) * (3+1))
 
-  copyDT <- copy(DT)
-  copyDT[, population := 1][1:50, population := 2]
-  expect_equal(
-    randomizations(
-      DT = copyDT,
-      type = 'step',
-      id = 'ID',
-      iterations = 1,
-      datetime = 'timegroup',
-      splitBy = 'population'
-    )[, uniqueN(randomID), by = timegroup],
-    copyDT[, uniqueN(ID), by = timegroup])
+  # copyDT <- copy(DT)
+  # copyDT[, population := 1][1:50, population := 2]
+  # expect_equal(
+  #   randomizations(
+  #     DT = copyDT,
+  #     type = 'step',
+  #     id = 'ID',
+  #     iterations = 1,
+  #     datetime = 'timegroup',
+  #     splitBy = 'population'
+  #   )[, uniqueN(randomID), by = timegroup],
+  #   copyDT[, uniqueN(ID), by = timegroup])
 })
 
 
-test_that('daily randomization returns as expected', {
-  copyDT <- copy(DT)
-  expect_equal(
-    randomizations(
-      DT = copyDT,
-      type = 'daily',
-      id = 'ID',
-      iterations = 1,
-      datetime = 'datetime'
-    )[, .(N = uniqueN(randomID)),
-      by = .(jul, ID)][, max(N)],
-    1)
+# test_that('daily randomization returns as expected', {
+  # copyDT <- copy(DT)
+  # expect_equal(
+  #   randomizations(
+  #     DT = copyDT,
+  #     type = 'daily',
+  #     id = 'ID',
+  #     iterations = 1,
+  #     datetime = 'datetime'
+  #   )[, .(N = uniqueN(randomID)),
+  #     by = .(jul, ID)][, max(N)],
+  #   1)
 
-})
+# })
 
 test_that('trajectory randomization returns as expected', {
-  copyDT <- copy(DT)
-  expect_equal(
-    randomizations(
-      DT = copyDT,
-      type = 'trajectory',
-      id = 'ID',
-      iterations = 1,
-      datetime = 'datetime'
-    )[, uniqueN(randomJul), by = .(ID, jul)][, max(V1)],
-    1)
+  # expect_equal(
+  #   randomizations(
+  #     DT = copyDT,
+  #     type = 'trajectory',
+  #     id = 'ID',
+  #     iterations = 1,
+  #     datetime = 'datetime'
+  #   )[, uniqueN(randomJul), by = .(ID, jul)][, max(V1)],
+  #   1)
 
-  copyDT <- copy(DT)
   expect_equal(
     nrow(randomizations(
-      DT = copyDT,
+      DT = DT,
       type = 'trajectory',
+      coords = c('X', 'Y'),
       id = 'ID',
       iterations = 3,
       datetime = 'datetime'
     )),
     nrow(DT) * (3 + 1))
+
+  # randomDatetime added
+  # xy preserved
+
+  expect_true(c('X', 'Y') %in%
+                colnames(
+                  randomizations(
+                    DT = DT,
+                    type = 'trajectory',
+                    coords = c('X', 'Y'),
+                    id = 'ID',
+                    iterations = 3,
+                    datetime = 'datetime'
+                  )
+                ))
+
 })
 
 test_that('non uniques are found (iterations > 1)', {
@@ -282,6 +278,7 @@ test_that('iterations > 1 returns expected columns', {
       DT = DT,
       type = 'trajectory',
       id = 'ID',
+      coords = c('X', 'Y'),
       datetime = 'datetime',
       iterations = 2
     )
@@ -292,6 +289,7 @@ test_that('iterations > 1 returns expected columns', {
       DT = DT,
       type = 'trajectory',
       id = 'ID',
+      coords = c('X', 'Y'),
       datetime = 'datetime',
       iterations = 2
     )
@@ -300,101 +298,9 @@ test_that('iterations > 1 returns expected columns', {
 })
 
 
-##
-test_that('iterations = 1 detects columns already present', {
-  # step, randomID
-  copyDT <- copy(DT)
-  copyDT[, randomID := 'a']
 
-  expect_message(
-    randomizations(
-      DT = copyDT,
-      type = 'step',
-      id = 'ID',
-      datetime = 'timegroup',
-      iterations = 1
-    ),
-    'column randomID found in DT',
-    fixed = FALSE
-  )
 
-  # daily, randomID
-  copyDT <- copy(DT)
-  copyDT[, randomID := 'a']
 
-  expect_message(
-    randomizations(
-      DT = copyDT,
-      type = 'daily',
-      id = 'ID',
-      datetime = 'datetime',
-      iterations = 1
-    ),
-    'column randomID found in DT',
-    fixed = FALSE
-  )
-
-  # daily, jul
-  copyDT <- copy(DT)
-  copyDT[, jul := 1]
-
-  expect_message(
-    randomizations(
-      DT = copyDT,
-      type = 'daily',
-      id = 'ID',
-      datetime = 'datetime',
-      iterations = 1
-    ),
-    'column jul found in DT',
-    fixed = FALSE
-  )
-
-  # trajectory, jul
-  copyDT <- copy(DT)
-  copyDT[, jul := 1]
-
-  expect_message(
-    randomizations(
-      DT = copyDT,
-      type = 'trajectory',
-      id = 'ID',
-      datetime = 'datetime',
-      iterations = 1
-    ),
-    'column jul found in DT',
-    fixed = FALSE
-  )
-
-  # trajectory, randomJul
-  copyDT <- copy(DT)
-  copyDT[, randomJul := 1]
-
-  expect_message(
-    randomizations(
-      DT = copyDT,
-      type = 'trajectory',
-      id = 'ID',
-      datetime = 'datetime',
-      iterations = 1
-    ),
-    'column randomJul found in DT',
-    fixed = FALSE
-  )
-
-  # trajectory, randomdatetime
-  copyDT <- copy(DT)
-  copyDT[, randomdatetime := 1]
-
-  expect_message(
-    randomizations(
-      DT = copyDT,
-      type = 'trajectory',
-      id = 'ID',
-      datetime = 'datetime',
-      iterations = 1
-    ),
-    'column randomdatetime found in DT',
-    fixed = FALSE
-  )
-})
+# test that length is always iter + 1
+# test that trajectory returns coords
+# test that daily, step doesnt
