@@ -40,7 +40,7 @@
 #'             projection = utm, id = 'ID', coords = c('X', 'Y'),
 #'             splitBy = 'yr')
 #'
-#' get_gbi(DT, 'group', 'ID')
+#' gbiMtrx <- get_gbi(DT, 'group', 'ID')
 #'
 get_gbi <-
   function(DT = NULL,
