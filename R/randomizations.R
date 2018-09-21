@@ -19,7 +19,7 @@
 #'   \item trajectory - datetime is \code{POSIXct} format
 #' }
 #'
-#' The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns. The \code{coords} argument is only required when the \code{type} is "trajectory", since the coordinates are required for recalculating spatial groups with \code{group_pts}, \code{group_lines} or \code{group_polys}
+#' The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns. The \code{coords} argument is only required when the \code{type} is "trajectory", since the coordinates are required for recalculating spatial groups with \code{group_pts}, \code{group_lines} or \code{group_polys}.
 #'
 #' Please note that if the data extends over multiple years, a column indicating the year should be provided to the \code{splitBy} argument. This will ensure randomizations only occur within each year.
 #'
@@ -78,17 +78,6 @@
 #' # Spatial grouping with timegroup
 #' group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
-#' ## Iterations = 1
-#' randomizations(
-#'     DT,
-#'     type = 'step',
-#'     id = 'ID',
-#'     datetime = 'timegroup',
-#'     iterations = 1,
-#'     splitBy = 'yr'
-#' )
-#'
-#' ## Iterations > 1
 #' # Randomization: step
 #' randStep <- randomizations(
 #'     DT,
@@ -114,6 +103,7 @@
 #'     DT,
 #'     type = 'trajectory',
 #'     id = 'ID',
+#'     coords = c('X', 'Y')
 #'     datetime = 'datetime',
 #'     splitBy = 'yr',
 #'     iterations = 2
