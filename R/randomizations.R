@@ -159,13 +159,13 @@ randomizations <- function(DT = NULL,
     ))
   }
 
+  if (!is.numeric(iterations)) {
+    stop('either provide a numeric for iterations or NULL')
+  }
+
   if (is.null(iterations)) {
     warning('iterations is not provided therefore iterations set to 1')
     iterations <- 1L
-  }
-
-  if (!is.numeric(iterations)) {
-    stop('either provide a numeric for iterations or NULL')
   }
 
   if (length(datetime) == 1 &&
