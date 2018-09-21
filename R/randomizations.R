@@ -30,23 +30,22 @@
 #' randomizations(DT, type = 'step', id = 'ID', datetime = 'timegroup', splitBy = 'yr')
 #' }
 #'
-#' The \code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
+#' \code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
 #'
-#' @return \code{randomizations} returns the random date time or random id along with the original \code{DT}, depending on the randomization \code{type}.
+#' @return \code{randomizations} returns the random date time or random id along with the original \code{DT}, depending on the randomization \code{type}. The length of the returned \code{data.table} is the original number of rows multiplied by the number of iterations + 1. For example, 3 iterations will return 4x - one observed and three randomized.
 #'
-#' In the case where \code{iterations = 1}:
+#' Two columns are always returned:
+#' \itemize{
+#'   \item observed - if the rows represent the observed (TRUE/FALSE)
+#'   \item iteration - iteration of rows (where 0 is the observed)
+#' }
+#'
+#' In addition, depending on the randomization type, random ID or random date time columns are returned:
 #'
 #' \itemize{
 #'   \item step - \code{randomID} each time step
 #'   \item daily - \code{randomID} for each day and \code{jul} indicating julian day
 #'   \item trajectory - a random date time ("random" prefixed to \code{datetime} argument), observed \code{jul} and \code{randomJul} indicating the random day relocations are swapped to.
-#' }
-#'
-#' If \code{iterations > 1}, two additional columns are returned.
-#'
-#' \itemize{
-#'   \item observed - if the rows represent the observed (TRUE/FALSE)
-#'   \item iteration - iteration of rows (where 0 is the observed)
 #' }
 #'
 #' A message is returned when any of these columns already exist in the input \code{DT}, because they will be overwritten.
