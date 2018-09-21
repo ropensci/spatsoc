@@ -19,7 +19,7 @@
 #'   \item trajectory - datetime is \code{POSIXct} format
 #' }
 #'
-#' The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns.
+#' The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns. The \code{coords} argument is only required when the \code{type} is "trajectory", since the coordinates are required for recalculating spatial groups with \code{group_pts}, \code{group_lines} or \code{group_polys}
 #'
 #' Please note that if the data extends over multiple years, a column indicating the year should be provided to the \code{splitBy} argument. This will ensure randomizations only occur within each year.
 #'
@@ -200,10 +200,10 @@ randomizations <- function(DT = NULL,
       )
     }
   }
-  if(type %in% c('step', 'daily')) {
+  if (type %in% c('step', 'daily')) {
     selCols <- c(splitBy, id, datetime)
   } else if (type == 'trajectory') {
-    if(is.null(coords)) {
+    if (is.null(coords)) {
       stop('coords must be provided if type is "trajectory"')
     }
     selCols <- c(splitBy, id, coords, datetime)
@@ -239,7 +239,7 @@ randomizations <- function(DT = NULL,
     return(merge(repDT, idDays, on = c('iteration', 'jul', splitBy),
                  all = TRUE))
 
-  } else if(type == 'trajectory') {
+  } else if (type == 'trajectory') {
     idDays[, randomJul := sample(jul),
            by = c(id, splitBy, 'iteration')]
     merged <- merge(repDT, idDays,
