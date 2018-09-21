@@ -199,58 +199,58 @@ randomizations <- function(DT = NULL,
       )
     }
   }
-
-  if (iterations == 1) {
-    if (type == 'step') {
-      if (is.null(splitBy)) {
-        splitBy <- datetime
-      } else {
-        splitBy <- c(datetime, splitBy)
-      }
-      if ('randomID' %in% colnames(DT)) {
-        message('column randomID found in DT, will be overwritten by this function')
-      }
-      DT[, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
-
-      return(DT[])
-
-    }
-
-    if ('jul' %in% colnames(DT)) {
-      message('column jul found in DT, will be overwritten by this function')
-    }
-
-    DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
-    idDays <- unique(DT[, .SD, .SDcols = c(splitBy, id, 'jul')])
-    setnames(idDays, c(splitBy, id, 'jul'))
-
-    if (type == 'daily') {
-      if ('randomID' %in% colnames(DT)) {
-        message('column randomID found in DT, will be overwritten by this function')
-      }
-      idDays[, randomID := .SD[sample(.N)],
-             by = c(splitBy, 'jul'), .SDcols = id]
-
-      return(merge(DT, idDays, on = c(splitBy, 'jul'))[])
-
-    } else if (type == 'trajectory') {
-      if ('randomJul' %in% colnames(DT)) {
-        message('column randomJul found in DT, will be overwritten by this function')
-      }
-      randomDateCol <- paste0('random', datetime)
-      if (randomDateCol %in% colnames(DT)) {
-        message(paste0('column ', randomDateCol,
-                       ' found in DT, will be overwritten by this function'))
-      }
-      idDays[, randomJul := sample(jul), by = c(id, splitBy)]
-      merged <- merge(DT, idDays, on = c('jul', id, splitBy))
-
-      merged[, (randomDateCol) :=
-               as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
-             .SDcols = datetime]
-      return(merged[])
-    }
-  } else {
+#
+#   if (iterations == 1) {
+#     if (type == 'step') {
+#       if (is.null(splitBy)) {
+#         splitBy <- datetime
+#       } else {
+#         splitBy <- c(datetime, splitBy)
+#       }
+#       if ('randomID' %in% colnames(DT)) {
+#         message('column randomID found in DT, will be overwritten by this function')
+#       }
+#       DT[, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
+#
+#       return(DT[])
+#
+#     }
+#
+#     if ('jul' %in% colnames(DT)) {
+#       message('column jul found in DT, will be overwritten by this function')
+#     }
+#
+#     DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
+#     idDays <- unique(DT[, .SD, .SDcols = c(splitBy, id, 'jul')])
+#     setnames(idDays, c(splitBy, id, 'jul'))
+#
+#     if (type == 'daily') {
+#       if ('randomID' %in% colnames(DT)) {
+#         message('column randomID found in DT, will be overwritten by this function')
+#       }
+#       idDays[, randomID := .SD[sample(.N)],
+#              by = c(splitBy, 'jul'), .SDcols = id]
+#
+#       return(merge(DT, idDays, on = c(splitBy, 'jul'))[])
+#
+#     } else if (type == 'trajectory') {
+#       if ('randomJul' %in% colnames(DT)) {
+#         message('column randomJul found in DT, will be overwritten by this function')
+#       }
+#       randomDateCol <- paste0('random', datetime)
+#       if (randomDateCol %in% colnames(DT)) {
+#         message(paste0('column ', randomDateCol,
+#                        ' found in DT, will be overwritten by this function'))
+#       }
+#       idDays[, randomJul := sample(jul), by = c(id, splitBy)]
+#       merged <- merge(DT, idDays, on = c('jul', id, splitBy))
+#
+#       merged[, (randomDateCol) :=
+#                as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
+#              .SDcols = datetime]
+#       return(merged[])
+#     }
+#   } else {
 
     selCols <- c(splitBy, id, datetime)
     repDT <- DT[, .SD, .SDcols = selCols][rep(1:.N, iterations + 1)]
