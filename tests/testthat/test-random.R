@@ -104,69 +104,67 @@ test_that('dateFormatted or not depending on randomization type', {
 
 
 test_that('step randomization returns as expected', {
-  # copyDT <- copy(DT)
-  # expect_equal(
-  #   randomizations(
-  #     DT = copyDT,
-  #     type = 'step',
-  #     id = 'ID',
-  #     iterations = 1,
-  #     datetime = 'timegroup'
-  #   )[, uniqueN(randomID), by = timegroup],
-  #   DT[, uniqueN(ID), by = timegroup])
-
-  # N rows in output is * iterations + 1
-  copyDT <- copy(DT)
+  # N unique randomIDs same as N unique IDs in each timegroup
   expect_equal(
-    nrow(randomizations(
-      DT = copyDT,
+    randomizations(
+      DT = DT,
+      type = 'step',
+      id = 'ID',
+      iterations = 1,
+      datetime = 'timegroup'
+    )[, uniqueN(randomID), by = timegroup],
+    DT[, uniqueN(ID), by = timegroup])
+
+  # N rows in output is (nrows * iterations + 1)
+  expect_equal(nrow(
+    randomizations(
+      DT = DT,
       type = 'step',
       id = 'ID',
       iterations = 3,
       datetime = 'timegroup'
-    )),
-    nrow(DT) * (3+1))
+    )
+  ),
+  nrow(DT) * (3 + 1))
 
-  # copyDT <- copy(DT)
-  # copyDT[, population := 1][1:50, population := 2]
-  # expect_equal(
-  #   randomizations(
-  #     DT = copyDT,
-  #     type = 'step',
-  #     id = 'ID',
-  #     iterations = 1,
-  #     datetime = 'timegroup',
-  #     splitBy = 'population'
-  #   )[, uniqueN(randomID), by = timegroup],
-  #   copyDT[, uniqueN(ID), by = timegroup])
+  copyDT <- copy(DT)[, population := 1][1:50, population := 2]
+  expect_equal(
+    randomizations(
+      DT = copyDT,
+      type = 'step',
+      id = 'ID',
+      iterations = 1,
+      datetime = 'timegroup',
+      splitBy = 'population'
+    )[, uniqueN(randomID), by = timegroup],
+    copyDT[, uniqueN(ID), by = timegroup])
 })
 
 
-# test_that('daily randomization returns as expected', {
-  # copyDT <- copy(DT)
-  # expect_equal(
-  #   randomizations(
-  #     DT = copyDT,
-  #     type = 'daily',
-  #     id = 'ID',
-  #     iterations = 1,
-  #     datetime = 'datetime'
-  #   )[, .(N = uniqueN(randomID)),
-  #     by = .(jul, ID)][, max(N)],
-  #   1)
-
-# })
+test_that('daily randomization returns as expected', {
+  expect_equal(
+    randomizations(
+      DT = DT,
+      type = 'daily',
+      id = 'ID',
+      iterations = 1,
+      datetime = 'datetime'
+    )[, .(N = uniqueN(randomID)),
+      by = .(jul, ID, iteration)][, max(N)],
+    1)
+})
 
 test_that('trajectory randomization returns as expected', {
-  # expect_equal(
-  #   randomizations(
-  #     DT = copyDT,
-  #     type = 'trajectory',
-  #     id = 'ID',
-  #     iterations = 1,
-  #     datetime = 'datetime'
-  #   )[, uniqueN(randomJul), by = .(ID, jul)][, max(V1)],
-  #   1)
+  expect_equal(
+    randomizations(
+      DT = copyDT,
+      type = 'trajectory',
+      id = 'ID',
+      coords = c('X', 'Y'),
+      iterations = 1,
+      datetime = 'datetime'
+    )[, uniqueN(randomJul), by = .(ID, jul, iteration)][, max(V1)],
+    1)
 
   expect_equal(
     nrow(randomizations(
@@ -179,24 +177,21 @@ test_that('trajectory randomization returns as expected', {
     )),
     nrow(DT) * (3 + 1))
 
-  # randomDatetime added
-  # xy preserved
-
-  expect_true(c('X', 'Y') %in%
-                colnames(
-                  randomizations(
-                    DT = DT,
-                    type = 'trajectory',
-                    coords = c('X', 'Y'),
-                    id = 'ID',
-                    iterations = 3,
-                    datetime = 'datetime'
-                  )
-                ))
+  expect_true(all(c('X', 'Y', 'randomDateTime') %in%
+                    colnames(
+                      randomizations(
+                        DT = DT,
+                        type = 'trajectory',
+                        coords = c('X', 'Y'),
+                        id = 'ID',
+                        iterations = 3,
+                        datetime = 'datetime'
+                      )
+                    )))
 
 })
 
-test_that('non uniques are found (iterations > 1)', {
+test_that('non uniques are found', {
   copyDT <- copy(DT)
   copyDT[2, (colnames(DT)) := copyDT[1, .SD]]
 
@@ -209,8 +204,9 @@ test_that('non uniques are found (iterations > 1)', {
                  fixed = FALSE)
 })
 
-test_that('iterations > 1 returns expected columns', {
-  expect_true('observed' %in% colnames(
+test_that('randomization returns expected columns', {
+  expect_true(all(c('observed', 'iteration')
+                  %in% colnames(
     randomizations(
       DT = DT,
       type = 'daily',
@@ -218,27 +214,7 @@ test_that('iterations > 1 returns expected columns', {
       datetime = 'datetime',
       iterations = 2
     )
-  ))
-
-  expect_true('iteration' %in% colnames(
-    randomizations(
-      DT = DT,
-      type = 'daily',
-      id = 'ID',
-      datetime = 'datetime',
-      iterations = 2
-    )
-  ))
-
-  expect_true('rowID' %in% colnames(
-    randomizations(
-      DT = DT,
-      type = 'daily',
-      id = 'ID',
-      datetime = 'datetime',
-      iterations = 2
-    )
-  ))
+  )))
 
   # if step, randomID
   expect_true('randomID' %in% colnames(
@@ -252,7 +228,7 @@ test_that('iterations > 1 returns expected columns', {
   ))
 
   # if daily, randomID and jul
-  expect_true('randomID' %in% colnames(
+  expect_true(all(c('randomID', 'jul') %in% colnames(
     randomizations(
       DT = DT,
       type = 'daily',
@@ -260,17 +236,7 @@ test_that('iterations > 1 returns expected columns', {
       datetime = 'datetime',
       iterations = 2
     )
-  ))
-
-  expect_true('jul' %in% colnames(
-    randomizations(
-      DT = DT,
-      type = 'daily',
-      id = 'ID',
-      datetime = 'datetime',
-      iterations = 2
-    )
-  ))
+  )))
 
   # if trajectory, randomJul and randomdatetime and jul
   expect_true('randomJul' %in% colnames(
@@ -295,12 +261,17 @@ test_that('iterations > 1 returns expected columns', {
     )
   ))
 
+  expect_error(
+    randomizations(
+      DT = DT,
+      type = 'trajectory',
+      id = 'ID',
+      coords = NULL,
+      datetime = 'datetime',
+      iterations = 2,
+      'coords must be provided if type is "trajectory"'
+    )
+  )
 })
 
 
-
-
-
-# test that length is always iter + 1
-# test that trajectory returns coords
-# test that daily, step doesnt

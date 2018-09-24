@@ -210,6 +210,12 @@ randomizations <- function(DT = NULL,
   set(repDT, j = 'rowID', value = NULL)
 
   if (type == 'step') {
+    if (is.null(splitBy)) {
+      splitBy <- datetime
+    } else {
+      splitBy <- c(datetime, splitBy)
+    }
+
     repDT[!(observed), randomID := .SD[sample(.N)],
           by = splitBy, .SDcols = id]
     repDT[(observed), randomID := .SD, .SDcols = id]

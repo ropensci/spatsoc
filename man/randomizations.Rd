@@ -38,8 +38,6 @@ In addition, depending on the randomization type, random ID or random date time 
 \item daily - \code{randomID} for each day and \code{jul} indicating julian day
 \item trajectory - a random date time ("random" prefixed to \code{datetime} argument), observed \code{jul} and \code{randomJul} indicating the random day relocations are swapped to.
 }
-
-A message is returned when any of these columns already exist in the input \code{DT}, because they will be overwritten.
 }
 \description{
 \code{randomizations} performs data-stream social network randomization. The function accepts a \code{data.table} with relocation data, individual identifiers and a randomization \code{type}. The \code{data.table} is randomized either using \code{step} or \code{daily} between-individual methods, or within-individual daily \code{trajectory} method described by Spiegel et al. (2016).
