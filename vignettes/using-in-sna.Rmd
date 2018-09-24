@@ -137,25 +137,34 @@ Three types of data stream randomization are provided by `spatsoc`'s `randomizat
 * daily: randomizes identities of relocations between individuals within each day.
 * trajectory: randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12553)).
 
-Note: if `iterations = 1`, columns are added to the `DT`. If `iterations` is greater than 1, the results must be assigned. In addition, if `iterations` is greater than 1, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed). <!-- rowID -->
+The results of `randomizations` must be assigned. The function returns the `id` and `datetime` columns provided (and anything provided to `splitBy`). In addition, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed). 
 
 As with spatial grouping functions, these methods are mutually exclusive. Pick one `type` and rebuild the network after randomization. 
+
+Note: the `coords` argument is only required for trajectory type randomization, since after randomizing with this method, the 'coords' are needed to redo spatial grouping (with `group_pts`, `group_lines` or `group_polys`). 
 
 ## 3. a) `type = 'step'`
 `'step'` randomizes identities of relocations between individuals within each time step. The `datetime` argument expects an integer group created by `group_times`. 
 
-This example shows where `iterations = 1`. One column is returned when `type = 'step'`:
+Four columns are returned when `type = 'step'` along with `id`, `datetime` and `splitBy` columns:
 
 * 'randomID' - randomly selected ID from IDs within each time step
+* 'observed' - observed rows (TRUE/FALSE)
+* 'iteration' - which iteration rows correspond to (0 is observed)
 
 ```{r}
-# Iterations = 1 therefore the results are appended to DT
-randomizations(
+# Calculate year column to ensure randomization only occurs within years since data spans multiple years
+DT[, yr := year(datetime)]
+
+# Step type randomization, providing 'timegroup' (from group_times) as datetime
+#  splitBy = 'yr' to force randomization only within year
+randStep <- randomizations(
    DT,
    type = 'step',
    id = 'ID',
+   coords = NULL,
    datetime = 'timegroup',
-   iterations = 1,
+   iterations = 3,
    splitBy = 'yr'
 )
 ```
@@ -164,23 +173,23 @@ randomizations(
 ## 3. b) `type = 'daily'`
 `'daily'` randomizes identities of relocations between individuals within each day. The `datetime` argument expects a datetime `POSIXct` format column. 
 
-Two column is returned when `type = 'daily'`:
+Four columns are returned when `type = 'daily'` along with `id`, `datetime` and `splitBy` columns:
 
 * 'randomID' - randomly selected ID for each day
 * 'jul' - julian day
-
-Since `iterations` is greater than 1, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed).
+* 'observed' - observed rows (TRUE/FALSE)
+* 'iteration' - which iteration rows correspond to (0 is observed)
 
 ```{r}
 # Calculate year column to ensure randomization only occurs within years since data spans multiple years
 DT[, yr := year(datetime)]
 
 # splitBy = 'yr' to force randomization only within year
-# Iterations > 1, results must be reassigned
 randDaily <- randomizations(
    DT,
    type = 'daily',
    id = 'ID',
+   coords = NULL,
    datetime = 'datetime',
    splitBy = 'yr',
    iterations = 20
@@ -190,13 +199,13 @@ randDaily <- randomizations(
 ## 3. c) `type = 'trajectory'`
 `'trajectory'` randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12553)). The `datetime` argument expects a datetime `POSIXct` format column. 
 
-Three column is returned when `type = 'trajectory'`:
+Five columns are returned when `type = 'trajectory'` along with `id`, `datetime` and `splitBy` columns:
 
 * random date time ("random" prefixed to *datetime* argument)
 * 'jul' - observed julian day
 * 'randomJul' - random julian day relocations are swapped to
-
-Since `iterations` is greater than 1, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed).
+* 'observed' - observed rows (TRUE/FALSE)
+* 'iteration' - which iteration rows correspond to (0 is observed)
 
 ```{r}
 # Calculate year column to ensure randomization only occurs within years since data spans multiple years
@@ -212,5 +221,3 @@ randTraj <- randomizations(
 )
 ```
 
-
-<!-- example with NL bog cow -->
