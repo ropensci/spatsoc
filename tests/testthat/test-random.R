@@ -269,10 +269,9 @@ test_that('randomization returns expected columns', {
       id = 'ID',
       coords = NULL,
       datetime = 'datetime',
-      iterations = 2,
+      iterations = 2),
       'coords must be provided if type is "trajectory"'
     )
-  )
 })
 
 
