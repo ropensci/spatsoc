@@ -4,8 +4,8 @@
 \alias{randomizations}
 \title{Randomizations}
 \usage{
-randomizations(DT = NULL, type = NULL, id = NULL, datetime = NULL,
-  splitBy = NULL, iterations = NULL)
+randomizations(DT = NULL, type = NULL, id = NULL, coords = NULL,
+  datetime = NULL, splitBy = NULL, iterations = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -14,6 +14,8 @@ randomizations(DT = NULL, type = NULL, id = NULL, datetime = NULL,
 
 \item{id}{Character string of ID column name}
 
+\item{coords}{Character vector of X coordinate and Y coordinate column names}
+
 \item{datetime}{field used for providing date time or time group - see details}
 
 \item{splitBy}{List of fields in DT to split the randomization process by}
@@ -21,24 +23,21 @@ randomizations(DT = NULL, type = NULL, id = NULL, datetime = NULL,
 \item{iterations}{The number of iterations to randomize}
 }
 \value{
-\code{randomizations} returns the random date time or random id along with the original \code{DT}, depending on the randomization \code{type}.
+\code{randomizations} returns the random date time or random id along with the original \code{DT}, depending on the randomization \code{type}. The length of the returned \code{data.table} is the original number of rows multiplied by the number of iterations + 1. For example, 3 iterations will return 4x - one observed and three randomized.
 
-In the case where \code{iterations = 1}:
+Two columns are always returned:
+\itemize{
+\item observed - if the rows represent the observed (TRUE/FALSE)
+\item iteration - iteration of rows (where 0 is the observed)
+}
+
+In addition, depending on the randomization type, random ID or random date time columns are returned:
 
 \itemize{
 \item step - \code{randomID} each time step
 \item daily - \code{randomID} for each day and \code{jul} indicating julian day
 \item trajectory - a random date time ("random" prefixed to \code{datetime} argument), observed \code{jul} and \code{randomJul} indicating the random day relocations are swapped to.
 }
-
-If \code{iterations > 1}, two additional columns are returned.
-
-\itemize{
-\item observed - if the rows represent the observed (TRUE/FALSE)
-\item iteration - iteration of rows (where 0 is the observed)
-}
-
-A message is returned when any of these columns already exist in the input \code{DT}, because they will be overwritten.
 }
 \description{
 \code{randomizations} performs data-stream social network randomization. The function accepts a \code{data.table} with relocation data, individual identifiers and a randomization \code{type}. The \code{data.table} is randomized either using \code{step} or \code{daily} between-individual methods, or within-individual daily \code{trajectory} method described by Spiegel et al. (2016).
@@ -61,7 +60,7 @@ Depending on the \code{type}, the \code{datetime} must be a certain format:
 \item trajectory - datetime is \code{POSIXct} format
 }
 
-The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns.
+The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns. The \code{coords} argument is only required when the \code{type} is "trajectory", since the coordinates are required for recalculating spatial groups with \code{group_pts}, \code{group_lines} or \code{group_polys}.
 
 Please note that if the data extends over multiple years, a column indicating the year should be provided to the \code{splitBy} argument. This will ensure randomizations only occur within each year.
 
@@ -72,7 +71,7 @@ DT[, yr := year(datetime)]
 randomizations(DT, type = 'step', id = 'ID', datetime = 'timegroup', splitBy = 'yr')
 }
 
-The \code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
+\code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
 }
 \examples{
 # Load data.table
@@ -91,17 +90,6 @@ group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 # Spatial grouping with timegroup
 group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 
-## Iterations = 1
-randomizations(
-    DT,
-    type = 'step',
-    id = 'ID',
-    datetime = 'timegroup',
-    iterations = 1,
-    splitBy = 'yr'
-)
-
-## Iterations > 1
 # Randomization: step
 randStep <- randomizations(
     DT,
@@ -127,6 +115,7 @@ randTraj <- randomizations(
     DT,
     type = 'trajectory',
     id = 'ID',
+    coords = c('X', 'Y'),
     datetime = 'datetime',
     splitBy = 'yr',
     iterations = 2

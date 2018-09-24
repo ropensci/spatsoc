@@ -254,7 +254,8 @@ group_times <- function(DT = NULL,
         ), by = year(idate)]
 
         dtm[, timegroup := .GRP, .(year(idate), block)]
-        set(dtm, j = c('idate', 'itime', 'rangeday', 'minday', 'maxday'), value = NULL)
+        set(dtm, j = c('idate', 'itime', 'rangeday', 'minday', 'maxday'),
+            value = NULL)
         DT[, (colnames(dtm)) := dtm]
         return(DT[])
       }

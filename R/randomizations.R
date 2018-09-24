@@ -19,7 +19,7 @@
 #'   \item trajectory - datetime is \code{POSIXct} format
 #' }
 #'
-#' The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns.
+#' The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns. The \code{coords} argument is only required when the \code{type} is "trajectory", since the coordinates are required for recalculating spatial groups with \code{group_pts}, \code{group_lines} or \code{group_polys}.
 #'
 #' Please note that if the data extends over multiple years, a column indicating the year should be provided to the \code{splitBy} argument. This will ensure randomizations only occur within each year.
 #'
@@ -30,26 +30,23 @@
 #' randomizations(DT, type = 'step', id = 'ID', datetime = 'timegroup', splitBy = 'yr')
 #' }
 #'
-#' The \code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
+#' \code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
 #'
-#' @return \code{randomizations} returns the random date time or random id along with the original \code{DT}, depending on the randomization \code{type}.
+#' @return \code{randomizations} returns the random date time or random id along with the original \code{DT}, depending on the randomization \code{type}. The length of the returned \code{data.table} is the original number of rows multiplied by the number of iterations + 1. For example, 3 iterations will return 4x - one observed and three randomized.
 #'
-#' In the case where \code{iterations = 1}:
+#' Two columns are always returned:
+#' \itemize{
+#'   \item observed - if the rows represent the observed (TRUE/FALSE)
+#'   \item iteration - iteration of rows (where 0 is the observed)
+#' }
+#'
+#' In addition, depending on the randomization type, random ID or random date time columns are returned:
 #'
 #' \itemize{
 #'   \item step - \code{randomID} each time step
 #'   \item daily - \code{randomID} for each day and \code{jul} indicating julian day
 #'   \item trajectory - a random date time ("random" prefixed to \code{datetime} argument), observed \code{jul} and \code{randomJul} indicating the random day relocations are swapped to.
 #' }
-#'
-#' If \code{iterations > 1}, two additional columns are returned.
-#'
-#' \itemize{
-#'   \item observed - if the rows represent the observed (TRUE/FALSE)
-#'   \item iteration - iteration of rows (where 0 is the observed)
-#' }
-#'
-#' A message is returned when any of these columns already exist in the input \code{DT}, because they will be overwritten.
 #'
 #'
 #' @param type one of 'daily', 'step' or 'trajectory' - see details
@@ -79,17 +76,6 @@
 #' # Spatial grouping with timegroup
 #' group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
-#' ## Iterations = 1
-#' randomizations(
-#'     DT,
-#'     type = 'step',
-#'     id = 'ID',
-#'     datetime = 'timegroup',
-#'     iterations = 1,
-#'     splitBy = 'yr'
-#' )
-#'
-#' ## Iterations > 1
 #' # Randomization: step
 #' randStep <- randomizations(
 #'     DT,
@@ -115,6 +101,7 @@
 #'     DT,
 #'     type = 'trajectory',
 #'     id = 'ID',
+#'     coords = c('X', 'Y'),
 #'     datetime = 'datetime',
 #'     splitBy = 'yr',
 #'     iterations = 2
@@ -123,6 +110,7 @@
 randomizations <- function(DT = NULL,
                            type = NULL,
                            id = NULL,
+                           coords = NULL,
                            datetime = NULL,
                            splitBy = NULL,
                            iterations = NULL) {
@@ -199,105 +187,66 @@ randomizations <- function(DT = NULL,
       )
     }
   }
-
-  if (iterations == 1) {
-    if (type == 'step') {
-      if (is.null(splitBy)) {
-        splitBy <- datetime
-      } else {
-        splitBy <- c(datetime, splitBy)
-      }
-      if ('randomID' %in% colnames(DT)) {
-        message('column randomID found in DT, will be overwritten by this function')
-      }
-      DT[, randomID := .SD[sample(.N)], by = splitBy, .SDcols = id]
-
-      return(DT[])
-
-    }
-
-    if ('jul' %in% colnames(DT)) {
-      message('column jul found in DT, will be overwritten by this function')
-    }
-
-    DT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
-    idDays <- unique(DT[, .SD, .SDcols = c(splitBy, id, 'jul')])
-    setnames(idDays, c(splitBy, id, 'jul'))
-
-    if (type == 'daily') {
-      if ('randomID' %in% colnames(DT)) {
-        message('column randomID found in DT, will be overwritten by this function')
-      }
-      idDays[, randomID := .SD[sample(.N)],
-             by = c(splitBy, 'jul'), .SDcols = id]
-
-      return(merge(DT, idDays, on = c(splitBy, 'jul'))[])
-
-    } else if (type == 'trajectory') {
-      if ('randomJul' %in% colnames(DT)) {
-        message('column randomJul found in DT, will be overwritten by this function')
-      }
-      randomDateCol <- paste0('random', datetime)
-      if (randomDateCol %in% colnames(DT)) {
-        message(paste0('column ', randomDateCol,
-                       ' found in DT, will be overwritten by this function'))
-      }
-      idDays[, randomJul := sample(jul), by = c(id, splitBy)]
-      merged <- merge(DT, idDays, on = c('jul', id, splitBy))
-
-      merged[, (randomDateCol) :=
-               as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
-             .SDcols = datetime]
-      return(merged[])
-    }
-  } else {
-
+  if (type %in% c('step', 'daily')) {
     selCols <- c(splitBy, id, datetime)
-    repDT <- DT[, .SD, .SDcols = selCols][rep(1:.N, iterations + 1)]
-    repDT[, rowID := .GRP, by = selCols]
+  } else if (type == 'trajectory') {
+    if (is.null(coords)) {
+      stop('coords must be provided if type is "trajectory"')
+    }
+    selCols <- c(splitBy, id, coords, datetime)
+  }
 
-    if (any(repDT[, .N , by = rowID]$N != iterations + 1)) {
-      warning('found none unique rows of id, datetime (and splitBy)')
+  repDT <- DT[, .SD, .SDcols = selCols][rep(1:.N, iterations + 1)]
+  repDT[, rowID := .GRP, by = selCols]
+
+  if (any(repDT[, .N , by = rowID]$N != iterations + 1)) {
+    warning('found none unique rows of id, datetime (and splitBy)')
+  }
+
+  repDT[, iteration := seq(0, .N - 1, 1), by = rowID]
+  repDT[iteration == 0, observed := TRUE]
+  repDT[iteration != 0, observed := FALSE]
+
+  set(repDT, j = 'rowID', value = NULL)
+
+  if (type == 'step') {
+    if (is.null(splitBy)) {
+      splitBy <- datetime
+    } else {
+      splitBy <- c(datetime, splitBy)
     }
 
-    repDT[, iteration := seq(0, .N - 1, 1), by = rowID]
-    repDT[iteration == 0, observed := TRUE]
-    repDT[iteration != 0, observed := FALSE]
+    repDT[!(observed), randomID := .SD[sample(.N)],
+          by = splitBy, .SDcols = id]
+    repDT[(observed), randomID := .SD, .SDcols = id]
+    return(repDT)
+  }
 
-    if (type == 'step') {
-      repDT[!(observed), randomID := .SD[sample(.N)],
-            by = splitBy, .SDcols = id]
-      repDT[(observed), randomID := .SD, .SDcols = id]
-      return(repDT)
-    }
+  repDT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
+  idDays <- unique(repDT[, .SD,
+                         .SDcols = c(splitBy, id, 'jul',
+                                     'iteration', 'observed')])
 
-    repDT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
-    idDays <- unique(repDT[, .SD,
-                           .SDcols = c(splitBy, id, 'jul',
-                                       'iteration', 'observed')])
-    # setnames(idDays, c(splitBy, id, 'jul', 'iteration', 'observed'))
+  if (type == 'daily') {
+    idDays[, randomID := .SD[sample(.N)],
+           by = c(splitBy, 'jul'), .SDcols = id]
+    idDays[(observed), randomID := .SD[[1]], .SDcols = id]
+    return(merge(repDT, idDays, on = c('iteration', 'jul', splitBy),
+                 all = TRUE))
 
-    if (type == 'daily') {
-      idDays[, randomID := .SD[sample(.N)],
-             by = c(splitBy, 'jul'), .SDcols = id]
-      idDays[(observed), randomID := .SD[[1]], .SDcols = id]
-      return(merge(repDT, idDays, on = c('iteration', 'jul', splitBy),
-                   all = TRUE))
-
-    } else if(type == 'trajectory'){
-      idDays[, randomJul := sample(jul),
-             by = c(id, splitBy, 'iteration')]
-      merged <- merge(repDT, idDays,
-                      on = c('jul', id, 'iteration', splitBy),
-                      all = TRUE)
-      randomDateCol <- paste0('random', datetime)
-      merged[, (randomDateCol) :=
-               as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
-             .SDcols = datetime]
-      merged[(observed),
-             c(randomDateCol, 'randomJul') := .SD,
-             .SDcols = c(datetime, 'jul')]
-      return(merged)
-    }
+  } else if (type == 'trajectory') {
+    idDays[, randomJul := sample(jul),
+           by = c(id, splitBy, 'iteration')]
+    merged <- merge(repDT, idDays,
+                    on = c('jul', id, 'iteration', splitBy),
+                    all = TRUE)
+    randomDateCol <- paste0('random', datetime)
+    merged[, (randomDateCol) :=
+             as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
+           .SDcols = datetime]
+    merged[(observed),
+           c(randomDateCol, 'randomJul') := .SD,
+           .SDcols = c(datetime, 'jul')]
+    return(merged)
   }
 }
