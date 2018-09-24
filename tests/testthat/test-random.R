@@ -157,7 +157,7 @@ test_that('daily randomization returns as expected', {
 test_that('trajectory randomization returns as expected', {
   expect_equal(
     randomizations(
-      DT = copyDT,
+      DT = DT,
       type = 'trajectory',
       id = 'ID',
       coords = c('X', 'Y'),
@@ -165,6 +165,7 @@ test_that('trajectory randomization returns as expected', {
       datetime = 'datetime'
     )[, uniqueN(randomJul), by = .(ID, jul, iteration)][, max(V1)],
     1)
+
 
   expect_equal(
     nrow(randomizations(
@@ -177,7 +178,7 @@ test_that('trajectory randomization returns as expected', {
     )),
     nrow(DT) * (3 + 1))
 
-  expect_true(all(c('X', 'Y', 'randomDateTime') %in%
+  expect_true(all(c('X', 'Y', 'randomdatetime') %in%
                     colnames(
                       randomizations(
                         DT = DT,
