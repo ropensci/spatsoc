@@ -20,7 +20,7 @@
 #' @seealso \code{\link{group_pts}} \code{\link{group_lines}} \code{\link{group_polys}}
 #' @family Social network tools
 #' @importFrom data.table dcast
-#'
+#' @importFrom na.omit
 #'
 #' @examples
 #' # Load data.table
@@ -45,8 +45,7 @@
 get_gbi <-
   function(DT = NULL,
            group = 'group',
-           id = NULL,
-           splitBy = NULL) {
+           id = NULL) {
 
     if (is.null(DT)) {
       stop('input DT required')
@@ -60,10 +59,10 @@ get_gbi <-
       stop('ID field required')
     }
 
-    if (any(!(c(group, id, splitBy) %in% colnames(DT)))) {
+    if (any(!(c(group, id) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
-          c(group, id, splitBy),
+          c(group, id),
           colnames(DT)
         ), collapse = ', ')),
         ' field(s) provided are not present in input DT'
