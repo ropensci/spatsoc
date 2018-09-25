@@ -11,7 +11,7 @@ group_times(DT, datetime = 'datetime', threshold = '1 hour')
 group_pts(DT, threshold = 100, id = 'ID', timegroup = 'timegroup',
         coords = c('X', 'Y'))
 
-test_that('DT, type, id, datetime are required', {
+test_that('DT, type, id, datetime, (group) are required', {
   expect_error(randomizations(DT = NULL),
                'input DT required')
 
@@ -29,6 +29,23 @@ test_that('DT, type, id, datetime are required', {
                               id = 'ID',
                               datetime = NULL),
                'datetime field required')
+
+  # Group required for daily and step
+  expect_error(randomizations(DT = DT,
+                              type = 'step',
+                              id = 'ID',
+                              iterations = 1,
+                              group = NULL,
+                              datetime = 'timegroup'),
+               'group field must be provided if type is "step" or "daily"')
+
+  expect_error(randomizations(DT = DT,
+                              type = 'daily',
+                              id = 'ID',
+                              group = NULL,
+                              iterations = 1,
+                              datetime = 'datetime'),
+               'group field must be provided if type is "step" or "daily"')
 
 })
 
@@ -78,8 +95,7 @@ test_that('iterations is NULL or correctly provided', {
 })
 
 test_that('dateFormatted or not depending on randomization type', {
-  copyDT <- copy(DT)
-  expect_warning(randomizations(DT = copyDT,
+  expect_warning(randomizations(DT = DT,
                                 type = 'step',
                                 id = 'ID',
                                 group = 'group',
@@ -93,7 +109,7 @@ test_that('dateFormatted or not depending on randomization type', {
                               id = 'ID',
                               group = 'group',
                               datetime = 'numDate',
-                              iterations = 1),
+                              iterations = 3),
                  'datetime must be POSIXct', fixed = FALSE)
 
   expect_error(randomizations(DT = DT,
@@ -101,7 +117,7 @@ test_that('dateFormatted or not depending on randomization type', {
                               id = 'ID',
                               coords = c('X', 'Y'),
                               datetime = 'numDate',
-                              iterations = 1),
+                              iterations = 3),
                  'datetime must be POSIXct', fixed = FALSE)
 })
 
