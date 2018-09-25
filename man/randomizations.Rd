@@ -2,7 +2,7 @@
 % Please edit documentation in R/randomizations.R
 \name{randomizations}
 \alias{randomizations}
-\title{Randomizations}
+\title{Data-stream randomizations}
 \usage{
 randomizations(DT = NULL, type = NULL, id = NULL, coords = NULL,
   datetime = NULL, splitBy = NULL, iterations = NULL)
@@ -125,3 +125,7 @@ randTraj <- randomizations(
 \references{
 \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 }
+\seealso{
+Other Social network tools: \code{\link{get_gbi}}
+}
+\concept{Social network tools}
