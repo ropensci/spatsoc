@@ -14,13 +14,13 @@
 #' Note that \code{get_gbi} is identical in function for turning the outputs of \code{spatsoc} into social networks as \code{\link[asnipe:get_group_by_individual]{asnipe::get_group_by_individual}} but is more efficient thanks to \code{\link[data.table:dcast]{data.table::dcast}}.
 #'
 #' @inheritParams group_pts
-#' @param group Character string of group column (generated from spatsoc's spatial grouping functions)
+#' @param group Character string of group column (generated from one of spatsoc's spatial grouping functions)
 #' @export
 #'
 #' @seealso \code{\link{group_pts}} \code{\link{group_lines}} \code{\link{group_polys}}
 #' @family Social network tools
 #' @importFrom data.table dcast
-#' @importFrom na.omit
+#' @importFrom stats na.omit
 #'
 #' @examples
 #' # Load data.table
@@ -40,7 +40,7 @@
 #'             projection = utm, id = 'ID', coords = c('X', 'Y'),
 #'             splitBy = 'yr')
 #'
-#' gbiMtrx <- get_gbi(DT, 'group', 'ID')
+#' gbiMtrx <- get_gbi(DT = DT, group = 'group', id = 'ID')
 #'
 get_gbi <-
   function(DT = NULL,

@@ -23,6 +23,8 @@
 #'
 #' Please note that if the data extends over multiple years, a column indicating the year should be provided to the \code{splitBy} argument. This will ensure randomizations only occur within each year.
 #'
+#' The \code{group} argument is expected only when \code{type} is 'step' or 'daily'.
+#'
 #' For example, using \code{\link[data.table:year]{data.table::year}}:
 #'
 #' \preformatted{
@@ -51,6 +53,7 @@
 #'
 #' @param type one of 'daily', 'step' or 'trajectory' - see details
 #' @param datetime field used for providing date time or time group - see details
+#' @param group generated from spatial grouping functions - see details
 #' @inheritParams group_pts
 #' @param splitBy List of fields in DT to split the randomization process by
 #' @param iterations The number of iterations to randomize
@@ -83,6 +86,7 @@
 #'     DT,
 #'     type = 'step',
 #'     id = 'ID',
+#'     group = 'group',
 #'     datetime = 'timegroup',
 #'     splitBy = 'yr',
 #'     iterations = 2
@@ -93,6 +97,7 @@
 #'     DT,
 #'     type = 'daily',
 #'     id = 'ID',
+#'     group = 'group',
 #'     datetime = 'datetime',
 #'     splitBy = 'yr',
 #'     iterations = 2
@@ -103,6 +108,7 @@
 #'     DT,
 #'     type = 'trajectory',
 #'     id = 'ID',
+#'     group = NULL,
 #'     coords = c('X', 'Y'),
 #'     datetime = 'datetime',
 #'     splitBy = 'yr',

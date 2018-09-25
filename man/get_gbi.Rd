@@ -9,7 +9,7 @@ get_gbi(DT = NULL, group = "group", id = NULL)
 \arguments{
 \item{DT}{input data.table}
 
-\item{group}{Character string of group column (generated from spatsoc's spatial grouping functions)}
+\item{group}{Character string of group column (generated from one of spatsoc's spatial grouping functions)}
 
 \item{id}{Character string of ID column name}
 }
@@ -46,7 +46,7 @@ group_polys(DT, area = FALSE, hrType = 'mcp',
             projection = utm, id = 'ID', coords = c('X', 'Y'),
             splitBy = 'yr')
 
-gbiMtrx <- get_gbi(DT, 'group', 'ID')
+gbiMtrx <- get_gbi(DT = DT, group = 'group', id = 'ID')
 
 }
 \seealso{

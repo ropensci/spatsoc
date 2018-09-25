@@ -4,8 +4,9 @@
 \alias{randomizations}
 \title{Data-stream randomizations}
 \usage{
-randomizations(DT = NULL, type = NULL, id = NULL, coords = NULL,
-  datetime = NULL, splitBy = NULL, iterations = NULL)
+randomizations(DT = NULL, type = NULL, id = NULL, group = NULL,
+  coords = NULL, datetime = NULL, splitBy = NULL,
+  iterations = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -13,6 +14,8 @@ randomizations(DT = NULL, type = NULL, id = NULL, coords = NULL,
 \item{type}{one of 'daily', 'step' or 'trajectory' - see details}
 
 \item{id}{Character string of ID column name}
+
+\item{group}{generated from spatial grouping functions - see details}
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
@@ -64,6 +67,8 @@ The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect 
 
 Please note that if the data extends over multiple years, a column indicating the year should be provided to the \code{splitBy} argument. This will ensure randomizations only occur within each year.
 
+The \code{group} argument is expected only when \code{type} is 'step' or 'daily'.
+
 For example, using \code{\link[data.table:year]{data.table::year}}:
 
 \preformatted{
@@ -95,6 +100,7 @@ randStep <- randomizations(
     DT,
     type = 'step',
     id = 'ID',
+    group = 'group',
     datetime = 'timegroup',
     splitBy = 'yr',
     iterations = 2
@@ -105,6 +111,7 @@ randDaily <- randomizations(
     DT,
     type = 'daily',
     id = 'ID',
+    group = 'group',
     datetime = 'datetime',
     splitBy = 'yr',
     iterations = 2
@@ -115,6 +122,7 @@ randTraj <- randomizations(
     DT,
     type = 'trajectory',
     id = 'ID',
+    group = NULL,
     coords = c('X', 'Y'),
     datetime = 'datetime',
     splitBy = 'yr',
