@@ -1,6 +1,12 @@
-# v 0.1.2
-
+# v 0.1.4
 ## Development version
+
+
+# v 0.1.3
+* added `get_gbi` to generate group by individual matrices for better integrating `spatsoc` in social network analysis workflows
+
+
+# v 0.1.2
 
 * **major change to randomizations**: when `iterations = 1`, `randomizations` no longer returns the DT with appended columns. Regardless of the value of iterations, `randomizations` always returns observed rows followed by randomized rows in a long `data.table`. 
 
