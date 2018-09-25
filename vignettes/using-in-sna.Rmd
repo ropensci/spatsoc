@@ -43,6 +43,7 @@ spatsoc provides users with one temporal (`group_times`) and three spatial (`gro
 library(spatsoc)
 library(data.table)
 library(asnipe)
+library(igraph)
 
 ## Read data as a data.table
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
@@ -292,7 +293,7 @@ In this case, we will generate a fake column representing a "population" to show
 
 ```{r}
 ## Generate fake population
-randDaily[, population := sample(1:2, replace = TRUE)]
+randDaily[, population := sample(1:2, .N, replace = TRUE)]
 
 ## Create a data.table of unique combinations of iteration, year and population
 cols <- c('iteration', 'yr', 'population')
@@ -360,7 +361,31 @@ netLs <- lapply(gbiLs, FUN = get_network,
 
 
 # Calculate network metrics
+Finally, we can calculate some network metrics. Please note that there are many ways of interpreting, analyzing and measuring networks, so this will simply show a couple options. 
 
-lapply all
-rbindlist
-individual yearly avg
+With the list of networks, we can generate
+
+This example shows the `netLs` created by 6. a). 
+
+```{r}
+## Generate graph and calculate network metrics
+mets <- lapply(seq_along(netLs), function(n) {
+  g <- graph.adjacency(netLs[[n]], 'undirected', 
+                       diag = FALSE, weighted = TRUE)
+  
+  data.table(
+    centrality = evcent(g)$vector,
+    strength = graph.strength(g),
+    degree = degree(g),
+    ID = names(degree(g)),
+    iteration = iterYearLs$iter[[n]],
+    yr = iterYearLs$yr[[n]]
+    )
+})
+
+## Metrics for all individuals across all iterations and years
+out <- rbindlist(mets)
+
+## Mean values for each individual and year
+meanMets <- out[, lapply(.SD, mean), by = .(ID, yr)]
+```
