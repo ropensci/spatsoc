@@ -72,8 +72,11 @@ get_gbi <-
 
 
     if (anyNA(DT[[group]])) {
-      warning('DT contains NA(s) in group column')
+      warning('DT contains NA(s) in group column, these rows will be dropped')
     }
+
+
+
 
     uDT <-
       na.omit(unique(DT[, .SD, .SDcols = c(group, id)]),
