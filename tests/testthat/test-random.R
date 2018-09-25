@@ -64,6 +64,7 @@ test_that('iterations is NULL or correctly provided', {
   expect_warning(randomizations(DT = copyDT,
                               type = 'step',
                               id = 'ID',
+                              group = 'group',
                               datetime = 'datetime',
                               iterations = NULL),
                'iterations is not', fixed = FALSE)
@@ -81,6 +82,7 @@ test_that('dateFormatted or not depending on randomization type', {
   expect_warning(randomizations(DT = copyDT,
                                 type = 'step',
                                 id = 'ID',
+                                group = 'group',
                                 datetime = 'datetime',
                                 iterations = 1),
                  'datetime provided is POSIXct', fixed = FALSE)
@@ -89,6 +91,7 @@ test_that('dateFormatted or not depending on randomization type', {
   expect_error(randomizations(DT = DT,
                               type = 'daily',
                               id = 'ID',
+                              group = 'group',
                               datetime = 'numDate',
                               iterations = 1),
                  'datetime must be POSIXct', fixed = FALSE)
@@ -110,6 +113,7 @@ test_that('step randomization returns as expected', {
       DT = DT,
       type = 'step',
       id = 'ID',
+      group = 'group',
       iterations = 1,
       datetime = 'timegroup'
     )[, uniqueN(randomID), by = timegroup],
@@ -121,6 +125,7 @@ test_that('step randomization returns as expected', {
       DT = DT,
       type = 'step',
       id = 'ID',
+      group = 'group',
       iterations = 3,
       datetime = 'timegroup'
     )
@@ -133,6 +138,7 @@ test_that('step randomization returns as expected', {
       DT = copyDT,
       type = 'step',
       id = 'ID',
+      group = 'group',
       iterations = 1,
       datetime = 'timegroup',
       splitBy = 'population'
@@ -147,6 +153,7 @@ test_that('daily randomization returns as expected', {
       DT = DT,
       type = 'daily',
       id = 'ID',
+      group = 'group',
       iterations = 1,
       datetime = 'datetime'
     )[, .(N = uniqueN(randomID)),
@@ -199,6 +206,7 @@ test_that('non uniques are found', {
   expect_warning(randomizations(DT = copyDT,
                                 type = 'daily',
                                 id = 'ID',
+                                group = 'group',
                                 datetime = 'datetime',
                                 iterations = 2),
                  'found none unique rows of id, datetime',
@@ -212,6 +220,7 @@ test_that('randomization returns expected columns', {
       DT = DT,
       type = 'daily',
       id = 'ID',
+      group = 'group',
       datetime = 'datetime',
       iterations = 2
     )
@@ -223,6 +232,7 @@ test_that('randomization returns expected columns', {
       DT = DT,
       type = 'step',
       id = 'ID',
+      group = 'group',
       datetime = 'timegroup',
       iterations = 2
     )
@@ -234,6 +244,7 @@ test_that('randomization returns expected columns', {
       DT = DT,
       type = 'daily',
       id = 'ID',
+      group = 'group',
       datetime = 'datetime',
       iterations = 2
     )
