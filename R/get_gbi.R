@@ -45,7 +45,8 @@
 get_gbi <-
   function(DT = NULL,
            group = 'group',
-           id = NULL) {
+           id = NULL,
+           splitBy = NULL) {
 
     if (is.null(DT)) {
       stop('input DT required')
@@ -59,10 +60,10 @@ get_gbi <-
       stop('ID field required')
     }
 
-    if (any(!(c(group, id) %in% colnames(DT)))) {
+    if (any(!(c(group, id, splitBy) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
-          c(group, id),
+          c(group, id, splitBy),
           colnames(DT)
         ), collapse = ', ')),
         ' field(s) provided are not present in input DT'
