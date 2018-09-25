@@ -110,6 +110,7 @@
 randomizations <- function(DT = NULL,
                            type = NULL,
                            id = NULL,
+                           group = NULL,
                            coords = NULL,
                            datetime = NULL,
                            splitBy = NULL,
@@ -188,7 +189,10 @@ randomizations <- function(DT = NULL,
     }
   }
   if (type %in% c('step', 'daily')) {
-    selCols <- c(splitBy, id, datetime)
+    if (is.null(group)) {
+      stop('group field must be provided if type is "step" or "daily"')
+    }
+    selCols <- c(splitBy, id, datetime, group)
   } else if (type == 'trajectory') {
     if (is.null(coords)) {
       stop('coords must be provided if type is "trajectory"')
