@@ -46,7 +46,7 @@ group_polys(DT, area = FALSE, hrType = 'mcp',
             projection = utm, id = 'ID', coords = c('X', 'Y'),
             splitBy = 'yr')
 
-get_gbi(DT, 'group', 'ID')
+gbiMtrx <- get_gbi(DT, 'group', 'ID')
 
 }
 \seealso{
