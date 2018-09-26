@@ -34,8 +34,6 @@
 #' @family Spatial grouping
 #' @seealso \code{\link{build_lines}} \code{\link{group_times}}
 #'
-#' @importFrom rgeos gIntersects gBuffer
-#' @importFrom igraph graph_from_adjacency_matrix clusters
 #' @examples
 #' # Load data.table
 #' library(data.table)

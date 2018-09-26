@@ -19,8 +19,6 @@
 #'
 #' @seealso \code{\link{group_pts}} \code{\link{group_lines}} \code{\link{group_polys}}
 #' @family Social network tools
-#' @importFrom data.table dcast
-#' @importFrom stats na.omit
 #'
 #' @examples
 #' # Load data.table
@@ -78,7 +76,7 @@ get_gbi <-
 
 
     uDT <-
-      na.omit(unique(DT[, .SD, .SDcols = c(group, id)]),
+      stats::na.omit(unique(DT[, .SD, .SDcols = c(group, id)]),
               cols = group)
 
     cDT <-

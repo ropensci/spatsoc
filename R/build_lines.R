@@ -27,7 +27,6 @@
 #' @seealso \code{\link{group_lines}}
 #'
 #' @import data.table
-#' @importFrom sp SpatialLines Lines Line CRS rbind.SpatialLines
 #'
 #' @examples
 #' # Load data.table

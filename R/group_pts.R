@@ -28,9 +28,6 @@
 #'
 #' @export
 #'
-#' @importFrom stats dist
-#' @importFrom igraph graph_from_adjacency_matrix clusters
-#'
 #' @family Spatial grouping
 #' @seealso \code{\link{group_times}}
 #'
@@ -140,7 +137,7 @@ group_pts <- function(DT = NULL,
 
   DT[, withinGroup := {
     distMatrix <-
-      as.matrix(dist(cbind(
+      as.matrix(stats::dist(cbind(
         get(..coords[1]), get(..coords[2])
       ),
       method = 'euclidean'))

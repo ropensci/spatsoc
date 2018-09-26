@@ -27,10 +27,6 @@
 #' @family Build functions
 #' @seealso \code{\link{group_polys}}
 #'
-#' @importFrom sp SpatialPointsDataFrame CRS
-#' @importFrom adehabitatHR mcp kernelUD getverticeshr
-#'
-#'
 #' @examples
 #' # Load data.table
 #' library(data.table)

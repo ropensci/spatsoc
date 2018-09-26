@@ -26,10 +26,6 @@
 #'
 #' @export
 #'
-#' @importFrom methods slot
-#' @importFrom rgeos gIntersects gIntersection gBuffer
-#' @importFrom igraph graph_from_adjacency_matrix clusters
-#'
 #' @family Spatial grouping
 #' @seealso \code{\link{build_polys}} \code{\link{group_times}}
 #'
@@ -114,8 +110,8 @@ group_polys <-
         inters <-
           rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
         out <- data.table::data.table(
-          area = vapply(inters@polygons, slot, 'area', FUN.VALUE = 1),
-          IDs = vapply(inters@polygons, slot, 'ID', FUN.VALUE = "")
+          area = vapply(inters@polygons, methods::slot, 'area', FUN.VALUE = 1),
+          IDs = vapply(inters@polygons, methods::slot, 'ID', FUN.VALUE = "")
         )
 
         set(out, j = 'ID1', value = tstrsplit(out[['IDs']], ' ', keep = 1))
