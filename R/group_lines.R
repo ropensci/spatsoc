@@ -151,18 +151,23 @@ group_lines <-
     }
 
     if (is.null(timegroup)) {
-      suppressWarnings(
+      withCallingHandlers({
         spLines <- build_lines(
           DT = DT,
           projection = projection,
           coords = coords,
           id = id,
           sortBy = sortBy
-        )
+        )},
+        warning = function(w){
+          if (startsWith(conditionMessage(w), 'some rows dropped')) {
+            invokeRestart('muffleWarning')
+          }
+        }
       )
       if (!is.null(spLines)) {
         if (threshold == 0) {
-          inter <- rgeos::gIntersects(spLines, spLines, byid=TRUE)
+          inter <- rgeos::gIntersects(spLines, spLines, byid = TRUE)
         } else {
           buffered <- rgeos::gBuffer(spLines, width = threshold, byid = TRUE)
           inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
@@ -199,14 +204,19 @@ group_lines <-
       }
       ovrDT <-
         DT[, {
-          suppressWarnings(
+          withCallingHandlers({
             spLines <- build_lines(
               DT = .SD,
               projection = projection,
               coords = ..coords,
               id = ..id,
               sortBy = ..sortBy
-            )
+            )},
+            warning = function(w){
+              if (startsWith(conditionMessage(w), 'some rows dropped')) {
+                invokeRestart('muffleWarning')
+              }
+            }
           )
           if (!is.null(spLines)) {
             if (threshold == 0) {
