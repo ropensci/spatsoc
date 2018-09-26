@@ -190,6 +190,9 @@ See [3.2.1](#dt-1).
 ### threshold
 The `threshold` argument represents a buffer area around each line. When `threshold = 0`, the lines are grouped by spatial overlap. If the threshold is greater than 0, the lines buffered, then grouped by spatial overlap. 
 
+### coords
+The coordinates must be planar, such as UTM (of whichever zone your relocations are in). 
+
 ### sortBy
 The `sortBy` argument expects a date time formatted column name, which is used to order the rows for each individual (and `splitBy`). 
 
@@ -214,6 +217,9 @@ If `area = FALSE`, see [3.2.1](#dt-1). If `area = TRUE`, the DT will not be appe
 The default unit for area overlap is square meters. 
 
 <!-- direction of proportion -->
+
+### coords
+The coordinates must be planar, such as UTM (of whichever zone your relocations are in). 
 
 ### hrType and hrParams
 Currently, `spatsoc` offers two types of home ranges provided by the `adehabitatHR` package: `mcp` and `kernel`. The parameters must match the arguments of those functions. 
