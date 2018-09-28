@@ -10,7 +10,7 @@ RUN apt-get update \
     libcurl4-openssl-dev \
     libxml2-dev \
     zlib1g-dev \
-    qpdf \ 
+    qpdf \
     git \
   && install2.r --error \
     rgeos \
@@ -18,6 +18,7 @@ RUN apt-get update \
     data.table \
     adehabitatHR \
     igraph \
+    asnipe \
     knitr \
     devtools \
     rmarkdown \
