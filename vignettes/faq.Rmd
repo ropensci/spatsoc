@@ -257,3 +257,61 @@ if (truelength(DT) == 0) {
 group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 ```
 
+
+
+
+# Summary information
+Here are some useful code chunks for understanding the spatial and temporal extent of your data and the outputs of `spatsoc` functions. 
+
+## Number of individuals
+```{r}
+# Number of unique individuals
+DT[, uniqueN(ID)]
+
+# Number of unique individuals by timegroup
+DT[, uniqueN(ID), by = timegroup]
+```
+
+## Temporal range
+
+```{r}
+# Min, max datetime
+DT[, range(datetime)]
+
+# Difference between relocations in hours
+DT[order(datetime), 
+   .(difHours = as.numeric(difftime(datetime, shift(datetime), units = 'hours'))), 
+   by = ID]
+
+# Difference between relocations in hours
+DT[order(datetime), 
+   .(difMins = as.numeric(difftime(datetime, shift(datetime), units = 'mins'))), 
+   by = ID]
+```
+
+## Spatial extent
+Simple spatial extents can be calculated for all individuals or by individual. 
+```{r}
+# All individuals
+DT[, .(minX = min(X),
+       maxX = max(X),
+       minY = min(Y),
+       maxY = max(Y),)]
+
+# By individual
+DT[, .(minX = min(X),
+       maxX = max(X),
+       minY = min(Y),
+       maxY = max(Y),),
+   by = ID]
+```
+
+## `spatsoc` outputs
+After using the grouping functions, we can determine the number of individuals in a temporal or spatial group. 
+```{r}
+# Number of unique individuals by timegroup
+DT[, uniqueN(ID), by = timegroup]
+
+# Number of unique individuals by group
+DT[, uniqueN(ID), by = group]
+```
