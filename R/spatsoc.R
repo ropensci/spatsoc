@@ -15,9 +15,10 @@
 #'   \item \code{\link{group_polys}}
 #' }
 #'
-#' and one social network data-stream randomization function:
+#' and two social network functions:
 #' \itemize{
 #'   \item \code{\link{randomizations}}
+#'   \item \code{\link{get_gbi}}
 #' }
 #'
 #' @docType package
