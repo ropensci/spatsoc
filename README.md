@@ -13,8 +13,10 @@ status](https://gitlab.com/robit.a/spatsoc/badges/master/pipeline.svg)](https://
 spatsoc is an R package for detecting spatial and temporal groups in GPS
 relocations. It can be used to convert GPS relocations to
 gambit-of-the-group format to build proximity-based social networks. In
-addition, the randomization function provides data-stream randomization
-methods suitable for GPS data.
+addition, the `randomizations` function provides data-stream
+randomization methods suitable for GPS data and the `get_gbi` function
+generates group by individual matrices useful for building networks with
+`asnipe::get_network`.
 
 See below for installation and basic usage.
 
