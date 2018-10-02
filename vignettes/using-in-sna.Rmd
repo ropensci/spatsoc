@@ -138,7 +138,7 @@ areaDT <- group_polys(
 # Build observed network 
 Once we've created groups using `group_times` and one of the spatial grouping functions, we can generate a group by individual matrix. 
 
-The following code chunk showing `get_gbi` can be used for outputs from any of `group_pts`, `group_lines` or `group_polys(area = FALSE)`. For the purpose of this vignette however, we will consider the outputs from `group_pts` for the following code chunk (3. `get_gbi`).
+The following code chunk showing `get_gbi` can be used for outputs from any of `group_pts`, `group_lines` or `group_polys(area = FALSE)`. For the purpose of this vignette however, we will consider the outputs from `group_pts` ([2. a)](#a-group_pts)) for the following code chunk.
 
 Note: we show this example creating the group by individual matrix and network for only 2016 to illustrate how `spatsoc` can be used for simpler data with no splitting of temporal or spatial subgroups (e.g.: yearly, population). See the random network section for how to use `spatsoc` in social network analysis for multi-year or other complex data. 
 
@@ -386,7 +386,7 @@ Finally, we can calculate some network metrics. Please note that there are many 
 
 
 ## 7. Calculate observed network metrics
-To calculate observed network metrics, use the network (`net`) produced in 4. `asnipe::get_network` from 2016 data.
+To calculate observed network metrics, use the network (`net`) produced in [4.](#asnipeget_network) from 2016 data.
 
 ```{r}
 ## Generate graph
@@ -405,11 +405,9 @@ observed <- data.table(
 
 
 ## 8. Calculate random network metrics
-With the list of random networks from 6., we can generate a list of graphs with `igraph::graph.adjacency` (for example) and calculate random network metrics. 
+With the list of random networks from [6.](#build-random-network), we can generate a list of graphs with `igraph::graph.adjacency` (for example) and calculate random network metrics. 
 
-This example uses the `netLs` created by 6. a). which was split by year and iteration. 
-
-<!-- Note: the observed data is included? -->
+This example uses the `netLs` created by [6. a)](#a-type-step-1) which was split by year and iteration. 
 
 ```{r}
 ## Generate graph and calculate network metrics
