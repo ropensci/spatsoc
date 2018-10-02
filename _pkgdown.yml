@@ -23,10 +23,11 @@ reference:
     - '`group_lines`'
     - '`group_polys`'
     - '`group_pts`'
-  - title: Data-stream randomization
+  - title: Social network tools
     desc: ~
     contents:
     - '`randomizations`'
+    - '`get_gbi`'
   - title: Build functions
     desc: ~
     contents:
