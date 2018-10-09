@@ -20,7 +20,7 @@ knitr::opts_chunk$set(message = TRUE,
 ```
 
 
-`spatsoc` can be used in social network analysis to generate gambit of the group format data from GPS relocation data and perform data stream randomization. 
+`spatsoc` can be used in social network analysis to generate gambit of the group format data from GPS relocation data, perform data stream randomization and generate group by individual matrices. 
 
 Gambit of the group format data is generated using the grouping functions:
 
@@ -30,6 +30,8 @@ Gambit of the group format data is generated using the grouping functions:
 * `group_polys`
 
 Data stream randomization is performed using the `randomizations` function. 
+
+Group by individual matrices are generated using the `get_gbi` function. 
 
 # Generate gambit of the group data
 spatsoc provides users with one temporal (`group_times`) and three spatial (`group_pts`, `group_lines`, `group_polys`) functions to generate gambit of the group data from GPS relocations. Users can consider spatial grouping at three different scales combined with an appropriate temporal grouping threshold. The gambit of the group data is then used to generate a group by individual matrix and build the network. 
