@@ -26,7 +26,7 @@ The functions were developed for application across animal relocation data, for 
 
 ```{r libs, eval = TRUE, include = FALSE}
 library(spatsoc); library(data.table)
-DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))[ID %in% c('H', 'I', 'J')]
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
 
@@ -36,15 +36,23 @@ The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[
 
 
 ```{r, echo = TRUE}
+## Load packages
 library(spatsoc)
 library(data.table)
+
+## Read in spatsoc's example data
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+
+## Subset to only individuals H, I, and J
+DT <- DT[ID %in% c('H', 'I', 'J')]
+
+## Cast character column 'datetime' as POSIXct
 DT[, datetime := as.POSIXct(datetime,
                             tz = 'UTC')]
 ```
 
 ```{r, eval = TRUE}
-knitr::kable(DT[sample(.N, 5)])
+knitr::kable(DT[, .SD[1:2], ID][order(datetime)])
 ```
 
 
@@ -98,7 +106,7 @@ The `group_pts` function compares the relocations of all individuals in each tim
 
 ```{r grouppts, echo = TRUE}
 group_times(DT = DT, datetime = 'datetime', threshold = '15 minutes')
-group_pts(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'))
+group_pts(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 ```
 
 ```{r fakegrouppts, eval = TRUE}
@@ -108,7 +116,7 @@ knitr::kable(
                      threshold = '15 minutes'),
     threshold = 50, id = 'ID', coords = c('X', 'Y'),
     timegroup = 'timegroup')[
-      order(group)][
+      between(group,  771, 774)][order(timegroup)][
         1:nRows, .(ID, X, Y, timegroup, group)]
 )
 ```
