@@ -110,12 +110,15 @@ group_pts(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'time
 ```
 
 ```{r fakegrouppts, eval = TRUE}
-knitr::kable(
-  group_pts(
-    DT = group_times(DT = DT, datetime = 'datetime', 
-                     threshold = '15 minutes'),
+DT <- group_times(DT = DT, datetime = 'datetime', 
+                     threshold = '15 minutes')
+DT <- group_pts(
+    DT = DT,
     threshold = 50, id = 'ID', coords = c('X', 'Y'),
-    timegroup = 'timegroup')[
+    timegroup = 'timegroup')
+
+knitr::kable(
+  DT[
       between(group,  771, 774)][order(timegroup)][
         1:nRows, .(ID, X, Y, timegroup, group)]
 )
@@ -135,14 +138,15 @@ group_lines(DT, threshold = 50, projection = utm,
 
 ```{r grouplines, eval = TRUE}
 utm <- '+proj=utm +zone=21 ellps=WGS84'
+
+DT <- group_times(DT = DT, datetime = 'datetime', 
+                threshold = '1 day')
+DT <- group_lines(DT,
+                  threshold = 50, projection = utm, 
+                  id = 'ID', coords = c('X', 'Y'), 
+                  sortBy = 'datetime', timegroup = 'timegroup')
 knitr::kable(
-  group_lines(
-    group_times(DT = DT, datetime = 'datetime', 
-                threshold = '1 day'), 
-    threshold = 50, projection = utm, 
-    id = 'ID', coords = c('X', 'Y'), sortBy = 'datetime'
-  )[order(group)][
-        1:nRows, .(ID, X, Y, timegroup, group)]
+  unique(DT[, .(ID, timegroup, group)])[, .SD[1:3], ID][order(timegroup)]
 )
 ```
 
