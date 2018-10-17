@@ -60,7 +60,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 
 # Build polygons for each individual using kernelUD and getverticeshr
-build_polys(DT, projection = utm, hrType = 'mcp',
+build_polys(DT, projection = utm, hrType = 'kernel',
             hrParams = list(grid = 60, percent = 95),
             id = 'ID', coords = c('X', 'Y'))
 
