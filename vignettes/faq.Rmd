@@ -222,8 +222,21 @@ The default unit for area overlap is square meters.
 The coordinates must be planar, such as UTM (of whichever zone your relocations are in). 
 
 ### hrType and hrParams
-Currently, `spatsoc` offers two types of home ranges provided by the `adehabitatHR` package: `mcp` and `kernel`. The parameters must match the arguments of those functions. 
+Currently, `spatsoc` offers two types of home ranges provided by the `adehabitatHR` package: 'mcp' (`mcp`) and 'kernel' (`kernelUD` and `getverticeshr`). The parameters must match the arguments of those functions. 
 
+Internally, we match arguments to the functions allowing the user to provide, for example, both the percent (provided to `getverticeshr`) and grid arguments (provided to `mcp`).
+
+```{r}
+group_polys(
+  DT,
+  area = FALSE,
+  projection = utm,
+  hrType = 'mcp',
+  hrParams = list(grid = 60, percent = 95),
+  id = 'ID',
+  coords = c('X', 'Y')
+)
+```
 
 ## randomizations
 `randomizations(DT, type, id, datetime, splitBy, iterations)`
