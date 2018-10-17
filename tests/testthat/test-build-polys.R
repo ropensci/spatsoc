@@ -247,3 +247,18 @@ test_that('build_polys returns SpatialPolygons', {
     )
   ))
 })
+
+
+test_that('hrParams can have both vertices and kernel args', {
+  expect_silent(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'kernel',
+      hrParams = list(percent = 95, grid = 60),
+      coords = c('X', 'Y'),
+      id = 'ID'
+    )
+  )
+
+})
