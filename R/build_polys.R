@@ -8,7 +8,7 @@
 #'
 #' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{spatialreference.org}). \code{build_polys} expects planar coordinates (not unprojected latitude, longitude).
 #'
-#' The \code{hrType} must be either one of "kernel" or "mcp". The \code{hrParams} must be a named list of arguments matching those of \code{adehabitatHR::kernelUD} or \code{adehabitatHR::mcp}.
+#' The \code{hrType} must be either one of "kernel" or "mcp". The \code{hrParams} must be a named list of arguments matching those of \code{adehabitatHR::kernelUD} and \code{adehabitatHR::getverticeshr} or \code{adehabitatHR::mcp}.
 #'
 #' The \code{splitBy} argument offers further control building \code{SpatialPolygons}. If in your \code{DT}, you have multiple temporal groups (e.g.: years) for example, you can provide the name of the column which identifies them and build \code{SpatialPolygons} for each individual in each year.
 #'
@@ -40,8 +40,9 @@
 #' # Proj4 string for example data
 #' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
 #'
-#' # Build polygons for each individual
-#' build_polys(DT, projection = utm, hrType = 'mcp', hrParams = list(percent = 95),
+#' # Build polygons for each individual using kernelUD and getverticeshr
+#' build_polys(DT, projection = utm, hrType = 'mcp',
+#'             hrParams = list(grid = 60, percent = 95),
 #'             id = 'ID', coords = c('X', 'Y'))
 #'
 #' # Build polygons for each individual by year
