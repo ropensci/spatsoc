@@ -171,17 +171,25 @@ build_polys <- function(DT = NULL,
       )
     }
   } else if (hrType == 'kernel') {
-    functionParams <- formals(adehabitatHR::kernelUD)
-    if (all(names(hrParams) %in% names(functionParams))) {
-      kern <- do.call(adehabitatHR::kernelUD, hrParams)
-      return(adehabitatHR::getverticeshr(kern, unout = 'm2'))
+    kernelParam <- formals(adehabitatHR::kernelUD)
+    verticesParam <- formals(adehabitatHR::getverticeshr)
+
+    if (all(names(hrParams) %in% c(names(kernelParam), names(verticesParam)))) {
+
+      kern <- do.call(adehabitatHR::kernelUD,
+                      hrParams[intersect(names(hrParams), names(kernelParam))])
+      return(do.call(adehabitatHR::getverticeshr,
+                     c(x = list(kern),
+                       hrParams[intersect(names(hrParams),
+                                          names(verticesParam))])))
     } else {
       stop(
         strwrap(
           prefix = " ",
           initial = "",
           x = 'hrParams provided do not match
-          function parameters, see ?adehabitatHR::kernelUD'
+          function parameters, see ?adehabitatHR::kernelUD
+          and ?adehabitatHR::get_vertices'
         )
       )
     }
