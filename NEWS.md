@@ -1,5 +1,6 @@
 # v 0.1.4
-## Development version
+* fin [rOpenSci onboarding process](https://github.com/ropensci/onboarding/issues/237)
+* fixed bug couldn't provide percent to kernel type `build_polys` or `group_polys`(#23)
 
 
 # v 0.1.3
