@@ -153,4 +153,7 @@ Development of `spatsoc` welcomes contribution of feature requests, bug
 reports and suggested improvements through the [issue
 board](https://gitlab.com/robit.a/spatsoc/issues).
 
-See details in [CONTRIBUTING.md](CONTRIBUTING.md).
+See details in
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
+[![ropensci\_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
