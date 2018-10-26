@@ -1,6 +1,9 @@
-## v 0.1.1
-See NEWS.md for updates. 
-Added vignettes, fixed a couple bugs, big documentation improvements.
+## v 0.1.4
+See NEWS.md for all updates. 
+
+Finished rOpenSci onboarding process.  
+Added `get_gbi` function.  
+Fixed `randomizations` where object returned has same structure regardless of iterations = 1 or > 1. 
 
 ## Test environments
 * Linux: R 3.5
