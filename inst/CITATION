@@ -1,0 +1,16 @@
+citHeader("To cite spatsoc in publications use:")
+
+citEntry(entry = "Article",
+  title        = "Conducting social network analysis with animal telemetry data: applications and methods using {spatsoc}",
+  author       = personList(as.person("Alec L Robitaille"),
+                   as.person("Quinn MR Webber"), as.person("Eric Vander Wal")),
+  journal      = "bioRxiv",
+  year         = "2018",
+  url          = "https://doi.org/10.1101/447284",
+
+  textVersion  =
+  paste("Alec L. Robitaille, Quinn M.R. Webber, Eric Vander Wal (2018).",
+        "Conducting social network analysis with animal telemetry data: applications and methods using spatsoc.",
+        "bioRxiv.",
+        "URL https://doi.org/10.1101/447284.")
+)
