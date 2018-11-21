@@ -45,7 +45,7 @@ For more details, see the vignettes:
 
 ``` r
 # Development version
-devtools::install_git('https://gitlab.com/robit.a/spatsoc.git',
+remotes::install_git('https://gitlab.com/robit.a/spatsoc.git',
                       build_vignettes = TRUE)
 
 # CRAN
