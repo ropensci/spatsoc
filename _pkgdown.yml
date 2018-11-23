@@ -5,7 +5,7 @@ articles:
   intro-spatsoc: intro-spatsoc.html
 
 destination: ../spatsoc.gitlab.io/public
-url: spatsoc.gitlab.io
+url: https://spatsoc.gitlab.io
 
 
 template:
