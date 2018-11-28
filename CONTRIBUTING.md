@@ -1,6 +1,6 @@
 # Contributing
 
-Development of `spatsoc` welcomes contribution of feature requests, bug reports and suggested improvements through the [issue board](https://gitlab.com/robit.a/spatsoc/issues). 
+Development of `spatsoc` welcomes contribution of feature requests, bug reports and suggested improvements through the [issue board](https://github.com/ropensci/spatsoc/issues). 
 
 ### Issues
 
