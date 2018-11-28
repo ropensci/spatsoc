@@ -2,32 +2,34 @@
 
 Development of `spatsoc` welcomes contribution of feature requests, bug reports and suggested improvements through the [issue board](https://gitlab.com/robit.a/spatsoc/issues). 
 
-Other than for typos, always open an issue first to open a dialogue with the team. 
-
 ### Issues
 
 Use the labels available on the Issue Board:
 
-priority:
+| priority  | description | colour                                          	| 
+|-----------|-------------|---------------------------------------------------|
+| critical 	|             | <span style="background:#e50000">#e50000</span> 	|
+| high 	    |             | <span style="background:#fc7436">#fc7436</span> 	|
+| medium 	  |             | <span style="background:#ffbb5c">#ffbb5c</span> 	|
+| low 	    |             | <span style="background:#dfdfdf">#dfdfdf</span> 	|
 
-* critical
-* high
-* medium
-* low
 
-status:
+| status      	| description                                	| colour                                            |
+|-------------	|--------------------------------------------	|--------------------------------------------------	|
+| completed   	|                                            	| <span style="background:#34495E">#34495E</span> 	|
+| confirmed   	| bug is reproducible                        	| <span style="background:#e50000">#e50000</span> 	|
+| in progress 	| [workinonit](https://youtu.be/5nO7IA1DeeI) 	| <span style="background:#aefd3d">#aefd3d</span> 	|
+| duplicate   	|                                            	| <span style="background:#dfdfdf">#dfdfdf</span> 	|
 
-* completed
-* confirmed - for bugs, once author of the issue has provided reproducible examples
-* in progress - [workinonit](https://youtu.be/5nO7IA1DeeI)
 
-type:
-
-* bug - functions are not working as described, intended, ...
-* discussion
-* documentation - documentation suggestions, improvements
-* enhancement - new features, improvements to 
-* support - not sure how to implement something, trouble with functions, strange errors
+|  type         	| description                        | colour                                           |
+|---------------	|----------------------------------- |-------------------------------------------------	|
+| documentation 	|             	                     | <span style="background:#639f3b">#639f3b</span> 	|
+| support       	| usage or implementation troubles   | <span style="background:#e48ec0">#e48ec0</span>  |
+| bug           	| not working as described, intended | <span style="background:#e50000">#e50000</span> 	|
+| discussion    	|             	                     | <span style="background:#47b6a3">#47b6a3</span> 	|
+| enhancement   	|             	                     | <span style="background:#8935b8">#8935b8</span> 	|
+| typo          	|             	                     | <span style="background:#dfdfdf">#dfdfdf</span> 	|
 
 
 ### Prefer to Email? 
