@@ -22,7 +22,7 @@ spatsoc is an R package for detecting spatial and temporal groups in GPS relocat
 
 See below for installation and basic usage. 
 
-For more details, see the vignettes:
+For more details, see the [blog post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
 * [Introduction to spatsoc](https://spatsoc.gitlab.io/articles/intro-spatsoc.html)
 * [Frequently asked questions](https://spatsoc.gitlab.io/articles/faq.html)
@@ -30,6 +30,15 @@ For more details, see the vignettes:
 
 
 ## Installation
+Install the latest version with `remotes`.  
+
+```{r install}
+remotes::install_github('ropensci/spatsoc')
+
+# or CRAN
+install.packages('spatsoc')
+```
+
 `spatsoc` depends on `rgeos` and requires [GEOS](https://trac.osgeo.org/geos/) installed on the system. 
 
 * Debian/Ubuntu: `apt-get install libgeos-dev`
@@ -38,14 +47,6 @@ For more details, see the vignettes:
 * Mac: `brew install geos`
 * Windows: see [here](https://trac.osgeo.org/osgeo4w/)
 
-
-```{r install}
-# Development version
-remotes::install_github('ropensci/spatsoc')
-
-# CRAN
-install.packages('spatsoc')
-```
 
 ## Usage
 ### Import package, read data

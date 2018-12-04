@@ -21,7 +21,8 @@ generates group by individual matrices useful for building networks with
 
 See below for installation and basic usage.
 
-For more details, see the vignettes:
+For more details, see the [blog
+post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
   - [Introduction to
     spatsoc](https://spatsoc.gitlab.io/articles/intro-spatsoc.html)
@@ -32,6 +33,15 @@ For more details, see the vignettes:
 
 ## Installation
 
+Install the latest version with `remotes`.
+
+``` r
+remotes::install_github('ropensci/spatsoc')
+
+# or CRAN
+install.packages('spatsoc')
+```
+
 `spatsoc` depends on `rgeos` and requires
 [GEOS](https://trac.osgeo.org/geos/) installed on the system.
 
@@ -40,16 +50,6 @@ For more details, see the vignettes:
   - Fedora: `dnf install geos geos-devel`
   - Mac: `brew install geos`
   - Windows: see [here](https://trac.osgeo.org/osgeo4w/)
-
-<!-- end list -->
-
-``` r
-# Development version
-remotes::install_github('ropensci/spatsoc')
-
-# CRAN
-install.packages('spatsoc')
-```
 
 ## Usage
 
