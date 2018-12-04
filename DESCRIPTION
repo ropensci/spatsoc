@@ -2,9 +2,9 @@ Package: spatsoc
 Title: Group Animal Relocation Data by Spatial and Temporal Relationship
 Version: 0.1.5
 Authors@R: c(
-    person("Alec L.", "Robitaille", role = c("aut", "cre"), email = "robit.alec@gmail.com"),
-    person("Quinn", "Webber", role = c("aut")),
-    person("Eric", "Vander Wal", role = c("aut"))
+    person("Alec L.", "Robitaille", role = c("aut", "cre"), email = "robit.alec@gmail.com", comment = c(ORCID = "0000-0002-4706-1762")),
+    person("Quinn", "Webber", role = c("aut"), comment = c(ORCID = "0000-0002-0434-9360")),
+    person("Eric", "Vander Wal", role = c("aut"), comment = c(ORCID = "0000-0002-8534-4317"))
     )
 Description: Detects spatial and temporal groups in GPS relocations. 
     It can be used to convert GPS relocations to 

@@ -39,12 +39,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Alec L. Robitaille \email{robit.alec@gmail.com}
+\strong{Maintainer}: Alec L. Robitaille \email{robit.alec@gmail.com} (0000-0002-4706-1762)
 
 Authors:
 \itemize{
-  \item Quinn Webber
-  \item Eric Vander Wal
+  \item Quinn Webber (0000-0002-0434-9360)
+  \item Eric Vander Wal (0000-0002-8534-4317)
 }
 
 }

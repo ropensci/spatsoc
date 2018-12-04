@@ -35,17 +35,20 @@
       "@type": "Person",
       "givenName": "Alec L.",
       "familyName": "Robitaille",
-      "email": "robit.alec@gmail.com"
+      "email": "robit.alec@gmail.com",
+      "@id": "https://orcid.org/0000-0002-4706-1762"
     },
     {
       "@type": "Person",
       "givenName": "Quinn",
-      "familyName": "Webber"
+      "familyName": "Webber",
+      "@id": "https://orcid.org/0000-0002-0434-9360"
     },
     {
       "@type": "Person",
       "givenName": "Eric",
-      "familyName": "Vander Wal"
+      "familyName": "Vander Wal",
+      "@id": "https://orcid.org/0000-0002-8534-4317"
     }
   ],
   "maintainer": [
@@ -53,7 +56,8 @@
       "@type": "Person",
       "givenName": "Alec L.",
       "familyName": "Robitaille",
-      "email": "robit.alec@gmail.com"
+      "email": "robit.alec@gmail.com",
+      "@id": "https://orcid.org/0000-0002-4706-1762"
     }
   ],
   "softwareSuggestions": [
@@ -219,7 +223,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/spatsoc//blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/spatsoc/blob/master/README.md",
-  "fileSize": "360.906KB",
+  "fileSize": "360.994KB",
   "contIntegration": "https://codecov.io/gl/robit.a/spatsoc",
   "developmentStatus": "http://www.repostatus.org/#active",
   "review": {
