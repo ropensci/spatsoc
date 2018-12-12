@@ -1,9 +1,13 @@
-## v 0.1.4
+## v 0.1.6
 See NEWS.md for all updates. 
 
-Finished rOpenSci onboarding process.  
-Added `get_gbi` function.  
-Fixed `randomizations` where object returned has same structure regardless of iterations = 1 or > 1. 
+fix bug 'group_times misses nearest hour with mins threshold' (#5)
+
+## v 0.1.5
+update issue labels and contributing
+change over issue board location from GitLab to rOpenSci repository on GitHub
+added preprint CITATION
+added "https://" to `pkgdown` URL (#1)
 
 ## Test environments
 * Linux: R 3.5
