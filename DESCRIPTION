@@ -1,6 +1,6 @@
 Package: spatsoc
 Title: Group Animal Relocation Data by Spatial and Temporal Relationship
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: 
     c(person(given = "Alec L.",
              family = "Robitaille",
@@ -39,4 +39,4 @@ RoxygenNote: 6.1.0
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 BugReports: https://github.com/ropensci/spatsoc/issues
-URL: https://spatsoc.gitlab.io, https://www.gitlab.com/robit.a/spatsoc, https://github.com/ropensci/spatsoc
+URL: https://spatsoc.gitlab.io, https://github.com/ropensci/spatsoc
