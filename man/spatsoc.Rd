@@ -32,7 +32,6 @@ and two social network functions:
 Useful links:
 \itemize{
   \item \url{https://spatsoc.gitlab.io}
-  \item \url{https://www.gitlab.com/robit.a/spatsoc}
   \item \url{https://github.com/ropensci/spatsoc}
   \item Report bugs at \url{https://github.com/ropensci/spatsoc/issues}
 }

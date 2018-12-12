@@ -1,3 +1,6 @@
+# v0.1.6
+* fix bug 'group_times misses nearest hour with mins threshold' (#5)
+
 # v 0.1.5
 * update issue labels and contributing
 * change over issue board location from GitLab to rOpenSci repository on GitHub
