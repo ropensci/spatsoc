@@ -65,7 +65,7 @@ group_times <- function(DT = NULL,
                         threshold = NULL) {
   # due to NSE notes in R CMD check
   minutes <- block <- hours <- itime <- . <- idate <- timegroup <- NULL
-  minday <- maxday <- rangeday <- adjIDate <- NULL
+  minday <- maxday <- rangeday <- adjIDate <- adjHour <-  NULL
 
   if (is.null(DT)) {
     stop('input DT required')
