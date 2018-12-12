@@ -7,7 +7,7 @@
   "identifier": "spatsoc",
   "description": "Detects spatial and temporal groups in GPS relocations. \n    It can be used to convert GPS relocations to \n    gambit-of-the-group format to build proximity-based social networks. \n    In addition, the randomizations function provides data-stream \n    randomization methods suitable for GPS data. ",
   "name": "spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship",
-  "codeRepository": "https://www.gitlab.com/robit.a/spatsoc",
+  "codeRepository": "https://github.com/ropensci/spatsoc",
   "relatedLink": [
     "https://spatsoc.gitlab.io",
     "https://github.com/robitalec/spatsoc",
@@ -16,7 +16,7 @@
   ],
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -223,12 +223,13 @@
   ],
   "releaseNotes": "https://github.com/ropensci/spatsoc//blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/spatsoc/blob/master/README.md",
-  "fileSize": "361.009KB",
+  "fileSize": "361.203KB",
   "contIntegration": "https://codecov.io/gl/robit.a/spatsoc",
   "developmentStatus": "http://www.repostatus.org/#active",
   "review": {
     "@type": "Review",
     "url": "https://github.com/ropensci/onboarding/issues/237",
     "provider": "http://ropensci.org"
-  }
+  },
+  "keywords": ["r", "spatial", "social", "gps", "animal", "network"]
 }

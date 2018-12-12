@@ -262,9 +262,9 @@ test_that('group_times nearest hour with minutes threshold', {
   DT <- data.table(
     idate = as.IDate('2018-12-12'),
     itime = as.ITime(
-      c('1:00', '1:02', '12:58',
-        '3:00', '3:02', '2:59',
-        '5:00', '5:01', '4:58')
+      c('01:00', '01:02', '00:58',
+        '03:00', '03:02', '02:59',
+        '05:00', '05:01', '04:58')
     )
   )
 

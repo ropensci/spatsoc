@@ -65,7 +65,7 @@ group_times <- function(DT = NULL,
                         threshold = NULL) {
   # due to NSE notes in R CMD check
   minutes <- block <- hours <- itime <- . <- idate <- timegroup <- NULL
-  minday <- maxday <- rangeday <- adjIDate <- NULL
+  minday <- maxday <- rangeday <- adjIDate <- adjHour <-  NULL
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -197,10 +197,14 @@ group_times <- function(DT = NULL,
 
       dtm[, c('adjMinute', 'adjHour', 'adjDate') :=
             .(minutes, data.table::hour(itime), idate)]
-      dtm[data.table::hour(itime) == 23 &
-            minutes == 60,
-          c('adjMinute', 'adjHour', 'adjDate') :=
-            .(0, 0, idate + 1)]
+
+      dtm[minutes == 60L,
+          c('adjMinute', 'adjHour') :=
+            .(0L, adjHour + 1L)]
+
+      dtm[adjHour == 24L,
+      c('adjMinute', 'adjHour', 'adjDate') :=
+        .(0L, 0L, idate + 1)]
 
       dtm[, timegroup := .GRP,
           by = c('adjMinute', 'adjHour', 'adjDate')]
