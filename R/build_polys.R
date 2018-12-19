@@ -190,7 +190,7 @@ build_polys <- function(DT = NULL,
           initial = "",
           x = 'hrParams provided do not match
           function parameters, see ?adehabitatHR::kernelUD
-          and ?adehabitatHR::get_vertices'
+          and ?adehabitatHR::getverticeshr'
         )
       )
     }
