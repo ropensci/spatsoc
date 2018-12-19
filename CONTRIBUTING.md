@@ -6,6 +6,8 @@ Development of `spatsoc` welcomes contribution of feature requests, bug reports 
 
 Use the labels available on the Issue Board:
 
+#### priority
+ 
 | priority  | description | colour                                          	| 
 |-----------|-------------|---------------------------------------------------|
 | critical 	|             | <span style="background:#e50000">#e50000</span> 	|
@@ -14,6 +16,8 @@ Use the labels available on the Issue Board:
 | low 	    |             | <span style="background:#dfdfdf">#dfdfdf</span> 	|
 
 
+#### status
+
 | status      	| description                                	| colour                                            |
 |-------------	|--------------------------------------------	|--------------------------------------------------	|
 | completed   	|                                            	| <span style="background:#34495E">#34495E</span> 	|
@@ -21,6 +25,7 @@ Use the labels available on the Issue Board:
 | in progress 	| [workinonit](https://youtu.be/5nO7IA1DeeI) 	| <span style="background:#aefd3d">#aefd3d</span> 	|
 | duplicate   	|                                            	| <span style="background:#dfdfdf">#dfdfdf</span> 	|
 
+#### type
 
 |  type         	| description                        | colour                                           |
 |---------------	|----------------------------------- |-------------------------------------------------	|
