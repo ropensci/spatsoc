@@ -3,6 +3,9 @@ pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
   intro-spatsoc: intro-spatsoc.html
+  faq: faq.html
+  using-in-sna: using-in-sna.html
+
 
 destination: ../spatsoc.gitlab.io/public
 url: https://spatsoc.gitlab.io
