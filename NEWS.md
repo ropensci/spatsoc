@@ -1,3 +1,6 @@
+# v 0.1.7 
+
+
 # v 0.1.6 (2019-01-10)
 * fix bug 'group_times misses nearest hour with mins threshold' (#5)
 
