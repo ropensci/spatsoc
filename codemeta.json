@@ -16,14 +16,14 @@
   ],
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.1",
+    "version": "3.5.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.1 (2018-07-02)",
+  "runtimePlatform": "R version 3.5.2 (2018-12-20)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -223,7 +223,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/spatsoc//blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/spatsoc/blob/master/README.md",
-  "fileSize": "361.203KB",
+  "fileSize": "395.952KB",
   "contIntegration": "https://codecov.io/gl/robit.a/spatsoc",
   "developmentStatus": "http://www.repostatus.org/#active",
   "review": {
@@ -231,5 +231,15 @@
     "url": "https://github.com/ropensci/onboarding/issues/237",
     "provider": "http://ropensci.org"
   },
-  "keywords": ["r", "spatial", "social", "gps", "animal", "network"]
+  "keywords": [
+    "r",
+    "spatial",
+    "social",
+    "gps",
+    "animal",
+    "network"
+  ],
+  "contributor": {},
+  "copyrightHolder": {},
+  "funder": {}
 }
