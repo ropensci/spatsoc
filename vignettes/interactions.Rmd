@@ -1,0 +1,51 @@
+---
+title: "Detecting potential interactions"
+author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r libs, eval = TRUE}
+library(spatsoc)
+library(data.table)
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+```
+
+
+```{r}
+group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+
+DT[, nByTime := .N, by = timegroup]
+
+DT <- DT[nByTime > 1]
+```
+
+
+```{r}
+group_pts(
+  DT,
+  threshold = 50,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+  )
+
+DT[, nByGroup := .N, by = group]
+```
+
+```{r}
+DT[nByGroup > 1][order(group)]
+```
