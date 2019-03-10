@@ -255,7 +255,7 @@ group_polys(
 # Package design
 ## Don't I need to reassign to save the output?
 
-(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The exceptions are `group_polys(area = TRUE)` and `randomizations` with `iterations` greater than 1. 
+(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The exceptions are `group_polys(area = TRUE)` and `randomizations`.
 
 
 ## Why does a function print the result, but columns aren't added to my DT?
