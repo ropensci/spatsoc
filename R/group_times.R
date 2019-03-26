@@ -228,9 +228,9 @@ group_times <- function(DT = NULL,
         return(DT[])
       } else {
 
-        dtm[, minday := min(data.table::yday(idate)), by = year(idate)]
-        dtm[, maxday := max(data.table::yday(idate)), by = year(idate)]
-        dtm[, rangeday := maxday - minday, by = year(idate)]
+        minday <- dtm[, min(data.table::yday(idate))]
+        maxday <- dtm[, max(data.table::yday(idate))]
+        rangeday <- dtm[, maxday - minday]
 
         dtm[, block := cut(
           data.table::yday(idate),
