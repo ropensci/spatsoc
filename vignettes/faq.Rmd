@@ -123,7 +123,7 @@ The `threshold` provided to `group_times` should be related to the fix rate of t
 The `threshold` of `group_times` is considered only within the scope of 24 hours and this poses limitations on it:
 
 * `threshold` must evenly divide into 60 minutes or 24 hours
-* multi-day blocks should divide evenly into the range of days in the `DT`
+* multi-day blocks are consistent **across years** and timegroups from these are **by year**. 
 * number of minutes cannot exceed 60
 * `threshold` cannot be fractional
 
@@ -149,6 +149,10 @@ This message is returned to the user when a column matching those returned by `g
 * "no threshold provided, using the time field directly to group"
 
 This message is returned to the user when the `threshold` is NULL. This is the default setting of `threshold` and, at times, may be suitable. In this case, the date times in the `datetime` column will be grouped exactly. Usually, a threshold should be provided. 
+
+* "the minimum and maximum days in DT are not evenly divisible by the provided block length"
+
+This warning is returned to the user when the `threshold` with unit days does not divide evenly into the range of days in DT. For example, if DT had data covering 30 days, and a threshold of '7 days' was used, this warning would be returned. Note, this warning is returned for the range of days for the entire data set and not by year. 
 
 ## group_pts
 

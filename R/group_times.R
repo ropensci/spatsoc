@@ -228,19 +228,11 @@ group_times <- function(DT = NULL,
         return(DT[])
       } else {
 
-        dtm[, minday := min(data.table::yday(idate)), by = year(idate)]
-        dtm[, maxday := max(data.table::yday(idate)), by = year(idate)]
-        dtm[, rangeday := maxday - minday, by = year(idate)]
+        minday <- dtm[, min(data.table::yday(idate))]
+        maxday <- dtm[, max(data.table::yday(idate))]
+        rangeday <- dtm[, maxday - minday]
 
-        dtm[, block := cut(
-          data.table::yday(idate),
-          breaks = seq.int(minday[1], maxday[1] + nDays, by = nDays),
-          right = FALSE,
-          labels = FALSE
-        ), by = year(idate)]
-        dtm[, timegroup := .GRP, .(year(idate), block)]
-
-        if (any(!(dtm[, unique(rangeday)] %% nDays == 0))) {
+        if (!(rangeday %% nDays == 0)) {
           warning(
             strwrap(
               prefix = " ",
@@ -250,15 +242,16 @@ group_times <- function(DT = NULL,
               ))
           )
         }
+
         dtm[, block := cut(
           data.table::yday(idate),
-          breaks = seq.int(minday[1], maxday[1] + nDays, by = nDays),
+          breaks = seq.int(minday, maxday + nDays, by = nDays),
           right = FALSE,
           labels = FALSE
-        ), by = year(idate)]
+        )]
 
         dtm[, timegroup := .GRP, .(year(idate), block)]
-        set(dtm, j = c('idate', 'itime', 'rangeday', 'minday', 'maxday'),
+        set(dtm, j = c('idate', 'itime'),
             value = NULL)
         DT[, (colnames(dtm)) := dtm]
         return(DT[])
