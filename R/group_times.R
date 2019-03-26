@@ -232,15 +232,7 @@ group_times <- function(DT = NULL,
         maxday <- dtm[, max(data.table::yday(idate))]
         rangeday <- dtm[, maxday - minday]
 
-        dtm[, block := cut(
-          data.table::yday(idate),
-          breaks = seq.int(minday[1], maxday[1] + nDays, by = nDays),
-          right = FALSE,
-          labels = FALSE
-        ), by = year(idate)]
-        dtm[, timegroup := .GRP, .(year(idate), block)]
-
-        if (any(!(dtm[, unique(rangeday)] %% nDays == 0))) {
+        if (!(rangeday %% nDays == 0)) {
           warning(
             strwrap(
               prefix = " ",
