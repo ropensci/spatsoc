@@ -89,9 +89,11 @@ edge_dist <- function(DT = NULL,
     }
   }
 
-  # compare distances
-  # with splitBy
-  # return edges
-
-
+  DT[, c('leftID', 'rightID') := {
+    distMatrix <-
+      as.matrix(stats::dist(.SD, method = 'euclidean'))
+    lt <- data.table(melt(distMatrix < threshold))
+    lt[Var1 != Var2 & (value), .(Var1, Var2)]
+  },
+  by = splitBy, .SDcols = coords]
 }
