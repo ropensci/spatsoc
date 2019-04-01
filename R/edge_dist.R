@@ -16,7 +16,7 @@ edge_dist <- function(DT = NULL,
                       timegroup = NULL,
                       splitBy = NULL) {
   # due to NSE notes in R CMD check
-  N <- withinGroup <- ..id <- ..coords <- group <- NULL
+  N <- withinGroup <- ..id <- ..coords <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -71,11 +71,6 @@ edge_dist <- function(DT = NULL,
         )
     }
     }
-
-  if ('group' %in% colnames(DT)) {
-    message('group column will be overwritten by this function')
-    set(DT, j = 'group', value = NULL)
-  }
 
   if (is.null(timegroup) && is.null(splitBy)) {
     splitBy <- NULL
