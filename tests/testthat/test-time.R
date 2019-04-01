@@ -290,3 +290,18 @@ test_that('group_times nearest hour with minutes threshold', {
     3)
 
 })
+
+
+test_that('timegroups are based off years but blocks are consistent across all years', {
+  copyDT <- copy(DT)
+  copyDT[, datetime := as.POSIXct(datetime)]
+  suppressWarnings(group_times(copyDT, 'datetime', '10 days'))
+  blocks <- copyDT[, as.list(range(yday(datetime))),
+                   .(block, year(datetime))]
+  setkey(blocks, V1, V2)
+  expect_true(
+    nrow(foverlaps(blocks, blocks)) == nrow(blocks)
+  )
+
+  # need multi year data for same jul days to test if n years by block > 1, but n years by timegroup == 1
+})
