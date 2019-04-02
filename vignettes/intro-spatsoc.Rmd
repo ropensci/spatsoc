@@ -18,15 +18,15 @@ knitr::opts_chunk$set(message = TRUE,
 
 The `spatsoc` package provides functionality for analyzing animal relocation data in time and space to identify potential interactions among individuals and build gambit-of-the-group data for constructing social networks. 
 
-The package contains grouping functions that are used for identifying spatially and temporally explicit groups from input data. In addition, we provide a function for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals.
+The package contains grouping and edge list generating functions that are used for identifying spatially and temporally explicit groups from input data. In addition, we provide social network analysis functions for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals and for generating group by individual matrices.
 
 The functions were developed for application across animal relocation data, for example, proximity based social network analyses and spatial and temporal clustering of points.
 
-## Grouping
+## Data preparation
 
 ```{r libs, eval = TRUE, include = FALSE}
 library(spatsoc); library(data.table)
-DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))[ID %in% c('H', 'I', 'J')]
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
 
@@ -36,27 +36,22 @@ The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[
 
 
 ```{r, echo = TRUE}
-## Load packages
+# Load packages
 library(spatsoc)
 library(data.table)
 
-## Read in spatsoc's example data
+# Read in spatsoc's example data
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
-## Subset to only individuals H, I, and J
-DT <- DT[ID %in% c('H', 'I', 'J')]
-
-## Cast character column 'datetime' as POSIXct
-DT[, datetime := as.POSIXct(datetime,
-                            tz = 'UTC')]
+# Cast character column 'datetime' as POSIXct
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
 
 ```{r, eval = TRUE}
-knitr::kable(DT[, .SD[1:2], ID][order(datetime)])
+knitr::kable(DT[, .SD[1:2], ID][order(ID)])
 ```
 
-
-### `group_times`
+## Temporal grouping
 The `group_times` function is used to group relocations temporally. It is flexible to a threshold provided in units of minutes, hours or days. Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. Alternatively, we may want to understand different scales of grouping, perhaps daily movement trajectories or seasonal home range overlap. 
 
 ```{r groupmins, echo = TRUE}
@@ -100,9 +95,8 @@ knitr::kable(
         1:nRows, .(ID, X, Y, datetime, block, timegroup)])
 ```
 
-
-### `group_pts`
-The `group_pts` function compares the relocations of all individuals in each timegroup and groups individuals based on a distance threshold provided by the user.
+## Spatial grouping
+The `group_pts` function compares the relocations of all individuals in each timegroup and groups individuals based on a distance threshold provided by the user. The `group_pts` function uses the "chain rule" where three or more individuals that are all within the defined threshold distance of at least one other individual are considered in the same group. For point based spatial grouping with a distance threshold that does not use the chain rule, see `edge_dist` below.
 
 ```{r grouppts, echo = TRUE}
 group_times(DT = DT, datetime = 'datetime', threshold = '15 minutes')
@@ -125,7 +119,6 @@ knitr::kable(
 ```
 
 
-### `group_lines`
 The `group_lines` function groups individuals whose trajectories intersect in a specified time interval. This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
 
 ```{r fakegrouplines, echo = TRUE}
@@ -151,7 +144,6 @@ knitr::kable(
 ```
 
 
-### `group_polys`
 The `group_polys` function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`. Alternatively, a `SpatialPolygonsDataFrame` can be input to the `spPolys` argument.
 
 ```{r fakegrouppolys, echo = TRUE}
@@ -178,6 +170,23 @@ knitr::kable(
 )
 ```
 
+## Edge list generation
+The `edge_dist` function calculates the geographic distance between between individuals within each timegroup and returns all paired relocations within the spatial threshold (Figure 5). `edge_dist` uses a distance matrix like group_pts, but, in contrast, does not use the chain rule to group relocations.
+
+```{r edgedist, echo = TRUE}
+group_times(DT = DT, datetime = 'datetime', threshold = '15 minutes')
+edge_dist(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
+```
+
+```{r fakeedgedist, eval = TRUE}
+DT <- group_times(DT = DT, datetime = 'datetime', 
+                     threshold = '15 minutes')
+edges <- edge_dist(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
+
+knitr::kable(
+  edges
+)
+```
 
 ## Notes
 Package dependencies for `spatsoc` are `sp`, `rgeos`, `igraph`, `adehabitatHR` and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `data.table::setDT(df)` to convert it by reference. 
