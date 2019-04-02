@@ -33,7 +33,7 @@ edge_dist <- function(DT = NULL,
                       timegroup = NULL,
                       splitBy = NULL) {
   # due to NSE notes in R CMD check
-  Var1 <- Var2 <- value <- . <- NULL
+  N <- Var1 <- Var2 <- value <- . <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -107,11 +107,13 @@ edge_dist <- function(DT = NULL,
   }
 
   DT[, {
+
     distMatrix <-
       as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
-    colnames(distMatrix) <- rownames(distMatrix) <- .SD[[1]]
-    lt <- data.table(melt(distMatrix < threshold))
-    lt[Var1 != Var2 & (value), .(leftID = Var1, rightID = Var2)]
+    diag(distMatrix) <- NA
+    w <- which(distMatrix < threshold, arr.ind = TRUE)
+    list(.SD[[1]][w[, 1]],
+         .SD[[1]][w[, 2]])
   },
   by = splitBy, .SDcols = c(id, coords)]
 }
