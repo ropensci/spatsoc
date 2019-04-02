@@ -189,3 +189,20 @@ test_that('duplicate IDs in a timegroup detected', {
   'found duplicate id in a timegroup', fixed = FALSE)
 })
 
+
+test_that('returned IDs make sense', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  eDT <- edge_dist(
+    copyDT,
+    threshold = 50,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup'
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$leftID %in% IDs))
+  expect_true(all(eDT$rightID %in% IDs))
+  expect_true(eDT[leftID == rightID, .N] == 0)
+})
