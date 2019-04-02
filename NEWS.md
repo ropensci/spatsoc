@@ -1,14 +1,20 @@
-# v 0.1.7 
+# v 0.1.8
+* added edge list generating function `edge_dist` ([PR 11](https://github.com/ropensci/spatsoc/pull/11))
+
+
+# v 0.1.7 (2019-03-26)
+* fix inconsistent blocks across years ([PR 10](https://github.com/ropensci/spatsoc/pull/10))
+* update FAQ: remove old randomizations notes, clarify group_times block
 
 
 # v 0.1.6 (2019-01-10)
-* fix bug 'group_times misses nearest hour with mins threshold' (#5)
+* fix bug 'group_times misses nearest hour with mins threshold' ([#5](https://github.com/ropensci/spatsoc/issues/5) and [PR 6](https://github.com/ropensci/spatsoc/pull/6))
 
-# v 0.1.5
+# v 0.1.5 (2018-12-04)
 * update issue labels and contributing
 * change over issue board location from GitLab to rOpenSci repository on GitHub
 * added preprint CITATION
-* added "https://" to `pkgdown` URL (#1)
+* added "https://" to `pkgdown` URL ([PR 1](https://github.com/ropensci/spatsoc/pull/1))
 
 # v 0.1.4 (2018-10-26)
 * fin [rOpenSci onboarding process](https://github.com/ropensci/onboarding/issues/237)
