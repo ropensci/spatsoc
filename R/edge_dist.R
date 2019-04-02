@@ -89,11 +89,12 @@ edge_dist <- function(DT = NULL,
     }
   }
 
-  DT[, c('leftID', 'rightID') := {
+  DT[, {
     distMatrix <-
-      as.matrix(stats::dist(.SD, method = 'euclidean'))
+      as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
+    colnames(distMatrix) <- rownames(distMatrix) <- .SD[[1]]
     lt <- data.table(melt(distMatrix < threshold))
-    lt[Var1 != Var2 & (value), .(Var1, Var2)]
+    lt[Var1 != Var2 & (value), .(leftID = Var1, rightID = Var2)]
   },
-  by = splitBy, .SDcols = coords]
+  by = splitBy, .SDcols = c(id, coords)]
 }
