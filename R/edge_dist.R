@@ -40,8 +40,8 @@
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
 #' # Edge list generation
-#' edge_dist(DT, threshold = 100, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
-#'
+#' edge_dist(DT, threshold = 100, id = 'ID',
+#'           coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
 edge_dist <- function(DT = NULL,
                       threshold = NULL,
                       id = NULL,
