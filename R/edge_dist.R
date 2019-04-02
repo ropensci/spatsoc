@@ -33,7 +33,7 @@ edge_dist <- function(DT = NULL,
                       timegroup = NULL,
                       splitBy = NULL) {
   # due to NSE notes in R CMD check
-  N <- withinGroup <- ..id <- ..coords <- NULL
+  Var1 <- Var2 <- value <- . <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
