@@ -5,7 +5,7 @@
 \title{Distance based edge lists}
 \usage{
 edge_dist(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
-  timegroup = NULL, splitBy = NULL)
+  timegroup = NULL, splitBy = NULL, fillNA = TRUE)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -19,6 +19,8 @@ edge_dist(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
 \item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
+
+\item{fillNA}{boolean indicating if NAs should be returned for individuals that were not within the threshold distance of any other. If TRUE, NAs are returned. If FALSE, only edges between individuals within the threshold distance are returned.}
 }
 \description{
 \code{edge_dist} returns edge lists defined by a spatial distance within the user defined threshold. The function accepts a \code{data.table} with relocation data, individual identifiers and a threshold argument. The threshold argument is used to specify the criteria for distance between points which defines a group. Relocation data should be in two columns representing the X and Y coordinates.

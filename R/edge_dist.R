@@ -5,6 +5,7 @@
 #'
 #'
 #' @inheritParams group_pts
+#' @param fillNA boolean indicating if NAs should be returned for individuals that were not within the threshold distance of any other. If TRUE, NAs are returned. If FALSE, only edges between individuals within the threshold distance are returned.
 #'
 #' @export
 #'
@@ -31,7 +32,8 @@ edge_dist <- function(DT = NULL,
                       id = NULL,
                       coords = NULL,
                       timegroup = NULL,
-                      splitBy = NULL) {
+                      splitBy = NULL,
+                      fillNA = TRUE) {
   # due to NSE notes in R CMD check
   N <- Var1 <- Var2 <- value <- . <- NULL
 
@@ -106,14 +108,26 @@ edge_dist <- function(DT = NULL,
     }
   }
 
-  DT[, {
+  edges <- DT[, {
 
     distMatrix <-
       as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
     diag(distMatrix) <- NA
     w <- which(distMatrix < threshold, arr.ind = TRUE)
-    list(.SD[[1]][w[, 1]],
-         .SD[[1]][w[, 2]])
+    list(leftID = .SD[[1]][w[, 1]],
+         rightID = .SD[[1]][w[, 2]])
   },
   by = splitBy, .SDcols = c(id, coords)]
+
+  if (fillNA) {
+    merge(edges,
+          unique(DT[, .SD, .SDcols = c(splitBy, id)]),
+          by.x = c(splitBy, 'leftID'),
+          by.y = c(splitBy, id),
+          all = TRUE)
+  } else {
+    return(edges)
+  }
+
 }
+
