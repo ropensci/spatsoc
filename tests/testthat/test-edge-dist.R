@@ -198,11 +198,27 @@ test_that('returned IDs make sense', {
     threshold = 50,
     id = 'ID',
     coords = c('X', 'Y'),
-    timegroup = 'timegroup'
+    timegroup = 'timegroup',
+    fillNA = TRUE
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$leftID %in% IDs))
+  expect_true(all(na.omit(eDT$rightID) %in% IDs))
+  expect_true(eDT[leftID == rightID, .N] == 0)
+
+  eDT <- edge_dist(
+    copyDT,
+    threshold = 50,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    fillNA = FALSE
   )
 
   IDs <- copyDT[, unique(ID)]
   expect_true(all(eDT$leftID %in% IDs))
   expect_true(all(eDT$rightID %in% IDs))
   expect_true(eDT[leftID == rightID, .N] == 0)
+
 })
