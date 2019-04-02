@@ -37,8 +37,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 
 # Edge list generation
-group_pts(DT, threshold = 50, id = 'ID',
-          coords = c('X', 'Y'), timegroup = 'timegroup')
+edge_dist(DT, threshold = 100, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 
 }
 \concept{Edge-list generation}

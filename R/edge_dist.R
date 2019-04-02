@@ -1,5 +1,6 @@
 #' Distance based edge lists
 #'
+#'
 #' \code{edge_dist} returns edge lists defined by a spatial distance within the user defined threshold. The function accepts a \code{data.table} with relocation data, individual identifiers and a threshold argument. The threshold argument is used to specify the criteria for distance between points which defines a group. Relocation data should be in two columns representing the X and Y coordinates.
 #'
 #'
@@ -23,8 +24,7 @@
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
 #' # Edge list generation
-#' group_pts(DT, threshold = 50, id = 'ID',
-#'           coords = c('X', 'Y'), timegroup = 'timegroup')
+#' edge_dist(DT, threshold = 100, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
 edge_dist <- function(DT = NULL,
                       threshold = NULL,
