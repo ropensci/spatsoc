@@ -188,7 +188,7 @@ DT <- group_times(DT = DT, datetime = 'datetime',
 edges <- edge_dist(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
 
 knitr::kable(
-  edges[1:6]
+  edges[between(timegroup, 158, 160)]
 )
 ```
 
