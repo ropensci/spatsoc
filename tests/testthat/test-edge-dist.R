@@ -203,9 +203,9 @@ test_that('returned IDs make sense', {
   )
 
   IDs <- copyDT[, unique(ID)]
-  expect_true(all(eDT$leftID %in% IDs))
-  expect_true(all(na.omit(eDT$rightID) %in% IDs))
-  expect_true(eDT[leftID == rightID, .N] == 0)
+  expect_true(all(eDT$ID1 %in% IDs))
+  expect_true(all(na.omit(eDT$ID2) %in% IDs))
+  expect_true(eDT[ID1 == ID2, .N] == 0)
 
   eDT <- edge_dist(
     copyDT,
@@ -217,8 +217,8 @@ test_that('returned IDs make sense', {
   )
 
   IDs <- copyDT[, unique(ID)]
-  expect_true(all(eDT$leftID %in% IDs))
-  expect_true(all(eDT$rightID %in% IDs))
-  expect_true(eDT[leftID == rightID, .N] == 0)
+  expect_true(all(eDT$ID1 %in% IDs))
+  expect_true(all(eDT$ID2 %in% IDs))
+  expect_true(eDT[ID1 == ID2, .N] == 0)
 
 })
