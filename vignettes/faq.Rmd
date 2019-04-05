@@ -255,6 +255,18 @@ group_polys(
 
 This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
 
+## edge_nn
+`edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL, splitBy = NULL, threshold = NULL)`
+
+* `DT`: input `data.table`
+* `id`: column name of IDs in `DT`
+* `coords`: column names of x and y coordinates in `DT`
+* `timegroup`: (optional) column name of time group
+* `splitBy`: (optional) column names of extra variables to group on
+* `threshold`: (optional) spatial distance threshold to set maximum distance between an individual and their neighbour.
+
+This function can be used to generate edge lists defined either by nearest neighbour or nearest neighbour with a maximum distance. NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and it's nearest neighbour is greater than the threshold. 
+
 
 ## randomizations
 `randomizations(DT, type, id, datetime, splitBy, iterations)`
