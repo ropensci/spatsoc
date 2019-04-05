@@ -32,6 +32,7 @@ reference:
     desc: ~
     contents:
     - '`edge_dist`'
+    - '`edge_nn`'
   - title: Social network tools
     desc: ~
     contents:
