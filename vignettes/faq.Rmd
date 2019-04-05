@@ -19,14 +19,14 @@ knitr::opts_chunk$set(message = FALSE,
                       echo = TRUE)
 ```
 
-spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks. In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
+spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to build proximity-based social networks using gambit-of-the-group format and edge-lists. . In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
 
 # Usage
 `spatsoc` leverages `data.table` to modify by reference and iteratively work on subsets of the input data. The first input for all functions in `spatsoc` is `DT`, an input `data.table`. If your data is a `data.frame`, you can convert it by reference using `setDT(DF)`. 
 
 ## Spatial and temporal grouping
 
-`spatsoc` is designed to work in two steps: temporal followed by spatial grouping. Considering your specific study species and system, determine a relevant temporal and spatial grouping threshold. This may be 5 minutes and 50 meters or 2 days and 100 meters or any other thresholds - that decision is left to you. In some cases, the spatial grouping function selected is only relevant with certain temporal grouping thresholds. For example, we wouldn't expect a threshold of 5 minutes with `group_polys`. 
+`spatsoc` is designed to work in two steps: temporal followed by either spatial grouping or edge list generating. Considering your specific study species and system, determine a relevant temporal and spatial grouping threshold. This may be 5 minutes and 50 meters or 2 days and 100 meters or any other thresholds - the functions provided by `spatsoc` are flexible to user input. In some cases, the spatial grouping function selected is only relevant with certain temporal grouping thresholds. For example, we wouldn't expect a threshold of 5 minutes with `group_polys`. 
 
 ```{r, eval = TRUE, results = 'hide'}
 # Load packages
@@ -58,7 +58,7 @@ knitr::kable(DT[order(group, timegroup)][1:5, .(ID, X, Y, datetime, timegroup, g
 
 
 ## Social network analysis
-See the vignette about [using spatsoc in social network analysis!](http://spatsoc.gitlab.io/articles/using-in-sna.html)
+See the vignette about [using spatsoc in social network analysis](http://spatsoc.gitlab.io/articles/using-in-sna.html).
 
 
 # Installation
@@ -80,6 +80,7 @@ Install `GEOS`:
 * `igraph`
 * `sp`
 * `adehabitatHR`
+* `rgeos`
 
 
 
