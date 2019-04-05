@@ -175,7 +175,7 @@ knitr::kable(
 ```
 
 ## Edge list generation
-The `edge_dist` function calculates the geographic distance between between individuals within each timegroup and returns all paired relocations within the spatial threshold (Figure 5). `edge_dist` uses a distance matrix like group_pts, but, in contrast, does not use the chain rule to group relocations.
+The `edge_dist` function calculates the geographic distance between between individuals within each timegroup and returns all paired relocations within the spatial threshold. `edge_dist` uses a distance matrix like group_pts, but, in contrast, does not use the chain rule to group relocations.
 
 ```{r edgedist, echo = TRUE}
 group_times(DT = DT, datetime = 'datetime', threshold = '15 minutes')
@@ -188,7 +188,24 @@ DT <- group_times(DT = DT, datetime = 'datetime',
 edges <- edge_dist(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
 
 knitr::kable(
-  edges
+  edges[1:6]
+)
+```
+
+The `edge_nn` function calculates the nearest neighbour to each individual within each time group. If the optional distance threshold is provided, it is used to limit the maximum distance between neighbours. `edge_nn` returns an edge list of each individual and their nearest neighbour.
+
+```{r edgenn, echo = TRUE}
+group_times(DT = DT, datetime = 'datetime', threshold = '15 minutes')
+edge_nn(DT, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+```
+
+```{r fakeedgenn, eval = TRUE}
+DT <- group_times(DT = DT, datetime = 'datetime', 
+                     threshold = '15 minutes')
+edges <- edge_nn(DT, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+
+knitr::kable(
+  edges[1:6]
 )
 ```
 
