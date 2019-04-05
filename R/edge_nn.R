@@ -14,13 +14,14 @@
 #'
 #' The \code{splitBy} argument offers further control over grouping. If within your \code{DT}, you have multiple populations, subgroups or other distinct parts, you can provide the name of the column which identifies them to \code{splitBy}. \code{edge_nn} will only consider rows within each \code{splitBy} subgroup.
 #'
+#' @param threshold (optional) spatial distance threshold to set maximum distance between an individual and their neighbour.
 #' @inheritParams group_pts
 #'
 #' @return \code{edge_nn} returns a \code{data.table}  with three columns: timegroup, ID and NN.
 #'
 #' The ID and NN columns represent the edges defined by the nearest neighbours (and temporal thresholds with \code{group_times}).
 #'
-#' If an individual was alone in a timegroup or splitBy, they are assigned NA for nearest neighbour.
+#' If an individual was alone in a timegroup or splitBy, or did not have any neighbours within the , they are assigned NA for nearest neighbour.
 #'
 #' @export
 #'
