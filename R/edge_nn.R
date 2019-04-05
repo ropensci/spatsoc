@@ -16,11 +16,11 @@
 #'
 #' @inheritParams group_pts
 #'
-#' @return \code{edge_nn} returns a \code{data.table}  with three columns: timegroup, leftID and rightID.
+#' @return \code{edge_nn} returns a \code{data.table}  with three columns: timegroup, ID and NN.
 #'
-#' The leftID and rightID columns represent the edges defined by the spatial (and temporal with \code{group_times}) thresholds.
+#' The ID and NN columns represent the edges defined by the nearest neighbours (and temporal thresholds with \code{group_times}).
 #'
-#' If an individual
+#' If an individual was alone in a timegroup or splitBy, they are assigned NA for nearest neighbour.
 #'
 #' @export
 #'
@@ -43,12 +43,11 @@
 #' edge_nn(DT, threshold = 100, id = 'ID',
 #'           coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
 edge_nn <- function(DT = NULL,
-                      threshold = NULL,
-                      id = NULL,
-                      coords = NULL,
-                      timegroup = NULL,
-                      splitBy = NULL,
-                      fillNA = TRUE) {
+                    threshold = NULL,
+                    id = NULL,
+                    coords = NULL,
+                    timegroup = NULL,
+                    splitBy = NULL) {
   # due to NSE notes in R CMD check
   N <- Var1 <- Var2 <- value <- . <- NULL
 
@@ -123,26 +122,26 @@ edge_nn <- function(DT = NULL,
     }
     }
 
-  edges <- DT[, {
+  DT[, {
 
     distMatrix <-
       as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
     diag(distMatrix) <- NA
-    w <- which(distMatrix < threshold, arr.ind = TRUE)
-    list(leftID = .SD[[1]][w[, 1]],
-         rightID = .SD[[1]][w[, 2]])
+    if (is.null(threshold)) {
+      wm <- apply(distMatrix, MARGIN = 2, which.min)
+      l <- .SD[[1]][type.convert(names(wm))]
+      r <- .SD[[1]][wm]
+    } else {
+      gt <- which(distMatrix > threshold)
+      distMatrix[gt] <- NA
+      wm <- apply(distMatrix, MARGIN = 2, which.min)
+      l <- .SD[[1]][type.convert(names(wm))]
+      r <- .SD[[1]][wm]
+    }
+    list(ID = l,
+         NN = r)
   },
   by = splitBy, .SDcols = c(id, coords)]
 
-  if (fillNA) {
-    merge(edges,
-          unique(DT[, .SD, .SDcols = c(splitBy, id)]),
-          by.x = c(splitBy, 'leftID'),
-          by.y = c(splitBy, id),
-          all = TRUE)
-  } else {
-    return(edges)
-  }
-
-    }
+}
 
