@@ -138,7 +138,7 @@ edge_nn <- function(DT = NULL,
       distMatrix[distMatrix > threshold] <- NA
       wm <- apply(distMatrix, MARGIN = 2,
                   function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
-      l <- .SD[[1]][type.convert(names(wm))]
+      l <- .SD[[1]][as.numeric(names(wm))]
       r <- .SD[[1]][wm]
     }
     list(ID = l,
