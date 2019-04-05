@@ -3,6 +3,7 @@
 export(build_lines)
 export(build_polys)
 export(edge_dist)
+export(edge_nn)
 export(get_gbi)
 export(group_lines)
 export(group_polys)
