@@ -132,9 +132,9 @@ edge_nn <- function(DT = NULL,
       l <- .SD[[1]][type.convert(names(wm))]
       r <- .SD[[1]][wm]
     } else {
-      gt <- which(distMatrix > threshold)
-      distMatrix[gt] <- NA
-      wm <- apply(distMatrix, MARGIN = 2, which.min)
+      distMatrix[distMatrix > threshold] <- NA
+      wm <- apply(distMatrix, MARGIN = 2,
+                  function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
       l <- .SD[[1]][type.convert(names(wm))]
       r <- .SD[[1]][wm]
     }
