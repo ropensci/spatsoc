@@ -43,11 +43,11 @@
 #' edge_nn(DT, threshold = 100, id = 'ID',
 #'           coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
 edge_nn <- function(DT = NULL,
-                    threshold = NULL,
                     id = NULL,
                     coords = NULL,
                     timegroup = NULL,
-                    splitBy = NULL) {
+                    splitBy = NULL,
+                    threshold = NULL) {
   # due to NSE notes in R CMD check
   N <- Var1 <- Var2 <- value <- . <- NULL
 

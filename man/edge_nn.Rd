@@ -4,13 +4,11 @@
 \alias{edge_nn}
 \title{Nearest neighbour based edge lists}
 \usage{
-edge_nn(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
-  timegroup = NULL, splitBy = NULL)
+edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL,
+  splitBy = NULL, threshold = NULL)
 }
 \arguments{
 \item{DT}{input data.table}
-
-\item{threshold}{distance for grouping points, in the units of the coordinates}
 
 \item{id}{Character string of ID column name}
 
@@ -19,13 +17,15 @@ edge_nn(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
 \item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
+
+\item{threshold}{(optional) spatial distance threshold to set maximum distance between an individual and their neighbour.}
 }
 \value{
 \code{edge_nn} returns a \code{data.table}  with three columns: timegroup, ID and NN.
 
 The ID and NN columns represent the edges defined by the nearest neighbours (and temporal thresholds with \code{group_times}).
 
-If an individual was alone in a timegroup or splitBy, they are assigned NA for nearest neighbour.
+If an individual was alone in a timegroup or splitBy, or did not have any neighbours within the , they are assigned NA for nearest neighbour.
 }
 \description{
 \code{edge_nn} returns edge lists defined by the nearest neighbour. The function accepts a \code{data.table} with relocation data, individual identifiers and a threshold argument. The threshold argument is used to specify the criteria for distance between points which defines a group. Relocation data should be in two columns representing the X and Y coordinates.
@@ -55,8 +55,12 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 
 # Edge list generation
-edge_nn(DT, threshold = 100, id = 'ID',
-          coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
+edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
+        timegroup = 'timegroup')
+
+# Edge list generation using maximum distance threshold
+edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
+        timegroup = 'timegroup', threshold = 100)
 }
 \seealso{
 Other Edge-list generation: \code{\link{edge_dist}}
