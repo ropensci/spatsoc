@@ -21,7 +21,7 @@
 #'
 #' The ID and NN columns represent the edges defined by the nearest neighbours (and temporal thresholds with \code{group_times}).
 #'
-#' If an individual was alone in a timegroup or splitBy, or did not have any neighbours within the , they are assigned NA for nearest neighbour.
+#' If an individual was alone in a timegroup or splitBy, or did not have any neighbours within the threshold distance, they are assigned NA for nearest neighbour.
 #'
 #' @export
 #'
