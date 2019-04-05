@@ -53,8 +53,8 @@ edge_nn <- function(DT = NULL,
                     timegroup = NULL,
                     splitBy = NULL,
                     threshold = NULL) {
-  # due to NSE notes in R CMD check
-  N <- Var1 <- Var2 <- value <- . <- NULL
+  # NSE
+  N <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -132,7 +132,7 @@ edge_nn <- function(DT = NULL,
     diag(distMatrix) <- NA
     if (is.null(threshold)) {
       wm <- apply(distMatrix, MARGIN = 2, which.min)
-      l <- .SD[[1]][type.convert(names(wm))]
+      l <- .SD[[1]][as.numeric(names(wm))]
       r <- .SD[[1]][wm]
     } else {
       distMatrix[distMatrix > threshold] <- NA
