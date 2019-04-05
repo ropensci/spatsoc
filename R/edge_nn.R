@@ -60,17 +60,15 @@ edge_nn <- function(DT = NULL,
     stop('input DT required')
   }
 
-  if (is.null(threshold)) {
-    stop('threshold required')
+  if (!is.null(threshold)) {
+    if (!is.numeric(threshold)) {
+      stop('threshold must be numeric')
+    }
+    if (threshold <= 0) {
+      stop('threshold must be greater than 0')
+    }
   }
 
-  if (!is.numeric(threshold)) {
-    stop('threshold must be numeric')
-  }
-
-  if (threshold <= 0) {
-    stop('threshold must be greater than 0')
-  }
 
   if (is.null(id)) {
     stop('ID field required')
