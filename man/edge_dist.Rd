@@ -23,9 +23,9 @@ edge_dist(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
 \item{fillNA}{boolean indicating if NAs should be returned for individuals that were not within the threshold distance of any other. If TRUE, NAs are returned. If FALSE, only edges between individuals within the threshold distance are returned.}
 }
 \value{
-\code{edge_dist} returns a \code{data.table}  with three columns: timegroup, leftID and rightID.
+\code{edge_dist} returns a \code{data.table}  with three columns: timegroup, ID1 and ID2.
 
-The leftID and rightID columns represent the edges defined by the spatial (and temporal with \code{group_times}) thresholds.
+The ID1 and ID2 columns represent the edges defined by the spatial (and temporal with \code{group_times}) thresholds.
 }
 \description{
 \code{edge_dist} returns edge lists defined by a spatial distance within the user defined threshold. The function accepts a \code{data.table} with relocation data, individual identifiers and a threshold argument. The threshold argument is used to specify the criteria for distance between points which defines a group. Relocation data should be in two columns representing the X and Y coordinates.

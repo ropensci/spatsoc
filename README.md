@@ -3,7 +3,7 @@
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/onboarding/issues/237)
-[![](https://img.shields.io/badge/devel%20version-0.1.7-blue.svg)](https://github.com/robitalec/spatsoc)
+[![](https://img.shields.io/badge/devel%20version-0.1.8-blue.svg)](https://github.com/robitalec/spatsoc)
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
 [![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
 [![pipeline
@@ -13,10 +13,11 @@ status](https://gitlab.com/robit.a/spatsoc/badges/master/pipeline.svg)](https://
 
 spatsoc is an R package for detecting spatial and temporal groups in GPS
 relocations. It can be used to convert GPS relocations to
-gambit-of-the-group format to build proximity-based social networks. In
-addition, the `randomizations` function provides data-stream
-randomization methods suitable for GPS data and the `get_gbi` function
-generates group by individual matrices useful for building networks with
+gambit-of-the-group format to build proximity-based social networks with
+grouping and edge-liste generating functions. In addition, the
+`randomizations` function provides data-stream randomization methods
+suitable for GPS data and the `get_gbi` function generates group by
+individual matrices useful for building networks with
 `asnipe::get_network`.
 
 See below for installation and basic usage.

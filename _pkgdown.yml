@@ -28,6 +28,10 @@ reference:
     - '`group_lines`'
     - '`group_polys`'
     - '`group_pts`'
+  - title: Edge list generation
+    desc: ~
+    contents:
+    - '`edge_dist`'
   - title: Social network tools
     desc: ~
     contents:

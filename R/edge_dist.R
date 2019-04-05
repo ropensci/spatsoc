@@ -18,9 +18,9 @@
 #' @param fillNA boolean indicating if NAs should be returned for individuals that were not within the threshold distance of any other. If TRUE, NAs are returned. If FALSE, only edges between individuals within the threshold distance are returned.
 #'
 #'
-#' @return \code{edge_dist} returns a \code{data.table}  with three columns: timegroup, leftID and rightID.
+#' @return \code{edge_dist} returns a \code{data.table}  with three columns: timegroup, ID1 and ID2.
 #'
-#' The leftID and rightID columns represent the edges defined by the spatial (and temporal with \code{group_times}) thresholds.
+#' The ID1 and ID2 columns represent the edges defined by the spatial (and temporal with \code{group_times}) thresholds.
 #'
 #' @export
 #'
@@ -129,15 +129,15 @@ edge_dist <- function(DT = NULL,
       as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
     diag(distMatrix) <- NA
     w <- which(distMatrix < threshold, arr.ind = TRUE)
-    list(leftID = .SD[[1]][w[, 1]],
-         rightID = .SD[[1]][w[, 2]])
+    list(ID1 = .SD[[1]][w[, 1]],
+         ID2 = .SD[[1]][w[, 2]])
   },
   by = splitBy, .SDcols = c(id, coords)]
 
   if (fillNA) {
     merge(edges,
           unique(DT[, .SD, .SDcols = c(splitBy, id)]),
-          by.x = c(splitBy, 'leftID'),
+          by.x = c(splitBy, 'ID1'),
           by.y = c(splitBy, id),
           all = TRUE)
   } else {
