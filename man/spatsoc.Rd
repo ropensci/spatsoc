@@ -22,6 +22,13 @@ three spatial grouping functions:
 \item \code{\link{group_polys}}
 }
 
+two edge list generating functions:
+
+\itemize{
+\item \code{\link{edge_dist}}
+\item \code{\link{edge_nn}}
+}
+
 and two social network functions:
 \itemize{
 \item \code{\link{randomizations}}
