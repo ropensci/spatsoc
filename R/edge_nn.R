@@ -132,17 +132,13 @@ edge_nn <- function(DT = NULL,
     diag(distMatrix) <- NA
     if (is.null(threshold)) {
       wm <- apply(distMatrix, MARGIN = 2, which.min)
-      l <- .SD[[1]][as.numeric(names(wm))]
-      r <- .SD[[1]][wm]
     } else {
       distMatrix[distMatrix > threshold] <- NA
       wm <- apply(distMatrix, MARGIN = 2,
                   function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
-      l <- .SD[[1]][as.numeric(names(wm))]
-      r <- .SD[[1]][wm]
     }
-    list(ID = l,
-         NN = r)
+    list(ID = .SD[[1]][as.numeric(names(wm))]
+         NN = .SD[[1]][wm])
   },
   by = splitBy, .SDcols = c(id, coords)]
 
