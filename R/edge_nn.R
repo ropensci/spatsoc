@@ -40,8 +40,12 @@
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
 #' # Edge list generation
-#' edge_nn(DT, threshold = 100, id = 'ID',
-#'           coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
+#' edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
+#'         timegroup = 'timegroup')
+#'
+#' # Edge list generation using maximum distance threshold
+#' edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
+#'         timegroup = 'timegroup', threshold = 100)
 edge_nn <- function(DT = NULL,
                     id = NULL,
                     coords = NULL,
