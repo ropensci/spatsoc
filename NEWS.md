@@ -1,4 +1,6 @@
 # v 0.1.8
+* update [FAQ](http://spatsoc.robitalec.ca/articles/faq.html) and [Introduction to spatsoc](http://spatsoc.robitalec.ca/articles/intro-spatsoc.html) vignettes adding entries for edge list generating functions. 
+* added edge list generating function `edge_nn` ([PR 11](https://github.com/ropensci/spatsoc/pull/12))
 * added edge list generating function `edge_dist` ([PR 11](https://github.com/ropensci/spatsoc/pull/11))
 
 
@@ -32,10 +34,10 @@
 # v 0.1.1 (2018-09-17)
 
 * improvements to package, function documentation
-* [FAQ](https://spatsoc.gitlab.io/articles/faq.html) vignette added
+* [FAQ](http://spatsoc.robitalec.ca/articles/faq.html) vignette added
 * fixed `build_lines` ordering bug to ensure rows are ordered by date time when building lines
 * added CODE_OF_CONDUCT.md and CONTRIBUTING.md
-* [Using spatsoc in social network analysis](https://spatsoc.gitlab.io/articles/using-in-sna.html) vignette added
+* [Using spatsoc in social network analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html) vignette added
 
 # v 0.1.0 (2018-07-20)
 
