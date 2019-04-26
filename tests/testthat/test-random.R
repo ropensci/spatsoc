@@ -302,3 +302,64 @@ test_that('randomization returns expected columns', {
 })
 
 
+
+
+
+test_that('randomization is silent when an individual only has one row', {
+  ## Fixed here: 6092ad8d055ff269d39dd481a80f27069c790630
+
+  # ** Fake an individual with 1 relocation**
+  copyDT <- copy(DT)[1, ID := 'Z']
+
+  # Temporal grouping
+  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
+
+  # Spatial grouping with timegroup
+  group_pts(
+    copyDT,
+    threshold = 5,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup'
+  )
+
+  expect_silent(
+    randomizations(
+      copyDT,
+      type = 'step',
+      id = 'ID',
+      group = 'group',
+      datetime = 'timegroup',
+      splitBy = 'yr',
+      iterations = 2
+    )
+  )
+
+  expect_silent(
+    randomizations(
+      copyDT,
+      type = 'daily',
+      id = 'ID',
+      group = 'group',
+      datetime = 'datetime',
+      splitBy = 'yr',
+      iterations = 2
+    )
+  )
+
+  expect_silent(
+    randomizations(
+      copyDT,
+      type = 'trajectory',
+      id = 'ID',
+      group = NULL,
+      coords = c('X', 'Y'),
+      datetime = 'datetime',
+      splitBy = 'yr',
+      iterations = 2
+    )
+  )
+
+})
+
+
