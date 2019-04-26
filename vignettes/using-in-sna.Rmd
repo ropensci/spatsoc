@@ -295,7 +295,8 @@ gbiLs <- mapply(FUN = function(i, y) {
           'group', 'randomID')
   },
   i = iterYearLs$iter,
-  y = iterYearLs$yr
+  y = iterYearLs$yr,
+  SIMPLIFY = FALSE
 )
 
 ## Generate a list of random networks
@@ -330,7 +331,8 @@ gbiLs <- mapply(FUN = function(i, y, p) {
   },
   i = iterYearLs$iter,
   y = iterYearLs$yr,
-  p = iterYearLs$population
+  p = iterYearLs$population,
+  SIMPLIFY = FALSE
 )
 
 ## Generate a list of random networks
@@ -370,7 +372,8 @@ gbiLs <- mapply(FUN = function(i, y) {
           'group', 'ID')
   },
   i = iterYearLs$iter,
-  y = iterYearLs$yr
+  y = iterYearLs$yr,
+  SIMPLIFY = FALSE
 )
 
 ## Generate a list of random networks
@@ -452,7 +455,8 @@ gbiLs <- mapply(FUN = function(i, y) {
           'group', 'randomID')
   },
   i = iterYearLs$iter,
-  y = iterYearLs$yr
+  y = iterYearLs$yr,
+  SIMPLIFY = FALSE
 )
 
 ## Generate a list of random networks
