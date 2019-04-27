@@ -1,0 +1,19 @@
+---
+title: "Using spatsoc in social network analysis - edge list generating functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using spatsoc in social network analysis - edge list generating functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spatsoc)
+```
