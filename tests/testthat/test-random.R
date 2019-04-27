@@ -400,12 +400,11 @@ test_that('n individuals consistent across years', {
     datetime = 'datetime',
     iterations = 20
   )
-
-  uID <- randDaily[, .(nID = .N), by = .(randomID, yr, iteration)]
+  uJul <- randDaily[, .(nDay = uniqueN(jul)), by = .(randomID, yr, iteration)]
 
   expect_equal(
-    uID[, sd(nID), by = .(randomID, yr)]$V1,
-    rep(0, randDaily[, uniqueN(randomID)])
+    uJul[, sd(nDay), by = .(randomID, yr)]$V1,
+    rep(0, nrow(randDaily[, .N, .(randomID, yr)]))
   )
 
 })
