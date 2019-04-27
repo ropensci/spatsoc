@@ -212,7 +212,7 @@ randomizations <- function(DT = NULL,
   repDT[, rowID := .GRP, by = selCols]
 
   if (any(repDT[, .N , by = rowID]$N != iterations + 1)) {
-    warning('found none unique rows of id, datetime (and splitBy)')
+    warning('found non-unique rows of id, datetime (and splitBy)')
   }
 
   repDT[, iteration := seq(0, .N - 1, 1), by = rowID]

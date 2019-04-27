@@ -225,7 +225,7 @@ test_that('non uniques are found', {
                                 group = 'group',
                                 datetime = 'datetime',
                                 iterations = 2),
-                 'found none unique rows of id, datetime',
+                 'found non-unique rows of id, datetime',
                  fixed = FALSE)
 })
 
