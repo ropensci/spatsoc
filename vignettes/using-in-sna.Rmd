@@ -1,8 +1,8 @@
 ---
-title: "Using spatsoc in social network analysis"
+title: "Using spatsoc in social network analysis - grouping functions"
 author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
 date: "`r Sys.Date()`"
-output: 
+output:
   rmarkdown::html_vignette:
     number_sections: false
     toc: false
