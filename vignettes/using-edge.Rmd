@@ -56,3 +56,24 @@ DT[, yr := year(datetime)]
 
 
 Next, we will group relocations temporally with `group_times` and generate edges lists with one of `edge_dist`, `edge_dist`. Note: these are mutually exclusive, only select one spatial grouping function at a time. 
+
+## 2. a) `edge_dist` 
+
+Distance based edge lists where relocations in each timegroup are considered edges if they are within the spatial distance defined by the user with the `threshold` argument. Depending on species and study system, relevant temporal and spatial distance thresholds are used. In this case, relocations within 5 minutes and 50 meters are considered edges. 
+
+This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
+
+```{r}
+## Temporal groups
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+
+# Edge list generation
+edges <- edge_dist(
+  DT,
+  threshold = 100,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup',
+  fillNA = TRUE
+)
+```
