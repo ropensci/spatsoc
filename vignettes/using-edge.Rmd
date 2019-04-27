@@ -29,3 +29,30 @@ Data stream randomization is performed using the `randomizations` function.
 Group by individual matrices are generated using the `get_gbi` function.
 
 **Note**: The grouping functions and their application in social network analysis are further described in the vignette [Using spatsoc in social network analysis - grouping functions](http://spatsoc.robitalec.ca/articles/using-in-sna.html). 
+
+
+# Generate edge lists
+spatsoc provides users with one temporal (`group_times`) and two edge list generating functions (`edge_dist`, `edge_nn`) to generate edge lists from GPS relocations. Users can consider edges defined by either the spatial proximity between individuals (with `edge_dist`), by nearest neighbour (with `edge_nn`) or by nearest neighbour with a maximum distance (with `edge_nn`). The edge lists can be used directly by the animal social network package `asnipe` to generate networks. 
+
+## 1. Load packages and prepare data
+`spatsoc` expects a `data.table` for all `DT` arguments and date time columns to be formatted `POSIXct`. 
+
+```{r}
+## Load packages
+library(spatsoc)
+library(data.table)
+library(asnipe)
+library(igraph)
+
+## Read data as a data.table
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+
+## Cast datetime column to POSIXct
+DT[, datetime := as.POSIXct(datetime)]
+
+## Calculate the year of the relocation 
+DT[, yr := year(datetime)]
+```
+
+
+Next, we will group relocations temporally with `group_times` and generate edges lists with one of `edge_dist`, `edge_dist`. Note: these are mutually exclusive, only select one spatial grouping function at a time. 
