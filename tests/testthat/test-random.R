@@ -8,8 +8,13 @@ DT[, datetime := as.POSIXct(datetime)]
 DT[, yr := year(datetime)]
 
 group_times(DT, datetime = 'datetime', threshold = '1 hour')
-group_pts(DT, threshold = 100, id = 'ID', timegroup = 'timegroup',
-        coords = c('X', 'Y'))
+group_pts(
+  DT,
+  threshold = 100,
+  id = 'ID',
+  timegroup = 'timegroup',
+  coords = c('X', 'Y')
+)
 
 test_that('DT, type, id, datetime, (group) are required', {
   expect_error(randomizations(DT = NULL),
@@ -363,3 +368,44 @@ test_that('randomization is silent when an individual only has one row', {
 })
 
 
+
+test_that('n individuals consistent across years', {
+  DT[1, ID := 'Z']
+
+  ## Step
+  randStep <- randomizations(
+    DT,
+    type = 'step',
+    id = 'ID',
+    group = 'group',
+    splitBy = 'yr',
+    datetime = 'timegroup',
+    iterations = 20
+  )
+
+  uID <- randStep[, .(nID = .N), by = .(randomID, yr, iteration)]
+
+  expect_equal(
+    uID[, sd(nID), by = .(randomID, yr)]$V1,
+    rep(0, randStep[, uniqueN(randomID)])
+  )
+
+  ## Daily
+  randDaily <- randomizations(
+    DT,
+    type = 'daily',
+    id = 'ID',
+    group = 'group',
+    splitBy = 'yr',
+    datetime = 'datetime',
+    iterations = 20
+  )
+
+  uID <- randDaily[, .(nID = .N), by = .(randomID, yr, iteration)]
+
+  expect_equal(
+    uID[, sd(nID), by = .(randomID, yr)]$V1,
+    rep(0, randDaily[, uniqueN(randomID)])
+  )
+
+})
