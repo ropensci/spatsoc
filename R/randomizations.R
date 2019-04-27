@@ -230,21 +230,29 @@ randomizations <- function(DT = NULL,
 
     repDT[!(observed), randomID := .SD[sample(.N, size = .N)],
           by = splitBy, .SDcols = id]
+
     repDT[(observed), randomID := .SD, .SDcols = id]
+
     return(repDT)
   }
 
   repDT[, jul := data.table::yday(.SD[[1]]), .SDcols = datetime]
-  idDays <- unique(repDT[, .SD,
-                         .SDcols = c(splitBy, id, 'jul',
-                                     'iteration', 'observed')])
+  idDays <- unique(
+    repDT[, .SD, .SDcols = c(splitBy, id, 'jul', 'iteration', 'observed')]
+  )
 
   if (type == 'daily') {
-    idDays[, randomID := .SD[sample(.N, size = .N)],
-           by = c(splitBy, 'jul'), .SDcols = id]
+    if (is.null(splitBy)) {
+      splitBy <- c('jul', 'iteration')
+    } else {
+      splitBy <- c('jul', 'iteration', splitBy)
+    }
+
+
+    idDays[, randomID := .SD[sample(.N, size = .N)], by = splitBy, .SDcols = id]
     idDays[(observed), randomID := .SD[[1]], .SDcols = id]
-    return(merge(repDT, idDays, on = c('iteration', 'jul', splitBy),
-                 all = TRUE))
+
+    return(merge(repDT, idDays, on = splitBy, all = TRUE))
 
   } else if (type == 'trajectory') {
     idDays[, randomJul := sample(jul, size = .N),
