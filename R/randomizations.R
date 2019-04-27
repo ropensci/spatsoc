@@ -223,9 +223,9 @@ randomizations <- function(DT = NULL,
 
   if (type == 'step') {
     if (is.null(splitBy)) {
-      splitBy <- datetime
+      splitBy <- c(datetime, 'iteration')
     } else {
-      splitBy <- c(datetime, splitBy)
+      splitBy <- c(datetime, 'iteration', splitBy)
     }
 
     repDT[!(observed), randomID := .SD[sample(.N, size = .N)],
