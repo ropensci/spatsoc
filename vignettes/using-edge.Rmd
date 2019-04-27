@@ -64,7 +64,7 @@ Distance based edge lists where relocations in each timegroup are considered edg
 This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
 
 ```{r}
-## Temporal groups
+# Temporal groups
 group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 
 # Edge list generation
@@ -75,5 +75,33 @@ edges <- edge_dist(
   coords = c('X', 'Y'),
   timegroup = 'timegroup',
   fillNA = TRUE
+)
+```
+
+## 2. b) `edge_nn`
+
+Nearest neighbour based edge lists where each individual is connected to their nearest neighbour. `edge_nn` can be used to generate edge lists defined either by nearest neighbour or nearest neighbour with a maximum distance. As with grouping functions and `edge_dist`, temporal and spatial threshold depend on  species and study system. 
+
+NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and it's nearest neighbour is greater than the threshold. 
+
+```{r, eval = FALSE}
+# Temporal groups
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+
+# Edge list generation
+edges <- edge_nn(
+  DT,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+)
+
+# Edge list generation using maximum distance threshold
+edges <- edge_nn(
+  DT, 
+  id = 'ID', 
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup', 
+  threshold = 100
 )
 ```
