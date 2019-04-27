@@ -19,7 +19,7 @@ knitr::opts_chunk$set(message = FALSE,
                       echo = TRUE)
 ```
 
-spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to build proximity-based social networks using gambit-of-the-group format and edge-lists. . In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
+spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to build proximity-based social networks using gambit-of-the-group format and edge-lists. In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
 
 # Usage
 `spatsoc` leverages `data.table` to modify by reference and iteratively work on subsets of the input data. The first input for all functions in `spatsoc` is `DT`, an input `data.table`. If your data is a `data.frame`, you can convert it by reference using `setDT(DF)`. 
@@ -256,6 +256,8 @@ group_polys(
 
 This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
 
+**See the vignette [Using spatsoc in social network analysis - edge list generating functions](http://spatsoc.gitlab.io/articles/using-edge.html) for details about the `edge_dist` function.**
+
 ## edge_nn
 `edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL, splitBy = NULL, threshold = NULL)`
 
@@ -268,6 +270,8 @@ This is the non-chain rule implementation similar to `group_pts`. Edges are defi
 
 This function can be used to generate edge lists defined either by nearest neighbour or nearest neighbour with a maximum distance. NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and it's nearest neighbour is greater than the threshold. 
 
+
+**See the vignette [Using spatsoc in social network analysis - edge list generating functions](http://spatsoc.gitlab.io/articles/using-edge.html) for details about the `edge_nn` function.**
 
 ## randomizations
 `randomizations(DT, type, id, datetime, splitBy, iterations)`
