@@ -1,4 +1,9 @@
-# v 0.1.8
+# v 0.1.9 
+* fixed bug for randomizations type 'step' and 'daily' ([PR 13](https://github.com/ropensci/spatsoc/pull/13)). 
+* clarified `SIMPLIFY=FALSE` in SNA vignette. 
+
+
+# v 0.1.8 (2019-04-05)
 * update [FAQ](http://spatsoc.robitalec.ca/articles/faq.html) and [Introduction to spatsoc](http://spatsoc.robitalec.ca/articles/intro-spatsoc.html) vignettes adding entries for edge list generating functions. 
 * added edge list generating function `edge_nn` ([PR 11](https://github.com/ropensci/spatsoc/pull/12))
 * added edge list generating function `edge_dist` ([PR 11](https://github.com/ropensci/spatsoc/pull/11))

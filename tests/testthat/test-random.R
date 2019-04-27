@@ -8,8 +8,13 @@ DT[, datetime := as.POSIXct(datetime)]
 DT[, yr := year(datetime)]
 
 group_times(DT, datetime = 'datetime', threshold = '1 hour')
-group_pts(DT, threshold = 100, id = 'ID', timegroup = 'timegroup',
-        coords = c('X', 'Y'))
+group_pts(
+  DT,
+  threshold = 100,
+  id = 'ID',
+  timegroup = 'timegroup',
+  coords = c('X', 'Y')
+)
 
 test_that('DT, type, id, datetime, (group) are required', {
   expect_error(randomizations(DT = NULL),
@@ -225,7 +230,7 @@ test_that('non uniques are found', {
                                 group = 'group',
                                 datetime = 'datetime',
                                 iterations = 2),
-                 'found none unique rows of id, datetime',
+                 'found non-unique rows of id, datetime',
                  fixed = FALSE)
 })
 
@@ -302,3 +307,104 @@ test_that('randomization returns expected columns', {
 })
 
 
+
+
+
+test_that('randomization is silent when an individual only has one row', {
+  ## Fixed here: 6092ad8d055ff269d39dd481a80f27069c790630
+
+  # ** Fake an individual with 1 relocation**
+  copyDT <- copy(DT)[1, ID := 'Z']
+
+  # Temporal grouping
+  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
+
+  # Spatial grouping with timegroup
+  group_pts(
+    copyDT,
+    threshold = 5,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup'
+  )
+
+  expect_silent(
+    randomizations(
+      copyDT,
+      type = 'step',
+      id = 'ID',
+      group = 'group',
+      datetime = 'timegroup',
+      splitBy = 'yr',
+      iterations = 2
+    )
+  )
+
+  expect_silent(
+    randomizations(
+      copyDT,
+      type = 'daily',
+      id = 'ID',
+      group = 'group',
+      datetime = 'datetime',
+      splitBy = 'yr',
+      iterations = 2
+    )
+  )
+
+  expect_silent(
+    randomizations(
+      copyDT,
+      type = 'trajectory',
+      id = 'ID',
+      group = NULL,
+      coords = c('X', 'Y'),
+      datetime = 'datetime',
+      splitBy = 'yr',
+      iterations = 2
+    )
+  )
+
+})
+
+
+
+test_that('n individuals consistent across years', {
+  DT[1, ID := 'Z']
+
+  ## Step
+  randStep <- randomizations(
+    DT,
+    type = 'step',
+    id = 'ID',
+    group = 'group',
+    splitBy = 'yr',
+    datetime = 'timegroup',
+    iterations = 20
+  )
+
+  uID <- randStep[, .(nID = .N), by = .(randomID, yr, iteration)]
+
+  expect_equal(
+    uID[, sd(nID), by = .(randomID, yr)]$V1,
+    rep(0, randStep[, uniqueN(randomID)])
+  )
+
+  ## Daily
+  randDaily <- randomizations(
+    DT,
+    type = 'daily',
+    id = 'ID',
+    group = 'group',
+    splitBy = 'yr',
+    datetime = 'datetime',
+    iterations = 20
+  )
+  uJul <- randDaily[, .(nDay = uniqueN(jul)), by = .(randomID, yr, iteration)]
+
+  expect_equal(
+    uJul[, sd(nDay), by = .(randomID, yr)]$V1,
+    rep(0, nrow(randDaily[, .N, .(randomID, yr)]))
+  )
+
+})
