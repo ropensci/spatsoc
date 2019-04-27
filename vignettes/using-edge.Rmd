@@ -105,3 +105,17 @@ edges <- edge_nn(
   threshold = 100
 )
 ```
+
+
+# Build observed graph 
+Once we've generated edge lists using `group_times` and one of the edge list functions, we can build the graph with `igraph`.
+
+
+```{r}
+# Generate observed network
+g <- graph_from_edgelist(
+  as.matrix(edges[, .(ID, NN)]),
+  directed = FALSE
+)
+```
+
