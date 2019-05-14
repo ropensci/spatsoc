@@ -30,6 +30,15 @@ For more details, see the [blog post](https://ropensci.org/blog/2018/12/04/spats
 * [Using spatsoc in social network analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html)
 
 
+
+## News
+New edge-list generating functions added (feedback welcome as always!):
+
+  * `edge_nn`
+  * `edge_dist`
+
+
+
 ## Installation
 Install the latest version with `remotes`.  
 
@@ -61,79 +70,30 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
 
 
-### Temporal grouping
-#### group_times
-```{r groupTimes}
-group_times(
-  DT, 
-  datetime = 'datetime', 
-  threshold = '5 minutes'
-)
-```
+### Functions
+`spatsoc` provides:
 
-### Spatial grouping
-#### group_pts
+one temporal grouping function,
 
-```{r groupPts}
-group_pts(
-  DT,
-  threshold = 5,
-  id = 'ID',
-  coords = c('X', 'Y'),
-  timegroup = 'timegroup'
-)
-```
+* `group_times`
 
+three spatial grouping functions,
 
-#### group_lines
+* `group_pts`
+* `group_lines`
+* `group_polys`
 
-```{r groupLines}
-utm <-
-  '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-  
-group_times(
-  DT, 
-  datetime = 'datetime', 
-  threshold = '1 day'
-)
+two edge-list generating functions,
 
-group_lines(
-  DT,
-  threshold = 50,
-  projection = utm,
-  id = 'ID',
-  coords = c('X', 'Y'),
-  timegroup = 'timegroup',
-  sortBy = 'datetime'
-)
-```
+* `edge_nn`
+* `edge_dist`
+
+and two social network analysis functions.
+
+* `randomizations`
+* `get_gbi`
 
 
-#### group_polys
-
-```{r groupPolys}
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-
-group_polys(
-  DT,
-  area = FALSE,
-  'mcp',
-  list(percent = 95),
-  projection = utm,
-  id = 'ID',
-  coords = c('X', 'Y')
-)
-  
-areaDT <- group_polys(
-  DT,
-  area = TRUE,
-  'mcp',
-  list(percent = 95),
-  projection = utm,
-  id = 'ID',
-  coords = c('X', 'Y')
-)
-```
 
 
 # Contributing

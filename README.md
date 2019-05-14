@@ -3,7 +3,7 @@
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/onboarding/issues/237)
-[![](https://img.shields.io/badge/devel%20version-0.1.8-blue.svg)](https://github.com/robitalec/spatsoc)
+[![](https://img.shields.io/badge/devel%20version-0.1.9-blue.svg)](https://github.com/robitalec/spatsoc)
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
 [![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
 [![pipeline
@@ -31,6 +31,13 @@ post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
     questions](http://spatsoc.robitalec.ca/articles/faq.html)
   - [Using spatsoc in social network
     analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html)
+
+## News
+
+New edge-list generating functions added (feedback welcome as always\!):
+
+  - `edge_nn`
+  - `edge_dist`
 
 ## Installation
 
@@ -68,80 +75,29 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
 
-### Temporal grouping
+### Functions
 
-#### group\_times
+`spatsoc` provides:
 
-``` r
-group_times(
-  DT, 
-  datetime = 'datetime', 
-  threshold = '5 minutes'
-)
-```
+one temporal grouping function,
 
-### Spatial grouping
+  - `group_times`
 
-#### group\_pts
+three spatial grouping functions,
 
-``` r
-group_pts(
-  DT,
-  threshold = 5,
-  id = 'ID',
-  coords = c('X', 'Y'),
-  timegroup = 'timegroup'
-)
-```
+  - `group_pts`
+  - `group_lines`
+  - `group_polys`
 
-#### group\_lines
+two edge-list generating functions,
 
-``` r
-utm <-
-  '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-  
-group_times(
-  DT, 
-  datetime = 'datetime', 
-  threshold = '1 day'
-)
+  - `edge_nn`
+  - `edge_dist`
 
-group_lines(
-  DT,
-  threshold = 50,
-  projection = utm,
-  id = 'ID',
-  coords = c('X', 'Y'),
-  timegroup = 'timegroup',
-  sortBy = 'datetime'
-)
-```
+and two social network analysis functions.
 
-#### group\_polys
-
-``` r
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
-
-group_polys(
-  DT,
-  area = FALSE,
-  'mcp',
-  list(percent = 95),
-  projection = utm,
-  id = 'ID',
-  coords = c('X', 'Y')
-)
-  
-areaDT <- group_polys(
-  DT,
-  area = TRUE,
-  'mcp',
-  list(percent = 95),
-  projection = utm,
-  id = 'ID',
-  coords = c('X', 'Y')
-)
-```
+  - `randomizations`
+  - `get_gbi`
 
 # Contributing
 
@@ -153,7 +109,6 @@ Development of `spatsoc` welcomes contribution of feature requests, bug
 reports and suggested improvements through the [issue
 board](https://github.com/ropensci/spatsoc/issues).
 
-See details in
-[CONTRIBUTING.md](CONTRIBUTING.md).
+See details in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 [![ropensci\_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
