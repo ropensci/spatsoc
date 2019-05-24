@@ -19,7 +19,8 @@ Description: Detects spatial and temporal groups in GPS relocations.
     It can be used to convert GPS relocations to 
     gambit-of-the-group format to build proximity-based social networks. 
     In addition, the randomizations function provides data-stream 
-    randomization methods suitable for GPS data. 
+    randomization methods suitable for GPS data.
+ This package has been peer-reviewed by rOpenSci (v. 0.1.9).
 Depends: R (>= 3.4)
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
