@@ -9,14 +9,15 @@ knitr::opts_chunk$set(message = FALSE,
                       echo = TRUE)
 ```
 
-
+<!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/onboarding/issues/237)
 `r badger::badge_devel("robitalec/spatsoc", "blue")`
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
+[![cran checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
 [![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
-[![pipeline status](https://gitlab.com/robit.a/spatsoc/badges/master/pipeline.svg)](https://gitlab.com/robit.a/spatsoc/commits/master)
-
+[![peer-review](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/software-review/issues/237)
+<!-- badges: end -->
 
 # spatsoc 
 spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks with grouping and edge-list generating functions. In addition, the `randomizations` function provides data-stream randomization methods suitable for GPS data and the `get_gbi` function generates group by individual matrices useful for building networks with `asnipe::get_network`. 
@@ -59,7 +60,7 @@ install.packages('spatsoc')
 
 
 ## Usage
-### Import package, read data
+### Load package, import data
 `spatsoc` expects a `data.table` for all of its functions. If you have a `data.frame`, you can use `data.table::setDT()` to convert it by reference. If your data is a text file (e.g.: CSV), you can use `data.table::fread()` to import it as a `data.table`. 
 
 ```{r library}

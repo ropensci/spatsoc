@@ -1,13 +1,17 @@
 
+<!-- badges: start -->
+
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/onboarding/issues/237)
 [![](https://img.shields.io/badge/devel%20version-0.1.9-blue.svg)](https://github.com/robitalec/spatsoc)
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
+[![cran
+checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
 [![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
-[![pipeline
-status](https://gitlab.com/robit.a/spatsoc/badges/master/pipeline.svg)](https://gitlab.com/robit.a/spatsoc/commits/master)
+[![peer-review](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/software-review/issues/237)
+<!-- badges: end -->
 
 # spatsoc
 
@@ -61,7 +65,7 @@ install.packages('spatsoc')
 
 ## Usage
 
-### Import package, read data
+### Load package, import data
 
 `spatsoc` expects a `data.table` for all of its functions. If you have a
 `data.frame`, you can use `data.table::setDT()` to convert it by
