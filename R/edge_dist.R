@@ -48,6 +48,7 @@ edge_dist <- function(DT = NULL,
                       coords = NULL,
                       timegroup = NULL,
                       splitBy = NULL,
+                      returnDist = FALSE,
                       fillNA = TRUE) {
   # due to NSE notes in R CMD check
   N <- Var1 <- Var2 <- value <- . <- NULL
