@@ -259,7 +259,7 @@ test_that('returnDist works', {
   expect_equal(withDist[is.na(ID2)],
                withDist[is.na(distance)])
 
-  expect_lt(withDist[, max(distance)],
+  expect_lt(withDist[, max(distance, na.rm = TRUE)],
             thresh)
 
 })
