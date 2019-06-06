@@ -105,7 +105,7 @@ edge_dist <- function(DT = NULL,
         )
         )
     }
-    }
+  }
 
   if (is.null(timegroup) && is.null(splitBy)) {
     splitBy <- NULL
@@ -130,8 +130,15 @@ edge_dist <- function(DT = NULL,
       as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
     diag(distMatrix) <- NA
     w <- which(distMatrix < threshold, arr.ind = TRUE)
-    list(ID1 = .SD[[1]][w[, 1]],
-         ID2 = .SD[[1]][w[, 2]])
+
+    if (returnDist) {
+      list(ID1 = .SD[[1]][w[, 1]],
+           ID2 = .SD[[1]][w[, 2]],
+           distance = distMatrix[w])
+    } else {
+      list(ID1 = .SD[[1]][w[, 1]],
+           ID2 = .SD[[1]][w[, 2]])
+    }
   },
   by = splitBy, .SDcols = c(id, coords)]
 
@@ -144,6 +151,5 @@ edge_dist <- function(DT = NULL,
   } else {
     return(edges)
   }
-
 }
 

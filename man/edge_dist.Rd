@@ -5,7 +5,8 @@
 \title{Distance based edge lists}
 \usage{
 edge_dist(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
-  timegroup = NULL, splitBy = NULL, fillNA = TRUE)
+  timegroup = NULL, splitBy = NULL, returnDist = FALSE,
+  fillNA = TRUE)
 }
 \arguments{
 \item{DT}{input data.table}
