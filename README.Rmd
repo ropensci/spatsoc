@@ -37,7 +37,7 @@ For more details, see the [blog post](https://ropensci.org/blog/2018/12/04/spats
 
 
 
-## News
+## [News](http://spatsoc.robitalec.ca/news/index.html)
 New edge-list generating functions added (feedback welcome as always!):
 
   * `edge_nn`

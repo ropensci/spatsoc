@@ -38,7 +38,7 @@ post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
   - [Using spatsoc in social network
     analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html)
 
-## News
+## [News](http://spatsoc.robitalec.ca/news/index.html)
 
 New edge-list generating functions added (feedback welcome as always\!):
 
