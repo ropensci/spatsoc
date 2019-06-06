@@ -63,6 +63,8 @@ Distance based edge lists where relocations in each timegroup are considered edg
 
 This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
 
+Optionally, `edge_dist` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument 'returnDist' = TRUE. 
+
 ```{r}
 # Temporal groups
 group_times(DT, datetime = 'datetime', threshold = '5 minutes')
@@ -74,6 +76,7 @@ edges <- edge_dist(
   id = 'ID',
   coords = c('X', 'Y'),
   timegroup = 'timegroup',
+  returnDist = TRUE,
   fillNA = TRUE
 )
 ```
