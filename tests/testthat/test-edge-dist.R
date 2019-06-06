@@ -222,3 +222,44 @@ test_that('returned IDs make sense', {
   expect_true(eDT[ID1 == ID2, .N] == 0)
 
 })
+
+
+
+test_that('returnDist works', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+
+  thresh <- 50
+  withDist <- edge_dist(
+    copyDT,
+    threshold = thresh,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = TRUE,
+    fillNA = TRUE
+  )
+
+  woDist <- edge_dist(
+    copyDT,
+    threshold = thresh,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = FALSE,
+    fillNA = TRUE
+  )
+
+  expect_equal(withDist[, .(ID1, ID2, timegroup)],
+               woDist[, .(ID1, ID2, timegroup)])
+
+  expect_equal(nrow(withDist),
+               nrow(woDist))
+
+  expect_equal(withDist[is.na(ID2)],
+               withDist[is.na(distance)])
+
+  expect_lt(withDist[, max(distance)],
+            thresh)
+
+})
