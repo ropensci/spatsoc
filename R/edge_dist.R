@@ -15,10 +15,10 @@
 #' The \code{splitBy} argument offers further control over grouping. If within your \code{DT}, you have multiple populations, subgroups or other distinct parts, you can provide the name of the column which identifies them to \code{splitBy}. \code{edge_dist} will only consider rows within each \code{splitBy} subgroup.
 #'
 #' @inheritParams group_pts
+#' @param returnDist boolean indicating if the distance between individuals should be returned. If FALSE (default), only ID1, ID2 columns (and timegroup, splitBy columns if provided) are returned. If TRUE, another column "distance" is returned indicating the distance between ID1 and ID2.
 #' @param fillNA boolean indicating if NAs should be returned for individuals that were not within the threshold distance of any other. If TRUE, NAs are returned. If FALSE, only edges between individuals within the threshold distance are returned.
 #'
-#'
-#' @return \code{edge_dist} returns a \code{data.table}  with three columns: timegroup, ID1 and ID2.
+#' @return \code{edge_dist} returns a \code{data.table} with columns ID1, ID2, timegroup (if supplied) and any columns provided in splitBy. If 'returnDist' is TRUE, column 'distance' is returned indicating the distance between ID1 and ID2.
 #'
 #' The ID1 and ID2 columns represent the edges defined by the spatial (and temporal with \code{group_times}) thresholds.
 #'
@@ -41,7 +41,7 @@
 #'
 #' # Edge list generation
 #' edge_dist(DT, threshold = 100, id = 'ID',
-#'           coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
+#'           coords = c('X', 'Y'), timegroup = 'timegroup', returnDist = TRUE, fillNA = TRUE)
 edge_dist <- function(DT = NULL,
                       threshold = NULL,
                       id = NULL,
