@@ -5,7 +5,8 @@
 \title{Distance based edge lists}
 \usage{
 edge_dist(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
-  timegroup = NULL, splitBy = NULL, fillNA = TRUE)
+  timegroup = NULL, splitBy = NULL, returnDist = FALSE,
+  fillNA = TRUE)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -20,10 +21,12 @@ edge_dist(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 
+\item{returnDist}{boolean indicating if the distance between individuals should be returned. If FALSE (default), only ID1, ID2 columns (and timegroup, splitBy columns if provided) are returned. If TRUE, another column "distance" is returned indicating the distance between ID1 and ID2.}
+
 \item{fillNA}{boolean indicating if NAs should be returned for individuals that were not within the threshold distance of any other. If TRUE, NAs are returned. If FALSE, only edges between individuals within the threshold distance are returned.}
 }
 \value{
-\code{edge_dist} returns a \code{data.table}  with three columns: timegroup, ID1 and ID2.
+\code{edge_dist} returns a \code{data.table} with columns ID1, ID2, timegroup (if supplied) and any columns provided in splitBy. If 'returnDist' is TRUE, column 'distance' is returned indicating the distance between ID1 and ID2.
 
 The ID1 and ID2 columns represent the edges defined by the spatial (and temporal with \code{group_times}) thresholds.
 }
@@ -56,7 +59,7 @@ group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 
 # Edge list generation
 edge_dist(DT, threshold = 100, id = 'ID',
-          coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
+          coords = c('X', 'Y'), timegroup = 'timegroup', returnDist = TRUE, fillNA = TRUE)
 }
 \seealso{
 Other Edge-list generation: \code{\link{edge_nn}}

@@ -17,7 +17,7 @@
   ],
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -224,7 +224,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/spatsoc//blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/spatsoc/blob/master/README.md",
-  "fileSize": "366.364KB",
+  "fileSize": "366.853KB",
   "contIntegration": "https://codecov.io/gl/robit.a/spatsoc",
   "developmentStatus": "http://www.repostatus.org/#active",
   "review": {
