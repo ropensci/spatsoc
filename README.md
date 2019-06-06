@@ -15,6 +15,8 @@ checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.
 
 # spatsoc
 
+### [News](#news) | [Installation](#installation) | [Usage](#usage) | [Functions](#functions) | [Contributing](#contributing)
+
 spatsoc is an R package for detecting spatial and temporal groups in GPS
 relocations. It can be used to convert GPS relocations to
 gambit-of-the-group format to build proximity-based social networks with
