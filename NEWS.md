@@ -1,4 +1,6 @@
-# v 0.1.9 
+# v 0.1.10
+* added optional return of distance between individuals with `edge_dist` ([PR 19](https://github.com/ropensci/spatsoc/pull/19))
+
 # v 0.1.9 (2019-05-14)
 * fixed bug for randomizations type 'step' and 'daily' ([PR 13](https://github.com/ropensci/spatsoc/pull/13)). 
 * clarified `SIMPLIFY=FALSE` in SNA vignette. 
