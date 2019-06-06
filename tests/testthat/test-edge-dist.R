@@ -265,4 +265,20 @@ test_that('returnDist works', {
   expect_lt(withDist[, max(distance, na.rm = TRUE)],
             thresh)
 
+
+  withDistNoNA <- edge_dist(
+    copyDT,
+    threshold = thresh,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = TRUE,
+    fillNA = FALSE
+  )
+
+  expect_true(withDistNoNA[is.na(distance), .N] == 0)
+  expect_true(withDistNoNA[is.na(ID2), .N] == 0)
+  expect_lt(withDistNoNA[, max(distance, na.rm = TRUE)],
+            thresh)
+
 })
