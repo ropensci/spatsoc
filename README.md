@@ -117,7 +117,7 @@ spatiotemporal, line overlap based groups (B).
 Combined with `group_times`, the returned ‘group’ column represents
 spatiotemporal, polygon overlap based groups.
 
-<img src="man/figures/fig4.png" style="display: block; margin: auto;" />
+<img src="man/figures/fig4.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
 
 ### Edge-list generating functions
 

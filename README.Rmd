@@ -83,40 +83,30 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ### Temporal grouping
 `group_times` groups rows temporally using a threshold defined in units of minutes (B), hours (C) or days (D). 
 
-```{r fig1, echo = FALSE, eval = TRUE, fig.align="center"}
-knitr::include_graphics('man/figures/fig1.png')
-```
-
+<img src="man/figures/fig1.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
 
 ### Spatial grouping 
 `group_pts` groups points spatially using a distance matrix (B) and a spatial threshold defined by the user (50m in this case). Combined with `group_times`, the returned 'group' column represents spatiotemporal, point based groups (D). 
 
 
-```{r fig2, echo = FALSE, eval = TRUE, fig.align="center"}
-knitr::include_graphics('man/figures/fig2.png')
-```
+<img src="man/figures/fig2.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
 
 `group_lines` groups sequences of points (forming a line) spatially by buffering each line (A) by the user defined spatial threshold. Combined with `group_times`, the returned 'group' column represents spatiotemporal, line overlap based groups (B). 
 
-```{r fig3, echo = FALSE, eval = TRUE, fig.align="center"}
-knitr::include_graphics('man/figures/fig3.png')
-```
+<img src="man/figures/fig3.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+
 
 
 `group_polys` groups home ranges by spatial and proportional overlap. Combined with `group_times`, the returned 'group' column represents spatiotemporal, polygon overlap based groups. 
 
-```{r fig4, echo = FALSE, eval = TRUE, fig.align="center"}
-knitr::include_graphics('man/figures/fig4.png')
-```
+
+<img src="man/figures/fig4.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
 
 
 ### Edge-list generating functions
 `edge_dist` and `edge_nn` generate edge-lists. `edge_dist` measures the spatial distance between individuals (A) and returns all pairs within the user specified distance threshold (B). `edge_nn` measures the distance between individuals (C) and returns the nearest neighbour to each individual (D). 
 
-```{r fig5, echo = FALSE, eval = TRUE, fig.align="center"}
-knitr::include_graphics('man/figures/fig5.png')
-```
-
+<img src="man/figures/fig5.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
 
 ### Social network analysis functions
 `randomizations` for data-stream randomization and `get_gbi` for generating group by individual matrices. 
