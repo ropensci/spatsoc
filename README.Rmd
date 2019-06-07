@@ -44,6 +44,8 @@ New edge-list generating functions added (feedback welcome as always!):
   * `edge_dist`
 
 
+Also, our article describing `spatsoc` was just accepted at Methods in Ecology and Evolution. [Link here](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13215) and thanks to reviewers and editors at [rOpenSci](https://github.com/ropensci/software-review/issues/237) and at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x). 
+
 
 ## Installation
 Install the latest version with `remotes`.  
