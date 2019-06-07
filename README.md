@@ -5,7 +5,7 @@
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/onboarding/issues/237)
-[![](https://img.shields.io/badge/devel%20version-0.1.9-blue.svg)](https://github.com/robitalec/spatsoc)
+[![](https://img.shields.io/badge/devel%20version-0.1.10-blue.svg)](https://github.com/robitalec/spatsoc)
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
 [![cran
 checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
@@ -38,12 +38,21 @@ post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
   - [Using spatsoc in social network
     analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html)
 
-## [News](http://spatsoc.robitalec.ca/news/index.html)
+## News
 
 New edge-list generating functions added (feedback welcome as always\!):
 
   - `edge_nn`
   - `edge_dist`
+
+Also, our article describing `spatsoc` was just accepted at Methods in
+Ecology and Evolution. [Link
+here](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13215)
+and thanks to reviewers and editors at
+[rOpenSci](https://github.com/ropensci/software-review/issues/237) and
+at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x).
+
+More detailed news [here](http://spatsoc.robitalec.ca/news/index.html).
 
 ## Installation
 
@@ -81,29 +90,49 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ```
 
-### Functions
+### Temporal grouping
 
-`spatsoc` provides:
+`group_times` groups rows temporally using a threshold defined in units
+of minutes (B), hours (C) or days (D).
 
-one temporal grouping function,
+<img src="man/figures/fig1.png" style="display: block; margin: auto;" />
 
-  - `group_times`
+### Spatial grouping
 
-three spatial grouping functions,
+`group_pts` groups points spatially using a distance matrix (B) and a
+spatial threshold defined by the user (50m in this case). Combined with
+`group_times`, the returned ‘group’ column represents spatiotemporal,
+point based groups (D).
 
-  - `group_pts`
-  - `group_lines`
-  - `group_polys`
+<img src="man/figures/fig2.png" style="display: block; margin: auto;" />
 
-two edge-list generating functions,
+`group_lines` groups sequences of points (forming a line) spatially by
+buffering each line (A) by the user defined spatial threshold. Combined
+with `group_times`, the returned ‘group’ column represents
+spatiotemporal, line overlap based groups (B).
 
-  - `edge_nn`
-  - `edge_dist`
+<img src="man/figures/fig3.png" style="display: block; margin: auto;" />
 
-and two social network analysis functions.
+`group_polys` groups home ranges by spatial and proportional overlap.
+Combined with `group_times`, the returned ‘group’ column represents
+spatiotemporal, polygon overlap based groups.
 
-  - `randomizations`
-  - `get_gbi`
+<img src="man/figures/fig4.png" style="display: block; margin: auto;" />
+
+### Edge-list generating functions
+
+`edge_dist` and `edge_nn` generate edge-lists. `edge_dist` measures the
+spatial distance between individuals (A) and returns all pairs within
+the user specified distance threshold (B). `edge_nn` measures the
+distance between individuals (C) and returns the nearest neighbour to
+each individual (D).
+
+<img src="man/figures/fig5.png" style="display: block; margin: auto;" />
+
+### Social network analysis functions
+
+`randomizations` for data-stream randomization and `get_gbi` for
+generating group by individual matrices.
 
 # Contributing
 
