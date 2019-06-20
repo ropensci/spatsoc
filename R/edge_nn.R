@@ -138,8 +138,15 @@ edge_nn <- function(DT = NULL,
       wm <- apply(distMatrix, MARGIN = 2,
                   function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
     }
-    list(ID = .SD[[1]][as.numeric(names(wm))],
-         NN = .SD[[1]][wm])
+
+    if (returnDist) {
+      list(ID = .SD[[1]][as.numeric(names(wm))],
+           NN = .SD[[1]][wm],
+           distance = distMatrix[wm])
+    } else {
+      list(ID = .SD[[1]][as.numeric(names(wm))],
+           NN = .SD[[1]][wm])
+    }
   },
   by = splitBy, .SDcols = c(id, coords)]
 
