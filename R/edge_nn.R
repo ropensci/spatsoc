@@ -52,7 +52,8 @@ edge_nn <- function(DT = NULL,
                     coords = NULL,
                     timegroup = NULL,
                     splitBy = NULL,
-                    threshold = NULL) {
+                    threshold = NULL,
+                    returnDist = FALSE) {
   # NSE
   N <- NULL
 
