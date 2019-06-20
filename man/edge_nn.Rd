@@ -19,9 +19,11 @@ edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL,
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 
 \item{threshold}{(optional) spatial distance threshold to set maximum distance between an individual and their neighbour.}
+
+\item{returnDist}{boolean indicating if the distance between individuals should be returned. If FALSE (default), only ID, NN columns (and timegroup, splitBy columns if provided) are returned. If TRUE, another column "distance" is returned indicating the distance between ID and NN.}
 }
 \value{
-\code{edge_nn} returns a \code{data.table}  with three columns: timegroup, ID and NN.
+\code{edge_nn} returns a \code{data.table}  with three columns: timegroup, ID and NN. If 'returnDist' is TRUE, column 'distance' is returned indicating the distance between ID and NN.
 
 The ID and NN columns represent the edges defined by the nearest neighbours (and temporal thresholds with \code{group_times}).
 
