@@ -5,7 +5,7 @@
 \title{Nearest neighbour based edge lists}
 \usage{
 edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL,
-  splitBy = NULL, threshold = NULL)
+  splitBy = NULL, threshold = NULL, returnDist = FALSE)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -61,6 +61,12 @@ edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 # Edge list generation using maximum distance threshold
 edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
         timegroup = 'timegroup', threshold = 100)
+
+# Edge list generation, returning distance between nearest neighbours
+edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
+        timegroup = 'timegroup', threshold = 100,
+        returnDist = TRUE)
+
 }
 \seealso{
 Other Edge-list generation: \code{\link{edge_dist}}

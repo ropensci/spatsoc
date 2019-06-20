@@ -47,6 +47,12 @@
 #' # Edge list generation using maximum distance threshold
 #' edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 #'         timegroup = 'timegroup', threshold = 100)
+#'
+#' # Edge list generation, returning distance between nearest neighbours
+#' edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
+#'         timegroup = 'timegroup', threshold = 100,
+#'         returnDist = TRUE)
+#'
 edge_nn <- function(DT = NULL,
                     id = NULL,
                     coords = NULL,
