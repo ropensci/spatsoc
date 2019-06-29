@@ -11,12 +11,11 @@ knitr::opts_chunk$set(message = FALSE,
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/onboarding/issues/237)
-`r badger::badge_devel("robitalec/spatsoc", "blue")`
+[![peer-review](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/software-review/issues/237)
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
+`r badger::badge_devel("robitalec/spatsoc", "blue")`
 [![cran checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
 [![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
-[![peer-review](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/software-review/issues/237)
 <!-- badges: end -->
 
 # spatsoc 
@@ -43,7 +42,7 @@ New edge-list generating functions added (feedback welcome as always!):
   * `edge_nn`
   * `edge_dist`
 
-Also, our article describing `spatsoc` was just accepted at Methods in Ecology and Evolution. [Link here](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13215) and thanks to reviewers and editors at [rOpenSci](https://github.com/ropensci/software-review/issues/237) and at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x). 
+Also, our article describing `spatsoc` was just published at Methods in Ecology and Evolution. [Link here](https://doi.org/10.1111/2041-210X.13215) and thanks to reviewers and editors at [rOpenSci](https://github.com/ropensci/software-review/issues/237) and at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x). 
 
 
 More detailed news [here](http://spatsoc.robitalec.ca/news/index.html).

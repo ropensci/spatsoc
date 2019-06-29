@@ -4,13 +4,12 @@
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/onboarding/issues/237)
-[![](https://img.shields.io/badge/devel%20version-0.1.10-blue.svg)](https://github.com/robitalec/spatsoc)
+[![peer-review](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/software-review/issues/237)
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
+[![](https://img.shields.io/badge/devel%20version-0.1.10-blue.svg)](https://github.com/robitalec/spatsoc)
 [![cran
 checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
 [![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
-[![peer-review](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/software-review/issues/237)
 <!-- badges: end -->
 
 # spatsoc
@@ -45,10 +44,10 @@ New edge-list generating functions added (feedback welcome as always\!):
   - `edge_nn`
   - `edge_dist`
 
-Also, our article describing `spatsoc` was just accepted at Methods in
+Also, our article describing `spatsoc` was just published at Methods in
 Ecology and Evolution. [Link
-here](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13215)
-and thanks to reviewers and editors at
+here](https://doi.org/10.1111/2041-210X.13215) and thanks to reviewers
+and editors at
 [rOpenSci](https://github.com/ropensci/software-review/issues/237) and
 at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x).
 
@@ -95,7 +94,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 `group_times` groups rows temporally using a threshold defined in units
 of minutes (B), hours (C) or days (D).
 
-<img src="man/figures/fig1.png" style="display: block; margin: auto;" />
+<img src="man/figures/fig1.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
 
 ### Spatial grouping
 
@@ -104,14 +103,14 @@ spatial threshold defined by the user (50m in this case). Combined with
 `group_times`, the returned ‘group’ column represents spatiotemporal,
 point based groups (D).
 
-<img src="man/figures/fig2.png" style="display: block; margin: auto;" />
+<img src="man/figures/fig2.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
 
 `group_lines` groups sequences of points (forming a line) spatially by
 buffering each line (A) by the user defined spatial threshold. Combined
 with `group_times`, the returned ‘group’ column represents
 spatiotemporal, line overlap based groups (B).
 
-<img src="man/figures/fig3.png" style="display: block; margin: auto;" />
+<img src="man/figures/fig3.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
 
 `group_polys` groups home ranges by spatial and proportional overlap.
 Combined with `group_times`, the returned ‘group’ column represents
@@ -127,7 +126,7 @@ the user specified distance threshold (B). `edge_nn` measures the
 distance between individuals (C) and returns the nearest neighbour to
 each individual (D).
 
-<img src="man/figures/fig5.png" style="display: block; margin: auto;" />
+<img src="man/figures/fig5.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
 
 ### Social network analysis functions
 
