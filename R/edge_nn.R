@@ -138,6 +138,7 @@ edge_nn <- function(DT = NULL,
     distMatrix <-
       as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
     diag(distMatrix) <- NA
+
     if (is.null(threshold)) {
       wm <- apply(distMatrix, MARGIN = 2, which.min)
     } else {
@@ -147,15 +148,15 @@ edge_nn <- function(DT = NULL,
     }
 
     if (returnDist) {
+      w <- wm + (length(wm) * (as.numeric(names(wm)) - 1))
       list(ID = .SD[[1]][as.numeric(names(wm))],
            NN = .SD[[1]][wm],
-           distance = distMatrix[wm])
+           distance = distMatrix[w])
     } else {
       list(ID = .SD[[1]][as.numeric(names(wm))],
            NN = .SD[[1]][wm])
     }
   },
   by = splitBy, .SDcols = c(id, coords)]
-
 }
 
