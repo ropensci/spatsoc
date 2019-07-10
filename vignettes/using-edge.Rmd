@@ -87,6 +87,8 @@ Nearest neighbour based edge lists where each individual is connected to their n
 
 NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and it's nearest neighbour is greater than the threshold. 
 
+Optionally, `edge_nn` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument 'returnDist' = TRUE. 
+
 ```{r, eval = FALSE}
 # Temporal groups
 group_times(DT, datetime = 'datetime', threshold = '5 minutes')
@@ -107,6 +109,17 @@ edges <- edge_nn(
   timegroup = 'timegroup', 
   threshold = 100
 )
+
+# Edge list generation using maximum distance threshold, returning distances
+edges <- edge_nn(
+  DT, 
+  id = 'ID', 
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup', 
+  threshold = 100,
+  returnDist = TRUE
+)
+
 ```
 
 
