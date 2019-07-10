@@ -14,8 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, echo = FALSE}
 library(spatsoc)
+
 ```
 
 
@@ -37,7 +38,7 @@ spatsoc provides users with one temporal (`group_times`) and two edge list gener
 ## 1. Load packages and prepare data
 `spatsoc` expects a `data.table` for all `DT` arguments and date time columns to be formatted `POSIXct`. 
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 ## Load packages
 library(spatsoc)
 library(data.table)
@@ -127,7 +128,7 @@ edges <- edge_nn(
 Once we've generated edge lists using `group_times` and one of the edge list functions, we can build the graph with `igraph`.
 
 
-```{r}
+```{r, eval = FALSE}
 # Generate observed network
 g <- graph_from_edgelist(
   as.matrix(edges[, .(ID, NN)]),
