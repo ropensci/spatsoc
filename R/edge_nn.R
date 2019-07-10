@@ -15,9 +15,10 @@
 #' The \code{splitBy} argument offers further control over grouping. If within your \code{DT}, you have multiple populations, subgroups or other distinct parts, you can provide the name of the column which identifies them to \code{splitBy}. \code{edge_nn} will only consider rows within each \code{splitBy} subgroup.
 #'
 #' @param threshold (optional) spatial distance threshold to set maximum distance between an individual and their neighbour.
+#' @param returnDist boolean indicating if the distance between individuals should be returned. If FALSE (default), only ID, NN columns (and timegroup, splitBy columns if provided) are returned. If TRUE, another column "distance" is returned indicating the distance between ID and NN.
 #' @inheritParams group_pts
 #'
-#' @return \code{edge_nn} returns a \code{data.table}  with three columns: timegroup, ID and NN.
+#' @return \code{edge_nn} returns a \code{data.table}  with three columns: timegroup, ID and NN. If 'returnDist' is TRUE, column 'distance' is returned indicating the distance between ID and NN.
 #'
 #' The ID and NN columns represent the edges defined by the nearest neighbours (and temporal thresholds with \code{group_times}).
 #'
@@ -47,12 +48,19 @@
 #' # Edge list generation using maximum distance threshold
 #' edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 #'         timegroup = 'timegroup', threshold = 100)
+#'
+#' # Edge list generation, returning distance between nearest neighbours
+#' edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
+#'         timegroup = 'timegroup', threshold = 100,
+#'         returnDist = TRUE)
+#'
 edge_nn <- function(DT = NULL,
                     id = NULL,
                     coords = NULL,
                     timegroup = NULL,
                     splitBy = NULL,
-                    threshold = NULL) {
+                    threshold = NULL,
+                    returnDist = FALSE) {
   # NSE
   N <- NULL
 
@@ -130,6 +138,7 @@ edge_nn <- function(DT = NULL,
     distMatrix <-
       as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
     diag(distMatrix) <- NA
+
     if (is.null(threshold)) {
       wm <- apply(distMatrix, MARGIN = 2, which.min)
     } else {
@@ -137,10 +146,17 @@ edge_nn <- function(DT = NULL,
       wm <- apply(distMatrix, MARGIN = 2,
                   function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
     }
-    list(ID = .SD[[1]][as.numeric(names(wm))],
-         NN = .SD[[1]][wm])
+
+    if (returnDist) {
+      w <- wm + (length(wm) * (as.numeric(names(wm)) - 1))
+      list(ID = .SD[[1]][as.numeric(names(wm))],
+           NN = .SD[[1]][wm],
+           distance = distMatrix[w])
+    } else {
+      list(ID = .SD[[1]][as.numeric(names(wm))],
+           NN = .SD[[1]][wm])
+    }
   },
   by = splitBy, .SDcols = c(id, coords)]
-
 }
 

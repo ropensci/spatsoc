@@ -1,4 +1,4 @@
-context("test-edge-dist")
+context("test-edge-nn")
 
 library(spatsoc)
 
@@ -205,4 +205,92 @@ test_that('returned IDs make sense', {
   expect_true(eDT[ID == NN, .N] == 0)
 
 
+})
+
+
+
+
+
+
+test_that('returned columns match', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  eDT <- edge_nn(
+    copyDT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup'
+  )
+
+  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
+  expect_false('distance' %in% colnames(eDT))
+
+
+  eDT <- edge_nn(
+    copyDT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = TRUE
+  )
+
+  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
+
+
+  eDT <- edge_nn(
+    copyDT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = TRUE,
+    threshold = 1000
+  )
+
+  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
+
+  eDT <- edge_nn(
+    copyDT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = FALSE,
+    threshold = 1000
+  )
+
+  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
+  expect_false('distance' %in% colnames(eDT))
+
+
+})
+
+
+test_that('distances returned are below threshold', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  thresh <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = TRUE,
+    threshold = thresh
+  )
+
+  expect_equal(eDT[distance > thresh, .N], 0)
+})
+
+test_that('NAs exist in NN when threshold provided', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  thresh <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    threshold = thresh
+  )
+
+  expect_gt(eDT[is.na(NN), .N], 0)
 })
