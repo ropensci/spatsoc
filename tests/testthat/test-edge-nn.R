@@ -222,7 +222,7 @@ test_that('returned columns match', {
     timegroup = 'timegroup'
   )
 
-  expect_true(c('ID', 'NN') %in% colnames(eDT))
+  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
   expect_false('distance' %in% colnames(eDT))
 
 
@@ -234,7 +234,7 @@ test_that('returned columns match', {
     returnDist = TRUE
   )
 
-  expect_true(c('ID', 'NN', 'distance') %in% colnames(eDT))
+  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
 
 
   eDT <- edge_nn(
@@ -246,7 +246,7 @@ test_that('returned columns match', {
     threshold = 1000
   )
 
-  expect_true(c('ID', 'NN', 'distance') %in% colnames(eDT))
+  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
 
   eDT <- edge_nn(
     copyDT,
@@ -257,7 +257,7 @@ test_that('returned columns match', {
     threshold = 1000
   )
 
-  expect_true(c('ID', 'NN') %in% colnames(eDT))
+  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
   expect_false('distance' %in% colnames(eDT))
 
 
