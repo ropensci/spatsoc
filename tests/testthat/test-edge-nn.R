@@ -1,4 +1,4 @@
-context("test-edge-dist")
+context("test-edge-nn")
 
 library(spatsoc)
 
