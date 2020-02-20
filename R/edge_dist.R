@@ -77,6 +77,10 @@ edge_dist <- function(DT = NULL,
     stop('coords requires a vector of column names for coordinates X and Y')
   }
 
+  if (missing(timegroup)) {
+    stop('timegroup required')
+  }
+
   if (any(!(
     c(timegroup, id, coords, splitBy) %in% colnames(DT)
   ))) {
