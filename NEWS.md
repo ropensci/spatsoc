@@ -1,3 +1,7 @@
+# v 0.1.11
+* removed default NULL from 'timegroup' arguments in `group_pts`, `edge_dist` and `edge_nn` ([PR 21](https://github.com/ropensci/spatsoc/pull/24))
+
+
 # v 0.1.10
 * added optional return of distance between individuals with `edge_dist` ([PR 19](https://github.com/ropensci/spatsoc/pull/19)) and `edge_nn` ([PR 21](https://github.com/ropensci/spatsoc/pull/21))
 
