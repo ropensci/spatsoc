@@ -88,7 +88,7 @@ test_that('threshold correctly provided or error detected', {
     copyDT,
     id = 'ID',
     coords = c('X', 'Y'),
-    timegroup = 'timegroup'
+    timegroup = NULL
   ))
 
   expect_error(edge_nn(DT, threshold = -10, id = 'ID'),
@@ -117,7 +117,7 @@ test_that('coords are correctly provided or error detected', {
       DT,
       id = 'ID',
       coords = c('X', 'ID'),
-      timegroup = 'timegroup'
+      timegroup = NULL
     ),
     'coords must be numeric'
   )

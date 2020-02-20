@@ -129,7 +129,7 @@ test_that('coords are correctly provided or error detected', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'ID'),
-      timegroup = 'timegroup'
+      timegroup = NULL
     ),
     'coords must be numeric'
   )
