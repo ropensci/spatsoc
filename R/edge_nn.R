@@ -57,7 +57,7 @@
 edge_nn <- function(DT = NULL,
                     id = NULL,
                     coords = NULL,
-                    timegroup = NULL,
+                    timegroup,
                     splitBy = NULL,
                     threshold = NULL,
                     returnDist = FALSE) {
