@@ -4,8 +4,14 @@
 \alias{build_lines}
 \title{Build Lines}
 \usage{
-build_lines(DT = NULL, projection = NULL, id = NULL, coords = NULL,
-  sortBy = NULL, splitBy = NULL)
+build_lines(
+  DT = NULL,
+  projection = NULL,
+  id = NULL,
+  coords = NULL,
+  sortBy = NULL,
+  splitBy = NULL
+)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -67,6 +73,7 @@ build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
 \seealso{
 \code{\link{group_lines}}
 
-Other Build functions: \code{\link{build_polys}}
+Other Build functions: 
+\code{\link{build_polys}()}
 }
 \concept{Build functions}

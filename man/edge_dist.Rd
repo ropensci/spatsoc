@@ -4,9 +4,16 @@
 \alias{edge_dist}
 \title{Distance based edge lists}
 \usage{
-edge_dist(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
-  timegroup = NULL, splitBy = NULL, returnDist = FALSE,
-  fillNA = TRUE)
+edge_dist(
+  DT = NULL,
+  threshold = NULL,
+  id = NULL,
+  coords = NULL,
+  timegroup,
+  splitBy = NULL,
+  returnDist = FALSE,
+  fillNA = TRUE
+)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -62,6 +69,7 @@ edge_dist(DT, threshold = 100, id = 'ID',
           coords = c('X', 'Y'), timegroup = 'timegroup', returnDist = TRUE, fillNA = TRUE)
 }
 \seealso{
-Other Edge-list generation: \code{\link{edge_nn}}
+Other Edge-list generation: 
+\code{\link{edge_nn}()}
 }
 \concept{Edge-list generation}

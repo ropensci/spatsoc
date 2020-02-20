@@ -4,9 +4,16 @@
 \alias{randomizations}
 \title{Data-stream randomizations}
 \usage{
-randomizations(DT = NULL, type = NULL, id = NULL, group = NULL,
-  coords = NULL, datetime = NULL, splitBy = NULL,
-  iterations = NULL)
+randomizations(
+  DT = NULL,
+  type = NULL,
+  id = NULL,
+  group = NULL,
+  coords = NULL,
+  datetime = NULL,
+  splitBy = NULL,
+  iterations = NULL
+)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -134,6 +141,7 @@ randTraj <- randomizations(
 \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 }
 \seealso{
-Other Social network tools: \code{\link{get_gbi}}
+Other Social network tools: 
+\code{\link{get_gbi}()}
 }
 \concept{Social network tools}
