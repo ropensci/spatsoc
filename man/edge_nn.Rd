@@ -14,7 +14,7 @@ edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL,
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
+\item{timegroup}{timegroup field in the DT upon which the grouping will be calculated}
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 

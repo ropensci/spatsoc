@@ -20,7 +20,7 @@ of the projection. Supply 0 to compare intersection without buffering.}
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
+\item{timegroup}{timegroup field in the DT upon which the grouping will be calculated}
 
 \item{sortBy}{Character string of date time column(s) to sort rows by. Must be a POSIXct.}
 

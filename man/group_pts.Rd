@@ -4,8 +4,14 @@
 \alias{group_pts}
 \title{Group Points}
 \usage{
-group_pts(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
-  timegroup = NULL, splitBy = NULL)
+group_pts(
+  DT = NULL,
+  threshold = NULL,
+  id = NULL,
+  coords = NULL,
+  timegroup,
+  splitBy = NULL
+)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -16,7 +22,7 @@ group_pts(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
+\item{timegroup}{timegroup field in the DT upon which the grouping will be calculated}
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 }
@@ -64,7 +70,8 @@ group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'),
 \seealso{
 \code{\link{group_times}}
 
-Other Spatial grouping: \code{\link{group_lines}},
-  \code{\link{group_polys}}
+Other Spatial grouping: 
+\code{\link{group_lines}()},
+\code{\link{group_polys}()}
 }
 \concept{Spatial grouping}
