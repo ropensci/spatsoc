@@ -57,7 +57,7 @@
 edge_nn <- function(DT = NULL,
                     id = NULL,
                     coords = NULL,
-                    timegroup = NULL,
+                    timegroup,
                     splitBy = NULL,
                     threshold = NULL,
                     returnDist = FALSE) {
@@ -86,6 +86,10 @@ edge_nn <- function(DT = NULL,
     stop('coords requires a vector of column names for coordinates X and Y')
   }
 
+  if (missing(timegroup)) {
+    stop('timegroup required')
+  }
+
   if (any(!(
     c(timegroup, id, coords, splitBy) %in% colnames(DT)
   ))) {
@@ -112,9 +116,9 @@ edge_nn <- function(DT = NULL,
           x = 'timegroup provided is a date/time
           or character type, did you use group_times?'
         )
-        )
+      )
     }
-    }
+  }
 
   if (is.null(timegroup) && is.null(splitBy)) {
     splitBy <- NULL
@@ -129,9 +133,9 @@ edge_nn <- function(DT = NULL,
           timegroup and/or splitBy -
           does your group_times threshold match the fix rate?'
         )
-        )
+      )
     }
-    }
+  }
 
   DT[, {
 

@@ -52,6 +52,7 @@ gbiMtrx <- get_gbi(DT = DT, group = 'group', id = 'ID')
 \seealso{
 \code{\link{group_pts}} \code{\link{group_lines}} \code{\link{group_polys}}
 
-Other Social network tools: \code{\link{randomizations}}
+Other Social network tools: 
+\code{\link{randomizations}()}
 }
 \concept{Social network tools}

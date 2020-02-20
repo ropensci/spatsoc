@@ -41,7 +41,8 @@ test_that('column names must exist in DT', {
       DT,
       threshold = 10,
       id = 'potato',
-      coords = c('X', 'Y')
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -53,7 +54,8 @@ test_that('column names must exist in DT', {
       DT,
       threshold = 10,
       id = 'ID',
-      coords = c('potatoX', 'potatoY')
+      coords = c('potatoX', 'potatoY'),
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -66,6 +68,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'Y'),
+      timegroup = 'timegroup',
       splitBy = 'potato'
     ),
     'not present in input DT',
@@ -93,7 +96,8 @@ test_that('threshold correctly provided or error detected', {
     copyDT,
     threshold = 10,
     id = 'ID',
-    coords = c('X', 'Y')
+    coords = c('X', 'Y'),
+    timegroup = NULL
   ))
 
   expect_error(edge_dist(DT, threshold = -10, id = 'ID'),
@@ -113,7 +117,8 @@ test_that('coords are correctly provided or error detected', {
       DT,
       threshold = 10,
       id = 'ID',
-      coords = c('X', NULL)
+      coords = c('X', NULL),
+      timegroup = 'timegroup'
     ),
     'coords requires a vector'
   )
@@ -123,7 +128,8 @@ test_that('coords are correctly provided or error detected', {
       DT,
       threshold = 10,
       id = 'ID',
-      coords = c('X', 'ID')
+      coords = c('X', 'ID'),
+      timegroup = NULL
     ),
     'coords must be numeric'
   )

@@ -23,7 +23,7 @@
 #' @param threshold distance for grouping points, in the units of the coordinates
 #' @param id Character string of ID column name
 #' @param coords Character vector of X coordinate and Y coordinate column names
-#' @param timegroup (optional) timegroup field in the DT upon which the grouping will be calculated
+#' @param timegroup timegroup field in the DT upon which the grouping will be calculated
 #' @param splitBy (optional) character string or vector of grouping column name(s) upon which the grouping will be calculated
 #'
 #' @export
@@ -54,7 +54,7 @@ group_pts <- function(DT = NULL,
                      threshold = NULL,
                      id = NULL,
                      coords = NULL,
-                     timegroup = NULL,
+                     timegroup,
                      splitBy = NULL) {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL
@@ -81,6 +81,10 @@ group_pts <- function(DT = NULL,
 
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (missing(timegroup)) {
+    stop('timegroup required')
   }
 
   if (any(!(

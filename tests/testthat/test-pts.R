@@ -4,6 +4,9 @@ library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+
 test_that('DT is required', {
   expect_error(group_pts(
     DT = NULL,
@@ -41,7 +44,8 @@ test_that('column names must exist in DT', {
       DT,
       threshold = 10,
       id = 'potato',
-      coords = c('X', 'Y')
+      coords = c('X', 'Y'),
+      timegroup = NULL
     ),
     'not present in input DT',
     fixed = FALSE
@@ -53,7 +57,8 @@ test_that('column names must exist in DT', {
       DT,
       threshold = 10,
       id = 'ID',
-      coords = c('potatoX', 'potatoY')
+      coords = c('potatoX', 'potatoY'),
+      timegroup = NULL
     ),
     'not present in input DT',
     fixed = FALSE
@@ -66,6 +71,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'Y'),
+      timegroup = NULL,
       splitBy = 'potato'
     ),
     'not present in input DT',
@@ -93,7 +99,8 @@ test_that('threshold correctly provided or error detected', {
     copyDT,
     threshold = 10,
     id = 'ID',
-    coords = c('X', 'Y')
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup'
   ))
 
   expect_error(group_pts(DT, threshold = -10, id = 'ID'),
@@ -123,7 +130,8 @@ test_that('coords are correctly provided or error detected', {
       DT,
       threshold = 10,
       id = 'ID',
-      coords = c('X', 'ID')
+      coords = c('X', 'ID'),
+      timegroup = NULL
     ),
     'coords must be numeric'
   )
@@ -136,7 +144,8 @@ test_that('DT returned if timegroup, group fields not provided', {
                  copyDT,
                  threshold = 10,
                  id = 'ID',
-                 coords = c('X', 'Y')
+                 coords = c('X', 'Y'),
+                 timegroup = 'timegroup'
                )))
 
   # warns if > 1 ID row
@@ -201,7 +210,8 @@ test_that('group column succesfully detected', {
       copyDT,
       threshold = 10,
       id = 'ID',
-      coords = c('X', 'Y')
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
     ),
     'group column will be overwritten'
   )

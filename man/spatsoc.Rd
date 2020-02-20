@@ -40,17 +40,18 @@ Useful links:
 \itemize{
   \item \url{http://spatsoc.robitalec.ca}
   \item \url{https://github.com/ropensci/spatsoc}
+  \item \url{https://docs.ropensci.org/spatsoc/}
   \item Report bugs at \url{https://github.com/ropensci/spatsoc/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Alec L. Robitaille \email{robit.alec@gmail.com} (0000-0002-4706-1762)
+\strong{Maintainer}: Alec L. Robitaille \email{robit.alec@gmail.com} (\href{https://orcid.org/0000-0002-4706-1762}{ORCID})
 
 Authors:
 \itemize{
-  \item Quinn Webber (0000-0002-0434-9360)
-  \item Eric Vander Wal (0000-0002-8534-4317)
+  \item Quinn Webber (\href{https://orcid.org/0000-0002-0434-9360}{ORCID})
+  \item Eric Vander Wal (\href{https://orcid.org/0000-0002-8534-4317}{ORCID})
 }
 
 }

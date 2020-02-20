@@ -46,7 +46,7 @@ edge_dist <- function(DT = NULL,
                       threshold = NULL,
                       id = NULL,
                       coords = NULL,
-                      timegroup = NULL,
+                      timegroup,
                       splitBy = NULL,
                       returnDist = FALSE,
                       fillNA = TRUE) {
@@ -75,6 +75,10 @@ edge_dist <- function(DT = NULL,
 
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (missing(timegroup)) {
+    stop('timegroup required')
   }
 
   if (any(!(

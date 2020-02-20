@@ -4,9 +4,16 @@
 \alias{build_polys}
 \title{Build Polygons}
 \usage{
-build_polys(DT = NULL, projection = NULL, hrType = NULL,
-  hrParams = NULL, id = NULL, coords = NULL, splitBy = NULL,
-  spPts = NULL)
+build_polys(
+  DT = NULL,
+  projection = NULL,
+  hrType = NULL,
+  hrParams = NULL,
+  id = NULL,
+  coords = NULL,
+  splitBy = NULL,
+  spPts = NULL
+)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -82,6 +89,7 @@ build_polys(spPts = pts, hrType = 'mcp', hrParams = list(percent = 95))
 \seealso{
 \code{\link{group_polys}}
 
-Other Build functions: \code{\link{build_lines}}
+Other Build functions: 
+\code{\link{build_lines}()}
 }
 \concept{Build functions}

@@ -4,9 +4,16 @@
 \alias{edge_dist}
 \title{Distance based edge lists}
 \usage{
-edge_dist(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
-  timegroup = NULL, splitBy = NULL, returnDist = FALSE,
-  fillNA = TRUE)
+edge_dist(
+  DT = NULL,
+  threshold = NULL,
+  id = NULL,
+  coords = NULL,
+  timegroup,
+  splitBy = NULL,
+  returnDist = FALSE,
+  fillNA = TRUE
+)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -17,7 +24,7 @@ edge_dist(DT = NULL, threshold = NULL, id = NULL, coords = NULL,
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
+\item{timegroup}{timegroup field in the DT upon which the grouping will be calculated}
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 
@@ -62,6 +69,7 @@ edge_dist(DT, threshold = 100, id = 'ID',
           coords = c('X', 'Y'), timegroup = 'timegroup', returnDist = TRUE, fillNA = TRUE)
 }
 \seealso{
-Other Edge-list generation: \code{\link{edge_nn}}
+Other Edge-list generation: 
+\code{\link{edge_nn}()}
 }
 \concept{Edge-list generation}

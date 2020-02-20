@@ -4,9 +4,17 @@
 \alias{group_lines}
 \title{Groups Lines}
 \usage{
-group_lines(DT = NULL, threshold = NULL, projection = NULL,
-  id = NULL, coords = NULL, timegroup = NULL, sortBy = NULL,
-  splitBy = NULL, spLines = NULL)
+group_lines(
+  DT = NULL,
+  threshold = NULL,
+  projection = NULL,
+  id = NULL,
+  coords = NULL,
+  timegroup = NULL,
+  sortBy = NULL,
+  splitBy = NULL,
+  spLines = NULL
+)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -20,7 +28,7 @@ of the projection. Supply 0 to compare intersection without buffering.}
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
+\item{timegroup}{timegroup field in the DT upon which the grouping will be calculated}
 
 \item{sortBy}{Character string of date time column(s) to sort rows by. Must be a POSIXct.}
 
@@ -92,7 +100,8 @@ group_lines(DT, threshold = 50, projection = utm,
 \seealso{
 \code{\link{build_lines}} \code{\link{group_times}}
 
-Other Spatial grouping: \code{\link{group_polys}},
-  \code{\link{group_pts}}
+Other Spatial grouping: 
+\code{\link{group_polys}()},
+\code{\link{group_pts}()}
 }
 \concept{Spatial grouping}

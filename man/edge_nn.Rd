@@ -4,8 +4,15 @@
 \alias{edge_nn}
 \title{Nearest neighbour based edge lists}
 \usage{
-edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL,
-  splitBy = NULL, threshold = NULL, returnDist = FALSE)
+edge_nn(
+  DT = NULL,
+  id = NULL,
+  coords = NULL,
+  timegroup,
+  splitBy = NULL,
+  threshold = NULL,
+  returnDist = FALSE
+)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -14,7 +21,7 @@ edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL,
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timegroup}{(optional) timegroup field in the DT upon which the grouping will be calculated}
+\item{timegroup}{timegroup field in the DT upon which the grouping will be calculated}
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
 
@@ -71,6 +78,7 @@ edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 
 }
 \seealso{
-Other Edge-list generation: \code{\link{edge_dist}}
+Other Edge-list generation: 
+\code{\link{edge_dist}()}
 }
 \concept{Edge-list generation}
