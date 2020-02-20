@@ -36,7 +36,8 @@ test_that('column names must exist in DT', {
     edge_nn(
       DT,
       id = 'potato',
-      coords = c('X', 'Y')
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -47,7 +48,8 @@ test_that('column names must exist in DT', {
     edge_nn(
       DT,
       id = 'ID',
-      coords = c('potatoX', 'potatoY')
+      coords = c('potatoX', 'potatoY'),
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -59,7 +61,8 @@ test_that('column names must exist in DT', {
       DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      splitBy = 'potato'
+      splitBy = 'potato',
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -84,7 +87,8 @@ test_that('threshold correctly provided or error detected', {
   expect_silent(edge_nn(
     copyDT,
     id = 'ID',
-    coords = c('X', 'Y')
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup'
   ))
 
   expect_error(edge_nn(DT, threshold = -10, id = 'ID'),
@@ -112,7 +116,8 @@ test_that('coords are correctly provided or error detected', {
     edge_nn(
       DT,
       id = 'ID',
-      coords = c('X', 'ID')
+      coords = c('X', 'ID'),
+      timegroup = 'timegroup'
     ),
     'coords must be numeric'
   )
