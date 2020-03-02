@@ -1,5 +1,9 @@
+# v 0.1.12 (2020-03-02)
+* fixed `data.table` error in `edge_dist` and `edge_nn` ([PR 25](https://github.com/ropensci/spatsoc/pull/25))
+
+
 # v 0.1.11 (2020-02-20)
-* removed default NULL from 'timegroup' arguments in `group_pts`, `edge_dist` and `edge_nn` ([PR 21](https://github.com/ropensci/spatsoc/pull/24))
+* removed default NULL from 'timegroup' arguments in `group_pts`, `edge_dist` and `edge_nn` ([PR 24](https://github.com/ropensci/spatsoc/pull/24))
 
 
 # v 0.1.10 (2019-06-06)
