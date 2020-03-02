@@ -55,7 +55,8 @@ group_pts <- function(DT = NULL,
                      id = NULL,
                      coords = NULL,
                      timegroup,
-                     splitBy = NULL) {
+                     splitBy = NULL,
+                     latlon = FALSE) {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL
 
