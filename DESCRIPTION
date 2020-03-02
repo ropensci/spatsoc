@@ -28,8 +28,9 @@ Imports: data.table (>= 1.10.5),
     sp,
     rgeos,
     adehabitatHR,
-    igraph, 
-    methods
+    igraph,
+    methods,
+    geodist
 Suggests: testthat,
     knitr,
     rmarkdown,
