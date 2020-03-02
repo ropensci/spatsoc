@@ -57,7 +57,7 @@ group_pts <- function(DT = NULL,
                      timegroup,
                      splitBy = NULL,
                      latlon = FALSE,
-                     latlonMeasure = 'haversine') {
+                     latlonMeasure = 'geodesic') {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL
 
