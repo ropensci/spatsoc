@@ -153,13 +153,14 @@ edge_nn <- function(DT = NULL,
 
     if (returnDist) {
       w <- wm + (length(wm) * (as.numeric(names(wm)) - 1))
-      list(ID = .SD[[1]][as.numeric(names(wm))],
-           NN = .SD[[1]][wm],
-           distance = distMatrix[w])
+      l <- list(ID = .SD[[1]][as.numeric(names(wm))],
+                NN = .SD[[1]][wm],
+                distance = distMatrix[w])
     } else {
-      list(ID = .SD[[1]][as.numeric(names(wm))],
-           NN = .SD[[1]][wm])
+      l <- list(ID = .SD[[1]][as.numeric(names(wm))],
+                NN = .SD[[1]][wm])
     }
+    l
   },
   by = splitBy, .SDcols = c(id, coords)]
 }

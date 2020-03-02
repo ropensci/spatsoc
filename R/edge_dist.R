@@ -133,16 +133,18 @@ edge_dist <- function(DT = NULL,
     distMatrix <-
       as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
     diag(distMatrix) <- NA
+
     w <- which(distMatrix < threshold, arr.ind = TRUE)
 
     if (returnDist) {
-      list(ID1 = .SD[[1]][w[, 1]],
-           ID2 = .SD[[1]][w[, 2]],
-           distance = distMatrix[w])
+      l <- list(ID1 = .SD[[1]][w[, 1]],
+                ID2 = .SD[[1]][w[, 2]],
+                distance = distMatrix[w])
     } else {
-      list(ID1 = .SD[[1]][w[, 1]],
-           ID2 = .SD[[1]][w[, 2]])
+      l <- list(ID1 = .SD[[1]][w[, 1]],
+                ID2 = .SD[[1]][w[, 2]])
     }
+    l
   },
   by = splitBy, .SDcols = c(id, coords)]
 
