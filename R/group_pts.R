@@ -25,6 +25,8 @@
 #' @param coords Character vector of X coordinate and Y coordinate column names
 #' @param timegroup timegroup field in the DT upon which the grouping will be calculated
 #' @param splitBy (optional) character string or vector of grouping column name(s) upon which the grouping will be calculated
+#' @param lonlat boolean indiciating if coordinates are unprojected
+#' @param lonlatMeasure character of "haversine" "vincenty", "geodesic", or "cheap", specifying the method of distance calculation. Ignored if lonlat is FALSE. See \code{\link[geodist:geodist]{geodist::geodist}} for details.
 #'
 #' @export
 #'
@@ -43,6 +45,7 @@
 #'
 #' # Temporal grouping
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
 #' # Spatial grouping with timegroup
 #' group_pts(DT, threshold = 5, id = 'ID',
 #'           coords = c('X', 'Y'), timegroup = 'timegroup')

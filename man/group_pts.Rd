@@ -10,7 +10,9 @@ group_pts(
   id = NULL,
   coords = NULL,
   timegroup,
-  splitBy = NULL
+  splitBy = NULL,
+  lonlat = FALSE,
+  lonlatMeasure = "geodesic"
 )
 }
 \arguments{
@@ -25,6 +27,10 @@ group_pts(
 \item{timegroup}{timegroup field in the DT upon which the grouping will be calculated}
 
 \item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
+
+\item{lonlat}{boolean indiciating if coordinates are unprojected}
+
+\item{lonlatMeasure}{character of "haversine" "vincenty", "geodesic", or "cheap", specifying the method of distance calculation. Ignored if lonlat is FALSE. See \code{\link[geodist:geodist]{geodist::geodist}} for details.}
 }
 \value{
 \code{group_pts} returns the input \code{DT} appended with a \code{group} column.
@@ -59,6 +65,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 # Temporal grouping
 group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+
 # Spatial grouping with timegroup
 group_pts(DT, threshold = 5, id = 'ID',
           coords = c('X', 'Y'), timegroup = 'timegroup')
