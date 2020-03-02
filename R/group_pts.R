@@ -56,8 +56,8 @@ group_pts <- function(DT = NULL,
                      coords = NULL,
                      timegroup,
                      splitBy = NULL,
-                     latlon = FALSE,
-                     latlonMeasure = 'geodesic') {
+                     lonlat = FALSE,
+                     lonlatMeasure = 'geodesic') {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL
 
@@ -142,14 +142,14 @@ group_pts <- function(DT = NULL,
   }
 
   DT[, withinGroup := {
-    if (latlon) {
+    if (lonlat) {
       xy <- cbind(
         get(..coords[1]), get(..coords[2])
       )
       names(xy) <- c('x', 'y')
     distMatrix <-
       geodist::geodist(xy,
-      measure = latlonMeasure)
+      measure = lonlatMeasure)
     } else {
       distMatrix <-
         as.matrix(stats::dist(cbind(
