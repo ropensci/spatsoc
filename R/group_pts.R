@@ -142,11 +142,19 @@ group_pts <- function(DT = NULL,
   }
 
   DT[, withinGroup := {
+    if (latlon) {
     distMatrix <-
-      as.matrix(stats::dist(cbind(
+      geodist::geodist(cbind(
         get(..coords[1]), get(..coords[2])
       ),
-      method = 'euclidean'))
+      measure = latlonMeasure)
+    } else {
+      distMatrix <-
+        as.matrix(stats::dist(cbind(
+          get(..coords[1]), get(..coords[2])
+        ),
+        method = 'euclidean'))
+    }
     graphAdj <-
       igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
     igraph::clusters(graphAdj)$membership
