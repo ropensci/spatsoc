@@ -143,10 +143,12 @@ group_pts <- function(DT = NULL,
 
   DT[, withinGroup := {
     if (latlon) {
-    distMatrix <-
-      geodist::geodist(cbind(
+      xy <- cbind(
         get(..coords[1]), get(..coords[2])
-      ),
+      )
+      names(xy) <- c('x', 'y')
+    distMatrix <-
+      geodist::geodist(xy,
       measure = latlonMeasure)
     } else {
       distMatrix <-
