@@ -43,6 +43,7 @@
 #'
 #' # Temporal grouping
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
 #' # Spatial grouping with timegroup
 #' group_pts(DT, threshold = 5, id = 'ID',
 #'           coords = c('X', 'Y'), timegroup = 'timegroup')
