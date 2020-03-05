@@ -122,26 +122,3 @@ group_dyad <- function(DT = NULL,
 }
 
 ####### Dyad ID
-
-library(data.table)
-DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
-z <- unique(DT, by = 'ID')
-
-edges <- z[, CJ(ID, ID2 = ID)][ID != ID2]
-
-edges[, dyadID := apply(.SD, 1, function(x) paste(sort(x), collapse = '-'))]
-
-z[, IDnum := .GRP, by = ID]
-edges <- z[, CJ(IDnum, ID2num = IDnum)][IDnum != ID2num]
-edges[, dyadID := apply(.SD, 1, function(x) paste(sort(x), collapse = '-'))]
-
-# what if IDs are numbers
-edges[, ]
-
-apply(edges, MARGIN = 1, function(x) paste(sort(x), collapse = '-'))
-
-g <- igraph::graph_from_data_frame(edges, directed = FALSE)
-
-dyad_id <- function(DT, idcol) {
-
-}
