@@ -151,6 +151,8 @@ group_dyad <- function(DT = NULL,
 #' # Generate dyad IDs
 #' dyad_id(DT, 'ID1', 'ID2')
 dyad_id <- function(DT, id1, id2) {
-  DT[, dyadID := apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-')),
+  DT[!is.na(get(id1)) & !is.na(get(id2)),
+     dyadID := apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-')),
      .SDcols = c(id1, id2)][]
 }
+
