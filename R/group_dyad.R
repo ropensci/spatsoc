@@ -23,14 +23,14 @@
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
 #'
-edge_dist <- function(DT = NULL,
-                      threshold = NULL,
-                      id = NULL,
-                      coords = NULL,
-                      timegroup,
-                      splitBy = NULL,
-                      returnDist = FALSE,
-                      fillNA = FALSE) {
+group_dyad <- function(DT = NULL,
+                       threshold = NULL,
+                       id = NULL,
+                       coords = NULL,
+                       timegroup,
+                       splitBy = NULL,
+                       returnDist = FALSE,
+                       fillNA = FALSE) {
   # due to NSE notes in R CMD check
   N <- Var1 <- Var2 <- value <- . <- NULL
 
@@ -62,9 +62,7 @@ edge_dist <- function(DT = NULL,
     stop('timegroup required')
   }
 
-  if (any(!(
-    c(timegroup, id, coords, splitBy) %in% colnames(DT)
-  ))) {
+  if (any(!(c(timegroup, id, coords, splitBy) %in% colnames(DT)))) {
     stop(paste0(
       as.character(paste(setdiff(
         c(timegroup, id, coords, splitBy),
@@ -79,8 +77,10 @@ edge_dist <- function(DT = NULL,
   }
 
   if (!is.null(timegroup)) {
-    if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
-            c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+    if (any(
+      unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+      c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character')
+    )) {
       warning(
         strwrap(
           prefix = " ",
