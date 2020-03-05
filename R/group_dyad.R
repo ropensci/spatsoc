@@ -1,11 +1,8 @@
 #' Group Dyads
 #'
-#' @param DT input data.table
-#' @param threshold distance for grouping points, in the units of the coordinates
-#' @param id Character string of ID column name
-#' @param coords Character vector of X coordinate and Y coordinate column names
-#' @param timegroup timegroup field in the DT upon which the grouping will be calculated
-#' @param splitBy (optional) character string or vector of grouping column name(s) upon which the grouping will be calculated
+#' @inheritParams group_pts
+#' @param returnDist boolean indicating if the distance between individuals should be returned. If FALSE (default), only ID1, ID2 columns (and timegroup, splitBy columns if provided) are returned. If TRUE, another column "distance" is returned indicating the distance between ID1 and ID2.
+#' @param fillNA boolean indicating if NAs should be returned for individuals that were not within the threshold distance of any other. If TRUE, NAs are returned. If FALSE, only edges between individuals within the threshold distance are returned.
 #'
 #' @export
 #'
