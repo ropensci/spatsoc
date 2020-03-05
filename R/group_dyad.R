@@ -121,4 +121,22 @@ group_dyad <- function(DT = NULL,
 
 }
 
-####### Dyad ID
+#' Title
+#'
+#' @param DT input data.table
+#' @param id Character string of ID column name
+#'
+#' @return
+#' @export
+#'
+#' @examples
+dyad_id <- function(DT, id) {
+
+  uDT <- unique(DT, by = id)
+  dyads <- z[, CJ(ID1 = get(id), ID2 = get(id))][ID1 != ID2]
+  dyads[, dyadID := apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-'))]
+
+  data.table::setnames(dyads, c('ID1', 'ID2'), c(id, paste0(id, 2)))
+
+  return(dyads[])
+}
