@@ -26,14 +26,16 @@
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
 #'
-group_dyad <- function(DT = NULL,
-                       threshold = NULL,
-                       id = NULL,
-                       coords = NULL,
-                       timegroup,
-                       splitBy = NULL) {
+edge_dist <- function(DT = NULL,
+                      threshold = NULL,
+                      id = NULL,
+                      coords = NULL,
+                      timegroup,
+                      splitBy = NULL,
+                      returnDist = FALSE,
+                      fillNA = TRUE) {
   # due to NSE notes in R CMD check
-  N <- withinGroup <- ..id <- ..coords <- group <- NULL
+  N <- Var1 <- Var2 <- value <- . <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -91,11 +93,6 @@ group_dyad <- function(DT = NULL,
         )
       )
     }
-  }
-
-  if ('group' %in% colnames(DT)) {
-    message('group column will be overwritten by this function')
-    set(DT, j = 'group', value = NULL)
   }
 
   if (is.null(timegroup) && is.null(splitBy)) {
