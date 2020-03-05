@@ -124,17 +124,19 @@ group_dyad <- function(DT = NULL,
 ####### Dyad ID
 
 library(data.table)
-
-# Read example data
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
-
-# Cast the character column to POSIXct
-DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
-
 z <- unique(DT, by = 'ID')
 
 edges <- z[, CJ(ID, ID2 = ID)][ID != ID2]
+
 edges[, dyadID := apply(.SD, 1, function(x) paste(sort(x), collapse = '-'))]
+
+z[, IDnum := .GRP, by = ID]
+edges <- z[, CJ(IDnum, ID2num = IDnum)][IDnum != ID2num]
+edges[, dyadID := apply(.SD, 1, function(x) paste(sort(x), collapse = '-'))]
+
+# what if IDs are numbers
+edges[, ]
 
 apply(edges, MARGIN = 1, function(x) paste(sort(x), collapse = '-'))
 
