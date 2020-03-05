@@ -123,20 +123,34 @@ group_dyad <- function(DT = NULL,
 
 #' Title
 #'
+#' @param id1
+#' @param id2
 #' @param DT input data.table
-#' @param id Character string of ID column name
 #'
-#' @return
+#' @return `dyad_id` returns a `data.table` with all combinations of IDs in `DT` and a dyad ID.
+#'
 #' @export
 #'
 #' @examples
-dyad_id <- function(DT, id) {
-
-  uDT <- unique(DT, by = id)
-  dyads <- z[, CJ(ID1 = get(id), ID2 = get(id))][ID1 != ID2]
-  dyads[, dyadID := apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-'))]
-
-  data.table::setnames(dyads, c('ID1', 'ID2'), c(id, paste0(id, 2)))
-
-  return(dyads[])
+#' # Load data.table
+#' library(data.table)
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Edge list generation
+#' edge_dist(DT, threshold = 100, id = 'ID',
+#'           coords = c('X', 'Y'), timegroup = 'timegroup', returnDist = TRUE, fillNA = TRUE)
+#'
+#' # Generate dyad IDs
+#' dyad_id(DT, 'ID1', 'ID2')
+dyad_id <- function(DT, id1, id2) {
+  DT[, dyadID := apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-')),
+     .SDcols = c(id1, id2)][]
 }
