@@ -109,6 +109,18 @@ edge_dist <- function(DT = NULL,
     }
   }
 
+  edges <- edge_dist(
+    DT = DT,
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
+    splitBy = splitBy,
+    returnDist = returnDist,
+    fillNA = fillNA
+  )
+
+  dyad_id(DT = edges, id1 = 'ID1', id2 = 'ID2')
 
 
   # TODO: group_dyad logic
