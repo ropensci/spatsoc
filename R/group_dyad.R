@@ -30,7 +30,7 @@ edge_dist <- function(DT = NULL,
                       timegroup,
                       splitBy = NULL,
                       returnDist = FALSE,
-                      fillNA = TRUE) {
+                      fillNA = FALSE) {
   # due to NSE notes in R CMD check
   N <- Var1 <- Var2 <- value <- . <- NULL
 
