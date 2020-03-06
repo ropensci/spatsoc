@@ -157,8 +157,23 @@ group_dyad <- function(DT = NULL,
 #' # Generate dyad IDs
 #' dyad_id(DT, 'ID1', 'ID2')
 dyad_id <- function(DT, id1, id2) {
+  # TODO: this is way more inefficient, use a unique then merge?
+
   DT[!is.na(get(id1)) & !is.na(get(id2)),
      dyadID := apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-')),
      .SDcols = c(id1, id2)][]
 }
+
+dyad_id2 <- function(DT, id1, id2) {
+  uDT <- unique(c(DT[[id1]]), by = id)
+  dyads <- uDT[, CJ(ID1 = get(id), ID2 = get(id))][ID1 != ID2]
+  dyads[, dyadID := apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-'))]
+
+  data.table::setnames(dyads, c('ID1', 'ID2'), c(id, paste0(id, 2)))
+
+
+
+  return(dyads[])
+}
+
 
