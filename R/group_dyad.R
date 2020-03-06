@@ -40,6 +40,9 @@ group_dyad <- function(edges,
   igraph::clusters(g)
   igraph::count_triangles(g)
 
+  # TODO: sub down to clusters csize == 2 or == 3?
+  # TODO: cast out and gen triangle id too?
+
 }
 
 #' Dyad ID
