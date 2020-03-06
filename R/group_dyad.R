@@ -32,6 +32,14 @@ group_dyad <- function(edges,
 
   dyad_id(DT = edges, id1 = id1, id2 = id2)
 
+  # TODO: by timegroup
+  et1 <- edges[timegroup == 641]
+  d <- dcast(na.omit(et1), ID1 ~ ID2, fun.aggregate = length, drop = TRUE)
+  g <-  igraph::graph_from_adjacency_matrix(as.matrix(d[, -1]))
+
+  igraph::clusters(g)
+  igraph::count_triangles(g)
+
 }
 
 #' Dyad ID
