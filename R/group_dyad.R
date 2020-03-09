@@ -32,6 +32,15 @@ group_dyad <- function(edges,
 
   dyad_id(DT = edges, id1 = id1, id2 = id2)
 
+  ds <- edges[!is.na(dyadID), .(timegroup, dyadID)]
+  uds <- unique(ds)
+  uds[, uniqueN(timegroup), .(dyadID)][order(V1)]
+  setorder(uds, timegroup)
+  uds[, shifttimegrp := timegroup - shift(timegroup, 1), by = dyadID]
+  uds[, runlen := rleid(shifttimegrp), dyadID]
+  uds[shifttimegrp == 1, together := .N, .(runlen, dyadID)]
+
+
   # TODO: by timegroup
   et1 <- edges[timegroup == 641]
   d <- dcast(na.omit(et1), ID1 ~ ID2, fun.aggregate = length, drop = TRUE)
