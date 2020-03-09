@@ -81,7 +81,7 @@ dyad_id <- function(DT, id1, id2) {
 
   data.table::setnames(dyads, c('ID1', 'ID2'), c(id1, id2))
 
-  return(DT[dyads, dyadID := dyadID, on = c(id1, id2)])
+  return(DT[dyads, dyadID := dyadID, on = c(id1, id2)][])
 }
 
 
