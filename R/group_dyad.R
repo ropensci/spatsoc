@@ -87,11 +87,11 @@ dyad_stats <- function(DT = NULL,
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
 #' # Edge list generation
-#' edge_dist(DT, threshold = 100, id = 'ID',
+#' edges <- edge_dist(DT, threshold = 100, id = 'ID',
 #'           coords = c('X', 'Y'), timegroup = 'timegroup', returnDist = TRUE, fillNA = TRUE)
 #'
 #' # Generate dyad IDs
-#' dyad_id(DT, 'ID1', 'ID2')
+#' dyad_id(edges, 'ID1', 'ID2')
 dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
   if (is.null(DT)) {
     stop('input DT required')
