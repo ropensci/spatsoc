@@ -96,6 +96,18 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
     stop('input DT required')
   }
 
+  if (any(!(
+    c(id1, id2) %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(id1, id2),
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
   ids <- unique(na.omit(c(DT[[id1]], DT[[id2]])))
   dyads <- data.table::CJ(ID1 = ids, ID2 = ids)[ID1 != ID2]
   dyads[, dyadID := apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-'))]
