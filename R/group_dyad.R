@@ -23,26 +23,29 @@
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
 #'
-group_dyad <- function(edges,
+group_dyad <- function(DT,
                        n = 2,
                        id1,
                        id2,
                        timegroup) {
 
+  # TODO:
+  # start, end for each dyad
+  # mean xy for each dyad +timegroup
+  # number of relocations consecutive by dyad
 
-  dyad_id(DT = edges, id1 = id1, id2 = id2)
+  dyad_id(DT, id1 = id1, id2 = id2)
 
-  ds <- edges[!is.na(dyadID), .(timegroup, dyadID)]
+  ds <- DT[!is.na(dyadID), .(timegroup, dyadID)]
   uds <- unique(ds)
   uds[, uniqueN(timegroup), .(dyadID)][order(V1)]
   setorder(uds, timegroup)
   uds[, shifttimegrp := timegroup - shift(timegroup, 1), by = dyadID]
   uds[, runlen := rleid(shifttimegrp), dyadID]
-  uds[shifttimegrp == 1, together := .N, .(runlen, dyadID)]
+  uds[, together := ifelse(shifttimegrp == 1, 1, .N), .(runlen, dyadID)]
 
 
-  # TODO: by timegroup
-  et1 <- edges[timegroup == 641]
+  et1 <- DT[timegroup == 641]
   d <- dcast(na.omit(et1), ID1 ~ ID2, fun.aggregate = length, drop = TRUE)
   g <-  igraph::graph_from_adjacency_matrix(as.matrix(d[, -1]))
 
@@ -110,7 +113,8 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
 
   ids <- unique(na.omit(c(DT[[id1]], DT[[id2]])))
   dyads <- data.table::CJ(ID1 = ids, ID2 = ids)[ID1 != ID2]
-  dyads[, dyadID := apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-'))]
+  dyads[, dyadID :=
+          apply(X = .SD, MARGIN = 1, FUN = function(x) paste(sort(x), collapse = '-'))]
 
   data.table::setnames(dyads, c('ID1', 'ID2'), c(id1, id2))
 
