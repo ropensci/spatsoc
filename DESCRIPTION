@@ -30,7 +30,8 @@ Imports: data.table (>= 1.10.5),
     adehabitatHR,
     igraph, 
     methods
-Suggests: testthat,
+Suggests: 
+    testthat (>= 2.1.0),
     knitr,
     rmarkdown,
     asnipe
