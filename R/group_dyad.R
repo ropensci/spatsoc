@@ -34,22 +34,35 @@ dyad_stats <- function(DT = NULL,
                        dyadID = 'dyadID',
                        timegroup = NULL) {
 
-  # TODO: check if DT null, timegroup NULL
-  # TODO: check if dyadID in DT
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
+  if (is.null(timegroup)) {
+    stop('input timegroup required')
+  }
+
+  if (!(dyadID %in% colnames(DT)) {
+    stop(paste0(dyadID,
+      ' field provided are not present in input DT'
+    ))
+  })
+
 
   # TODO:
   # start, end for each dyad
   # mean xy for each dyad +timegroup
   # number of relocations consecutive by dyad
 
-  ds <- DT[!is.na(dyadID), .(timegroup, dyadID)]
-  uds <- unique(ds)
-  uds[, uniqueN(timegroup), .(dyadID)][order(V1)]
-  setorder(uds, timegroup)
-  uds[, shifttimegrp := timegroup - shift(timegroup, 1), by = dyadID]
-  uds[, runlen := rleid(shifttimegrp), dyadID]
-  uds[, together := ifelse(shifttimegrp == 1, 1, .N), .(runlen, dyadID)]
+  d <- unique(DT[!is.na(get(dyadID)), by = c(timegroup, dyadID)])
+  # d[, .(utimegroup = uniqueN(timegroup)), .(dyadID)][order(utimegroup)]
+  data.table::setorderv(d, timegroup)
 
+  uds[, shifttimegrp := get(timegroup) - shift(get(timegroup), 1), by = dyadID]
+
+  uds[, runlen := rleid(shifttimegrp), by = dyadID]
+
+  uds[, together := ifelse(shifttimegrp == 1, 1, .N), c('runlen', dyadID)]
 
   et1 <- DT[timegroup == 641]
   d <- dcast(na.omit(et1), ID1 ~ ID2, fun.aggregate = length, drop = TRUE)
@@ -98,11 +111,11 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
   }
 
   if (is.null(id1)) {
-    stop('input DT required')
+    stop('input id1 required')
   }
 
   if (is.null(id2)) {
-    stop('input DT required')
+    stop('input id2 required')
   }
 
   if (any(!(
