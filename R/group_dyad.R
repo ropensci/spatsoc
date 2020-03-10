@@ -21,19 +21,26 @@
 #' # Temporal grouping
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
+#' # Edge list generation
+#' edges <- edge_dist(DT, threshold = 100, id = 'ID',
+#'           coords = c('X', 'Y'), timegroup = 'timegroup', returnDist = TRUE, fillNA = TRUE)
 #'
-group_dyad <- function(DT,
-                       n = 2,
-                       id1,
-                       id2,
-                       timegroup) {
+#' # Generate dyad IDs
+#' dyad_id(edges, 'ID1', 'ID2')
+#'
+#' # Calculate dyad stats
+#' dyadstats <- dyad_stats(edges, 'dyadID', 'timegroup')
+dyad_stats <- function(DT = NULL,
+                       dyadID = 'dyadID',
+                       timegroup = NULL) {
+
+  # TODO: check if DT null, timegroup NULL
+  # TODO: check if dyadID in DT
 
   # TODO:
   # start, end for each dyad
   # mean xy for each dyad +timegroup
   # number of relocations consecutive by dyad
-
-  dyad_id(DT, id1 = id1, id2 = id2)
 
   ds <- DT[!is.na(dyadID), .(timegroup, dyadID)]
   uds <- unique(ds)
