@@ -153,12 +153,13 @@ dyads[, difftimegrp := timegroup - shifttimegrp]
 # Run id of diff timegroups
 dyads[, runid := rleid(difftimegrp), by = dyadID]
 
-# Run length of consecutive observations of dyadIDs
-dyads[, runlen := fifelse(difftimegrp == 1, .N, NA_integer_), by = .(runid, dyadID)]
+# N consecutive observations of dyadIDs
+dyads[, runCount := fifelse(difftimegrp == 1, .N, NA_integer_), by = .(runid, dyadID)]
 
 ## Start and end of consecutive relocations for each dyad
-dyads
+dyads[!is.na(runCount), start := fifelse(timegroup == min(timegroup), TRUE, NA), by = .(runid, dyadID)]
 
+dyads[!is.na(runCount), end := fifelse(timegroup == max(timegroup), TRUE, NA), by = .(runid, dyadID)]
 
 ## Mean x, y of dyads
 ```
