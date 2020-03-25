@@ -37,10 +37,17 @@ For more details, see the [blog post](https://ropensci.org/blog/2018/12/04/spats
 
 
 ## News
-New edge-list generating functions added (feedback welcome as always!):
+New edge-list generating functions added:
 
   * `edge_nn`
   * `edge_dist`
+  
+and dyad id function:
+
+  * `dyad_id`
+  
+(feedback welcome as always!)
+
 
 Also, our article describing `spatsoc` was just published at Methods in Ecology and Evolution. [Link here](https://doi.org/10.1111/2041-210X.13215) and thanks to reviewers and editors at [rOpenSci](https://github.com/ropensci/software-review/issues/237) and at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x). 
 
