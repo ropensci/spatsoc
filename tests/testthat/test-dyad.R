@@ -42,3 +42,17 @@ test_that('dyadID column succesfully detected', {
 })
 
 
+
+test_that('dyadID handles NAs', {
+  naedges <- copy(edges)[, NN := NA]
+  expect_equal(dyad_id(DT = naedges,
+                       id1 = 'ID',
+                       id2 = 'NN')[is.na(dyadID), .N],
+               naedges[is.na(NN), .N])
+
+  naedges <- copy(edges)[, ID := NA]
+  expect_equal(dyad_id(DT = naedges,
+                       id1 = 'ID',
+                       id2 = 'NN')[is.na(dyadID), .N],
+               naedges[is.na(ID), .N])
+})
