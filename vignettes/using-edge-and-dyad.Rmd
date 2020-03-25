@@ -137,12 +137,15 @@ Once we have generated dyad ids, we can measure consecutive relocations, start a
 
 ```{r}
 # Get the unique dyads by timegroup
-d <- unique(edges[!is.na(get(dyadID)), by = c(timegroup, dyadID)])
+d <- unique(edges, by = c('timegroup', 'dyadID'))
+
+# Set the order of the rows
+setorder(d, timegroup)
+
 
   # start, end for each dyad
   # mean xy for each dyad +timegroup
   # number of relocations consecutive by dyad
-data.table::setorderv(d, timegroup)
 
 ```
   # TODO:
