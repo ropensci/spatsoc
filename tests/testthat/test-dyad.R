@@ -56,3 +56,17 @@ test_that('dyadID handles NAs', {
                        id2 = 'NN')[is.na(dyadID), .N],
                naedges[is.na(ID), .N])
 })
+
+
+test_that('dyadID handles numeric ids', {
+  nDyads <- dyad_id(copy(edges), 'ID', 'NN')[, uniqueN(dyadID)]
+  numids <- copy(edges)
+  numids[, ID := .GRP, ID]
+  numids[, NN := .GRP, NN]
+
+  expect_equal(dyad_id(DT = numids,
+                       id1 = 'ID',
+                       id2 = 'NN')[, uniqueN(dyadID)],
+               nDyads)
+
+})
