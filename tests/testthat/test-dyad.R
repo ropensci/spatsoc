@@ -1,4 +1,4 @@
-context("test-edge-nn")
+context("test-dyad")
 
 library(spatsoc)
 
