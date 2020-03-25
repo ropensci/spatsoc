@@ -120,7 +120,7 @@ group_pts <- function(DT = NULL,
 
   if ('group' %in% colnames(DT)) {
     message('group column will be overwritten by this function')
-    set(DT, j = 'group', value = NULL)
+    data.table::set(DT, j = 'group', value = NULL)
   }
 
   if (is.null(timegroup) && is.null(splitBy)) {
