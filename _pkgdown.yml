@@ -38,6 +38,10 @@ reference:
     contents:
     - '`randomizations`'
     - '`get_gbi`'
+  - title: Dyad ID function
+    desc: ~
+    contents:
+    - '`dyad_id`'
   - title: Build functions
     desc: ~
     contents:
