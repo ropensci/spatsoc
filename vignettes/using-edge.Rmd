@@ -38,8 +38,6 @@ spatsoc provides users with one temporal (`group_times`) and two edge list gener
 ## Load packages
 library(spatsoc)
 library(data.table)
-library(asnipe)
-library(igraph)
 
 ## Read data as a data.table
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
