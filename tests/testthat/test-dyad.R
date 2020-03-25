@@ -18,12 +18,17 @@ test_that('DT is required', {
 
 test_that('id1 and id2 are required', {
   expect_error(dyad_id(DT = edges, id1 = NULL),
-               'input DT required')
+               'input id1 required')
 
   expect_error(dyad_id(DT = edges, id1 = 'ID1', id2 = NULL),
-               'input DT required')
+               'input id2 required')
 })
 
+test_that('columns must be in DT', {
+  expect_error(dyad_id(DT = edges, id1 = 'potato', id2 = 'ID2'),
+               'provided are not present in input DT', fixed = FALSE)
 
-# TODO: Test if any are NULL
-# TODO: Test if id1 or id2 arent in DT
+  expect_error(dyad_id(DT = edges, id1 = 'ID1', id2 = 'potato'),
+               'provided are not present in input DT', fixed = FALSE)
+})
+
