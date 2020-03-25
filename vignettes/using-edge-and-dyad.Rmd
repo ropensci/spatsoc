@@ -164,13 +164,4 @@ dyads[, runlen := fifelse(difftimegrp == 1, .N, NA_integer_), by = .(runid, dyad
   # number of relocations consecutive by dyad
 
 ```
-  # TODO:
 
-
-  d <- unique(DT[!is.na(get(dyadID)), by = c(timegroup, dyadID)])
-
-  uds[, shifttimegrp := get(timegroup) - shift(get(timegroup), 1), by = dyadID]
-
-  uds[, runlen := rleid(shifttimegrp), by = dyadID]
-
-  uds[, together := ifelse(shifttimegrp == 1, 1, .N), c('runlen', dyadID)]
