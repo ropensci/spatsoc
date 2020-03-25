@@ -161,8 +161,8 @@ dyads[!is.na(runCount), start := fifelse(timegroup == min(timegroup), TRUE, NA),
 
 dyads[!is.na(runCount), end := fifelse(timegroup == max(timegroup), TRUE, NA), by = .(runid, dyadID)]
 
-## Mean x, y of dyads
 ```
 
 
+<!-- mean xy, todo -->
 
