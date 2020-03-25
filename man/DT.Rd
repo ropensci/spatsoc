@@ -3,16 +3,14 @@
 \name{DT}
 \alias{DT}
 \title{Movement of 10 "Newfoundland Bog Cows"}
-\format{A data.table with 14297 rows and 5 variables:
-\describe{
-\item{ID}{individual identifier}
-\item{X}{X coordinate of the relocation (UTM 21N)}
-\item{Y}{Y coordinate of the relocation (UTM 21N)}
+\format{A data.table with 14297 rows and 5 variables: \describe{
+\item{ID}{individual identifier} \item{X}{X coordinate of the relocation
+(UTM 21N)} \item{Y}{Y coordinate of the relocation (UTM 21N)}
 \item{datetime}{character string representing the date time}
-\item{population}{sub population within the individuals}
-}}
+\item{population}{sub population within the individuals} }}
 \description{
-A dataset containing the GPS relocations of 10 individuals in winter 2016-2017.
+A dataset containing the GPS relocations of 10 individuals in winter
+2016-2017.
 }
 \examples{
 # Load data.table

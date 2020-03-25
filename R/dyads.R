@@ -33,8 +33,15 @@
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
 #' # Edge list generation
-#' edges <- edge_dist(DT, threshold = 100, id = 'ID', coords = c('X', 'Y'),
-#' timegroup = 'timegroup', returnDist = TRUE, fillNA = TRUE)
+#' edges <- edge_dist(
+#'     DT,
+#'     threshold = 100,
+#'     id = 'ID',
+#'     coords = c('X', 'Y'),
+#'     timegroup = 'timegroup',
+#'     returnDist = TRUE,
+#'     fillNA = TRUE
+#'   )
 #'
 #' # Generate dyad IDs
 #' dyad_id(edges, 'ID1', 'ID2')
