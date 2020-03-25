@@ -58,6 +58,11 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
     ))
   }
 
+  if ('dyadID' %in% colnames(DT)) {
+    message('dyadID column will be overwritten by this function')
+    data.table::set(DT, j = 'dyadID', value = NULL)
+  }
+
   ids <- unique(na.omit(c(DT[[id1]], DT[[id2]])))
   dyads <- data.table::CJ(ID1 = ids, ID2 = ids)[ID1 != ID2]
   dyads[, dyadID :=
