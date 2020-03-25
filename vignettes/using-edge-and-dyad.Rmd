@@ -157,12 +157,15 @@ dyads[, runid := rleid(difftimegrp), by = dyadID]
 dyads[, runCount := fifelse(difftimegrp == 1, .N, NA_integer_), by = .(runid, dyadID)]
 
 ## Start and end of consecutive relocations for each dyad
+# Dont consider where rows aren't a run (na for runCount)
 dyads[!is.na(runCount), start := fifelse(timegroup == min(timegroup), TRUE, NA), by = .(runid, dyadID)]
 
 dyads[!is.na(runCount), end := fifelse(timegroup == max(timegroup), TRUE, NA), by = .(runid, dyadID)]
 
+## Example output
+dyads[dyadID == 'B-H', 
+      .(timegroup, nObs, shifttimegrp, difftimegrp, runid, runCount, start, end)]
 ```
-
 
 <!-- mean xy, todo -->
 
