@@ -50,7 +50,7 @@ DT[, yr := year(datetime)]
 ```
 
 
-Next, we will group relocations temporally with `group_times` and generate edges lists with one of `edge_dist`, `edge_dist`. Note: these are mutually exclusive, only select one spatial grouping function at a time. 
+Next, we will group relocations temporally with `group_times` and generate edges lists with one of `edge_dist`, `edge_dist`. Note: these are mutually exclusive, only select one edge list generating function at a time. 
 
 ## 2. a) `edge_dist` 
 
@@ -58,7 +58,7 @@ Distance based edge lists where relocations in each timegroup are considered edg
 
 This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
 
-Optionally, `edge_dist` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument 'returnDist' = TRUE. 
+Optionally, `edge_dist` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument `returnDist = TRUE`. 
 
 ```{r}
 # Temporal groups
@@ -80,9 +80,9 @@ edges <- edge_dist(
 
 Nearest neighbour based edge lists where each individual is connected to their nearest neighbour. `edge_nn` can be used to generate edge lists defined either by nearest neighbour or nearest neighbour with a maximum distance. As with grouping functions and `edge_dist`, temporal and spatial threshold depend on  species and study system. 
 
-NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and it's nearest neighbour is greater than the threshold. 
+NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and its nearest neighbour is greater than the threshold. 
 
-Optionally, `edge_nn` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument 'returnDist' = TRUE. 
+Optionally, `edge_nn` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument `returnDist = TRUE`. 
 
 ```{r, eval = FALSE}
 # Temporal groups
