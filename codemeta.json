@@ -5,7 +5,7 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "spatsoc",
-  "description": "Detects spatial and temporal groups in GPS relocations. \n    It can be used to convert GPS relocations to \n    gambit-of-the-group format to build proximity-based social networks. \n    In addition, the randomizations function provides data-stream \n    randomization methods suitable for GPS data.\n This package has been peer-reviewed by rOpenSci (v. 0.1.9).",
+  "description": "Detects spatial and temporal groups in GPS relocations. \n    It can be used to convert GPS relocations to \n    gambit-of-the-group format to build proximity-based social networks. \n    In addition, the randomizations function provides data-stream \n    randomization methods suitable for GPS data.",
   "name": "spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship",
   "codeRepository": "https://github.com/ropensci/spatsoc",
   "relatedLink": [
@@ -13,18 +13,19 @@
     "https://github.com/robitalec/spatsoc",
     "https://github.com/ropensci/spatsoc",
     "https://CRAN.R-project.org/package=spatsoc",
-    "http://spatsoc.robitalec.ca"
+    "http://spatsoc.robitalec.ca",
+    "https://docs.ropensci.org/spatsoc/"
   ],
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.10",
+  "version": "0.1.13",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.0",
+    "version": "3.6.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.0 (2019-04-26)",
+  "runtimePlatform": "R version 3.6.2 (2019-12-12)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -66,6 +67,7 @@
       "@type": "SoftwareApplication",
       "identifier": "testthat",
       "name": "testthat",
+      "version": ">= 2.1.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -192,7 +194,7 @@
   "citation": [
     {
       "@type": "ScholarlyArticle",
-      "datePublished": "2018",
+      "datePublished": "2019",
       "author": [
         {
           "@type": "Person",
@@ -211,20 +213,20 @@
         }
       ],
       "name": "Conducting social network analysis with animal telemetry data: applications and methods using {spatsoc}",
-      "url": "https://doi.org/10.1101/447284",
+      "url": "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13215",
       "isPartOf": {
         "@type": "PublicationIssue",
-        "datePublished": "2018",
+        "datePublished": "2019",
         "isPartOf": {
           "@type": ["PublicationVolume", "Periodical"],
-          "name": "bioRxiv"
+          "name": "Methods in Ecology and Evolution"
         }
       }
     }
   ],
   "releaseNotes": "https://github.com/ropensci/spatsoc//blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/spatsoc/blob/master/README.md",
-  "fileSize": "366.853KB",
+  "fileSize": "662.35KB",
   "contIntegration": "https://codecov.io/gl/robit.a/spatsoc",
   "developmentStatus": "http://www.repostatus.org/#active",
   "review": {
