@@ -1,0 +1,171 @@
+---
+title: "Using edge list generating functions and dyad_id"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using edge list generating functions and dyad_id}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  eval = FALSE,
+  echo = TRUE,
+  comment = "#>"
+)
+```
+
+
+
+`spatsoc` can be used in social network analysis to generate edge lists from GPS relocation data. 
+
+
+Edge lists are generated using either the `edge_dist` or the `edge_nn` function. 
+
+
+**Note**: The grouping functions and their application in social network analysis are further described in the vignette [Using spatsoc in social network analysis - grouping functions](http://spatsoc.robitalec.ca/articles/using-in-sna.html). 
+
+
+## Generate edge lists
+spatsoc provides users with one temporal (`group_times`) and two edge list generating functions (`edge_dist`, `edge_nn`) to generate edge lists from GPS relocations. Users can consider edges defined by either the spatial proximity between individuals (with `edge_dist`), by nearest neighbour (with `edge_nn`) or by nearest neighbour with a maximum distance (with `edge_nn`). The edge lists can be used directly by the animal social network package `asnipe` to generate networks. 
+
+### 1. Load packages and prepare data
+`spatsoc` expects a `data.table` for all `DT` arguments and date time columns to be formatted `POSIXct`. 
+
+```{r, message = FALSE, warning = FALSE, eval = TRUE}
+## Load packages
+library(spatsoc)
+library(data.table)
+
+## Read data as a data.table
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+
+## Cast datetime column to POSIXct
+DT[, datetime := as.POSIXct(datetime)]
+```
+
+
+Next, we will group relocations temporally with `group_times` and generate edges lists with one of `edge_dist`, `edge_dist`. Note: these are mutually exclusive, only select one edge list generating function at a time. 
+
+### 2. a) `edge_dist` 
+
+Distance based edge lists where relocations in each timegroup are considered edges if they are within the spatial distance defined by the user with the `threshold` argument. Depending on species and study system, relevant temporal and spatial distance thresholds are used. In this case, relocations within 5 minutes and 50 meters are considered edges. 
+
+This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
+
+Optionally, `edge_dist` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument `returnDist = TRUE`. 
+
+```{r, eval = TRUE}
+# Temporal groups
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+
+# Edge list generation
+edges <- edge_dist(
+  DT,
+  threshold = 100,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup',
+  returnDist = TRUE,
+  fillNA = TRUE
+)
+```
+
+### 2. b) `edge_nn`
+
+Nearest neighbour based edge lists where each individual is connected to their nearest neighbour. `edge_nn` can be used to generate edge lists defined either by nearest neighbour or nearest neighbour with a maximum distance. As with grouping functions and `edge_dist`, temporal and spatial threshold depend on  species and study system. 
+
+NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and its nearest neighbour is greater than the threshold. 
+
+Optionally, `edge_nn` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument `returnDist = TRUE`. 
+
+```{r, eval = FALSE}
+# Temporal groups
+group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+
+# Edge list generation
+edges <- edge_nn(
+  DT,
+  id = 'ID',
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup'
+)
+
+# Edge list generation using maximum distance threshold
+edges <- edge_nn(
+  DT, 
+  id = 'ID', 
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup', 
+  threshold = 100
+)
+
+# Edge list generation using maximum distance threshold, returning distances
+edges <- edge_nn(
+  DT, 
+  id = 'ID', 
+  coords = c('X', 'Y'),
+  timegroup = 'timegroup', 
+  threshold = 100,
+  returnDist = TRUE
+)
+
+```
+
+
+## Dyads
+
+### 3. `dyad_id`
+
+The function `dyad_id` can be used to generate a unique, undirected dyad identifier for edge lists. 
+
+```{r, eval = TRUE}
+# In this case, using the edges generated in 2. a) edge_dist
+dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
+```
+
+
+Once we have generated dyad ids, we can measure consecutive relocations, start and end relocation, etc. **Note:** since the edges are duplicated A-B and B-A, you will need to use the unique timegroup*dyadID or divide counts by 2. 
+
+
+### 4. Dyad stats
+
+```{r, eval = TRUE}
+# Get the unique dyads by timegroup
+dyads <- unique(edges, by = c('timegroup', 'dyadID'))
+
+# Set the order of the rows
+setorder(dyads, timegroup)
+
+## Count number of timegroups dyads are observed together
+dyads[, nObs := .N, by = .(dyadID)]
+
+## Count consecutive relocations together
+# Shift the timegroup within dyadIDs
+dyads[, shifttimegrp := shift(timegroup, 1), by =  dyadID]
+
+# Difference between consecutive timegroups for each dyadID
+# where difftimegrp == 1, the dyads remained together in consecutive timegroups
+dyads[, difftimegrp := timegroup - shifttimegrp]
+
+
+# Run id of diff timegroups
+dyads[, runid := rleid(difftimegrp), by = dyadID]
+
+# N consecutive observations of dyadIDs
+dyads[, runCount := fifelse(difftimegrp == 1, .N, NA_integer_), by = .(runid, dyadID)]
+
+## Start and end of consecutive relocations for each dyad
+# Dont consider where rows aren't a run (na for runCount)
+dyads[!is.na(runCount), start := fifelse(timegroup == min(timegroup), TRUE, NA), by = .(runid, dyadID)]
+
+dyads[!is.na(runCount), end := fifelse(timegroup == max(timegroup), TRUE, NA), by = .(runid, dyadID)]
+
+## Example output
+dyads[dyadID == 'B-H', 
+      .(timegroup, nObs, shifttimegrp, difftimegrp, runid, runCount, start, end)]
+```
+
+<!-- mean xy, todo -->
+

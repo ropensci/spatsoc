@@ -5,6 +5,7 @@ articles:
   intro-spatsoc: intro-spatsoc.html
   faq: faq.html
   using-in-sna: using-in-sna.html
+  using-edge-and-dyad: using-edge-and-dyad.html
 
 
 destination: ../spatsoc.gitlab.io/public
@@ -69,6 +70,8 @@ navbar:
         href: articles/faq.html
       - text: Using spatsoc in social network analysis
         href: articles/using-in-sna.html
+      - text: Using edge list and dyad id functions
+        href: articles/using-edge-and-dyad.html
     news:
       text: "News"
       href: news/index.html

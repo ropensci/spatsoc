@@ -19,7 +19,7 @@ knitr::opts_chunk$set(message = FALSE,
                       echo = TRUE)
 ```
 
-spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to build proximity-based social networks using gambit-of-the-group format and edge-lists. . In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
+spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to build proximity-based social networks using gambit-of-the-group format and edge-lists. In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
 
 # Usage
 `spatsoc` leverages `data.table` to modify by reference and iteratively work on subsets of the input data. The first input for all functions in `spatsoc` is `DT`, an input `data.table`. If your data is a `data.frame`, you can convert it by reference using `setDT(DF)`. 
@@ -58,7 +58,7 @@ knitr::kable(DT[order(group, timegroup)][1:5, .(ID, X, Y, datetime, timegroup, g
 
 
 ## Social network analysis
-See the vignette about [using spatsoc in social network analysis](http://spatsoc.gitlab.io/articles/using-in-sna.html).
+See the vignette about [using spatsoc in social network analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html).
 
 
 # Installation
@@ -256,6 +256,8 @@ group_polys(
 
 This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
 
+**See the vignette [Using spatsoc in social network analysis - edge list generating functions](http://spatsoc.robitalec.ca/articles/using-edge.html) for details about the `edge_dist` function.**
+
 ## edge_nn
 `edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL, splitBy = NULL, threshold = NULL)`
 
@@ -269,6 +271,8 @@ This is the non-chain rule implementation similar to `group_pts`. Edges are defi
 This function can be used to generate edge lists defined either by nearest neighbour or nearest neighbour with a maximum distance. NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and it's nearest neighbour is greater than the threshold. 
 
 
+**See the vignette [Using spatsoc in social network analysis - edge list generating functions](http://spatsoc.robitalec.ca/articles/using-edge.html) for details about the `edge_nn` function.**
+
 ## randomizations
 `randomizations(DT, type, id, datetime, splitBy, iterations)`
   
@@ -280,25 +284,32 @@ This function can be used to generate edge lists defined either by nearest neigh
 * `iterations`: The number of iterations to randomize
 
 
-**See the vignette [Using spatsoc in social network analysis](http://spatsoc.gitlab.io/articles/using-in-sna.html) for details about the `randomizations` function (specifically the section 'Data stream randomization')**
+**See the vignette [Using spatsoc in social network analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html) for details about the `randomizations` function (specifically the section 'Data stream randomization')**
 
 
 # Package design
 ## Don't I need to reassign to save the output?
 
-(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The exceptions are `group_polys(area = TRUE)` and `randomizations`.
+(Almost) all functions in `spatsoc` use data.table's modify-by-reference to reduce recopying large datasets and improve performance. The exceptions are `group_polys(area = TRUE)`, `randomizations` and the edge list generating functions `edge_dist` and `edge_nn`.
 
 
 ## Why does a function print the result, but columns aren't added to my DT?
 
-Check that your `data.table` has columns allocated (with `data.table::truelength`) and if not, use `data.table::setDT`. This can happen if you are reading your data from `RDS` or `RData` files.  [See here.](https://cran.r-project.org/package=data.table/vignettes/datatable-faq.html#reading-data.table-from-rds-or-rdata-file)
+Check that your `data.table` has columns allocated (with `data.table::truelength`) and if not, use `data.table::setDT` or `data.table::alloc.col`. This can happen if you are reading your data from `RDS` or `RData` files.  [See here.](https://cran.r-project.org/package=data.table/vignettes/datatable-faq.html#reading-data.table-from-rds-or-rdata-file)
 
-```{r alloc}
+```{r setdt}
 if (truelength(DT) == 0) {
   setDT(DT)
 }
 # then go to spatsoc
 group_times(DT, datetime = 'datetime', threshold = '5 minutes')
+```
+
+or simply:
+
+```{r alloc}
+DT <- readRDS('path/to/data.Rds')
+alloc.col(DT)
 ```
 
 
