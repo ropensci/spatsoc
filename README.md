@@ -31,11 +31,13 @@ For more details, see the [blog
 post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
   - [Introduction to
-    spatsoc](http://spatsoc.robitalec.ca/articles/intro-spatsoc.html)
+    spatsoc](https://docs.ropensci.org/spatsoc/articles/intro-spatsoc.html)
   - [Frequently asked
-    questions](http://spatsoc.robitalec.ca/articles/faq.html)
+    questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
   - [Using spatsoc in social network
-    analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html)
+    analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html)
+  - [Using edge list and dyad id
+    functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
 
 ## News
 
@@ -49,6 +51,9 @@ and dyad id function:
   - `dyad_id`
 
 (feedback welcome as always\!)
+
+Both documented further in a new vignette: [Using edge list and dyad id
+functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html).
 
 Also, our article describing `spatsoc` was just published at Methods in
 Ecology and Evolution. [Link
