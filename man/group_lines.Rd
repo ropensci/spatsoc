@@ -101,7 +101,6 @@ group_lines(DT, threshold = 50, projection = utm,
 \code{\link{build_lines}} \code{\link{group_times}}
 
 Other Spatial grouping: 
-\code{\link{group_dyad}()},
 \code{\link{group_polys}()},
 \code{\link{group_pts}()}
 }

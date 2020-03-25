@@ -72,7 +72,6 @@ group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'),
 \code{\link{group_times}}
 
 Other Spatial grouping: 
-\code{\link{group_dyad}()},
 \code{\link{group_lines}()},
 \code{\link{group_polys}()}
 }
