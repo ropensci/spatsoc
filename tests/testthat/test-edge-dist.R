@@ -41,7 +41,8 @@ test_that('column names must exist in DT', {
       DT,
       threshold = 10,
       id = 'potato',
-      coords = c('X', 'Y')
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -53,7 +54,8 @@ test_that('column names must exist in DT', {
       DT,
       threshold = 10,
       id = 'ID',
-      coords = c('potatoX', 'potatoY')
+      coords = c('potatoX', 'potatoY'),
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -66,6 +68,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'Y'),
+      timegroup = 'timegroup',
       splitBy = 'potato'
     ),
     'not present in input DT',
@@ -93,7 +96,8 @@ test_that('threshold correctly provided or error detected', {
     copyDT,
     threshold = 10,
     id = 'ID',
-    coords = c('X', 'Y')
+    coords = c('X', 'Y'),
+    timegroup = NULL
   ))
 
   expect_error(edge_dist(DT, threshold = -10, id = 'ID'),
@@ -113,7 +117,8 @@ test_that('coords are correctly provided or error detected', {
       DT,
       threshold = 10,
       id = 'ID',
-      coords = c('X', NULL)
+      coords = c('X', NULL),
+      timegroup = 'timegroup'
     ),
     'coords requires a vector'
   )
@@ -123,7 +128,8 @@ test_that('coords are correctly provided or error detected', {
       DT,
       threshold = 10,
       id = 'ID',
-      coords = c('X', 'ID')
+      coords = c('X', 'ID'),
+      timegroup = NULL
     ),
     'coords must be numeric'
   )
@@ -220,5 +226,65 @@ test_that('returned IDs make sense', {
   expect_true(all(eDT$ID1 %in% IDs))
   expect_true(all(eDT$ID2 %in% IDs))
   expect_true(eDT[ID1 == ID2, .N] == 0)
+
+})
+
+
+
+test_that('returnDist works', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+
+  thresh <- 50
+  withDist <- edge_dist(
+    copyDT,
+    threshold = thresh,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = TRUE,
+    fillNA = TRUE
+  )
+
+  woDist <- edge_dist(
+    copyDT,
+    threshold = thresh,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = FALSE,
+    fillNA = TRUE
+  )
+
+  expect_equal(withDist[, .(ID1, ID2, timegroup)],
+               woDist[, .(ID1, ID2, timegroup)])
+
+  expect_equal(nrow(withDist),
+               nrow(woDist))
+
+  expect_equal(withDist[is.na(ID2)],
+               withDist[is.na(distance)])
+
+  expect_equal(withDist[!is.na(ID2)],
+               withDist[!is.na(distance)])
+
+  expect_lt(withDist[, max(distance, na.rm = TRUE)],
+            thresh)
+
+
+  withDistNoNA <- edge_dist(
+    copyDT,
+    threshold = thresh,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup',
+    returnDist = TRUE,
+    fillNA = FALSE
+  )
+
+  expect_true(withDistNoNA[is.na(distance), .N] == 0)
+  expect_true(withDistNoNA[is.na(ID2), .N] == 0)
+  expect_lt(withDistNoNA[, max(distance, na.rm = TRUE)],
+            thresh)
 
 })

@@ -1,65 +1,80 @@
 #' Data-stream randomizations
 #'
-#' \code{randomizations} performs data-stream social network randomization. The function accepts a \code{data.table} with relocation data, individual identifiers and a randomization \code{type}. The \code{data.table} is randomized either using \code{step} or \code{daily} between-individual methods, or within-individual daily \code{trajectory} method described by Spiegel et al. (2016).
+#' \code{randomizations} performs data-stream social network randomization. The
+#' function accepts a \code{data.table} with relocation data, individual
+#' identifiers and a randomization \code{type}. The \code{data.table} is
+#' randomized either using \code{step} or \code{daily} between-individual
+#' methods, or within-individual daily \code{trajectory} method described by
+#' Spiegel et al. (2016).
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a \code{data.frame}, you can convert it by reference using \code{\link[data.table:setDT]{data.table::setDT}}.
+#' The \code{DT} must be a \code{data.table}. If your data is a
+#' \code{data.frame}, you can convert it by reference using
+#' \code{\link[data.table:setDT]{data.table::setDT}}.
 #'
-#' Three randomization \code{type}s are provided:
-#' \enumerate{
-#'   \item step - randomizes identities of relocations between individuals within each time step.
-#'   \item daily - randomizes identities of relocations between individuals within each day.
-#'   \item trajectory - randomizes daily trajectories within individuals (Spiegel et al. 2016).
-#' }
+#' Three randomization \code{type}s are provided: \enumerate{ \item step -
+#' randomizes identities of relocations between individuals within each time
+#' step. \item daily - randomizes identities of relocations between individuals
+#' within each day. \item trajectory - randomizes daily trajectories within
+#' individuals (Spiegel et al. 2016). }
 #'
 #' Depending on the \code{type}, the \code{datetime} must be a certain format:
 #'
-#' \itemize{
-#'   \item step - datetime is integer group created by \code{group_times}
-#'   \item daily - datetime is \code{POSIXct} format
-#'   \item trajectory - datetime is \code{POSIXct} format
-#' }
+#' \itemize{ \item step - datetime is integer group created by
+#' \code{group_times} \item daily - datetime is \code{POSIXct} format \item
+#' trajectory - datetime is \code{POSIXct} format }
 #'
-#' The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, date time, and additional grouping columns. The \code{coords} argument is only required when the \code{type} is "trajectory", since the coordinates are required for recalculating spatial groups with \code{group_pts}, \code{group_lines} or \code{group_polys}.
+#' The \code{id}, \code{datetime},  (and optional \code{splitBy}) arguments
+#' expect the names of respective columns in \code{DT} which correspond to the
+#' individual identifier, date time, and additional grouping columns. The
+#' \code{coords} argument is only required when the \code{type} is "trajectory",
+#' since the coordinates are required for recalculating spatial groups with
+#' \code{group_pts}, \code{group_lines} or \code{group_polys}.
 #'
-#' Please note that if the data extends over multiple years, a column indicating the year should be provided to the \code{splitBy} argument. This will ensure randomizations only occur within each year.
+#' Please note that if the data extends over multiple years, a column indicating
+#' the year should be provided to the \code{splitBy} argument. This will ensure
+#' randomizations only occur within each year.
 #'
-#' The \code{group} argument is expected only when \code{type} is 'step' or 'daily'.
+#' The \code{group} argument is expected only when \code{type} is 'step' or
+#' 'daily'.
 #'
 #' For example, using \code{\link[data.table:year]{data.table::year}}:
 #'
-#' \preformatted{
-#' DT[, yr := year(datetime)]
-#' randomizations(DT, type = 'step', id = 'ID', datetime = 'timegroup', splitBy = 'yr')
-#' }
+#' \preformatted{ DT[, yr := year(datetime)] randomizations(DT, type = 'step',
+#' id = 'ID', datetime = 'timegroup', splitBy = 'yr') }
 #'
-#' \code{iterations} is set to 1 if not provided. Take caution with a large value for \code{iterations} with large input \code{DT}.
+#' \code{iterations} is set to 1 if not provided. Take caution with a large
+#' value for \code{iterations} with large input \code{DT}.
 #'
-#' @return \code{randomizations} returns the random date time or random id along with the original \code{DT}, depending on the randomization \code{type}. The length of the returned \code{data.table} is the original number of rows multiplied by the number of iterations + 1. For example, 3 iterations will return 4x - one observed and three randomized.
+#' @return \code{randomizations} returns the random date time or random id along
+#'   with the original \code{DT}, depending on the randomization \code{type}.
+#'   The length of the returned \code{data.table} is the original number of rows
+#'   multiplied by the number of iterations + 1. For example, 3 iterations will
+#'   return 4x - one observed and three randomized.
 #'
-#' Two columns are always returned:
-#' \itemize{
-#'   \item observed - if the rows represent the observed (TRUE/FALSE)
-#'   \item iteration - iteration of rows (where 0 is the observed)
-#' }
+#'   Two columns are always returned: \itemize{ \item observed - if the rows
+#'   represent the observed (TRUE/FALSE) \item iteration - iteration of rows
+#'   (where 0 is the observed) }
 #'
-#' In addition, depending on the randomization type, random ID or random date time columns are returned:
+#'   In addition, depending on the randomization type, random ID or random date
+#'   time columns are returned:
 #'
-#' \itemize{
-#'   \item step - \code{randomID} each time step
-#'   \item daily - \code{randomID} for each day and \code{jul} indicating julian day
-#'   \item trajectory - a random date time ("random" prefixed to \code{datetime} argument), observed \code{jul} and \code{randomJul} indicating the random day relocations are swapped to.
-#' }
+#'   \itemize{ \item step - \code{randomID} each time step \item daily -
+#'   \code{randomID} for each day and \code{jul} indicating julian day \item
+#'   trajectory - a random date time ("random" prefixed to \code{datetime}
+#'   argument), observed \code{jul} and \code{randomJul} indicating the random
+#'   day relocations are swapped to. }
 #'
 #'
 #' @param type one of 'daily', 'step' or 'trajectory' - see details
-#' @param datetime field used for providing date time or time group - see details
+#' @param datetime field used for providing date time or time group - see
+#'   details
 #' @param group generated from spatial grouping functions - see details
 #' @inheritParams group_pts
 #' @param splitBy List of fields in DT to split the randomization process by
 #' @param iterations The number of iterations to randomize
 #'
 #' @references
-#'   \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
+#' \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
 #' @export
 #'
 #' @family Social network tools

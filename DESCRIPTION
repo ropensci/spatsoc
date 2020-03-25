@@ -1,6 +1,6 @@
 Package: spatsoc
 Title: Group Animal Relocation Data by Spatial and Temporal Relationship
-Version: 0.1.9
+Version: 0.1.13
 Authors@R: 
     c(person(given = "Alec L.",
              family = "Robitaille",
@@ -19,7 +19,7 @@ Description: Detects spatial and temporal groups in GPS relocations.
     It can be used to convert GPS relocations to 
     gambit-of-the-group format to build proximity-based social networks. 
     In addition, the randomizations function provides data-stream 
-    randomization methods suitable for GPS data. 
+    randomization methods suitable for GPS data.
 Depends: R (>= 3.4)
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
@@ -30,13 +30,14 @@ Imports: data.table (>= 1.10.5),
     adehabitatHR,
     igraph, 
     methods
-Suggests: testthat,
+Suggests: 
+    testthat (>= 2.1.0),
     knitr,
     rmarkdown,
     asnipe
 SystemRequirements: GEOS (>= 3.2.0)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 BugReports: https://github.com/ropensci/spatsoc/issues
-URL: http://spatsoc.robitalec.ca, https://github.com/ropensci/spatsoc
+URL: http://spatsoc.robitalec.ca, https://github.com/ropensci/spatsoc, https://docs.ropensci.org/spatsoc/

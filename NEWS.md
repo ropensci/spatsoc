@@ -1,4 +1,19 @@
-# v 0.1.9 
+# v 0.1.13 (2020-03-25)
+* added `dyad_id` function for generating dyad IDs with edge functions ([PR 27](https://github.com/ropensci/spatsoc/pull/25))
+
+# v 0.1.12 (2020-03-02)
+* fixed `data.table` error in `edge_dist` and `edge_nn` ([PR 25](https://github.com/ropensci/spatsoc/pull/25))
+
+
+# v 0.1.11 (2020-02-20)
+* removed default NULL from 'timegroup' arguments in `group_pts`, `edge_dist` and `edge_nn` ([PR 24](https://github.com/ropensci/spatsoc/pull/24))
+
+
+# v 0.1.10 (2019-06-06)
+* added optional return of distance between individuals with `edge_dist` ([PR 19](https://github.com/ropensci/spatsoc/pull/19)) and `edge_nn` ([PR 21](https://github.com/ropensci/spatsoc/pull/21))
+
+
+# v 0.1.9 (2019-05-14)
 * fixed bug for randomizations type 'step' and 'daily' ([PR 13](https://github.com/ropensci/spatsoc/pull/13)). 
 * clarified `SIMPLIFY=FALSE` in SNA vignette. 
 

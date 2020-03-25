@@ -4,9 +4,16 @@
 \alias{build_polys}
 \title{Build Polygons}
 \usage{
-build_polys(DT = NULL, projection = NULL, hrType = NULL,
-  hrParams = NULL, id = NULL, coords = NULL, splitBy = NULL,
-  spPts = NULL)
+build_polys(
+  DT = NULL,
+  projection = NULL,
+  hrType = NULL,
+  hrParams = NULL,
+  id = NULL,
+  coords = NULL,
+  splitBy = NULL,
+  spPts = NULL
+)
 }
 \arguments{
 \item{DT}{input data.table}
@@ -21,7 +28,8 @@ build_polys(DT = NULL, projection = NULL, hrType = NULL,
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
+\item{splitBy}{(optional) character string or vector of grouping column
+name(s) upon which the grouping will be calculated}
 
 \item{spPts}{alternatively, provide solely a SpatialPointsDataFrame with one column representing the ID of each point.}
 }
@@ -82,6 +90,7 @@ build_polys(spPts = pts, hrType = 'mcp', hrParams = list(percent = 95))
 \seealso{
 \code{\link{group_polys}}
 
-Other Build functions: \code{\link{build_lines}}
+Other Build functions: 
+\code{\link{build_lines}()}
 }
 \concept{Build functions}

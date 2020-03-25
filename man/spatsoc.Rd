@@ -7,50 +7,43 @@
 \alias{spatsoc-package}
 \title{spatsoc}
 \description{
-spatsoc is an R package for detecting spatial and temporal groups in GPS relocations. It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks. In addition, the randomization function provides data-stream randomization methods suitable for GPS data.
+spatsoc is an R package for detecting spatial and temporal groups in GPS
+relocations. It can be used to convert GPS relocations to gambit-of-the-group
+format to build proximity-based social networks. In addition, the
+randomization function provides data-stream randomization methods suitable
+for GPS data.
 }
 \details{
 The spatsoc package provides one temporal grouping function:
 
-\itemize{
-\item \code{\link{group_times}}
-}
-three spatial grouping functions:
-\itemize{
-\item \code{\link{group_pts}}
-\item \code{\link{group_lines}}
-\item \code{\link{group_polys}}
-}
+\itemize{ \item \code{\link{group_times}} } three spatial grouping functions:
+\itemize{ \item \code{\link{group_pts}} \item \code{\link{group_lines}} \item
+\code{\link{group_polys}} }
 
 two edge list generating functions:
 
-\itemize{
-\item \code{\link{edge_dist}}
-\item \code{\link{edge_nn}}
-}
+\itemize{ \item \code{\link{edge_dist}} \item \code{\link{edge_nn}} }
 
-and two social network functions:
-\itemize{
-\item \code{\link{randomizations}}
-\item \code{\link{get_gbi}}
-}
+and two social network functions: \itemize{ \item
+\code{\link{randomizations}} \item \code{\link{get_gbi}} }
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{http://spatsoc.robitalec.ca}
   \item \url{https://github.com/ropensci/spatsoc}
+  \item \url{https://docs.ropensci.org/spatsoc/}
   \item Report bugs at \url{https://github.com/ropensci/spatsoc/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Alec L. Robitaille \email{robit.alec@gmail.com} (0000-0002-4706-1762)
+\strong{Maintainer}: Alec L. Robitaille \email{robit.alec@gmail.com} (\href{https://orcid.org/0000-0002-4706-1762}{ORCID})
 
 Authors:
 \itemize{
-  \item Quinn Webber (0000-0002-0434-9360)
-  \item Eric Vander Wal (0000-0002-8534-4317)
+  \item Quinn Webber (\href{https://orcid.org/0000-0002-0434-9360}{ORCID})
+  \item Eric Vander Wal (\href{https://orcid.org/0000-0002-8534-4317}{ORCID})
 }
 
 }

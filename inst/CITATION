@@ -4,13 +4,13 @@ citEntry(entry = "Article",
   title        = "Conducting social network analysis with animal telemetry data: applications and methods using {spatsoc}",
   author       = personList(as.person("Alec L Robitaille"),
                    as.person("Quinn MR Webber"), as.person("Eric Vander Wal")),
-  journal      = "bioRxiv",
-  year         = "2018",
-  url          = "https://doi.org/10.1101/447284",
+  journal      = "Methods in Ecology and Evolution",
+  year         = "2019",
+  url          = "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13215",
 
   textVersion  =
-  paste("Alec L. Robitaille, Quinn M.R. Webber, Eric Vander Wal (2018).",
+  paste("Alec L. Robitaille, Quinn M.R. Webber, Eric Vander Wal (2019).",
         "Conducting social network analysis with animal telemetry data: applications and methods using spatsoc.",
-        "bioRxiv.",
-        "URL https://doi.org/10.1101/447284.")
+        "Methods in Ecology and Evolution.",
+        "URL https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13215.")
 )
