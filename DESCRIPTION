@@ -1,6 +1,6 @@
 Package: spatsoc
 Title: Group Animal Relocation Data by Spatial and Temporal Relationship
-Version: 0.1.12
+Version: 0.1.13
 Authors@R: 
     c(person(given = "Alec L.",
              family = "Robitaille",
@@ -30,7 +30,8 @@ Imports: data.table (>= 1.10.5),
     adehabitatHR,
     igraph, 
     methods
-Suggests: testthat,
+Suggests: 
+    testthat (>= 2.1.0),
     knitr,
     rmarkdown,
     asnipe

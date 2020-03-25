@@ -2,6 +2,7 @@
 
 export(build_lines)
 export(build_polys)
+export(dyad_id)
 export(edge_dist)
 export(edge_nn)
 export(get_gbi)

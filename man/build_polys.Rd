@@ -28,7 +28,8 @@ build_polys(
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
+\item{splitBy}{(optional) character string or vector of grouping column
+name(s) upon which the grouping will be calculated}
 
 \item{spPts}{alternatively, provide solely a SpatialPointsDataFrame with one column representing the ID of each point.}
 }

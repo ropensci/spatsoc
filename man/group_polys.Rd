@@ -19,7 +19,8 @@ group_polys(
 \arguments{
 \item{DT}{input data.table}
 
-\item{area}{boolean indicating either overlap group (when \code{FALSE}) or area and proportion of overlap (when \code{TRUE})}
+\item{area}{boolean indicating either overlap group (when \code{FALSE}) or
+area and proportion of overlap (when \code{TRUE})}
 
 \item{hrType}{type of HR estimation, either 'mcp' or 'kernel'}
 
@@ -31,28 +32,58 @@ group_polys(
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{splitBy}{(optional) character string or vector of grouping column name(s) upon which the grouping will be calculated}
+\item{splitBy}{(optional) character string or vector of grouping column
+name(s) upon which the grouping will be calculated}
 
 \item{spPolys}{Alternatively, provide solely a SpatialPolygons object}
 }
 \value{
-When \code{area} is \code{FALSE}, \code{group_polys} returns the input \code{DT} appended with a \code{group} column. As with the other grouping functions,  the actual value of \code{group} is arbitrary and represents the identity of a given group where 1 or more individuals are assigned to a group. If the data was reordered, the \code{group} may change, but the contents of each group would not. When \code{area} is \code{TRUE}, \code{group_polys} returns a proportional area overlap \code{data.table}. In this case, ID refers to the focal individual of which the total area is compared against the overlapping area of ID2.
+When \code{area} is \code{FALSE}, \code{group_polys} returns the
+input \code{DT} appended with a \code{group} column. As with the other
+grouping functions,  the actual value of \code{group} is arbitrary and
+represents the identity of a given group where 1 or more individuals are
+assigned to a group. If the data was reordered, the \code{group} may
+change, but the contents of each group would not. When \code{area} is
+\code{TRUE}, \code{group_polys} returns a proportional area overlap
+\code{data.table}. In this case, ID refers to the focal individual of which
+the total area is compared against the overlapping area of ID2.
 
-If \code{area} is \code{FALSE}, a message is returned when a column named \code{group} already exists in the input \code{DT}, because it will be overwritten.
+If \code{area} is \code{FALSE}, a message is returned when a column named
+\code{group} already exists in the input \code{DT}, because it will be
+overwritten.
 }
 \description{
-\code{group_polys} groups rows into spatial groups by overlapping polygons (home ranges). The function accepts a \code{data.table} with relocation data, individual identifiers and an \code{area} argument.  The relocation data is transformed into home range \code{SpatialPolygons}. If the \code{area} argument is \code{FALSE}, \code{group_polys} returns grouping calculated by overlap. If the \code{area} argument is \code{TRUE}, the area and proportion of overlap is calculated. Relocation data should be in two columns representing the X and Y coordinates.
+\code{group_polys} groups rows into spatial groups by overlapping polygons
+(home ranges). The function accepts a \code{data.table} with relocation data,
+individual identifiers and an \code{area} argument.  The relocation data is
+transformed into home range \code{SpatialPolygons}. If the \code{area}
+argument is \code{FALSE}, \code{group_polys} returns grouping calculated by
+overlap. If the \code{area} argument is \code{TRUE}, the area and proportion
+of overlap is calculated. Relocation data should be in two columns
+representing the X and Y coordinates.
 }
 \details{
-The \code{DT} must be a \code{data.table}. If your data is a \code{data.frame}, you can convert it by reference using \code{\link[data.table:setDT]{data.table::setDT}}.
+The \code{DT} must be a \code{data.table}. If your data is a
+\code{data.frame}, you can convert it by reference using
+\code{\link[data.table:setDT]{data.table::setDT}}.
 
-The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, X and Y coordinates, and additional grouping columns.
+The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect
+the names of respective columns in \code{DT} which correspond to the
+individual identifier, X and Y coordinates, and additional grouping columns.
 
-The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{spatialreference.org}). \code{group_polys} expects planar coordinates (not unprojected latitude, longitude).
+The \code{projection} expects a \code{PROJ.4} character string (such as those
+available on \url{spatialreference.org}). \code{group_polys} expects planar
+coordinates (not unprojected latitude, longitude).
 
-The \code{hrType} must be either one of "kernel" or "mcp". The \code{hrParams} must be a named list of arguments matching those of \code{adehabitatHR::kernelUD} or \code{adehabitatHR::mcp}.
+The \code{hrType} must be either one of "kernel" or "mcp". The
+\code{hrParams} must be a named list of arguments matching those of
+\code{adehabitatHR::kernelUD} or \code{adehabitatHR::mcp}.
 
-The \code{splitBy} argument offers further control over grouping. If within your \code{DT}, you have multiple populations, subgroups or other distinct parts, you can provide the name of the column which identifies them to \code{splitBy}. The grouping performed by \code{group_polys} will only consider rows within each \code{splitBy} subgroup.
+The \code{splitBy} argument offers further control over grouping. If within
+your \code{DT}, you have multiple populations, subgroups or other distinct
+parts, you can provide the name of the column which identifies them to
+\code{splitBy}. The grouping performed by \code{group_polys} will only
+consider rows within each \code{splitBy} subgroup.
 }
 \examples{
 # Load data.table

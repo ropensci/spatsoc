@@ -1,3 +1,6 @@
+# v 0.1.13 (2020-03-25)
+* added `dyad_id` function for generating dyad IDs with edge functions ([PR 27](https://github.com/ropensci/spatsoc/pull/25))
+
 # v 0.1.12 (2020-03-02)
 * fixed `data.table` error in `edge_dist` and `edge_nn` ([PR 25](https://github.com/ropensci/spatsoc/pull/25))
 
