@@ -124,10 +124,35 @@ edges <- edge_nn(
 
 The function `dyad_id` can be used to generate a unique, undirected dyad identifier for edge lists. 
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 # In this case, using the edges generated in 2. b) edge_nn
 dyad_id(edges, id1 = 'ID', id2 = 'NN')
 ```
 
 
-Once we have generated dyad ids, we can measure consecutive relocations, start and end relocation, etc. 
+Once we have generated dyad ids, we can measure consecutive relocations, start and end relocation, etc. **Note:** since the edges are duplicated A-B and B-A, you will need to use the unique timegroup*dyadID or divide counts by 2. 
+
+
+## 4. Dyad stats
+
+```{r}
+# Get the unique dyads by timegroup
+d <- unique(edges[!is.na(get(dyadID)), by = c(timegroup, dyadID)])
+
+  # start, end for each dyad
+  # mean xy for each dyad +timegroup
+  # number of relocations consecutive by dyad
+data.table::setorderv(d, timegroup)
+
+```
+  # TODO:
+
+
+  d <- unique(DT[!is.na(get(dyadID)), by = c(timegroup, dyadID)])
+  # d[, .(utimegroup = uniqueN(timegroup)), .(dyadID)][order(utimegroup)]
+
+  uds[, shifttimegrp := get(timegroup) - shift(get(timegroup), 1), by = dyadID]
+
+  uds[, runlen := rleid(shifttimegrp), by = dyadID]
+
+  uds[, together := ifelse(shifttimegrp == 1, 1, .N), c('runlen', dyadID)]
