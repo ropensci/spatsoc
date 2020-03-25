@@ -142,7 +142,10 @@ d <- unique(edges, by = c('timegroup', 'dyadID'))
 # Set the order of the rows
 setorder(d, timegroup)
 
+# Count number of timegroups dyads are observed together
+d[, nObs := .N, by = .(dyadID)]
 
+# 
   # start, end for each dyad
   # mean xy for each dyad +timegroup
   # number of relocations consecutive by dyad
