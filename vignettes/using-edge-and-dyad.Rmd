@@ -155,11 +155,13 @@ dyads[, runid := rleid(difftimegrp), by = dyadID]
 
 # Run length of consecutive observations of dyadIDs
 dyads[, runlen := fifelse(difftimegrp == 1, .N, NA_integer_), by = .(runid, dyadID)]
+
+## Start and end of consecutive relocations for each dyad
+dyads
+
+
+## Mean x, y of dyads
 ```
 
 
-```{r}
-  # mean xy for each dyad +timegroup
-# start and end
-```
 
