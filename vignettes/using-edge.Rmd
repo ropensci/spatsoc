@@ -1,8 +1,8 @@
 ---
-title: "Using spatsoc in social network analysis - edge list generating functions"
+title: "Using edge list generating functions and dyad_id"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using spatsoc in social network analysis - edge list generating functions}
+  %\VignetteIndexEntry{Using edge list generating functions and dyad_id}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
