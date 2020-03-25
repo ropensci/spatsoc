@@ -137,15 +137,29 @@ Once we have generated dyad ids, we can measure consecutive relocations, start a
 
 ```{r}
 # Get the unique dyads by timegroup
-d <- unique(edges, by = c('timegroup', 'dyadID'))
+dyads <- unique(edges, by = c('timegroup', 'dyadID'))
 
 # Set the order of the rows
-setorder(d, timegroup)
+setorder(dyads, timegroup)
 
-# Count number of timegroups dyads are observed together
-d[, nObs := .N, by = .(dyadID)]
+## Count number of timegroups dyads are observed together
+dyads[, nObs := .N, by = .(dyadID)]
 
-# 
+## Count consecutive relocations together
+# Shift the timegroup within dyadIDs
+dyads[, shifttimegrp := shift(timegroup, 1), by =  dyadID]
+
+# Difference between consecutive timegroups for each dyadID
+# where difftimegrp == 1, the dyads remained together in consecutive timegroups
+dyads[, difftimegrp := timegroup - shifttimegrp]
+
+
+# Run id of diff timegroups
+dyads[, runid := rleid(difftimegrp), by = dyadID]
+
+# Run length of consecutive observations of dyadIDs
+dyads[, runlen := fifelse(difftimegrp == 1, .N, NA_integer_), by = .(runid, dyadID)]
+
   # start, end for each dyad
   # mean xy for each dyad +timegroup
   # number of relocations consecutive by dyad
@@ -155,7 +169,6 @@ d[, nObs := .N, by = .(dyadID)]
 
 
   d <- unique(DT[!is.na(get(dyadID)), by = c(timegroup, dyadID)])
-  # d[, .(utimegroup = uniqueN(timegroup)), .(dyadID)][order(utimegroup)]
 
   uds[, shifttimegrp := get(timegroup) - shift(get(timegroup), 1), by = dyadID]
 
