@@ -32,3 +32,13 @@ test_that('columns must be in DT', {
                'provided are not present in input DT', fixed = FALSE)
 })
 
+
+test_that('dyadID column succesfully detected', {
+  copyEdges <- copy(edges)[, dyadID := 1]
+  expect_message(
+    dyad_id(DT = edges, id1 = 'potato', id2 = 'ID2'),
+    'dyadID column will be overwritten'
+  )
+})
+
+
