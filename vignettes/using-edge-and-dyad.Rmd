@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 Edge lists are generated using either the `edge_dist` or the `edge_nn` function. 
 
 
-**Note**: The grouping functions and their application in social network analysis are further described in the vignette [Using spatsoc in social network analysis - grouping functions](http://spatsoc.robitalec.ca/articles/using-in-sna.html). 
+**Note**: The grouping functions and their application in social network analysis are further described in the vignette [Using spatsoc in social network analysis - grouping functions](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html). 
 
 
 ## Generate edge lists

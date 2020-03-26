@@ -34,7 +34,8 @@ Data stream randomization is performed using the `randomizations` function.
 Group by individual matrices are generated using the `get_gbi` function. 
 
 
-**Note**: edge list generating functions are also available and are described in the vignette [Using spatsoc in social network analysis - edge list generating functions](http://spatsoc.robitalec.ca/articles/using-edge.html). 
+**Note**: edge list generating functions are also available and are described in the vignette [Using edge list generating functions and dyad_id](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html). 
+
 
 # Generate gambit of the group data
 spatsoc provides users with one temporal (`group_times`) and three spatial (`group_pts`, `group_lines`, `group_polys`) functions to generate gambit of the group data from GPS relocations. Users can consider spatial grouping at three different scales combined with an appropriate temporal grouping threshold. The gambit of the group data is then used to generate a group by individual matrix and build the network. 

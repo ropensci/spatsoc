@@ -58,7 +58,7 @@ knitr::kable(DT[order(group, timegroup)][1:5, .(ID, X, Y, datetime, timegroup, g
 
 
 ## Social network analysis
-See the vignette about [using spatsoc in social network analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html).
+See the vignette about [using spatsoc in social network analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html).
 
 
 # Installation
@@ -256,7 +256,7 @@ group_polys(
 
 This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
 
-**See the vignette [Using spatsoc in social network analysis - edge list generating functions](http://spatsoc.robitalec.ca/articles/using-edge.html) for details about the `edge_dist` function.**
+**See the vignette [Using edge list generating functions and dyad_id](https://docs.ropensci.org/spatsoc/articles/using-edge.html) for details about the `edge_dist` function.**
 
 ## edge_nn
 `edge_nn(DT = NULL, id = NULL, coords = NULL, timegroup = NULL, splitBy = NULL, threshold = NULL)`
@@ -271,7 +271,7 @@ This is the non-chain rule implementation similar to `group_pts`. Edges are defi
 This function can be used to generate edge lists defined either by nearest neighbour or nearest neighbour with a maximum distance. NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and it's nearest neighbour is greater than the threshold. 
 
 
-**See the vignette [Using spatsoc in social network analysis - edge list generating functions](http://spatsoc.robitalec.ca/articles/using-edge.html) for details about the `edge_nn` function.**
+**See the vignette [Using spatsoc in social network analysis - edge list generating functions](https://docs.ropensci.org/spatsoc/articles/using-edge.html) for details about the `edge_nn` function.**
 
 ## randomizations
 `randomizations(DT, type, id, datetime, splitBy, iterations)`
@@ -284,7 +284,7 @@ This function can be used to generate edge lists defined either by nearest neigh
 * `iterations`: The number of iterations to randomize
 
 
-**See the vignette [Using spatsoc in social network analysis](http://spatsoc.robitalec.ca/articles/using-in-sna.html) for details about the `randomizations` function (specifically the section 'Data stream randomization')**
+**See the vignette [Using spatsoc in social network analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html) for details about the `randomizations` function (specifically the section 'Data stream randomization')**
 
 
 # Package design
