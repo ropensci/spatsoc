@@ -1,6 +1,10 @@
-## v 0.1.8
+## v 0.1.13
 See NEWS.md for all updates. 
-Added two functions for generating edge lists and fixed a bug with group_times. 
+
+* Added a new function `dyad_id`
+* Added a new vignette
+* Fixed an error from a dependency
+* Added new arguments to `edge_nn` and `edge_dist`
 
 
 ## Test environments
