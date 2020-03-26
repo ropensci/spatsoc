@@ -79,7 +79,7 @@ columns.
 The \code{sortBy} is used to order the input \code{data.table} when creating
 \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted
 by date time. The \code{projection} expects a \code{PROJ.4} character string
-(such as those available on \url{spatialreference.org}). \code{group_lines}
+(such as those available on \url{https://spatialreference.org/}). \code{group_lines}
 expects planar coordinates (not unprojected latitude, longitude).
 
 The \code{threshold} must be provided in the units of the coordinates. The

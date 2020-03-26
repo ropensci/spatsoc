@@ -6,7 +6,7 @@
 #'
 #' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, X and Y coordinates, and additional grouping columns.
 #'
-#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{spatialreference.org}). \code{build_polys} expects planar coordinates (not unprojected latitude, longitude).
+#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{https://spatialreference.org/}). \code{build_polys} expects planar coordinates (not unprojected latitude, longitude).
 #'
 #' The \code{hrType} must be either one of "kernel" or "mcp". The \code{hrParams} must be a named list of arguments matching those of \code{adehabitatHR::kernelUD} and \code{adehabitatHR::getverticeshr} or \code{adehabitatHR::mcp}.
 #'

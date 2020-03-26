@@ -7,7 +7,7 @@
 #'
 #' The \code{id}, \code{coords}, \code{sortBy} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, X and Y coordinates, sorting column, and additional splitting columns.
 #'
-#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{spatialreference.org}).
+#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{https://spatialreference.org/}).
 #'
 #' The \code{sortBy} is used to order the input \code{data.table} when creating \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted by date time.
 #'

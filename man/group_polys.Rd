@@ -72,7 +72,7 @@ the names of respective columns in \code{DT} which correspond to the
 individual identifier, X and Y coordinates, and additional grouping columns.
 
 The \code{projection} expects a \code{PROJ.4} character string (such as those
-available on \url{spatialreference.org}). \code{group_polys} expects planar
+available on \url{https://spatialreference.org/}). \code{group_polys} expects planar
 coordinates (not unprojected latitude, longitude).
 
 The \code{hrType} must be either one of "kernel" or "mcp". The
