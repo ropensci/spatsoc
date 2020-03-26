@@ -62,7 +62,8 @@ and editors at
 [rOpenSci](https://github.com/ropensci/software-review/issues/237) and
 at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x).
 
-More detailed news [here](https://docs.ropensci.org/spatsoc/news/index.html).
+More detailed news
+[here](https://docs.ropensci.org/spatsoc/news/index.html).
 
 ## Installation
 
