@@ -78,7 +78,7 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
     data.table::set(DT, j = 'dyadID', value = NULL)
   }
 
-  ids <- unique(na.omit(c(DT[[id1]], DT[[id2]])))
+  ids <- unique(stats::na.omit(c(DT[[id1]], DT[[id2]])))
   dyads <- data.table::CJ(ID1 = ids, ID2 = ids)[ID1 != ID2]
   dyads[, dyadID :=
           apply(
