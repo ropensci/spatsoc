@@ -133,7 +133,18 @@ Once we have generated dyad ids, we can measure consecutive relocations, start a
 
 ```{r, eval = TRUE}
 # Get the unique dyads by timegroup
-dyads <- unique(edges, by = c('timegroup', 'dyadID'))
+# NOTE: we are explicitly selecting only where dyadID is not NA
+dyads <- unique(edges[!is.na(dyadID)], by = c('timegroup', 'dyadID'))
+
+# NOTE: if we wanted to also include where dyadID is NA, we should do it explicitly
+# dyadNN <- unique(DT[!is.na(NN)], by = c('timegroup', 'dyadID'))
+
+# Get where NN was NA
+# dyadNA <- DT[is.na(NN)]
+
+# Combine where NN is NA
+# dyads <- rbindlist(list(dyadNN, dyadNA))
+
 
 # Set the order of the rows
 setorder(dyads, timegroup)
