@@ -69,8 +69,8 @@
 #' # Cast the character column to POSIXct
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
-#' # Proj4 string for example data
-#' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+#' # EPSG code for example data
+#' utm <- '+init=epsg:32736'
 #'
 #' group_polys(DT, area = FALSE, 'mcp', list(percent = 95),
 #'             projection = utm,

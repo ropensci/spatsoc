@@ -37,7 +37,7 @@
 #' # Cast the character column to POSIXct
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
-#' # Proj4 string for example data
+#' # EPSG code for example data
 #' utm <- '+init=epsg:32736'
 #'
 #' # Build polygons for each individual using kernelUD and getverticeshr
