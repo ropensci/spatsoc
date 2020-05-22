@@ -38,7 +38,7 @@
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
 #' # Proj4 string for example data
-#' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+#' utm <- '+init=epsg:32736'
 #'
 #' # Build polygons for each individual using kernelUD and getverticeshr
 #' build_polys(DT, projection = utm, hrType = 'kernel',
