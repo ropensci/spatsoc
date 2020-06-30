@@ -186,7 +186,7 @@ test_that('hrParams returns error if params do not match function params', {
 })
 
 test_that('if hrParams NULL, warns', {
-  expect_message(
+  hrparamsnull <- evaluate_promise(
     build_polys(
       DT = DT,
       projection = utm,
@@ -194,7 +194,11 @@ test_that('if hrParams NULL, warns', {
       hrParams = NULL,
       coords = c('X', 'Y'),
       id = 'ID'
-    ),
+    )
+  )
+
+  expect_match(
+    hrparamsnull$messages,
     'hrParams is not provided, using defaults'
   )
 
