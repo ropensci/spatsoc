@@ -170,15 +170,17 @@ test_that('hrParams returns error if params do not match function params', {
     fixed = FALSE
   )
 
+  s4promise <- evaluate_promise(build_polys(
+    DT = DT,
+    projection = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    coords = c('X', 'Y'),
+    id = 'ID'
+  ))
+
   expect_s4_class(
-    build_polys(
-      DT = DT,
-      projection = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      coords = c('X', 'Y'),
-      id = 'ID'
-    ),
+    s4promise$result,
     'SpatialPolygonsDataFrame'
   )
 })
