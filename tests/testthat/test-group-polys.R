@@ -90,7 +90,7 @@ test_that('mising hrParams warns default used', {
       id = 'ID'
     )
   )
-  expect_message(
+  expect_match(
     missingpromise$messages,
     'hrParams is not provided, using defaults'
   )
@@ -213,6 +213,9 @@ test_that('column and row lengths returned make sense', {
   expect_lte(nrow(ltepromise$result),
              nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
 
+
+  copyDT <- copy(DT)[, yr := year(datetime)]
+
   ltepromise2 <- evaluate_promise(
     group_polys(
       DT = copyDT,
@@ -225,8 +228,9 @@ test_that('column and row lengths returned make sense', {
       splitBy = 'yr'
     )
   )
-  copyDT <- copy(DT)[, yr := year(datetime)]
+
   expect_equal(nrow(ltepromise2), nrow(copyDT))
+
 
   copyDT <- copy(DT)
   copyDT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
@@ -284,7 +288,7 @@ test_that('group column succesfully detected', {
       splitBy = 'mnth'
     )
   )
-  expect_message(groupdelpromise$messages, 'group column will be overwritten')
+  expect_match(groupdelpromise$messages, 'group column will be overwritten')
 
   copyDT <- copy(DT)[, group := 1][, mnth := month(datetime)]
   copyDT <- copyDT[, nBy := .N, by = .(mnth, ID)][nBy > 30]
@@ -299,7 +303,7 @@ test_that('group column succesfully detected', {
       id = 'ID'
     )
   )
-  expect_message(
+  expect_match(
     overwritepromise$messages,
     'group column will be overwritten'
   )
