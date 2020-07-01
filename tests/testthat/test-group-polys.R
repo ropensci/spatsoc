@@ -288,7 +288,7 @@ test_that('group column succesfully detected', {
 
   copyDT <- copy(DT)[, group := 1][, mnth := month(datetime)]
   copyDT <- copyDT[, nBy := .N, by = .(mnth, ID)][nBy > 30]
-  expect_message(#
+  overwritepromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -297,7 +297,10 @@ test_that('group column succesfully detected', {
       area = FALSE,
       coords = c('X', 'Y'),
       id = 'ID'
-    ),
+    )
+  )
+  expect_message(
+    overwritepromise$messages,
     'group column will be overwritten'
   )
 })
@@ -306,7 +309,7 @@ test_that('group column succesfully detected', {
 test_that('area provided with splitBy does not return errors', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   copyDT[, yr := year(datetime)]
-  expect_false('withinGroup' %in% colnames(#
+  withinsplitpromise <- evalute_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -317,9 +320,10 @@ test_that('area provided with splitBy does not return errors', {
       id = 'ID',
       splitBy = 'yr'
     )
-  ))
+  )
+  expect_false('withinGroup' %in% colnames(withinsplitpromise$result))
 
-  expect_true('area' %in% colnames(#
+  areapromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -330,9 +334,10 @@ test_that('area provided with splitBy does not return errors', {
       id = 'ID',
       splitBy = 'yr'
     )
-  ))
+  )
+  expect_true('area' %in% colnames(areapromise$result))
 
-  expect_true('proportion' %in% colnames(#
+  proppromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -343,7 +348,8 @@ test_that('area provided with splitBy does not return errors', {
       id = 'ID',
       splitBy = 'yr'
     )
-  ))
+  )
+  expect_true('proportion' %in% colnames(proppromise))
 })
 
 
@@ -407,15 +413,3 @@ test_that('less than 5 locs returns NAs and warning', {
 
 
 })
-
-# group_polys(
-#   DT = DT,
-#   projection = utm,
-#   hrType = 'mcp',
-#   hrParams = NULL,
-#   area = FALSE,
-#   coords = c('X', 'Y'),
-#   id = 'ID',
-#   splitBy = NULL,
-#   spPolys = NULL
-# )
