@@ -199,9 +199,10 @@ test_that('ID field is alphanumeric and does not have spaces', {
 })
 
 test_that('column and row lengths returned make sense', {
+  copyDT <- copy(DT)
   ltepromise <- evaluate_promise(
     group_polys(
-      DT = DT,
+      DT = copyDT,
       projection = utm,
       hrType = 'mcp',
       hrParams = list(percent = 95),
@@ -229,12 +230,11 @@ test_that('column and row lengths returned make sense', {
     )
   )
 
-  expect_equal(nrow(ltepromise2), nrow(copyDT))
-
+  expect_equal(nrow(ltepromise2$result), nrow(copyDT))
 
   copyDT <- copy(DT)
   copyDT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
-  ncolpromise <- evaluate_promise(
+  ncolpromise <- evaluate_promise({
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -244,9 +244,9 @@ test_that('column and row lengths returned make sense', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'family'
-    )
+    )}
   )
-  expect_equal(ncol(copyDT) + 1,
+  expect_equal(ncol(DT) + 2,
                ncol(ncolpromise$result))
 })
 
@@ -313,7 +313,7 @@ test_that('group column succesfully detected', {
 test_that('area provided with splitBy does not return errors', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   copyDT[, yr := year(datetime)]
-  withinsplitpromise <- evalute_promise(
+  withinsplitpromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -353,7 +353,7 @@ test_that('area provided with splitBy does not return errors', {
       splitBy = 'yr'
     )
   )
-  expect_true('proportion' %in% colnames(proppromise))
+  expect_true('proportion' %in% colnames(proppromise$result))
 })
 
 
