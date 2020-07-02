@@ -3,12 +3,6 @@
 #'
 #' \code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}. The function accepts a \code{data.table} with relocation data, individual identifiers a sorting column and a \code{projection}. The relocation data is transformed into \code{SpatialLines} for each individual and optionally, each \code{splitBy}. Relocation data should be in two columns representing the X and Y coordinates.
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a \code{data.frame}, you can convert it by reference using \code{\link[data.table:setDT]{data.table::setDT}}.
-#'
-#' The \code{id}, \code{coords}, \code{sortBy} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, X and Y coordinates, sorting column, and additional splitting columns.
-#'
-#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{https://spatialreference.org/}).
-#'
 #' The \code{sortBy} is used to order the input \code{data.table} when creating \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted by date time.
 #'
 #' The \code{splitBy} argument offers further control building \code{SpatialLines}. If in your \code{DT}, you have multiple temporal groups (e.g.: years) for example, you can provide the name of the column which identifies them and build \code{SpatialLines} for each individual in each year.
