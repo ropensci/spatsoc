@@ -6,7 +6,7 @@
 #'
 #' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, X and Y coordinates, and additional grouping columns.
 #'
-#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{https://spatialreference.org/}). \code{build_polys} expects planar coordinates (not unprojected latitude, longitude).
+#' The \code{projection} argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See \url{https://spatialreference.org/}) for a list of EPSG codes. At the moment, \code{build_polys} expects planar coordinates (not unprojected coordinates). Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
 #'
 #' The \code{hrType} must be either one of "kernel" or "mcp". The \code{hrParams} must be a named list of arguments matching those of \code{adehabitatHR::kernelUD} and \code{adehabitatHR::getverticeshr} or \code{adehabitatHR::mcp}.
 #'
