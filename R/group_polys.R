@@ -70,12 +70,12 @@
 #' # EPSG code for example data
 #' utm <- '+init=epsg:32736'
 #'
-#' group_polys(DT, area = FALSE, 'mcp', list(percent = 95),
-#'             projection = utm,
+#' group_polys(DT, area = FALSE, hrType = 'mcp',
+#'             hrParams = list(percent = 95), projection = utm,
 #'             id = 'ID', coords = c('X', 'Y'))
 #'
-#' areaDT <- group_polys(DT, area = TRUE, 'mcp', list(percent = 95),
-#'                       projection = utm,
+#' areaDT <- group_polys(DT, area = TRUE, hrType = 'mcp',
+#'                       hrParams = list(percent = 95), projection = utm,
 #'                       id = 'ID', coords = c('X', 'Y'))
 group_polys <-
   function(DT = NULL,
