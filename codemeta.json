@@ -19,14 +19,14 @@
   ],
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "4.0.0",
+    "version": "4.0.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.0 (2020-04-24)",
+  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -227,7 +227,7 @@
   ],
   "releaseNotes": "https://github.com/ropensci/spatsoc//blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/spatsoc/blob/master/README.md",
-  "fileSize": "662.408KB",
+  "fileSize": "663.098KB",
   "contIntegration": "https://codecov.io/gl/robit.a/spatsoc",
   "developmentStatus": "http://www.repostatus.org/#active",
   "review": {

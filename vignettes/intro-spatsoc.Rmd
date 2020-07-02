@@ -126,7 +126,8 @@ knitr::kable(
 The `group_lines` function groups individuals whose trajectories intersect in a specified time interval. This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
 
 ```{r fakegrouplines, echo = TRUE}
-utm <- '+proj=utm +zone=21 ellps=WGS84'
+utm <- '+init=epsg:32736'
+
 group_times(DT = DT, datetime = 'datetime', threshold = '1 day')
 group_lines(DT, threshold = 50, projection = utm, 
             id = 'ID', coords = c('X', 'Y'),
@@ -134,7 +135,7 @@ group_lines(DT, threshold = 50, projection = utm,
 ```
 
 ```{r grouplines, eval = TRUE}
-utm <- '+proj=utm +zone=21 ellps=WGS84'
+utm <- '+init=epsg:32736'
 
 DT <- group_times(DT = DT, datetime = 'datetime', 
                 threshold = '1 day')
@@ -151,7 +152,7 @@ knitr::kable(
 The `group_polys` function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`. Alternatively, a `SpatialPolygonsDataFrame` can be input to the `spPolys` argument.
 
 ```{r fakegrouppolys, echo = TRUE}
-utm <- '+proj=utm +zone=21 ellps=WGS84'
+utm <- '+init=epsg:32736'
 group_times(DT = DT, datetime = 'datetime', threshold = '8 days')
 group_polys(DT = DT, area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
@@ -160,7 +161,7 @@ group_polys(DT = DT, area = TRUE, hrType = 'mcp',
 ```
 
 ```{r grouppolys, eval = TRUE}
-utm <- '+proj=utm +zone=21 ellps=WGS84'
+utm <- '+init=epsg:32736'
 DT <- group_times(DT = DT, datetime = 'datetime', 
                 threshold = '8 days')
 knitr::kable(

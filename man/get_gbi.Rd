@@ -53,7 +53,8 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 DT[, yr := year(datetime)]
 
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+# EPSG code for example data
+utm <- '+init=epsg:32736'
 
 group_polys(DT, area = FALSE, hrType = 'mcp',
             hrParams = list(percent = 95),

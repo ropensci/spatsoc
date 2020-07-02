@@ -4,8 +4,7 @@ library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
-utm <-
-  '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+utm <- '+init=epsg:32736'
 
 test_that('DT or spPts are required but not both', {
   expect_error(group_polys(
@@ -81,7 +80,7 @@ test_that('projection provided or error', {
 
 test_that('mising hrParams warns default used', {
   copyDT <- copy(DT)
-  expect_message(
+  missingpromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -89,7 +88,10 @@ test_that('mising hrParams warns default used', {
       area = FALSE,
       coords = c('X', 'Y'),
       id = 'ID'
-    ),
+    )
+  )
+  expect_match(
+    missingpromise$messages,
     'hrParams is not provided, using defaults'
   )
 })
@@ -164,8 +166,8 @@ test_that('splitBy and spPolys are not both provided', {
 
 test_that('ID field is alphanumeric and does not have spaces', {
   copyDT <- copy(DT)[ID == unique(ID)[1], ID := paste(ID, ID)]
-  expect_error(
-    group_polys(
+  idpromise <- evaluate_promise(
+    expect_error(group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -173,7 +175,10 @@ test_that('ID field is alphanumeric and does not have spaces', {
       area = TRUE,
       coords = c('X', 'Y'),
       id = 'ID'
-    ),
+    ))
+  )
+  expect_match(
+    as.character(idpromise$result),
     'please ensure IDs are alphanumeric and do not contain spaces'
   )
 
@@ -194,9 +199,10 @@ test_that('ID field is alphanumeric and does not have spaces', {
 })
 
 test_that('column and row lengths returned make sense', {
-  expect_lte(nrow(
+  copyDT <- copy(DT)
+  ltepromise <- evaluate_promise(
     group_polys(
-      DT = DT,
+      DT = copyDT,
       projection = utm,
       hrType = 'mcp',
       hrParams = list(percent = 95),
@@ -204,11 +210,14 @@ test_that('column and row lengths returned make sense', {
       coords = c('X', 'Y'),
       id = 'ID'
     )
-  ),
-  nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
+  )
+  expect_lte(nrow(ltepromise$result),
+             nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
+
 
   copyDT <- copy(DT)[, yr := year(datetime)]
-  expect_equal(nrow(
+
+  ltepromise2 <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -219,24 +228,26 @@ test_that('column and row lengths returned make sense', {
       id = 'ID',
       splitBy = 'yr'
     )
-  ),
-  nrow(copyDT))
+  )
+
+  expect_equal(nrow(ltepromise2$result), nrow(copyDT))
 
   copyDT <- copy(DT)
   copyDT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
-  expect_equal(ncol(copyDT) + 1,
-               ncol(
-                 group_polys(
-                   DT = copyDT,
-                   projection = utm,
-                   hrType = 'mcp',
-                   hrParams = list(percent = 95),
-                   area = FALSE,
-                   coords = c('X', 'Y'),
-                   id = 'ID',
-                   splitBy = 'family'
-                 )
-               ))
+  ncolpromise <- evaluate_promise({
+    group_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = FALSE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 'family'
+    )}
+  )
+  expect_equal(ncol(DT) + 2,
+               ncol(ncolpromise$result))
 })
 
 
@@ -247,7 +258,7 @@ test_that('withinGroup is not returned to the user', {
     group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   )
   copyDT[, N := .N, by = .(ID, block)]
-  expect_false('withinGroup' %in% colnames(
+  withinpromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -257,14 +268,15 @@ test_that('withinGroup is not returned to the user', {
       coords = c('X', 'Y'),
       id = 'ID'
     )
-  ))
+  )
+  expect_false('withinGroup' %in% colnames(withinpromise$result))
 })
 
 
 test_that('group column succesfully detected', {
   copyDT <- copy(DT)[, group := 1][, mnth := month(datetime)]
   copyDT <- copyDT[, nBy := .N, by = .(mnth, ID)][nBy > 30]
-  expect_message(
+  groupdelpromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -274,13 +286,13 @@ test_that('group column succesfully detected', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'mnth'
-    ),
-    'group column will be overwritten'
+    )
   )
+  expect_match(groupdelpromise$messages, 'group column will be overwritten')
 
   copyDT <- copy(DT)[, group := 1][, mnth := month(datetime)]
   copyDT <- copyDT[, nBy := .N, by = .(mnth, ID)][nBy > 30]
-  expect_message(
+  overwritepromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -289,7 +301,10 @@ test_that('group column succesfully detected', {
       area = FALSE,
       coords = c('X', 'Y'),
       id = 'ID'
-    ),
+    )
+  )
+  expect_match(
+    overwritepromise$messages,
     'group column will be overwritten'
   )
 })
@@ -298,7 +313,7 @@ test_that('group column succesfully detected', {
 test_that('area provided with splitBy does not return errors', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   copyDT[, yr := year(datetime)]
-  expect_false('withinGroup' %in% colnames(
+  withinsplitpromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -309,9 +324,10 @@ test_that('area provided with splitBy does not return errors', {
       id = 'ID',
       splitBy = 'yr'
     )
-  ))
+  )
+  expect_false('withinGroup' %in% colnames(withinsplitpromise$result))
 
-  expect_true('area' %in% colnames(
+  areapromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -322,9 +338,10 @@ test_that('area provided with splitBy does not return errors', {
       id = 'ID',
       splitBy = 'yr'
     )
-  ))
+  )
+  expect_true('area' %in% colnames(areapromise$result))
 
-  expect_true('proportion' %in% colnames(
+  proppromise <- evaluate_promise(
     group_polys(
       DT = copyDT,
       projection = utm,
@@ -335,7 +352,8 @@ test_that('area provided with splitBy does not return errors', {
       id = 'ID',
       splitBy = 'yr'
     )
-  ))
+  )
+  expect_true('proportion' %in% colnames(proppromise$result))
 })
 
 
@@ -399,15 +417,3 @@ test_that('less than 5 locs returns NAs and warning', {
 
 
 })
-
-# group_polys(
-#   DT = DT,
-#   projection = utm,
-#   hrType = 'mcp',
-#   hrParams = NULL,
-#   area = FALSE,
-#   coords = c('X', 'Y'),
-#   id = 'ID',
-#   splitBy = NULL,
-#   spPolys = NULL
-# )

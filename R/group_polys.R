@@ -13,14 +13,11 @@
 #' \code{data.frame}, you can convert it by reference using
 #' \code{\link[data.table:setDT]{data.table::setDT}}.
 #'
-#'
 #' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect
 #' the names of respective columns in \code{DT} which correspond to the
 #' individual identifier, X and Y coordinates, and additional grouping columns.
 #'
-#' The \code{projection} expects a \code{PROJ.4} character string (such as those
-#' available on \url{https://spatialreference.org/}). \code{group_polys} expects planar
-#' coordinates (not unprojected latitude, longitude).
+#' The \code{projection} argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See \url{https://spatialreference.org/}) for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
 #'
 #' The \code{hrType} must be either one of "kernel" or "mcp". The
 #' \code{hrParams} must be a named list of arguments matching those of
@@ -48,6 +45,7 @@
 #'
 #' @inheritParams group_pts
 #' @inheritParams group_lines
+#' @inheritParams build_polys
 #' @param area boolean indicating either overlap group (when \code{FALSE}) or
 #'   area and proportion of overlap (when \code{TRUE})
 #' @param hrType type of HR estimation, either 'mcp' or 'kernel'
@@ -69,15 +67,15 @@
 #' # Cast the character column to POSIXct
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
-#' # Proj4 string for example data
-#' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+#' # EPSG code for example data
+#' utm <- '+init=epsg:32736'
 #'
-#' group_polys(DT, area = FALSE, 'mcp', list(percent = 95),
-#'             projection = utm,
+#' group_polys(DT, area = FALSE, hrType = 'mcp',
+#'             hrParams = list(percent = 95), projection = utm,
 #'             id = 'ID', coords = c('X', 'Y'))
 #'
-#' areaDT <- group_polys(DT, area = TRUE, 'mcp', list(percent = 95),
-#'                       projection = utm,
+#' areaDT <- group_polys(DT, area = TRUE, hrType = 'mcp',
+#'                       hrParams = list(percent = 95), projection = utm,
 #'                       id = 'ID', coords = c('X', 'Y'))
 group_polys <-
   function(DT = NULL,

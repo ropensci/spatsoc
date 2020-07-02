@@ -88,8 +88,8 @@ group_pts(
 Line based grouping by measuring intersection of, optionally buffered, trajectories for each individual in each timegroup. Longer temporal thresholds are used to measure, for example, intersecting daily trajectories. 
 
 ```{r, eval = FALSE}
-# UTM zone for relocations
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+# EPSG code for relocations
+utm <- '+init=epsg:32736'
 
 ## Group relocations by julian day
 group_times(DT, datetime = 'datetime', threshold = '1 day')
@@ -112,8 +112,8 @@ group_lines(
 Polygon based grouping by generating home ranges using `adehabitatHR` and measuring intersection or proportional overlap. Longer temporal thresholds are used to create seasonal, monthly, yearly home ranges.
 
 ```{r, eval = FALSE}
-# UTM zone for relocations
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+# EPSG code for relocations
+utm <- '+init=epsg:32736'
 
 ## Option 1: area = FALSE and home range intersection 'group' column added to DT 
 group_polys(

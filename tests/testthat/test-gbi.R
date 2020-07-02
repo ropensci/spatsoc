@@ -8,14 +8,10 @@ DT <- fread('../testdata/DT.csv')
 DT[, datetime := as.POSIXct(datetime)]
 DT[, yr := year(datetime)]
 
-utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+utm <- '+init=epsg:32736'
 
-group_polys(DT, area = FALSE, hrType = 'mcp',
-            hrParams = list(percent = 95),
-            projection = utm, id = 'ID', coords = c('X', 'Y'),
-            splitBy = 'yr')
-
-DT <- unique(DT[, .(ID, group, yr)])
+group_times(DT, 'datetime', '5 minutes')
+group_pts(DT, 50, timegroup = 'timegroup', id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
 
 test_that('DT is required', {
   expect_error(get_gbi(

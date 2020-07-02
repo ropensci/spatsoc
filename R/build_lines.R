@@ -3,11 +3,7 @@
 #'
 #' \code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}. The function accepts a \code{data.table} with relocation data, individual identifiers a sorting column and a \code{projection}. The relocation data is transformed into \code{SpatialLines} for each individual and optionally, each \code{splitBy}. Relocation data should be in two columns representing the X and Y coordinates.
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a \code{data.frame}, you can convert it by reference using \code{\link[data.table:setDT]{data.table::setDT}}.
-#'
-#' The \code{id}, \code{coords}, \code{sortBy} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, X and Y coordinates, sorting column, and additional splitting columns.
-#'
-#' The \code{projection} expects a \code{PROJ.4} character string (such as those available on \url{https://spatialreference.org/}).
+#' The \code{projection} argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See \url{https://spatialreference.org/}) for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
 #'
 #' The \code{sortBy} is used to order the input \code{data.table} when creating \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted by date time.
 #'
@@ -20,6 +16,7 @@
 #' An error is returned when an individual has less than 2 relocations, making it impossible to build a line.
 #'
 #' @inheritParams group_lines
+#' @inheritParams build_polys
 #'
 #' @export
 #'
@@ -38,8 +35,8 @@
 #' # Cast the character column to POSIXct
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
-#' # Proj4 string for example data
-#' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+#' # EPSG code for example data
+#' utm <- '+init=epsg:32736'
 #'
 #' # Build lines for each individual
 #' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),

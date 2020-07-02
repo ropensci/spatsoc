@@ -36,7 +36,7 @@ Suggests:
     rmarkdown,
     asnipe
 SystemRequirements: GEOS (>= 3.2.0)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 BugReports: https://github.com/ropensci/spatsoc/issues

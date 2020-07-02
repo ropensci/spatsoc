@@ -4,8 +4,7 @@ library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
-utm <-
-  '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+utm <- '+init=epsg:32736'
 
 
 test_that('DT or spPts are required but not both', {
@@ -171,21 +170,23 @@ test_that('hrParams returns error if params do not match function params', {
     fixed = FALSE
   )
 
+  s4promise <- evaluate_promise(build_polys(
+    DT = DT,
+    projection = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    coords = c('X', 'Y'),
+    id = 'ID'
+  ))
+
   expect_s4_class(
-    build_polys(
-      DT = DT,
-      projection = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      coords = c('X', 'Y'),
-      id = 'ID'
-    ),
+    s4promise$result,
     'SpatialPolygonsDataFrame'
   )
 })
 
 test_that('if hrParams NULL, warns', {
-  expect_message(
+  paramspromise <- evaluate_promise(
     build_polys(
       DT = DT,
       projection = utm,
@@ -193,7 +194,11 @@ test_that('if hrParams NULL, warns', {
       hrParams = NULL,
       coords = c('X', 'Y'),
       id = 'ID'
-    ),
+    )
+  )
+
+  expect_match(
+    paramspromise$messages,
     'hrParams is not provided, using defaults'
   )
 
@@ -201,19 +206,7 @@ test_that('if hrParams NULL, warns', {
 
 
 test_that('build_polys returns SpatialPolygons', {
-  expect_true('SpatialPolygonsDataFrame' %in%
-                class(
-                  build_polys(
-                    DT = DT,
-                    projection = utm,
-                    hrType = 'mcp',
-                    hrParams = list(percent = 95),
-                    coords = c('X', 'Y'),
-                    id = 'ID'
-                  )
-                ))
-
-  expect_true(isS4(
+  polpromise <- evaluate_promise(
     build_polys(
       DT = DT,
       projection = utm,
@@ -222,21 +215,14 @@ test_that('build_polys returns SpatialPolygons', {
       coords = c('X', 'Y'),
       id = 'ID'
     )
-  ))
+  )
 
-  expect_true('SpatialPolygonsDataFrame' %in%
-                class(
-                  build_polys(
-                    DT = DT,
-                    projection = utm,
-                    hrType = 'kernel',
-                    hrParams = list(grid = 60),
-                    coords = c('X', 'Y'),
-                    id = 'ID'
-                  )
-                ))
+  expect_s4_class(
+    polpromise$result,
+    'SpatialPolygonsDataFrame'
+  )
 
-  expect_true(isS4(
+  polpromise2 <- evaluate_promise(
     build_polys(
       DT = DT,
       projection = utm,
@@ -245,12 +231,17 @@ test_that('build_polys returns SpatialPolygons', {
       coords = c('X', 'Y'),
       id = 'ID'
     )
-  ))
+  )
+
+  expect_s4_class(
+    polpromise2$result,
+    'SpatialPolygonsDataFrame'
+  )
 })
 
 
 test_that('hrParams can have both vertices and kernel args', {
-  expect_silent(
+  bothparamspromise <- evaluate_promise(
     build_polys(
       DT = DT,
       projection = utm,
@@ -260,5 +251,8 @@ test_that('hrParams can have both vertices and kernel args', {
       id = 'ID'
     )
   )
-
+  expect_s4_class(
+    bothparamspromise$result,
+    'SpatialPolygonsDataFrame'
+  )
 })
