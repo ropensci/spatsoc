@@ -22,7 +22,7 @@ Note that \code{get_gbi} is identical in function for turning the outputs
 of \code{spatsoc} into social networks as
 \code{\link[asnipe:get_group_by_individual]{asnipe::get_group_by_individual}}
 but is more efficient thanks to
-\code{\link[data.table:dcast]{data.table::dcast}}.
+\code{\link[data.table:dcast.data.table]{data.table::dcast}}.
 }
 \description{
 \code{get_gbi} generates a group by individual matrix. The function accepts a

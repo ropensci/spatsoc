@@ -37,7 +37,7 @@
 #' The \code{group} argument is expected only when \code{type} is 'step' or
 #' 'daily'.
 #'
-#' For example, using \code{\link[data.table:year]{data.table::year}}:
+#' For example, using \code{\link[data.table:IDateTime]{data.table::year}}:
 #'
 #' \preformatted{ DT[, yr := year(datetime)] randomizations(DT, type = 'step',
 #' id = 'ID', datetime = 'timegroup', splitBy = 'yr') }
