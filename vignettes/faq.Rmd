@@ -195,8 +195,18 @@ See [3.2.1](#dt-1).
 ### threshold
 The `threshold` argument represents a buffer area around each line. When `threshold = 0`, the lines are grouped by spatial overlap. If the threshold is greater than 0, the lines buffered, then grouped by spatial overlap. 
 
-### coords
-The coordinates must be planar, such as UTM (of whichever zone your relocations are in). 
+### projection
+The `projection` argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is `projection = "+init=epsg:32736"`. See \url{https://spatialreference.org/}) for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}. 
+
+Because of changes to projection handling, `group_polys`, `build_polys`, `group_lines` and `build_lines` may return the warning once, or many times: 
+
+```
+In proj4string(xy) : CRS object has comment, which is lost in output
+Calls: group_polys ... do.call -> <Anonymous> -> proj4string -> proj4string
+```
+
+This warning is explicitly verbose, to ensure we are considering the updated use of CRS [in `sp`](https://www.r-spatial.org/r/2020/03/17/wkt.html#crs-objects-in-sp) and other spatial packages.  
+
 
 ### sortBy
 The `sortBy` argument expects a date time formatted column name, which is used to order the rows for each individual (and `splitBy`). 
@@ -223,8 +233,18 @@ The default unit for area overlap is square meters.
 
 <!-- direction of proportion -->
 
-### coords
-The coordinates must be planar, such as UTM (of whichever zone your relocations are in). 
+### projection
+The `projection` argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is `projection = "+init=epsg:32736"`. See \url{https://spatialreference.org/}) for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}. 
+
+Because of changes to projection handling, `group_polys`, `build_polys`, `group_lines` and `build_lines` may return the warning once, or many times: 
+
+```
+In proj4string(xy) : CRS object has comment, which is lost in output
+Calls: group_polys ... do.call -> <Anonymous> -> proj4string -> proj4string
+```
+
+This warning is explicitly verbose, to ensure we are considering the updated use of CRS [in `sp`](https://www.r-spatial.org/r/2020/03/17/wkt.html#crs-objects-in-sp) and other spatial packages.  
+
 
 ### hrType and hrParams
 Currently, `spatsoc` offers two types of home ranges provided by the `adehabitatHR` package: 'mcp' (`mcp`) and 'kernel' (`kernelUD` and `getverticeshr`). The parameters must match the arguments of those functions. 
