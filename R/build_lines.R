@@ -33,8 +33,8 @@
 #' # Cast the character column to POSIXct
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
-#' # Proj4 string for example data
-#' utm <- '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+#' # EPSG code for example data
+#' utm <- '+init=epsg:32736'
 #'
 #' # Build lines for each individual
 #' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
