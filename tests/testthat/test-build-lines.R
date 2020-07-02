@@ -4,8 +4,7 @@ library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
-utm <-
-  '+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs'
+utm <- '+init=epsg:32736'
 
 DT[, datetime := as.POSIXct(datetime)]
 
