@@ -45,6 +45,7 @@
 #'
 #' @inheritParams group_pts
 #' @inheritParams group_lines
+#' @inheritParams build_polys
 #' @param area boolean indicating either overlap group (when \code{FALSE}) or
 #'   area and proportion of overlap (when \code{TRUE})
 #' @param hrType type of HR estimation, either 'mcp' or 'kernel'
