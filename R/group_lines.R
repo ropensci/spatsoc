@@ -60,12 +60,13 @@
 #'
 #' @inheritParams group_pts
 #' @inheritParams build_polys
-#' @inheritParams build_lines
 #' @param threshold The width of the buffer around the lines in the units of the
 #'   projection. Supply 0 to compare intersection without buffering.
 #' @param spLines Alternatively to providing a DT, provide a SpatialLines object
 #'   created with the sp package. If a spLines object is provided, groups cannot
 #'   be calculated by a    timegroup or splitBy.
+#' @param sortBy Character string of date time column(s) to sort rows by. Must
+#'   be a POSIXct.
 #'
 #' @export
 #'

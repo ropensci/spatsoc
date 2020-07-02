@@ -31,6 +31,9 @@ projection. Supply 0 to compare intersection without buffering.}
 \item{timegroup}{timegroup field in the DT upon which the grouping will be
 calculated}
 
+\item{sortBy}{Character string of date time column(s) to sort rows by. Must
+be a POSIXct.}
+
 \item{splitBy}{(optional) character string or vector of grouping column
 name(s) upon which the grouping will be calculated}
 

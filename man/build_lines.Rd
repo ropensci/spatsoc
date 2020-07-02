@@ -22,6 +22,9 @@ build_lines(
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
+\item{sortBy}{Character string of date time column(s) to sort rows by. Must
+be a POSIXct.}
+
 \item{splitBy}{(optional) character string or vector of grouping column
 name(s) upon which the grouping will be calculated}
 }
