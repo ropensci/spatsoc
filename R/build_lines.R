@@ -20,6 +20,7 @@
 #' An error is returned when an individual has less than 2 relocations, making it impossible to build a line.
 #'
 #' @inheritParams group_lines
+#' @inheritParams build_polys
 #'
 #' @export
 #'
