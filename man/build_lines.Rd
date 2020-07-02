@@ -37,7 +37,7 @@ An error is returned when an individual has less than 2 relocations, making it i
 \code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}. The function accepts a \code{data.table} with relocation data, individual identifiers a sorting column and a \code{projection}. The relocation data is transformed into \code{SpatialLines} for each individual and optionally, each \code{splitBy}. Relocation data should be in two columns representing the X and Y coordinates.
 }
 \details{
-The \code{projection} argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See \url{https://spatialreference.org/}) for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
+The \code{projection} argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See \url{https://spatialreference.org}) for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
 
 The \code{sortBy} is used to order the input \code{data.table} when creating \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted by date time.
 
