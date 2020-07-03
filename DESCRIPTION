@@ -15,11 +15,12 @@ Authors@R:
              family = "Vander Wal",
              role = "aut",
              comment = c(ORCID = "0000-0002-8534-4317")))
-Description: Detects spatial and temporal groups in GPS relocations. 
+Description: Detects spatial and temporal groups in GPS relocations 
+    (Robitaille et al. (2020) <doi:10.1111/2041-210X.13215>). 
     It can be used to convert GPS relocations to 
-    gambit-of-the-group format to build proximity-based social networks. 
+    gambit-of-the-group format to build proximity-based social networks 
     In addition, the randomizations function provides data-stream 
-    randomization methods suitable for GPS data.
+    randomization methods suitable for GPS data. 
 Depends: R (>= 3.4)
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
