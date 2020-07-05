@@ -6,7 +6,7 @@ state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![peer-review](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/software-review/issues/237)
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
-[![](https://img.shields.io/badge/devel%20version-0.1.13-blue.svg)](https://github.com/robitalec/spatsoc)
+[![](https://img.shields.io/badge/devel%20version-0.1.14-blue.svg)](https://github.com/robitalec/spatsoc)
 [![cran
 checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
 [![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
