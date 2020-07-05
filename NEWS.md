@@ -1,4 +1,4 @@
-# v 0.1.14 
+# v 0.1.14 (2020-07-03)
 * updated tests, man and vignettes following new handling of projections in sp ([PR 31](https://github.com/ropensci/spatsoc/pull/31), [R spatial information](https://www.r-spatial.org/r/2020/03/17/wkt.html))
 * clarified explicit drop of NAs in dyadID in edge list vignette
 
