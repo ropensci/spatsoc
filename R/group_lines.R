@@ -1,4 +1,4 @@
-#' Groups Lines
+#' Group Lines
 #'
 #' \code{group_lines} groups rows into spatial groups by creating trajectories
 #' and grouping based on spatial overlap. The function accepts a
