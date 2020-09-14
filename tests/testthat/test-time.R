@@ -2,7 +2,7 @@
 context('test group_times')
 library(spatsoc)
 
-DT <- fread('../testdata/DT.csv')
+DT <- fread('../testdata/DT.csv', tz = 'UTC')
 # Sys.setenv(TZ='GMT')
 
 test_that('DT is required', {
@@ -52,7 +52,7 @@ test_that('time field is appropriate format', {
   # where character is provided
   copyDT <- copy(DT)
   expect_error(
-    group_times(copyDT, datetime = 'datetime', threshold = '60 minutes'),
+    group_times(copyDT, datetime = 'ID', threshold = '60 minutes'),
     'time field provided must be either',
     fixed = FALSE
   )
