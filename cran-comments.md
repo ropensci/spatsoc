@@ -1,14 +1,10 @@
-## v 0.1.14
+## v 0.1.15
 See NEWS.md for all updates. 
 
-
-
-* updated tests, man and vignettes following new handling of projections in sp ([PR 31](https://github.com/ropensci/spatsoc/pull/31), [R spatial information](https://www.r-spatial.org/r/2020/03/17/wkt.html))
-* clarified explicit drop of NAs in dyadID in edge list vignette
-
+* fixed an issue ([32](https://github.com/ropensci/spatsoc/issues/32)) causing data.table's reverse dependency tests to fail for spatsoc
 
 ## Test environments
-* Linux: R 4.2
+* Linux: R 4.0.3
 * devtools::check_rhub
 * devtools::check_win_devel
 
