@@ -6,15 +6,16 @@ state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![peer-review](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/software-review/issues/237)
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
-[![](https://img.shields.io/badge/devel%20version-0.1.14-blue.svg)](https://github.com/robitalec/spatsoc)
+[![](https://img.shields.io/badge/devel%20version-0.1.15-blue.svg)](https://github.com/robitalec/spatsoc)
 [![cran
 checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
 [![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
 <!-- badges: end -->
 
-# spatsoc
+spatsoc
+=======
 
-### [News](#news) | [Installation](#installation) | [Usage](#usage) | [Contributing](#contributing)
+### [News](#news) \| [Installation](#installation) \| [Usage](#usage) \| [Contributing](#contributing)
 
 `spatsoc` is an R package for detecting spatial and temporal groups in
 GPS relocations. It can be used to convert GPS relocations to
@@ -30,27 +31,28 @@ See below for [installation](#installation) and basic [usage](#usage).
 For more details, see the [blog
 post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
-  - [Introduction to
+-   [Introduction to
     spatsoc](https://docs.ropensci.org/spatsoc/articles/intro-spatsoc.html)
-  - [Frequently asked
+-   [Frequently asked
     questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
-  - [Using spatsoc in social network
+-   [Using spatsoc in social network
     analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html)
-  - [Using edge list and dyad id
+-   [Using edge list and dyad id
     functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
 
-## News
+News
+----
 
 New edge-list generating functions added:
 
-  - `edge_nn`
-  - `edge_dist`
+-   `edge_nn`
+-   `edge_dist`
 
 and dyad id function:
 
-  - `dyad_id`
+-   `dyad_id`
 
-(feedback welcome as always\!)
+(feedback welcome as always!)
 
 Both documented further in a new vignette: [Using edge list and dyad id
 functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html).
@@ -65,27 +67,27 @@ at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x).
 More detailed news
 [here](https://docs.ropensci.org/spatsoc/news/index.html).
 
-## Installation
+Installation
+------------
 
 Install the latest version with `remotes`.
 
-``` r
-remotes::install_github('ropensci/spatsoc')
+    remotes::install_github('ropensci/spatsoc')
 
-# or CRAN
-install.packages('spatsoc')
-```
+    # or CRAN
+    install.packages('spatsoc')
 
 `spatsoc` depends on `rgeos` and requires
 [GEOS](https://trac.osgeo.org/geos/) installed on the system.
 
-  - Debian/Ubuntu: `apt-get install libgeos-dev`
-  - Arch: `pacman -S geos`
-  - Fedora: `dnf install geos geos-devel`
-  - Mac: `brew install geos`
-  - Windows: see [here](https://trac.osgeo.org/osgeo4w/)
+-   Debian/Ubuntu: `apt-get install libgeos-dev`
+-   Arch: `pacman -S geos`
+-   Fedora: `dnf install geos geos-devel`
+-   Mac: `brew install geos`
+-   Windows: see [here](https://trac.osgeo.org/osgeo4w/)
 
-## Usage
+Usage
+-----
 
 ### Load package, import data
 
@@ -94,12 +96,10 @@ install.packages('spatsoc')
 reference. If your data is a text file (e.g.: CSV), you can use
 `data.table::fread()` to import it as a `data.table`.
 
-``` r
-library(spatsoc)
-library(data.table)
-DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
-DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
-```
+    library(spatsoc)
+    library(data.table)
+    DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+    DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 ### Temporal grouping
 
@@ -145,7 +145,8 @@ each individual (D).
 `randomizations` for data-stream randomization and `get_gbi` for
 generating group by individual matrices.
 
-# Contributing
+Contributing
+============
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
