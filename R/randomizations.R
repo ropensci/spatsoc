@@ -74,7 +74,7 @@
 #' @param iterations The number of iterations to randomize
 #'
 #' @references
-#' \url{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12553/full}
+#' \url{https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12553}
 #' @export
 #'
 #' @family Social network tools

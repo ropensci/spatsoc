@@ -42,4 +42,4 @@ RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 BugReports: https://github.com/ropensci/spatsoc/issues
-URL: https://docs.ropensci.org/spatsoc, https://github.com/ropensci/spatsoc, http://spatsoc.robitalec.ca
+URL: https://docs.ropensci.org/spatsoc/, https://github.com/ropensci/spatsoc, http://spatsoc.robitalec.ca
