@@ -165,25 +165,50 @@ edge_dist <- function(DT = NULL,
     }
   }
 
-  edges <- DT[, {
+  if (is.null(threshold)) {
+    edges <- DT[, {
 
-    distMatrix <-
-      as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
-    diag(distMatrix) <- NA
+      distMatrix <-
+        as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
+      diag(distMatrix) <- NA
 
-    w <- which(distMatrix < threshold, arr.ind = TRUE)
+      if (returnDist) {
+        l <- data.table::data.table(
+          ID1 = .SD[[1]][rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+          ID2 = .SD[[1]][rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
+          distance = c(distMatrix)
+        )[ID1 != ID2]
+      } else {
+        l <- data.table::data.table(
+          ID1 = .SD[[1]][rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+          ID2 = .SD[[1]][rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
+        )[ID1 != ID2]
+      }
+      l
+    },
+    by = splitBy, .SDcols = c(id, coords)]
+  } else {
+    edges <- DT[, {
 
-    if (returnDist) {
-      l <- list(ID1 = .SD[[1]][w[, 1]],
-                ID2 = .SD[[1]][w[, 2]],
-                distance = distMatrix[w])
-    } else {
-      l <- list(ID1 = .SD[[1]][w[, 1]],
-                ID2 = .SD[[1]][w[, 2]])
-    }
-    l
-  },
-  by = splitBy, .SDcols = c(id, coords)]
+      distMatrix <-
+        as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
+      diag(distMatrix) <- NA
+
+      w <- which(distMatrix < threshold, arr.ind = TRUE)
+
+      if (returnDist) {
+        l <- list(ID1 = .SD[[1]][w[, 1]],
+                  ID2 = .SD[[1]][w[, 2]],
+                  distance = distMatrix[w])
+      } else {
+        l <- list(ID1 = .SD[[1]][w[, 1]],
+                  ID2 = .SD[[1]][w[, 2]])
+      }
+      l
+    },
+    by = splitBy, .SDcols = c(id, coords)]
+  }
+
 
   if (fillNA) {
     merge(edges,
