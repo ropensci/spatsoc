@@ -94,7 +94,7 @@ edge_dist <- function(DT = NULL,
     stop('input DT required')
   }
 
-  if (is.null(threshold)) {
+  if (missing(threshold)) {
     stop('threshold required')
   }
 
