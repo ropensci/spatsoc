@@ -88,7 +88,7 @@ edge_dist <- function(DT = NULL,
                       returnDist = FALSE,
                       fillNA = TRUE) {
   # due to NSE notes in R CMD check
-  N <- Var1 <- Var2 <- value <- . <- NULL
+  N <- ID1 <- ID2 <- value <- . <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
