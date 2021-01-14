@@ -18,7 +18,7 @@ test_that('ID and coords column names, threshold correctly provided',
             expect_error(edge_dist(DT, threshold = 10, id = NULL),
                          'ID field required')
 
-            expect_error(edge_dist(DT, threshold = NULL, id = 'ID'),
+            expect_error(edge_dist(DT, id = 'ID'),
                          'threshold required')
 
             expect_error(
