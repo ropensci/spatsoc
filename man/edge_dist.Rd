@@ -6,7 +6,7 @@
 \usage{
 edge_dist(
   DT = NULL,
-  threshold = NULL,
+  threshold,
   id = NULL,
   coords = NULL,
   timegroup,
