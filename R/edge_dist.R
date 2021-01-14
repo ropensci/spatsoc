@@ -80,7 +80,7 @@
 #'     fillNA = TRUE
 #'   )
 edge_dist <- function(DT = NULL,
-                      threshold = NULL,
+                      threshold,
                       id = NULL,
                       coords = NULL,
                       timegroup,
