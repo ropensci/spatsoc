@@ -102,7 +102,7 @@ edge_dist <- function(DT = NULL,
     stop('threshold must be numeric or NULL')
   }
 
-  if (threshold <= 0) {
+  if (is.numeric(threshold) && threshold <= 0) {
     stop('threshold must be greater than 0')
   }
 
