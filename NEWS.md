@@ -1,3 +1,7 @@
+# v 0.1.15 (in development)
+* added an option for `edge_dist` to handle threshold = NULL. If NULL, `edge_dist` will return all neighbours observed (eg. useful if one wanted to calculated mean nearest neighbour distance at each timegroup). 
+
+
 # v 0.1.14 (2020-10-21)
 * fix TZ=UTC data.table tests ([Issue 32](https://github.com/ropensci/spatsoc/issues/32))
 
