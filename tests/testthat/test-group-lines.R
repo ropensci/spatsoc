@@ -4,7 +4,7 @@ library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
-utm <- '+init=epsg:32736'
+utm <- '+init=epsg:32736' # should be "EPSG:32736"
 
 DT[, datetime := as.POSIXct(datetime)]
 DT[, jul := data.table::yday(datetime)]
@@ -161,6 +161,7 @@ test_that('timegroup is correctly provided but is not required', {
 
 
 test_that('threshold is correctly provided, or error', {
+  options("rgdal_show_exportToProj4_warnings"="none")
   copyDT <- copy(DT)
   # to avoid block length warning
   suppressWarnings(
