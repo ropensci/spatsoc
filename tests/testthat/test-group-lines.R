@@ -161,7 +161,6 @@ test_that('timegroup is correctly provided but is not required', {
 
 
 test_that('threshold is correctly provided, or error', {
-  options("rgdal_show_exportToProj4_warnings"="none")
   copyDT <- copy(DT)
   # to avoid block length warning
   suppressWarnings(
