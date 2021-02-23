@@ -8,7 +8,7 @@ DT <- fread('../testdata/DT.csv')
 DT[, datetime := as.POSIXct(datetime)]
 DT[, yr := year(datetime)]
 
-utm <- '+init=epsg:32736'
+utm <- 'EPSG:32736'
 
 group_times(DT, 'datetime', '5 minutes')
 group_pts(DT, 50, timegroup = 'timegroup', id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
