@@ -89,7 +89,7 @@ Line based grouping by measuring intersection of, optionally buffered, trajector
 
 ```{r, eval = FALSE}
 # EPSG code for relocations
-utm <- '+init=epsg:32736'
+utm <- 'EPSG:32736'
 
 ## Group relocations by julian day
 group_times(DT, datetime = 'datetime', threshold = '1 day')
@@ -113,7 +113,7 @@ Polygon based grouping by generating home ranges using `adehabitatHR` and measur
 
 ```{r, eval = FALSE}
 # EPSG code for relocations
-utm <- '+init=epsg:32736'
+utm <- 'EPSG:32736'
 
 ## Option 1: area = FALSE and home range intersection 'group' column added to DT 
 group_polys(
