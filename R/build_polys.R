@@ -65,7 +65,7 @@
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
 #' # EPSG code for example data
-#' utm <- '+init=epsg:32736'
+#' utm <- 'EPSG:32736'
 #'
 #' # Build polygons for each individual using kernelUD and getverticeshr
 #' build_polys(DT, projection = utm, hrType = 'kernel',
