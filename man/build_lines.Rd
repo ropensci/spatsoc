@@ -16,8 +16,9 @@ build_lines(
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{character string defining the EPSG code. For example, for
-UTM zone 21N (EPSG 32736), the projection argument is 'EPSG:32736'. See details.}
+\item{projection}{character string defining the projection to be passed to
+\code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
+the projection argument is 'EPSG:32736'. See details.}
 
 \item{id}{Character string of ID column name}
 
@@ -46,7 +47,7 @@ the X and Y coordinates.
 }
 \details{
 The \code{projection} argument expects a character string defining the EPSG
-code. For example, for UTM zone 21N (EPSG 32736), the projection argument is
+code. For example, for UTM zone 36N (EPSG 32736), the projection argument is
 'EPSG:32736'. See \url{https://spatialreference.org} for a list of
 EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ
 for handling projections, see more at
