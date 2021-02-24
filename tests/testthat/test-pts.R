@@ -95,13 +95,6 @@ test_that('column names must exist in DT', {
 
 test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
-  expect_silent(group_pts(
-    copyDT,
-    threshold = 10,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup'
-  ))
 
   expect_error(group_pts(DT, threshold = -10, id = 'ID'),
                'threshold must be greater than 0')
@@ -291,4 +284,16 @@ test_that('duplicate IDs in a timegroup detected', {
                     timegroup = 'timegroup'
                   ),
                  'found duplicate id in a timegroup', fixed = FALSE)
+})
+
+
+
+test_that('returns a data.table', {
+  expect_s3_class(group_pts(
+    DT,
+    threshold = 10,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = 'timegroup'
+  ), 'data.table')
 })
