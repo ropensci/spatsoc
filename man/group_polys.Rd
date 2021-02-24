@@ -26,7 +26,9 @@ area and proportion of overlap (when \code{TRUE})}
 
 \item{hrParams}{a named list of parameters for \code{adehabitatHR} functions}
 
-\item{projection}{character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See details.}
+\item{projection}{character string defining the projection to be passed to
+\code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
+the projection argument is 'EPSG:32736'. See details.}
 
 \item{id}{Character string of ID column name}
 
@@ -71,7 +73,14 @@ The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect
 the names of respective columns in \code{DT} which correspond to the
 individual identifier, X and Y coordinates, and additional grouping columns.
 
-The \code{projection} argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See \url{https://spatialreference.org} for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
+The \code{projection} argument expects a character string defining the EPSG
+code. For example, for UTM zone 36N (EPSG 32736), the projection argument is
+'EPSG:32736'. See \url{https://spatialreference.org} for a list of EPSG
+codes. Please note, R spatial has followed updates to GDAL and PROJ for
+handling projections, see more at
+\url{https://www.r-spatial.org/r/2020/03/17/wkt.html}. It is likely
+that \code{build_polys} will return "Warning in proj4string(xy) :
+CRS object has comment, which is lost in output" due to these changes.
 
 The \code{hrType} must be either one of "kernel" or "mcp". The
 \code{hrParams} must be a named list of arguments matching those of
@@ -94,7 +103,7 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 # EPSG code for example data
-utm <- '+init=epsg:32736'
+utm <- 'EPSG:32736'
 
 group_polys(DT, area = FALSE, hrType = 'mcp',
             hrParams = list(percent = 95), projection = utm,

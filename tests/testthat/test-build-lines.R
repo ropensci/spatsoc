@@ -4,7 +4,7 @@ library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
-utm <- '+init=epsg:32736'
+utm <- 'EPSG:32736'
 
 DT[, datetime := as.POSIXct(datetime)]
 

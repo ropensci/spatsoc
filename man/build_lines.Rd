@@ -16,7 +16,9 @@ build_lines(
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See details.}
+\item{projection}{character string defining the projection to be passed to
+\code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
+the projection argument is 'EPSG:32736'. See details.}
 
 \item{id}{Character string of ID column name}
 
@@ -29,21 +31,39 @@ be a POSIXct.}
 name(s) upon which the grouping will be calculated}
 }
 \value{
-\code{build_lines} returns a \code{SpatialLines} object with a line for each individual (and optionally \code{splitBy} combination).
+\code{build_lines} returns a \code{SpatialLines} object with a line
+for each individual (and optionally \code{splitBy} combination).
 
-An error is returned when an individual has less than 2 relocations, making it impossible to build a line.
+An error is returned when an individual has less than 2 relocations, making
+it impossible to build a line.
 }
 \description{
-\code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}. The function accepts a \code{data.table} with relocation data, individual identifiers a sorting column and a \code{projection}. The relocation data is transformed into \code{SpatialLines} for each individual and optionally, each \code{splitBy}. Relocation data should be in two columns representing the X and Y coordinates.
+\code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}.
+The function accepts a \code{data.table} with relocation data, individual
+identifiers a sorting column and a \code{projection}. The relocation data
+is transformed into \code{SpatialLines} for each individual and optionally,
+each \code{splitBy}. Relocation data should be in two columns representing
+the X and Y coordinates.
 }
 \details{
-The \code{projection} argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See \url{https://spatialreference.org} for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
+The \code{projection} argument expects a character string defining the EPSG
+code. For example, for UTM zone 36N (EPSG 32736), the projection argument is
+'EPSG:32736'. See \url{https://spatialreference.org} for a list of
+EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ
+for handling projections, see more at
+\url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
 
-The \code{sortBy} is used to order the input \code{data.table} when creating \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted by date time.
+The \code{sortBy} is used to order the input \code{data.table} when creating
+\code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted
+by date time.
 
-The \code{splitBy} argument offers further control building \code{SpatialLines}. If in your \code{DT}, you have multiple temporal groups (e.g.: years) for example, you can provide the name of the column which identifies them and build \code{SpatialLines} for each individual in each year.
+The \code{splitBy} argument offers further control building \code{SpatialLines}.
+If in your \code{DT}, you have multiple temporal groups (e.g.: years) for
+example, you can provide the name of the column which identifies them and
+build \code{SpatialLines} for each individual in each year.
 
-\code{build_lines} is used by \code{group_lines} for grouping overlapping lines created from relocations.
+\code{build_lines} is used by \code{group_lines} for grouping overlapping
+lines created from relocations.
 }
 \examples{
 # Load data.table
@@ -56,7 +76,7 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 # EPSG code for example data
-utm <- '+init=epsg:32736'
+utm <- 'EPSG:32736'
 
 # Build lines for each individual
 build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),

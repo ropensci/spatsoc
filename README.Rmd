@@ -36,7 +36,7 @@ For more details, see the [blog post](https://ropensci.org/blog/2018/12/04/spats
 
 
 ## News
-New edge-list generating functions added:
+Edge-list generating functions added:
 
   * `edge_nn`
   * `edge_dist`
@@ -47,23 +47,23 @@ and dyad id function:
   
 (feedback welcome as always!)
 
-Both documented further in a new vignette: [Using edge list and dyad id functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html).
+Both documented further in a vignette: [Using edge list and dyad id functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html).
 
 
-Also, our article describing `spatsoc` was just published at Methods in Ecology and Evolution. [Link here](https://doi.org/10.1111/2041-210X.13215) and thanks to reviewers and editors at [rOpenSci](https://github.com/ropensci/software-review/issues/237) and at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x). 
+Also, our article describing `spatsoc` is published at Methods in Ecology and Evolution. [Link here](https://doi.org/10.1111/2041-210X.13215). Thanks to reviewers and editors at [rOpenSci](https://github.com/ropensci/software-review/issues/237) and at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x). 
 
 
 More detailed news [here](https://docs.ropensci.org/spatsoc/news/index.html).
 
 
 ## Installation
-Install the latest version with `remotes`.  
 
 ```{r install}
-remotes::install_github('ropensci/spatsoc')
-
-# or CRAN
+# Stable release
 install.packages('spatsoc')
+
+# Development version
+remotes::install_github('ropensci/spatsoc')
 ```
 
 `spatsoc` depends on `rgeos` and requires [GEOS](https://trac.osgeo.org/geos/) installed on the system. 

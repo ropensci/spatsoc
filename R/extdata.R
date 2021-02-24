@@ -5,7 +5,7 @@
 #'
 #' @format A data.table with 14297 rows and 5 variables: \describe{
 #'   \item{ID}{individual identifier} \item{X}{X coordinate of the relocation
-#'   (UTM 21N)} \item{Y}{Y coordinate of the relocation (UTM 21N)}
+#'   (UTM 36N)} \item{Y}{Y coordinate of the relocation (UTM 36N)}
 #'   \item{datetime}{character string representing the date time}
 #'   \item{population}{sub population within the individuals} }
 #'

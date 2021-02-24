@@ -1,27 +1,59 @@
 #' Build Polygons
 #'
-#' \code{build_polys} creates a \code{SpatialPolygons} object from a \code{data.table}. The function accepts a \code{data.table} with relocation data, individual identifiers, a \code{projection}, \code{hrType} and \code{hrParams}. The relocation data is transformed into \code{SpatialPolygons} for each individual and optionally, each \code{splitBy}. Relocation data should be in two columns representing the X and Y coordinates.
+#' \code{build_polys} creates a \code{SpatialPolygons} object from a
+#' \code{data.table}. The function accepts a \code{data.table} with
+#' relocation data, individual identifiers, a \code{projection},
+#' \code{hrType} and \code{hrParams}. The relocation data is transformed
+#' into \code{SpatialPolygons} for each individual and optionally, each
+#' \code{splitBy}. Relocation data should be in two columns representing
+#' the X and Y coordinates.
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a \code{data.frame}, you can convert it by reference using \code{\link[data.table:setDT]{data.table::setDT}}.
+#' The \code{DT} must be a \code{data.table}. If your data is a
+#' \code{data.frame}, you can convert it by reference using
+#' \code{\link[data.table:setDT]{data.table::setDT}}.
 #'
-#' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments expect the names of respective columns in \code{DT} which correspond to the individual identifier, X and Y coordinates, and additional grouping columns.
+#' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments
+#' expect the names of respective columns in \code{DT} which correspond
+#' to the individual identifier, X and Y coordinates, and additional
+#' grouping columns.
 #'
-#' The \code{projection} argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See \url{https://spatialreference.org} for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
+#' The \code{projection} argument expects a character string defining
+#' the EPSG code. For example, for UTM zone 36N (EPSG 32736), the projection
+#' argument is "EPSG:32736". See \url{https://spatialreference.org}
+#' for a list of EPSG codes. Please note, R spatial has followed updates
+#' to GDAL and PROJ for handling projections, see more at
+#' \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}. It is likely
+#' that \code{build_polys} will return "Warning in proj4string(xy) :
+#' CRS object has comment, which is lost in output" due to these changes.
 #'
-#' The \code{hrType} must be either one of "kernel" or "mcp". The \code{hrParams} must be a named list of arguments matching those of \code{adehabitatHR::kernelUD} and \code{adehabitatHR::getverticeshr} or \code{adehabitatHR::mcp}.
+#' The \code{hrType} must be either one of "kernel" or "mcp". The
+#' \code{hrParams} must be a named list of arguments matching those
+#' of \code{adehabitatHR::kernelUD} and \code{adehabitatHR::getverticeshr}
+#' or \code{adehabitatHR::mcp}.
 #'
-#' The \code{splitBy} argument offers further control building \code{SpatialPolygons}. If in your \code{DT}, you have multiple temporal groups (e.g.: years) for example, you can provide the name of the column which identifies them and build \code{SpatialPolygons} for each individual in each year.
+#' The \code{splitBy} argument offers further control building
+#' \code{SpatialPolygons}. If in your \code{DT}, you have multiple
+#' temporal groups (e.g.: years) for example, you can provide the
+#' name of the column which identifies them and build \code{SpatialPolygons}
+#' for each individual in each year.
 #'
-#' \code{group_polys} uses \code{build_polys} for grouping overlapping polygons created from relocations.
+#' \code{group_polys} uses \code{build_polys} for grouping overlapping
+#' polygons created from relocations.
 #'
-#' @return \code{build_polys} returns a \code{SpatialPolygons} object with a polyon for each individual (and optionally \code{splitBy} combination).
+#' @return \code{build_polys} returns a \code{SpatialPolygons} object
+#' with a polyon for each individual (and optionally \code{splitBy}
+#' combination).
 #'
-#' An error is returned when \code{hrParams} do not match the arguments of the \code{hrType} \code{adehabitatHR} function.
+#' An error is returned when \code{hrParams} do not match the arguments
+#' of the \code{hrType} \code{adehabitatHR} function.
 #'
 #'
 #' @inheritParams group_polys
-#' @param spPts alternatively, provide solely a SpatialPointsDataFrame with one column representing the ID of each point.
-#' @param projection character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See details.
+#' @param spPts alternatively, provide solely a SpatialPointsDataFrame with one
+#' column representing the ID of each point.
+#' @param projection character string defining the projection to be passed to
+#' \code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
+#' the projection argument is 'EPSG:32736'. See details.
 #' @export
 #'
 #' @family Build functions
@@ -38,7 +70,7 @@
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
 #' # EPSG code for example data
-#' utm <- '+init=epsg:32736'
+#' utm <- 'EPSG:32736'
 #'
 #' # Build polygons for each individual using kernelUD and getverticeshr
 #' build_polys(DT, projection = utm, hrType = 'kernel',

@@ -196,7 +196,12 @@ See [3.2.1](#dt-1).
 The `threshold` argument represents a buffer area around each line. When `threshold = 0`, the lines are grouped by spatial overlap. If the threshold is greater than 0, the lines buffered, then grouped by spatial overlap. 
 
 ### projection
-The `projection` argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is `projection = "+init=epsg:32736"`. See \url{https://spatialreference.org} for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}. 
+The `projection` argument expects a character string defining the projection to
+be passed to `sp::CRS`. For example, for UTM zone 36S (EPSG 32736), the projection
+argument is `projection = "EPSG:32736"`. See \url{https://spatialreference.org} 
+for a list of EPSG codes. Please note, R spatial has followed updates to GDAL 
+and PROJ for handling projections, see more at
+\url{https://www.r-spatial.org/r/2020/03/17/wkt.html}. 
 
 Because of changes to projection handling, `group_polys`, `build_polys`, `group_lines` and `build_lines` may return the warning once, or many times: 
 
@@ -234,7 +239,12 @@ The default unit for area overlap is square meters.
 <!-- direction of proportion -->
 
 ### projection
-The `projection` argument expects a character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is `projection = "+init=epsg:32736"`. See \url{https://spatialreference.org} for a list of EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ for handling projections, see more at \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}. 
+The `projection` argument expects a character string defining the projection to be
+passed to `sp::CRS`. For example, for UTM zone 36S (EPSG 32736), the projection
+argument is `projection = "EPSG:32736"`. See \url{https://spatialreference.org} 
+for a list of EPSG codes. Please note, R spatial has followed updates to GDAL 
+and PROJ for handling projections, see more at
+\url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
 
 Because of changes to projection handling, `group_polys`, `build_polys`, `group_lines` and `build_lines` may return the warning once, or many times: 
 
