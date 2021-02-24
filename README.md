@@ -15,7 +15,7 @@ checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.
 
 # spatsoc
 
-### [News](#news) \| [Installation](#installation) \| [Usage](#usage) \| [Contributing](#contributing)
+### [News](#news) - [Installation](#installation) - [Usage](#usage) - 2[Contributing](#contributing)
 
 `spatsoc` is an R package for detecting spatial and temporal groups in
 GPS relocations. It can be used to convert GPS relocations to
@@ -42,7 +42,7 @@ post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
 ## News
 
-New edge-list generating functions added:
+Edge-list generating functions added:
 
 -   `edge_nn`
 -   `edge_dist`
@@ -53,13 +53,13 @@ and dyad id function:
 
 (feedback welcome as always!)
 
-Both documented further in a new vignette: [Using edge list and dyad id
+Both documented further in a vignette: [Using edge list and dyad id
 functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html).
 
-Also, our article describing `spatsoc` was just published at Methods in
+Also, our article describing `spatsoc` is published at Methods in
 Ecology and Evolution. [Link
-here](https://doi.org/10.1111/2041-210X.13215) and thanks to reviewers
-and editors at
+here](https://doi.org/10.1111/2041-210X.13215). Thanks to reviewers and
+editors at
 [rOpenSci](https://github.com/ropensci/software-review/issues/237) and
 at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x).
 
@@ -68,13 +68,12 @@ More detailed news
 
 ## Installation
 
-Install the latest version with `remotes`.
-
 ``` r
-remotes::install_github('ropensci/spatsoc')
-
-# or CRAN
+# Stable release
 install.packages('spatsoc')
+
+# Development version
+remotes::install_github('ropensci/spatsoc')
 ```
 
 `spatsoc` depends on `rgeos` and requires
