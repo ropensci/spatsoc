@@ -57,12 +57,12 @@
 #' utm <- 'EPSG:32736'
 #'
 #' # Build lines for each individual
-#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
+#' lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
 #'             sortBy = 'datetime')
 #'
 #' # Build lines for each individual by year
 #' DT[, yr := year(datetime)]
-#' build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
+#' lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
 #'             sortBy = 'datetime', splitBy = 'yr')
 #'
 build_lines <-
