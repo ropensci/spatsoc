@@ -92,13 +92,6 @@ test_that('column names must exist in DT', {
 
 test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
-  expect_silent(edge_dist(
-    copyDT,
-    threshold = 10,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = NULL
-  ))
 
   expect_error(edge_dist(DT, threshold = -10, id = 'ID'),
                'threshold must be greater than 0')
@@ -287,4 +280,15 @@ test_that('returnDist works', {
   expect_lt(withDistNoNA[, max(distance, na.rm = TRUE)],
             thresh)
 
+})
+
+
+test_that('returns a data.table', {
+  expect_s3_class(edge_dist(
+    DT,
+    threshold = 10,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = NULL
+  ), 'data.table')
 })
