@@ -9,7 +9,7 @@
 #' the X and Y coordinates.
 #'
 #' The \code{projection} argument expects a character string defining the EPSG
-#' code. For example, for UTM zone 21N (EPSG 32736), the projection argument is
+#' code. For example, for UTM zone 36N (EPSG 32736), the projection argument is
 #'  'EPSG:32736'. See \url{https://spatialreference.org} for a list of
 #'  EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ
 #'  for handling projections, see more at
