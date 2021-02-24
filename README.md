@@ -9,11 +9,11 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repo
 [![](https://img.shields.io/badge/devel%20version-0.1.15-blue.svg)](https://github.com/robitalec/spatsoc)
 [![cran
 checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
-[![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
+[![codecov](https://codecov.io/gh/ropensci/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/spatsoc)
+[![R-CMD-check](https://github.com/ropensci/spatsoc/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/spatsoc/actions)
 <!-- badges: end -->
 
-spatsoc
-=======
+# spatsoc
 
 ### [News](#news) \| [Installation](#installation) \| [Usage](#usage) \| [Contributing](#contributing)
 
@@ -40,8 +40,7 @@ post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 -   [Using edge list and dyad id
     functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
 
-News
-----
+## News
 
 New edge-list generating functions added:
 
@@ -67,15 +66,16 @@ at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x).
 More detailed news
 [here](https://docs.ropensci.org/spatsoc/news/index.html).
 
-Installation
-------------
+## Installation
 
 Install the latest version with `remotes`.
 
-    remotes::install_github('ropensci/spatsoc')
+``` r
+remotes::install_github('ropensci/spatsoc')
 
-    # or CRAN
-    install.packages('spatsoc')
+# or CRAN
+install.packages('spatsoc')
+```
 
 `spatsoc` depends on `rgeos` and requires
 [GEOS](https://trac.osgeo.org/geos/) installed on the system.
@@ -86,8 +86,7 @@ Install the latest version with `remotes`.
 -   Mac: `brew install geos`
 -   Windows: see [here](https://trac.osgeo.org/osgeo4w/)
 
-Usage
------
+## Usage
 
 ### Load package, import data
 
@@ -96,10 +95,12 @@ Usage
 reference. If your data is a text file (e.g.: CSV), you can use
 `data.table::fread()` to import it as a `data.table`.
 
-    library(spatsoc)
-    library(data.table)
-    DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
-    DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+``` r
+library(spatsoc)
+library(data.table)
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+```
 
 ### Temporal grouping
 
@@ -145,8 +146,7 @@ each individual (D).
 `randomizations` for data-stream randomization and `get_gbi` for
 generating group by individual matrices.
 
-Contributing
-============
+# Contributing
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree
