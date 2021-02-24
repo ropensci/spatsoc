@@ -84,12 +84,6 @@ test_that('column names must exist in DT', {
 
 test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
-  expect_silent(edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = NULL
-  ))
 
   expect_error(edge_nn(DT, threshold = -10, id = 'ID'),
                'threshold must be greater than 0')
@@ -298,4 +292,13 @@ test_that('NAs exist in NN when threshold provided', {
   )
 
   expect_gt(eDT[is.na(NN), .N], 0)
+})
+
+test_that('returns a data.table', {
+  expect_s3_class(edge_nn(
+    DT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    timegroup = NULL
+  ), 'data.table')
 })
