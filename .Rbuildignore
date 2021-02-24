@@ -14,3 +14,4 @@
 Makefile
 ^doc$
 ^Meta$
+^\.github$
