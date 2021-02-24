@@ -22,7 +22,8 @@ group_lines(
 \item{threshold}{The width of the buffer around the lines in the units of the
 projection. Supply 0 to compare intersection without buffering.}
 
-\item{projection}{character string defining the EPSG code. For example, for UTM zone 21N (EPSG 32736), the projection argument is "+init=epsg:32736". See details.}
+\item{projection}{character string defining the EPSG code. For example, for
+UTM zone 21N (EPSG 32736), the projection argument is 'EPSG:32736'. See details.}
 
 \item{id}{Character string of ID column name}
 

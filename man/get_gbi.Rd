@@ -54,7 +54,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 DT[, yr := year(datetime)]
 
 # EPSG code for example data
-utm <- '+init=epsg:32736'
+utm <- 'EPSG:32736'
 
 group_polys(DT, area = FALSE, hrType = 'mcp',
             hrParams = list(percent = 95),
