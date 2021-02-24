@@ -193,18 +193,6 @@ test_that('threshold is correctly provided, or error', {
     'cannot provide a negative threshold'
   )
 
-  expect_silent(
-    group_lines(
-      DT = copyDT[N > 2],
-      threshold = 0,
-      timegroup = 'timegroup',
-      id = 'ID',
-      coords = c('X', 'Y'),
-      projection = utm,
-      sortBy = 'datetime'
-    )
-  )
-
   expect_error(
     group_lines(
       DT = DT,
