@@ -51,8 +51,9 @@
 #' @inheritParams group_polys
 #' @param spPts alternatively, provide solely a SpatialPointsDataFrame with one
 #' column representing the ID of each point.
-#' @param projection character string defining the EPSG code. For example, for
-#' UTM zone 21N (EPSG 32736), the projection argument is 'EPSG:32736'. See details.
+#' @param projection character string defining the projection to be passed to
+#' \code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
+#' the projection argument is 'EPSG:32736'. See details.
 #' @export
 #'
 #' @family Build functions
