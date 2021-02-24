@@ -149,13 +149,14 @@ build_lines <-
     if (length(lst) == 0) {
       return(NULL)
     } else {
+      proj4string <- sp::CRS(projection)
       l <- lapply(seq_along(lst), function(i) {
         sp::SpatialLines(list(sp::Lines(sp::Line(
           cbind(lst[[i]][[coords[1]]],
                 lst[[i]][[coords[2]]])
         ),
         names(lst)[[i]])),
-        proj4string = sp::CRS(projection))
+        proj4string = proj4string)
       })
       return(do.call(sp::rbind.SpatialLines, l))
     }
