@@ -15,7 +15,8 @@ knitr::opts_chunk$set(message = FALSE,
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
 `r badger::badge_devel("robitalec/spatsoc", "blue")`
 [![cran checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
-[![codecov](https://codecov.io/gl/robit.a/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gl/robit.a/spatsoc)
+[![codecov](https://codecov.io/gh/ropensci/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/spatsoc)
+[![R-CMD-check](https://github.com/ropensci/spatsoc/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/spatsoc/actions)
 <!-- badges: end -->
 
 # spatsoc 
