@@ -6,7 +6,7 @@ state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![peer-review](https://badges.ropensci.org/237_status.svg)](https://github.com/ropensci/software-review/issues/237)
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
-[![](https://img.shields.io/badge/devel%20version-0.1.15-blue.svg)](https://github.com/robitalec/spatsoc)
+[![](https://img.shields.io/badge/devel%20version-0.1.16-blue.svg)](https://github.com/robitalec/spatsoc)
 [![cran
 checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
 [![codecov](https://codecov.io/gh/ropensci/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/spatsoc)
@@ -15,7 +15,7 @@ checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.
 
 # spatsoc
 
-### [News](#news) - [Installation](#installation) - [Usage](#usage) - 2[Contributing](#contributing)
+### [News](#news) - [Installation](#installation) - [Usage](#usage) - [Contributing](#contributing)
 
 `spatsoc` is an R package for detecting spatial and temporal groups in
 GPS relocations. It can be used to convert GPS relocations to
