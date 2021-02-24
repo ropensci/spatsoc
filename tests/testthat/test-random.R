@@ -328,42 +328,39 @@ test_that('randomization is silent when an individual only has one row', {
     timegroup = 'timegroup'
   )
 
-  expect_silent(
-    randomizations(
-      copyDT,
-      type = 'step',
-      id = 'ID',
-      group = 'group',
-      datetime = 'timegroup',
-      splitBy = 'yr',
-      iterations = 2
-    )
-  )
+  expect_s3_class(randomizations(
+    copyDT,
+    type = 'step',
+    id = 'ID',
+    group = 'group',
+    datetime = 'timegroup',
+    splitBy = 'yr',
+    iterations = 2
+  ), 'data.table')
 
-  expect_silent(
-    randomizations(
-      copyDT,
-      type = 'daily',
-      id = 'ID',
-      group = 'group',
-      datetime = 'datetime',
-      splitBy = 'yr',
-      iterations = 2
-    )
-  )
 
-  expect_silent(
-    randomizations(
-      copyDT,
-      type = 'trajectory',
-      id = 'ID',
-      group = NULL,
-      coords = c('X', 'Y'),
-      datetime = 'datetime',
-      splitBy = 'yr',
-      iterations = 2
-    )
-  )
+  expect_s3_class(  randomizations(
+    copyDT,
+    type = 'daily',
+    id = 'ID',
+    group = 'group',
+    datetime = 'datetime',
+    splitBy = 'yr',
+    iterations = 2
+  ), 'data.table')
+
+
+  expect_s3_class(  randomizations(
+    copyDT,
+    type = 'trajectory',
+    id = 'ID',
+    group = NULL,
+    coords = c('X', 'Y'),
+    datetime = 'datetime',
+    splitBy = 'yr',
+    iterations = 2
+  ), 'data.table')
+
 
 })
 
