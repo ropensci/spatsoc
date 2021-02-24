@@ -94,7 +94,7 @@
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
 #' # EPSG code for example data
-#' utm <- '+init=epsg:32736'
+#' utm <- 'EPSG:32736'
 #'
 #' \donttest{group_lines(DT, threshold = 50, projection = utm, sortBy = 'datetime',
 #'             id = 'ID', coords = c('X', 'Y'))}
