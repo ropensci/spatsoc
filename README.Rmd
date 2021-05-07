@@ -36,6 +36,9 @@ For more details, see the [blog post](https://ropensci.org/blog/2018/12/04/spats
 
 
 ## News
+We wrote a [`targets`](https://github.com/ropensci/targets) workflow, available at [github.com/robitalec/targets-spatsoc-networks](https://github.com/ropensci/targets). `targets` is an incredible package for designing workflows in R and, with it, we can reproducibly run all steps from raw telemetry data to output networks and metrics. Check it out and let us know how it works for you!
+
+
 Edge-list generating functions added:
 
   * `edge_nn`
