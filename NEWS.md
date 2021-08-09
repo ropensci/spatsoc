@@ -1,3 +1,9 @@
+# v 0.1.17 (unreleased)
+
+* added a link to our `spatsoc` + `targets` workflow example
+* changed the error and underlying check for `group_polys` from alphanumeric to
+spaces in input DT's id column
+
 # v 0.1.16 (2021-03-23)
 * added an option for `edge_dist` to handle threshold = NULL. If NULL, `edge_dist` will return all neighbours observed (eg. useful if one wanted to calculated mean nearest neighbour distance at each timegroup). 
 * updated EPSG argument according to newest recommendations in tests, man and vignettes ([PR 38](https://github.com/ropensci/spatsoc/pull/38)
