@@ -164,7 +164,7 @@ test_that('splitBy and spPolys are not both provided', {
 })
 
 
-test_that('ID field is alphanumeric and does not have spaces', {
+test_that('ID field does not have spaces', {
   copyDT <- copy(DT)[ID == unique(ID)[1], ID := paste(ID, ID)]
   idpromise <- evaluate_promise(
     expect_error(group_polys(
@@ -179,7 +179,7 @@ test_that('ID field is alphanumeric and does not have spaces', {
   )
   expect_match(
     as.character(idpromise$result),
-    'please ensure IDs are alphanumeric and do not contain spaces'
+    'please ensure IDs do not contain spaces'
   )
 
   copyDT[, population := 1]
@@ -194,7 +194,7 @@ test_that('ID field is alphanumeric and does not have spaces', {
       id = 'ID',
       splitBy = 'population'
     ),
-    'please ensure IDs are alphanumeric and do not contain spaces'
+    'please ensure IDs do not contain spaces'
   )
 })
 

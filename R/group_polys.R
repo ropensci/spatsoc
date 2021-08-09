@@ -138,8 +138,8 @@ group_polys <-
         return(DT[])
       } else if (area) {
         if (!is.null(DT)) {
-          if (any(DT[, grepl('[^A-z0-9]', .SD[[1]]), .SDcols = id])) {
-            stop('please ensure IDs are alphanumeric and do not contain spaces')
+          if (any(DT[, grepl(' ', .SD[[1]]), .SDcols = id])) {
+            stop('please ensure IDs do not contain spaces')
           }
         }
         inters <-
@@ -230,8 +230,8 @@ group_polys <-
         }
         return(DT[])
       } else if (area) {
-        if (any(DT[, grepl('[^A-z0-9]', .SD[[1]]), .SDcols = id])) {
-          stop('please ensure IDs are alphanumeric and do not contain spaces')
+        if (any(DT[, grepl(' ', .SD[[1]]), .SDcols = id])) {
+          stop('please ensure IDs do not contain spaces')
         }
         outDT <-
           DT[nBy > 5, {
