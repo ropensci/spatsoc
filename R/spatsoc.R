@@ -23,4 +23,5 @@
 #' @docType package
 #' @name spatsoc
 #' @aliases spatsoc-package
+#' @keywords internal
 "_PACKAGE"
