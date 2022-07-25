@@ -24,7 +24,6 @@ Description: Detects spatial and temporal groups in GPS relocations
 Depends: R (>= 3.4)
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
-LazyData: true
 Imports: data.table (>= 1.10.5),
     sp,
     rgeos,
