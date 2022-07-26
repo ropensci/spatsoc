@@ -1,4 +1,6 @@
 
+# spatsoc
+
 <!-- badges: start -->
 
 [![Project Status: Active – The project has reached a stable, usable
@@ -11,8 +13,6 @@ checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.
 [![codecov](https://codecov.io/gh/ropensci/spatsoc/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/spatsoc)
 [![R-CMD-check](https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
-
-# spatsoc
 
 ### [News](#news) - [Installation](#installation) - [Usage](#usage) - [Contributing](#contributing)
 
