@@ -1,13 +1,3 @@
-destination: ../spatsoc.gitlab.io/public
-url: https://spatsoc.gitlab.io
-
-
-template:
-  params:
-    bootswatch: yeti
-    ganalytics: "UA-130501037-2"
-
-
 reference:
   - title: Temporal grouping
     desc: ~
