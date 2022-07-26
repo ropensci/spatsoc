@@ -32,7 +32,6 @@ Useful links:
 \itemize{
   \item \url{https://docs.ropensci.org/spatsoc/}
   \item \url{https://github.com/ropensci/spatsoc}
-  \item \url{http://spatsoc.robitalec.ca}
   \item Report bugs at \url{https://github.com/ropensci/spatsoc/issues}
 }
 
