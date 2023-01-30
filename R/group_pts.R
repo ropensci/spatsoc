@@ -152,21 +152,16 @@ group_pts <- function(DT = NULL,
     data.table::set(DT, j = 'group', value = NULL)
   }
 
-  if (is.null(timegroup) && is.null(splitBy)) {
-    splitBy <- NULL
-  } else {
-    splitBy <- c(splitBy, timegroup)
-    if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
-      warning(
-        strwrap(
-          prefix = " ",
-          initial = "",
-          x = 'found duplicate id in a
+  if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
+    warning(
+      strwrap(
+        prefix = " ",
+        initial = "",
+        x = 'found duplicate id in a
           timegroup and/or splitBy -
           does your group_times threshold match the fix rate?'
-        )
       )
-    }
+    )
   }
 
   DT[, withinGroup := {
