@@ -213,7 +213,7 @@ group_polys <-
               data.table(ID = get(..id),
                          withinGroup = as.integer(NA))
             }
-          }, by = splitBy, .SDcols = c(coords, id)]
+          }, by = c(splitBy), .SDcols = c(coords, id)]
         DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
         DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
            by = c(splitBy, 'withinGroup')]
@@ -288,7 +288,7 @@ group_polys <-
                               'area', 'proportion'))
               out
             }
-          }, by = splitBy, .SDcols = c(coords, id)]
+          }, by = c(splitBy), .SDcols = c(coords, id)]
         dropped <-
           unique(DT[nBy <= 5, .SD, .SDcols = c(splitBy, id)])
         out <- rbindlist(list(dropped, outDT), fill = TRUE)
