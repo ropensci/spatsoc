@@ -112,7 +112,7 @@ group_times <- function(DT = NULL,
 
   if (is.null(threshold)) {
     message('no threshold provided, using the time field directly to group')
-    DT[, timegroup := .GRP, by = datetime]
+    DT[, timegroup := .GRP, by = c(datetime)]
     return(DT[])
   } else {
     if (length(datetime) == 1 &&
