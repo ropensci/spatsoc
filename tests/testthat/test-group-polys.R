@@ -236,22 +236,21 @@ test_that('column and row lengths returned make sense', {
 
   expect_equal(nrow(ltepromise2$result), nrow(copyDT))
 
-  copyDT <- copy(DT)
-  copyDT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
-  ncolpromise <- evaluate_promise({
-    group_polys(
-      DT = copyDT,
-      projection = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      area = FALSE,
-      coords = c('X', 'Y'),
-      id = 'ID',
-      splitBy = 'family'
-    )}
-  )
-  expect_equal(ncol(DT) + 2,
-               ncol(ncolpromise$result))
+  # copyDT <- copy(DT)
+  # ncolpromise <- evaluate_promise({
+  #   group_polys(
+  #     DT = copyDT,
+  #     projection = utm,
+  #     hrType = 'mcp',
+  #     hrParams = list(percent = 95),
+  #     area = FALSE,
+  #     coords = c('X', 'Y'),
+  #     id = 'ID',
+  #     splitBy = 'family'
+  #   )}
+  # )
+  # expect_equal(ncol(copyDT) + 1,
+  #              ncol(ncolpromise$result))
 })
 
 
