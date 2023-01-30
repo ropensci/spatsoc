@@ -297,3 +297,22 @@ test_that('returns a data.table', {
     timegroup = 'timegroup'
   ), 'data.table')
 })
+
+
+
+test_that('splitBy argument doesnt use splitBy column', {
+  copyDT <- copy(DT)
+
+  copyDT[, splitBy := sample(seq.int(5), .N, TRUE)]
+
+  expect_true(
+    group_pts(
+      copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
+    )[, uniqueN(splitBy), group][V1 > 1, .N != 0]
+  )
+
+})
