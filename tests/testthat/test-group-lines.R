@@ -465,3 +465,25 @@ test_that('spLines provided returns data.table', {
 })
 
 
+test_that('splitBy argument doesnt use splitBy column', {
+  copyDT <- copy(DT)
+
+  copyDT[, splitBy := as.IDate(datetime)]
+  group_times(copyDT, 'datetime', '1 day')
+
+  utm <- 'EPSG:32736'
+
+  expect_true(
+    group_lines(
+      DT = copyDT,
+      threshold = 0,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      timegroup = 'timegroup',
+      splitBy = 'splitBy',
+      sortBy = 'datetime'
+    )[, uniqueN(splitBy), group][, all(V1 == 1)]
+  )
+})
+
