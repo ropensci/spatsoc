@@ -302,7 +302,7 @@ test_that('splitBy argument doesnt use splitBy column', {
       projection = utm,
       splitBy = 'splitBy',
       sortBy = 'datetime'
-    ),
+    ) |> length(),
     copyDT[, uniqueN(splitBy) * uniqueN(ID)]
   )
 })
