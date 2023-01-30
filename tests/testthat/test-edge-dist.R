@@ -295,7 +295,7 @@ test_that('returns a data.table', {
 
 
 
-test_that('splitBy argument doesnt use splitBy column', {
+test_that('warns about splitBy column', {
   copyDT <- copy(DT)
 
   group_times(copyDT, 'datetime', '5 minutes')
