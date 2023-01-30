@@ -149,6 +149,16 @@ edge_nn <- function(DT = NULL,
     }
   }
 
+  if ('splitBy' %in% colnames(DT)) {
+    warning(
+      strwrap(x = 'a column named "splitBy" was found in your data.table,
+              renamed to "split_by" to avoid confusion with the argument
+              "splitBy"')
+    )
+    setnames(DT, 'splitBy', 'split_by')
+  }
+
+
   if (is.null(timegroup) && is.null(splitBy)) {
     splitBy <- NULL
   } else {
