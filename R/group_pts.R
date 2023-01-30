@@ -179,9 +179,9 @@ group_pts <- function(DT = NULL,
       igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
     igraph::clusters(graphAdj)$membership
   },
-  by = splitBy, .SDcols = c(coords, id)]
+  by = c(splitBy, timegroup), .SDcols = c(coords, id)]
   DT[, group := .GRP,
-     by = c(splitBy, 'withinGroup')]
+     by = c(splitBy, timegroup, 'withinGroup')]
   set(DT, j = 'withinGroup', value = NULL)
   return(DT[])
 }
