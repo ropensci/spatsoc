@@ -217,7 +217,7 @@ This warning is explicitly verbose, to ensure we are considering the updated use
 The `sortBy` argument expects a date time formatted column name, which is used to order the rows for each individual (and `splitBy`). 
 
 ## group_polys
-`group_polys(DT, area, hrType, hrParams, projection, id, coords, timegroup, splitBy, spLines)`
+`group_polys(DT, area, hrType, hrParams, projection, id, coords, splitBy, spLines)`
   
 * `DT`: input `data.table`
 * `area`: boolean argument if proportional area should be returned
@@ -226,7 +226,6 @@ The `sortBy` argument expects a date time formatted column name, which is used t
 * `projection`: projection of coordinates in `DT`
 * `id`: column name of IDs in `DT`
 * `coords`: column names of x and y coordinates in `DT`
-* `timegroup`: (optional) column name of time group
 * `splitBy`: (optional) column names of extra variables to group on
 * `spPolys`: alternatively, provide solely a `SpatialPolygons` object
 
