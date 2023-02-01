@@ -20,15 +20,17 @@
 #' coordinates (e.g.: UTM). In the case of UTM, a \code{threshold} = 50 would
 #' indicate a 50m distance threshold.
 #'
-#' The \code{timegroup} argument is used to define the temporal groups within
-#' which spatial groups are determine. The intended framework is to group rows temporally
-#' with \code{\link{group_times}} then spatially with \code{group_pts} (or
-#' \code{\link{group_lines}}, \code{\link{group_polys}}). Temporal grouping with
-#' \code{group_pts} is flexible to minutes, hours or days but as the number of
-#' rows increases within each temporal group (eg. using a long temporal threshold
-#' with many observations) the calculation of spatial groups can become more
-#' computationally intensive as the distance between all locations within each
-#' temporal group must be calculated.
+#' The \code{timegroup} argument is required to define the temporal groups
+#' within which spatial groups are calculated. The intended framework is to
+#' group rows temporally with \code{\link{group_times}} then spatially with
+#' \code{group_pts} (or \code{\link{group_lines}}, \code{\link{group_polys}}).
+#' If you have already calculated temporal groups without
+#' \code{\link{group_times}}, you can pass this column to the \code{timegroup}
+#' argument. Note that the expectation is that each individual will be observed
+#' only once per timegroup. Caution that accidentally including huge numbers of
+#' rows within timegroups can overload your machine since all pairwise distances
+#' are calculated within each timegroup.
+#'
 #'
 #' The \code{splitBy} argument offers further control over grouping. If within
 #' your \code{DT}, you have multiple populations, subgroups or other distinct
