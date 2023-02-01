@@ -137,14 +137,14 @@ build_lines <-
     }
 
 
-    dropRows <- DT[, .(dropped = .N < 2), by = splitBy]
+    dropRows <- DT[, .(dropped = .N < 2), by = c(splitBy)]
 
     if (dropRows[(dropped), .N] > 0) {
       warning('some rows dropped, cannot build lines with less than two points')
     }
 
     lst <- split(DT[dropRows, on = splitBy][!(dropped)][order(get(sortBy))],
-                 by = splitBy, sorted = TRUE)
+                 by = c(splitBy), sorted = TRUE)
 
     if (length(lst) == 0) {
       return(NULL)

@@ -287,9 +287,22 @@ test_that('build_lines builds ordered lines', {
 
 
 
-# build_lines(
-#   DT = DT,
-#   id = 'ID',
-#   coords = c('X', 'Y'),
-#   projection = utm
-# )
+test_that('splitBy argument doesnt use splitBy column', {
+  copyDT <- copy(DT)
+
+  copyDT[, splitBy := as.IDate(datetime)]
+
+  utm <- 'EPSG:32736'
+
+  expect_equal(
+    build_lines(
+      DT = copyDT,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      splitBy = 'splitBy',
+      sortBy = 'datetime'
+    ) |> length(),
+    copyDT[, uniqueN(splitBy) * uniqueN(ID)]
+  )
+})

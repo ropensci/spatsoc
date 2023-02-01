@@ -292,3 +292,23 @@ test_that('returns a data.table', {
     timegroup = NULL
   ), 'data.table')
 })
+
+
+
+test_that('warns about splitBy column', {
+  copyDT <- copy(DT)
+
+  group_times(copyDT, 'datetime', '5 minutes')
+  copyDT[, splitBy := as.IDate(datetime)]
+
+  expect_warning(
+    edge_dist(
+      copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
+    ),
+    'split_by'
+  )
+})

@@ -305,3 +305,16 @@ test_that('timegroups are based off years but blocks are consistent across all y
 
   # need multi year data for same jul days to test if n years by block > 1, but n years by timegroup == 1
 })
+
+
+test_that('datetime argument doesnt use datetime column', {
+  copyDT <- copy(DT)
+  # copyDT[, datetime := as.POSIXct(datetime)]
+  copyDT[, date := as.IDate(datetime)]
+  group_times(copyDT, 'date')
+  expect_equal(
+    copyDT[, uniqueN(date)],
+    copyDT[, uniqueN(timegroup)]
+  )
+
+})

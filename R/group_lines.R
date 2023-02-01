@@ -282,7 +282,7 @@ group_lines <-
             data.table::setnames(out, c(..id, 'withinGroup'))
 
           }
-        }, by = splitBy, .SDcols = c(coords, id, sortBy)]
+        }, by = c(splitBy), .SDcols = c(coords, id, sortBy)]
 
       DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
       DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
