@@ -30,7 +30,7 @@ the projection argument is 'EPSG:32736'. See details.}
 
 \item{coords}{Character vector of X coordinate and Y coordinate column names}
 
-\item{timegroup}{timegroup field in the DT upon which the grouping will be
+\item{timegroup}{timegroup field in the DT within which the grouping will be
 calculated}
 
 \item{sortBy}{Character string of date time column(s) to sort rows by. Must
