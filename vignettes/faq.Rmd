@@ -164,7 +164,7 @@ This warning is returned to the user when the `threshold` with unit days does no
 * `threshold`: threshold for grouping 
 * `id`: column name of IDs in `DT`
 * `coords`: column names of x and y coordinates in `DT`
-* `timegroup`: (optional) column name of time group
+* `timegroup`: column name of time group
 * `splitBy`: (optional) column names of extra variables to group on
 
 ### <a name="group_pts DT"></a>DT
@@ -280,7 +280,7 @@ group_polys(
 * `threshold`: threshold for grouping 
 * `id`: column name of IDs in `DT`
 * `coords`: column names of x and y coordinates in `DT`
-* `timegroup`: (optional) column name of time group
+* `timegroup`: column name of time group
 * `splitBy`: (optional) column names of extra variables to group on
 * `fillNA`: boolean indicating if NAs should be returned for individuals that were not within the threshold distance of any other. If TRUE, NAs are returned. If FALSE, only edges between individuals within the threshold distance are returned.
 
@@ -294,7 +294,7 @@ This is the non-chain rule implementation similar to `group_pts`. Edges are defi
 * `DT`: input `data.table`
 * `id`: column name of IDs in `DT`
 * `coords`: column names of x and y coordinates in `DT`
-* `timegroup`: (optional) column name of time group
+* `timegroup`: column name of time group
 * `splitBy`: (optional) column names of extra variables to group on
 * `threshold`: (optional) spatial distance threshold to set maximum distance between an individual and their neighbour.
 
