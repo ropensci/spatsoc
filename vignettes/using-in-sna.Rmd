@@ -177,7 +177,7 @@ Three types of data stream randomization are provided by `spatsoc`'s `randomizat
 
 * step: randomizes identities of relocations between individuals within each time step.
 * daily: randomizes identities of relocations between individuals within each day.
-* trajectory: randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12553)).
+* trajectory: randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://doi.org/10.1111/2041-210X.12553)).
 
 The results of `randomizations` must be assigned. The function returns the `id` and `datetime` columns provided (and anything provided to `splitBy`). In addition, columns 'observed' and 'iteration' are returned indicating observed rows and which iteration rows correspond to (where 0 is the observed). 
 
@@ -244,7 +244,7 @@ randDaily <- randomizations(
 ```
 
 ## 5. c) `type = 'trajectory'`
-`'trajectory'` randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12553)). The `datetime` argument expects a datetime `POSIXct` format column. 
+`'trajectory'` randomizes daily trajectories within individuals ([Spiegel et al. 2016](https://doi.org/10.1111/2041-210X.12553)). The `datetime` argument expects a datetime `POSIXct` format column. 
 
 Five columns are returned when `type = 'trajectory'` along with `id`, `datetime` and `splitBy` columns:
 
