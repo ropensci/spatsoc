@@ -1,31 +1,20 @@
 {
-  "@context": [
-    "https://doi.org/10.5063/schema/codemeta-2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "spatsoc",
-  "description": "Detects spatial and temporal groups in GPS relocations \n    (Robitaille et al. (2020) <doi:10.1111/2041-210X.13215>). \n    It can be used to convert GPS relocations to \n    gambit-of-the-group format to build proximity-based social networks \n    In addition, the randomizations function provides data-stream \n    randomization methods suitable for GPS data. ",
+  "description": "Detects spatial and temporal groups in GPS relocations (Robitaille et al. (2020) <doi:10.1111/2041-210X.13215>). It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks In addition, the randomizations function provides data-stream randomization methods suitable for GPS data. ",
   "name": "spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship",
+  "relatedLink": ["https://docs.ropensci.org/spatsoc/", "https://CRAN.R-project.org/package=spatsoc"],
   "codeRepository": "https://github.com/ropensci/spatsoc",
-  "relatedLink": [
-    "https://spatsoc.gitlab.io",
-    "https://github.com/robitalec/spatsoc",
-    "https://github.com/ropensci/spatsoc",
-    "https://CRAN.R-project.org/package=spatsoc",
-    "http://spatsoc.robitalec.ca",
-    "https://docs.ropensci.org/spatsoc/",
-    "https://docs.ropensci.org/spatsoc"
-  ],
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.16",
+  "version": "0.1.16.9003",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.4 (2021-02-15)",
+  "runtimePlatform": "R version 4.2.2 (2022-10-31)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -125,14 +114,14 @@
       "sameAs": "https://CRAN.R-project.org/package=markdown"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 3.4"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "data.table",
       "name": "data.table",
@@ -145,7 +134,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=data.table"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "sp",
       "name": "sp",
@@ -157,7 +146,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sp"
     },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "rgeos",
       "name": "rgeos",
@@ -169,7 +158,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rgeos"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "adehabitatHR",
       "name": "adehabitatHR",
@@ -181,7 +170,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=adehabitatHR"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "igraph",
       "name": "igraph",
@@ -193,16 +182,14 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=igraph"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "methods",
       "name": "methods"
     },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libgeos"
-    }
-  ],
+    "SystemRequirements": "GEOS (>= 3.2.0)"
+  },
+  "fileSize": "1483.656KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -225,7 +212,7 @@
         }
       ],
       "name": "Conducting social network analysis with animal telemetry data: applications and methods using {spatsoc}",
-      "url": "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13215",
+      "url": "https://doi.org/10.1111/2041-210X.13215",
       "isPartOf": {
         "@type": "PublicationIssue",
         "datePublished": "2019",
@@ -236,27 +223,13 @@
       }
     }
   ],
-  "releaseNotes": "https://github.com/ropensci/spatsoc/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/spatsoc/blob/master/README.md",
-  "fileSize": "1505.316KB",
-  "contIntegration": "https://codecov.io/gh/ropensci/spatsoc",
+  "contIntegration": ["https://codecov.io/gh/ropensci/spatsoc", "https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml"],
   "developmentStatus": "http://www.repostatus.org/#active",
   "review": {
     "@type": "Review",
     "url": "https://github.com/ropensci/software-review/issues/237",
     "provider": "https://ropensci.org"
   },
-  "keywords": [
-    "r",
-    "spatial",
-    "social",
-    "gps",
-    "animal",
-    "network",
-    "r-package",
-    "rstats"
-  ],
-  "contributor": {},
-  "copyrightHolder": {},
-  "funder": {}
+  "keywords": ["r", "spatial", "social", "gps", "animal", "network", "r-package", "rstats"]
 }
