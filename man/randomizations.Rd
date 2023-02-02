@@ -153,7 +153,7 @@ randTraj <- randomizations(
 
 }
 \references{
-\url{https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12553}
+\url{https://doi.org/10.1111/2041-210X.12553}
 }
 \seealso{
 Other Social network tools: 
