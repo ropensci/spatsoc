@@ -13,7 +13,7 @@
 #'  'EPSG:32736'. See \url{https://spatialreference.org} for a list of
 #'  EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ
 #'  for handling projections, see more at
-#'  \url{https://www.r-spatial.org/r/2020/03/17/wkt.html}.
+#'  \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 #'
 #' The \code{sortBy} is used to order the input \code{data.table} when creating
 #' \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted

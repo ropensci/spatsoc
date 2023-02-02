@@ -17,7 +17,7 @@ spaces in input DT's id column
 * fix TZ=UTC data.table tests ([Issue 32](https://github.com/ropensci/spatsoc/issues/32))
 
 # v 0.1.14 (2020-07-03)
-* updated tests, man and vignettes following new handling of projections in sp ([PR 31](https://github.com/ropensci/spatsoc/pull/31), [R spatial information](https://www.r-spatial.org/r/2020/03/17/wkt.html))
+* updated tests, man and vignettes following new handling of projections in sp ([PR 31](https://github.com/ropensci/spatsoc/pull/31), [R spatial information](https://r-spatial.org/r/2020/03/17/wkt.html))
 * clarified explicit drop of NAs in dyadID in edge list vignette
 
 # v 0.1.13 (2020-03-25)
