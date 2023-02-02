@@ -68,7 +68,7 @@ the EPSG code. For example, for UTM zone 36N (EPSG 32736), the projection
 argument is "EPSG:32736". See \url{https://spatialreference.org}
 for a list of EPSG codes. Please note, R spatial has followed updates
 to GDAL and PROJ for handling projections, see more at
-\url{https://www.r-spatial.org/r/2020/03/17/wkt.html}. It is likely
+\url{https://r-spatial.org/r/2020/03/17/wkt.html}. It is likely
 that \code{build_polys} will return "Warning in proj4string(xy) :
 CRS object has comment, which is lost in output" due to these changes.
 

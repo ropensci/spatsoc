@@ -5,6 +5,7 @@
 spaces in input DT's id column
 * clarify timegroups are required for `group_pts`, `edge_nn` and `edge_dist` ([PR 46](https://github.com/ropensci/spatsoc/pull/46))
 * fix potential mixup between a column named splitBy and splitBy arg ([PR 45](https://github.com/ropensci/spatsoc/pull/45))
+* fix links in man ([PR 47](https://github.com/ropensci/spatsoc/pull/47))
 
 # v 0.1.16 (2021-03-23)
 * added an option for `edge_dist` to handle threshold = NULL. If NULL, `edge_dist` will return all neighbours observed (eg. useful if one wanted to calculated mean nearest neighbour distance at each timegroup). 
@@ -17,7 +18,7 @@ spaces in input DT's id column
 * fix TZ=UTC data.table tests ([Issue 32](https://github.com/ropensci/spatsoc/issues/32))
 
 # v 0.1.14 (2020-07-03)
-* updated tests, man and vignettes following new handling of projections in sp ([PR 31](https://github.com/ropensci/spatsoc/pull/31), [R spatial information](https://www.r-spatial.org/r/2020/03/17/wkt.html))
+* updated tests, man and vignettes following new handling of projections in sp ([PR 31](https://github.com/ropensci/spatsoc/pull/31), [R spatial information](https://r-spatial.org/r/2020/03/17/wkt.html))
 * clarified explicit drop of NAs in dyadID in edge list vignette
 
 # v 0.1.13 (2020-03-25)
