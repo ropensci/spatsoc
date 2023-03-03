@@ -64,16 +64,16 @@ spaces in input DT's id column
 
 # v 0.1.4 (2018-10-26)
 * fin [rOpenSci onboarding process](https://github.com/ropensci/software-review/issues/237)
-* fixed bug couldn't provide percent to kernel type `build_polys` or `group_polys`([!3](https://gitlab.com/robit.a/spatsoc/-/merge_requests/3))
+* fixed bug couldn't provide percent to kernel type `build_polys` or `group_polys`([!3](https://gitlab.com/robitalec/spatsoc/-/merge_requests/3))
 
 
 # v 0.1.3 
-* added `get_gbi` to generate group by individual matrices for better integrating `spatsoc` in social network analysis workflows ([!2](https://gitlab.com/robit.a/spatsoc/-/merge_requests/2))
+* added `get_gbi` to generate group by individual matrices for better integrating `spatsoc` in social network analysis workflows ([!2](https://gitlab.com/robitalec/spatsoc/-/merge_requests/2))
 
 
 # v 0.1.2
 
-* **major change to randomizations**: when `iterations = 1`, `randomizations` no longer returns the DT with appended columns. Regardless of the value of iterations, `randomizations` always returns observed rows followed by randomized rows in a long `data.table` ([!1](https://gitlab.com/robit.a/spatsoc/-/merge_requests/1)). 
+* **major change to randomizations**: when `iterations = 1`, `randomizations` no longer returns the DT with appended columns. Regardless of the value of iterations, `randomizations` always returns observed rows followed by randomized rows in a long `data.table` ([!1](https://gitlab.com/robitalec/spatsoc/-/merge_requests/1)). 
 
 # v 0.1.1 (2018-09-17)
 
