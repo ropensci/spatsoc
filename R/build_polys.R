@@ -205,7 +205,7 @@ build_polys <- function(DT = NULL,
     }
   } else if (hrType == 'kernel') {
     kernelParam <- formals(adehabitatHR::kernelUD)
-    verticesParam <- formals(adehabitatHR::getverticeshr)
+    verticesParam <- formals(adehabitatHR::getverticeshr.estUD)
 
     if (all(names(hrParams) %in% c(names(kernelParam), names(verticesParam)))) {
 
