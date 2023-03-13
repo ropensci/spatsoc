@@ -458,3 +458,44 @@ test_that('splitBy argument doesnt use splitBy column', {
   )
 
 })
+
+
+test_that('group_polys with area returns proportions within 0-1', {
+
+  copyDT <- copy(DT)
+
+  utm <- 'EPSG:32736'
+
+  out_mcp <- suppressWarnings(group_polys(
+    DT = copyDT,
+    projection = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    area = TRUE,
+    coords = c('X', 'Y'),
+    id = 'ID'
+  ))
+
+  expect_true(all(
+    out_mcp$proportion >= 0 &
+      out_mcp$proportion <= 1
+    )
+  )
+
+  out_kernel <- suppressWarnings(group_polys(
+    DT = copyDT,
+    projection = utm,
+    hrType = 'kernel',
+    hrParams = list(percent = 95),
+    area = TRUE,
+    coords = c('X', 'Y'),
+    id = 'ID'
+  ))
+
+  expect_true(all(
+    out_kernel$proportion >= 0 &
+      out_kernel$proportion <= 1
+    )
+  )
+
+})
