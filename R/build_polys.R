@@ -208,7 +208,9 @@ build_polys <- function(DT = NULL,
     verticesParam <- formals(adehabitatHR::getverticeshr.estUD)
 
     if (all(names(hrParams) %in% c(names(kernelParam), names(verticesParam)))) {
-
+      if (!('unout' %in% names(hrParams))) {
+        hrParams$unout <- 'm2'
+      }
       kern <- do.call(adehabitatHR::kernelUD,
                       hrParams[intersect(names(hrParams), names(kernelParam))])
       return(do.call(adehabitatHR::getverticeshr,
