@@ -6,6 +6,8 @@ spaces in input DT's id column
 * clarify timegroups are required for `group_pts`, `edge_nn` and `edge_dist` ([PR 46](https://github.com/ropensci/spatsoc/pull/46))
 * fix potential mixup between a column named splitBy and splitBy arg ([PR 45](https://github.com/ropensci/spatsoc/pull/45))
 * fix links in man ([PR 47](https://github.com/ropensci/spatsoc/pull/47))
+* fix proportions outside 0-1 due to differences in default units from rgeos::gArea 
+and polys@area ([PR 49](https://github.com/ropensci/spatsoc/pull/49))
 
 # v 0.1.16 (2021-03-23)
 * added an option for `edge_dist` to handle threshold = NULL. If NULL, `edge_dist` will return all neighbours observed (eg. useful if one wanted to calculated mean nearest neighbour distance at each timegroup). 
