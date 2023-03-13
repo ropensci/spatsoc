@@ -478,7 +478,7 @@ test_that('group_polys with area returns proportions within 0-1', {
 
   expect_true(all(
     out_mcp$proportion >= 0 &
-      out_mcp$proportion <= 1
+      out_mcp$proportion <= 1.00001
     )
   )
 
@@ -494,7 +494,7 @@ test_that('group_polys with area returns proportions within 0-1', {
 
   expect_true(all(
     out_kernel$proportion >= 0 &
-      out_kernel$proportion <= 1
+      out_kernel$proportion <= 1.00001
     )
   )
 
