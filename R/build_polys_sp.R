@@ -1,4 +1,4 @@
-#' Build Polygons
+#' Build Polygons (deprecated version of function with retired spatial packages)
 #'
 #' @inheritParams build_polys
 #' @export
