@@ -176,12 +176,15 @@ build_polys <- function(DT = NULL,
   }
 
   if (is.null(spPts)) {
-    spPts <- sp::SpatialPointsDataFrame(
-      DT[, .SD, .SDcols = eval.parent(coords, n = 1)],
-      proj4string = sp::CRS(projection),
-      data = DT[, .(ID = do.call(paste,
-                                 c(.SD, sep = '-'))),
-                .SDcols = splitBy])
+    DT[, ade_id := do.call(function(...) paste(..., sep = '-'), .SD),
+       .SDcols = splitBy]
+    spPts <- sf::as_Spatial(
+      sf::st_as_sf(
+        DT[, .SD, .SDcols = c(coords, 'ade_id')],
+        coords = coords,
+        crs = sf::st_crs(projection)),
+      IDs = DT$ade_id
+    )
   }
 
   hrParams$xy <- spPts
