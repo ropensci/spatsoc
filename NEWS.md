@@ -1,3 +1,7 @@
+# v 0.2.0
+
+* remove dependency on retired spatial packages (https://github.com/ropensci/spatsoc/issues/50)
+
 # v 0.1.17 (unreleased)
 
 * added a link to our `spatsoc` + `targets` workflow example
