@@ -143,21 +143,13 @@ build_lines <-
       warning('some rows dropped, cannot build lines with less than two points')
     }
 
-    lst <- split(DT[dropRows, on = splitBy][!(dropped)][order(get(sortBy))],
-                 by = c(splitBy), sorted = TRUE)
+    wo_drop <- DT[dropRows, on = splitBy][!(dropped)]
 
-    if (length(lst) == 0) {
-      return(NULL)
-    } else {
-      proj4string <- sp::CRS(projection)
-      l <- lapply(seq_along(lst), function(i) {
-        sp::SpatialLines(list(sp::Lines(sp::Line(
-          cbind(lst[[i]][[coords[1]]],
-                lst[[i]][[coords[2]]])
-        ),
-        names(lst)[[i]])),
-        proj4string = proj4string)
-      })
-      return(do.call(sp::rbind.SpatialLines, l))
-    }
+    setorderv(wo_drop, sortBy)
+    lines <- st_as_sf(
+      wo_drop[, .(geometry = st_sfc(st_linestring(as.matrix(.SD)))),
+         by = splitBy, .SDcols = coords],
+      crs = st_crs(projection)
+    )
+    # TODO: check if NULL?
   }
