@@ -142,6 +142,21 @@ test_that('column names must exist in DT', {
   )
 })
 
+test_that('hrType either mcp or kernel', {
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'potato',
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ),
+    'hrType not one of',
+    fixed = FALSE
+  )
+})
+
+
 test_that('hrParams returns error if params do not match function params', {
   expect_error(
     build_polys(
