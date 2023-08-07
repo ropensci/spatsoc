@@ -184,19 +184,6 @@ test_that('hrParams returns error if params do not match function params', {
     fixed = FALSE
   )
 
-  s4promise <- evaluate_promise(build_polys(
-    DT = DT,
-    projection = utm,
-    hrType = 'mcp',
-    hrParams = list(percent = 95),
-    coords = c('X', 'Y'),
-    id = 'ID'
-  ))
-
-  expect_s4_class(
-    s4promise$result,
-    'SpatialPolygonsDataFrame'
-  )
 })
 
 test_that('if hrParams NULL, warns', {
@@ -219,8 +206,8 @@ test_that('if hrParams NULL, warns', {
 })
 
 
-test_that('build_polys returns SpatialPolygons', {
-  polpromise <- evaluate_promise(
+test_that('build_polys returns sf, POLYGONs', {
+  expect_s3_class(
     build_polys(
       DT = DT,
       projection = utm,
@@ -228,15 +215,11 @@ test_that('build_polys returns SpatialPolygons', {
       hrParams = list(percent = 95),
       coords = c('X', 'Y'),
       id = 'ID'
-    )
+    ),
+    'sf'
   )
 
-  expect_s4_class(
-    polpromise$result,
-    'SpatialPolygonsDataFrame'
-  )
-
-  polpromise2 <- evaluate_promise(
+  expect_s3_class(
     build_polys(
       DT = DT,
       projection = utm,
@@ -244,18 +227,45 @@ test_that('build_polys returns SpatialPolygons', {
       hrParams = list(grid = 60),
       coords = c('X', 'Y'),
       id = 'ID'
+    ),
+    'sf'
+  )
+
+  expect_true(
+    any(c('POLYGON', 'MULTIPOLYGON') %in%
+    sf::st_geometry_type(
+      build_polys(
+        DT = DT,
+        projection = utm,
+        hrType = 'mcp',
+        hrParams = list(percent = 95),
+        coords = c('X', 'Y'),
+        id = 'ID'
+      ),
+      by_geometry = FALSE)
     )
   )
 
-  expect_s4_class(
-    polpromise2$result,
-    'SpatialPolygonsDataFrame'
+
+  expect_true(
+    any(c('POLYGON', 'MULTIPOLYGON') %in%
+    sf::st_geometry_type(
+        build_polys(
+          DT = DT,
+          projection = utm,
+          hrType = 'kernel',
+          hrParams = list(grid = 60),
+          coords = c('X', 'Y'),
+          id = 'ID'),
+        by_geometry = FALSE
+      )
+    )
   )
 })
 
 
 test_that('hrParams can have both vertices and kernel args', {
-  bothparamspromise <- evaluate_promise(
+  expect_s3_class(
     build_polys(
       DT = DT,
       projection = utm,
@@ -263,10 +273,22 @@ test_that('hrParams can have both vertices and kernel args', {
       hrParams = list(percent = 95, grid = 60),
       coords = c('X', 'Y'),
       id = 'ID'
-    )
+    ),
+    'sf'
   )
-  expect_s4_class(
-    bothparamspromise$result,
-    'SpatialPolygonsDataFrame'
+
+  expect_true(
+    any(c('POLYGON', 'MULTIPOLYGON') %in%
+      sf::st_geometry_type(
+        build_polys(
+          DT = DT,
+          projection = utm,
+          hrType = 'kernel',
+          hrParams = list(percent = 95, grid = 60),
+          coords = c('X', 'Y'),
+          id = 'ID'),
+        by_geometry = FALSE
+      )
+    )
   )
 })
