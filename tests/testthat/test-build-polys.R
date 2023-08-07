@@ -1,6 +1,5 @@
 # Test build_polys
 context('test build_polys')
-library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
