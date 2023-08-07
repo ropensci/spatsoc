@@ -195,7 +195,7 @@ build_polys <- function(DT = NULL,
       if (!('unout' %in% names(hrParams))) {
         hrParams$unout <- 'm2'
       }
-      return(do.call(adehabitatHR::mcp, hrParams))
+      out <- do.call(adehabitatHR::mcp, hrParams)
     } else {
       stop(
         strwrap(
@@ -216,10 +216,10 @@ build_polys <- function(DT = NULL,
       }
       kern <- do.call(adehabitatHR::kernelUD,
                       hrParams[intersect(names(hrParams), names(kernelParam))])
-      return(do.call(adehabitatHR::getverticeshr,
+      out <- do.call(adehabitatHR::getverticeshr,
                      c(x = list(kern),
                        hrParams[intersect(names(hrParams),
-                                          names(verticesParam))])))
+                                          names(verticesParam))]))
     } else {
       stop(
         strwrap(
@@ -234,6 +234,8 @@ build_polys <- function(DT = NULL,
   } else {
     stop('hrType not one of "kernel" or "mcp"')
   }
+
+  return(sf::st_as_sf(out))
 }
 
 
