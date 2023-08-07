@@ -1,37 +1,42 @@
 #' Build Lines
 #'
 #'
-#' \code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}.
-#' The function accepts a \code{data.table} with relocation data, individual
-#' identifiers a sorting column and a \code{projection}. The relocation data
-#' is transformed into \code{SpatialLines} for each individual and optionally,
-#' each \code{splitBy}. Relocation data should be in two columns representing
-#' the X and Y coordinates.
+#' `build_lines` generates an sf LINESTRING object from a `data.table`.
+#' The function accepts a `data.table` with relocation data, individual
+#' identifiers, a sorting column and a `projection`. The relocation data
+#' is transformed into LINESTRINGs for each individual and optionally,
+#' combination of columns in `splitBy`.
+#' Relocation data should be in two columns representing the X and Y coordinates.
 #'
-#' The \code{projection} argument expects a character string defining the EPSG
-#' code. For example, for UTM zone 36N (EPSG 32736), the projection argument is
-#'  'EPSG:32736'. See \url{https://spatialreference.org} for a list of
-#'  EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ
+#' The `projection` argument expects a numeric or character defining the
+#' coordinate reference system.
+#' For example, for UTM zone 36N (EPSG 32736), the projection argument is either
+#'  `projection = 'EPSG:32736'` or `projection = 32736`.
+#'  See details in [`sf::st_crs()`] and \url{https://spatialreference.org}
+#'  for a list of EPSG codes.
+#'
+#'  Please note, R spatial has followed updates to GDAL and PROJ
 #'  for handling projections, see more at
 #'  \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 #'
-#' The \code{sortBy} is used to order the input \code{data.table} when creating
-#' \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted
-#' by date time.
+#' The `sortBy` argument is used to order the input `DT` when creating
+#' sf LINESTRINGs. It must a column in the input `DT` of type
+#' POSIXct to ensure the rows are sorted by date time.
 #'
-#' The \code{splitBy} argument offers further control building \code{SpatialLines}.
-#' If in your \code{DT}, you have multiple temporal groups (e.g.: years) for
+#' The `splitBy` argument offers further control building LINESTRINGs.
+#' If in your input `DT`, you have multiple temporal groups (e.g.: years) for
 #' example, you can provide the name of the column which identifies them and
-#' build \code{SpatialLines} for each individual in each year.
+#' build LINESTRINGs for each individual in each year.
 #'
-#' \code{build_lines} is used by \code{group_lines} for grouping overlapping
-#' lines created from relocations.
+#' `build_lines` is used by `group_lines` for grouping overlapping
+#' lines generated from relocations.
 #'
-#' @return \code{build_lines} returns a \code{SpatialLines} object with a line
-#' for each individual (and optionally \code{splitBy} combination).
+#' @return `build_lines` returns an sf LINESTRING object with a line
+#' for each individual (and optionally `splitBy` combination).
 #'
-#' An error is returned when an individual has less than 2 relocations, making
-#' it impossible to build a line.
+#' Individuals (or combinations of individuals and `splitBy`) with less than two
+#'  relocations are dropped since it requires at least two relocations to
+#'  build a line.
 #'
 #' @inheritParams group_lines
 #' @inheritParams build_polys
@@ -54,7 +59,7 @@
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
 #' # EPSG code for example data
-#' utm <- 'EPSG:32736'
+#' utm <- 32736
 #'
 #' # Build lines for each individual
 #' lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
@@ -64,7 +69,6 @@
 #' DT[, yr := year(datetime)]
 #' lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
 #'             sortBy = 'datetime', splitBy = 'yr')
-#'
 build_lines <-
   function(DT = NULL,
            projection = NULL,
@@ -132,7 +136,7 @@ build_lines <-
     }
 
     if (!('POSIXct' %in%
-          unlist(lapply(DT[, .SD, .SDcols = sortBy], class)))) {
+          unlist(lapply(DT[, .SD, .SDcols = c(sortBy)], class)))) {
       stop('sortBy provided must be 1 column of type POSIXct')
     }
 
@@ -146,10 +150,10 @@ build_lines <-
     wo_drop <- DT[dropRows, on = splitBy][!(dropped)]
 
     data.table::setorderv(wo_drop, sortBy)
+
     lines <- sf::st_as_sf(
       wo_drop[, .(geometry = sf::st_sfc(sf::st_linestring(as.matrix(.SD)))),
          by = c(splitBy), .SDcols = coords],
       crs = sf::st_crs(projection)
     )
-    # TODO: check if NULL?
   }
