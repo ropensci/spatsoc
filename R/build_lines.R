@@ -145,11 +145,10 @@ build_lines <-
 
     wo_drop <- DT[dropRows, on = splitBy][!(dropped)]
 
-    setorderv(wo_drop, sortBy)
-    lines <- st_as_sf(
-      wo_drop[, .(geometry = st_sfc(st_linestring(as.matrix(.SD)))),
-         by = splitBy, .SDcols = coords],
-      crs = st_crs(projection)
+    data.table::setorderv(wo_drop, sortBy)
+    lines <- sf::st_as_sf(
+      wo_drop[, .(geometry = sf::st_sfc(sf::st_linestring(as.matrix(.SD)))),
+      crs = sf::st_crs(projection)
     )
     # TODO: check if NULL?
   }
