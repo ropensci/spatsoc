@@ -231,6 +231,8 @@ build_polys <- function(DT = NULL,
         )
       )
     }
+  } else {
+    stop('hrType not one of "kernel" or "mcp"')
   }
 }
 
