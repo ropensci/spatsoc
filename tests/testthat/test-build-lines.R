@@ -139,7 +139,7 @@ test_that('column names must exist in DT', {
 
 test_that('returns same number of lines as unique IDs/splitBy provided', {
   # without splitBy
-  expect_equal(length(
+  expect_equal(nrow(
     build_lines(
       DT = DT,
       id = 'ID',
@@ -156,7 +156,7 @@ test_that('returns same number of lines as unique IDs/splitBy provided', {
   DT[, count := .N, by = splitBy]
   subDT <- DT[count >= 2]
 
-  expect_equal(length(
+  expect_equal(nrow(
     build_lines(
       DT = subDT,
       id = 'ID',
@@ -294,14 +294,14 @@ test_that('splitBy argument doesnt use splitBy column', {
   utm <- 'EPSG:32736'
 
   expect_equal(
-    build_lines(
+    nrow(build_lines(
       DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
       splitBy = 'splitBy',
       sortBy = 'datetime'
-    ) |> length(),
+    )),
     copyDT[, uniqueN(splitBy) * uniqueN(ID)]
   )
 })
