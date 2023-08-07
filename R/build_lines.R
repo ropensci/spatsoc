@@ -148,6 +148,7 @@ build_lines <-
     data.table::setorderv(wo_drop, sortBy)
     lines <- sf::st_as_sf(
       wo_drop[, .(geometry = sf::st_sfc(sf::st_linestring(as.matrix(.SD)))),
+         by = c(splitBy), .SDcols = coords],
       crs = sf::st_crs(projection)
     )
     # TODO: check if NULL?
