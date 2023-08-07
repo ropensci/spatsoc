@@ -254,8 +254,8 @@ test_that('build_lines returns an sf object with LINESTRINGs', {
     'sf'
   )
 
-  expect_true(
-    'LINESTRING' %in%
+  expect_in(
+    'LINESTRING',
     sf::st_geometry_type(build_lines(
       DT = DT,
       id = 'ID',
