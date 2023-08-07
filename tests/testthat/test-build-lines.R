@@ -267,21 +267,25 @@ test_that('build_lines returns an sf object with LINESTRINGs', {
 })
 
 test_that('build_lines builds ordered lines', {
+  base_lines <- build_lines(
+    DT = DT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    projection = utm,
+    sortBy = 'datetime'
+  )
+
+  random_lines <- build_lines(
+    DT = DT[sample(.N)],
+    id = 'ID',
+    coords = c('X', 'Y'),
+    projection = utm,
+    sortBy = 'datetime'
+  )
+
   expect_equal(
-    build_lines(
-      DT = DT,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      projection = utm,
-      sortBy = 'datetime'
-    ),
-    build_lines(
-      DT = DT[sample(.N, .N)],
-      id = 'ID',
-      coords = c('X', 'Y'),
-      projection = utm,
-      sortBy = 'datetime'
-    )
+    base_lines[order(base_lines$ID),],
+    random_lines[order(random_lines$ID),]
   )
 })
 
