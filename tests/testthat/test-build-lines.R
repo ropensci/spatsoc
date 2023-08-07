@@ -242,26 +242,28 @@ test_that('splitBy and id provided are not correct format', {
   )
 })
 
-test_that('BuildPts returns a SpatialLines', {
-  expect_true('SpatialLines' %in% class(
+test_that('build_lines returns an sf object with LINESTRINGs', {
+  expect_s3_class(
     build_lines(
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
       sortBy = 'datetime'
-    )
-  ))
+    ),
+    'sf'
+  )
 
-  expect_true(isS4(
-    build_lines(
+  expect_true(
+    'LINESTRING' %in%
+    sf::st_geometry_type(build_lines(
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
       sortBy = 'datetime'
-    )
-  ))
+    ), by_geometry = FALSE)
+  )
 })
 
 test_that('build_lines builds ordered lines', {
