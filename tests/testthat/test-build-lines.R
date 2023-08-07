@@ -1,6 +1,5 @@
 # Test build_lines
 context('test build_lines')
-library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
