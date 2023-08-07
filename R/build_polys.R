@@ -153,7 +153,7 @@ build_polys <- function(DT = NULL,
       FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
-    ), .SDcols = splitBy]))) {
+    ), .SDcols = c(splitBy)]))) {
       stop(
         strwrap(
           prefix = " ",
@@ -177,7 +177,7 @@ build_polys <- function(DT = NULL,
 
   if (is.null(spPts)) {
     DT[, ade_id := do.call(function(...) paste(..., sep = '-'), .SD),
-       .SDcols = splitBy]
+       .SDcols = c(splitBy)]
     spPts <- sf::as_Spatial(
       sf::st_as_sf(
         DT[, .SD, .SDcols = c(coords, 'ade_id')],
