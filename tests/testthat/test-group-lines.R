@@ -487,3 +487,24 @@ test_that('splitBy argument doesnt use splitBy column', {
   )
 })
 
+
+
+test_that('group_lines can accomodate NULL timegroup and non null splitBy', {
+  copyDT <- copy(DT)
+  copyDT[, yr := year(datetime)]
+
+  expect_contains(
+    group_lines(
+      DT = copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      projection = utm,
+      timegroup = NULL,
+      splitBy = 'yr',
+      sortBy = 'datetime'
+    ) |> colnames(),
+    'group'
+  )
+
+})
