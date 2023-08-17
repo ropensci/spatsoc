@@ -199,7 +199,8 @@ group_lines <-
           projection = projection,
           coords = coords,
           id = id,
-          sortBy = sortBy
+          sortBy = sortBy,
+          splitBy = splitBy
         )},
         warning = function(w){
           if (startsWith(conditionMessage(w), 'some rows dropped')) {
