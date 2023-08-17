@@ -113,7 +113,6 @@
 #'             id = 'ID', coords = c('X', 'Y'),
 #'             timegroup = 'timegroup', sortBy = 'datetime',
 #'             splitBy = 'population')
-
 group_lines <-
   function(DT = NULL,
            threshold = NULL,
@@ -194,7 +193,7 @@ group_lines <-
 
     if (is.null(timegroup)) {
       withCallingHandlers({
-        spLines <- build_lines(
+        lns <- build_lines(
           DT = DT,
           projection = projection,
           coords = coords,
@@ -208,12 +207,12 @@ group_lines <-
           }
         }
       )
-      if (!is.null(spLines)) {
+      if (!is.null(lns)) {
         if (threshold == 0) {
-          inter <- rgeos::gIntersects(spLines, spLines, byid = TRUE)
+          inter <- rgeos::gIntersects(lns, lns, byid = TRUE)
         } else {
-          buffered <- rgeos::gBuffer(spLines, width = threshold, byid = TRUE)
-          inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
+          buffered <- rgeos::gBuffer(lns, width = threshold, byid = TRUE)
+          inter <- rgeos::gIntersects(lns, buffered, byid = TRUE)
         }
         g <- igraph::graph_from_adjacency_matrix(inter)
         ovr <- igraph::clusters(g)$membership
@@ -248,7 +247,7 @@ group_lines <-
       ovrDT <-
         DT[, {
           withCallingHandlers({
-            spLines <- build_lines(
+            lns <- build_lines(
               DT = .SD,
               projection = projection,
               coords = ..coords,
@@ -261,13 +260,13 @@ group_lines <-
               }
             }
           )
-          if (!is.null(spLines)) {
+          if (!is.null(lns)) {
             if (threshold == 0) {
-              inter <- rgeos::gIntersects(spLines, spLines, byid = TRUE)
+              inter <- rgeos::gIntersects(lns, lns, byid = TRUE)
             } else {
-              buffered <- rgeos::gBuffer(spLines, width = threshold,
+              buffered <- rgeos::gBuffer(lns, width = threshold,
                                          byid = TRUE)
-              inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
+              inter <- rgeos::gIntersects(lns, buffered, byid = TRUE)
 
             }
             g <- igraph::graph_from_adjacency_matrix(inter)
