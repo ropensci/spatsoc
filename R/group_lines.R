@@ -12,13 +12,13 @@
 #'
 #' Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
 #' handling projections, see more at
-#' \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
+#' <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
 #' In addition, `group_lines` (and [build_lines]) previously used
 #' [sp::SpatialLines], [rgeos::gIntersects], [rgeos::gBuffer] but have been
 #' updated to use [sf::st_as_sf], [sf::st_linestring], [sf::st_intersects], and
 #' [sf::st_buffer] according to the R-spatial evolution, see more at
-#' \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
+#' <https://r-spatial.org/r/2022/04/12/evolution.html>.
 #'
 #' ## Notes on arguments
 #' The `DT` must be a `data.table`. If your data is a
@@ -34,7 +34,7 @@
 #' coordinate reference system. For example, for UTM zone 36N (EPSG 32736), the
 #' projection argument is either `projection = 'EPSG:32736'` or `projection =
 #' 32736`. See details in [`sf::st_crs()`] and
-#' \url{https://spatialreference.org} for a list of EPSG codes.
+#' <https://spatialreference.org> for a list of EPSG codes.
 #'
 #' The `sortBy` argument is used to order the input `DT` when creating sf
 #' LINESTRINGs. It must a column in the input `DT` of type POSIXct to ensure the
