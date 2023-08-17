@@ -13,17 +13,17 @@ utm <- 'EPSG:32736'
 test_that('DT or spPts are required but not both', {
   expect_error(group_polys(
     DT = NULL,
-    spPolys = NULL,
+    sfPolys = NULL,
     area = FALSE
   ),
-  'must provide either DT or spPolys')
+  'must provide either DT or sfPolys')
 
   expect_error(group_polys(
     DT = DT,
-    spPolys = 10,
+    sfPolys = 10,
     area = FALSE
   ),
-  'cannot provide both DT and spPolys')
+  'cannot provide both DT and sfPolys')
 })
 
 test_that('area provided and logical, or error', {
@@ -156,14 +156,14 @@ test_that('column names must exist in DT', {
   )
 })
 
-test_that('splitBy and spPolys are not both provided', {
+test_that('splitBy and sfPolys are not both provided', {
   expect_error(
     group_polys(
       splitBy = 'yr',
-      spPolys = 10,
+      sfPolys = 10,
       area = TRUE
     ),
-    'cannot provide spPolys if providing splitBy'
+    'cannot provide sfPolys if providing splitBy'
   )
 })
 
