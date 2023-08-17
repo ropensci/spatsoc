@@ -67,8 +67,10 @@
 #' @param threshold The width of the buffer around the lines in the units of the
 #'   projection. Supply 0 to compare intersection without buffering.
 #' @param sfLines Alternatively to providing a DT, provide a simple feature
-#'   LINESTRING object generated with the sf package. If a sfLines object is
-#'   provided, groups cannot be calculated by timegroup or splitBy.
+#'   LINESTRING object generated with the sf package. The id argument is
+#'   required to provide the identifier matching each LINESTRING.
+#'   If a sfLines object is provided, groups cannot be calculated by timegroup
+#'   or splitBy.
 #' @param sortBy Character string of date time column(s) to sort rows by. Must
 #'   be a POSIXct.
 #'
