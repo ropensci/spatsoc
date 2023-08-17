@@ -16,11 +16,11 @@
 #'
 #' Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
 #' handling projections, see more below and  details at
-#' \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
+#' <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
 #' In addition, `build_polys` previously used [sp::SpatialPoints] but has been
 #' updated to use [sf::st_as_sf] according to the R-spatial evolution, see more
-#' at \url{https://r-spatial.org/r/2022/04/12/evolution.html}. A deprecated
+#' at <https://r-spatial.org/r/2022/04/12/evolution.html>. A deprecated
 #' version of this function using [sp::SpatialPoints] is retained as
 #' [build_polys_sp] temporarily but users are urged to transition as soon as
 #' possible.
@@ -39,7 +39,7 @@
 #' defining the coordinate reference system to be passed to [sf::st_crs].
 #' For example, for UTM zone 36S (EPSG 32736), the projection
 #' argument is `projection = "EPSG:32736"` or `projection = 32736`.
-#' See \url{https://spatialreference.org}
+#' See <https://spatialreference.org>
 #' for a list of EPSG codes.
 #'
 #' The `hrType` must be either one of "kernel" or "mcp". The
