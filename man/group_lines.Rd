@@ -22,9 +22,8 @@ group_lines(
 \item{threshold}{The width of the buffer around the lines in the units of the
 projection. Supply 0 to compare intersection without buffering.}
 
-\item{projection}{character string defining the projection to be passed to
-\code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
-the projection argument is 'EPSG:32736'. See details.}
+\item{projection}{character or numeric defining the coordinate reference
+system to be passed to \link[sf:st_crs]{sf::st_crs}. See details.}
 
 \item{id}{Character string of ID column name}
 
@@ -83,9 +82,7 @@ the EPSG code. For example, for UTM zone 36N (EPSG 32736), the projection
 argument is "EPSG:32736". See \url{https://spatialreference.org}
 for a list of EPSG codes. Please note, R spatial has followed updates
 to GDAL and PROJ for handling projections, see more at
-\url{https://r-spatial.org/r/2020/03/17/wkt.html}. It is likely
-that \code{build_polys} will return "Warning in proj4string(xy) :
-CRS object has comment, which is lost in output" due to these changes.
+\url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 
 The \code{sortBy} is used to order the input \code{data.table} when creating
 \code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted

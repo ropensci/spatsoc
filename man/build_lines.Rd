@@ -16,9 +16,8 @@ build_lines(
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{character string defining the projection to be passed to
-\code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
-the projection argument is 'EPSG:32736'. See details.}
+\item{projection}{character or numeric defining the coordinate reference
+system to be passed to \link[sf:st_crs]{sf::st_crs}. See details.}
 
 \item{id}{Character string of ID column name}
 
@@ -92,6 +91,7 @@ lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
 \code{\link{group_lines}}
 
 Other Build functions: 
+\code{\link{build_polys_sp}()},
 \code{\link{build_polys}()}
 }
 \concept{Build functions}
