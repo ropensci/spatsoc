@@ -16,9 +16,8 @@ build_lines(
 \arguments{
 \item{DT}{input data.table}
 
-
 \item{projection}{numeric or character defining the coordinate reference
-system to be passed to \code{\link[sf:st_crs]{sf::st_crs()}}. For example, either
+system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \code{projection = "EPSG:32736"} or \code{projection = 32736}.}
 
 \item{id}{Character string of ID column name}
@@ -48,6 +47,8 @@ combination of columns listed in \code{splitBy}. Relocation data should be in tw
 columns representing the X and Y coordinates.
 }
 \details{
+\subsection{R-spatial evolution}{
+
 Please note, spatsoc has followed updates from R spatial, GDAL and PROJ
 for handling projections, see more at
 \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
@@ -59,6 +60,9 @@ R-spatial evolution, see more at
 version of this function using \link[sp:SpatialLines]{sp::SpatialLines} is retained as
 \link{build_lines_sp} temporarily but users are urged to transition as soon as
 possible.
+}
+
+\subsection{Notes on arguments}{
 
 The \code{projection} argument expects a numeric or character defining the
 coordinate reference system.
@@ -78,6 +82,7 @@ build LINESTRINGs for each individual in each year.
 
 \code{build_lines} is used by \code{group_lines} for grouping overlapping
 lines generated from relocations.
+}
 }
 \examples{
 # Load data.table
@@ -105,8 +110,8 @@ lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
 \code{\link{group_lines}}
 
 Other Build functions: 
-\code{\link{build_polys_sp}()},
 \code{\link{build_lines_sp}()},
+\code{\link{build_polys_sp}()},
 \code{\link{build_polys}()}
 }
 \concept{Build functions}
