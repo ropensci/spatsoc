@@ -51,7 +51,7 @@
 #' @inheritParams group_polys
 #' @param spPts alternatively, provide solely a SpatialPointsDataFrame with one
 #' column representing the ID of each point.
-#' @param projection numeric or character definition the coordinate reference
+#' @param projection numeric or character defining the coordinate reference
 #'   system to be passed to [sf::st_crs()]. For example, either
 #'   `projection = "EPSG:32736"` or `projection = 32736`.
 #' @export
