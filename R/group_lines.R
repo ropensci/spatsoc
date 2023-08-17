@@ -66,9 +66,9 @@
 #' @inheritParams build_polys
 #' @param threshold The width of the buffer around the lines in the units of the
 #'   projection. Supply 0 to compare intersection without buffering.
-#' @param spLines Alternatively to providing a DT, provide a SpatialLines object
-#'   created with the sp package. If a spLines object is provided, groups cannot
-#'   be calculated by a timegroup or splitBy.
+#' @param sfLines Alternatively to providing a DT, provide a simple feature
+#'   LINESTRING object generated with the sf package. If a sfLines object is
+#'   provided, groups cannot be calculated by timegroup or splitBy.
 #' @param sortBy Character string of date time column(s) to sort rows by. Must
 #'   be a POSIXct.
 #'
@@ -122,7 +122,7 @@ group_lines <-
            timegroup = NULL,
            sortBy = NULL,
            splitBy = NULL,
-           spLines = NULL) {
+           sfLines = NULL) {
 
     # due to NSE notes in R CMD check
     group <- ..coords <- ..id <- ..sortBy <- withinGroup <- NULL
@@ -136,13 +136,14 @@ group_lines <-
       stop('cannot provide a negative threshold')
     }
 
-    if (!is.null(spLines) && !is.null(DT)) {
-      stop('cannot provide both DT and spLines')
-    } else if (is.null(spLines) && is.null(DT)) {
-      stop('must provide either DT or spLines')
-    } else if (!is.null(spLines) && is.null(DT)) {
-      if (!('SpatialLines' %in% class(spLines) && isS4(spLines))) {
-        stop('spLines provided must be a SpatialLines object')
+    if (!is.null(sfLines) && !is.null(DT)) {
+      stop('cannot provide both DT and sfLines')
+    } else if (is.null(sfLines) && is.null(DT)) {
+      stop('must provide either DT or sfLines')
+    } else if (!is.null(sfLines) && is.null(DT)) {
+      if (!inherits(sfLines, 'sf') ||
+          !'LINESTRING' %in% sf::st_geometry_type(sfLines)) {
+        stop('sfLines provided must be a sf object with LINESTRINGs')
       }
 
       if (threshold == 0) {
@@ -157,7 +158,7 @@ group_lines <-
                                     unlist(ovr))
       data.table::setnames(out, c('ID', 'group'))
       return(out[])
-    } else if (is.null(spLines) && !is.null(DT)) {
+    } else if (is.null(sfLines) && !is.null(DT)) {
       if (is.null(projection)) {
         stop('projection must be provided when DT is')
       }
