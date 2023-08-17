@@ -8,16 +8,24 @@
 #' combination of columns listed in `splitBy`. Relocation data should be in two
 #' columns representing the X and Y coordinates.
 #'
+#'  Please note, spatsoc has followed updates from R spatial, GDAL and PROJ
+#'  for handling projections, see more at
+#'  \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
+#'
+#' In addition, `build_lines` previously used [sp::SpatialLines] but has been
+#' updated to use [sf::st_as_sf] and [sf::st_linestring] according to the
+#' R-spatial evolution, see more at
+#' \url{https://r-spatial.org/r/2022/04/12/evolution.html}. A deprecated
+#' version of this function using [sp::SpatialLines] is retained as
+#' [build_lines_sp] temporarily but users are urged to transition as soon as
+#' possible.
+#'
 #' The `projection` argument expects a numeric or character defining the
 #' coordinate reference system.
 #' For example, for UTM zone 36N (EPSG 32736), the projection argument is either
 #'  `projection = 'EPSG:32736'` or `projection = 32736`.
 #'  See details in [`sf::st_crs()`] and \url{https://spatialreference.org}
 #'  for a list of EPSG codes.
-#'
-#'  Please note, R spatial has followed updates to GDAL and PROJ
-#'  for handling projections, see more at
-#'  \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 #'
 #' The `sortBy` argument is used to order the input `DT` when creating
 #' sf LINESTRINGs. It must a column in the input `DT` of type
