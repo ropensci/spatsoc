@@ -2,8 +2,8 @@
 #'
 #' `build_polys` generates a simple feature collection with POLYGONs from a
 #' `data.table`. The function accepts a `data.table` with
-#' relocation data, individual identifiers, a `projection`,
-#' `hrType` and `hrParams`. The relocation
+#' relocation data, individual identifiers, a projection,
+#' home range type and parameters. The relocation
 #' data is transformed into POLYGONs using either [adehabitatHR::mcp] or
 #' [adehabitatHR::kernelUD] for each individual and, optionally,
 #' combination of columns listed in `splitBy`. Relocation data should be in two
