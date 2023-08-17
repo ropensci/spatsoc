@@ -211,7 +211,7 @@ group_lines <-
           }
         }
       )
-      if (!is.null(lns)) {
+      if (nrow(lns) != 0) {
         if (threshold == 0) {
           inter <- sf::st_intersects(lns, lns, sparse = FALSE)
         } else {
