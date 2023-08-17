@@ -145,6 +145,9 @@ group_lines <-
           !'LINESTRING' %in% sf::st_geometry_type(sfLines)) {
         stop('sfLines provided must be a sf object with LINESTRINGs')
       }
+      if (is.null(id)) {
+        stop('id must be provided')
+      }
 
       if (threshold == 0) {
         inter <- sf::st_intersects(sfLines, sfLines, sparse = FALSE)
