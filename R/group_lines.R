@@ -147,11 +147,12 @@ group_lines <-
       }
 
       if (threshold == 0) {
-        inter <- sf::st_intersects(lns, lns, sparse = FALSE)
+        inter <- sf::st_intersects(sfLines, sfLines, sparse = FALSE)
       } else {
-        buffered <- sf::st_buffer(lns, dist = threshold)
-        inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
+        buffered <- sf::st_buffer(sfLines, dist = threshold)
+        inter <- sf::st_intersects(sfLines, buffered, sparse = FALSE)
       }
+      dimnames(inter) <- list(sfLines[[id]], sfLines[[id]])
       g <- igraph::graph_from_adjacency_matrix(inter)
       ovr <- igraph::clusters(g)$membership
       out <- data.table::data.table(names(ovr),
@@ -214,6 +215,7 @@ group_lines <-
           buffered <- sf::st_buffer(lns, dist = threshold)
           inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
         }
+        dimnames(inter) <- list(lns[[id]], lns[[id]])
         g <- igraph::graph_from_adjacency_matrix(inter)
         ovr <- igraph::clusters(g)$membership
         ovrDT <- data.table::data.table(ID = names(ovr),
@@ -267,6 +269,7 @@ group_lines <-
               buffered <- sf::st_buffer(lns, dist = threshold)
               inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
             }
+            dimnames(inter) <- list(lns[[id]], lns[[id]])
             g <- igraph::graph_from_adjacency_matrix(inter)
             ovr <- igraph::clusters(g)$membership
             out <- data.table::data.table(names(ovr),
