@@ -141,6 +141,24 @@ group_lines <-
       stop('cannot provide both DT and spLines')
     } else if (is.null(spLines) && is.null(DT)) {
       stop('must provide either DT or spLines')
+    } else if (!is.null(spLines) && is.null(DT)) {
+      if (!('SpatialLines' %in% class(spLines) && isS4(spLines))) {
+        stop('spLines provided must be a SpatialLines object')
+      }
+
+      if (threshold == 0) {
+        inter <- rgeos::gIntersects(spLines, spLines, byid = TRUE)
+      } else {
+        buffered <- rgeos::gBuffer(spLines, width = threshold,
+                                   byid = TRUE)
+        inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
+      }
+      g <- igraph::graph_from_adjacency_matrix(inter)
+      ovr <- igraph::clusters(g)$membership
+      out <- data.table::data.table(names(ovr),
+                                    unlist(ovr))
+      data.table::setnames(out, c('ID', 'group'))
+      return(out[])
     } else if (is.null(spLines) && !is.null(DT)) {
       if (is.null(projection)) {
         stop('projection must be provided when DT is')
@@ -172,24 +190,6 @@ group_lines <-
         message('group column will be overwritten by this function')
         set(DT, j = 'group', value = NULL)
       }
-    } else if (!is.null(spLines) && is.null(DT)) {
-      if (!('SpatialLines' %in% class(spLines) && isS4(spLines))) {
-        stop('spLines provided must be a SpatialLines object')
-      }
-
-      if (threshold == 0) {
-        inter <- rgeos::gIntersects(spLines, spLines, byid = TRUE)
-      } else {
-        buffered <- rgeos::gBuffer(spLines, width = threshold,
-                                   byid = TRUE)
-        inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
-      }
-      g <- igraph::graph_from_adjacency_matrix(inter)
-      ovr <- igraph::clusters(g)$membership
-      out <- data.table::data.table(names(ovr),
-                                      unlist(ovr))
-      data.table::setnames(out, c('ID', 'group'))
-      return(out[])
     }
 
     if (is.null(timegroup)) {
