@@ -9,6 +9,18 @@
 #' Relocation data should be in two columns representing the X and Y
 #' coordinates.
 #'
+#' ## R-spatial evolution
+#'
+#' Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
+#' handling projections, see more at
+#' \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
+#'
+#' In addition, `group_lines` (and [build_lines]) previously used
+#' [sp::SpatialLines], [rgeos::gIntersects], [rgeos::gBuffer] but have been
+#' updated to use [sf::st_as_sf], [sf::st_linestring], [sf::st_intersects], and
+#' [sf::st_buffer] according to the R-spatial evolution, see more at
+#' \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
+#'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using [data.table::setDT].
 #'
