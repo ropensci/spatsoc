@@ -151,6 +151,10 @@ group_lines <-
         stop('id must be provided')
       }
 
+      if (uniqueN(sfLines[[id]]) != nrow(sfLines)) {
+        stop('number of unique values in sfLines does not match nrow(sfLines)')
+      }
+
       if (threshold == 0) {
         inter <- sf::st_intersects(sfLines, sfLines, sparse = FALSE)
       } else {
