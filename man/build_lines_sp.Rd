@@ -17,7 +17,7 @@ build_lines_sp(
 \item{DT}{input data.table}
 
 \item{projection}{numeric or character defining the coordinate reference
-system to be passed to \code{\link[sf:st_crs]{sf::st_crs()}}. For example, either
+system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \code{projection = "EPSG:32736"} or \code{projection = 32736}.}
 
 \item{id}{Character string of ID column name}
@@ -38,6 +38,7 @@ Build Lines (deprecated version of function with retired spatial packages)
 
 Other Build functions: 
 \code{\link{build_lines}()},
+\code{\link{build_polys_sp}()},
 \code{\link{build_polys}()}
 }
 \concept{Build functions}
