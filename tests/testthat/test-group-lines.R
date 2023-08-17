@@ -10,21 +10,21 @@ DT[, datetime := as.POSIXct(datetime)]
 DT[, jul := data.table::yday(datetime)]
 DT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
 
-test_that('one of DT or spLines is required, not both or neither', {
+test_that('one of DT or sfLines is required, not both or neither', {
   expect_error(
     group_lines(
       DT = NULL,
       threshold = 10,
-      spLines = NULL
+      sfLines = NULL
     ),
-    'must provide either DT or spLines'
+    'must provide either DT or sfLines'
   )
 
   expect_error(
     group_lines(
       DT = DT,
       threshold = 10,
-      spLines = build_lines(
+      sfLines = build_lines(
         DT,
         projection = utm,
         coords = c('X', 'Y'),
@@ -32,7 +32,7 @@ test_that('one of DT or spLines is required, not both or neither', {
         sortBy = 'datetime'
       )
     ),
-    'cannot provide both DT and spLines'
+    'cannot provide both DT and sfLines'
   )
 })
 
@@ -431,15 +431,17 @@ test_that('group column succesfully detected', {
 # )
 
 
-test_that('spLines provided must be an S4 + spatial lines', {
+test_that('sfLines provided must be an sf LINESTRING', {
   expect_error(
-    group_lines(spLines = DT, threshold = 10),
-    'spLines provided must be a SpatialLines object'
+    group_lines(sfLines = DT, threshold = 10),
+    'sfLines provided must be a sf object'
   )
+
+  # TODO:  test linestring
 })
 
-test_that('spLines provided returns data.table', {
-  spLines <- build_lines(
+test_that('sfLines provided returns data.table', {
+  sfLines <- build_lines(
     DT = DT,
     id = 'ID',
     coords = c('X', 'Y'),
@@ -449,17 +451,17 @@ test_that('spLines provided returns data.table', {
 
   expect_true(
     'data.table' %in%
-      class(group_lines(spLines = spLines, threshold = 10))
+      class(group_lines(sfLines = sfLines, threshold = 10))
   )
 
   expect_true(
     'data.table' %in%
-      class(group_lines(spLines = spLines, threshold = 0))
+      class(group_lines(sfLines = sfLines, threshold = 0))
   )
 
   expect_equal(
-    nrow((group_lines(spLines = spLines, threshold = 10))),
-    length(spLines)
+    nrow((group_lines(sfLines = sfLines, threshold = 10))),
+    length(sfLines)
   )
 
 })
