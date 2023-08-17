@@ -14,6 +14,8 @@
 #'
 #' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments
 #' expect the names of respective columns in \code{DT} which correspond
+#' [group_polys] uses `build_polys` for grouping overlapping
+#' polygons created from relocations.
 #' to the individual identifier, X and Y coordinates, and additional
 #' grouping columns.
 #'
