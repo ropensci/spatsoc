@@ -26,9 +26,9 @@ area and proportion of overlap (when \code{TRUE})}
 
 \item{hrParams}{a named list of parameters for \code{adehabitatHR} functions}
 
-\item{projection}{character string defining the projection to be passed to
-\code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
-the projection argument is 'EPSG:32736'. See details.}
+\item{projection}{numeric or character defining the coordinate reference
+system to be passed to \code{\link[sf:st_crs]{sf::st_crs()}}. For example, either
+\code{projection = "EPSG:32736"} or \code{projection = 32736}.}
 
 \item{id}{Character string of ID column name}
 
