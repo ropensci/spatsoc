@@ -1,6 +1,5 @@
 # Test build_lines
 context('test build_lines')
-library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
@@ -140,7 +139,7 @@ test_that('column names must exist in DT', {
 
 test_that('returns same number of lines as unique IDs/splitBy provided', {
   # without splitBy
-  expect_equal(length(
+  expect_equal(nrow(
     build_lines(
       DT = DT,
       id = 'ID',
@@ -157,7 +156,7 @@ test_that('returns same number of lines as unique IDs/splitBy provided', {
   DT[, count := .N, by = splitBy]
   subDT <- DT[count >= 2]
 
-  expect_equal(length(
+  expect_equal(nrow(
     build_lines(
       DT = subDT,
       id = 'ID',
@@ -243,30 +242,8 @@ test_that('splitBy and id provided are not correct format', {
   )
 })
 
-test_that('BuildPts returns a SpatialLines', {
-  expect_true('SpatialLines' %in% class(
-    build_lines(
-      DT = DT,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      projection = utm,
-      sortBy = 'datetime'
-    )
-  ))
-
-  expect_true(isS4(
-    build_lines(
-      DT = DT,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      projection = utm,
-      sortBy = 'datetime'
-    )
-  ))
-})
-
-test_that('build_lines builds ordered lines', {
-  expect_equal(
+test_that('build_lines returns an sf object with LINESTRINGs', {
+  expect_s3_class(
     build_lines(
       DT = DT,
       id = 'ID',
@@ -274,13 +251,41 @@ test_that('build_lines builds ordered lines', {
       projection = utm,
       sortBy = 'datetime'
     ),
-    build_lines(
-      DT = DT[sample(.N, .N)],
+    'sf'
+  )
+
+  expect_in(
+    'LINESTRING',
+    sf::st_geometry_type(build_lines(
+      DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
       sortBy = 'datetime'
-    )
+    ), by_geometry = FALSE)
+  )
+})
+
+test_that('build_lines builds ordered lines', {
+  base_lines <- build_lines(
+    DT = DT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    projection = utm,
+    sortBy = 'datetime'
+  )
+
+  random_lines <- build_lines(
+    DT = DT[sample(.N)],
+    id = 'ID',
+    coords = c('X', 'Y'),
+    projection = utm,
+    sortBy = 'datetime'
+  )
+
+  expect_equal(
+    base_lines[order(base_lines$ID),],
+    random_lines[order(random_lines$ID),]
   )
 })
 
@@ -295,14 +300,14 @@ test_that('splitBy argument doesnt use splitBy column', {
   utm <- 'EPSG:32736'
 
   expect_equal(
-    build_lines(
+    nrow(build_lines(
       DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
       projection = utm,
       splitBy = 'splitBy',
       sortBy = 'datetime'
-    ) |> length(),
+    )),
     copyDT[, uniqueN(splitBy) * uniqueN(ID)]
   )
 })
