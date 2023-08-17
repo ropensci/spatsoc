@@ -16,6 +16,7 @@ build_lines(
 \arguments{
 \item{DT}{input data.table}
 
+
 \item{projection}{numeric or character defining the coordinate reference
 system to be passed to \code{\link[sf:st_crs]{sf::st_crs()}}. For example, either
 \code{projection = "EPSG:32736"} or \code{projection = 32736}.}
@@ -104,6 +105,7 @@ lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
 \code{\link{group_lines}}
 
 Other Build functions: 
+\code{\link{build_polys_sp}()},
 \code{\link{build_lines_sp}()},
 \code{\link{build_polys}()}
 }
