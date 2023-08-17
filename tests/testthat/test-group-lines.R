@@ -4,7 +4,7 @@ library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
-utm <- 'EPSG:32736'
+utm <- 32736
 
 DT[, datetime := as.POSIXct(datetime)]
 DT[, jul := data.table::yday(datetime)]
