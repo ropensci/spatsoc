@@ -105,8 +105,8 @@
 #' # EPSG code for example data
 #' utm <- 32736
 #'
-#' \donttest{group_lines(DT, threshold = 50, projection = utm, sortBy = 'datetime',
-#'             id = 'ID', coords = c('X', 'Y'))}
+#' group_lines(DT, threshold = 50, projection = utm, sortBy = 'datetime',
+#'             id = 'ID', coords = c('X', 'Y'))
 #'
 #' ## Daily movement tracks
 #' # Temporal grouping
