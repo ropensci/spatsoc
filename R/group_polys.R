@@ -121,6 +121,9 @@ group_polys <-
           )
       }
 
+      if (is.null(id)) {
+        stop('id must be provided')
+      }
 
       if (!area) {
         if ('group' %in% colnames(DT)) {
