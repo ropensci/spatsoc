@@ -1,13 +1,12 @@
 #' Group Lines
 #'
-#' `group_lines` groups rows into spatial groups by creating trajectories
-#' and grouping based on spatial overlap. The function accepts a
-#' `data.table` with relocation data, individual identifiers and a
-#' `threshold`. The relocation data is transformed into `SpatialLines`
-#' and overlapping `SpatialLines` are grouped. The `threshold`
-#' argument is used to specify the criteria for distance between lines.
-#' Relocation data should be in two columns representing the X and Y
-#' coordinates.
+#' `group_lines` groups rows into spatial groups by generating LINESTRINGs and
+#' grouping based on spatial intersection. The function accepts a `data.table`
+#' with relocation data, individual identifiers and a distance threshold. The
+#' relocation data is transformed into sf LINESTRINGs using [build_lines] and
+#' intersecting LINESTRINGs are grouped. The threshold argument is used to
+#' specify the distance criteria for grouping. Relocation data should be in two
+#' columns representing the X and Y coordinates.
 #'
 #' ## R-spatial evolution
 #'
