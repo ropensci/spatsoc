@@ -433,7 +433,7 @@ test_that('group column succesfully detected', {
 
 test_that('sfLines provided must be an sf LINESTRING', {
   expect_error(
-    group_lines(sfLines = DT, threshold = 10),
+    group_lines(sfLines = DT, threshold = 10, id = 'ID'),
     'sfLines provided must be a sf object'
   )
 
@@ -451,17 +451,17 @@ test_that('sfLines provided returns data.table', {
 
   expect_true(
     'data.table' %in%
-      class(group_lines(sfLines = sfLines, threshold = 10))
+      class(group_lines(sfLines = sfLines, threshold = 10, id = 'ID'))
   )
 
   expect_true(
     'data.table' %in%
-      class(group_lines(sfLines = sfLines, threshold = 0))
+      class(group_lines(sfLines = sfLines, threshold = 0, id = 'ID'))
   )
 
   expect_equal(
-    nrow((group_lines(sfLines = sfLines, threshold = 10))),
-    length(sfLines)
+    nrow(group_lines(sfLines = sfLines, threshold = 10, id = 'ID')),
+    nrow(sfLines)
   )
 
 })
