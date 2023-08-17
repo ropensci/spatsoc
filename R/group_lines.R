@@ -146,11 +146,10 @@ group_lines <-
       }
 
       if (threshold == 0) {
-        inter <- rgeos::gIntersects(spLines, spLines, byid = TRUE)
+        inter <- sf::st_intersects(lns, lns, sparse = FALSE)
       } else {
-        buffered <- rgeos::gBuffer(spLines, width = threshold,
-                                   byid = TRUE)
-        inter <- rgeos::gIntersects(spLines, buffered, byid = TRUE)
+        buffered <- sf::st_buffer(lns, dist = threshold)
+        inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
       }
       g <- igraph::graph_from_adjacency_matrix(inter)
       ovr <- igraph::clusters(g)$membership
@@ -209,10 +208,10 @@ group_lines <-
       )
       if (!is.null(lns)) {
         if (threshold == 0) {
-          inter <- rgeos::gIntersects(lns, lns, byid = TRUE)
+          inter <- sf::st_intersects(lns, lns, sparse = FALSE)
         } else {
-          buffered <- rgeos::gBuffer(lns, width = threshold, byid = TRUE)
-          inter <- rgeos::gIntersects(lns, buffered, byid = TRUE)
+          buffered <- sf::st_buffer(lns, dist = threshold)
+          inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
         }
         g <- igraph::graph_from_adjacency_matrix(inter)
         ovr <- igraph::clusters(g)$membership
@@ -262,12 +261,10 @@ group_lines <-
           )
           if (!is.null(lns)) {
             if (threshold == 0) {
-              inter <- rgeos::gIntersects(lns, lns, byid = TRUE)
+              inter <- sf::st_intersects(lns, lns, sparse = FALSE)
             } else {
-              buffered <- rgeos::gBuffer(lns, width = threshold,
-                                         byid = TRUE)
-              inter <- rgeos::gIntersects(lns, buffered, byid = TRUE)
-
+              buffered <- sf::st_buffer(lns, dist = threshold)
+              inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
             }
             g <- igraph::graph_from_adjacency_matrix(inter)
             ovr <- igraph::clusters(g)$membership
