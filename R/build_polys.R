@@ -93,18 +93,9 @@
 #'
 #' # Build polygons for each individual by year
 #' DT[, yr := year(datetime)]
-#' build_polys(DT, projection = utm, hrType = 'mcp', hrParams = list(percent = 95),
+#' build_polys(DT, projection = utm, hrType = 'mcp',
+#'             hrParams = list(percent = 95),
 #'             id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
-#'
-#' # Build polygons from SpatialPointsDataFrame
-#' library(sp)
-#' pts <- SpatialPointsDataFrame(coords = DT[, .(X, Y)],
-#'                               proj4string = CRS(utm),
-#'                               data = DT[, .(ID)]
-#' )
-#'
-#' build_polys(spPts = pts, hrType = 'mcp', hrParams = list(percent = 95))
-#'
 build_polys <- function(DT = NULL,
                         projection = NULL,
                         hrType = NULL,
