@@ -22,8 +22,9 @@ group_lines(
 \item{threshold}{The width of the buffer around the lines in the units of the
 projection. Supply 0 to compare intersection without buffering.}
 
-\item{projection}{character or numeric defining the coordinate reference
-system to be passed to \link[sf:st_crs]{sf::st_crs}. See details.}
+\item{projection}{numeric or character defining the coordinate reference
+system to be passed to \code{\link[sf:st_crs]{sf::st_crs()}}. For example, either
+\code{projection = "EPSG:32736"} or \code{projection = 32736}.}
 
 \item{id}{Character string of ID column name}
 
