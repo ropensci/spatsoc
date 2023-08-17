@@ -55,7 +55,8 @@
 #'   area and proportion of overlap (when `TRUE`)
 #' @param hrType type of HR estimation, either 'mcp' or 'kernel'
 #' @param hrParams a named list of parameters for `adehabitatHR` functions
-#' @param spPolys Alternatively, provide solely a SpatialPolygons object
+#' @param sfPolys Alternatively, provide solely a simple features object with
+#' POLYGONs or MULTIPOLYGONs. If sfPolys provided, id is required.
 #'
 #' @export
 #'
@@ -91,7 +92,7 @@ group_polys <-
            id = NULL,
            coords = NULL,
            splitBy = NULL,
-           spPolys = NULL) {
+           sfPolys = NULL) {
     # due to NSE notes in R CMD check
     nBy <- ..coords <- ..id <- withinGroup <- group <- outGroup <- NULL
 
@@ -99,15 +100,15 @@ group_polys <-
       stop('area must be provided (TRUE or FALSE)')
     }
 
-    if (is.null(DT) && is.null(spPolys)) {
-      stop('must provide either DT or spPolys')
-    } else if (!is.null(DT) && !is.null(spPolys)) {
-      stop('cannot provide both DT and spPolys')
+    if (is.null(DT) && is.null(sfPolys)) {
+      stop('must provide either DT or sfPolys')
+    } else if (!is.null(DT) && !is.null(sfPolys)) {
+      stop('cannot provide both DT and sfPolys')
     }
 
     if (is.null(splitBy)) {
-      if (!is.null(DT) && is.null(spPolys)) {
-        spPolys <-
+      if (!is.null(DT) && is.null(sfPolys)) {
+        sfPolys <-
           build_polys(
             DT = DT,
             projection = projection,
@@ -163,8 +164,8 @@ group_polys <-
         return(out[])
       }
     } else if (!is.null(splitBy)) {
-      if (!is.null(spPolys)) {
-        stop('cannot provide spPolys if providing splitBy')
+      if (!is.null(sfPolys)) {
+        stop('cannot provide sfPolys if providing splitBy')
       }
 
       if (any(!(c(id, splitBy) %in% colnames(DT)))) {
@@ -187,7 +188,7 @@ group_polys <-
         ovrDT <-
           DT[nBy > 5, {
             try(
-              spPolys <-
+              sfPolys <-
                 build_polys(
                   DT = .SD,
                   projection = projection,
@@ -200,8 +201,8 @@ group_polys <-
                 ),
               silent = TRUE
             )
-            if (!is.null(spPolys)) {
-              inter <- rgeos::gIntersects(spPolys, spPolys, byid = TRUE)
+            if (!is.null(sfPolys)) {
+              inter <- rgeos::gIntersects(sfPolys, sfPolys, byid = TRUE)
               g <- igraph::graph_from_adjacency_matrix(inter)
               ovr <- igraph::clusters(g)$membership
               out <- data.table::data.table(names(ovr),
@@ -234,7 +235,7 @@ group_polys <-
         outDT <-
           DT[nBy > 5, {
             try(
-              spPolys <-
+              sfPolys <-
                 build_polys(
                   DT = .SD,
                   projection = projection,
@@ -247,8 +248,8 @@ group_polys <-
                 ),
               silent = TRUE
             )
-            if (!is.null(spPolys)) {
-              inters <- rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
+            if (!is.null(sfPolys)) {
+              inters <- rgeos::gIntersection(sfPolys, sfPolys, byid = TRUE)
               areas <- rgeos::gArea(inters, byid = TRUE)
               areaID <-
                 data.table::data.table(
@@ -264,7 +265,7 @@ group_polys <-
                   value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
 
               out <- merge(
-                x = data.table(spPolys@data),
+                x = data.table(sfPolys@data),
                 y = areaID,
                 by.x = 'id',
                 by.y = ..id,
