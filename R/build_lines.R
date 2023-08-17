@@ -1,12 +1,12 @@
 #' Build Lines
 #'
 #'
-#' `build_lines` generates an sf LINESTRING object from a `data.table`.
-#' The function accepts a `data.table` with relocation data, individual
-#' identifiers, a sorting column and a `projection`. The relocation data
-#' is transformed into LINESTRINGs for each individual and optionally,
-#' combination of columns in `splitBy`.
-#' Relocation data should be in two columns representing the X and Y coordinates.
+#' `build_lines` generates a simple feature collection with LINESTRINGs from a
+#' `data.table`. The function accepts a `data.table` with relocation data,
+#' individual identifiers, a sorting column and a `projection`. The relocation
+#' data is transformed into LINESTRINGs for each individual and, optionally,
+#' combination of columns listed in `splitBy`. Relocation data should be in two
+#' columns representing the X and Y coordinates.
 #'
 #' The `projection` argument expects a numeric or character defining the
 #' coordinate reference system.
