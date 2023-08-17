@@ -187,7 +187,7 @@ The coordinates must be planar, such as UTM (of whichever zone your relocations 
 * `timegroup`: (optional) column name of time group
 * `sortBy`: column name of date time to sort rows for building lines
 * `splitBy`: (optional) column names of extra variables to group on
-* `spLines`: alternatively, provide solely a `SpatialLines` object
+* `sfLines`: alternatively, provide a sf LINESTRING object and id column name
 
 ### DT
 See [3.2.1](#dt-1). 
