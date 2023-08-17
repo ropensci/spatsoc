@@ -12,6 +12,7 @@
 #' [group_polys] uses `build_polys` for grouping overlapping
 #' polygons created from relocations.
 #'
+#' ## R-spatial evolution
 #'
 #' Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
 #' handling projections, see more below and  details at
@@ -23,6 +24,8 @@
 #' version of this function using [sp::SpatialPoints] is retained as
 #' [build_polys_sp] temporarily but users are urged to transition as soon as
 #' possible.
+#'
+#' ## Notes on arguments
 #'
 #' The `DT` must be a `data.table`. If your data is a `data.frame`, you can
 #' convert it by reference using [data.table::setDT].
