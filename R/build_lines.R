@@ -8,6 +8,8 @@
 #' combination of columns listed in `splitBy`. Relocation data should be in two
 #' columns representing the X and Y coordinates.
 #'
+#' ## R-spatial evolution
+#'
 #'  Please note, spatsoc has followed updates from R spatial, GDAL and PROJ
 #'  for handling projections, see more at
 #'  \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
@@ -19,6 +21,8 @@
 #' version of this function using [sp::SpatialLines] is retained as
 #' [build_lines_sp] temporarily but users are urged to transition as soon as
 #' possible.
+#'
+#' ## Notes on arguments
 #'
 #' The `projection` argument expects a numeric or character defining the
 #' coordinate reference system.
