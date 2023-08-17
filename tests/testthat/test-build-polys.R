@@ -16,91 +16,90 @@ test_that('DT or spPts are required but not both', {
 
 
 
-test_that('coords, id, projection must be provided and (splitBy) proper format',
-          {
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = utm,
-                hrType = 'mcp',
-                coords = c('X', 'Y'),
-                id = NULL
-              ),
-              'id must be provided'
-            )
+test_that('coords, id, projection, (splitBy) provided and proper format', {
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      coords = c('X', 'Y'),
+      id = NULL
+    ),
+    'id must be provided'
+  )
 
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = NULL,
-                hrType = 'mcp',
-                coords = c('X', 'Y'),
-                id = 'ID'
-              ),
-              'projection must be provided'
-            )
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = NULL,
+      hrType = 'mcp',
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ),
+    'projection must be provided'
+  )
 
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = utm,
-                hrType = 'mcp',
-                coords = NULL,
-                id = 'ID'
-              ),
-              'coords must be provided'
-            )
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      coords = NULL,
+      id = 'ID'
+    ),
+    'coords must be provided'
+  )
 
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = utm,
-                hrType = 'mcp',
-                coords = 'X',
-                id = 'ID'
-              ),
-              'coords requires a vector of',
-              fixed = FALSE
-            )
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      coords = 'X',
+      id = 'ID'
+    ),
+    'coords requires a vector of',
+    fixed = FALSE
+  )
 
-            copyDT <- copy(DT)
-            copyDT[, X := as.character(X)]
-            expect_error(
-              build_polys(
-                DT = copyDT,
-                projection = utm,
-                hrType = 'mcp',
-                coords = c('X', 'Y'),
-                id = 'ID'
-              ),
-              'coords must be numeric'
-            )
+  copyDT <- copy(DT)
+  copyDT[, X := as.character(X)]
+  expect_error(
+    build_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ),
+    'coords must be numeric'
+  )
 
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = utm,
-                hrType = NULL,
-                coords = c('X', 'Y'),
-                id = 'ID'
-              ),
-              'hrType must be provided'
-            )
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = NULL,
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ),
+    'hrType must be provided'
+  )
 
-            copyDT <- copy(DT)
-            copyDT[, s := factor(1)]
-            expect_error(
-              build_polys(
-                DT = copyDT,
-                projection = utm,
-                hrType = NULL,
-                coords = c('X', 'Y'),
-                id = 'ID',
-                splitBy = 's'
-              ),
-              'and splitBy when provided', fixed = FALSE
-            )
-          })
+  copyDT <- copy(DT)
+  copyDT[, s := factor(1)]
+  expect_error(
+    build_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = NULL,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 's'
+    ),
+    'and splitBy when provided', fixed = FALSE
+  )
+})
 
 
 test_that('column names must exist in DT', {
