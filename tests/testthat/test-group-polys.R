@@ -458,7 +458,7 @@ test_that('splitBy argument doesnt use splitBy column', {
 })
 
 
-test_that('group_polys with area returns proportions within 0-1', {
+test_that('proportion within 0-100, area > 0', {
 
   copyDT <- copy(DT)
 
@@ -474,11 +474,10 @@ test_that('group_polys with area returns proportions within 0-1', {
     id = 'ID'
   ))
 
-  expect_true(all(
-    out_mcp$proportion >= 0 &
-      out_mcp$proportion <= 1.00001
-    )
-  )
+  expect_true(all(out_mcp$proportion >= units::as_units(0, 'percent')))
+  expect_true(all(out_mcp$proportion <= units::as_units(100, 'percent')))
+  expect_true(all(out_mcp$area >= units::as_units(0, units(out_mcp$area))))
+
 
   out_kernel <- suppressWarnings(group_polys(
     DT = copyDT,
@@ -490,10 +489,10 @@ test_that('group_polys with area returns proportions within 0-1', {
     id = 'ID'
   ))
 
-  expect_true(all(
-    out_kernel$proportion >= 0 &
-      out_kernel$proportion <= 1.00001
-    )
-  )
+  expect_true(all(out_kernel$proportion >= units::as_units(0, 'percent')))
+  expect_true(all(out_kernel$proportion <= units::as_units(100, 'percent')))
+  expect_true(all(out_kernel$area >= units::as_units(0, units(out_kernel$area))))
+
+
 
 })
