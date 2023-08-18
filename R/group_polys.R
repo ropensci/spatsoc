@@ -166,7 +166,7 @@ group_polys <-
         set(out_inter, j = 'proportion',
             value = units::set_units(
               out_inter[['area']] / out_inter[['area_ID1']],
-              percent)
+              'percent')
         )
         set(out_inter, j = 'area_ID1',  value = NULL)
 
@@ -175,7 +175,7 @@ group_polys <-
           ID1 = sfPolys[[id]][disjointed$row.id],
           ID2 = sfPolys[[id]][disjointed$col.id],
           area = rep(units::as_units(0, units(out_inter$area)), nrow(disjointed)),
-          proportion = rep(units::set_units(0, percent), nrow(disjointed))
+          proportion = rep(units::set_units(0, 'percent'), nrow(disjointed))
         )
         out <- rbind(out_inter, out_disjointed)
 
@@ -283,7 +283,7 @@ group_polys <-
               set(out_inter, j = 'proportion',
                   value = units::set_units(
                     out_inter[['area']] / out_inter[['area_ID1']],
-                    percent)
+                    'percent')
               )
               set(out_inter, j = 'area_ID1',  value = NULL)
 
@@ -293,7 +293,7 @@ group_polys <-
                 ID2 = sfPolys[[id]][disjointed$col.id],
                 area = rep(units::as_units(0, units(out_inter$area)),
                            nrow(disjointed)),
-                proportion = rep(units::set_units(0, percent), nrow(disjointed))
+                proportion = rep(units::set_units(0, 'percent'), nrow(disjointed))
               )
               out <- rbind(out_inter, out_disjointed)
 
