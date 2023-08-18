@@ -27,7 +27,7 @@ Encoding: UTF-8
 Imports: data.table (>= 1.10.5),
     sf,
     units,
-    adehabitatHR,
+    adehabitatHR (>= 0.4.21),
     igraph
 Suggests: 
     testthat (>= 2.1.0),
