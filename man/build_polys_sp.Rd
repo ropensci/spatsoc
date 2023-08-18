@@ -41,7 +41,7 @@ or \link[adehabitatHR:kernelUD]{adehabitatHR::kernelUD}}
 Build Polygons (deprecated version of function with retired spatial packages)
 }
 \seealso{
-\code{\link{group_polys}}
+\code{\link[=group_polys]{group_polys()}}
 
 Other Build functions: 
 \code{\link{build_lines_sp}()},
