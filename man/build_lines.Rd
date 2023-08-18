@@ -56,10 +56,7 @@ for handling projections, see more at
 In addition, \code{build_lines} previously used \link[sp:SpatialLines]{sp::SpatialLines} but has been
 updated to use \link[sf:st_as_sf]{sf::st_as_sf} and \link[sf:st]{sf::st_linestring} according to the
 R-spatial evolution, see more at
-\url{https://r-spatial.org/r/2022/04/12/evolution.html}. A deprecated
-version of this function using \link[sp:SpatialLines]{sp::SpatialLines} is retained as
-\link{build_lines_sp} temporarily but users are urged to transition as soon as
-possible.
+\url{https://r-spatial.org/r/2022/04/12/evolution.html}.
 }
 
 \subsection{Notes on arguments}{
@@ -110,8 +107,6 @@ lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
 \code{\link{group_lines}}
 
 Other Build functions: 
-\code{\link{build_lines_sp}()},
-\code{\link{build_polys_sp}()},
 \code{\link{build_polys}()}
 }
 \concept{Build functions}

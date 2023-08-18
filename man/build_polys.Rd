@@ -65,10 +65,7 @@ handling projections, see more below and  details at
 
 In addition, \code{build_polys} previously used \link[sp:SpatialPoints]{sp::SpatialPoints} but has been
 updated to use \link[sf:st_as_sf]{sf::st_as_sf} according to the R-spatial evolution, see more
-at \url{https://r-spatial.org/r/2022/04/12/evolution.html}. A deprecated
-version of this function using \link[sp:SpatialPoints]{sp::SpatialPoints} is retained as
-\link{build_polys_sp} temporarily but users are urged to transition as soon as
-possible.
+at \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
 }
 
 \subsection{Notes on arguments}{
@@ -128,8 +125,6 @@ build_polys(DT, projection = utm, hrType = 'mcp',
 \link{group_polys}
 
 Other Build functions: 
-\code{\link{build_lines_sp}()},
-\code{\link{build_lines}()},
-\code{\link{build_polys_sp}()}
+\code{\link{build_lines}()}
 }
 \concept{Build functions}
