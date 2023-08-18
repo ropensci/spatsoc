@@ -73,7 +73,8 @@
 #' @param hrType type of HR estimation, either 'mcp' or 'kernel'
 #' @param hrParams a named list of parameters for `adehabitatHR` functions
 #' @param sfPolys Alternatively, provide solely a simple features object with
-#' POLYGONs or MULTIPOLYGONs. If sfPolys provided, id is required.
+#' POLYGONs or MULTIPOLYGONs. If sfPolys are provided, id is required and
+#' splitBy cannot be used.
 #'
 #' @export
 #'
