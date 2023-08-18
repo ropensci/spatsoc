@@ -92,7 +92,7 @@
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
 #' # EPSG code for example data
-#' utm <- 'EPSG:32736'
+#' utm <- 32736
 #'
 #' group_polys(DT, area = FALSE, hrType = 'mcp',
 #'             hrParams = list(percent = 95), projection = utm,
