@@ -8,7 +8,7 @@ DT[, datetime := as.POSIXct(datetime)]
 DT[, family := sample(c(1, 2, 3, 4), .N, replace = TRUE)]
 DT[, jul := data.table::yday(datetime)]
 
-utm <- 'EPSG:32736'
+utm <- 32736
 
 test_that('DT or spPts are required but not both', {
   expect_error(group_polys(
@@ -217,7 +217,6 @@ test_that('column and row lengths returned make sense', {
   )
   expect_lte(nrow(ltepromise$result),
              nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
-
 
   copyDT <- copy(DT)[, yr := year(datetime)]
 
@@ -428,7 +427,7 @@ test_that('splitBy argument doesnt use splitBy column', {
 
   copyDT[, splitBy := family]
 
-  utm <- 'EPSG:32736'
+  utm <- 32736
 
   expect_true(
     suppressWarnings(group_polys(
@@ -464,7 +463,7 @@ test_that('group_polys with area returns proportions within 0-1', {
 
   copyDT <- copy(DT)
 
-  utm <- 'EPSG:32736'
+  utm <- 32736
 
   out_mcp <- suppressWarnings(group_polys(
     DT = copyDT,
