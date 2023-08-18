@@ -153,20 +153,22 @@ group_polys <-
           }
         }
         inter <- sf::st_intersection(sfPolys, sfPolys)
+        areas <- sf::st_area(inter)
+        out_inter <- data.table::data.table(
+          ID1 = inter[[id]],
+          ID2 = inter[[paste0(id, '.1')]],
+          area = areas,
+          area_ID1 = units::as_units(inter[['area']], units(areas),
+                                     set_units_mode = 'standard')
         )
-
-        set(out, j = 'ID1', value = tstrsplit(out[['IDs']], ' ', keep = 1))
-        set(out, j = 'ID2', value = tstrsplit(out[['IDs']], ' ', keep = 2))
-
-        out <- merge(
-          out,
-          data.table(spPolys@data),
-          by.x = 'ID1',
-          by.y = 'id',
-          suffixes = c('', 'Total')
+        set(out_inter, j = 'proportion',
+            value = units::set_units(
+              out_inter[['area']] / out_inter[['area_ID1']],
+              percent)
         )
-        set(out, j = 'proportion', value = out[['area']] / out[['areaTotal']])
-        set(out, j = c('IDs', 'areaTotal'),  value = NULL)
+        set(out_inter, j = 'area_ID1',  value = NULL)
+
+        )
         data.table::setcolorder(out, c('ID1', 'ID2', 'area', 'proportion'))
         return(out[])
       }
@@ -258,20 +260,22 @@ group_polys <-
               silent = TRUE
             )
             if (!is.null(sfPolys)) {
-              areaID <-
-                data.table::data.table(
-                  area = areas,
-                  IDs = names(areas))
-
-              set(areaID,
-                  j = ..id,
-                  value = tstrsplit(areaID[['IDs']], ' ', keep = 1))
-
-              set(areaID,
-                  j = paste0(..id, '2'),
-                  value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
               sf::st_agr(sfPolys) <- 'constant'
               inter <- sf::st_intersection(sfPolys, sfPolys)
+              areas <- sf::st_area(inter)
+              out_inter <- data.table::data.table(
+                ID1 = inter[[id]],
+                ID2 = inter[[paste0(id, '.1')]],
+                area = areas,
+                area_ID1 = units::as_units(inter[['area']], units(areas),
+                                           set_units_mode = 'standard')
+              )
+              set(out_inter, j = 'proportion',
+                  value = units::set_units(
+                    out_inter[['area']] / out_inter[['area_ID1']],
+                    percent)
+              )
+              set(out_inter, j = 'area_ID1',  value = NULL)
 
               out <- merge(
                 x = data.table(sfPolys@data),
