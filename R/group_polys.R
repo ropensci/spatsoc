@@ -114,7 +114,7 @@ group_polys <-
     # due to NSE notes in R CMD check
     nBy <- ..coords <- ..id <- withinGroup <- group <- outGroup <- NULL
 
-    if (is.null(area) | !is.logical(area)) {
+    if (is.null(area) || !is.logical(area)) {
       stop('area must be provided (TRUE or FALSE)')
     }
 
