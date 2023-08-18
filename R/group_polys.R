@@ -169,7 +169,14 @@ group_polys <-
         )
         set(out_inter, j = 'area_ID1',  value = NULL)
 
+        disjointed <- data.frame(sf::st_disjoint(sfPolys))
+        out_disjointed <- data.frame(
+          ID1 = sfPolys[[id]][disjointed$row.id],
+          ID2 = sfPolys[[id]][disjointed$col.id],
+          area = rep(units::as_units(0, units(out_inter$area)), nrow(disjointed)),
+          proportion = rep(units::set_units(0, percent), nrow(disjointed))
         )
+        out <- rbind(out_inter, out_disjointed)
         data.table::setcolorder(out, c('ID1', 'ID2', 'area', 'proportion'))
         return(out[])
       }
@@ -278,19 +285,17 @@ group_polys <-
               )
               set(out_inter, j = 'area_ID1',  value = NULL)
 
-              out <- merge(
-                x = data.table(sfPolys@data),
-                y = areaID,
-                by.x = 'id',
-                by.y = ..id,
-                suffixes = c('Total', '')
+              disjointed <- data.frame(sf::st_disjoint(sfPolys))
+              out_disjointed <- data.frame(
+                ID1 = sfPolys[[id]][disjointed$row.id],
+                ID2 = sfPolys[[id]][disjointed$col.id],
+                area = rep(units::as_units(0, units(out_inter$area)),
+                           nrow(disjointed)),
+                proportion = rep(units::set_units(0, percent), nrow(disjointed))
               )
-              set(out, j = 'proportion',
-                  value = out[['area']] / out[['areaTotal']])
-              set(out, j = c('IDs', 'areaTotal'),  value = NULL)
-              setnames(out, 'id', ..id)
-              setcolorder(out, c(..id, paste0(..id, '2'),
-                                 'area', 'proportion'))
+              out <- rbind(out_inter, out_disjointed)
+
+              data.table::setcolorder(out, c('ID1', 'ID2', 'area', 'proportion'))
               out
             } else {
               out <- data.table(ID = get(..id),
