@@ -240,7 +240,9 @@ build_polys <- function(DT = NULL,
     stop('hrType not one of "kernel" or "mcp"')
   }
 
-  return(sf::st_as_sf(out))
+  out_sf <- sf::st_as_sf(out)
+  colnames(out_sf) <- gsub('id', id, colnames(out_sf))
+  return(out_sf)
 }
 
 
