@@ -1,13 +1,14 @@
 #' Group Polygons
 #'
-#' `group_polys` groups rows into spatial groups by overlapping polygons
-#' (home ranges). The function accepts a `data.table` with relocation data,
-#' individual identifiers and an `area` argument.  The relocation data is
-#' transformed into home range `SpatialPolygons`. If the `area`
-#' argument is `FALSE`, `group_polys` returns grouping calculated by
-#' overlap. If the `area` argument is `TRUE`, the area and proportion
-#' of overlap is calculated. Relocation data should be in two columns
-#' representing the X and Y coordinates.
+#' `group_polys` groups rows into spatial groups by overlapping polygons (home
+#' ranges). The function accepts a `data.table` with relocation data, individual
+#' identifiers and an `area` argument.  The relocation data is transformed into
+#' home range POLYGONs using [build_polys()] with [adehabitatHR::mcp] or
+#' [adehabitatHR::kernelUD]. If the `area` argument is `FALSE`, `group_polys`
+#' returns grouping calculated by spatial overlap. If the `area` argument is
+#' `TRUE`, `group_polys` returns the area area and proportion of overlap.
+#' Relocation data should be in two columns representing the X and Y
+#' coordinates.
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
