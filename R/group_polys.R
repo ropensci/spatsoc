@@ -49,19 +49,21 @@
 #' `splitBy`. The grouping performed by `group_polys` will only
 #' consider rows within each `splitBy` subgroup.
 #'
-#' @return When `area` is `FALSE`, `group_polys` returns the
-#'   input `DT` appended with a `group` column. As with the other
-#'   grouping functions,  the actual value of `group` is arbitrary and
-#'   represents the identity of a given group where 1 or more individuals are
-#'   assigned to a group. If the data was reordered, the `group` may
-#'   change, but the contents of each group would not. When `area` is
-#'   `TRUE`, `group_polys` returns a proportional area overlap
-#'   `data.table`. In this case, ID refers to the focal individual of which
-#'   the total area is compared against the overlapping area of ID2.
+#' @return When `area` is `FALSE`, `group_polys` returns the input `DT` appended
+#'   with a `group` column. As with the other grouping functions,  the actual
+#'   value of `group` is arbitrary and represents the identity of a given group
+#'   where 1 or more individuals are assigned to a group. If the data was
+#'   reordered, the `group` may change, but the contents of each group would
+#'   not. When `area` is `TRUE`, `group_polys` returns a proportional area
+#'   overlap `data.table`. In this case, ID refers to the focal individual of
+#'   which the total area is compared against the overlapping area of ID2.
 #'
-#'   If `area` is `FALSE`, a message is returned when a column named
-#'   `group` already exists in the input `DT`, because it will be
-#'   overwritten.
+#'   If `area` is `FALSE`, a message is returned when a column named `group`
+#'   already exists in the input `DT`, because it will be overwritten.
+#'
+#'   Along with changes to follow the R-spatial evolution, `group_polys` also
+#'   now returns area and proportion of overlap with units explicitly specified
+#'   through the `units` package.
 #'
 #' @inheritParams group_pts
 #' @inheritParams group_lines
