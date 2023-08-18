@@ -20,10 +20,7 @@
 #'
 #' In addition, `build_polys` previously used [sp::SpatialPoints] but has been
 #' updated to use [sf::st_as_sf] according to the R-spatial evolution, see more
-#' at <https://r-spatial.org/r/2022/04/12/evolution.html>. A deprecated
-#' version of this function using [sp::SpatialPoints] is retained as
-#' [build_polys_sp] temporarily but users are urged to transition as soon as
-#' possible.
+#' at <https://r-spatial.org/r/2022/04/12/evolution.html>.
 #'
 #' ## Notes on arguments
 #'

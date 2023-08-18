@@ -17,10 +17,7 @@
 #' In addition, `build_lines` previously used [sp::SpatialLines] but has been
 #' updated to use [sf::st_as_sf] and [sf::st_linestring] according to the
 #' R-spatial evolution, see more at
-#' \url{https://r-spatial.org/r/2022/04/12/evolution.html}. A deprecated
-#' version of this function using [sp::SpatialLines] is retained as
-#' [build_lines_sp] temporarily but users are urged to transition as soon as
-#' possible.
+#' \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
 #'
 #' ## Notes on arguments
 #'
