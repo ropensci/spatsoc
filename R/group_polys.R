@@ -152,6 +152,7 @@ group_polys <-
             stop('please ensure IDs do not contain spaces')
           }
         }
+        sf::st_agr(sfPolys) <- 'constant'
         inter <- sf::st_intersection(sfPolys, sfPolys)
         areas <- sf::st_area(inter)
         out_inter <- data.table::data.table(
