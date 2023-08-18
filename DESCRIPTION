@@ -25,11 +25,10 @@ Depends: R (>= 3.4)
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
 Imports: data.table (>= 1.10.5),
-    sp,
-    rgeos,
+    sf,
+    units,
     adehabitatHR,
-    igraph, 
-    methods
+    igraph
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
