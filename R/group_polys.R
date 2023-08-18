@@ -107,7 +107,9 @@ group_polys <-
     }
 
     if (is.null(splitBy)) {
-      if (!is.null(DT) && is.null(sfPolys)) {
+      if (is.null(DT) && !is.null(sfPolys)) {
+        input <- 'sfPolys'
+      } else if (!is.null(DT) && is.null(sfPolys)) {
         sfPolys <-
           build_polys(
             DT = DT,
@@ -119,6 +121,7 @@ group_polys <-
             splitBy = NULL,
             spPts = NULL
           )
+        input <- 'DT'
       }
 
       if (is.null(id)) {
@@ -138,6 +141,12 @@ group_polys <-
         data.table::setnames(out, c(id, 'outGroup'))
         DT[out, group := outGroup, on = id]
         return(DT[])
+        if (input == 'DT') {
+          DT[out, group := group, on = c(id)]
+          return(DT)
+        } else if (input == 'sfPolys'){
+          return(out)
+        }
       } else if (area) {
         if (!is.null(DT)) {
           if (any(DT[, grepl(' ', .SD[[1]]), .SDcols = id])) {
