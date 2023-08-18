@@ -32,12 +32,12 @@
 #' the names of respective columns in `DT` which correspond to the
 #' individual identifier, X and Y coordinates, and additional grouping columns.
 #'
-#' The `projection` argument expects a character string defining the EPSG
-#' code. For example, for UTM zone 36N (EPSG 32736), the projection argument is
-#'  'EPSG:32736'. See <https://spatialreference.org> for a list of EPSG
-#'  codes. Please note, R spatial has followed updates to GDAL and PROJ for
-#'  handling projections, see more at
-#'  <https://r-spatial.org/r/2020/03/17/wkt.html>.
+#' The `projection` argument expects a character string or numeric
+#' defining the coordinate reference system to be passed to [sf::st_crs].
+#' For example, for UTM zone 36S (EPSG 32736), the projection
+#' argument is `projection = "EPSG:32736"` or `projection = 32736`.
+#' See <https://spatialreference.org>
+#' for a list of EPSG codes.
 #'
 #' The `hrType` must be either one of "kernel" or "mcp". The
 #' `hrParams` must be a named list of arguments matching those of
