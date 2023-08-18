@@ -147,10 +147,11 @@ group_polys <-
           return(out)
         }
       } else if (area) {
-        if (!is.null(DT)) {
-          if (any(DT[, grepl(' ', .SD[[1]]), .SDcols = id])) {
-            stop('please ensure IDs do not contain spaces')
-          }
+        if (any(grepl(' ', sfPolys[[id]]))) {
+          stop('please ensure IDs do not contain spaces')
+        }
+        if (! 'area' %in% colnames(sfPolys)) {
+          stop('please ensure column "area" present in input DT or sfPolys')
         }
         sf::st_agr(sfPolys) <- 'constant'
         inter <- sf::st_intersection(sfPolys, sfPolys)
@@ -177,6 +178,7 @@ group_polys <-
           proportion = rep(units::set_units(0, percent), nrow(disjointed))
         )
         out <- rbind(out_inter, out_disjointed)
+
         data.table::setcolorder(out, c('ID1', 'ID2', 'area', 'proportion'))
         return(out[])
       }
