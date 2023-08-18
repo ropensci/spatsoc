@@ -291,3 +291,20 @@ test_that('hrParams can have both vertices and kernel args', {
     )
   )
 })
+
+
+test_that('id provided matches id retured', {
+  expect_in(
+    'ID',
+    colnames(build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'kernel',
+      hrParams = list(percent = 95, grid = 60),
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ))
+  )
+})
+
+

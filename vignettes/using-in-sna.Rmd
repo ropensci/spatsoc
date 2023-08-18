@@ -113,7 +113,7 @@ Polygon based grouping by generating home ranges using `adehabitatHR` and measur
 
 ```{r, eval = FALSE}
 # EPSG code for relocations
-utm <- 'EPSG:32736'
+utm <- 32736
 
 ## Option 1: area = FALSE and home range intersection 'group' column added to DT 
 group_polys(
@@ -282,12 +282,12 @@ Since we want to create a group by individual matrix for each random iteration (
 Note: building the random networks depends on the `type` used and therefore, the following chunks are mutually exclusive. Use the one that corresponds to the randomization type you used above. 
 
 ## 6. a) `type = 'step'`
-`randomizations` with `type = 'step'` returns a 'randomID' which should be used instead of the observed 'ID' to generate the group by indiviual matrix. 
+`randomizations` with `type = 'step'` returns a 'randomID' which should be used instead of the observed 'ID' to generate the group by individual matrix. 
 
 After `get_gbi`, we use `asnipe::get_network` to build the random network. 
 
 ```{r}
-## Create a data.table of unique combinations of iteration and year, exluding observed rows
+## Create a data.table of unique combinations of iteration and year, excluding observed rows
 iterYearLs <- unique(randStep[!(observed), .(iteration, yr)])
 
 ## Generate group by individual matrix 
@@ -311,7 +311,7 @@ netLs <- lapply(gbiLs, FUN = get_network,
 
 
 ## 6. b) `type = 'daily'`
-`randomizations` with `type = 'step'` returns a 'randomID' which should be used instead of the observed 'ID' to generate the group by indiviual matrix. 
+`randomizations` with `type = 'step'` returns a 'randomID' which should be used instead of the observed 'ID' to generate the group by individual matrix. 
 
 After `get_gbi`, we use `asnipe::get_network` to build the random network. 
 
@@ -321,7 +321,7 @@ In this case, we will generate a fake column representing a "population" to show
 ## Generate fake population
 randDaily[, population := sample(1:2, .N, replace = TRUE)]
 
-## Create a data.table of unique combinations of iteration, year, and population, exluding observed rows
+## Create a data.table of unique combinations of iteration, year, and population, excluding observed rows
 iterYearLs <- unique(randStep[!(observed), .(iteration, yr, population)])
 
 ## Generate group by individual matrix 
@@ -364,7 +364,7 @@ group_times(randTraj, datetime = 'randomdatetime', threshold = '5 minutes')
 group_pts(randTraj, threshold = 50, id = 'ID', coords = c('X', 'Y'),
           timegroup = 'timegroup', splitBy = 'iteration')
 
-## Create a data.table of unique combinations of iteration and year, exluding observed rows
+## Create a data.table of unique combinations of iteration and year, excluding observed rows
 iterYearLs <- unique(randStep[!(observed), .(iteration, yr)])
 
 ## Generate group by individual matrix 

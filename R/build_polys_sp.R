@@ -4,7 +4,7 @@
 #' @export
 #'
 #' @family Build functions
-#' @seealso \code{\link{group_polys}}
+#' @seealso [group_polys()]
 build_polys_sp <- function(DT = NULL,
                         projection = NULL,
                         hrType = NULL,
