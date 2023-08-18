@@ -113,7 +113,7 @@ Polygon based grouping by generating home ranges using `adehabitatHR` and measur
 
 ```{r, eval = FALSE}
 # EPSG code for relocations
-utm <- 'EPSG:32736'
+utm <- 32736
 
 ## Option 1: area = FALSE and home range intersection 'group' column added to DT 
 group_polys(

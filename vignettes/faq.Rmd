@@ -220,7 +220,7 @@ The `sortBy` argument expects a date time formatted column name, which is used t
 * `id`: column name of IDs in `DT`
 * `coords`: column names of x and y coordinates in `DT`
 * `splitBy`: (optional) column names of extra variables to group on
-* `spPolys`: alternatively, provide solely a `SpatialPolygons` object
+* `sfPolys`: alternatively, provide a simple features POLGON or MULTIPOLYGON object and an id column
 
 
 ### DT and area
