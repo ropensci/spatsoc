@@ -133,14 +133,13 @@ group_polys <-
           message('group column will be overwritten by this function')
           set(DT, j = 'group', value = NULL)
         }
-        inter <- rgeos::gIntersects(spPolys, spPolys, byid = TRUE)
+        inter <- sf::st_intersects(sfPolys, sfPolys, sparse = FALSE)
+        dimnames(inter) <- list(sfPolys[[id]], sfPolys[[id]])
         g <- igraph::graph_from_adjacency_matrix(inter)
         ovr <- igraph::clusters(g)$membership
         out <- data.table::data.table(names(ovr),
                                       as.integer(unlist(ovr)))
-        data.table::setnames(out, c(id, 'outGroup'))
-        DT[out, group := outGroup, on = id]
-        return(DT[])
+        data.table::setnames(out, c(id, 'group'))
         if (input == 'DT') {
           DT[out, group := group, on = c(id)]
           return(DT)
@@ -153,11 +152,7 @@ group_polys <-
             stop('please ensure IDs do not contain spaces')
           }
         }
-        inters <-
-          rgeos::gIntersection(spPolys, spPolys, byid = TRUE)
-        out <- data.table::data.table(
-          area = vapply(inters@polygons, methods::slot, 'area', FUN.VALUE = 1),
-          IDs = vapply(inters@polygons, methods::slot, 'ID', FUN.VALUE = "")
+        inter <- sf::st_intersection(sfPolys, sfPolys)
         )
 
         set(out, j = 'ID1', value = tstrsplit(out[['IDs']], ' ', keep = 1))
@@ -214,12 +209,14 @@ group_polys <-
               silent = TRUE
             )
             if (!is.null(sfPolys)) {
-              inter <- rgeos::gIntersects(sfPolys, sfPolys, byid = TRUE)
+              inter <- sf::st_intersects(sfPolys, sfPolys, sparse = FALSE)
+              dimnames(inter) <- list(sfPolys[[..id]], sfPolys[[..id]])
               g <- igraph::graph_from_adjacency_matrix(inter)
               ovr <- igraph::clusters(g)$membership
               out <- data.table::data.table(names(ovr),
-                                            unlist(ovr))
-              data.table::setnames(out, c(..id, 'withinGroup'))
+                                            as.integer(unlist(ovr)))
+              data.table::setnames(out, c(id, 'withinGroup'))
+              out
             } else {
               data.table(ID = get(..id),
                          withinGroup = as.integer(NA))
@@ -261,8 +258,6 @@ group_polys <-
               silent = TRUE
             )
             if (!is.null(sfPolys)) {
-              inters <- rgeos::gIntersection(sfPolys, sfPolys, byid = TRUE)
-              areas <- rgeos::gArea(inters, byid = TRUE)
               areaID <-
                 data.table::data.table(
                   area = areas,
@@ -275,6 +270,8 @@ group_polys <-
               set(areaID,
                   j = paste0(..id, '2'),
                   value = tstrsplit(areaID[['IDs']], ' ', keep = 2))
+              sf::st_agr(sfPolys) <- 'constant'
+              inter <- sf::st_intersection(sfPolys, sfPolys)
 
               out <- merge(
                 x = data.table(sfPolys@data),
