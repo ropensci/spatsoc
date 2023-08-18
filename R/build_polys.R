@@ -181,14 +181,16 @@ build_polys <- function(DT = NULL,
   }
 
   if (is.null(spPts)) {
-    DT[, ade_id := do.call(function(...) paste(..., sep = '-'), .SD),
-       .SDcols = c(splitBy)]
+    ade_id <- DT[, do.call(function(...) paste(..., sep = '-'), .SD),
+                           .SDcols = c(splitBy)]
+
     spPts <- sf::as_Spatial(
       sf::st_as_sf(
-        DT[, .SD, .SDcols = c(coords, 'ade_id')],
+        DT[, cbind(.SD, ade_id), .SDcols = c(coords)],
         coords = coords,
-        crs = sf::st_crs(projection)),
-      IDs = DT$ade_id
+        crs = sf::st_crs(projection)
+      ),
+      IDs = ade_id
     )
   }
 
