@@ -212,7 +212,6 @@ test_that('column and row lengths returned make sense', {
       area = TRUE,
       coords = c('X', 'Y'),
       id = 'ID'
-    )
   )
   expect_lte(nrow(group_polys_mcp),
              nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
@@ -256,6 +255,8 @@ test_that('column and row lengths returned make sense', {
       id = 'ID'
     )
   )
+  expect_equal(nrow(group_sf_polys), length(unique(DT$ID)))
+  expect_equal(nrow(group_sf_polys_area), length(unique(DT$ID)) ^ 2)
 })
 
 
