@@ -204,8 +204,7 @@ test_that('ID field does not have spaces', {
 
 test_that('column and row lengths returned make sense', {
   copyDT <- copy(DT)
-  ltepromise <- evaluate_promise(
-    group_polys(
+  group_polys_mcp <- group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -215,13 +214,12 @@ test_that('column and row lengths returned make sense', {
       id = 'ID'
     )
   )
-  expect_lte(nrow(ltepromise$result),
+  expect_lte(nrow(group_polys_mcp),
              nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
 
   copyDT <- copy(DT)[, yr := year(datetime)]
 
-  ltepromise2 <- evaluate_promise(
-    group_polys(
+  group_polys_mcp_split <- group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -231,25 +229,33 @@ test_that('column and row lengths returned make sense', {
       id = 'ID',
       splitBy = 'yr'
     )
+
+  expect_equal(nrow(group_polys_mcp_split), nrow(copyDT))
+
+  group_sf_polys <- group_polys(
+      id = 'ID',
+      area = FALSE,
+      sfPolys = build_polys(
+        DT = DT,
+        projection = utm,
+        hrType = 'mcp',
+        hrParams = list(percent = 95),
+        coords = c('X', 'Y'),
+        id = 'ID'
+    )
   )
-
-  expect_equal(nrow(ltepromise2$result), nrow(copyDT))
-
-  # copyDT <- copy(DT)
-  # ncolpromise <- evaluate_promise({
-  #   group_polys(
-  #     DT = copyDT,
-  #     projection = utm,
-  #     hrType = 'mcp',
-  #     hrParams = list(percent = 95),
-  #     area = FALSE,
-  #     coords = c('X', 'Y'),
-  #     id = 'ID',
-  #     splitBy = 'family'
-  #   )}
-  # )
-  # expect_equal(ncol(copyDT) + 1,
-  #              ncol(ncolpromise$result))
+  group_sf_polys_area <- group_polys(
+    id = 'ID',
+    area = TRUE,
+    sfPolys = build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      coords = c('X', 'Y'),
+      id = 'ID'
+    )
+  )
 })
 
 
@@ -260,8 +266,7 @@ test_that('withinGroup is not returned to the user', {
     group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   )
   copyDT[, N := .N, by = .(ID, block)]
-  withinpromise <- evaluate_promise(
-    group_polys(
+  within_group <- group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -269,9 +274,8 @@ test_that('withinGroup is not returned to the user', {
       area = FALSE,
       coords = c('X', 'Y'),
       id = 'ID'
-    )
   )
-  expect_false('withinGroup' %in% colnames(withinpromise$result))
+  expect_false('withinGroup' %in% colnames(within_group))
 })
 
 
@@ -315,8 +319,7 @@ test_that('group column succesfully detected', {
 test_that('area provided with splitBy does not return errors', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   copyDT[, yr := year(datetime)]
-  withinsplitpromise <- evaluate_promise(
-    group_polys(
+  within_split <- group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -325,12 +328,10 @@ test_that('area provided with splitBy does not return errors', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'yr'
-    )
   )
-  expect_false('withinGroup' %in% colnames(withinsplitpromise$result))
+  expect_false('withinGroup' %in% colnames(within_split))
 
-  areapromise <- evaluate_promise(
-    group_polys(
+  area <- group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -339,12 +340,10 @@ test_that('area provided with splitBy does not return errors', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'yr'
-    )
   )
-  expect_true('area' %in% colnames(areapromise$result))
+  expect_true('area' %in% colnames(area))
 
-  proppromise <- evaluate_promise(
-    group_polys(
+  prop <- group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -353,9 +352,8 @@ test_that('area provided with splitBy does not return errors', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'yr'
-    )
   )
-  expect_true('proportion' %in% colnames(proppromise$result))
+  expect_true('proportion' %in% colnames(prop))
 })
 
 
@@ -391,8 +389,8 @@ test_that('less than 5 locs returns NAs and warning', {
     'build_polys failed for some rows', fixed = FALSE
   )
 
-  expect_true(suppressWarnings(
-    group_polys(
+  expect_true(
+    suppressWarnings(group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -401,11 +399,11 @@ test_that('less than 5 locs returns NAs and warning', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'yr'
-    )[is.na(group), .N] != 0)
-  )
+    )[is.na(group), .N != 0]
+  ))
 
-  expect_true(suppressWarnings(
-    group_polys(
+  expect_true(
+    suppressWarnings(group_polys(
       DT = copyDT,
       projection = utm,
       hrType = 'mcp',
@@ -414,8 +412,8 @@ test_that('less than 5 locs returns NAs and warning', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'yr'
-    )[is.na(area), .N] != 0)
-  )
+    )[is.na(area), .N != 0]
+  ))
 
 
 })
