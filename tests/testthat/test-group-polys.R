@@ -460,12 +460,8 @@ test_that('splitBy argument doesnt use splitBy column', {
 
 test_that('proportion within 0-100, area > 0', {
 
-  copyDT <- copy(DT)
-
-  utm <- 32736
-
   out_mcp <- suppressWarnings(group_polys(
-    DT = copyDT,
+    DT = DT,
     projection = utm,
     hrType = 'mcp',
     hrParams = list(percent = 95),
@@ -479,11 +475,11 @@ test_that('proportion within 0-100, area > 0', {
   expect_lte(max(out_mcp$proportion),
              units::set_units(100, 'percent', mode = 'standard'))
   expect_gte(min(out_mcp$area),
-             units::set_units(0, 'percent', mode = 'standard'))
+             units::set_units(0, 'm^2', mode = 'standard'))
 
 
   out_kernel <- suppressWarnings(group_polys(
-    DT = copyDT,
+    DT = DT,
     projection = utm,
     hrType = 'kernel',
     hrParams = list(percent = 95),
@@ -497,6 +493,6 @@ test_that('proportion within 0-100, area > 0', {
   expect_lte(max(out_kernel$proportion),
              units::set_units(100, 'percent', mode = 'standard'))
   expect_gte(min(out_kernel$area),
-             units::set_units(0, 'percent', mode = 'standard'))
+             units::set_units(0, 'm^2', mode = 'standard'))
 
 })
