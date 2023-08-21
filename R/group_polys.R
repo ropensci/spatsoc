@@ -304,6 +304,9 @@ group_polys <-
                     'percent')
               )
               set(out_inter, j = 'area_ID1',  value = NULL)
+              set(out_inter, j = 'proportion',
+                  i = which(unclass(out_inter$proportion) > 100),
+                  value = units::set_units(100, 'percent'))
 
               disjointed <- data.frame(sf::st_disjoint(sfPolys))
               out_disjointed <- data.frame(
