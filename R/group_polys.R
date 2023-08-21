@@ -16,8 +16,8 @@
 #' handling projections, see more below and  details at
 #' <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
-#' In addition, `group_polys` previously used [rgeos::gIntersection],
-#' [rgeos::gIntersects] and [rgeos::gArea] but has been
+#' In addition, `group_polys` previously used rgeos::gIntersection,
+#' rgeos::gIntersects and rgeos::gArea but has been
 #' updated to use [sf::st_intersects], [sf::st_intersection] and [sf::st_area]
 #' according to the R-spatial evolution, see more
 #' at <https://r-spatial.org/r/2022/04/12/evolution.html>.

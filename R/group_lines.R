@@ -15,7 +15,7 @@
 #' <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
 #' In addition, `group_lines` (and [build_lines]) previously used
-#' [sp::SpatialLines], [rgeos::gIntersects], [rgeos::gBuffer] but have been
+#' [sp::SpatialLines], rgeos::gIntersects, rgeos::gBuffer but have been
 #' updated to use [sf::st_as_sf], [sf::st_linestring], [sf::st_intersects], and
 #' [sf::st_buffer] according to the R-spatial evolution, see more at
 #' <https://r-spatial.org/r/2022/04/12/evolution.html>.
