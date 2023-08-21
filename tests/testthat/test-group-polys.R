@@ -474,9 +474,9 @@ test_that('proportion within 0-100, area > 0', {
     id = 'ID'
   ))
 
-  expect_true(all(out_mcp$proportion >= units::as_units(0, 'percent')))
-  expect_true(all(out_mcp$proportion <= units::as_units(100, 'percent')))
-  expect_true(all(out_mcp$area >= units::as_units(0, units(out_mcp$area))))
+  expect_gte(min(out_mcp$proportion), units::as_units(0, 'percent'))
+  expect_lte(max(out_mcp$proportion), units::as_units(100, 'percent'))
+  expect_gte(min(out_mcp$area), units::as_units(0, 'percent'))
 
 
   out_kernel <- suppressWarnings(group_polys(
@@ -489,10 +489,8 @@ test_that('proportion within 0-100, area > 0', {
     id = 'ID'
   ))
 
-  expect_true(all(out_kernel$proportion >= units::as_units(0, 'percent')))
-  expect_true(all(out_kernel$proportion <= units::as_units(100, 'percent')))
-  expect_true(all(out_kernel$area >= units::as_units(0, units(out_kernel$area))))
-
-
+  expect_gte(min(out_kernel$proportion), units::as_units(0, 'percent'))
+  expect_lte(max(out_kernel$proportion), units::as_units(100, 'percent'))
+  expect_gte(min(out_kernel$area), units::as_units(0, 'percent'))
 
 })
