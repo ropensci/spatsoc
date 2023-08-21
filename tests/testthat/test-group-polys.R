@@ -472,7 +472,7 @@ test_that('proportion within 0-100, area > 0', {
 
   expect_gte(min(out_mcp$proportion),
              units::as_units(0, 'percent'))
-  waldo::compare(max(out_mcp$proportion),
+  expect_lte(max(out_mcp$proportion),
              units::as_units(100, 'percent'))
   expect_gte(min(out_mcp$area),
              units::as_units(0, 'm^2'))
