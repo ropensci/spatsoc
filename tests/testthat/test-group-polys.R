@@ -510,3 +510,20 @@ test_that('proportion within 0-100, area > 0', {
              units::as_units(0, 'm^2'))
 
 })
+
+
+test_that('sfPolys has area column', {
+  sfPolys <- build_polys(DT, projection = utm, hrType = 'kernel',
+                         hrParams = list(grid = 60, percent = 95),
+                         id = 'ID', coords = c('X', 'Y'))
+
+  sfPolys$area <- NULL
+
+  expect_error(
+    group_polys(sfPolys = sfPolys,
+                area = TRUE,
+                id = 'id'),
+    'please ensure column "area"',
+    fixed = TRUE
+  )
+})
