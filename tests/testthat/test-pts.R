@@ -25,7 +25,6 @@ test_that('ID, coord column names, time, threshold provided correctly',
                          'threshold required')
 
             expect_error(group_pts(DT, threshold = 10, id = 'ID',
-                                   timegroup = NULL,
                                    coords = c('X', 'Y')),
                          'timegroup required')
 
