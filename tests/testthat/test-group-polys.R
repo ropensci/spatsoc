@@ -67,6 +67,20 @@ test_that('area provided and logical, or error', {
   )
 })
 
+test_that('id provided', {
+  expect_error(
+    group_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      area = TRUE,
+      coords = c('X', 'Y'),
+      id = NULL
+    ),
+    'id must be provided',
+    fixed = TRUE
+  )
+})
 
 test_that('projection provided or error', {
   expect_error(
