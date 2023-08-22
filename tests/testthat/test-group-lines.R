@@ -440,6 +440,28 @@ test_that('sfLines provided must be an sf LINESTRING', {
   # TODO:  test linestring
 })
 
+test_that('sfLines id provided, uniqueN(id) match n rows', {
+  sfLines <- build_lines(
+    DT = DT,
+    id = 'ID',
+    coords = c('X', 'Y'),
+    projection = utm,
+    sortBy = 'datetime'
+  )
+
+  expect_error(
+    group_lines(sfLines = sfLines, threshold = 10, id = NULL),
+    'id must be provided'
+  )
+
+  sfLines_dup <- rbind(sfLines, sfLines)
+
+  expect_error(
+    group_lines(sfLines = sfLines_dup, threshold = 10, id = 'ID'),
+    'number of unique values in sfLines'
+  )
+})
+
 test_that('sfLines provided returns data.table', {
   sfLines <- build_lines(
     DT = DT,
