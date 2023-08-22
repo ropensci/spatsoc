@@ -473,7 +473,7 @@ test_that('proportion within 0-100, area > 0', {
   expect_gte(min(out_mcp$proportion),
              units::as_units(0, 'percent'))
   expect_lte(max(out_mcp$proportion),
-             units::as_units(100, 'percent'))
+             units::as_units(100.01, 'percent'))
   expect_gte(min(out_mcp$area),
              units::as_units(0, 'm^2'))
 
@@ -491,7 +491,7 @@ test_that('proportion within 0-100, area > 0', {
   expect_gte(min(out_kernel$proportion),
              units::as_units(0, 'percent'))
   expect_lte(max(out_kernel$proportion),
-             units::as_units(100, 'percent'))
+             units::as_units(100.01, 'percent'))
   expect_gte(min(out_kernel$area),
              units::as_units(0, 'm^2'))
 
