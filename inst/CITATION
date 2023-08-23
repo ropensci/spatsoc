@@ -1,17 +1,22 @@
 citHeader("To cite spatsoc in publications use:")
 
-citEntry(entry = "Article",
+bibentry(
+  bibtype = "Article",
   title        = "Conducting social network analysis with animal telemetry data: applications and methods using {spatsoc}",
-  author       = c(as.person("Alec L Robitaille"),
-                   as.person("Quinn MR Webber"),
-                   as.person("Eric Vander Wal")),
+  author       = c(
+    as.person("Alec L Robitaille"),
+    as.person("Quinn MR Webber"),
+    as.person("Eric Vander Wal")
+  ),
   journal      = "Methods in Ecology and Evolution",
   year         = "2019",
   url          = "https://doi.org/10.1111/2041-210X.13215",
 
   textVersion  =
-  paste("Alec L. Robitaille, Quinn M.R. Webber, Eric Vander Wal (2019).",
-        "Conducting social network analysis with animal telemetry data: applications and methods using spatsoc.",
-        "Methods in Ecology and Evolution.",
-        "URL https://doi.org/10.1111/2041-210X.13215")
+    paste(
+      "Alec L. Robitaille, Quinn M.R. Webber, Eric Vander Wal (2019).",
+      "Conducting social network analysis with animal telemetry data: applications and methods using spatsoc.",
+      "Methods in Ecology and Evolution.",
+      "URL https://doi.org/10.1111/2041-210X.13215"
+    )
 )
