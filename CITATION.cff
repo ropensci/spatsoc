@@ -196,6 +196,22 @@ references:
     orcid: https://orcid.org/0000-0003-0645-5666
   year: '2023'
 - type: software
+  title: markdown
+  abstract: 'markdown: Render Markdown with ''commonmark'''
+  notes: Suggests
+  url: https://github.com/rstudio/markdown
+  repository: https://CRAN.R-project.org/package=markdown
+  authors:
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  - family-names: Allaire
+    given-names: JJ
+  - family-names: Horner
+    given-names: Jeffrey
+  year: '2023'
+- type: software
   title: rmarkdown
   abstract: 'rmarkdown: Dynamic Documents for R'
   notes: Suggests
