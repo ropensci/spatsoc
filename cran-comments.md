@@ -1,5 +1,9 @@
-## v 0.2.0
+## v 0.2.1
 See NEWS.md for all updates. 
+
+* Fix CRAN notes by @robitalec in https://github.com/ropensci/spatsoc/pull/56
+
+## v 0.2.0
 
 * Fix/rm sp build lines by @robitalec in https://github.com/ropensci/spatsoc/pull/53
 * Fix/rm sp build polys by @robitalec in https://github.com/ropensci/spatsoc/pull/52
