@@ -1,7 +1,26 @@
 # v 0.2.0
 
-* remove dependency on retired spatial packages (https://github.com/ropensci/spatsoc/issues/50)
+* following [R-spatial evolution](https://r-spatial.org/r/2022/04/12/evolution.html),
+removed dependencies on retired spatial packages (
+[PR 50](https://github.com/ropensci/spatsoc/issues/50):
+[PR 52](https://github.com/ropensci/spatsoc/issues/50),
+[PR 53](https://github.com/ropensci/spatsoc/issues/50),
+[PR 54](https://github.com/ropensci/spatsoc/issues/50)
+[PR 55](https://github.com/ropensci/spatsoc/issues/50))
+  - spatsoc now depends on `sf`, `units` instead of `rgeos` and `sp`
+  - `build_lines` now returns an `sf` LINESTRING object
+  - `build_polys` now returns an `sf` POLYGON/MULTIPOLYGON object
+  - `group_lines` now accepts an input `sf` LINESTRING object (argument "sfLines") 
+  and internally uses `sf::st_intersects`, `sf::st_buffer`, etc instead of `rgeos` functions
+  - `group_polys` now accepts an input `sf` POLYGON/MULTIPOLYGON object (argument "sfPolys") 
+  and internally uses `sf::st_intersects`, `sf::st_area`, etc instead of `rgeos` functions. 
+  `group_polys` now returns area and proportion of overlap when `area = TRUE` with 
+  respective units using the `units` package
+  - tests, vignettes, manual updated
 
+  
+  
+  
 # v 0.1.17 (unreleased)
 
 * added a link to our `spatsoc` + `targets` workflow example
