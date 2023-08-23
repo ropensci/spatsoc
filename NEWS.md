@@ -17,6 +17,7 @@ removed dependencies on retired spatial packages (
   `group_polys` now returns area and proportion of overlap when `area = TRUE` with 
   respective units using the `units` package
   - tests, vignettes, manual updated
+  - added temporary package startup message until October 2023
 
   
   
