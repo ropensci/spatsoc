@@ -200,9 +200,9 @@ The `projection` argument expects a character string or numeric
 defining the coordinate reference system to be passed to `sf::st_crs`. 
 For example, for UTM zone 36S (EPSG 32736), the projection
 argument is `projection = "EPSG:32736"` or `projection = 32736`. 
-See https://spatialreference.org 
-for a list of EPSG codes. Please note, R spatial has followed updates to GDAL 
-and PROJ for handling projections, see more at
+See https://spatialreference.org for a list of EPSG codes. 
+Please note, R spatial has followed updates to GDAL 
+and PROJ for handling projections, see more at 
 https://r-spatial.org/r/2020/03/17/wkt.html. 
 
 
@@ -235,8 +235,8 @@ The `projection` argument expects a character string or numeric
 defining the coordinate reference system to be passed to `sf::st_crs`. 
 For example, for UTM zone 36S (EPSG 32736), the projection
 argument is `projection = "EPSG:32736"` or `projection = 32736`. 
-See https://spatialreference.org 
-for a list of EPSG codes. Please note, R spatial has followed updates to GDAL 
+See https://spatialreference.org for a list of EPSG codes. 
+Please note, R spatial has followed updates to GDAL 
 and PROJ for handling projections, see more at
 https://r-spatial.org/r/2020/03/17/wkt.html. 
 
