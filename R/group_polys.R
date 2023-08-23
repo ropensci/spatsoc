@@ -101,6 +101,7 @@
 #' areaDT <- group_polys(DT, area = TRUE, hrType = 'mcp',
 #'                       hrParams = list(percent = 95), projection = utm,
 #'                       id = 'ID', coords = c('X', 'Y'))
+#' print(areaDT)
 group_polys <-
   function(DT = NULL,
            area = NULL,

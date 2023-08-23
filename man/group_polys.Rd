@@ -131,6 +131,7 @@ group_polys(DT, area = FALSE, hrType = 'mcp',
 areaDT <- group_polys(DT, area = TRUE, hrType = 'mcp',
                       hrParams = list(percent = 95), projection = utm,
                       id = 'ID', coords = c('X', 'Y'))
+print(areaDT)
 }
 \seealso{
 \code{\link[=build_polys]{build_polys()}} \code{\link[=group_times]{group_times()}}
