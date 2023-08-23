@@ -88,6 +88,9 @@ library(data.table)
 # Read example data
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
+# Select only individuals A, B, C for this example
+DT <- DT[ID \%in\% c('A', 'B', 'C')]
+
 # Cast the character column to POSIXct
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
