@@ -1,4 +1,9 @@
-# v 0.2.0
+# v 0.2.1 (2023-08-23)
+
+* fixed CRAN notes [PR 56](https://github.com/ropensci/spatsoc/pull/56)
+
+
+# v 0.2.0 (2023-08-22)
 
 * following [R-spatial evolution](https://r-spatial.org/r/2022/04/12/evolution.html),
 removed dependencies on retired spatial packages (

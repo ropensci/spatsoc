@@ -74,7 +74,7 @@
 #' @param iterations The number of iterations to randomize
 #'
 #' @references
-#' \url{https://doi.org/10.1111/2041-210X.12553}
+#' <doi:10.1111/2041-210X.12553>
 #' @export
 #'
 #' @family Social network tools
@@ -85,6 +85,9 @@
 #'
 #' # Read example data
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Select only individuals A, B, C for this example
+#' DT <- DT[ID %in% c('A', 'B', 'C')]
 #'
 #' # Date time columns
 #' DT[, datetime := as.POSIXct(datetime)]

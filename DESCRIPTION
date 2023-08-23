@@ -1,43 +1,43 @@
 Package: spatsoc
 Title: Group Animal Relocation Data by Spatial and Temporal Relationship
-Version: 0.2.0
-Authors@R: 
-    c(person(given = "Alec L.",
-             family = "Robitaille",
-             role = c("aut", "cre"),
-             email = "robit.alec@gmail.com",
-             comment = c(ORCID = "0000-0002-4706-1762")),
-      person(given = "Quinn",
-             family = "Webber",
-             role = "aut",
-             comment = c(ORCID = "0000-0002-0434-9360")),
-      person(given = "Eric",
-             family = "Vander Wal",
-             role = "aut",
-             comment = c(ORCID = "0000-0002-8534-4317")))
-Description: Detects spatial and temporal groups in GPS relocations 
-    (Robitaille et al. (2020) <doi:10.1111/2041-210X.13215>). 
-    It can be used to convert GPS relocations to 
-    gambit-of-the-group format to build proximity-based social networks 
-    In addition, the randomizations function provides data-stream 
-    randomization methods suitable for GPS data. 
-Depends: R (>= 3.4)
+Version: 0.2.1
+Authors@R: c(
+    person("Alec L.", "Robitaille", , "robit.alec@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-4706-1762")),
+    person("Quinn", "Webber", role = "aut",
+           comment = c(ORCID = "0000-0002-0434-9360")),
+    person("Eric", "Vander Wal", role = "aut",
+           comment = c(ORCID = "0000-0002-8534-4317"))
+  )
+Description: Detects spatial and temporal groups in GPS relocations
+    (Robitaille et al. (2019) <doi:10.1111/2041-210X.13215>).  It can be
+    used to convert GPS relocations to gambit-of-the-group format to build
+    proximity-based social networks In addition, the randomizations
+    function provides data-stream randomization methods suitable for GPS
+    data.
 License: GPL-3 | file LICENSE
-Encoding: UTF-8
-Imports: data.table (>= 1.10.5),
-    sf,
-    units,
-    adehabitatHR (>= 0.4.21),
-    igraph
-Suggests: 
-    testthat (>= 2.1.0),
-    knitr,
-    rmarkdown,
-    asnipe,
-    markdown
-SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0), sqlite3
-RoxygenNote: 7.2.3
-VignetteBuilder: knitr
-Roxygen: list(markdown = TRUE)
+URL: https://docs.ropensci.org/spatsoc/,
+    https://github.com/ropensci/spatsoc
 BugReports: https://github.com/ropensci/spatsoc/issues
-URL: https://docs.ropensci.org/spatsoc/, https://github.com/ropensci/spatsoc
+Depends: 
+    R (>= 3.4)
+Imports: 
+    adehabitatHR (>= 0.4.21),
+    data.table (>= 1.10.5),
+    igraph,
+    sf,
+    stats,
+    units
+Suggests: 
+    asnipe,
+    knitr,
+    markdown,
+    rmarkdown,
+    testthat (>= 2.1.0)
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),
+    sqlite3
