@@ -3,10 +3,10 @@
 * following [R-spatial evolution](https://r-spatial.org/r/2022/04/12/evolution.html),
 removed dependencies on retired spatial packages (
 [PR 50](https://github.com/ropensci/spatsoc/issues/50):
-[PR 52](https://github.com/ropensci/spatsoc/issues/50),
-[PR 53](https://github.com/ropensci/spatsoc/issues/50),
-[PR 54](https://github.com/ropensci/spatsoc/issues/50)
-[PR 55](https://github.com/ropensci/spatsoc/issues/50))
+[PR 52](https://github.com/ropensci/spatsoc/issues/52),
+[PR 53](https://github.com/ropensci/spatsoc/issues/53),
+[PR 54](https://github.com/ropensci/spatsoc/issues/54)
+[PR 55](https://github.com/ropensci/spatsoc/issues/55))
   - spatsoc now depends on `sf`, `units` instead of `rgeos` and `sp`
   - `build_lines` now returns an `sf` LINESTRING object
   - `build_polys` now returns an `sf` POLYGON/MULTIPOLYGON object
