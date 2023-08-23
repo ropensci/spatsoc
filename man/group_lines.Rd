@@ -76,7 +76,7 @@ handling projections, see more at
 \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 
 In addition, \code{group_lines} (and \link{build_lines}) previously used
-\link[sp:SpatialLines]{sp::SpatialLines}, \link[rgeos:pred-binary-gIntersects]{rgeos::gIntersects}, \link[rgeos:rgeos-deprecated]{rgeos::gBuffer} but have been
+\link[sp:SpatialLines]{sp::SpatialLines}, rgeos::gIntersects, rgeos::gBuffer but have been
 updated to use \link[sf:st_as_sf]{sf::st_as_sf}, \link[sf:st]{sf::st_linestring}, \link[sf:geos_binary_pred]{sf::st_intersects}, and
 \link[sf:geos_unary]{sf::st_buffer} according to the R-spatial evolution, see more at
 \url{https://r-spatial.org/r/2022/04/12/evolution.html}.

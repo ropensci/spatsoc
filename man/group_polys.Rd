@@ -76,8 +76,8 @@ Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
 handling projections, see more below and  details at
 \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 
-In addition, \code{group_polys} previously used \link[rgeos:rgeos-deprecated]{rgeos::gIntersection},
-\link[rgeos:pred-binary-gIntersects]{rgeos::gIntersects} and \link[rgeos:misc-gArea]{rgeos::gArea} but has been
+In addition, \code{group_polys} previously used rgeos::gIntersection,
+rgeos::gIntersects and rgeos::gArea but has been
 updated to use \link[sf:geos_binary_pred]{sf::st_intersects}, \link[sf:geos_binary_ops]{sf::st_intersection} and \link[sf:geos_measures]{sf::st_area}
 according to the R-spatial evolution, see more
 at \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
