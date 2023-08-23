@@ -20,9 +20,7 @@ removed dependencies on retired spatial packages (
   - added temporary package startup message until October 2023
 
   
-  
-  
-# v 0.1.17 (unreleased)
+# v 0.1.17 (2023-03-16)
 
 * added a link to our `spatsoc` + `targets` workflow example
 * changed the error and underlying check for `group_polys` from alphanumeric to
@@ -32,6 +30,9 @@ spaces in input DT's id column
 * fix links in man ([PR 47](https://github.com/ropensci/spatsoc/pull/47))
 * fix proportions outside 0-1 due to differences in default units from rgeos::gArea 
 and polys@area ([PR 49](https://github.com/ropensci/spatsoc/pull/49))
+* Add keyword internal by @maelle in https://github.com/ropensci/spatsoc/pull/40
+* Rm unnecessary lines by @maelle in https://github.com/ropensci/spatsoc/pull/43
+
 
 # v 0.1.16 (2021-03-23)
 * added an option for `edge_dist` to handle threshold = NULL. If NULL, `edge_dist` will return all neighbours observed (eg. useful if one wanted to calculated mean nearest neighbour distance at each timegroup). 
