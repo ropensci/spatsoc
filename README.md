@@ -30,20 +30,54 @@ See below for [installation](#installation) and basic [usage](#usage).
 For more details, see the [blog
 post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
--   [Introduction to
-    spatsoc](https://docs.ropensci.org/spatsoc/articles/intro-spatsoc.html)
--   [Frequently asked
-    questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
--   [Using spatsoc in social network
-    analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html)
--   [Using edge list and dyad id
-    functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
+- [Introduction to
+  spatsoc](https://docs.ropensci.org/spatsoc/articles/intro-spatsoc.html)
+- [Frequently asked
+  questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
+- [Using spatsoc in social network
+  analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html)
+- [Using edge list and dyad id
+  functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
 
 ## News
 
+### R-spatial evolution
+
+`spatsoc` has been updated according to the [R-spatial
+evolution](https://r-spatial.org/r/2022/04/12/evolution.html), to remove
+deprecated package dependencies in favour of modern spatial R packages.
+In our case, this means replacing `rgeos`, `rgdal` and `sp` with `sf`.
+
+Below is a list of user-side differences for `spatsoc` users:
+
+- spatsoc now depends on `sf`, `units` instead of `rgeos` and `sp`
+- `build_lines` now returns an `sf` LINESTRING object
+- `build_polys` now returns an `sf` POLYGON/MULTIPOLYGON object
+- `group_lines` now accepts an input `sf` LINESTRING object (argument
+  “sfLines”) and internally uses `sf::st_intersects`, `sf::st_buffer`,
+  etc instead of `rgeos` functions
+- `group_polys` now accepts an input `sf` POLYGON/MULTIPOLYGON object
+  (argument “sfPolys”) and internally uses `sf::st_intersects`,
+  `sf::st_area`, etc instead of `rgeos` functions. `group_polys` now
+  returns area and proportion of overlap (%) when `area = TRUE` with
+  respective units using the `units` package
+
+The details of these changes are available in [PR
+50](https://github.com/ropensci/spatsoc/issues/50).
+
+If required, the old version using retired spatial packages can be
+installed with the following but please note that in October 2023
+`rgeos`, `rgdal` and `maptools` will no longer be available on CRAN.
+
+``` r
+remotes::install_github('ropensci/spatsoc@v0.1.17')
+```
+
+------------------------------------------------------------------------
+
 We wrote a [`targets`](https://github.com/ropensci/targets) workflow,
 available at
-[github.com/robitalec/targets-spatsoc-networks](https://github.com/ropensci/targets).
+[github.com/robitalec/targets-spatsoc-networks](https://github.com/robitalec/targets-spatsoc-networks).
 `targets` is an incredible package for designing workflows in R and,
 with it, we can reproducibly run all steps from raw telemetry data to
 output networks and metrics. Check it out and let us know how it works
@@ -51,12 +85,12 @@ for you!
 
 Edge-list generating functions added:
 
--   `edge_nn`
--   `edge_dist`
+- `edge_nn`
+- `edge_dist`
 
 and dyad id function:
 
--   `dyad_id`
+- `dyad_id`
 
 (feedback welcome as always!)
 
@@ -79,18 +113,15 @@ More detailed news
 # Stable release
 install.packages('spatsoc')
 
-# Development version
+# Development version (choose one option)
+install.packages('spatsoc', 
+                 repos = c('https://robitalec.r-universe.dev',
+                           'https://cloud.r-project.org'))
 remotes::install_github('ropensci/spatsoc')
 ```
 
-`spatsoc` depends on `rgeos` and requires
-[GEOS](https://trac.osgeo.org/geos/) installed on the system.
-
--   Debian/Ubuntu: `apt-get install libgeos-dev`
--   Arch: `pacman -S geos`
--   Fedora: `dnf install geos geos-devel`
--   Mac: `brew install geos`
--   Windows: see [here](https://trac.osgeo.org/osgeo4w/)
+`spatsoc` depends on `sf`, see
+[here](https://github.com/r-spatial/sf#installing) for help installing.
 
 ## Usage
 

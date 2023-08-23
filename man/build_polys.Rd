@@ -18,9 +18,9 @@ build_polys(
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{character string defining the projection to be passed to
-\code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
-the projection argument is 'EPSG:32736'. See details.}
+\item{projection}{numeric or character defining the coordinate reference
+system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
+\code{projection = "EPSG:32736"} or \code{projection = 32736}.}
 
 \item{hrType}{type of HR estimation, either 'mcp' or 'kernel'}
 
@@ -34,57 +34,68 @@ the projection argument is 'EPSG:32736'. See details.}
 name(s) upon which the grouping will be calculated}
 
 \item{spPts}{alternatively, provide solely a SpatialPointsDataFrame with one
-column representing the ID of each point.}
+column representing the ID of each point, as specified by \link[adehabitatHR:mcp]{adehabitatHR::mcp}
+or \link[adehabitatHR:kernelUD]{adehabitatHR::kernelUD}}
 }
 \value{
-\code{build_polys} returns a \code{SpatialPolygons} object
-with a polyon for each individual (and optionally \code{splitBy}
-combination).
+\code{build_polys} returns a simple feature collection with POLYGONs
+for each individual (and optionally \code{splitBy} combination).
 
 An error is returned when \code{hrParams} do not match the arguments
-of the \code{hrType} \code{adehabitatHR} function.
+of the respective \code{hrType} \code{adehabitatHR} function.
 }
 \description{
-\code{build_polys} creates a \code{SpatialPolygons} object from a
+\code{build_polys} generates a simple feature collection with POLYGONs from a
 \code{data.table}. The function accepts a \code{data.table} with
-relocation data, individual identifiers, a \code{projection},
-\code{hrType} and \code{hrParams}. The relocation data is transformed
-into \code{SpatialPolygons} for each individual and optionally, each
-\code{splitBy}. Relocation data should be in two columns representing
-the X and Y coordinates.
+relocation data, individual identifiers, a projection,
+home range type and parameters. The relocation
+data is transformed into POLYGONs using either \link[adehabitatHR:mcp]{adehabitatHR::mcp} or
+\link[adehabitatHR:kernelUD]{adehabitatHR::kernelUD} for each individual and, optionally,
+combination of columns listed in \code{splitBy}. Relocation data should be in two
+columns representing the X and Y coordinates.
 }
 \details{
-The \code{DT} must be a \code{data.table}. If your data is a
-\code{data.frame}, you can convert it by reference using
-\code{\link[data.table:setDT]{data.table::setDT}}.
+\link{group_polys} uses \code{build_polys} for grouping overlapping
+polygons created from relocations.
+\subsection{R-spatial evolution}{
+
+Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
+handling projections, see more below and  details at
+\url{https://r-spatial.org/r/2020/03/17/wkt.html}.
+
+In addition, \code{build_polys} previously used \link[sp:SpatialPoints]{sp::SpatialPoints} but has been
+updated to use \link[sf:st_as_sf]{sf::st_as_sf} according to the R-spatial evolution, see more
+at \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
+}
+
+\subsection{Notes on arguments}{
+
+The \code{DT} must be a \code{data.table}. If your data is a \code{data.frame}, you can
+convert it by reference using \link[data.table:setDT]{data.table::setDT}.
 
 The \code{id}, \code{coords} (and optional \code{splitBy}) arguments
 expect the names of respective columns in \code{DT} which correspond
 to the individual identifier, X and Y coordinates, and additional
 grouping columns.
 
-The \code{projection} argument expects a character string defining
-the EPSG code. For example, for UTM zone 36N (EPSG 32736), the projection
-argument is "EPSG:32736". See \url{https://spatialreference.org}
-for a list of EPSG codes. Please note, R spatial has followed updates
-to GDAL and PROJ for handling projections, see more at
-\url{https://r-spatial.org/r/2020/03/17/wkt.html}. It is likely
-that \code{build_polys} will return "Warning in proj4string(xy) :
-CRS object has comment, which is lost in output" due to these changes.
+The \code{projection} argument expects a character string or numeric
+defining the coordinate reference system to be passed to \link[sf:st_crs]{sf::st_crs}.
+For example, for UTM zone 36S (EPSG 32736), the projection
+argument is \code{projection = "EPSG:32736"} or \code{projection = 32736}.
+See \url{https://spatialreference.org}
+for a list of EPSG codes.
 
 The \code{hrType} must be either one of "kernel" or "mcp". The
 \code{hrParams} must be a named list of arguments matching those
-of \code{adehabitatHR::kernelUD} and \code{adehabitatHR::getverticeshr}
-or \code{adehabitatHR::mcp}.
+of \link[adehabitatHR:kernelUD]{adehabitatHR::kernelUD} and \link[adehabitatHR:getverticeshr]{adehabitatHR::getverticeshr}
+or \link[adehabitatHR:mcp]{adehabitatHR::mcp}.
 
 The \code{splitBy} argument offers further control building
-\code{SpatialPolygons}. If in your \code{DT}, you have multiple
+POLYGONs. If in your \code{DT}, you have multiple
 temporal groups (e.g.: years) for example, you can provide the
-name of the column which identifies them and build \code{SpatialPolygons}
+name of the column which identifies them and build POLYGONs
 for each individual in each year.
-
-\code{group_polys} uses \code{build_polys} for grouping overlapping
-polygons created from relocations.
+}
 }
 \examples{
 # Load data.table
@@ -97,7 +108,7 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 # EPSG code for example data
-utm <- 'EPSG:32736'
+utm <- 32736
 
 # Build polygons for each individual using kernelUD and getverticeshr
 build_polys(DT, projection = utm, hrType = 'kernel',
@@ -106,21 +117,12 @@ build_polys(DT, projection = utm, hrType = 'kernel',
 
 # Build polygons for each individual by year
 DT[, yr := year(datetime)]
-build_polys(DT, projection = utm, hrType = 'mcp', hrParams = list(percent = 95),
+build_polys(DT, projection = utm, hrType = 'mcp',
+            hrParams = list(percent = 95),
             id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
-
-# Build polygons from SpatialPointsDataFrame
-library(sp)
-pts <- SpatialPointsDataFrame(coords = DT[, .(X, Y)],
-                              proj4string = CRS(utm),
-                              data = DT[, .(ID)]
-)
-
-build_polys(spPts = pts, hrType = 'mcp', hrParams = list(percent = 95))
-
 }
 \seealso{
-\code{\link{group_polys}}
+\link{group_polys}
 
 Other Build functions: 
 \code{\link{build_lines}()}

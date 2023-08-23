@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/ropensci/spatsoc",
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.16.9003",
+  "version": "0.2.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.2 (2022-10-31)",
+  "runtimePlatform": "R version 4.3.1 (2023-06-16)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -136,32 +136,33 @@
     },
     "3": {
       "@type": "SoftwareApplication",
-      "identifier": "sp",
-      "name": "sp",
+      "identifier": "sf",
+      "name": "sf",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=sp"
+      "sameAs": "https://CRAN.R-project.org/package=sf"
     },
     "4": {
       "@type": "SoftwareApplication",
-      "identifier": "rgeos",
-      "name": "rgeos",
+      "identifier": "units",
+      "name": "units",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=rgeos"
+      "sameAs": "https://CRAN.R-project.org/package=units"
     },
     "5": {
       "@type": "SoftwareApplication",
       "identifier": "adehabitatHR",
       "name": "adehabitatHR",
+      "version": ">= 0.4.21",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -182,14 +183,9 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=igraph"
     },
-    "7": {
-      "@type": "SoftwareApplication",
-      "identifier": "methods",
-      "name": "methods"
-    },
-    "SystemRequirements": "GEOS (>= 3.2.0)"
+    "SystemRequirements": "GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0), sqlite3"
   },
-  "fileSize": "1483.656KB",
+  "fileSize": "1492.814KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -223,7 +219,8 @@
       }
     }
   ],
-  "readme": "https://github.com/ropensci/spatsoc/blob/master/README.md",
+  "releaseNotes": "https://github.com/ropensci/spatsoc/blob/master/NEWS.md",
+  "readme": "https://github.com/ropensci/spatsoc/blob/main/README.md",
   "contIntegration": ["https://codecov.io/gh/ropensci/spatsoc", "https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml"],
   "developmentStatus": "http://www.repostatus.org/#active",
   "review": {

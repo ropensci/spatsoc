@@ -1,63 +1,74 @@
 #' Build Polygons
 #'
-#' \code{build_polys} creates a \code{SpatialPolygons} object from a
-#' \code{data.table}. The function accepts a \code{data.table} with
-#' relocation data, individual identifiers, a \code{projection},
-#' \code{hrType} and \code{hrParams}. The relocation data is transformed
-#' into \code{SpatialPolygons} for each individual and optionally, each
-#' \code{splitBy}. Relocation data should be in two columns representing
-#' the X and Y coordinates.
+#' `build_polys` generates a simple feature collection with POLYGONs from a
+#' `data.table`. The function accepts a `data.table` with
+#' relocation data, individual identifiers, a projection,
+#' home range type and parameters. The relocation
+#' data is transformed into POLYGONs using either [adehabitatHR::mcp] or
+#' [adehabitatHR::kernelUD] for each individual and, optionally,
+#' combination of columns listed in `splitBy`. Relocation data should be in two
+#' columns representing the X and Y coordinates.
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a
-#' \code{data.frame}, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}}.
+#' [group_polys] uses `build_polys` for grouping overlapping
+#' polygons created from relocations.
 #'
-#' The \code{id}, \code{coords} (and optional \code{splitBy}) arguments
-#' expect the names of respective columns in \code{DT} which correspond
+#' ## R-spatial evolution
+#'
+#' Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
+#' handling projections, see more below and  details at
+#' <https://r-spatial.org/r/2020/03/17/wkt.html>.
+#'
+#' In addition, `build_polys` previously used [sp::SpatialPoints] but has been
+#' updated to use [sf::st_as_sf] according to the R-spatial evolution, see more
+#' at <https://r-spatial.org/r/2022/04/12/evolution.html>.
+#'
+#' ## Notes on arguments
+#'
+#' The `DT` must be a `data.table`. If your data is a `data.frame`, you can
+#' convert it by reference using [data.table::setDT].
+#'
+#' The `id`, `coords` (and optional `splitBy`) arguments
+#' expect the names of respective columns in `DT` which correspond
 #' to the individual identifier, X and Y coordinates, and additional
 #' grouping columns.
 #'
-#' The \code{projection} argument expects a character string defining
-#' the EPSG code. For example, for UTM zone 36N (EPSG 32736), the projection
-#' argument is "EPSG:32736". See \url{https://spatialreference.org}
-#' for a list of EPSG codes. Please note, R spatial has followed updates
-#' to GDAL and PROJ for handling projections, see more at
-#' \url{https://r-spatial.org/r/2020/03/17/wkt.html}. It is likely
-#' that \code{build_polys} will return "Warning in proj4string(xy) :
-#' CRS object has comment, which is lost in output" due to these changes.
+#' The `projection` argument expects a character string or numeric
+#' defining the coordinate reference system to be passed to [sf::st_crs].
+#' For example, for UTM zone 36S (EPSG 32736), the projection
+#' argument is `projection = "EPSG:32736"` or `projection = 32736`.
+#' See <https://spatialreference.org>
+#' for a list of EPSG codes.
 #'
-#' The \code{hrType} must be either one of "kernel" or "mcp". The
-#' \code{hrParams} must be a named list of arguments matching those
-#' of \code{adehabitatHR::kernelUD} and \code{adehabitatHR::getverticeshr}
-#' or \code{adehabitatHR::mcp}.
+#' The `hrType` must be either one of "kernel" or "mcp". The
+#' `hrParams` must be a named list of arguments matching those
+#' of [adehabitatHR::kernelUD] and [adehabitatHR::getverticeshr]
+#' or [adehabitatHR::mcp].
 #'
-#' The \code{splitBy} argument offers further control building
-#' \code{SpatialPolygons}. If in your \code{DT}, you have multiple
+#' The `splitBy` argument offers further control building
+#' POLYGONs. If in your `DT`, you have multiple
 #' temporal groups (e.g.: years) for example, you can provide the
-#' name of the column which identifies them and build \code{SpatialPolygons}
+#' name of the column which identifies them and build POLYGONs
 #' for each individual in each year.
 #'
-#' \code{group_polys} uses \code{build_polys} for grouping overlapping
-#' polygons created from relocations.
 #'
-#' @return \code{build_polys} returns a \code{SpatialPolygons} object
-#' with a polyon for each individual (and optionally \code{splitBy}
-#' combination).
+#' @return `build_polys` returns a simple feature collection with POLYGONs
+#' for each individual (and optionally `splitBy` combination).
 #'
-#' An error is returned when \code{hrParams} do not match the arguments
-#' of the \code{hrType} \code{adehabitatHR} function.
+#' An error is returned when `hrParams` do not match the arguments
+#' of the respective `hrType` `adehabitatHR` function.
 #'
 #'
 #' @inheritParams group_polys
 #' @param spPts alternatively, provide solely a SpatialPointsDataFrame with one
-#' column representing the ID of each point.
-#' @param projection character string defining the projection to be passed to
-#' \code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
-#' the projection argument is 'EPSG:32736'. See details.
+#' column representing the ID of each point, as specified by [adehabitatHR::mcp]
+#' or [adehabitatHR::kernelUD]
+#' @param projection numeric or character defining the coordinate reference
+#'   system to be passed to [sf::st_crs]. For example, either
+#'   `projection = "EPSG:32736"` or `projection = 32736`.
 #' @export
 #'
 #' @family Build functions
-#' @seealso \code{\link{group_polys}}
+#' @seealso [group_polys]
 #'
 #' @examples
 #' # Load data.table
@@ -70,7 +81,7 @@
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
 #' # EPSG code for example data
-#' utm <- 'EPSG:32736'
+#' utm <- 32736
 #'
 #' # Build polygons for each individual using kernelUD and getverticeshr
 #' build_polys(DT, projection = utm, hrType = 'kernel',
@@ -79,18 +90,9 @@
 #'
 #' # Build polygons for each individual by year
 #' DT[, yr := year(datetime)]
-#' build_polys(DT, projection = utm, hrType = 'mcp', hrParams = list(percent = 95),
+#' build_polys(DT, projection = utm, hrType = 'mcp',
+#'             hrParams = list(percent = 95),
 #'             id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
-#'
-#' # Build polygons from SpatialPointsDataFrame
-#' library(sp)
-#' pts <- SpatialPointsDataFrame(coords = DT[, .(X, Y)],
-#'                               proj4string = CRS(utm),
-#'                               data = DT[, .(ID)]
-#' )
-#'
-#' build_polys(spPts = pts, hrType = 'mcp', hrParams = list(percent = 95))
-#'
 build_polys <- function(DT = NULL,
                         projection = NULL,
                         hrType = NULL,
@@ -153,7 +155,7 @@ build_polys <- function(DT = NULL,
       FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
-    ), .SDcols = splitBy]))) {
+    ), .SDcols = c(splitBy)]))) {
       stop(
         strwrap(
           prefix = " ",
@@ -176,12 +178,17 @@ build_polys <- function(DT = NULL,
   }
 
   if (is.null(spPts)) {
-    spPts <- sp::SpatialPointsDataFrame(
-      DT[, .SD, .SDcols = eval.parent(coords, n = 1)],
-      proj4string = sp::CRS(projection),
-      data = DT[, .(ID = do.call(paste,
-                                 c(.SD, sep = '-'))),
-                .SDcols = splitBy])
+    ade_id <- DT[, do.call(function(...) paste(..., sep = '-'), .SD),
+                           .SDcols = c(splitBy)]
+
+    spPts <- sf::as_Spatial(
+      sf::st_as_sf(
+        DT[, cbind(.SD, ade_id), .SDcols = c(coords)],
+        coords = coords,
+        crs = sf::st_crs(projection)
+      ),
+      IDs = ade_id
+    )
   }
 
   hrParams$xy <- spPts
@@ -192,7 +199,7 @@ build_polys <- function(DT = NULL,
       if (!('unout' %in% names(hrParams))) {
         hrParams$unout <- 'm2'
       }
-      return(do.call(adehabitatHR::mcp, hrParams))
+      out <- do.call(adehabitatHR::mcp, hrParams)
     } else {
       stop(
         strwrap(
@@ -213,10 +220,10 @@ build_polys <- function(DT = NULL,
       }
       kern <- do.call(adehabitatHR::kernelUD,
                       hrParams[intersect(names(hrParams), names(kernelParam))])
-      return(do.call(adehabitatHR::getverticeshr,
+      out <- do.call(adehabitatHR::getverticeshr,
                      c(x = list(kern),
                        hrParams[intersect(names(hrParams),
-                                          names(verticesParam))])))
+                                          names(verticesParam))]))
     } else {
       stop(
         strwrap(
@@ -228,7 +235,13 @@ build_polys <- function(DT = NULL,
         )
       )
     }
+  } else {
+    stop('hrType not one of "kernel" or "mcp"')
   }
+
+  out_sf <- sf::st_as_sf(out)
+  colnames(out_sf) <- gsub('id', id, colnames(out_sf))
+  return(out_sf)
 }
 
 

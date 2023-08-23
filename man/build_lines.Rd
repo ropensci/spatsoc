@@ -16,9 +16,9 @@ build_lines(
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{character string defining the projection to be passed to
-\code{sp::CRS}. For example, for UTM zone 36S (EPSG 32736),
-the projection argument is 'EPSG:32736'. See details.}
+\item{projection}{numeric or character defining the coordinate reference
+system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
+\code{projection = "EPSG:32736"} or \code{projection = 32736}.}
 
 \item{id}{Character string of ID column name}
 
@@ -31,39 +31,55 @@ be a POSIXct.}
 name(s) upon which the grouping will be calculated}
 }
 \value{
-\code{build_lines} returns a \code{SpatialLines} object with a line
+\code{build_lines} returns an sf LINESTRING object with a line
 for each individual (and optionally \code{splitBy} combination).
 
-An error is returned when an individual has less than 2 relocations, making
-it impossible to build a line.
+Individuals (or combinations of individuals and \code{splitBy}) with less than two
+relocations are dropped since it requires at least two relocations to
+build a line.
 }
 \description{
-\code{build_lines} creates a \code{SpatialLines} object from a \code{data.table}.
-The function accepts a \code{data.table} with relocation data, individual
-identifiers a sorting column and a \code{projection}. The relocation data
-is transformed into \code{SpatialLines} for each individual and optionally,
-each \code{splitBy}. Relocation data should be in two columns representing
-the X and Y coordinates.
+\code{build_lines} generates a simple feature collection with LINESTRINGs from a
+\code{data.table}. The function accepts a \code{data.table} with relocation data,
+individual identifiers, a sorting column and a \code{projection}. The relocation
+data is transformed into LINESTRINGs for each individual and, optionally,
+combination of columns listed in \code{splitBy}. Relocation data should be in two
+columns representing the X and Y coordinates.
 }
 \details{
-The \code{projection} argument expects a character string defining the EPSG
-code. For example, for UTM zone 36N (EPSG 32736), the projection argument is
-'EPSG:32736'. See \url{https://spatialreference.org} for a list of
-EPSG codes. Please note, R spatial has followed updates to GDAL and PROJ
+\subsection{R-spatial evolution}{
+
+Please note, spatsoc has followed updates from R spatial, GDAL and PROJ
 for handling projections, see more at
 \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 
-The \code{sortBy} is used to order the input \code{data.table} when creating
-\code{SpatialLines}. It must a \code{POSIXct} to ensure the rows are sorted
-by date time.
+In addition, \code{build_lines} previously used \link[sp:SpatialLines]{sp::SpatialLines} but has been
+updated to use \link[sf:st_as_sf]{sf::st_as_sf} and \link[sf:st]{sf::st_linestring} according to the
+R-spatial evolution, see more at
+\url{https://r-spatial.org/r/2022/04/12/evolution.html}.
+}
 
-The \code{splitBy} argument offers further control building \code{SpatialLines}.
-If in your \code{DT}, you have multiple temporal groups (e.g.: years) for
+\subsection{Notes on arguments}{
+
+The \code{projection} argument expects a numeric or character defining the
+coordinate reference system.
+For example, for UTM zone 36N (EPSG 32736), the projection argument is either
+\code{projection = 'EPSG:32736'} or \code{projection = 32736}.
+See details in \code{\link[sf:st_crs]{sf::st_crs()}} and \url{https://spatialreference.org}
+for a list of EPSG codes.
+
+The \code{sortBy} argument is used to order the input \code{DT} when creating
+sf LINESTRINGs. It must a column in the input \code{DT} of type
+POSIXct to ensure the rows are sorted by date time.
+
+The \code{splitBy} argument offers further control building LINESTRINGs.
+If in your input \code{DT}, you have multiple temporal groups (e.g.: years) for
 example, you can provide the name of the column which identifies them and
-build \code{SpatialLines} for each individual in each year.
+build LINESTRINGs for each individual in each year.
 
 \code{build_lines} is used by \code{group_lines} for grouping overlapping
-lines created from relocations.
+lines generated from relocations.
+}
 }
 \examples{
 # Load data.table
@@ -76,7 +92,7 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 
 # EPSG code for example data
-utm <- 'EPSG:32736'
+utm <- 32736
 
 # Build lines for each individual
 lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
@@ -86,7 +102,6 @@ lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
 DT[, yr := year(datetime)]
 lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
             sortBy = 'datetime', splitBy = 'yr')
-
 }
 \seealso{
 \code{\link{group_lines}}

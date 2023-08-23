@@ -16,13 +16,17 @@ test_that('DT is required', {
   'input DT required')
 })
 
-test_that('ID and coords column names, threshold correctly provided',
+test_that('ID, coord column names, time, threshold provided correctly',
           {
             expect_error(group_pts(DT, threshold = 10, id = NULL),
                          'ID field required')
 
             expect_error(group_pts(DT, threshold = NULL, id = 'ID'),
                          'threshold required')
+
+            expect_error(group_pts(DT, threshold = 10, id = 'ID',
+                                   coords = c('X', 'Y')),
+                         'timegroup required')
 
             expect_error(
               group_pts(

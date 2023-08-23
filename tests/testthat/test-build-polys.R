@@ -1,6 +1,5 @@
 # Test build_polys
 context('test build_polys')
-library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
 
@@ -17,91 +16,90 @@ test_that('DT or spPts are required but not both', {
 
 
 
-test_that('coords, id, projection must be provided and (splitBy) proper format',
-          {
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = utm,
-                hrType = 'mcp',
-                coords = c('X', 'Y'),
-                id = NULL
-              ),
-              'id must be provided'
-            )
+test_that('coords, id, projection, (splitBy) provided and proper format', {
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      coords = c('X', 'Y'),
+      id = NULL
+    ),
+    'id must be provided'
+  )
 
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = NULL,
-                hrType = 'mcp',
-                coords = c('X', 'Y'),
-                id = 'ID'
-              ),
-              'projection must be provided'
-            )
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = NULL,
+      hrType = 'mcp',
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ),
+    'projection must be provided'
+  )
 
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = utm,
-                hrType = 'mcp',
-                coords = NULL,
-                id = 'ID'
-              ),
-              'coords must be provided'
-            )
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      coords = NULL,
+      id = 'ID'
+    ),
+    'coords must be provided'
+  )
 
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = utm,
-                hrType = 'mcp',
-                coords = 'X',
-                id = 'ID'
-              ),
-              'coords requires a vector of',
-              fixed = FALSE
-            )
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'mcp',
+      coords = 'X',
+      id = 'ID'
+    ),
+    'coords requires a vector of',
+    fixed = FALSE
+  )
 
-            copyDT <- copy(DT)
-            copyDT[, X := as.character(X)]
-            expect_error(
-              build_polys(
-                DT = copyDT,
-                projection = utm,
-                hrType = 'mcp',
-                coords = c('X', 'Y'),
-                id = 'ID'
-              ),
-              'coords must be numeric'
-            )
+  copyDT <- copy(DT)
+  copyDT[, X := as.character(X)]
+  expect_error(
+    build_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = 'mcp',
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ),
+    'coords must be numeric'
+  )
 
-            expect_error(
-              build_polys(
-                DT = DT,
-                projection = utm,
-                hrType = NULL,
-                coords = c('X', 'Y'),
-                id = 'ID'
-              ),
-              'hrType must be provided'
-            )
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = NULL,
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ),
+    'hrType must be provided'
+  )
 
-            copyDT <- copy(DT)
-            copyDT[, s := factor(1)]
-            expect_error(
-              build_polys(
-                DT = copyDT,
-                projection = utm,
-                hrType = NULL,
-                coords = c('X', 'Y'),
-                id = 'ID',
-                splitBy = 's'
-              ),
-              'and splitBy when provided', fixed = FALSE
-            )
-          })
+  copyDT <- copy(DT)
+  copyDT[, s := factor(1)]
+  expect_error(
+    build_polys(
+      DT = copyDT,
+      projection = utm,
+      hrType = NULL,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      splitBy = 's'
+    ),
+    'and splitBy when provided', fixed = FALSE
+  )
+})
 
 
 test_that('column names must exist in DT', {
@@ -143,6 +141,21 @@ test_that('column names must exist in DT', {
   )
 })
 
+test_that('hrType either mcp or kernel', {
+  expect_error(
+    build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'potato',
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ),
+    'hrType not one of',
+    fixed = FALSE
+  )
+})
+
+
 test_that('hrParams returns error if params do not match function params', {
   expect_error(
     build_polys(
@@ -170,19 +183,6 @@ test_that('hrParams returns error if params do not match function params', {
     fixed = FALSE
   )
 
-  s4promise <- evaluate_promise(build_polys(
-    DT = DT,
-    projection = utm,
-    hrType = 'mcp',
-    hrParams = list(percent = 95),
-    coords = c('X', 'Y'),
-    id = 'ID'
-  ))
-
-  expect_s4_class(
-    s4promise$result,
-    'SpatialPolygonsDataFrame'
-  )
 })
 
 test_that('if hrParams NULL, warns', {
@@ -205,8 +205,8 @@ test_that('if hrParams NULL, warns', {
 })
 
 
-test_that('build_polys returns SpatialPolygons', {
-  polpromise <- evaluate_promise(
+test_that('build_polys returns sf, POLYGONs', {
+  expect_s3_class(
     build_polys(
       DT = DT,
       projection = utm,
@@ -214,15 +214,11 @@ test_that('build_polys returns SpatialPolygons', {
       hrParams = list(percent = 95),
       coords = c('X', 'Y'),
       id = 'ID'
-    )
+    ),
+    'sf'
   )
 
-  expect_s4_class(
-    polpromise$result,
-    'SpatialPolygonsDataFrame'
-  )
-
-  polpromise2 <- evaluate_promise(
+  expect_s3_class(
     build_polys(
       DT = DT,
       projection = utm,
@@ -230,18 +226,45 @@ test_that('build_polys returns SpatialPolygons', {
       hrParams = list(grid = 60),
       coords = c('X', 'Y'),
       id = 'ID'
+    ),
+    'sf'
+  )
+
+  expect_true(
+    any(c('POLYGON', 'MULTIPOLYGON') %in%
+    sf::st_geometry_type(
+      build_polys(
+        DT = DT,
+        projection = utm,
+        hrType = 'mcp',
+        hrParams = list(percent = 95),
+        coords = c('X', 'Y'),
+        id = 'ID'
+      ),
+      by_geometry = FALSE)
     )
   )
 
-  expect_s4_class(
-    polpromise2$result,
-    'SpatialPolygonsDataFrame'
+
+  expect_true(
+    any(c('POLYGON', 'MULTIPOLYGON') %in%
+    sf::st_geometry_type(
+        build_polys(
+          DT = DT,
+          projection = utm,
+          hrType = 'kernel',
+          hrParams = list(grid = 60),
+          coords = c('X', 'Y'),
+          id = 'ID'),
+        by_geometry = FALSE
+      )
+    )
   )
 })
 
 
 test_that('hrParams can have both vertices and kernel args', {
-  bothparamspromise <- evaluate_promise(
+  expect_s3_class(
     build_polys(
       DT = DT,
       projection = utm,
@@ -249,10 +272,39 @@ test_that('hrParams can have both vertices and kernel args', {
       hrParams = list(percent = 95, grid = 60),
       coords = c('X', 'Y'),
       id = 'ID'
+    ),
+    'sf'
+  )
+
+  expect_true(
+    any(c('POLYGON', 'MULTIPOLYGON') %in%
+      sf::st_geometry_type(
+        build_polys(
+          DT = DT,
+          projection = utm,
+          hrType = 'kernel',
+          hrParams = list(percent = 95, grid = 60),
+          coords = c('X', 'Y'),
+          id = 'ID'),
+        by_geometry = FALSE
+      )
     )
   )
-  expect_s4_class(
-    bothparamspromise$result,
-    'SpatialPolygonsDataFrame'
+})
+
+
+test_that('id provided matches id retured', {
+  expect_in(
+    'ID',
+    colnames(build_polys(
+      DT = DT,
+      projection = utm,
+      hrType = 'kernel',
+      hrParams = list(percent = 95, grid = 60),
+      coords = c('X', 'Y'),
+      id = 'ID'
+    ))
   )
 })
+
+
