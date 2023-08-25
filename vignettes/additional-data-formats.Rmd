@@ -1,0 +1,19 @@
+---
+title: "Additional-data-formats"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{additional-data-formats}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spatsoc)
+```
