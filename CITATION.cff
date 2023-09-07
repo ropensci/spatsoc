@@ -8,7 +8,7 @@ message: 'To cite package "spatsoc" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship'
-version: 0.2.1
+version: 0.2.2
 abstract: Detects spatial and temporal groups in GPS relocations (Robitaille et al.
   (2019) <doi:10.1111/2041-210X.13215>). It can be used to convert GPS relocations
   to gambit-of-the-group format to build proximity-based social networks In addition,
