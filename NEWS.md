@@ -1,3 +1,8 @@
+# v 0.2.2 (2023-09-07)
+
+* fixed CRAN notes about number of cores/parallel process/threads [PR 58](https://github.com/ropensci/spatsoc/pull/58)
+
+
 # v 0.2.1 (2023-08-23)
 
 * fixed CRAN notes [PR 56](https://github.com/ropensci/spatsoc/pull/56)
