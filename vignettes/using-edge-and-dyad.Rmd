@@ -16,8 +16,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-
 `spatsoc` can be used in social network analysis to generate edge lists from GPS relocation data. 
 
 
@@ -33,17 +31,24 @@ spatsoc provides users with one temporal (`group_times`) and two edge list gener
 ### 1. Load packages and prepare data
 `spatsoc` expects a `data.table` for all `DT` arguments and date time columns to be formatted `POSIXct`. 
 
-```{r, message = FALSE, warning = FALSE, eval = TRUE}
+```{r, eval = TRUE}
 ## Load packages
 library(spatsoc)
 library(data.table)
+```
 
+```{r, echo = FALSE, eval = TRUE}
+data.table::setDTthreads(1)
+```
+
+```{r, eval = TRUE}
 ## Read data as a data.table
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
 ## Cast datetime column to POSIXct
 DT[, datetime := as.POSIXct(datetime)]
 ```
+
 
 
 Next, we will group relocations temporally with `group_times` and generate edges lists with one of `edge_dist`, `edge_dist`. Note: these are mutually exclusive, only select one edge list generating function at a time. 

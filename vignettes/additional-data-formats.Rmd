@@ -1,5 +1,5 @@
 ---
-title: "Additional-data-formats"
+title: "Additional data formats"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{additional-data-formats}
@@ -16,6 +16,11 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(spatsoc)
+library(data.table)
+```
+
+```{r, echo = FALSE, eval = TRUE}
+data.table::setDTthreads(1)
 ```
 
 ## Multispecies interactions
