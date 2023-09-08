@@ -24,22 +24,17 @@ The functions were developed for application across animal relocation data, for 
 
 ## Data preparation
 
-```{r libs, eval = TRUE, include = FALSE}
-library(spatsoc); library(data.table)
-DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
-DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
-```
-
-`spatsoc` expects a `data.table` for all of its functions. If you have a `data.frame`, you can use `data.table::setDT()` to convert it by reference. If your data is a CSV, you can use `data.table::fread()` to import it as a `data.table`. 
-
-The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. Using these data, we can compare the various grouping methods available in `spatsoc`. Note: these examples will use a subset of the data, only individuals H, I and J. 
-
-
-```{r, echo = TRUE}
+```{r, eval = TRUE, echo = TRUE}
 # Load packages
 library(spatsoc)
 library(data.table)
+```
 
+```{r, echo = FALSE, eval = TRUE}
+data.table::setDTthreads(1)
+```
+
+```{r, eval = TRUE, echo = TRUE}
 # Read in spatsoc's example data
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
@@ -48,12 +43,17 @@ DT <- DT[ID %in% c('H', 'I', 'J')]
 
 # Cast character column 'datetime' as POSIXct
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+DT <- DT[ID %chin% c('H', 'I', 'J')]
 ```
 
-```{r, eval = TRUE}
-DT <- DT[ID %chin% c('H', 'I', 'J')]
+```{r, eval = TRUE, echo = FALSE}
 knitr::kable(DT[, .SD[1:2], ID][order(ID)])
 ```
+
+
+`spatsoc` expects a `data.table` for all of its functions. If you have a `data.frame`, you can use `data.table::setDT()` to convert it by reference. If your data is a CSV, you can use `data.table::fread()` to import it as a `data.table`. 
+
+The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. Using these data, we can compare the various grouping methods available in `spatsoc`. Note: these examples will use a subset of the data, only individuals H, I and J. 
 
 ## Temporal grouping
 The `group_times` function is used to group relocations temporally. It is flexible to a threshold provided in units of minutes, hours or days. Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. Alternatively, we may want to understand different scales of grouping, perhaps daily movement trajectories or seasonal home range overlap. 

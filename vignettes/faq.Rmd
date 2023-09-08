@@ -28,11 +28,17 @@ spatsoc is an R package for detecting spatial and temporal groups in GPS relocat
 
 `spatsoc` is designed to work in two steps: temporal followed by either spatial grouping or edge list generating. Considering your specific study species and system, determine a relevant temporal and spatial grouping threshold. This may be 5 minutes and 50 meters or 2 days and 100 meters or any other thresholds - the functions provided by `spatsoc` are flexible to user input. In some cases, the spatial grouping function selected is only relevant with certain temporal grouping thresholds. For example, we wouldn't expect a threshold of 5 minutes with `group_polys`. 
 
-```{r, eval = TRUE, results = 'hide'}
+```{r, eval = TRUE}
 # Load packages
 library(spatsoc)
 library(data.table)
+```
 
+```{r, echo = FALSE, eval = TRUE}
+data.table::setDTthreads(1)
+```
+
+```{r, eval = TRUE}
 # Read data as a data.table
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
@@ -50,10 +56,6 @@ group_pts(
   coords = c('X', 'Y'),
   timegroup = 'timegroup'
 )
-```
-
-```{r, eval = TRUE, echo = FALSE}
-knitr::kable(DT[order(group, timegroup)][1:5, .(ID, X, Y, datetime, timegroup, group)])
 ```
 
 
