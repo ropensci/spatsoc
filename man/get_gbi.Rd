@@ -45,6 +45,7 @@ individual identifier.
 \examples{
 # Load data.table
 library(data.table)
+\dontshow{data.table::setDTthreads(1)}
 
 # Read example data
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))

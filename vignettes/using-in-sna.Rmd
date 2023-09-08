@@ -19,7 +19,6 @@ knitr::opts_chunk$set(message = TRUE,
                       echo = TRUE)
 ```
 
-
 `spatsoc` can be used in social network analysis to generate gambit of the group format data from GPS relocation data, perform data stream randomization and generate group by individual matrices. 
 
 Gambit of the group format data is generated using the grouping functions:
@@ -50,7 +49,13 @@ library(spatsoc)
 library(data.table)
 library(asnipe)
 library(igraph)
+```
 
+```{r, echo = FALSE, eval = TRUE}
+data.table::setDTthreads(1)
+```
+
+```{r}
 ## Read data as a data.table
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
