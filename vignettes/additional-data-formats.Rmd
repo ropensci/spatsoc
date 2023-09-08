@@ -16,6 +16,11 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(spatsoc)
+library(data.table)
+```
+
+```{r, eval = TRUE, echo = FALSE}
+data.table::setDTthreads(1)
 ```
 
 ## Multispecies interactions
