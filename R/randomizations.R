@@ -267,11 +267,10 @@ randomizations <- function(DT = NULL,
       splitBy <- c('jul', 'iteration', 'observed', splitBy)
     }
 
-
     idDays[, randomID := .SD[sample(.N, size = .N)], by = c(splitBy), .SDcols = id]
     idDays[(observed), randomID := .SD[[1]], .SDcols = id]
 
-    return(merge(repDT, idDays, on = splitBy, all = TRUE))
+    return(merge(repDT, idDays, by = c(splitBy, id), all = TRUE))
 
   } else if (type == 'trajectory') {
     if (is.null(splitBy)) {
