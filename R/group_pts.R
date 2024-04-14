@@ -182,7 +182,7 @@ group_pts <- function(DT = NULL,
       method = 'euclidean'))
     graphAdj <-
       igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
-    igraph::clusters(graphAdj)$membership
+    igraph::components(graphAdj)$membership
   },
   by = c(splitBy, timegroup), .SDcols = c(coords, id)]
   DT[, group := .GRP,

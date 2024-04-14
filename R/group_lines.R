@@ -174,7 +174,7 @@ group_lines <-
       }
       dimnames(inter) <- list(sfLines[[id]], sfLines[[id]])
       g <- igraph::graph_from_adjacency_matrix(inter)
-      ovr <- igraph::clusters(g)$membership
+      ovr <- igraph::components(g)$membership
       out <- data.table::data.table(names(ovr),
                                     unlist(ovr))
       data.table::setnames(out, c('ID', 'group'))
@@ -237,7 +237,7 @@ group_lines <-
         }
         dimnames(inter) <- list(lns[[id]], lns[[id]])
         g <- igraph::graph_from_adjacency_matrix(inter)
-        ovr <- igraph::clusters(g)$membership
+        ovr <- igraph::components(g)$membership
         ovrDT <- data.table::data.table(ID = names(ovr),
                                         group = unlist(ovr))
       } else {
@@ -291,7 +291,7 @@ group_lines <-
             }
             dimnames(inter) <- list(lns[[id]], lns[[id]])
             g <- igraph::graph_from_adjacency_matrix(inter)
-            ovr <- igraph::clusters(g)$membership
+            ovr <- igraph::components(g)$membership
             out <- data.table::data.table(names(ovr),
                                           unlist(ovr))
             data.table::setnames(out, c(..id, 'withinGroup'))
