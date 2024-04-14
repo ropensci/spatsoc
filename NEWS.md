@@ -1,3 +1,8 @@
+# v 0.2.3 
+
+* Fix/replace igraph clusters with components [PR 61](https://github.com/ropensci/spatsoc/pull/61)
+* Fix/warnings from merge args [PR 62](https://github.com/ropensci/spatsoc/pull/61)
+
 # v 0.2.2 (2023-09-07)
 
 * fixed CRAN notes about number of cores/parallel process/threads [PR 58](https://github.com/ropensci/spatsoc/pull/58)
