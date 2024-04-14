@@ -156,7 +156,7 @@ group_polys <-
         inter <- sf::st_intersects(sfPolys, sfPolys, sparse = FALSE)
         dimnames(inter) <- list(sfPolys[[id]], sfPolys[[id]])
         g <- igraph::graph_from_adjacency_matrix(inter)
-        ovr <- igraph::clusters(g)$membership
+        ovr <- igraph::components(g)$membership
         out <- data.table::data.table(names(ovr),
                                       as.integer(unlist(ovr)))
         data.table::setnames(out, c(id, 'group'))
@@ -244,7 +244,7 @@ group_polys <-
               inter <- sf::st_intersects(sfPolys, sfPolys, sparse = FALSE)
               dimnames(inter) <- list(sfPolys[[..id]], sfPolys[[..id]])
               g <- igraph::graph_from_adjacency_matrix(inter)
-              ovr <- igraph::clusters(g)$membership
+              ovr <- igraph::components(g)$membership
               out <- data.table::data.table(names(ovr),
                                             as.integer(unlist(ovr)))
               data.table::setnames(out, c(id, 'withinGroup'))
