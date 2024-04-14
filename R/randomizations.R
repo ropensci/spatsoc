@@ -284,7 +284,7 @@ randomizations <- function(DT = NULL,
     merged <- merge(
       x = repDT,
       y = idDays,
-      on = c('jul', splitBy),
+      by = c('jul', splitBy),
       all = TRUE
     )
 
