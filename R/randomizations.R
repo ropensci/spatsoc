@@ -262,9 +262,9 @@ randomizations <- function(DT = NULL,
 
   if (type == 'daily') {
     if (is.null(splitBy)) {
-      splitBy <- c('jul', 'iteration')
+      splitBy <- c('jul', 'iteration', 'observed')
     } else {
-      splitBy <- c('jul', 'iteration', splitBy)
+      splitBy <- c('jul', 'iteration', 'observed', splitBy)
     }
 
 
