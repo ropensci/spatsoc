@@ -226,7 +226,7 @@ edge_dist <- function(DT = NULL,
 
 
   if (fillNA) {
-    data.table::merge.data.table(edges,
+    merge(edges,
           unique(DT[, .SD, .SDcols = c(splitBy, id)]),
           by.x = c(splitBy, 'ID1'),
           by.y = c(splitBy, id),
