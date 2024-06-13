@@ -2,7 +2,7 @@
 title: "Additional data formats"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{additional-data-formats}
+  %\VignetteIndexEntry{Additional data formats}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,7 +19,7 @@ library(spatsoc)
 library(data.table)
 ```
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, eval = TRUE, echo = FALSE}
 data.table::setDTthreads(1)
 ```
 
