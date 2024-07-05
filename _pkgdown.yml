@@ -34,27 +34,9 @@ reference:
     - '`DT`'
 
 navbar:
-  left:
-    home:
-      icon: fa-home fa-lg
-      href: index.html
-    reference:
-      text: "Reference"
-      href: reference/index.html
-    articles:
-      text: "Vignettes"
-      menu:
-      - text: Introduction to spatsoc
-        href: articles/intro-spatsoc.html
-      - text: Frequently asked questions
-        href: articles/faq.html
-      - text: Using spatsoc in social network analysis
-        href: articles/using-in-sna.html
-      - text: Using edge list and dyad id functions
-        href: articles/using-edge-and-dyad.html
-    news:
-      text: "News"
-      href: news/index.html
-
+  structure:
+    left: [home, reference, articles, news]
+    right: [search, github]
+    
 news:
 - one_page: true
