@@ -204,8 +204,6 @@ mean of individual locations in a group.
 group_centroid(DT, coords = coords)
 ```
 
-    ## group column will be overwritten by this function
-
 | ID  | X        | Y       | datetime            | timegroup | group | group_mean_X | group_mean_Y |
 |-----|----------|---------|---------------------|-----------|-------|--------------|--------------|
 | A   | 715851.4 | 5505340 | 2016-11-01 00:00:54 | 1         | 1     | 715851.4     | 5505340      |
@@ -217,7 +215,7 @@ group_centroid(DT, coords = coords)
 Then we can measure each individual’s direction and distance to the
 group centroid. The distance to group centroid is the distance between
 from the focal individual to the group centroid. The direction to group
-centroid is the absolute azimuth from the focal individual to the group
+centroid is the absolute bearing from the focal individual to the group
 centroid. The rank distance to group centroid is the ordinal rank of
 individuals’ distances to the group centroid.
 <!-- TODO: insert refs with examples of biological interpretation of distance and direction to  -->
@@ -245,7 +243,7 @@ of the group’s bearing (eg. \[@Burns_2012\]). The time spent leading
 group is an aggregate metric of the time in the first rank position
 within group. The distance to leader is the geographic distance from the
 focal individual to the group’s leader. The direction to leader is the
-absolute azimuth from the focal individual to the group’s leader.
+absolute bearing from the focal individual to the group’s leader.
 
 ``` r
 projection <- 32636
@@ -253,8 +251,6 @@ bearing_sequential(DT, id = id, coords = coords, projection = projection)
 group_bearing(DT)
 position_within_group(DT, coords = coords, return_rank = TRUE)
 ```
-
-    ## Linking to GEOS 3.12.2, GDAL 3.9.0, PROJ 9.4.1; sf_use_s2() is TRUE
 
 ![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
@@ -310,24 +306,24 @@ direction, directional alignment and group polarization.
 <!-- related eg. direction between individuals (always L / R), polarization of flock, -->
 <!-- etc -->
 
-Polarization measures the uniformity of absolute azimuth in a group of
+Polarization measures the uniformity of absolute bearing in a group of
 individuals \[@Wang_2022\] on a scale of 0-1 where values near 0
-indicate that azimuths point in different directions and values near 1
-indicate that azimuths point in similar directions.
+indicate that bearings point in different directions and values near 1
+indicate that bearings point in similar directions.
 
 ``` r
-# Calculate polarization using azimuth from az_sequential()
+# Calculate polarization using bearing from bearing_sequential()
 bearing_polarization(DT)
 ```
 
 ![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 Directional alignment is the relative difference between two
-individuals’ azimuths. Given the similarity to `edge_dist`, this
-functionality is provided under a similar name: `edge_az`.
+individuals’ bearings. Given the similarity to `edge_dist`, this
+functionality is provided under a similar name: `edge_bearing`.
 
 ``` r
-directional_align <- edge_az(
+directional_align <- edge_bearing(
   DT,
   threshold = NULL,
   id = id,
@@ -338,7 +334,7 @@ directional_align <- edge_az(
 )
 ```
 
-Interindividual direction measures the absolute azimuth between
+Interindividual direction measures the absolute bearing between
 individuals.
 
 (TODO)
