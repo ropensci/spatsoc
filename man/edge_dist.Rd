@@ -116,6 +116,7 @@ edges <- edge_dist(
 }
 \seealso{
 Other Edge-list generation: 
+\code{\link{edge_bearing}()},
 \code{\link{edge_nn}()}
 }
 \concept{Edge-list generation}
