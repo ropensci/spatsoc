@@ -2,6 +2,7 @@
 #'
 #' @param DT expects group_mean columns generated with group_centroid
 #' @param coords character vector of column names for x, y
+#' @export
 distance_to_group_centroid <- function(DT, coords, group = 'group',
                                      return_rank = FALSE) {
   pre <- 'group_mean_'

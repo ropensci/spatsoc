@@ -6,6 +6,7 @@
 #' @param n_max_missing maximum number of missing observations within a fusion event
 #' @param allow_split boolean if a single observation can be greater than the
 #'  threshold distance without initiating fission event
+#' @export
 fusion_id <- function(edges,
                            threshold = 50,
                            n_min_length = 0,

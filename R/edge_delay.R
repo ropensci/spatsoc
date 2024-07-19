@@ -5,6 +5,7 @@
 #' @param DT relocation data
 #' @param edges edges generated with edges_dist
 #' @param window integer window in timegroups generated with group_times
+#' @export
 edge_delay <- function(DT, id = NULL, edges, window = NULL) {
   stopifnot(!is.null(id))
   stopifnot(!is.null(window))
