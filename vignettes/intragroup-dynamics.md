@@ -228,7 +228,7 @@ distance_to_group_centroid(DT, coords, return_rank = TRUE)
 bearing_to_group_centroid(DT, coords)
 ```
 
-![](/tmp/RtmpRq5rSu/preview-b84969b60b66.dir/intragroup-dynamics_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 After considering how individuals are positioned relative to the group
 centroid, we can also measure how individuals are positioned relative to
@@ -256,7 +256,7 @@ position_within_group(DT, coords = coords, return_rank = TRUE)
 
     ## Linking to GEOS 3.12.2, GDAL 3.9.0, PROJ 9.4.1; sf_use_s2() is TRUE
 
-![](/tmp/RtmpRq5rSu/preview-b84969b60b66.dir/intragroup-dynamics_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->![](/tmp/RtmpRq5rSu/preview-b84969b60b66.dir/intragroup-dynamics_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 ## Position relative to leader
 
@@ -269,7 +269,7 @@ distance_to_leader(DT, coords = coords)
 bearing_to_leader(DT, coords = coords)
 ```
 
-![](/tmp/RtmpRq5rSu/preview-b84969b60b66.dir/intragroup-dynamics_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->![](/tmp/RtmpRq5rSu/preview-b84969b60b66.dir/intragroup-dynamics_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
 
 ## Fission fusion
 
@@ -299,7 +299,7 @@ fusion_events <- fusion_id(
 )
 ```
 
-![](/tmp/RtmpRq5rSu/preview-b84969b60b66.dir/intragroup-dynamics_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ## Bearings
 
@@ -320,7 +320,7 @@ indicate that azimuths point in similar directions.
 bearing_polarization(DT)
 ```
 
-![](/tmp/RtmpRq5rSu/preview-b84969b60b66.dir/intragroup-dynamics_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 Directional alignment is the relative difference between two
 individuals’ azimuths. Given the similarity to `edge_dist`, this
@@ -408,7 +408,7 @@ dir_delay <- edge_delay(
 )
 ```
 
-![](/tmp/RtmpRq5rSu/preview-b84969b60b66.dir/intragroup-dynamics_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](intragroup-dynamics_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 <!-- TODO: example of hierarchical networks -->
 
