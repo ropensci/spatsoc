@@ -100,6 +100,14 @@ fusion_id(
   allow_split = FALSE
   )
 }
+\references{
+See examples of identifying fission-fusion events with spatiotemporal data:
+\itemize{
+\item \url{doi:10.1111/ele.12457}
+\item \url{doi:10.1016/j.anbehav.2018.03.014}
+\item \url{doi:10.1890/08-0345.1}
+}
+}
 \seealso{
 \code{\link{edge_dist}}
 }
