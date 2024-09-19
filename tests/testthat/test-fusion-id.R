@@ -24,3 +24,17 @@ test_that('edges is required', {
   ),
   'input edges required')
 })
+
+
+test_that('columns are required otherwise error detected', {
+  expect_error(fusion_id(
+    edges = edges[, .SD, .SDcols = -'dyadID']
+  ))
+  expect_error(fusion_id(
+    edges = edges[, .SD, .SDcols = -'timegroup']
+  ))
+  expect_error(fusion_id(
+    edges = edges[, .SD, .SDcols = -'distance']
+  ))
+})
+
