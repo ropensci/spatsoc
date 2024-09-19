@@ -19,11 +19,10 @@ reference:
     contents:
     - '`randomizations`'
     - '`get_gbi`'
-  - title: Dyad function
+  - title: Dyad ID function
     desc: ~
     contents:
     - '`dyad_id`'
-    - '`fusion_id`'
   - title: Build functions
     desc: ~
     contents:
@@ -35,6 +34,10 @@ reference:
     - '`DT`'
 
 articles:
+- title: Introduction to spatsoc
+  navbar: ~
+  contents:
+  - spatsoc
 - title: Frequently asked questions about spatsoc
   navbar: ~
   contents:
