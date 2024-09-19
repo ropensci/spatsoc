@@ -86,6 +86,10 @@ fusion_id <- function(edges = NULL,
   # due to NSE notes  in R CMD check
   . <- both_rleid <- distance <- dyadID <- fusionID <- tg_diff <- timegroup <- within_rleid <- NULL
 
+  if (is.null(edges)) {
+    stop('input edges required')
+  }
+
   stopifnot('dyadID' %in% colnames(edges))
   stopifnot('timegroup' %in% colnames(edges))
   stopifnot('distance' %in% colnames(edges))
