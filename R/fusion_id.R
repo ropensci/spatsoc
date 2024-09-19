@@ -6,8 +6,13 @@
 #' events are defined.
 #'
 #' The \code{edges} must be a \code{data.table} returned by the \code{edge_dist}
-#' function. If your data is a #' \code{data.frame}, you can convert it by
+#' function. If your data is a \code{data.frame}, you can convert it by
 #' reference using \code{\link[data.table:setDT]{data.table::setDT}}.
+#'
+#' The \code{threshold} must be provided in the units of the coordinates. The
+#' \code{threshold} must be larger than 0. The coordinates must be planar
+#' coordinates (e.g.: UTM). In the case of UTM, a \code{threshold} = 50 would
+#' indicate a 50 m distance threshold.
 #' @param threshold spatial distance threshold in the units of the projection
 #' @param n_min_length minimum length of fusion events
 #' @param n_max_missing maximum number of missing observations within a fusion event
