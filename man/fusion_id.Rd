@@ -5,7 +5,7 @@
 \title{Fission-fusion events}
 \usage{
 fusion_id(
-  edges,
+  edges = NULL,
   threshold = 50,
   n_min_length = 0,
   n_max_missing = 0,
