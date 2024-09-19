@@ -72,7 +72,7 @@
 #' dyad_id(edges, 'ID1', 'ID2')
 #'
 #' fusion_id(
-#'   edges,
+#'   edges = edges,
 #'   threshold = 100,
 #'   n_min_length = 1,
 #'   n_max_missing = 0,
