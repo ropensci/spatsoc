@@ -42,6 +42,41 @@
 #'  threshold distance without initiating fission event
 #' @export
 #' @seealso \code{\link{edge_dist}}
+#' @examples
+#'
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Edge list generation
+#' edges <- edge_dist(
+#'     DT,
+#'     threshold = 100,
+#'     id = 'ID',
+#'     coords = c('X', 'Y'),
+#'     timegroup = 'timegroup',
+#'     returnDist = TRUE,
+#'     fillNA = TRUE
+#'   )
+#'
+#' dyad_id(edges, 'ID1', 'ID2')
+#'
+#' fusion_id(
+#'   edges,
+#'   threshold = 100,
+#'   n_min_length = 1,
+#'   n_max_missing = 0,
+#'   allow_split = FALSE
+#'   )
 fusion_id <- function(edges,
                       threshold = 50,
                       n_min_length = 0,
