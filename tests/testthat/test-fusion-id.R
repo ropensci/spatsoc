@@ -19,9 +19,7 @@ edges <- edge_dist(
 dyad_id(edges, 'ID1', 'ID2')
 
 test_that('edges is required', {
-  expect_error(fusion_id(
-    edges = NULL
-  ),
+  expect_error(fusion_id(),
   'input edges required')
 })
 
@@ -88,9 +86,9 @@ test_that('returns a numeric fusionID column', {
 })
 
 test_that('message if fusionID column already present, overwritten', {
-  edges[, fusionID := 42]
+  fusionID_present <- copy(edges)[, fusionID := 42]
   expect_message(fusion_id(
-    edges = edges,
+    edges = fusionID_present,
     threshold = 50
   ), 'fusionID column will be overwritten by this function')
 })
