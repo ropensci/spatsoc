@@ -92,3 +92,14 @@ test_that('message if fusionID column already present, overwritten', {
     threshold = 50
   ), 'fusionID column will be overwritten by this function')
 })
+
+
+
+test_that('allow_split TRUE returns less unique fusionID', {
+  # When splits are allowed, more fusion events are combined
+  #  resulting in less unique fusion events
+  expect_lt(
+    fusion_id(edges, allow_split = TRUE)[, uniqueN(fusionID)],
+    fusion_id(edges, allow_split = FALSE)[, uniqueN(fusionID)]
+  )
+})
