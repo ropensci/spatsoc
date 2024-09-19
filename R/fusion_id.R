@@ -21,6 +21,19 @@
 #' argument defines if a single observation can be greater than the threshold
 #' distance without initiating fission event.
 #'
+#' @return \code{fusion_id} returns the input \code{edges} appended with a
+#'   \code{fusionID} column.
+#'
+#'   This column represents the fusion event id. As with \code{spatsoc}'s
+#'   grouping functions, the actual value of \code{fusionID} is arbitrary and
+#'   represents the identity of a given fusion event. If the data was reordered,
+#'   the \code{fusionID} may change, but the membership of each fusion event
+#'   would not.
+#'
+#'   A message is returned when a column named \code{fusionID} already exists in
+#'   the input \code{edges}, because it will be overwritten.
+#'
+#'
 #' @param threshold spatial distance threshold in the units of the projection
 #' @param n_min_length minimum length of fusion events
 #' @param n_max_missing maximum number of missing observations within a fusion event
