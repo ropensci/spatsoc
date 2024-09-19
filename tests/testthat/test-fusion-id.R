@@ -112,3 +112,12 @@ test_that('larger n_max_missing returns less unique fusionID', {
     fusion_id(edges, n_max_missing = 0)[, uniqueN(fusionID)]
   )
 })
+
+test_that('larger n_min_length returns less unique fusionID', {
+  # When a larger n min length is provided, less fusion events are identified
+  #  resulting in less unique fusion events
+  expect_lt(
+    fusion_id(edges, n_min_length = 3)[, uniqueN(fusionID)],
+    fusion_id(edges, n_min_length = 0)[, uniqueN(fusionID)]
+  )
+})
