@@ -172,6 +172,10 @@ fusion_id <- function(edges = NULL,
   unique_edges[!is.na(both_rleid), fusionID := .GRP, by = .(dyadID, both_rleid)]
 
   # Merge fusion id onto input edges
+  if ('fusionID' %in% colnames(edges)) {
+    message('fusionID column will be overwritten by this function')
+    data.table::set(edges, j = 'fusionID', value = NULL)
+  }
   edges[unique_edges, fusionID := fusionID, on = .(timegroup, dyadID)]
   return(edges)
 }
