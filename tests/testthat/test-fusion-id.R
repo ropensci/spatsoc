@@ -70,3 +70,10 @@ test_that('arguments are correctly provided or error detected', {
     allow_split = 42
   ))
 })
+
+test_that('returns a data.table', {
+  expect_s3_class(fusion_id(
+    edges = edges,
+    threshold = 50
+  ), 'data.table')
+})
