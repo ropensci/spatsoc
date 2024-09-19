@@ -83,6 +83,9 @@ fusion_id <- function(edges,
                       n_max_missing = 0,
                       allow_split = FALSE)  {
 
+  # due to NSE notes  in R CMD check
+  . <- both_rleid <- distance <- dyadID <- fusionID <- tg_diff <- timegroup <- within_rleid <- NULL
+
   stopifnot('dyadID' %in% colnames(edges))
   stopifnot('timegroup' %in% colnames(edges))
   stopifnot('distance' %in% colnames(edges))
