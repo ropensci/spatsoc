@@ -77,7 +77,7 @@
 #'   n_max_missing = 0,
 #'   allow_split = FALSE
 #'   )
-fusion_id <- function(edges,
+fusion_id <- function(edges = NULL,
                       threshold = 50,
                       n_min_length = 0,
                       n_max_missing = 0,
