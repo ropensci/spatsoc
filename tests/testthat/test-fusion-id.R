@@ -86,3 +86,11 @@ test_that('returns a numeric fusionID column', {
   )), 'fusionID')
   expect_type(edges$fusionID, 'integer')
 })
+
+test_that('message if fusionID column already present, overwritten', {
+  edges[, fusionID := 42]
+  expect_message(fusion_id(
+    edges = edges,
+    threshold = 50
+  ), 'fusionID column will be overwritten by this function')
+})
