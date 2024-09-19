@@ -19,10 +19,11 @@ fusion_id(
 
 \item{n_min_length}{minimum length of fusion events}
 
-\item{n_max_missing}{maximum number of missing observations within a fusion event}
+\item{n_max_missing}{maximum number of missing observations within a fusion
+event}
 
-\item{allow_split}{boolean defining if a single observation can be greater than the
-threshold distance without initiating fission event}
+\item{allow_split}{boolean defining if a single observation can be greater
+than the threshold distance without initiating fission event}
 }
 \value{
 \code{fusion_id} returns the input \code{edges} appended with a
@@ -89,7 +90,7 @@ edges <- edge_dist(
 dyad_id(edges, 'ID1', 'ID2')
 
 fusion_id(
-  edges,
+  edges = edges,
   threshold = 100,
   n_min_length = 1,
   n_max_missing = 0,
