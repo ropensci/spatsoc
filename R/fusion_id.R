@@ -43,10 +43,10 @@
 #' @export
 #' @seealso \code{\link{edge_dist}}
 fusion_id <- function(edges,
-                           threshold = 50,
-                           n_min_length = 0,
-                           n_max_missing = 0,
-                           allow_split = FALSE)  {
+                      threshold = 50,
+                      n_min_length = 0,
+                      n_max_missing = 0,
+                      allow_split = FALSE)  {
 
   stopifnot('dyadID' %in% colnames(edges))
   stopifnot('timegroup' %in% colnames(edges))
@@ -66,13 +66,15 @@ fusion_id <- function(edges,
   unique_edges[, within := distance < threshold]
 
   # If allow split, check if previously within threshold, and
-  #   difference between before, after timegroups is only 1
+  #   timegroup difference between before and after is only 1
   if (allow_split) {
-    unique_edges[, within := data.table::fifelse(within | timegroup == min(timegroup),
-                                     within,
-                                     data.table::shift(within, -1) & data.table::shift(within, 1) &
-                                       timegroup - data.table::shift(timegroup, 1) == 1),
-                 by = dyadID]
+    unique_edges[, within := data.table::fifelse(
+      within | timegroup == min(timegroup),
+      within,
+      data.table::shift(within, -1) &
+        data.table::shift(within, 1) &
+        timegroup - data.table::shift(timegroup, 1) == 1
+    ), by = dyadID]
   }
 
   # Runs of within
@@ -80,21 +82,23 @@ fusion_id <- function(edges,
   unique_edges[!(within), within_rleid := NA_integer_]
 
   # Check timegroup difference, unless first obs for dyad
-  unique_edges[, tg_diff := data.table::fifelse(within,
-                                    timegroup - data.table::shift(timegroup, 1) <= 1 |
-                                      timegroup == min(timegroup),
-                                    NA),
-               by = dyadID]
+  unique_edges[, tg_diff := data.table::fifelse(
+    within,
+    timegroup - data.table::shift(timegroup, 1) <= 1 |
+      timegroup == min(timegroup),
+    NA
+  ), by = dyadID]
 
   # If missing obs allowed, adjust timegroup difference to allow as long as
   #   previously within threshold distance
   if (n_max_missing > 0) {
-    unique_edges[, tg_diff := data.table::fifelse(tg_diff,
-                                      tg_diff,
-                                      data.table::shift(within, 1) &
-                                        (timegroup - data.table::shift(timegroup, 1)) <=
-                                        (1 + n_max_missing)),
-                 by = dyadID]
+    unique_edges[, tg_diff := data.table::fifelse(
+      tg_diff,
+      tg_diff,
+      data.table::shift(within, 1) &
+        (timegroup - data.table::shift(timegroup, 1)) <=
+        (1 + n_max_missing)
+    ), by = dyadID]
   }
 
   # Get runs on within and timegroup difference. Adjust if runs of isolated
@@ -106,17 +110,19 @@ fusion_id <- function(edges,
 
   # Correct if (looking forward) the loc is part of a new fusion run
   unique_edges[, both_rleid := data.table::fifelse(
-    timegroup - data.table::shift(timegroup, - 1) == -1  &
+    timegroup - data.table::shift(timegroup, -1) == -1  &
       within & !(tg_diff),
     data.table::shift(both_rleid, -1),
-    both_rleid),
-               by = dyadID]
+    both_rleid
+  ), by = dyadID]
 
   # If n minimum length > 0, check nrows and return NA if less than min
   if (n_min_length > 0) {
-    unique_edges[!is.na(both_rleid),
-                 both_rleid := data.table::fifelse(.N >= n_min_length, both_rleid, NA_integer_),
-                 by = .(dyadID, both_rleid)]
+    unique_edges[!is.na(both_rleid), both_rleid := data.table::fifelse(
+      .N >= n_min_length,
+      both_rleid,
+      NA_integer_),
+      by = .(dyadID, both_rleid)]
   }
 
   # Set fusion id on runs and dyad id
