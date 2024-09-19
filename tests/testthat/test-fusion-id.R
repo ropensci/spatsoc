@@ -38,3 +38,35 @@ test_that('columns are required otherwise error detected', {
   ))
 })
 
+test_that('arguments are correctly provided or error detected', {
+  expect_error(fusion_id(
+    edges = edges,
+    threshold = NULL
+  ))
+  expect_error(fusion_id(
+    edges = edges,
+    threshold = -42
+  ))
+  expect_error(fusion_id(
+    edges = edges,
+    threshold = "potato"
+  ))
+
+  expect_error(fusion_id(
+    edges = edges,
+    n_min_length = 'potato'
+  ))
+
+  expect_error(fusion_id(
+    edges = edges,
+    n_max_missing = 'potato'
+  ))
+  expect_error(fusion_id(
+    edges = edges,
+    allow_split = 'potato'
+  ))
+  expect_error(fusion_id(
+    edges = edges,
+    allow_split = 42
+  ))
+})
