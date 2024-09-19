@@ -19,10 +19,11 @@ reference:
     contents:
     - '`randomizations`'
     - '`get_gbi`'
-  - title: Dyad ID function
+  - title: Dyad function
     desc: ~
     contents:
     - '`dyad_id`'
+    - '`fusion_id`'
   - title: Build functions
     desc: ~
     contents:
