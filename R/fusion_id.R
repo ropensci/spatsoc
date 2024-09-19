@@ -41,6 +41,7 @@
 #' @param allow_split boolean defining if a single observation can be greater than the
 #'  threshold distance without initiating fission event
 #' @export
+#' @seealso \code{\link{edge_dist}}
 fusion_id <- function(edges,
                            threshold = 50,
                            n_min_length = 0,
