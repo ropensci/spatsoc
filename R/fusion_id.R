@@ -55,6 +55,7 @@ fusion_id <- function(edges,
   stopifnot(is.numeric(threshold))
   stopifnot(is.numeric(n_min_length))
   stopifnot(is.numeric(n_max_missing))
+  stopifnot(is.logical(allow_split))
 
   stopifnot(threshold >= 0)
 
