@@ -202,3 +202,29 @@ test_that('allow_split returns expected number of unique fusionIDs', {
     4
   )
 })
+
+
+test_that('n_max_missing returns expected number of unique fusionIDs', {
+  expect_equal(
+    fusion_id(
+      edges,
+      threshold = threshold,
+      n_min_length = 2,
+      n_max_missing = 1,
+      allow_split = FALSE
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges,
+      threshold = threshold,
+      n_min_length = 2,
+      n_max_missing = 1,
+      allow_split = FALSE
+    )[!is.na(fusionID), .N, fusionID][, max(N)],
+    3
+  )
+
+})
