@@ -159,3 +159,46 @@ test_that('n_min_length returns expected number of unique fusionIDs', {
   )
 
 })
+
+
+test_that('allow_split returns expected number of unique fusionIDs', {
+  expect_equal(
+    fusion_id(
+      edges,
+      threshold = threshold,
+      n_min_length = 2,
+      allow_split = FALSE
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges,
+      threshold = threshold,
+      n_min_length = 2,
+      allow_split = FALSE
+    )[!is.na(fusionID), .N, fusionID][, max(N)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges,
+      threshold = threshold,
+      n_min_length = 2,
+      allow_split = FALSE
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges,
+      threshold = threshold,
+      n_min_length = 2,
+      allow_split = TRUE
+    )[!is.na(fusionID), .N, fusionID][, max(N)],
+    4
+  )
+})
