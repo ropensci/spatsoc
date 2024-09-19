@@ -121,3 +121,41 @@ test_that('larger n_min_length returns less unique fusionID', {
     fusion_id(edges, n_min_length = 0)[, uniqueN(fusionID)]
   )
 })
+
+
+test_that('n_min_length returns expected number of unique fusionIDs', {
+  edges <- data.table(
+    dyadID = rep('A-B', 9),
+    timegroup = seq.int(10)[-5],
+    distance = c(1, 50, 1, 1, 1, 50, 1, 1, 50)
+  )
+  threshold <- 25
+
+  expect_equal(
+    fusion_id(
+      edges,
+      threshold = threshold,
+      n_min_length = 0
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    4
+  )
+
+  expect_equal(
+    fusion_id(
+      edges,
+      threshold = threshold,
+      n_min_length = 2
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges,
+      threshold = threshold,
+      n_min_length = 3
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    0
+  )
+
+})
