@@ -103,3 +103,12 @@ test_that('allow_split TRUE returns less unique fusionID', {
     fusion_id(edges, allow_split = FALSE)[, uniqueN(fusionID)]
   )
 })
+
+test_that('larger n_max_missing returns less unique fusionID', {
+  # When a larger n max missing is provided, more fusion events are combined
+  #  resulting in less unique fusion events
+  expect_lt(
+    fusion_id(edges, n_max_missing = 3)[, uniqueN(fusionID)],
+    fusion_id(edges, n_max_missing = 0)[, uniqueN(fusionID)]
+  )
+})
