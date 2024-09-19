@@ -1,3 +1,9 @@
+# v 0.2.4.9000
+
+* (experimental) `fusion_id` function for flexibly identifying fission-fusion
+events [PR 78](https://github.com/ropensci/spatsoc/pull/78)
+
+
 # v 0.2.3 
 
 * Fix/replace igraph clusters with components [PR 61](https://github.com/ropensci/spatsoc/pull/61)
