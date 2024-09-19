@@ -17,3 +17,10 @@ edges <- edge_dist(
   )
 
 dyad_id(edges, 'ID1', 'ID2')
+
+test_that('edges is required', {
+  expect_error(fusion_id(
+    edges = NULL
+  ),
+  'input edges required')
+})
