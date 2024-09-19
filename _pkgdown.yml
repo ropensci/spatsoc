@@ -34,10 +34,29 @@ reference:
     contents:
     - '`DT`'
 
+articles:
+- title: Frequently asked questions about spatsoc
+  navbar: ~
+  contents:
+  - faq
+- title: Using spatsoc in social network analysis
+  navbar: ~
+  contents:
+  - using-in-sna
+- title: Using edge list generating functions and dyad_id
+  navbar: ~
+  contents:
+  - using-edge-and-dyad
+- title: Additional data formats
+  navbar: ~
+  contents:
+  - additional-data-formats
+
+
 navbar:
   structure:
     left: [home, reference, articles, news]
     right: [search, github]
-    
+
 news:
 - one_page: true
