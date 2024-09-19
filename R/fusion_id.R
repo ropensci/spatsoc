@@ -13,6 +13,14 @@
 #' \code{threshold} must be larger than 0. The coordinates must be planar
 #' coordinates (e.g.: UTM). In the case of UTM, a \code{threshold} = 50 would
 #' indicate a 50 m distance threshold.
+#'
+#' The \code{n_min_length} argument defines the minimum number of successive
+#' fixes that are required to establish a fusion event. The \code{n_max_missing}
+#' argument defines the the maximum number of allowable missing observations for
+#' either individual in a dyad within a fusion event. The \code{allow_split}
+#' argument defines if a single observation can be greater than the threshold
+#' distance without initiating fission event.
+#'
 #' @param threshold spatial distance threshold in the units of the projection
 #' @param n_min_length minimum length of fusion events
 #' @param n_max_missing maximum number of missing observations within a fusion event
