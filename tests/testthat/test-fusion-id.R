@@ -162,6 +162,13 @@ test_that('n_min_length returns expected number of unique fusionIDs', {
 
 
 test_that('allow_split returns expected number of unique fusionIDs', {
+  edges <- data.table(
+    dyadID = rep('A-B', 9),
+    timegroup = seq.int(10)[-5],
+    distance = c(1, 50, 1, 1, 1, 50, 1, 1, 50)
+  )
+  threshold <- 25
+
   expect_equal(
     fusion_id(
       edges,
@@ -205,6 +212,13 @@ test_that('allow_split returns expected number of unique fusionIDs', {
 
 
 test_that('n_max_missing returns expected number of unique fusionIDs', {
+  edges <- data.table(
+    dyadID = rep('A-B', 9),
+    timegroup = seq.int(10)[-5],
+    distance = c(1, 50, 1, 1, 1, 50, 1, 1, 50)
+  )
+  threshold <- 25
+
   expect_equal(
     fusion_id(
       edges,
