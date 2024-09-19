@@ -160,14 +160,6 @@ fusion_id <- function(edges = NULL,
                both_rleid := (both_rleid + seq.int(.N)) * -1,
                by = dyadID]
 
-  # Correct if (looking forward) the loc is part of a new fusion run
-  unique_edges[, both_rleid := data.table::fifelse(
-    timegroup - data.table::shift(timegroup, -1) == -1  &
-      within & !(tg_diff),
-    data.table::shift(both_rleid, -1),
-    both_rleid
-  ), by = dyadID]
-
   # If n minimum length > 0, check nrows and return NA if less than min
   if (n_min_length > 0) {
     unique_edges[!is.na(both_rleid), both_rleid := data.table::fifelse(
