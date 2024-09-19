@@ -77,3 +77,12 @@ test_that('returns a data.table', {
     threshold = 50
   ), 'data.table')
 })
+
+test_that('returns a numeric fusionID column', {
+  edges[, fusionID := NULL]
+  expect_contains(colnames(fusion_id(
+    edges = edges,
+    threshold = 50
+  )), 'fusionID')
+  expect_type(edges$fusionID, 'integer')
+})
