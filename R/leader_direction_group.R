@@ -16,7 +16,7 @@
 #' multiple individuals in a group have identical coordinates, they will
 #' receive an average rank (eg. 1.5, 2.5) which may indicate some data cleaning
 #' is required.
-group_leader <- function(DT, group_bearing = 'group_mean_bearing', coords = c('x', 'y'),
+leader_direction_group <- function(DT, group_bearing = 'group_mean_bearing', coords = c('x', 'y'),
                                group = 'group', return_rank = FALSE,
                                ties.method = 'average') {
 
