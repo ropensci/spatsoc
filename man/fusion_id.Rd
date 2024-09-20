@@ -60,9 +60,9 @@ indicate a 50 m distance threshold.
 The \code{n_min_length} argument defines the minimum number of successive
 fixes that are required to establish a fusion event. The \code{n_max_missing}
 argument defines the the maximum number of allowable missing observations for
-either individual in a dyad within a fusion event. The \code{allow_split}
-argument defines if a single observation can be greater than the threshold
-distance without initiating fission event.
+the dyad within a fusion event. The \code{allow_split} argument defines if a
+single observation can be greater than the threshold distance without
+initiating fission event.
 }
 \examples{
 

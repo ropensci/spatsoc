@@ -19,9 +19,9 @@
 #' The \code{n_min_length} argument defines the minimum number of successive
 #' fixes that are required to establish a fusion event. The \code{n_max_missing}
 #' argument defines the the maximum number of allowable missing observations for
-#' either individual in a dyad within a fusion event. The \code{allow_split}
-#' argument defines if a single observation can be greater than the threshold
-#' distance without initiating fission event.
+#' the dyad within a fusion event. The \code{allow_split} argument defines if a
+#' single observation can be greater than the threshold distance without
+#' initiating fission event.
 #'
 #' @return \code{fusion_id} returns the input \code{edges} appended with a
 #'   \code{fusionID} column.
@@ -159,14 +159,6 @@ fusion_id <- function(edges = NULL,
   unique_edges[(within) & !(tg_diff),
                both_rleid := (both_rleid + seq.int(.N)) * -1,
                by = dyadID]
-
-  # Correct if (looking forward) the loc is part of a new fusion run
-  unique_edges[, both_rleid := data.table::fifelse(
-    timegroup - data.table::shift(timegroup, -1) == -1  &
-      within & !(tg_diff),
-    data.table::shift(both_rleid, -1),
-    both_rleid
-  ), by = dyadID]
 
   # If n minimum length > 0, check nrows and return NA if less than min
   if (n_min_length > 0) {

@@ -121,3 +121,143 @@ test_that('larger n_min_length returns less unique fusionID', {
     fusion_id(edges, n_min_length = 0)[, uniqueN(fusionID)]
   )
 })
+
+edges_expected <- data.table(
+  dyadID = rep('A-B', 11),
+  timegroup = seq.int(12)[-5],
+  distance = c(1, 50, 1, 1, 1, 50, 50, 1, 1, 50, 1)
+)
+threshold <- 25
+
+test_that('n_min_length returns expected number of unique fusionIDs', {
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 0
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    5
+  )
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 2
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 3
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    0
+  )
+
+})
+
+
+test_that('allow_split returns expected number of unique fusionIDs', {
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 2,
+      allow_split = FALSE
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 2,
+      allow_split = FALSE
+    )[!is.na(fusionID), .N, fusionID][, max(N)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 2,
+      allow_split = TRUE
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 2,
+      allow_split = TRUE
+    )[!is.na(fusionID), .N, fusionID][, max(N)],
+    4
+  )
+})
+
+
+test_that('n_max_missing returns expected number of unique fusionIDs', {
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 0,
+      n_max_missing = 1,
+      allow_split = FALSE
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    4
+  )
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 2,
+      n_max_missing = 1,
+      allow_split = FALSE
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 2,
+      n_max_missing = 1,
+      allow_split = FALSE
+    )[!is.na(fusionID), .N, fusionID][, max(N)],
+    3
+  )
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 2,
+      n_max_missing = 1,
+      allow_split = TRUE
+    )[, uniqueN(fusionID,  na.rm = TRUE)],
+    2
+  )
+
+  expect_equal(
+    fusion_id(
+      edges_expected,
+      threshold = threshold,
+      n_min_length = 2,
+      n_max_missing = 1,
+      allow_split = TRUE
+    )[!is.na(fusionID), .N, fusionID][, max(N)],
+    5
+  )
+
+})

@@ -1,3 +1,7 @@
+# v 0.2.4.9001
+
+* improve tests of `fusion_id` with tests for expected number of output fusionIDs [PR 83](https://github.com/ropensci/spatsoc/pull/83)
+
 # v 0.2.4.9000
 
 * (experimental) `fusion_id` function for flexibly identifying fission-fusion
