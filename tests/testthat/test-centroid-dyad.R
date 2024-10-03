@@ -59,3 +59,10 @@ test_that('coords are correctly provided or error detected', {
                'coords must be numeric')
 })
 
+test_that('centroid column succesfully detected', {
+  copyEdges <- copy(edges)[, centroid_X := 1]
+  expect_message(
+    centroid_dyad(copyEdges, DT, id = id, coords = coords),
+    'centroid_X column will be overwritten'
+  )
+})
