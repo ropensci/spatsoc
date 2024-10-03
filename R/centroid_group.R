@@ -31,6 +31,9 @@
 #'
 #'   A message is returned when centroid columns are already exists in
 #'   the input \code{DT}, because they will be overwritten.
+#'
+#' @export
+#' @seealso \code{\link{group_pts}}
 
   xcol <- first(coords)
   ycol <- last(coords)
