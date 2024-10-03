@@ -37,3 +37,8 @@ test_that('arguments required, otherwise error detected', {
   expect_error(centroid_dyad(edges, DT, id = id, coords = coords, na.rm = NULL),
                'na.rm is required')
 })
+
+test_that('na.rm is boolean', {
+  expect_error(centroid_dyad(edges, DT, id = id, coords = coords, na.rm = 'potato'),
+               'boolean')
+})
