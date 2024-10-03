@@ -46,7 +46,6 @@ The \code{coords} and \code{group} arguments expect the names of a column in
 values are removed before calculation.
 }
 \examples{
-
 # Load data.table
 library(data.table)
 \dontshow{data.table::setDTthreads(1)}
