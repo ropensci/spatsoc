@@ -21,6 +21,16 @@
 #' @inheritParams group_pts
 #' @param group Character string of group column
 #' @param na.rm if NAs should be removed in calculating mean location, see \code{mean}
+#'
+#' @return \code{centroid_group} returns the input \code{DT} appended with
+#'  centroid columns for the X and Y coordinate columns.
+#'
+#'   These columns represents the centroid coordinate columns.
+#'   The naming of these columns will correspond to the provided coordinate
+#'   column names prefixed with "centroid_".
+#'
+#'   A message is returned when centroid columns are already exists in
+#'   the input \code{DT}, because they will be overwritten.
 
   xcol <- first(coords)
   ycol <- last(coords)
