@@ -64,14 +64,48 @@ centroid_group <- function(
     group = 'group',
     na.rm = FALSE) {
 
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
+  if (is.null(id)) {
+    stop('ID field required')
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (any(!(
+    c(coords, group) %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(coords, group),
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
+  }
+
   xcol <- first(coords)
   ycol <- last(coords)
 
-  stopifnot(xcol %in% colnames(DT))
-  stopifnot(ycol %in% colnames(DT))
-  stopifnot(group %in% colnames(DT))
+  out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
+  out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
 
-  DT[, paste0('group_mean_', xcol) := mean(.SD[[xcol]], na.rm = na.rm), by = c(group)]
-  DT[, paste0('group_mean_', ycol) := mean(.SD[[ycol]], na.rm = na.rm), by = c(group)]
+  if (out_xcol %in% colnames(DT)) {
+    message(paste(out_xcol, 'column will be overwritten by this function'))
+    data.table::set(DT, j = out_xcol, value = NULL)
+  }
+
+  if (out_ycol %in% colnames(DT)) {
+    message(paste(out_ycol, 'column will be overwritten by this function'))
+    data.table::set(DT, j = out_ycol, value = NULL)
+  }
   return(DT[])
 }
