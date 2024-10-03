@@ -96,6 +96,10 @@ centroid_group <- function(
     stop('na.rm is required')
   }
 
+  if (!is.logical(na.rm)) {
+    stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
+  }
+
   xcol <- first(coords)
   ycol <- last(coords)
 
