@@ -26,3 +26,14 @@ test_that('edges, DT are required', {
   expect_error(centroid_dyad(edges, DT = NULL))
   expect_error(centroid_dyad(edges = NULL, DT))
 })
+
+test_that('arguments required, otherwise error detected', {
+  expect_error(centroid_dyad(edges, DT, id = id, coords = 'X'),
+               'coords requires a vector')
+  expect_error(centroid_dyad(edges, DT, id = NULL),
+               'id column name required')
+  expect_error(centroid_dyad(edges, DT, id = id, coords = coords, timegroup = NULL),
+               'timegroup column name required')
+  expect_error(centroid_dyad(edges, DT, id = id, coords = coords, na.rm = NULL),
+               'na.rm is required')
+})
