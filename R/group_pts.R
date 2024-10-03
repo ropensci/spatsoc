@@ -8,7 +8,8 @@
 #'
 #' The \code{DT} must be a \code{data.table}. If your data is a
 #' \code{data.frame}, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}}.
+#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
+#' \code{\link[data.table:data.table]{data.table::data.table}}.
 #'
 #' The \code{id}, \code{coords}, \code{timegroup} (and optional \code{splitBy})
 #' arguments expect the names of a column in \code{DT} which correspond to the
