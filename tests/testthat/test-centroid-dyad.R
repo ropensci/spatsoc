@@ -78,3 +78,8 @@ test_that('two columns added to the result DT', {
   expect_equal(ncol(copyEdges) + 2,
                ncol(centroid_dyad(edges, DT, id = id, coords = coords)))
 })
+
+test_that('two columns added to the result DT are doubles', {
+  expect_type(centroid_dyad(edges, DT, id = id, coords = coords)$centroid_X, 'double')
+  expect_type(centroid_dyad(edges, DT, id = id, coords = coords)$centroid_Y, 'double')
+})
