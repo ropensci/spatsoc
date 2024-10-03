@@ -1,3 +1,4 @@
+# Test fusion_id
 context("test-fusion-id")
 
 library(spatsoc)
