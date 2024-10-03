@@ -68,10 +68,6 @@ centroid_group <- function(
     stop('input DT required')
   }
 
-  if (is.null(id)) {
-    stop('ID field required')
-  }
-
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')
   }
