@@ -21,3 +21,8 @@ dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 
 clean_DT <- copy(DT)
 clean_edges <- copy(edges)
+
+test_that('edges, DT are required', {
+  expect_error(centroid_dyad(edges, DT = NULL))
+  expect_error(centroid_dyad(edges = NULL, DT))
+})
