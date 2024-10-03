@@ -40,3 +40,7 @@
 #'
 #'   A message is returned when centroid columns are already exists in
 #'   the input \code{edges}, because they will be overwritten.
+#'
+#' @export
+#' @family Centroid functions
+#' @seealso [dyad_id] [edge_dist] [edge_nn] [group_pts]
