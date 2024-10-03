@@ -72,6 +72,10 @@ centroid_group <- function(
     stop('coords requires a vector of column names for coordinates X and Y')
   }
 
+  if (is.null(group)) {
+    stop('group column name required')
+  }
+
   if (any(!(
     c(coords, group) %in% colnames(DT)
   ))) {
