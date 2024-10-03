@@ -1,3 +1,4 @@
+# Test edge_dist
 context("test-edge-dist")
 
 library(spatsoc)

@@ -1,3 +1,4 @@
+# Test edge_nn
 context("test-edge-nn")
 
 library(spatsoc)

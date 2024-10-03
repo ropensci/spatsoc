@@ -1,5 +1,6 @@
 # Test group_lines
 context('test group_lines')
+
 library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
