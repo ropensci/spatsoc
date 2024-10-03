@@ -92,6 +92,10 @@ centroid_group <- function(
     stop('coords must be numeric')
   }
 
+  if (is.null(na.rm)) {
+    stop('na.rm is required')
+  }
+
   xcol <- first(coords)
   ycol <- last(coords)
 
