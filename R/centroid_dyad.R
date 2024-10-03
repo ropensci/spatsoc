@@ -38,6 +38,10 @@
 #'   The naming of these columns will correspond to the provided coordinate
 #'   column names prefixed with "centroid_".
 #'
+#'  Note: due to the merge required within this function, the output needs to be
+#'  reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
+#'  and \code{group_pts}.
+#'
 #'   A message is returned when centroid columns are already exists in
 #'   the input \code{edges}, because they will be overwritten.
 #'
@@ -76,13 +80,15 @@
 #' dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 #'
 #' # Calculate dyad centroid
-#' centroid_dyad(
+#' centroids <- centroid_dyad(
 #'   edges,
 #'   DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
 #'   timegroup = 'timegroup', na.rm = TRUE
 #' )
+#'
+#' print(centroids)
 centroid_dyad <- function(
     edges = NULL,
     DT = NULL,
