@@ -31,3 +31,10 @@ test_that('arguments required, otherwise error detected', {
   expect_error(centroid_group(DT, coords = coords, na.rm = NULL),
                'na.rm is required')
 })
+
+test_that('column names must exist in DT', {
+  expect_error(centroid_group(DT, coords = rep('potato', 2)),
+               'potato field')
+  expect_error(centroid_group(DT, coords = coords, group = 'potato'),
+               'potato field')
+})
