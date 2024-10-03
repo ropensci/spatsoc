@@ -19,11 +19,15 @@ reference:
     contents:
     - '`randomizations`'
     - '`get_gbi`'
-  - title: Dyad function
+  - title: Dyad functions
     desc: ~
     contents:
     - '`dyad_id`'
     - '`fusion_id`'
+  - title: Centroid functions
+    desc: ~
+    contents:
+    - '`centroid_group`'
   - title: Build functions
     desc: ~
     contents:
