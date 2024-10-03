@@ -36,6 +36,7 @@ test_that('na.rm is boolean', {
   expect_error(centroid_group(DT, coords = coords, na.rm = 'potato'),
                'boolean')
 })
+
 test_that('column names must exist in DT', {
   expect_error(centroid_group(DT, coords = rep('potato', 2)),
                'potato field')
@@ -70,6 +71,11 @@ test_that('two columns added to the result DT', {
 
   expect_equal(ncol(copyDT) + 2,
                ncol(centroid_group(DT, coords = coords)))
+})
+
+test_that('two columns added to the result DT', {
+  expect_type(centroid_group(DT, coords = coords)$centroid_X, 'double')
+  expect_type(centroid_group(DT, coords = coords)$centroid_Y, 'double')
 })
 
 test_that('returns a data.table', {
