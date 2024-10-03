@@ -53,3 +53,10 @@ test_that('centroid column succesfully detected', {
     'centroid_X column will be overwritten'
   )
 })
+
+test_that('no rows are added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(nrow(copyDT),
+               nrow(centroid_group(copyDT, coords = coords)))
+})
