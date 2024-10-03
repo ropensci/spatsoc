@@ -105,6 +105,10 @@ centroid_dyad <- function(
     stop('input edges required')
   }
 
+  if (is.null(id)) {
+    stop('id column name required')
+  }
+
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')
   }
