@@ -42,3 +42,12 @@ test_that('na.rm is boolean', {
   expect_error(centroid_dyad(edges, DT, id = id, coords = coords, na.rm = 'potato'),
                'boolean')
 })
+
+test_that('column names must exist in DT', {
+  expect_error(centroid_dyad(edges, DT, id = 'potato', coords = coords),
+               'potato field')
+  expect_error(centroid_dyad(edges, DT, id = id, coords = rep('potato', 2)),
+               'potato field')
+  expect_error(centroid_dyad(edges, DT, id = id, coords = coords, timegroup = 'potato'),
+               'potato field')
+})
