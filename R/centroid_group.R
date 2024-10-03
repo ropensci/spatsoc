@@ -33,6 +33,7 @@
 #'
 #' @export
 #' @seealso \code{\link{group_pts}}
+#' @family Centroid functions
 #' @examples
 #' # Load data.table
 #' library(data.table)
