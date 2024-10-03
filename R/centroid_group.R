@@ -34,7 +34,6 @@
 #' @export
 #' @seealso \code{\link{group_pts}}
 #' @examples
-#'
 #' # Load data.table
 #' library(data.table)
 #' \dontshow{data.table::setDTthreads(1)}
