@@ -45,3 +45,11 @@ test_that('coords are correctly provided or error detected', {
   expect_error(centroid_group(DT, coords = c('X', 'ID')),
                'coords must be numeric')
 })
+
+test_that('centroid column succesfully detected', {
+  copyDT <- copy(clean_DT)[, centroid_X := 1]
+  expect_message(
+    centroid_group(copyDT, coords = coords),
+    'centroid_X column will be overwritten'
+  )
+})
