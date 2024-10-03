@@ -107,5 +107,9 @@ centroid_group <- function(
     message(paste(out_ycol, 'column will be overwritten by this function'))
     data.table::set(DT, j = out_ycol, value = NULL)
   }
+
+  DT[, c(out_xcol) := mean(.SD[[xcol]], na.rm = na.rm), by = c(group)]
+  DT[, c(out_ycol) := mean(.SD[[ycol]], na.rm = na.rm), by = c(group)]
+
   return(DT[])
 }
