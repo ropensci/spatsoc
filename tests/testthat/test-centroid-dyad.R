@@ -51,3 +51,11 @@ test_that('column names must exist in DT', {
   expect_error(centroid_dyad(edges, DT, id = id, coords = coords, timegroup = 'potato'),
                'potato field')
 })
+
+test_that('coords are correctly provided or error detected', {
+  expect_error(centroid_dyad(edges, DT, id = id, coords = c('X', NULL)),
+               'coords requires a vector')
+  expect_error(centroid_dyad(edges, DT, id = id, coords = c('X', 'ID')),
+               'coords must be numeric')
+})
+
