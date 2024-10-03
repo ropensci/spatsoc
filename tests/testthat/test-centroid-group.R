@@ -67,3 +67,7 @@ test_that('two columns added to the result DT', {
   expect_equal(ncol(copyDT) + 2,
                ncol(centroid_group(DT, coords = coords)))
 })
+
+test_that('returns a data.table', {
+  expect_s3_class(centroid_group(DT, coords = coords), 'data.table')
+})
