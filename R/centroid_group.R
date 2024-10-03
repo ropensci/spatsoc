@@ -58,6 +58,11 @@
 #'
 #' # Calculate group centroid
 #' centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
+centroid_group <- function(
+    DT = NULL,
+    coords = NULL,
+    group = 'group',
+    na.rm = FALSE) {
 
   xcol <- first(coords)
   ycol <- last(coords)
