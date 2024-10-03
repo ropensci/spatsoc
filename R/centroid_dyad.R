@@ -165,14 +165,14 @@ centroid_dyad <- function(
   m <- merge(edges,
         DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
         by.x = c('ID1', timegroup),
-        by.y = c('ID', timegroup),
+        by.y = c(id, timegroup),
         all.x = TRUE,
         sort = FALSE)
   data.table::setnames(m, coords, id1_coords)
   m <- merge(m,
              DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
              by.x = c('ID2', timegroup),
-             by.y = c('ID', timegroup),
+             by.y = c(id, timegroup),
              all.x = TRUE,
              sort = FALSE)
   data.table::setnames(m, coords, id2_coords)
