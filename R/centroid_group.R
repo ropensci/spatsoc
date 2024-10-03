@@ -16,6 +16,11 @@
 #' X and Y coordinates and group columns. The \code{na.rm} argument is passed
 #' to the \code{mean} function to control if NA values are removed before
 #' calculation.
+#'
+#' @param DT input data.table with group column generated with \code{group_pts}
+#' @inheritParams group_pts
+#' @param group Character string of group column
+#' @param na.rm if NAs should be removed in calculating mean location, see \code{mean}
 
   xcol <- first(coords)
   ycol <- last(coords)
