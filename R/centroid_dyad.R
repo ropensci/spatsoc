@@ -151,3 +151,18 @@ centroid_dyad <- function(
 
   id1_coords <- paste0('id1_', coords)
   id2_coords <- paste0('id2_', coords)
+
+  m <- merge(edges,
+        DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+        by.x = c('ID1', timegroup),
+        by.y = c('ID', timegroup),
+        all.x = TRUE,
+        sort = FALSE)
+  data.table::setnames(m, coords, id1_coords)
+  m <- merge(m,
+             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+             by.x = c('ID2', timegroup),
+             by.y = c('ID', timegroup),
+             all.x = TRUE,
+             sort = FALSE)
+  data.table::setnames(m, coords, id2_coords)
