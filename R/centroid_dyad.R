@@ -1,0 +1,2 @@
+#' Dyad centroid
+#'
