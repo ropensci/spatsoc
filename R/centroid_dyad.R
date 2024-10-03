@@ -176,3 +176,8 @@ centroid_dyad <- function(
     message(paste(out_ycol, 'column will be overwritten by this function'))
     data.table::set(m, j = out_ycol, value = NULL)
   }
+
+  m[, c(out_xcol) := rowMeans(.SD, na.rm = na.rm),
+    .SDcols = c(first(id1_coords), first(id2_coords))]
+  m[, c(out_ycol) := rowMeans(.SD, na.rm = na.rm),
+    .SDcols = c(last(id1_coords), last(id2_coords))]
