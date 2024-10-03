@@ -60,3 +60,10 @@ test_that('no rows are added to the result DT', {
   expect_equal(nrow(copyDT),
                nrow(centroid_group(copyDT, coords = coords)))
 })
+
+test_that('two columns added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(ncol(copyDT) + 2,
+               ncol(centroid_group(DT, coords = coords)))
+})
