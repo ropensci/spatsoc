@@ -81,3 +81,33 @@ test_that('two columns added to the result DT', {
 test_that('returns a data.table', {
   expect_s3_class(centroid_group(DT, coords = coords), 'data.table')
 })
+
+
+DT <- data.table(
+  group = c(1, 1, 2, 2),
+  X = c(10, 20, 10, NA),
+  Y = c(10, 20, 10, 20)
+)
+
+test_that('results are expected', {
+  expect_equal(
+    centroid_group(copy(DT), coords, na.rm = FALSE)[group == 1, unique(centroid_X)],
+    15
+  )
+
+  expect_equal(
+    centroid_group(copy(DT), coords, na.rm = FALSE)[group == 2, unique(centroid_X)],
+    NA_real_
+  )
+
+  expect_equal(
+    centroid_group(copy(DT), coords, na.rm = TRUE)[group == 1, unique(centroid_X)],
+    15
+  )
+
+  expect_equal(
+    centroid_group(copy(DT), coords, na.rm = TRUE)[group == 2, unique(centroid_X)],
+    10
+  )
+})
+
