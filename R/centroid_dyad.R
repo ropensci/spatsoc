@@ -166,3 +166,13 @@ centroid_dyad <- function(
              all.x = TRUE,
              sort = FALSE)
   data.table::setnames(m, coords, id2_coords)
+
+  if (out_xcol %in% colnames(m)) {
+    message(paste(out_xcol, 'column will be overwritten by this function'))
+    data.table::set(m, j = out_xcol, value = NULL)
+  }
+
+  if (out_ycol %in% colnames(m)) {
+    message(paste(out_ycol, 'column will be overwritten by this function'))
+    data.table::set(m, j = out_ycol, value = NULL)
+  }
