@@ -66,3 +66,15 @@ test_that('centroid column succesfully detected', {
     'centroid_X column will be overwritten'
   )
 })
+
+test_that('no rows are added to the result DT', {
+  expect_equal(nrow(edges),
+               nrow(centroid_dyad(edges, DT, id = id, coords = coords)))
+})
+
+test_that('two columns added to the result DT', {
+  copyEdges <- copy(edges)
+
+  expect_equal(ncol(copyEdges) + 2,
+               ncol(centroid_dyad(edges, DT, id = id, coords = coords)))
+})
