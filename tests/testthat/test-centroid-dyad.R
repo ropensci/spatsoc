@@ -83,3 +83,7 @@ test_that('two columns added to the result DT are doubles', {
   expect_type(centroid_dyad(edges, DT, id = id, coords = coords)$centroid_X, 'double')
   expect_type(centroid_dyad(edges, DT, id = id, coords = coords)$centroid_Y, 'double')
 })
+
+test_that('returns a data.table', {
+  expect_s3_class(centroid_dyad(edges, DT, id = id, coords = coords), 'data.table')
+})
