@@ -12,10 +12,12 @@ coords <- c('X', 'Y')
 timegroup <- 'timegroup'
 group <- 'group'
 
-DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
-group_times(DT, datetime = 'datetime', threshold = '20 minutes')
-group_pts(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
 
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+group_times(DT, datetime = datetime, threshold = timethreshold)
+group_pts(DT, threshold = threshold, id = id, coords = coords, timegroup = timegroup)
+
+clean_DT <- copy(DT)
 test_that('DT is required', {
   expect_error(centroid_group(DT = NULL))
 })
