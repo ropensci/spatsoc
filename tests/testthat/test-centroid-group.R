@@ -73,7 +73,7 @@ test_that('two columns added to the result DT', {
                ncol(centroid_group(DT, coords = coords)))
 })
 
-test_that('two columns added to the result DT', {
+test_that('two columns added to the result DT are doubles', {
   expect_type(centroid_group(DT, coords = coords)$centroid_X, 'double')
   expect_type(centroid_group(DT, coords = coords)$centroid_Y, 'double')
 })
