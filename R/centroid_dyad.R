@@ -83,3 +83,10 @@
 #'   coords = c('X', 'Y'),
 #'   timegroup = 'timegroup', na.rm = TRUE
 #' )
+centroid_dyad <- function(
+    edges = NULL,
+    DT = NULL,
+    id = NULL,
+    coords = NULL,
+    timegroup = 'timegroup',
+    na.rm = FALSE) {
