@@ -29,7 +29,8 @@
 #' each \code{id} and \code{splitBy} subgroup.
 #'
 #' @return \code{direction_step} returns the input \code{DT} appended with
-#'  a direction column.
+#'  a direction column with units set to radians using the \code{units}
+#'  package.
 #'
 #'   This column represents the azimuth between the sequence of points for
 #'   each individual computed using \code{lwgeom::st_geod_azimuth}. Note, the
@@ -113,22 +114,19 @@ direction_step <- function(
 
   if (sf::st_is_longlat(projection)) {
     DT[, direction := c(
-      units::drop_units(
-        lwgeom::st_geod_azimuth(
-          sf::st_as_sf(.SD, coords = coords, crs = projection))
-        ),
-      NA),
+      lwgeom::st_geod_azimuth(
+        sf::st_as_sf(.SD, coords = coords, crs = projection))
+      ),
+      units::set_units(NA, rad),
       by = c(id, splitBy)]
   } else if (!sf::st_is_longlat(projection)) {
     DT[, direction := c(
-      units::drop_units(
-        lwgeom::st_geod_azimuth(
-          sf::st_transform(
-            sf::st_as_sf(.SD, coords = coords, crs = projection),
-            crs = 4326)
-          )
+      lwgeom::st_geod_azimuth(
+        sf::st_transform(
+          sf::st_as_sf(.SD, coords = coords, crs = projection),
+          crs = 4326)
         ),
-      NA),
+      units::set_units(NA, rad)),
       by = c(id, splitBy)]
   } else {
     stop('projection not recognized, please see sf::st_crs')
