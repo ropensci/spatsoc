@@ -129,15 +129,14 @@ distance_to_centroid <- function(
     ))
   }
 
-
   if ('distance_centroid' %in% colnames(DT)) {
     message('distance_centroid column will be overwritten by this function')
     data.table::set(DT, j = 'distance_centroid', value = NULL)
   }
 
   DT[, distance_centroid :=
-       sqrt((.SD[[xcol]] - .SD[[group_xcol]])^2 +
-              (.SD[[ycol]] - .SD[[group_ycol]])^2)]
+       sqrt((.SD[[xcol]] - .SD[[centroid_xcol]])^2 +
+              (.SD[[ycol]] - .SD[[centroid_ycol]])^2)]
 
   if (return_rank) {
     if (!group %in% colnames(DT)) {
