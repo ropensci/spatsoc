@@ -98,3 +98,14 @@ direction_step <- function(
         ),
       NA),
       by = c(id, splitBy)]
+  } else if (!sf::st_is_longlat(projection)) {
+    DT[, bearing := c(
+      units::drop_units(
+        lwgeom::st_geod_azimuth(
+          sf::st_transform(
+            sf::st_as_sf(.SD, coords = coords, crs = projection),
+            crs = 4326)
+          )
+        ),
+      NA),
+      by = c(id, splitBy)]
