@@ -107,6 +107,10 @@ direction_step <- function(
     data.table::set(DT, j = 'direction', value = NULL)
   }
 
+  if (is.null(projection)) {
+    stop('projection required')
+  }
+
   if (sf::st_is_longlat(projection)) {
     DT[, direction := c(
       units::drop_units(
