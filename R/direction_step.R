@@ -55,3 +55,9 @@
 #'   coords = c('X', 'Y'),
 #'   projection = 32736
 #' )
+direction_step <- function(
+    DT = NULL,
+    id = NULL,
+    coords = NULL,
+    projection = NULL,
+    splitBy = NULL) {
