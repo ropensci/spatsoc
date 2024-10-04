@@ -60,6 +60,9 @@
 #'
 #' # Calculate direction to group centroid
 #' direction_to_centroid(DT, coords = c('X', 'Y'))
+direction_to_centroid <- function(
+    DT = NULL,
+    coords = NULL) {
 
   stopifnot(length(coords) == 2)
 
