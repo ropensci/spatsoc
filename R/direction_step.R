@@ -27,3 +27,6 @@
 #' can provide the column name(s) which identify them to \code{splitBy}. The
 #' direction calculation by \code{direction_step} will only consider rows within
 #' each \code{id} and \code{splitBy} subgroup.
+#'
+#' @inheritParams group_pts
+#' @inheritParams build_polys
