@@ -119,6 +119,7 @@ print(centroids)
 \link{dyad_id} \link{edge_dist} \link{edge_nn} \link{group_pts}
 
 Other Centroid functions: 
+\code{\link{centroid_fusion}()},
 \code{\link{centroid_group}()}
 }
 \concept{Centroid functions}
