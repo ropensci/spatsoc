@@ -40,3 +40,11 @@ test_that('coords are correctly provided or error detected', {
   expect_error(direction_to_centroid(DT, coords = c('X', 'ID')),
                'coords must be numeric')
 })
+
+test_that('direction_centroid column succesfully detected', {
+  copyDT <- copy(clean_DT)[, direction_centroid := 1]
+  expect_message(
+    direction_to_centroid(copyDT, coords = coords),
+    'direction_centroid column will be overwritten'
+  )
+})
