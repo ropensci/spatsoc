@@ -80,3 +80,16 @@ test_that('dimensions returned expected', {
 
 })
 
+
+test_that('direction column succesfully detected', {
+  copyDT <- copy(clean_DT)[, direction := 1]
+  expect_message(
+    direction_step(
+      copyDT,
+      id = id,
+      coords = coords,
+      projection = projection
+    ),
+    'direction column will be overwritten'
+  )
+})
