@@ -47,3 +47,10 @@ test_that('coords are correctly provided or error detected', {
                'coords must be numeric')
 })
 
+test_that('distance_centroid column succesfully detected', {
+  copyDT <- copy(clean_DT)[, distance_centroid := 1]
+  expect_message(
+    distance_to_centroid(copyDT, coords = coords),
+    'distance_centroid column will be overwritten'
+  )
+})
