@@ -115,11 +115,14 @@ direction_to_centroid <- function(
     message('direction_centroid column will be overwritten by this function')
     data.table::set(DT, j = 'direction_centroid', value = NULL)
   }
+
+  DT[, direction_centroid := fifelse(
     .SD[[xcol]] == .SD[[group_xcol]] &
       .SD[[ycol]] == .SD[[group_ycol]],
     NaN,
     atan2(.SD[[group_ycol]] - .SD[[ycol]],
           (.SD[[group_xcol]] - .SD[[xcol]]))
   )]
+
   return(DT[])
 }
