@@ -1,4 +1,4 @@
-#' Calculate distance to group centroid
+#' Distance to group centroid
 #'
 #' @param DT expects group_mean columns generated with group_centroid
 #' @param coords character vector of column names for x, y
