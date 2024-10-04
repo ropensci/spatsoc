@@ -30,3 +30,6 @@
 #'
 #' @inheritParams group_pts
 #' @inheritParams build_polys
+#'
+#' @family Direction functions
+#' @export
