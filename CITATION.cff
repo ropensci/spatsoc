@@ -8,7 +8,7 @@ message: 'To cite package "spatsoc" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship'
-version: 0.2.5
+version: 0.2.5.9000
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.spatsoc
@@ -157,6 +157,19 @@ references:
     orcid: https://orcid.org/0000-0001-8049-7069
   year: '2024'
   doi: 10.32614/CRAN.package.sf
+- type: software
+  title: lwgeom
+  abstract: 'lwgeom: Bindings to Selected ''liblwgeom'' Functions for Simple Features'
+  notes: Imports
+  url: https://r-spatial.github.io/lwgeom/
+  repository: https://CRAN.R-project.org/package=lwgeom
+  authors:
+  - family-names: Pebesma
+    given-names: Edzer
+    email: edzer.pebesma@uni-muenster.de
+    orcid: https://orcid.org/0000-0001-8049-7069
+  year: '2024'
+  doi: 10.32614/CRAN.package.lwgeom
 - type: software
   title: stats
   abstract: 'R: A Language and Environment for Statistical Computing'

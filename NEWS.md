@@ -1,3 +1,8 @@
+# v 0.2.5.9000
+
+* `direction_step` function for calculating direction in radians between each
+location [PR 90](https://github.com/ropensci/spatsoc/pull/90)
+
 # v 0.2.5
 
 New experimental functions: 
@@ -6,6 +11,8 @@ New experimental functions:
 * `centroid_group` function for calculating group centroids [PR 72](https://github.com/ropensci/spatsoc/pull/72)
 
 # v 0.2.4
+
+New experimental function: 
 
 * `fusion_id` function for flexibly identifying fission-fusion events [PR 78](https://github.com/ropensci/spatsoc/pull/78)
 * improve tests of `fusion_id` with tests for expected number of output fusionIDs [PR 83](https://github.com/ropensci/spatsoc/pull/83)

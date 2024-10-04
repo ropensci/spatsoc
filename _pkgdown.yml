@@ -30,6 +30,10 @@ reference:
     - '`centroid_group`'
     - '`centroid_dyad`'
     - '`centroid_fusion`'
+  - title: Direction functions
+    desc: ~
+    contents:
+    - '`direction_step`'
   - title: Build functions
     desc: ~
     contents:
