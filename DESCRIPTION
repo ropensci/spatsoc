@@ -26,6 +26,7 @@ Imports:
     data.table (>= 1.10.5),
     igraph,
     sf,
+    lwgeom,
     stats,
     units
 Suggests: 
