@@ -54,3 +54,29 @@ test_that('coords are correctly provided or error detected', {
                               projection = projection),
                'numeric')
 })
+
+test_that('dimensions returned expected', {
+
+  expect_equal(
+    ncol(clean_DT) + 1,
+    ncol(direction_step(copy(clean_DT), id = id,
+                        coords = coords, projection = projection))
+  )
+
+  expect_equal(
+    nrow(clean_DT),
+    nrow(direction_step(copy(clean_DT), id = id,
+                        coords = coords, projection = projection))
+  )
+
+  expect_true('direction' %in% colnames(
+    direction_step(
+      copy(clean_DT),
+      id = id,
+      coords = coords,
+      projection = projection
+    )
+  ))
+
+})
+
