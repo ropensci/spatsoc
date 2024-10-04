@@ -89,3 +89,12 @@ direction_step <- function(
   if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
+
+  if (sf::st_is_longlat(projection)) {
+    DT[, bearing := c(
+      units::drop_units(
+        lwgeom::st_geod_azimuth(
+          sf::st_as_sf(.SD, coords = coords, crs = projection))
+        ),
+      NA),
+      by = c(id, splitBy)]
