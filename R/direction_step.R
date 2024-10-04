@@ -47,6 +47,7 @@
 #' @inheritParams build_polys
 #'
 #' @family Direction functions
+#' @seealso [amt::direction_abs()], [geosphere::bearing()]
 #' @export
 #'
 #' @examples
