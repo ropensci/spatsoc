@@ -74,6 +74,12 @@
 #'
 #' # Calculate distance to group centroid
 #' distance_to_centroid(DT, coords = c('X', 'Y'), group = 'group', return_rank = TRUE)
+distance_to_centroid <- function(
+    DT = NULL,
+    coords = NULL,
+    group = 'group',
+    return_rank = FALSE,
+    ties.method = NULL) {
 
   stopifnot(length(coords) == 2)
 
