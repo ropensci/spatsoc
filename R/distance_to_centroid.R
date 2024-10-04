@@ -47,6 +47,33 @@
 #'  * <https://doi.org/10.1016/j.anbehav.2021.08.004>
 #'  * <https://doi.org/10.1111/eth.12336>
 #'  * <https://doi.org/10.1007/s13364-018-0400-2>
+#'
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Select only individuals A, B, C for this example
+#' DT <- DT[ID %in% c('A', 'B', 'C')]
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Spatial grouping with timegroup
+#' group_pts(DT, threshold = 5, id = 'ID',
+#'           coords = c('X', 'Y'), timegroup = 'timegroup')
+#'
+#' # Calculate group centroid
+#' centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
+#'
+#' # Calculate distance to group centroid
+#' distance_to_centroid(DT, coords = c('X', 'Y'), group = 'group', return_rank = TRUE)
 
   stopifnot(length(coords) == 2)
 
