@@ -2,7 +2,7 @@
 title: "Additional data formats"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{additional-data-formats}
+  %\VignetteIndexEntry{Additional data formats}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
