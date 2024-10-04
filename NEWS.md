@@ -1,3 +1,7 @@
+# v 0.2.5.9001
+
+* `centroid_dyad` function for calculating dyad centroids [PR 88](https://github.com/ropensci/spatsoc/pull/88)
+
 # v 0.2.5.9000
 
 * `centroid_group` function for calculating group centroids [PR 72](https://github.com/ropensci/spatsoc/pull/72)

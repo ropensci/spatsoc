@@ -28,6 +28,7 @@ reference:
     desc: ~
     contents:
     - '`centroid_group`'
+    - '`centroid_dyad`'
   - title: Build functions
     desc: ~
     contents:
