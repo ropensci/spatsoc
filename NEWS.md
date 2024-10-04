@@ -1,19 +1,14 @@
-# v 0.2.5.9001
+# v 0.2.5
 
-* `centroid_dyad` function for calculating dyad centroids [PR 88](https://github.com/ropensci/spatsoc/pull/88)
+New experimental functions: 
 
-# v 0.2.5.9000
-
+* `centroid_fusion` function for calculation fusion centroids [PR 89](https://github.com/ropensci/spatsoc/pull/89)
 * `centroid_group` function for calculating group centroids [PR 72](https://github.com/ropensci/spatsoc/pull/72)
 
-# v 0.2.4.9001
+# v 0.2.4
 
+* `fusion_id` function for flexibly identifying fission-fusion events [PR 78](https://github.com/ropensci/spatsoc/pull/78)
 * improve tests of `fusion_id` with tests for expected number of output fusionIDs [PR 83](https://github.com/ropensci/spatsoc/pull/83)
-
-# v 0.2.4.9000
-
-* `fusion_id` function for flexibly identifying fission-fusion
-events [PR 78](https://github.com/ropensci/spatsoc/pull/78)
 
 
 # v 0.2.3 
