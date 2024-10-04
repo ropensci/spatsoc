@@ -114,11 +114,11 @@ direction_to_centroid <- function(
   }
 
   DT[, direction_centroid := fifelse(
-    .SD[[xcol]] == .SD[[group_xcol]] &
-      .SD[[ycol]] == .SD[[group_ycol]],
+    .SD[[xcol]] == .SD[[centroid_xcol]] &
+      .SD[[ycol]] == .SD[[centroid_ycol]],
     NaN,
-    atan2(.SD[[group_ycol]] - .SD[[ycol]],
-          (.SD[[group_xcol]] - .SD[[xcol]]))
+    atan2(.SD[[centroid_ycol]] - .SD[[ycol]],
+          (.SD[[centroid_xcol]] - .SD[[xcol]]))
   )]
 
   return(DT[])
