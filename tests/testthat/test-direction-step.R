@@ -100,3 +100,16 @@ test_that('returns a data.table', {
                                  projection = projection),
                   'data.table')
 })
+
+
+test_that('splitBy returns expected', {
+  DT[, split := sample(seq.int(5), .N, replace = TRUE)]
+  expect_gte(
+    direction_step(DT, id = id, coords = coords,
+                   projection = projection,
+                   splitBy = 'split')[is.na(direction), .N],
+    direction_step(DT, id = id, coords = coords,
+                   projection = projection)[is.na(direction), .N]
+
+  )
+})
