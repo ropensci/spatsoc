@@ -87,3 +87,37 @@ test_that('two columns added to the result DT are doubles', {
 test_that('returns a data.table', {
   expect_s3_class(centroid_dyad(edges, DT, id = id, coords = coords), 'data.table')
 })
+
+expected_DT <- copy(clean_DT)[timegroup < 3]
+expected_DT[, X := timegroup * 10 + .I]
+expected_DT[, Y := timegroup * 10]
+
+expected_edges <- copy(clean_edges)[timegroup < 3]
+expected_DT[ID %in% first(expected_edges$ID1), X := NA]
+
+test_that('results are expected', {
+  expect_equal(
+    centroid_dyad(expected_edges, expected_DT, id = id, coords = coords,
+                  na.rm = FALSE)[timegroup == 1, unique(centroid_X)],
+    NA_real_
+  )
+
+  expect_equal(
+    centroid_dyad(expected_edges, expected_DT, id = id, coords = coords,
+                  na.rm = TRUE)[timegroup == 1, unique(centroid_Y)],
+    10
+  )
+
+  expect_equal(
+    centroid_dyad(expected_edges, expected_DT, id = id, coords = coords,
+                  na.rm = FALSE)[timegroup == 2, .N],
+    0
+  )
+
+  expect_gt(
+    centroid_dyad(expected_edges, expected_DT, id = id, coords = coords,
+                  na.rm = TRUE)[timegroup == 1, unique(centroid_X)],
+    10
+  )
+})
+
