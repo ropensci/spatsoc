@@ -71,4 +71,8 @@ centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
 }
 \seealso{
 \code{\link{group_pts}}
+
+Other Centroid functions: 
+\code{\link{centroid_dyad}()}
 }
+\concept{Centroid functions}

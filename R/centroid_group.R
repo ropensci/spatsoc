@@ -33,6 +33,7 @@
 #'
 #' @export
 #' @seealso \code{\link{group_pts}}
+#' @family Centroid functions
 #' @examples
 #' # Load data.table
 #' library(data.table)
@@ -98,8 +99,8 @@ centroid_group <- function(
     stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
   }
 
-  xcol <- first(coords)
-  ycol <- last(coords)
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
 
   out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
   out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
