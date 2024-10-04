@@ -1,13 +1,14 @@
 #' Fusion centroid
 #'
-#' \code{centroid_fusion} calculates the centroid (mean location) of fusion
-#' events. The function accepts an edge list of fusion events identified by
-#' \code{fusion_id} from edge lists generated with \code{edge_dist} and a
-#' \code{data.table} with relocation data appended with a \code{timegroup}
-#' column from \code{group_times}. It is recommended to use the argument
-#' \code{fillNA = FALSE} for \code{edge_dist} when using \code{centroid_fusion}
-#' to avoid unnecessarily merging additional rows. Relocation data should be in
-#' two columns representing the X and Y coordinates.
+#' \code{centroid_fusion} calculates the centroid (mean location) of each
+#' timestep in fusion events. The function accepts an edge list of fusion events
+#' identified by \code{fusion_id} from edge lists generated with
+#' \code{edge_dist} and a \code{data.table} with relocation data appended with a
+#' \code{timegroup} column from \code{group_times}. It is recommended to use the
+#' argument \code{fillNA = FALSE} for \code{edge_dist} when using
+#' \code{centroid_fusion} to avoid unnecessarily merging additional rows.
+#' Relocation data should be in two columns representing the X and Y
+#' coordinates.
 #'
 #' The \code{edges} and \code{DT} must be \code{data.table}. If your data is a
 #' \code{data.frame}, you can convert it by reference using
@@ -35,11 +36,11 @@
 #'   \code{rowMeans}
 #'
 #' @return \code{centroid_fusion} returns the input \code{edges} appended with
-#'  centroid columns for the X and Y coordinate columns.
+#'   centroid columns for the X and Y coordinate columns.
 #'
-#'   These columns represents the centroid coordinate columns for the fusion
-#'   event. The naming of these columns will correspond to the provided
-#'   coordinate column names prefixed with "centroid_".
+#'   These columns represents the centroid coordinate columns for each timestep
+#'   in a fusion event. The naming of these columns will correspond to the
+#'   provided coordinate column names prefixed with "centroid_".
 #'
 #'   Note: due to the merge required within this function, the output needs to
 #'   be reassigned unlike some other \code{spatsoc} functions like
