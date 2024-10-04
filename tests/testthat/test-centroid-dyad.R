@@ -119,5 +119,15 @@ test_that('results are expected', {
                   na.rm = TRUE)[timegroup == 1, unique(centroid_X)],
     10
   )
+
+  expect_equal(
+    expected_edges[, .N],
+    centroid_dyad(expected_edges, expected_DT, id = id, coords = coords)[, .N]
+  )
+
+  expect_equal(
+    expected_edges[, unique(ID1)],
+    centroid_dyad(expected_edges, expected_DT, id = id, coords = coords)[, unique(ID1)]
+  )
 })
 
