@@ -19,3 +19,15 @@ group_pts(DT, threshold = threshold, id = id,
 centroid_group(DT, coords = coords, group = group, na.rm = TRUE)
 
 clean_DT <- copy(DT)
+
+test_that('DT is required', {
+  expect_error(distance_to_centroid(DT = NULL))
+})
+
+test_that('arguments required, otherwise error detected', {
+  expect_error(distance_to_centroid(DT, coords = NULL),
+               'coords req')
+  expect_error(distance_to_centroid(DT, coords = coords, group = NULL,
+                                    return_rank = TRUE),
+               'group column name required')
+})
