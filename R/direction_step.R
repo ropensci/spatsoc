@@ -102,6 +102,10 @@ direction_step <- function(
     stop('coords must be numeric')
   }
 
+  if ('direction' %in% colnames(DT)) {
+    message('direction column will be overwritten by this function')
+    data.table::set(DT, j = 'direction', value = NULL)
+  }
   if (sf::st_is_longlat(projection)) {
     DT[, bearing := c(
       units::drop_units(
