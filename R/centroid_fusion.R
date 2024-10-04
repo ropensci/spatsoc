@@ -158,3 +158,27 @@ centroid_fusion <- function(
   if (!is.logical(na.rm)) {
     stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
   }
+
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+
+  out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
+  out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
+
+  id1_coords <- paste0('id1_', coords)
+  id2_coords <- paste0('id2_', coords)
+
+  m <- merge(edges,
+             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+             by.x = c('ID1', timegroup),
+             by.y = c(id, timegroup),
+             all.x = TRUE,
+             sort = FALSE)
+  data.table::setnames(m, coords, id1_coords)
+  m <- merge(m,
+             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+             by.x = c('ID2', timegroup),
+             by.y = c(id, timegroup),
+             all.x = TRUE,
+             sort = FALSE)
+  data.table::setnames(m, coords, id2_coords)
