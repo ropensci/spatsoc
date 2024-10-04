@@ -30,3 +30,27 @@ test_that('args required else error', {
                'coords requires a vector')
 })
 
+
+test_that('column names must exist in DT', {
+  expect_error(direction_step(DT, id = 'potato', coords = coords,
+                              projection = projection),
+               'not present')
+
+  expect_error(direction_step(DT, id = id, coords = c('potato', 'potato'),
+                              projection = projection),
+               'not present')
+
+  expect_error(direction_step(DT, id = id, coords = coords,
+                              projection = projection, splitBy = 'potato'),
+               'not present')
+})
+
+test_that('coords are correctly provided or error detected', {
+  expect_error(direction_step(DT, id = id, coords = c('X', NULL),
+                              projection = projection),
+               'requires a vector')
+
+  expect_error(direction_step(DT, id = id, coords = c('X', 'ID'),
+                              projection = projection),
+               'numeric')
+})
