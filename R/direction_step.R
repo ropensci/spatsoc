@@ -109,3 +109,7 @@ direction_step <- function(
         ),
       NA),
       by = c(id, splitBy)]
+  } else {
+    stop('projection not recognized, please see sf::st_crs')
+  }
+}
