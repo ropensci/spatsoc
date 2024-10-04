@@ -36,7 +36,9 @@
 #'   each individual computed using \code{lwgeom::st_geod_azimuth}. Note, the
 #'   order of points is not modified by this function and therefore it is
 #'   crucial the user sets the order of rows to their specific question
-#'   before using \code{direction_step}.
+#'   before using \code{direction_step}. In addition, the direction column
+#'   will include an \code{NA} value for the last point in each sequence of
+#'   points since there is no future point to calculate a direction to.
 #'
 #'   A message is returned when a direction column are already exists in
 #'   the input \code{DT}, because it will be overwritten.
