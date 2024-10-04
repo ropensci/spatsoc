@@ -52,3 +52,47 @@
 #' @export
 #' @family Centroid functions
 #' @seealso [fusion_id] [edge_dist] [group_pts]
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Select only individuals A, B, C for this example
+#' DT <- DT[ID %in% c('A', 'B', 'C')]
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Edge list generation
+#' edges <- edge_dist(
+#'     DT,
+#'     threshold = 100,
+#'     id = 'ID',
+#'     coords = c('X', 'Y'),
+#'     timegroup = 'timegroup',
+#'     returnDist = TRUE,
+#'     fillNA = FALSE
+#'   )
+#'
+#' # Generate dyad id
+#' dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
+#'
+#' # Generate fusion id
+#' fusion_id(edges, threshold = 100)
+#'
+#' # Calculate fusion centroid
+#' centroids <- centroid_fusion(
+#'   edges,
+#'   DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   timegroup = 'timegroup', na.rm = TRUE
+#' )
+#'
+#' print(centroids)
