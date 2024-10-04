@@ -31,3 +31,19 @@ test_that('arguments required, otherwise error detected', {
                                     return_rank = TRUE),
                'group column name required')
 })
+
+test_that('column names must exist in DT', {
+  expect_error(distance_to_centroid(DT, coords = rep('potato', 2)),
+               'potato field')
+  expect_error(distance_to_centroid(DT, coords = coords, group = 'potato',
+                                    return_rank = TRUE),
+               'group column')
+})
+
+test_that('coords are correctly provided or error detected', {
+  expect_error(distance_to_centroid(DT, coords = c('X', NULL)),
+               'coords requires a vector')
+  expect_error(distance_to_centroid(DT, coords = c('X', 'ID')),
+               'coords must be numeric')
+})
+
