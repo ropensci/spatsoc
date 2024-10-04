@@ -136,13 +136,23 @@ distance_to_centroid <- function(
     message('distance_centroid column will be overwritten by this function')
     data.table::set(DT, j = 'distance_centroid', value = NULL)
   }
+
+  DT[, distance_centroid :=
        sqrt((.SD[[xcol]] - .SD[[group_xcol]])^2 +
               (.SD[[ycol]] - .SD[[group_ycol]])^2)]
 
   if (return_rank) {
-    DT[, N_by_group := .N, by = c(group)]
-    DT[, rank_dist_group_centroid :=
-         data.table::frank(dist_group_centroid),
+    if (!group %in% colnames(DT)) {
+      stop('group column not present in input DT, did you run group_pts?')
+    }
+
+    if ('rank_distance_centroid' %in% colnames(DT)) {
+      message('rank_distance_centroid column will be overwritten by this function')
+      data.table::set(DT, j = 'rank_distance_centroid', value = NULL)
+    }
+
+    DT[, rank_distance_centroid :=
+         data.table::frank(dist_group_centroid,  ties.method = ties.method),
        by = c(group)]
   }
   return(DT[])
