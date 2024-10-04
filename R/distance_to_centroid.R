@@ -110,6 +110,14 @@ distance_to_centroid <- function(
     ))
   }
 
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)]))) {
+    stop('coords must be numeric')
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)]))) {
+    stop('centroid coords must be numeric')
+  }
+
   if (any(!(centroid_coords %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -121,13 +129,6 @@ distance_to_centroid <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)]))) {
-    stop('coords must be numeric')
-  }
-
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)]))) {
-    stop('centroid coords must be numeric')
-  }
 
   if ('distance_centroid' %in% colnames(DT)) {
     message('distance_centroid column will be overwritten by this function')
