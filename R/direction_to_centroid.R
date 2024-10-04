@@ -2,7 +2,7 @@
 #'
 #' @param DT expects group_mean columns generated with group_centroid
 #' @param coords character vector of column names for x, y
-bearing_to_group_centroid <- function(DT, coords = NULL) {
+direction_to_centroid <- function(DT, coords = NULL) {
   pre <- 'group_mean_'
 
   stopifnot(length(coords) == 2)
