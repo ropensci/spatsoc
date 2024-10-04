@@ -81,7 +81,8 @@ distance_to_centroid <- function(
     return_rank = FALSE,
     ties.method = NULL) {
 
-  stopifnot(length(coords) == 2)
+  # Due to NSE notes in R CMD check
+  distance_centroid <- rank_distance_centroid <- NULL
 
   xcol <- first(coords)
   ycol <- last(coords)
