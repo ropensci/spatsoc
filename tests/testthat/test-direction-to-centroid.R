@@ -2,6 +2,7 @@
 context('test direction_to_centroid')
 
 library(spatsoc)
+library(units)
 
 DT <- fread('../testdata/DT.csv')
 id <- 'ID'
@@ -63,9 +64,13 @@ test_that('one column added to the result DT', {
                ncol(direction_to_centroid(DT, coords = coords)))
 })
 
-test_that('column added to the result DT is a double', {
+test_that('column added to the result DT is a double with units rad', {
   expect_type(direction_to_centroid(DT, coords = coords)$direction_centroid,
               'double')
+  expect_equal(
+    units(
+      direction_to_centroid(DT, coords = coords)$direction_centroid)$numerator,
+    'rad')
 })
 
 test_that('returns a data.table', {
