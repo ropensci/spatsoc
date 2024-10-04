@@ -132,7 +132,8 @@ test_that('results are expected', {
   )
 
   expect_gte(
-    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords)[, uniqueN(centroid_X)],
+    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords,
+                    na.rm = TRUE)[, uniqueN(centroid_X)],
     expected_edges[, uniqueN(fusionID)]
   )
 
