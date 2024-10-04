@@ -75,6 +75,9 @@ direction_step <- function(
     projection = NULL,
     splitBy = NULL) {
 
+  # due to NSE notes in R CMD check
+  direction <- NULL
+
   if (is.null(DT)) {
     stop('input DT required')
   }
