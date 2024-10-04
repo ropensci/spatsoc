@@ -54,3 +54,27 @@ test_that('distance_centroid column succesfully detected', {
     'distance_centroid column will be overwritten'
   )
 })
+
+test_that('no rows are added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(nrow(copyDT),
+               nrow(distance_to_centroid(copyDT, coords = coords)))
+})
+
+test_that('one column added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(ncol(copyDT) + 1,
+               ncol(distance_to_centroid(DT, coords = coords)))
+})
+
+test_that('column added to the result DT is a double', {
+  expect_type(distance_to_centroid(DT, coords = coords)$distance_centroid,
+              'double')
+})
+
+test_that('returns a data.table', {
+  expect_s3_class(distance_to_centroid(DT, coords = coords), 'data.table')
+})
+
