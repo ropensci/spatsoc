@@ -33,3 +33,25 @@
 #'
 #' @family Direction functions
 #' @export
+#'
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Set order using data.table::setorder
+#' setorder(DT, datetime)
+#'
+#' # Calculate direction
+#' direction_step(
+#'   DT = DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   projection = 32736
+#' )
