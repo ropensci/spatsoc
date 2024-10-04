@@ -89,11 +89,11 @@ test_that('returns a data.table', {
   expect_s3_class(centroid_fusion(edges, DT, id = id, coords = coords), 'data.table')
 })
 
-expected_DT <- copy(clean_DT)[timegroup < 3]
+expected_DT <- copy(clean_DT)[timegroup < 10]
 expected_DT[, X := timegroup * 10 + .I]
 expected_DT[, Y := timegroup * 10]
 
-expected_edges <- copy(clean_edges)[timegroup < 3]
+expected_edges <- copy(clean_edges)[timegroup < 10]
 expected_DT[ID %in% first(expected_edges$ID1), X := NA]
 
 test_that('results are expected', {
@@ -129,6 +129,16 @@ test_that('results are expected', {
   expect_equal(
     expected_edges[, unique(ID1)],
     centroid_fusion(expected_edges, expected_DT, id = id, coords = coords)[, unique(ID1)]
+  )
+
+  expect_gte(
+    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords)[, uniqueN(centroid_X)],
+    expected_edges[, uniqueN(fusionID)]
+  )
+
+  expect_gte(
+    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords)[, uniqueN(centroid_Y)],
+    expected_edges[, uniqueN(fusionID)]
   )
 })
 
