@@ -1,10 +1,26 @@
 #' Distance to group centroid
 #'
-#' @param DT expects group_mean columns generated with group_centroid
-#' @param coords character vector of column names for x, y
-distance_to_centroid <- function(DT, coords, group = 'group',
-                                     return_rank = FALSE) {
-  pre <- 'group_mean_'
+#' \code{distance_to_centroid} calculates the distance of each relocation to the
+#' centroid of the spatiotemporal group identified by \code{group_pts}. The
+#' function accepts a \code{data.table} with relocation data appended with a
+#' \code{group} column from \code{group_pts} and centroid columns from
+#' \code{centroid_group}. Relocation data should be in two columns representing
+#' the X and Y coordinates.
+#'
+#' The \code{DT} must be a \code{data.table}. If your data is a
+#' \code{data.frame}, you can convert it by reference using
+#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
+#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#'
+#' This function expects a \code{group} column present generated with the
+#' \code{group_pts} function and centroid coordinate columns generated with the
+#' \code{centroid_group} function. The \code{coords} and \code{group} arguments
+#' expect the names of columns in \code{DT} which correspond to the X and Y
+#' coordinates and group columns. The \code{return_rank} argument controls if
+#' the rank of each individual's distance to the group centroid is also
+#' returned. The \code{ties.method} argument is passed to
+#' \code{data.table::frank}, see details at
+#' \code{\link[data.table:frank]{?data.table::frank}}.
 
   stopifnot(length(coords) == 2)
 
