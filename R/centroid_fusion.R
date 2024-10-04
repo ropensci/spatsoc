@@ -33,3 +33,17 @@
 #' @inheritParams group_pts
 #' @param na.rm if NAs should be removed in calculating mean location, see
 #'   \code{rowMeans}
+#'
+#' @return \code{centroid_fusion} returns the input \code{edges} appended with
+#'  centroid columns for the X and Y coordinate columns.
+#'
+#'   These columns represents the centroid coordinate columns for the fusion
+#'   event. The naming of these columns will correspond to the provided
+#'   coordinate column names prefixed with "centroid_".
+#'
+#'   Note: due to the merge required within this function, the output needs to
+#'   be reassigned unlike some other \code{spatsoc} functions like
+#'   \code{fusion_id} and \code{group_pts}.
+#'
+#'   A message is returned when centroid columns are already exists in the input
+#'   \code{edges}, because they will be overwritten.
