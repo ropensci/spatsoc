@@ -22,7 +22,7 @@
 #'
 #' @return \code{direction_to_centroid} returns the input \code{DT} appended
 #'   with a \code{direction_centroid} column indicating the direction to group
-#'   centroid.
+#'   centroid in radians.
 #'
 #'   A message is returned when \code{direction_centroid} column already exist
 #'   in the input \code{DT}, because they will be overwritten.
