@@ -96,3 +96,10 @@
 #' )
 #'
 #' print(centroids)
+centroid_fusion <- function(
+    edges = NULL,
+    DT = NULL,
+    id = NULL,
+    coords = NULL,
+    timegroup = 'timegroup',
+    na.rm = FALSE) {
