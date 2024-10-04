@@ -8,3 +8,8 @@
 #' \code{fillNA = FALSE} for \code{edge_dist} when using \code{centroid_fusion}
 #' to avoid unnecessarily merging additional rows. Relocation data should be in
 #' two columns representing the X and Y coordinates.
+#'
+#' The \code{edges} and \code{DT} must be \code{data.table}. If your data is a
+#' \code{data.frame}, you can convert it by reference using
+#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
+#' \code{\link[data.table:data.table]{data.table::data.table}}.
