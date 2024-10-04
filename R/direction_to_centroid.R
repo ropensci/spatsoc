@@ -64,19 +64,57 @@ direction_to_centroid <- function(
     DT = NULL,
     coords = NULL) {
 
-  stopifnot(length(coords) == 2)
+  # Due to NSE notes in R CMD check
+  direction_centroid <- NULL
+
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
 
   xcol <- first(coords)
   ycol <- last(coords)
-  group_xcol <- paste0(pre, xcol)
-  group_ycol <- paste0(pre, ycol)
+  pre <- 'centroid_'
+  centroid_xcol <- paste0(pre, xcol)
+  centroid_ycol <- paste0(pre, ycol)
+  centroid_coords  <- c(centroid_xcol, centroid_ycol)
 
-  stopifnot(xcol %in% colnames(DT))
-  stopifnot(ycol %in% colnames(DT))
-  stopifnot(group_xcol %in% colnames(DT))
-  stopifnot(group_ycol %in% colnames(DT))
+  if (any(!(coords %in% colnames(DT)))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
 
-  DT[, bearing_centroid := fifelse(
+  if (any(!(centroid_coords %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        centroid_coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT, did you run centroid_group?'
+    ))
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)]))) {
+    stop('coords must be numeric')
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)]))) {
+    stop('centroid coords must be numeric')
+  }
+
+  if ('direction_centroid' %in% colnames(DT)) {
+    message('direction_centroid column will be overwritten by this function')
+    data.table::set(DT, j = 'direction_centroid', value = NULL)
+  }
     .SD[[xcol]] == .SD[[group_xcol]] &
       .SD[[ycol]] == .SD[[group_ycol]],
     NaN,
