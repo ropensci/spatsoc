@@ -2,6 +2,7 @@
 
 export(build_lines)
 export(build_polys)
+export(centroid_dyad)
 export(centroid_group)
 export(dyad_id)
 export(edge_dist)
