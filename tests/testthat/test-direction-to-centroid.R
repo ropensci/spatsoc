@@ -48,3 +48,27 @@ test_that('direction_centroid column succesfully detected', {
     'direction_centroid column will be overwritten'
   )
 })
+
+test_that('no rows are added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(nrow(copyDT),
+               nrow(direction_to_centroid(copyDT, coords = coords)))
+})
+
+test_that('one column added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(ncol(copyDT) + 1,
+               ncol(direction_to_centroid(DT, coords = coords)))
+})
+
+test_that('column added to the result DT is a double', {
+  expect_type(direction_to_centroid(DT, coords = coords)$direction_centroid,
+              'double')
+})
+
+test_that('returns a data.table', {
+  expect_s3_class(direction_to_centroid(DT, coords = coords), 'data.table')
+})
+
