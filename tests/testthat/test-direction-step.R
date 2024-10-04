@@ -93,3 +93,10 @@ test_that('direction column succesfully detected', {
     'direction column will be overwritten'
   )
 })
+
+
+test_that('returns a data.table', {
+  expect_s3_class(direction_step(DT, id = id, coords = coords,
+                                 projection = projection),
+                  'data.table')
+})
