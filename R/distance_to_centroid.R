@@ -139,6 +139,10 @@ distance_to_centroid <- function(
               (.SD[[ycol]] - .SD[[centroid_ycol]])^2)]
 
   if (return_rank) {
+    if (is.null(group)) {
+      stop('group column name required')
+    }
+
     if (!group %in% colnames(DT)) {
       stop('group column not present in input DT, did you run group_pts?')
     }
