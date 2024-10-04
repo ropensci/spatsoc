@@ -28,6 +28,18 @@
 #' direction calculation by \code{direction_step} will only consider rows within
 #' each \code{id} and \code{splitBy} subgroup.
 #'
+#' @return \code{direction_step} returns the input \code{DT} appended with
+#'  a direction column.
+#'
+#'   This column represents the azimuth between the sequence of points for
+#'   each individual computed using \code{lwgeom::st_geod_azimuth}. Note, the
+#'   order of points is not modified by this function and therefore it is
+#'   crucial the user sets the order of rows to their specific question
+#'   before using \code{direction_step}.
+#'
+#'   A message is returned when a direction column are already exists in
+#'   the input \code{DT}, because it will be overwritten.
+#'
 #' @inheritParams group_pts
 #' @inheritParams build_polys
 #'
