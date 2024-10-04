@@ -29,6 +29,15 @@
 #'   FALSE
 #' @param ties.method see \code{\link[data.table:frank]{?data.table::frank}}
 #'
+#' @return \code{distance_to_centroid} returns the input \code{DT} appended with
+#'   a \code{distance_centroid} column indicating the distance to group centroid
+#'   and, optionally, a \code{rank_distance_centroid} column indicating the
+#'   within group rank distance to group centroid (if \code{return_rank =
+#'   TRUE}).
+#'
+#'   A message is returned when \code{distance_centroid} and optional
+#'   \code{rank_distance_centroid} columns already exist in the input \code{DT},
+#'   because they will be overwritten.
 
   stopifnot(length(coords) == 2)
 
