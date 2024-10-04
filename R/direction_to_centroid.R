@@ -89,6 +89,14 @@ direction_to_centroid <- function(
     ))
   }
 
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)]))) {
+    stop('coords must be numeric')
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)]))) {
+    stop('centroid coords must be numeric')
+  }
+
   if (any(!(centroid_coords %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -98,14 +106,6 @@ direction_to_centroid <- function(
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT, did you run centroid_group?'
     ))
-  }
-
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)]))) {
-    stop('coords must be numeric')
-  }
-
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)]))) {
-    stop('centroid coords must be numeric')
   }
 
   if ('direction_centroid' %in% colnames(DT)) {
