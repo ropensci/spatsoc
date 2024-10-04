@@ -197,3 +197,9 @@ centroid_fusion <- function(
     .SDcols = c(first(id1_coords), first(id2_coords))]
   m[, c(out_ycol) := rowMeans(.SD, na.rm = na.rm),
     .SDcols = c(last(id1_coords), last(id2_coords))]
+
+  data.table::set(m, j = c(id1_coords, id2_coords), value = NULL)
+  data.table::setcolorder(m, colnames(edges))
+
+  return(m[])
+}
