@@ -61,3 +61,31 @@ direction_step <- function(
     coords = NULL,
     projection = NULL,
     splitBy = NULL) {
+
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
+  if (is.null(id)) {
+    stop('ID field required')
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  check_cols <- c(id, coords, splitBy)
+  if (any(!(check_cols %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        check_cols,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
+  }
