@@ -103,3 +103,58 @@ centroid_fusion <- function(
     coords = NULL,
     timegroup = 'timegroup',
     na.rm = FALSE) {
+
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
+  if (is.null(edges)) {
+    stop('input edges required')
+  }
+
+  if (is.null(id)) {
+    stop('id column name required')
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (is.null(timegroup)) {
+    stop('timegroup column name required')
+  }
+
+  check_cols_edges <- c('fusionID', 'ID1', 'ID2', timegroup)
+  if (any(!(check_cols_edges %in% colnames(edges)))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        check_cols_edges,
+        colnames(edges)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (any(!(
+    c(id, coords, timegroup) %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(id, coords, timegroup),
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
+  }
+
+  if (is.null(na.rm)) {
+    stop('na.rm is required')
+  }
+
+  if (!is.logical(na.rm)) {
+    stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
+  }
