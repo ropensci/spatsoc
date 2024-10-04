@@ -106,8 +106,9 @@ direction_step <- function(
     message('direction column will be overwritten by this function')
     data.table::set(DT, j = 'direction', value = NULL)
   }
+
   if (sf::st_is_longlat(projection)) {
-    DT[, bearing := c(
+    DT[, direction := c(
       units::drop_units(
         lwgeom::st_geod_azimuth(
           sf::st_as_sf(.SD, coords = coords, crs = projection))
@@ -115,7 +116,7 @@ direction_step <- function(
       NA),
       by = c(id, splitBy)]
   } else if (!sf::st_is_longlat(projection)) {
-    DT[, bearing := c(
+    DT[, direction := c(
       units::drop_units(
         lwgeom::st_geod_azimuth(
           sf::st_transform(
