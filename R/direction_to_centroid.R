@@ -26,6 +26,13 @@
 #'
 #'   A message is returned when \code{direction_centroid} column already exist
 #'   in the input \code{DT}, because they will be overwritten.
+#'
+#' @export
+#' @family Distance functions
+#' @seealso [centroid_group], [group_pts]
+#' @references
+#' See example of using direction to group centroid:
+#'  * <https://doi.org/10.1016/j.cub.2017.08.004>
 
   stopifnot(length(coords) == 2)
 
