@@ -1,0 +1,2 @@
+#' Fusion centroid
+#'
