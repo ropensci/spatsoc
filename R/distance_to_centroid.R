@@ -153,7 +153,7 @@ distance_to_centroid <- function(
     }
 
     DT[, rank_distance_centroid :=
-         data.table::frank(dist_group_centroid,  ties.method = ties.method),
+         data.table::frank(distance_centroid,  ties.method = ties.method),
        by = c(group)]
   }
   return(DT[])
