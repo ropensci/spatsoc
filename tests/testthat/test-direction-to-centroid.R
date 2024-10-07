@@ -33,10 +33,10 @@ test_that('arguments required, otherwise error detected', {
 test_that('column names must exist in DT', {
   expect_error(direction_to_centroid(DT, coords = rep('potato', 2)),
                'potato field')
-  copy_DT <- copy(DT)
+  copy_DT <- copy(clean_DT)
   setnames(copy_DT, 'centroid_X', 'potato_X')
   expect_error(direction_to_centroid(copy_DT, coords = coords),
-               'centroid_')
+               'did you run centroid_group')
 })
 
 test_that('coords are correctly provided or error detected', {
