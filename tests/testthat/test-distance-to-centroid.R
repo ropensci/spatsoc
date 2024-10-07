@@ -47,7 +47,8 @@ test_that('column names must exist in DT', {
 test_that('coords are correctly provided or error detected', {
   expect_error(distance_to_centroid(DT, coords = c('X', NULL)),
                'coords requires a vector')
-  expect_error(distance_to_centroid(DT, coords = c('X', 'ID')),
+  copy_DT <- copy(DT)[, X := as.character(X)]
+  expect_error(distance_to_centroid(copy_DT, coords = coords),
                'coords must be numeric')
 })
 
