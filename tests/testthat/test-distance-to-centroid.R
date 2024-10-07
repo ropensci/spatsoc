@@ -30,6 +30,9 @@ test_that('arguments required, otherwise error detected', {
   expect_error(distance_to_centroid(DT, coords = coords, group = NULL,
                                     return_rank = TRUE),
                'group column name required')
+  expect_error(distance_to_centroid(DT, coords = coords, group = group,
+                                    return_rank = NULL),
+               'return_rank')
 })
 
 test_that('column names must exist in DT', {
