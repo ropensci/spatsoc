@@ -123,6 +123,8 @@ direction_to_centroid <- function(
       'rad'
     )
   )]
+  DT[direction_centroid < units::as_units(0, 'rad'),
+     direction_centroid := direction_centroid + units::as_units(2 * pi, 'rad')]
 
   return(DT[])
 }
