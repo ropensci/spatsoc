@@ -1,3 +1,11 @@
+# v 0.2.5.9001
+
+* `direction_to_centroid`` function for calculating direction in radians from
+each individual's position in a spatiotemporal group and the group's centroid, 
+`distance_to_centroid` function for calculation the distance (and rank distance)
+from each individual's position in a spatiotemporal group and the group's
+centroid [PR 74](https://github.com/ropensci/spatsoc/pull/74)
+
 # v 0.2.5.9000
 
 * `direction_step` function for calculating direction in radians between each

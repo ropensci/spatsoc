@@ -34,6 +34,11 @@ reference:
     desc: ~
     contents:
     - '`direction_step`'
+    - '`direction_to_centroid`'
+  - title: Distance functions
+    desc: ~
+    contents:
+    - '`distance_to_centroid`'
   - title: Build functions
     desc: ~
     contents:
