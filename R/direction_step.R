@@ -123,7 +123,7 @@ direction_step <- function(
       lwgeom::st_geod_azimuth(
         sf::st_as_sf(.SD, coords = coords, crs = projection))
       ),
-      units::set_units(NA, rad),
+      units::set_units(NA, 'rad'),
       by = c(id, splitBy)]
   } else if (!sf::st_is_longlat(projection)) {
     DT[, direction := c(
@@ -132,7 +132,7 @@ direction_step <- function(
           sf::st_as_sf(.SD, coords = coords, crs = projection),
           crs = 4326)
         ),
-      units::set_units(NA, rad)),
+      units::set_units(NA, 'rad')),
       by = c(id, splitBy)]
   } else {
     stop('projection not recognized, please see sf::st_crs')
