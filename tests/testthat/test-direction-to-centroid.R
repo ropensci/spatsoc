@@ -53,24 +53,24 @@ test_that('coords are correctly provided or error detected', {
 })
 
 test_that('direction_centroid column succesfully detected', {
-  copyDT <- copy(clean_DT)[, direction_centroid := 1]
+  copy_DT <- copy(clean_DT)[, direction_centroid := 1]
   expect_message(
-    direction_to_centroid(copyDT, coords = coords),
+    direction_to_centroid(copy_DT, coords = coords),
     'direction_centroid column will be overwritten'
   )
 })
 
 test_that('no rows are added to the result DT', {
-  copyDT <- copy(clean_DT)
+  copy_DT <- copy(clean_DT)
 
-  expect_equal(nrow(copyDT),
-               nrow(direction_to_centroid(copyDT, coords = coords)))
+  expect_equal(nrow(copy_DT),
+               nrow(direction_to_centroid(copy_DT, coords = coords)))
 })
 
 test_that('one column added to the result DT', {
-  copyDT <- copy(clean_DT)
+  copy_DT <- copy(clean_DT)
 
-  expect_equal(ncol(copyDT) + 1,
+  expect_equal(ncol(copy_DT) + 1,
                ncol(direction_to_centroid(DT, coords = coords)))
 })
 
