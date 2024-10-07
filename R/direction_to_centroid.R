@@ -22,7 +22,8 @@
 #'
 #' @return \code{direction_to_centroid} returns the input \code{DT} appended
 #'   with a \code{direction_centroid} column indicating the direction to group
-#'   centroid in radians.
+#'   centroid in radians. The direction is measured in radians in the range
+#'   of 0 to 2 * pi from the positive x-axis.
 #'
 #'   A message is returned when \code{direction_centroid} column already exist
 #'   in the input \code{DT}, because they will be overwritten.
