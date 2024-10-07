@@ -44,7 +44,7 @@ test_that('column names must exist in DT', {
   copy_DT <- copy(DT)
   setnames(copy_DT, 'centroid_X', 'potato_X')
   expect_error(distance_to_centroid(copy_DT, coords = coords),
-               'centroid_')
+               'did you run centroid_group?')
 })
 
 test_that('coords are correctly provided or error detected', {
