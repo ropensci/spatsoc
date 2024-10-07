@@ -15,7 +15,8 @@ Note: the order is assumed X followed by Y column names.}
 \value{
 \code{direction_to_centroid} returns the input \code{DT} appended
 with a \code{direction_centroid} column indicating the direction to group
-centroid in radians.
+centroid in radians. The direction is measured in radians in the range
+of 0 to 2 * pi from the positive x-axis.
 
 A message is returned when \code{direction_centroid} column already exist
 in the input \code{DT}, because they will be overwritten.
@@ -25,8 +26,8 @@ in the input \code{DT}, because they will be overwritten.
 the centroid of the spatiotemporal group identified by \code{group_pts}. The
 function accepts a \code{data.table} with relocation data appended with a
 \code{group} column from \code{group_pts} and centroid columns from
-\code{centroid_group}. Relocation data should be in two columns representing
-the X and Y coordinates.
+\code{centroid_group}. Relocation data should be in planar coordinates
+provided in two columns representing the X and Y coordinates.
 }
 \details{
 The \code{DT} must be a \code{data.table}. If your data is a

@@ -42,8 +42,8 @@ because they will be overwritten.
 centroid of the spatiotemporal group identified by \code{group_pts}. The
 function accepts a \code{data.table} with relocation data appended with a
 \code{group} column from \code{group_pts} and centroid columns from
-\code{centroid_group}. Relocation data should be in two columns representing
-the X and Y coordinates.
+\code{centroid_group}. Relocation data should be in planar coordinates
+provided in two columns representing the X and Y coordinates.
 }
 \details{
 The \code{DT} must be a \code{data.table}. If your data is a
@@ -83,7 +83,12 @@ group_pts(DT, threshold = 5, id = 'ID',
 centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
 
 # Calculate distance to group centroid
-distance_to_centroid(DT, coords = c('X', 'Y'), group = 'group', return_rank = TRUE)
+distance_to_centroid(
+  DT,
+  coords = c('X', 'Y'),
+  group = 'group',
+  return_rank = TRUE
+)
 }
 \references{
 See examples of using distance to group centroid:
