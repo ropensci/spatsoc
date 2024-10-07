@@ -70,7 +70,12 @@
 #' centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
 #'
 #' # Calculate distance to group centroid
-#' distance_to_centroid(DT, coords = c('X', 'Y'), group = 'group', return_rank = TRUE)
+#' distance_to_centroid(
+#'   DT,
+#'   coords = c('X', 'Y'),
+#'   group = 'group',
+#'   return_rank = TRUE
+#' )
 distance_to_centroid <- function(
     DT = NULL,
     coords = NULL,
@@ -125,7 +130,7 @@ distance_to_centroid <- function(
         centroid_coords,
         colnames(DT)
       ), collapse = ', ')),
-      ' field(s) provided are not present in input DT, did you run centroid_group?'
+      ' field(s) provided are not present in DT, did you run centroid_group?'
     ))
   }
 
@@ -148,7 +153,9 @@ distance_to_centroid <- function(
     }
 
     if ('rank_distance_centroid' %in% colnames(DT)) {
-      message('rank_distance_centroid column will be overwritten by this function')
+      message(
+        'rank_distance_centroid column will be overwritten by this function'
+      )
       data.table::set(DT, j = 'rank_distance_centroid', value = NULL)
     }
 
