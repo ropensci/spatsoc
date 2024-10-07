@@ -38,6 +38,10 @@ test_that('column names must exist in DT', {
   expect_error(distance_to_centroid(DT, coords = coords, group = 'potato',
                                     return_rank = TRUE),
                'group column')
+  copy_DT <- copy(DT)
+  setnames(copy_DT, 'centroid_X', 'potato_X')
+  expect_error(distance_to_centroid(copy_DT, coords = coords),
+               'centroid_')
 })
 
 test_that('coords are correctly provided or error detected', {
