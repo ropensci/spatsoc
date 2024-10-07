@@ -89,3 +89,11 @@ test_that('returns a data.table', {
   expect_s3_class(distance_to_centroid(DT, coords = coords), 'data.table')
 })
 
+test_that('message if overwritting rank_distance_centroid', {
+  copy_DT <- copy(clean_DT)
+  copy_DT[, rank_distance_centroid := 'potato']
+
+  expect_message(distance_to_centroid(copy_DT, coords = coords, group = group,
+                                      return_rank = TRUE),
+                 'rank_distance_centroid')
+})
