@@ -53,6 +53,9 @@ test_that('coords are correctly provided or error detected', {
   copy_DT <- copy(DT)[, X := as.character(X)]
   expect_error(distance_to_centroid(copy_DT, coords = coords),
                'coords must be numeric')
+  copy_DT <- copy(DT)[, centroid_X := as.character(centroid_X)]
+  expect_error(direction_to_centroid(copy_DT, coords = coords),
+               'centroid coords must be numeric')
 })
 
 test_that('distance_centroid column succesfully detected', {
