@@ -119,10 +119,6 @@ distance_to_centroid <- function(
     stop('coords must be numeric')
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)]))) {
-    stop('centroid coords must be numeric')
-  }
-
   if (any(!(centroid_coords %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -132,6 +128,10 @@ distance_to_centroid <- function(
       ), collapse = ', ')),
       ' field(s) provided are not present in DT, did you run centroid_group?'
     ))
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)]))) {
+    stop('centroid coords must be numeric')
   }
 
   if ('distance_centroid' %in% colnames(DT)) {
