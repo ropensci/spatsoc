@@ -18,14 +18,14 @@
 #'
 #' @inheritParams direction_group
 #'
-#' @return \code{direction_group} returns the input \code{DT} appended with a
-#'   \code{group_direction} column representing the mean direction of
-#'   all individuals in each spatiotemporal group.
+#' @return \code{direction_polarization} returns the input \code{DT} appended
+#'   with a \code{polarization} column representing the direction polarization
+#'   of all individuals in each spatiotemporal group.
 #'
-#'   The mean direction is calculated using [CircStats::circ.mean()]
+#'   The direction polarization is calculated using [CircStats::r.test()]
 #'   which expects units of radians.
 #'
-#'   A message is returned when the \code{group_direction} columns already
+#'   A message is returned when the \code{polarization} columns already
 #'   exists in the input \code{DT}, because it will be overwritten.
 #'
 #' @export
