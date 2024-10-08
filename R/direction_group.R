@@ -23,3 +23,10 @@
 #' @param group character string of group column name, default "group"
 #' @param na.rm if NAs should be removed in calculating mean direction, see
 #'   \code{?mean}, default FALSE
+#'
+#' @return \code{direction_group} returns the input \code{DT} appended with a
+#'   \code{group_direction} column representing the mean direction of
+#'   all individuals in each spatiotemporal group.
+#'
+#'   A message is returned when the \code{group_direction} columns already
+#'   exists in the input \code{DT}, because it will be overwritten.
