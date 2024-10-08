@@ -23,3 +23,10 @@ clean_DT <- copy(DT)
 test_that('DT is required', {
   expect_error(direction_polarization(DT = NULL))
 })
+
+test_that('arguments required, otherwise error detected', {
+  expect_error(direction_polarization(DT, group = NULL),
+               'group column name required')
+  expect_error(direction_polarization(DT, direction = NULL),
+               'direction column name required')
+})
