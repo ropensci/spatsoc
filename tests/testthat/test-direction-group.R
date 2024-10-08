@@ -43,3 +43,11 @@ test_that('radians expected else error', {
                'direction_step')
 })
 
+
+test_that('group_direction column succesfully detected', {
+  copyDT <- copy(clean_DT)[, group_direction := 1]
+  expect_message(
+    direction_group(copyDT),
+    'group_direction column will be overwritten'
+  )
+})
