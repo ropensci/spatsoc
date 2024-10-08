@@ -8,7 +8,7 @@ message: 'To cite package "spatsoc" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship'
-version: 0.2.5.9001
+version: 0.2.5.9002
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.spatsoc
@@ -170,6 +170,21 @@ references:
     orcid: https://orcid.org/0000-0001-8049-7069
   year: '2024'
   doi: 10.32614/CRAN.package.lwgeom
+- type: software
+  title: CircStats
+  abstract: 'CircStats: Circular Statistics, from "Topics in Circular Statistics"
+    (2001)'
+  notes: Imports
+  repository: https://CRAN.R-project.org/package=CircStats
+  authors:
+  - family-names: Lund
+    given-names: S-plus original by Ulric
+    email: ulund@calpoly.edu
+  - family-names: Agostinelli
+    given-names: R port by Claudio
+    email: claudio.agostinelli@unitn.it
+  year: '2024'
+  doi: 10.32614/CRAN.package.CircStats
 - type: software
   title: stats
   abstract: 'R: A Language and Environment for Statistical Computing'

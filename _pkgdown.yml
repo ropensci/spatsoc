@@ -35,6 +35,7 @@ reference:
     contents:
     - '`direction_step`'
     - '`direction_to_centroid`'
+    - '`direction_group`'
   - title: Distance functions
     desc: ~
     contents:

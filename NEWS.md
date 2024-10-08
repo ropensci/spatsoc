@@ -1,3 +1,7 @@
+# v 0.2.5.9002
+
+* `direction_group`` function for calculating mean group direction [PR 91](https://github.com/ropensci/spatsoc/pull/91)
+
 # v 0.2.5.9001
 
 * `direction_to_centroid`` function for calculating direction in radians from
