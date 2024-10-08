@@ -98,8 +98,8 @@ distance_to_centroid <- function(
     stop('return_rank required')
   }
 
-  xcol <- first(coords)
-  ycol <- last(coords)
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
   pre <- 'centroid_'
   centroid_xcol <- paste0(pre, xcol)
   centroid_ycol <- paste0(pre, ycol)
