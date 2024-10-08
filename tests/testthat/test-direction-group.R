@@ -23,3 +23,10 @@ clean_DT <- copy(DT)
 test_that('DT is required', {
   expect_error(direction_group(DT = NULL))
 })
+
+test_that('arguments required, otherwise error detected', {
+  expect_error(direction_group(DT, group = NULL),
+               'group column name required')
+  expect_error(direction_group(DT, direction = NULL),
+               'direction column name required')
+})
