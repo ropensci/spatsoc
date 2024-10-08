@@ -37,3 +37,8 @@ test_that('column names must exist in DT', {
   expect_error(direction_polarization(DT, group = 'potato'),
                'potato field')
 })
+
+test_that('radians expected else error', {
+  expect_error(direction_polarization(DT, direction = 'X'),
+               'direction_step')
+})
