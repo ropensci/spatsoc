@@ -100,11 +100,11 @@ direction_group <- function(
     stop('direction must be numeric')
   }
 
-  out_mean <- 'group_direction'
+  out <- 'polarization'
 
-  if (out_mean %in% colnames(DT)) {
-    message(paste(out_mean, 'column will be overwritten by this function'))
-    data.table::set(DT, j = out_mean, value = NULL)
+  if (out %in% colnames(DT)) {
+    message(paste(out, 'column will be overwritten by this function'))
+    data.table::set(DT, j = out, value = NULL)
   }
 
   if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(direction)] ||
@@ -112,9 +112,7 @@ direction_group <- function(
     stop('units(DT$direction) is not radians, did you use direction_step?')
   }
 
-  DT[, c(out_mean) := units::as_units(
-    CircStats::circ.mean(units::drop_units(.SD)),
-    'rad'),
+  DT[, c(out) := CircStats::r.test(units::drop_units(.SD))$r.bar,
     by = c(group),
     .SDcols = c(direction)]
 
