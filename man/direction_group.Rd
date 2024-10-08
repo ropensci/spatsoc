@@ -20,7 +20,7 @@ direction_group(DT, direction = "direction", group = "group")
 \code{group_direction} column representing the mean direction of
 all individuals in each spatiotemporal group.
 
-The mean direction is calculated using \code{\link{CircStats::circ.mean}}
+The mean direction is calculated using \code{\link[CircStats:circ.mean]{CircStats::circ.mean()}}
 which expects units of radians.
 
 A message is returned when the \code{group_direction} columns already
@@ -42,7 +42,7 @@ The \code{DT} must be a \code{data.table}. If your data is a
 The \code{direction} and \code{group} arguments expect the names of columns
 in \code{DT} which correspond to the direction and group columns. The
 direction column is expected in units of radians and the mean calculated with
-\code{\link{CircStats::circ.mean}}.
+\code{\link[CircStats:circ.mean]{CircStats::circ.mean()}}.
 }
 \examples{
 # Load data.table
@@ -82,7 +82,8 @@ See example of using mean group direction:
 }
 }
 \seealso{
-\code{\link{direction_step}}, \code{\link{group_pts}}
+\code{\link{direction_step}}, \code{\link{group_pts}},
+\code{\link[CircStats:circ.mean]{CircStats::circ.mean()}}
 
 Other Direction functions: 
 \code{\link{direction_step}()}
