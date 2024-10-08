@@ -67,7 +67,7 @@
 #'
 #' # Calculate polarization
 #' direction_polarization(DT)
-direction_group <- function(
+direction_polarization <- function(
     DT,
     direction = 'direction',
     group = 'group') {
