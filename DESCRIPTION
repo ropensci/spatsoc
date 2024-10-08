@@ -27,6 +27,7 @@ Imports:
     igraph,
     sf,
     lwgeom,
+    CircStats,
     stats,
     units
 Suggests: 
