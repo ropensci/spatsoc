@@ -65,8 +65,8 @@
 #'   projection = 32736
 #' )
 #'
-#' # Calculate group direction
-#' direction_group(DT)
+#' # Calculate polarization
+#' direction_polarization(DT)
 direction_group <- function(
     DT,
     direction = 'direction',
