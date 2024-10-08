@@ -43,6 +43,11 @@ test_that('radians expected else error', {
                'direction_step')
 })
 
+test_that('direction expected numeric', {
+  expect_error(direction_group(DT, direction = 'ID'),
+               'direction must be numeric')
+})
+
 
 test_that('group_direction column succesfully detected', {
   copyDT <- copy(clean_DT)[, group_direction := 1]
