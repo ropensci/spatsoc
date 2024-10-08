@@ -1,5 +1,6 @@
-# Test GBI
+# Test get_gbi
 context('test get_gbi')
+
 library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')

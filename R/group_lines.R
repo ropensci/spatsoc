@@ -1,7 +1,7 @@
 #' Group Lines
 #'
 #' `group_lines` groups rows into spatial groups by generating LINESTRINGs and
-#' grouping based on spatial intersection. The function accepts a `data.table`
+#' grouping based on spatial intersection. The function expects a `data.table`
 #' with relocation data, individual identifiers and a distance threshold. The
 #' relocation data is transformed into sf LINESTRINGs using [build_lines] and
 #' intersecting LINESTRINGs are grouped. The threshold argument is used to

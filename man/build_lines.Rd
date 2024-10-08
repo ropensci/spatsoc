@@ -22,7 +22,8 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 
 \item{id}{Character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
 
 \item{sortBy}{Character string of date time column(s) to sort rows by. Must
 be a POSIXct.}
@@ -40,7 +41,7 @@ build a line.
 }
 \description{
 \code{build_lines} generates a simple feature collection with LINESTRINGs from a
-\code{data.table}. The function accepts a \code{data.table} with relocation data,
+\code{data.table}. The function expects a \code{data.table} with relocation data,
 individual identifiers, a sorting column and a \code{projection}. The relocation
 data is transformed into LINESTRINGs for each individual and, optionally,
 combination of columns listed in \code{splitBy}. Relocation data should be in two
