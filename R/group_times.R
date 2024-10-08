@@ -1,6 +1,6 @@
 #' Group Times
 #'
-#' \code{group_times} groups rows into time groups. The function accepts date
+#' \code{group_times} groups rows into time groups. The function expects date
 #' time formatted data and a threshold argument. The threshold argument is used
 #' to specify a time window within which rows are grouped.
 #'

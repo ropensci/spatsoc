@@ -49,7 +49,7 @@ neighbour.
 }
 \description{
 \code{edge_nn} returns edge lists defined by the nearest neighbour. The
-function accepts a \code{data.table} with relocation data, individual
+function expects a \code{data.table} with relocation data, individual
 identifiers and a threshold argument. The threshold argument is used to
 specify the criteria for distance between points which defines a group.
 Relocation data should be in two columns representing the X and Y

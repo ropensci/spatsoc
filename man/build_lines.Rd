@@ -40,7 +40,7 @@ build a line.
 }
 \description{
 \code{build_lines} generates a simple feature collection with LINESTRINGs from a
-\code{data.table}. The function accepts a \code{data.table} with relocation data,
+\code{data.table}. The function expects a \code{data.table} with relocation data,
 individual identifiers, a sorting column and a \code{projection}. The relocation
 data is transformed into LINESTRINGs for each individual and, optionally,
 combination of columns listed in \code{splitBy}. Relocation data should be in two
