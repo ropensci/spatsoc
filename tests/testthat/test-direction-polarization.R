@@ -71,8 +71,10 @@ test_that('one column added to the result DT', {
                ncol(direction_polarization(DT)))
 })
 
-test_that('column added to the result DT is numeric', {
+test_that('column added to the result DT is numeric, between 0-1', {
   expect_type(direction_polarization(DT)$polarization, 'double')
+  expect_gte(min(direction_polarization(DT)$polarization, na.rm = TRUE), 0)
+  expect_lte(max(direction_polarization(DT)$polarization, na.rm = TRUE), 1)
 })
 
 test_that('returns a data.table', {
