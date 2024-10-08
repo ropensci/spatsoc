@@ -26,6 +26,9 @@
 #'   \code{group_direction} column representing the mean direction of
 #'   all individuals in each spatiotemporal group.
 #'
+#'   The mean direction is calculated using \code{\link{CircStats::circ.mean}}
+#'   which expects units of radians.
+#'
 #'   A message is returned when the \code{group_direction} columns already
 #'   exists in the input \code{DT}, because it will be overwritten.
 #'
