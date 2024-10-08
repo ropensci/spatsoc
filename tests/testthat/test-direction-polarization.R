@@ -49,10 +49,11 @@ test_that('direction expected numeric', {
 })
 
 
-test_that('group_direction column succesfully detected', {
-  copyDT <- copy(clean_DT)[, group_direction := 1]
+test_that('polarization column succesfully detected', {
+  copyDT <- copy(clean_DT)[, polarization := 1]
   expect_message(
     direction_polarization(copyDT),
-    'group_direction column will be overwritten'
+    'polarization column will be overwritten'
   )
 })
+
