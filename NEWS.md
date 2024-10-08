@@ -1,17 +1,16 @@
-# v 0.2.5.9002
+# v 0.2.6
 
-* `direction_group`` function for calculating mean group direction [PR 91](https://github.com/ropensci/spatsoc/pull/91)
+New experimental functions: 
 
-# v 0.2.5.9001
-
+* `direction_polarization`` function for calculating polarization of individual 
+directions within spatiotemporal groups [PR 76](https://github.com/ropensci/spatsoc/pull/76)
+* `direction_group`` function for calculating mean group direction
+[PR 91](https://github.com/ropensci/spatsoc/pull/91)
 * `direction_to_centroid`` function for calculating direction in radians from
 each individual's position in a spatiotemporal group and the group's centroid, 
 `distance_to_centroid` function for calculation the distance (and rank distance)
 from each individual's position in a spatiotemporal group and the group's
 centroid [PR 74](https://github.com/ropensci/spatsoc/pull/74)
-
-# v 0.2.5.9000
-
 * `direction_step` function for calculating direction in radians between each
 location [PR 90](https://github.com/ropensci/spatsoc/pull/90)
 

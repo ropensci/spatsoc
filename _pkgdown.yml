@@ -36,6 +36,7 @@ reference:
     - '`direction_step`'
     - '`direction_to_centroid`'
     - '`direction_group`'
+    - '`direction_polarization`'
   - title: Distance functions
     desc: ~
     contents:
