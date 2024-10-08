@@ -57,3 +57,24 @@ test_that('polarization column succesfully detected', {
   )
 })
 
+test_that('no rows are added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(nrow(copyDT),
+               nrow(direction_polarization(copyDT)))
+})
+
+test_that('one column added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(ncol(copyDT) + 1,
+               ncol(direction_polarization(DT)))
+})
+
+test_that('column added to the result DT is numeric', {
+  expect_type(direction_polarization(DT)$polarization, 'double')
+})
+
+test_that('returns a data.table', {
+  expect_s3_class(direction_polarization(DT), 'data.table')
+})
