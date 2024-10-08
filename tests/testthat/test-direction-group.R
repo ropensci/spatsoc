@@ -19,3 +19,7 @@ group_pts(DT, threshold = threshold, id = id, coords = coords, timegroup = timeg
 direction_step(DT, id = id, coords = coords, projection = projection)
 
 clean_DT <- copy(DT)
+
+test_that('DT is required', {
+  expect_error(direction_group(DT = NULL))
+})
