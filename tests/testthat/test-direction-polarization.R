@@ -47,3 +47,12 @@ test_that('direction expected numeric', {
   expect_error(direction_polarization(DT, direction = 'ID'),
                'direction must be numeric')
 })
+
+
+test_that('group_direction column succesfully detected', {
+  copyDT <- copy(clean_DT)[, group_direction := 1]
+  expect_message(
+    direction_polarization(copyDT),
+    'group_direction column will be overwritten'
+  )
+})
