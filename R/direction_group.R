@@ -63,3 +63,7 @@
 #'
 #' # Calculate group direction
 #' direction_group(DT)
+direction_group <- function(
+    DT,
+    direction = 'direction',
+    group = 'group') {
