@@ -47,7 +47,7 @@ of the respective \code{hrType} \code{adehabitatHR} function.
 }
 \description{
 \code{build_polys} generates a simple feature collection with POLYGONs from a
-\code{data.table}. The function accepts a \code{data.table} with
+\code{data.table}. The function expects a \code{data.table} with
 relocation data, individual identifiers, a projection,
 home range type and parameters. The relocation
 data is transformed into POLYGONs using either \link[adehabitatHR:mcp]{adehabitatHR::mcp} or

@@ -99,6 +99,7 @@ direction_step(
 \code{\link[amt:steps]{amt::direction_abs()}}, \code{\link[geosphere:bearing]{geosphere::bearing()}}
 
 Other Direction functions: 
-\code{\link{direction_group}()}
+\code{\link{direction_group}()},
+\code{\link{direction_polarization}()}
 }
 \concept{Direction functions}

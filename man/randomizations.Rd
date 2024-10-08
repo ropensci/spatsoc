@@ -56,7 +56,7 @@ day relocations are swapped to. }
 }
 \description{
 \code{randomizations} performs data-stream social network randomization. The
-function accepts a \code{data.table} with relocation data, individual
+function expects a \code{data.table} with relocation data, individual
 identifiers and a randomization \code{type}. The \code{data.table} is
 randomized either using \code{step} or \code{daily} between-individual
 methods, or within-individual daily \code{trajectory} method described by

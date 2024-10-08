@@ -62,7 +62,7 @@ input \code{DT}, because it will be overwritten.
 }
 \description{
 \code{group_lines} groups rows into spatial groups by generating LINESTRINGs and
-grouping based on spatial intersection. The function accepts a \code{data.table}
+grouping based on spatial intersection. The function expects a \code{data.table}
 with relocation data, individual identifiers and a distance threshold. The
 relocation data is transformed into sf LINESTRINGs using \link{build_lines} and
 intersecting LINESTRINGs are grouped. The threshold argument is used to

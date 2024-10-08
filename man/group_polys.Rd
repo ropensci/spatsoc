@@ -61,7 +61,7 @@ through the \code{units} package.
 }
 \description{
 \code{group_polys} groups rows into spatial groups by overlapping polygons (home
-ranges). The function accepts a \code{data.table} with relocation data, individual
+ranges). The function expects a \code{data.table} with relocation data, individual
 identifiers and an \code{area} argument.  The relocation data is transformed into
 home range POLYGONs using \code{\link[=build_polys]{build_polys()}} with \link[adehabitatHR:mcp]{adehabitatHR::mcp} or
 \link[adehabitatHR:kernelUD]{adehabitatHR::kernelUD}. If the \code{area} argument is \code{FALSE}, \code{group_polys}

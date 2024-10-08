@@ -1,6 +1,6 @@
 #' Group Points
 #'
-#' \code{group_pts} groups rows into spatial groups. The function accepts a
+#' \code{group_pts} groups rows into spatial groups. The function expects a
 #' \code{data.table} with relocation data, individual identifiers and a
 #' threshold argument. The threshold argument is used to specify the criteria
 #' for distance between points which defines a group. Relocation data should be
