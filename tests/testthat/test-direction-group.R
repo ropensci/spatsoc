@@ -30,3 +30,10 @@ test_that('arguments required, otherwise error detected', {
   expect_error(direction_group(DT, direction = NULL),
                'direction column name required')
 })
+
+test_that('column names must exist in DT', {
+  expect_error(direction_group(DT, direction = 'potato'),
+               'potato field')
+  expect_error(direction_group(DT, group = 'potato'),
+               'potato field')
+})
