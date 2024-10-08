@@ -35,3 +35,31 @@
 #' @export
 #' @seealso \code{\link{direction_step}}, \code{\link{group_pts}}
 #' @family Direction functions
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Spatial grouping with timegroup
+#' group_pts(DT, threshold = 50, id = 'ID',
+#'           coords = c('X', 'Y'), timegroup = 'timegroup')
+#'
+#' # Calculate direction at each step
+#' direction_step(
+#'   DT = DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   projection = 32736
+#' )
+#'
+#' # Calculate group direction
+#' direction_group(DT)
