@@ -1,3 +1,35 @@
+# v 0.2.5.9002
+
+* `direction_group`` function for calculating mean group direction [PR 91](https://github.com/ropensci/spatsoc/pull/91)
+
+# v 0.2.5.9001
+
+* `direction_to_centroid`` function for calculating direction in radians from
+each individual's position in a spatiotemporal group and the group's centroid, 
+`distance_to_centroid` function for calculation the distance (and rank distance)
+from each individual's position in a spatiotemporal group and the group's
+centroid [PR 74](https://github.com/ropensci/spatsoc/pull/74)
+
+# v 0.2.5.9000
+
+* `direction_step` function for calculating direction in radians between each
+location [PR 90](https://github.com/ropensci/spatsoc/pull/90)
+
+# v 0.2.5
+
+New experimental functions: 
+
+* `centroid_fusion` function for calculation fusion centroids [PR 89](https://github.com/ropensci/spatsoc/pull/89)
+* `centroid_group` function for calculating group centroids [PR 72](https://github.com/ropensci/spatsoc/pull/72)
+
+# v 0.2.4
+
+New experimental function: 
+
+* `fusion_id` function for flexibly identifying fission-fusion events [PR 78](https://github.com/ropensci/spatsoc/pull/78)
+* improve tests of `fusion_id` with tests for expected number of output fusionIDs [PR 83](https://github.com/ropensci/spatsoc/pull/83)
+
+
 # v 0.2.3 
 
 * Fix/replace igraph clusters with components [PR 61](https://github.com/ropensci/spatsoc/pull/61)

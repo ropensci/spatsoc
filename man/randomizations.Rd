@@ -24,7 +24,8 @@ randomizations(
 
 \item{group}{generated from spatial grouping functions - see details}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
 
 \item{datetime}{field used for providing date time or time group - see
 details}

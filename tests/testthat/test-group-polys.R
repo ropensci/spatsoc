@@ -1,5 +1,6 @@
 # Test group_polys
 context('test group_polys')
+
 library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')

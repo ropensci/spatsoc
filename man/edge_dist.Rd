@@ -23,7 +23,8 @@ coordinates}
 
 \item{id}{Character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{Character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
 
 \item{timegroup}{timegroup field in the DT within which the grouping will be
 calculated}

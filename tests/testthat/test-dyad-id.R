@@ -1,4 +1,5 @@
-context("test-dyad")
+# Test dyad_id
+context("test dyad_id")
 
 library(spatsoc)
 
