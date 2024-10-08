@@ -30,14 +30,14 @@
 #'
 #' @export
 #' @seealso \code{\link{direction_step}}, \code{\link{group_pts}},
-#'   [CircStats::circ.mean()]
+#'   [CircStats::r.test()]
 #' @family Direction functions
 #'
 #' @references
-#' See example of using mean group direction:
-#'  * <https://doi.org/10.1098/rsos.170148>
-#'  * <https://doi.org/10.1098/rsos.201128>
-#'  * <https://doi.org/10.1016/j.beproc.2018.01.013>
+#' See example of using polarization:
+#'  * <https://doi.org/10.1016/j.cub.2017.08.004>
+#'  * <10.1371/journal.pcbi.1009437>
+#'  * <https://doi.org/10.7554/eLife.19505>
 #'
 #' @examples
 #' # Load data.table
