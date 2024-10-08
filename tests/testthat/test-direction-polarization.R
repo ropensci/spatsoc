@@ -42,3 +42,8 @@ test_that('radians expected else error', {
   expect_error(direction_polarization(DT, direction = 'X'),
                'direction_step')
 })
+
+test_that('direction expected numeric', {
+  expect_error(direction_polarization(DT, direction = 'ID'),
+               'direction must be numeric')
+})
