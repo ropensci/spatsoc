@@ -103,6 +103,11 @@ direction_group <- function(
     data.table::set(DT, j = out_mean, value = NULL)
   }
 
+  if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(direction)] ||
+      DT[, units(.SD[[1]])$numerator != 'rad', .SDcols = c(direction)]) {
+    stop('units(DT$direction) is not radians, did you use direction_step?')
+  }
+
   DT[, c(out_mean) := units::as_units(
     CircStats::circ.mean(units::drop_units(.SD)),
     'rad'),
