@@ -30,3 +30,7 @@
 #'
 #'   A message is returned when the \code{group_direction} columns already
 #'   exists in the input \code{DT}, because it will be overwritten.
+#'
+#' @export
+#' @seealso \code{\link{direction_step}}, \code{\link{group_pts}}
+#' @family Direction functions
