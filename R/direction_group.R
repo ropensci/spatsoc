@@ -67,3 +67,38 @@ direction_group <- function(
     DT,
     direction = 'direction',
     group = 'group') {
+
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
+  if (is.null(direction)) {
+    stop('direction column name required')
+  }
+
+  if (is.null(group)) {
+    stop('group column name required')
+  }
+
+  if (any(!(
+    c(direction, group) %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(direction, group),
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(direction)]))) {
+    stop('direction must be numeric')
+  }
+
+  out_mean <- 'group_direction'
+
+  if (out_mean %in% colnames(DT)) {
+    message(paste(out_mean, 'column will be overwritten by this function'))
+    data.table::set(DT, j = out_mean, value = NULL)
+  }
