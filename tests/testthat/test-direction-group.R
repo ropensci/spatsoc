@@ -51,3 +51,26 @@ test_that('group_direction column succesfully detected', {
     'group_direction column will be overwritten'
   )
 })
+
+test_that('no rows are added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(nrow(copyDT),
+               nrow(direction_group(copyDT)))
+})
+
+test_that('one column added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(ncol(copyDT) + 1,
+               ncol(direction_group(DT)))
+})
+
+test_that('column added to the result DT are radians', {
+  expect_type(direction_group(DT)$group_direction, 'double')
+  expect_equal(units(direction_group(DT)$group_direction)$numerator, 'rad')
+})
+
+test_that('returns a data.table', {
+  expect_s3_class(direction_group(DT), 'data.table')
+})
