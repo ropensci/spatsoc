@@ -104,7 +104,11 @@ direction_group <- function(
   }
 
   DT[, c(out_mean) := units::as_units(
-    CircStats::circ.mean(.SD),
+    CircStats::circ.mean(units::drop_units(.SD)),
     'rad'),
     by = c(group),
     .SDcols = c(direction)]
+
+  return(DT[])
+}
+
