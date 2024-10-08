@@ -102,3 +102,9 @@ direction_group <- function(
     message(paste(out_mean, 'column will be overwritten by this function'))
     data.table::set(DT, j = out_mean, value = NULL)
   }
+
+  DT[, c(out_mean) := units::as_units(
+    CircStats::circ.mean(.SD),
+    'rad'),
+    by = c(group),
+    .SDcols = c(direction)]
