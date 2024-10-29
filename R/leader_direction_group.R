@@ -42,7 +42,7 @@
 #' @inheritParams direction_group
 #' @inheritParams distance_to_centroid
 #' @param group_direction group_direction column name generated using
-#'   \code{direction_group}, default is 'group_direction'
+#'   \code{direction_group}, default 'group_direction'
 #'
 #' @export
 #' @seealso \code{\link{direction_group}}, \code{\link{centroid_group}}
