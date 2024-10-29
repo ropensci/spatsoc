@@ -22,4 +22,5 @@ centroid_group(DT, coords = coords, group = group, na.rm = TRUE)
 direction_step(DT = DT, id = id, coords = coords, projection = projection)
 direction_group(DT)
 
+clean_DT <- copy(DT)
 
