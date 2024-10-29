@@ -138,6 +138,11 @@ leader_direction_group <- function(
     data.table::set(DT, j = 'position_group_direction', value = NULL)
   }
 
+  if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(group_direction)] ||
+      DT[, units(.SD[[1]])$numerator != 'rad', .SDcols = c(group_direction)]) {
+    stop('units(DT$group_direction) is not radians, did you use direction_group?')
+  }
+
   DT[, position_group_direction :=
        cos(units::drop_units(.SD[[1]])) * (.SD[[2]] - .SD[[4]]) +
        sin(units::drop_units(.SD[[1]])) * (.SD[[3]] - .SD[[5]]),
