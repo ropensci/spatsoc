@@ -20,6 +20,6 @@ group_pts(DT, threshold = threshold, id = id,
           coords = coords, timegroup = timegroup)
 centroid_group(DT, coords = coords, group = group, na.rm = TRUE)
 direction_step(DT = DT, id = id, coords = coords, projection = projection)
-direction_group(DT, coords = coords)
+direction_group(DT)
 
 

@@ -82,7 +82,7 @@
 #' )
 #'
 #' # Calculate group direction
-#' direction_group(DT, coords = c('X', 'Y'))
+#' direction_group(DT)
 #'
 #' # Calculate leader in terms of position along group direction
 #' leader_direction_group(DT, coords = c('X', 'Y'))
