@@ -41,3 +41,15 @@ test_that('column names must exist in DT', {
   expect_error(leader_direction_group(copy_DT, coords = coords),
                'centroid_X field')
 })
+
+test_that('coords are correctly provided or error detected', {
+  expect_error(leader_direction_group(DT, coords = c('X', NULL)),
+               'coords requires a vector')
+  copy_DT <- copy(clean_DT)[, X := as.character(X)]
+  expect_error(leader_direction_group(copy_DT, coords = coords),
+               'coords must be numeric')
+  copy_DT <- copy(clean_DT)[, centroid_X := as.character(centroid_X)]
+  expect_error(leader_direction_group(copy_DT, coords = coords),
+               'centroid coords must be numeric')
+})
+
