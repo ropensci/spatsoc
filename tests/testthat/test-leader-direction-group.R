@@ -135,3 +135,37 @@ test_that('returns a data.table', {
   expect_s3_class(leader_direction_group(DT, coords = coords), 'data.table')
 })
 
+
+
+expect_DT <- data.table(
+  ID = c('A', 'B'),
+  X = c(0, 10),
+  Y = c(0, 0),
+  group_direction = rep(as_units(0, 'rad'), 2),
+  group = c(1, 1)
+)
+centroid_group(expect_DT, coords = coords)
+leader_direction_group(expect_DT, coords = coords,
+                       return_rank = TRUE, group = group)
+
+test_that('expected results for simple case', {
+  expect_lte(
+    expect_DT[, max(rank_position_group_direction)],
+    2
+  )
+
+  expect_lte(
+    expect_DT[, max(position_group_direction)],
+    5
+  )
+  expect_gte(
+    expect_DT[, min(position_group_direction)],
+    -5
+  )
+
+  expect_equal(
+    expect_DT[rank_position_group_direction == 1, ID],
+    'B'
+  )
+})
+
