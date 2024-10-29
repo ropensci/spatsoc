@@ -142,9 +142,10 @@ leader_direction_group <- function(
   }
 
   DT[, position_group_direction :=
-       cos(.SD[[group_direction]]) * (.SD[[xcol]] - .SD[[xcol_group]]) +
-       sin(.SD[[group_direction]]) * (.SD[[ycol]] - .SD[[ycol_group]]),
-     by = .I]
+       cos(units::drop_units(.SD[[1]])) * (.SD[[2]] - .SD[[4]]) +
+       sin(units::drop_units(.SD[[1]])) * (.SD[[3]] - .SD[[5]]),
+     by = .I,
+     .SDcols = c(group_direction, xcol, ycol, centroid_xcol, centroid_ycol)]
 
   if (return_rank) {
     if ('rank_position_group_direction' %in% colnames(DT)) {
