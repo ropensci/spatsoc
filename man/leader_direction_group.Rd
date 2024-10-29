@@ -18,7 +18,7 @@ leader_direction_group(
 \code{distance_step} and group column generated with \code{group_pts}}
 
 \item{group_direction}{group_direction column name generated using
-\code{direction_group}, default is 'group_direction'}
+\code{direction_group}, default 'group_direction'}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
 Note: the order is assumed X followed by Y column names.}
