@@ -24,3 +24,11 @@ direction_group(DT)
 
 clean_DT <- copy(DT)
 
+test_that('DT is required', {
+  expect_error(leader_direction_group(DT = NULL))
+})
+
+test_that('arguments required, otherwise error detected', {
+  expect_error(leader_direction_group(DT, coords = NULL),
+               'coords req')
+})
