@@ -36,6 +36,11 @@
 #'   A message is returned when \code{position_group_direction} or
 #'   \code{rank_position_group_direction} columns already exist
 #'   in the input \code{DT}, because they will be overwritten.
+#'
+#' @inheritParams direction_group
+#' @inheritParams distance_tO_centroid
+#' @param group_direction group_direction column name generated using \code{direction_group},
+#' default is 'group_direction'
 
   xcol <- first(coords)
   ycol <- last(coords)
