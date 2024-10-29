@@ -61,3 +61,22 @@ test_that('position_group_direction column succesfully detected', {
   )
 })
 
+test_that('no rows are added to the result DT', {
+  copy_DT <- copy(clean_DT)
+
+  expect_equal(nrow(copy_DT),
+               nrow(leader_direction_group(copy_DT, coords = coords)))
+})
+
+test_that('1 or 2 (return_rank = TRUE) column(s) added to the result DT', {
+  copy_DT <- copy(clean_DT)
+
+  expect_equal(ncol(copy_DT) + 1,
+               ncol(leader_direction_group(copy_DT, coords = coords)))
+
+  copy_DT <- copy(clean_DT)
+  expect_equal(ncol(copy_DT) + 2,
+               ncol(leader_direction_group(copy_DT, coords = coords,
+                                           return_rank = TRUE,
+                                           group = 'group')))
+})
