@@ -1,4 +1,4 @@
-#' Position along group's mean bearing as leadership order
+#' Leadership along group direction
 #'
 #' Given the mean bearing of a group of animals, shifts the coordinate
 #' system to a new origin at the group centroid and rotates the coordinate system
