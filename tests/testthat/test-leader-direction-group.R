@@ -53,3 +53,11 @@ test_that('coords are correctly provided or error detected', {
                'centroid coords must be numeric')
 })
 
+test_that('position_group_direction column succesfully detected', {
+  copy_DT <- copy(clean_DT)[, position_group_direction := 1]
+  expect_message(
+    leader_direction_group(copy_DT, coords = coords),
+    'position_group_direction column will be overwritten'
+  )
+})
+
