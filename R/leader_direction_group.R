@@ -93,6 +93,8 @@ leader_direction_group <- function(
     group = NULL,
     return_rank = FALSE,
     ties.method = 'average') {
+  # Due to NSE notes
+  position_group_direction <- rank_position_group_direction <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
