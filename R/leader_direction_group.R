@@ -42,6 +42,8 @@
 #' @inheritParams distance_to_centroid
 #' @param group_direction group_direction column name generated using
 #'   \code{direction_group}, default is 'group_direction'
+#'
+#' @export
 leader_direction_group <- function(
     DT = NULL,
     group_direction = 'group_direction',
