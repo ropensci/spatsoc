@@ -66,16 +66,60 @@ leader_direction_group <- function(
 
   centroid_xcol <- paste0('centroid_', gsub(' ', '', xcol))
   centroid_ycol <- paste0('centroid_', gsub(' ', '', ycol))
+
+  check_cols <- c(coords, group, group_direction, centroid_xcol, centroid_ycol)
+
+  if (any(!(check_cols %in% colnames(DT)))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        check_cols,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
+  }
+
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE),
+               .SDcols = c(centroid_xcol, centroid_ycol)]))) {
+    stop('centroid coords must be numeric')
+  }
+
+  if (is.null(return_rank)) {
+    stop('return_rank required')
+  }
+
+  if ('position_group_direction' %in% colnames(DT)) {
+    message('position_group_direction column will be overwritten by this function')
+    data.table::set(DT, j = 'position_group_direction', value = NULL)
+  }
+
+  DT[, position_group_direction :=
        cos(.SD[[group_bearing]]) * (.SD[[xcol]] - .SD[[xcol_group]]) +
        sin(.SD[[group_bearing]]) * (.SD[[ycol]] - .SD[[ycol_group]]),
      by = .I]
 
   if (return_rank) {
-    DT[, N_by_group := .N, by = c(group)]
-    DT[, rank_dist_along_group_bearing :=
+    if ('rank_position_group_direction' %in% colnames(DT)) {
+      message('rank_position_group_direction column will be overwritten by this function')
+      data.table::set(DT, j = 'rank_position_group_direction', value = NULL)
+    }
+
+    if (is.null(group)) {
+      stop('group column name required')
+    }
+
+    if (!group %in% colnames(DT)) {
+      stop('group column not present in input DT, did you run group_pts?')
+    }
+
+    DT[, rank_position_group_direction :=
          data.table::frank(-dist_along_group_bearing, ties.method = ties.method),
        by = c(group)]
   }
 
-  return(DT)
+  return(DT[])
 }
