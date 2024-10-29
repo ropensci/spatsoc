@@ -3,13 +3,13 @@
 #' Given the mean direction of a group of animals, \code{leader_direction_group}
 #' shifts the coordinate system to a new origin at the group centroid and
 #' rotates the coordinate system by the mean direction to return each
-#' individual's position along the mean direction, representing
-#' leadership in terms of the front-back position in group's mean direction.
+#' individual's position along the mean direction, representing leadership in
+#' terms of the front-back position in group's mean direction.
 #'
-#' The function accepts a \code{data.table} with relocation data appended with
-#' a \code{group_direction} column from \code{direction_group} and group
-#' centroid columns from \code{centroid_group}. Relocation data should be in two columns representing the X and
-#' Y coordinates.
+#' The function accepts a \code{data.table} with relocation data appended with a
+#' \code{group_direction} column from \code{direction_group} and group centroid
+#' columns from \code{centroid_group}. Relocation data should be in two columns
+#' representing the X and Y coordinates.
 #'
 #' The \code{DT} must be a \code{data.table}. If your data is a
 #' \code{data.frame}, you can convert it by reference using
@@ -28,19 +28,20 @@
 #' \code{\link[data.table:frank]{?data.table::frank}}.
 #'
 #' @return \code{leader_direction_group} returns the input \code{DT} appended
-#'   with a \code{position_group_direction} column indicating the position along the
-#'   group direction in the units of the projection and, optionally, a \code{rank_position_group_direction} column indicating the
+#'   with a \code{position_group_direction} column indicating the position along
+#'   the group direction in the units of the projection and, optionally, a
+#'   \code{rank_position_group_direction} column indicating the
 #'   within group rank position along the group dirtection \code{return_rank =
 #'   TRUE}).
 #'
 #'   A message is returned when \code{position_group_direction} or
-#'   \code{rank_position_group_direction} columns already exist
-#'   in the input \code{DT}, because they will be overwritten.
+#'   \code{rank_position_group_direction} columns already exist in the input
+#'   \code{DT}, because they will be overwritten.
 #'
 #' @inheritParams direction_group
 #' @inheritParams distance_tO_centroid
-#' @param group_direction group_direction column name generated using \code{direction_group},
-#' default is 'group_direction'
+#' @param group_direction group_direction column name generated using
+#'   \code{direction_group}, default is 'group_direction'
 leader_direction_group <- function(
     DT = NULL,
     group_direction = 'group_direction',
