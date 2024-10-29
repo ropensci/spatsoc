@@ -26,9 +26,9 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 
 \item{hrParams}{a named list of parameters for \code{adehabitatHR} functions}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names.
+\item{coords}{character vector of X coordinate and Y coordinate column names.
 Note: the order is assumed X followed by Y column names.}
 
 \item{splitBy}{(optional) character string or vector of grouping column

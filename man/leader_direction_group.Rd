@@ -20,7 +20,7 @@ leader_direction_group(
 \item{group_direction}{group_direction column name generated using
 \code{direction_group}, default is 'group_direction'}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names.
+\item{coords}{character vector of X coordinate and Y coordinate column names.
 Note: the order is assumed X followed by Y column names.}
 
 \item{group}{character string of group column name, default "group"}
