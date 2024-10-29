@@ -71,7 +71,7 @@ test_that('one column added to the result DT', {
   copy_DT <- copy(clean_DT)
 
   expect_equal(ncol(copy_DT) + 1,
-               ncol(direction_to_centroid(DT, coords = coords)))
+               ncol(direction_to_centroid(copy_DT, coords = coords)))
 })
 
 test_that('column added to the result DT is a double with units rad', {
