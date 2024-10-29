@@ -124,3 +124,8 @@ test_that('column(s) added to the result DT are expected range', {
     0
   )
 })
+
+test_that('returns a data.table', {
+  expect_s3_class(leader_direction_group(DT, coords = coords), 'data.table')
+})
+
