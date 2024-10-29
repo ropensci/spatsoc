@@ -34,7 +34,7 @@
 #' @family Direction functions
 #'
 #' @references
-#' See example of using polarization:
+#' See examples of using polarization:
 #'  * <https://doi.org/10.1016/j.cub.2017.08.004>
 #'  * <10.1371/journal.pcbi.1009437>
 #'  * <https://doi.org/10.7554/eLife.19505>
