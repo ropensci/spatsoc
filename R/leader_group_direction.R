@@ -49,19 +49,17 @@ leader_direction_group <- function(
     return_rank = FALSE,
     ties.method = 'average') {
 
-  xcol <- first(coords)
-  ycol <- last(coords)
-  xcol_group <- paste0('group_mean_', xcol)
-  ycol_group <- paste0('group_mean_', ycol)
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
 
-  stopifnot(group_bearing %in% colnames(DT))
-  stopifnot(group %in% colnames(DT))
-  stopifnot(xcol %in% colnames(DT))
-  stopifnot(ycol %in% colnames(DT))
-  stopifnot(xcol_group %in% colnames(DT))
-  stopifnot(ycol_group %in% colnames(DT))
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
 
-  DT[, dist_along_group_bearing :=
+  if (is.null(group)) {
+    stop('group column name required')
+  }
        cos(.SD[[group_bearing]]) * (.SD[[xcol]] - .SD[[xcol_group]]) +
        sin(.SD[[group_bearing]]) * (.SD[[ycol]] - .SD[[ycol_group]]),
      by = .I]
