@@ -41,6 +41,13 @@
 #' @inheritParams distance_tO_centroid
 #' @param group_direction group_direction column name generated using \code{direction_group},
 #' default is 'group_direction'
+leader_direction_group <- function(
+    DT,
+    group_direction = 'group_direction',
+    coords = NULL,
+    group = 'group',
+    return_rank = FALSE,
+    ties.method = 'average') {
 
   xcol <- first(coords)
   ycol <- last(coords)
