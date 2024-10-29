@@ -39,7 +39,7 @@
 #'   \code{DT}, because they will be overwritten.
 #'
 #' @inheritParams direction_group
-#' @inheritParams distance_tO_centroid
+#' @inheritParams distance_to_centroid
 #' @param group_direction group_direction column name generated using
 #'   \code{direction_group}, default is 'group_direction'
 leader_direction_group <- function(
