@@ -32,3 +32,12 @@ test_that('arguments required, otherwise error detected', {
   expect_error(leader_direction_group(DT, coords = NULL),
                'coords req')
 })
+
+test_that('column names must exist in DT', {
+  expect_error(leader_direction_group(DT, coords = rep('potato', 2)),
+               'potato field')
+  copy_DT <- copy(clean_DT)
+  setnames(copy_DT, 'centroid_X', 'potato_X')
+  expect_error(leader_direction_group(copy_DT, coords = coords),
+               'centroid_X field')
+})
