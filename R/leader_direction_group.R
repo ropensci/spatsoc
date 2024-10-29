@@ -81,6 +81,9 @@
 #'   projection = 32736
 #' )
 #'
+#' # Calculate group centroid
+#' centroid_group(DT, coords = c('X', 'Y'))
+#'
 #' # Calculate group direction
 #' direction_group(DT)
 #'
