@@ -53,6 +53,38 @@
 #'  * <https://doi.org/10.1371/journal.pone.0036567>
 #'  * <https://doi.org/10.1111/jfb.15315>
 #'  * <https://doi.org/10.1098/rspb.2021.0839>
+#'
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Spatial grouping with timegroup
+#' group_pts(DT, threshold = 50, id = 'ID',
+#'           coords = c('X', 'Y'), timegroup = 'timegroup')
+#'
+#' # Calculate direction at each step
+#' direction_step(
+#'   DT = DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   projection = 32736
+#' )
+#'
+#' # Calculate group direction
+#' direction_group(DT, coords = c('X', 'Y'))
+#'
+#' # Calculate leader in terms of position along group direction
+#' leader_direction_group(DT, coords = c('X', 'Y'))
 leader_direction_group <- function(
     DT = NULL,
     group_direction = 'group_direction',
