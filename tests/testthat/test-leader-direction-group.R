@@ -96,3 +96,31 @@ test_that('column(s) added to the result DT are expected type', {
   )
 
 })
+
+test_that('column(s) added to the result DT are expected range', {
+  expect_gt(
+    leader_direction_group(DT, coords = coords)[
+      position_group_direction < 0, .N],
+    0
+  )
+
+  expect_gt(
+    leader_direction_group(DT, coords = coords)[
+      position_group_direction > 0, .N],
+    0
+  )
+
+  expect_equal(
+    leader_direction_group(DT, coords = coords,
+                           group = 'group', return_rank = TRUE)[
+      rank_position_group_direction < 0, .N],
+    0
+  )
+
+  expect_gt(
+    leader_direction_group(DT, coords = coords,
+                           group = 'group', return_rank = TRUE)[
+      position_group_direction > 0, .N],
+    0
+  )
+})
