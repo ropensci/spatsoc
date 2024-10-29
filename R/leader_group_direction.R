@@ -42,7 +42,7 @@
 #' @param group_direction group_direction column name generated using \code{direction_group},
 #' default is 'group_direction'
 leader_direction_group <- function(
-    DT,
+    DT = NULL,
     group_direction = 'group_direction',
     coords = NULL,
     group = 'group',
