@@ -99,8 +99,8 @@ leader_direction_group <- function(
   }
 
   DT[, position_group_direction :=
-       cos(.SD[[group_bearing]]) * (.SD[[xcol]] - .SD[[xcol_group]]) +
-       sin(.SD[[group_bearing]]) * (.SD[[ycol]] - .SD[[ycol_group]]),
+       cos(.SD[[group_direction]]) * (.SD[[xcol]] - .SD[[xcol_group]]) +
+       sin(.SD[[group_direction]]) * (.SD[[ycol]] - .SD[[ycol_group]]),
      by = .I]
 
   if (return_rank) {
@@ -118,7 +118,7 @@ leader_direction_group <- function(
     }
 
     DT[, rank_position_group_direction :=
-         data.table::frank(-dist_along_group_bearing, ties.method = ties.method),
+         data.table::frank(-position_group_direction, ties.method = ties.method),
        by = c(group)]
   }
 
