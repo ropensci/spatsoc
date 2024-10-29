@@ -80,3 +80,19 @@ test_that('1 or 2 (return_rank = TRUE) column(s) added to the result DT', {
                                            return_rank = TRUE,
                                            group = 'group')))
 })
+
+test_that('column(s) added to the result DT are expected type', {
+  expect_type(
+    leader_direction_group(DT, coords = coords)$position_group_direction,
+    'double'
+  )
+  expect_type(
+    leader_direction_group(
+      DT,
+      coords = coords,
+      group = 'group',
+      return_rank = TRUE)$rank_position_group_direction,
+    'double'
+  )
+
+})
