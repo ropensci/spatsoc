@@ -44,6 +44,8 @@
 #'   \code{direction_group}, default is 'group_direction'
 #'
 #' @export
+#' @seealso \code{\link{direction_group}}, \code{\link{centroid_group}}
+#' @family Leadership functions
 leader_direction_group <- function(
     DT = NULL,
     group_direction = 'group_direction',
