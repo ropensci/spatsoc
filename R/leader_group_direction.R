@@ -60,6 +60,12 @@ leader_direction_group <- function(
   if (is.null(group)) {
     stop('group column name required')
   }
+
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+
+  centroid_xcol <- paste0('centroid_', gsub(' ', '', xcol))
+  centroid_ycol <- paste0('centroid_', gsub(' ', '', ycol))
        cos(.SD[[group_bearing]]) * (.SD[[xcol]] - .SD[[xcol_group]]) +
        sin(.SD[[group_bearing]]) * (.SD[[ycol]] - .SD[[ycol_group]]),
      by = .I]
