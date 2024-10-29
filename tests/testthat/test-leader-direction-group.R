@@ -53,6 +53,12 @@ test_that('coords are correctly provided or error detected', {
                'centroid coords must be numeric')
 })
 
+test_that('radians expected else error', {
+  expect_error(leader_direction_group(DT, coords = coords,
+                                      group_direction = 'X'),
+               'direction_group')
+})
+
 test_that('position_group_direction column succesfully detected', {
   copy_DT <- copy(clean_DT)[, position_group_direction := 1]
   expect_message(
