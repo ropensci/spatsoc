@@ -139,13 +139,17 @@ leader_direction_group <- function(
   }
 
   if ('position_group_direction' %in% colnames(DT)) {
-    message('position_group_direction column will be overwritten by this function')
+    message(
+      'position_group_direction column will be overwritten by this function'
+    )
     data.table::set(DT, j = 'position_group_direction', value = NULL)
   }
 
   if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(group_direction)] ||
       DT[, units(.SD[[1]])$numerator != 'rad', .SDcols = c(group_direction)]) {
-    stop('units(DT$group_direction) is not radians, did you use direction_group?')
+    stop(
+      'units(DT$group_direction) is not radians, did you use direction_group?'
+    )
   }
 
   DT[, position_group_direction :=
@@ -156,7 +160,9 @@ leader_direction_group <- function(
 
   if (return_rank) {
     if ('rank_position_group_direction' %in% colnames(DT)) {
-      message('rank_position_group_direction column will be overwritten by this function')
+      message(
+        'rank_position_group_direction column will be overwritten by this function'
+      )
       data.table::set(DT, j = 'rank_position_group_direction', value = NULL)
     }
 
