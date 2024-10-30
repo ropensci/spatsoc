@@ -31,6 +31,11 @@ test_that('DT is required', {
 test_that('arguments required, otherwise error detected', {
   expect_error(leader_direction_group(DT, coords = NULL),
                'coords req')
+  expect_error(leader_direction_group(DT, coords = coords, return_rank = NULL),
+               'return_rank req')
+  expect_error(leader_direction_group(DT, coords = coords, return_rank = TRUE,
+                                      group = NULL),
+               'group column name')
 })
 
 test_that('column names must exist in DT', {
@@ -40,7 +45,11 @@ test_that('column names must exist in DT', {
   setnames(copy_DT, 'centroid_X', 'potato_X')
   expect_error(leader_direction_group(copy_DT, coords = coords),
                'centroid_X field')
+  expect_error(leader_direction_group(DT, coords = coords, return_rank = TRUE,
+                                      group = 'potato'),
+               'group_pts')
 })
+
 
 test_that('coords are correctly provided or error detected', {
   expect_error(leader_direction_group(DT, coords = c('X', NULL)),
