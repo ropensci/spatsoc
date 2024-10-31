@@ -75,7 +75,10 @@
 #'
 #' # Calculate distance to leader
 #' distance_to_leader(DT, coords = c('X', 'Y'))
-distance_to_leader <- function(DT, coords = c('x', 'y'), group = 'group') {
+distance_to_leader <- function(
+    DT = NULL,
+    coords = NULL,
+    group = NULL) {
   stopifnot(first(coords) %in% colnames(DT))
   stopifnot(last(coords) %in% colnames(DT))
   stopifnot(group %in% colnames(DT))
