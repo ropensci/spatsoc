@@ -132,19 +132,29 @@ distance_to_leader <- function(
     data.table::set(DT, j = out_col, value = NULL)
   }
 
+
+  DT[, zzz_N_by_group := .N, by = c(group)]
+
+  check_has_leader <- DT[, .(
+    has_leader = any(rank_position_group_direction == 1)),
+    by = c(group)][!(has_leader)]
+
   if (check_has_leader[, .N > 0]) {
-    warning('groups found missing leader (rank_position_group_direction == 1): \n',
-            check_has_leader[, paste(group, collapse = ', ')])
+    warning(
+      'groups found missing leader (rank_position_group_direction == 1): \n',
+      check_has_leader[, paste(group, collapse = ', ')]
+    )
   }
 
   DT[!group %in% check_has_leader$group,
-     dist_leader := fifelse(
-       temp_N_by_group > 1,
-       as.matrix(dist(cbind(.SD[[1]], .SD[[2]])))[, which(.SD[[3]] == 1)],
+     c(out_col) := fifelse(
+       zzz_N_by_group > 1,
+       as.matrix(
+         stats::dist(cbind(.SD[[1]], .SD[[2]]))
+       )[, which(.SD[[3]] == 1)],
        0
      ),
      .SDcols = c(coords, 'rank_position_group_direction'),
      by = c(group)]
-  DT[, temp_N_by_group := NULL]
-  return(DT)
+
 }
