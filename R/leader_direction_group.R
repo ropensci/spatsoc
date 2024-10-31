@@ -159,9 +159,10 @@ leader_direction_group <- function(
      .SDcols = c(group_direction, xcol, ycol, centroid_xcol, centroid_ycol)]
 
   if (return_rank) {
-    if ('rank_position_group_direction' %in% colnames(DT)) {
+    rank_col <- 'rank_position_group_direction'
+    if (rank_col %in% colnames(DT)) {
       message(
-        'rank_position_group_direction column will be overwritten by this function'
+        paste0(rank_col, ' column will be overwritten by this function')
       )
       data.table::set(DT, j = 'rank_position_group_direction', value = NULL)
     }
@@ -175,7 +176,8 @@ leader_direction_group <- function(
     }
 
     DT[, rank_position_group_direction :=
-         data.table::frank(-position_group_direction, ties.method = ties.method),
+         data.table::frank(-position_group_direction,
+                           ties.method = ties.method),
        by = c(group)]
   }
 
