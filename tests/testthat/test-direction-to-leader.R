@@ -49,3 +49,15 @@ test_that('column names must exist in DT', {
                'did you run leader?')
 })
 
+test_that('coords are correctly provided or error detected', {
+  expect_error(distance_to_leader(DT, coords = c('X', NULL), group = group),
+               'coords requires a vector')
+  copy_DT <- copy(DT)[, X := as.character(X)]
+  expect_error(distance_to_leader(copy_DT, coords = coords, group = group),
+               'coords must be numeric')
+  copy_DT <- copy(DT)[, X := as.character(X)]
+  expect_error(distance_to_leader(copy_DT, coords = coords,
+                                  group = group),
+               'coords must be numeric')
+})
+
