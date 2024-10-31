@@ -27,6 +27,16 @@
 #'
 #'   A message is returned when the \code{distance_leader} column is already exist in the input \code{DT}
 #'   because it will be overwritten.
+#'
+#' @export
+#' @family Distance functions
+#' @seealso [leader_direction_group], [group_pts]
+#' @references
+#'
+#' See examples of using distance to leader and position within group:
+#'  * <https://doi.org/10.1111/jfb.15315>
+#'  * <https://doi.org/10.1098/rspb.2017.2629>
+#'  * <https://doi.org/10.1016/j.anbehav.2023.09.009>
 distance_to_leader <- function(DT, coords = c('x', 'y'), group = 'group') {
   stopifnot(first(coords) %in% colnames(DT))
   stopifnot(last(coords) %in% colnames(DT))
