@@ -30,7 +30,7 @@
 #'
 #' @export
 #' @family Distance functions
-#' @seealso [leader_direction_group], [group_pts]
+#' @seealso [direction_to_leader], [leader_direction_group], [group_pts]
 #' @references
 #'
 #' See examples of using distance to leader and position within group:
