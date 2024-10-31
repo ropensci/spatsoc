@@ -157,4 +157,7 @@ distance_to_leader <- function(
      .SDcols = c(coords, 'rank_position_group_direction'),
      by = c(group)]
 
+  data.table::set(DT, j = 'zzz_N_by_group', value = NULL)
+
+  return(DT[])
 }
