@@ -114,7 +114,6 @@ distance_to_leader <- function(
     stop('coords must be numeric')
   }
 
-  # check exists, is numeric
   leader_col <- 'rank_position_group_direction'
 
   if (!leader_col %in% colnames(DT)) {
@@ -124,6 +123,10 @@ distance_to_leader <- function(
       'did you run leader_direction_group(return_rank = TRUE)?'))
   }
 
+  if (!is.numeric(DT[[leader_col]]) {
+    stop(paste0(leader_col, ' column must be numeric'))
+  })
+
   out_col <- 'distance_leader'
   if (out_col %in% colnames(DT)) {
     message(
@@ -131,7 +134,6 @@ distance_to_leader <- function(
     )
     data.table::set(DT, j = out_col, value = NULL)
   }
-
 
   DT[, zzz_N_by_group := .N, by = c(group)]
 
