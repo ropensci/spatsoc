@@ -79,10 +79,8 @@ distance_to_leader <- function(
     DT = NULL,
     coords = NULL,
     group = NULL) {
-  stopifnot(first(coords) %in% colnames(DT))
-  stopifnot(last(coords) %in% colnames(DT))
-  stopifnot(group %in% colnames(DT))
-  stopifnot('rank_position_group_direction' %in% colnames(DT))
+  # Due to NSE notes
+  # distance_leader <- zzz_N_by_group <- NULL
 
   DT[, temp_N_by_group := .N, by = c(group)]
 
