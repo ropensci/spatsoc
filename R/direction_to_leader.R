@@ -135,3 +135,14 @@ direction_to_leader <- function(
     )
     data.table::set(DT, j = out_col, value = NULL)
   }
+
+  check_has_leader <- DT[, .(
+    has_leader = any(rank_position_group_direction == 1)),
+    by = c(group)][!(has_leader)]
+
+  if (check_has_leader[, .N > 0]) {
+    warning(
+      'groups found missing leader (rank_position_group_direction == 1): \n',
+      check_has_leader[, paste(group, collapse = ', ')]
+    )
+  }
