@@ -80,7 +80,8 @@ distance_to_leader <- function(
     coords = NULL,
     group = NULL) {
   # Due to NSE notes
-  # distance_leader <- zzz_N_by_group <- NULL
+  distance_leader <- zzz_N_by_group <- rank_position_group_direction <-
+    has_leader <- . <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
