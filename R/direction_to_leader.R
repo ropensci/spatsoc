@@ -27,3 +27,13 @@
 #'
 #'   A message is returned when the \code{direction_leader} column is already exist in the input \code{DT}
 #'   because it will be overwritten.
+#'
+#' @export
+#' @family Direction functions
+#' @seealso [distance_to_leader], [leader_direction_group], [group_pts]
+#' @references
+#'
+#' See examples of using direction to leader and position within group:
+#'  * <https://doi.org/10.1016/j.anbehav.2023.09.009>
+#'  * <https://doi.org/10.1016/j.beproc.2013.10.007>
+#'  * <https://doi.org/10.1371/journal.pone.0036567>
