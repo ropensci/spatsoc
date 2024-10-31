@@ -68,3 +68,18 @@ test_that('message when distance_leader column overwritten', {
     'distance_leader column will be overwritten'
   )
 })
+
+test_that('no rows are added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(nrow(copyDT),
+               nrow(distance_to_leader(copyDT, coords = coords, group = group)))
+})
+
+test_that('one column added to the result DT', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(ncol(copyDT) + 1,
+               ncol(distance_to_leader(copyDT, coords = coords, group = group)))
+})
+
