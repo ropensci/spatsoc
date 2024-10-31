@@ -61,3 +61,10 @@ test_that('coords are correctly provided or error detected', {
                'coords must be numeric')
 })
 
+test_that('message when distance_leader column overwritten', {
+  copyDT <- copy(clean_DT)[, distance_leader := 1]
+  expect_message(
+    distance_to_leader(copyDT, coords = coords, group = group),
+    'distance_leader column will be overwritten'
+  )
+})
