@@ -32,7 +32,7 @@ test_that('DT is required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(distance_to_leader(DT, coords = NULL),
+  expect_error(distance_to_leader(DT, coords = NULL, group = group),
                'coords req')
   expect_error(distance_to_leader(DT, coords = coords, group = NULL),
                'group column name required')
