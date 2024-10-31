@@ -83,3 +83,14 @@ test_that('one column added to the result DT', {
                ncol(distance_to_leader(copyDT, coords = coords, group = group)))
 })
 
+test_that('column added to the result DT is a double', {
+  expect_type(
+    distance_to_leader(DT, coords = coords, group = group)$distance_leader,
+    'double'
+  )
+})
+
+test_that('returns a data.table', {
+  expect_s3_class(distance_to_leader(DT, coords = coords, group = group),
+                  'data.table')
+})
