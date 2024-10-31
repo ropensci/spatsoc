@@ -75,3 +75,7 @@
 #'
 #' # Calculate direction to leader
 #' direction_to_leader(DT, coords = c('X', 'Y'), group = 'group')
+direction_to_leader <- function(
+    DT = NULL,
+    coords = NULL,
+    group = NULL) {
