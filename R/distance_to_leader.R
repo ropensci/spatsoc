@@ -86,12 +86,12 @@ distance_to_leader <- function(
     stop('input DT required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
   if (is.null(group)) {
     stop('group column name required')
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
   }
 
   if (!group %in% colnames(DT)) {
