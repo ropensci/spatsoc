@@ -1,4 +1,4 @@
-#' Calculate distance to leader
+#' Distance to group leader
 #'
 #' Leader as identified using group_leader by first position along
 #' group axis of movement (return_rank = TRUE)
