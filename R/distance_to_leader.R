@@ -20,6 +20,7 @@
 #' expect the names of columns in \code{DT} which correspond to the X and Y
 #' coordinates and group columns.
 #'
+#' @inheritParams leader_direction_group
 distance_to_leader <- function(DT, coords = c('x', 'y'), group = 'group') {
   stopifnot(first(coords) %in% colnames(DT))
   stopifnot(last(coords) %in% colnames(DT))
