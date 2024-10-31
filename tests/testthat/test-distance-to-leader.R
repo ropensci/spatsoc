@@ -26,3 +26,15 @@ leader_direction_group(DT, coords = coords, group = group, return_rank = TRUE)
 DT <- copy(DT)[group != 868]
 
 clean_DT <- copy(DT)
+
+test_that('DT is required', {
+  expect_error(distance_to_leader(DT = NULL))
+})
+
+test_that('arguments required, otherwise error detected', {
+  expect_error(distance_to_leader(DT, coords = NULL),
+               'coords req')
+  expect_error(distance_to_leader(DT, coords = coords, group = NULL),
+               'group column name required')
+})
+
