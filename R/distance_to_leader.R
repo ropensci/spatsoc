@@ -123,9 +123,10 @@ distance_to_leader <- function(
       'did you run leader_direction_group(return_rank = TRUE)?'))
   }
 
-  if (!is.numeric(DT[[leader_col]]) {
+  if (!is.numeric(DT[[leader_col]])) {
     stop(paste0(leader_col, ' column must be numeric'))
-  })
+  }
+
 
   out_col <- 'distance_leader'
   if (out_col %in% colnames(DT)) {
