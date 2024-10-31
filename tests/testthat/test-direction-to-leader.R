@@ -38,3 +38,14 @@ test_that('arguments required, otherwise error detected', {
                'group column name required')
 })
 
+test_that('column names must exist in DT', {
+  expect_error(distance_to_leader(DT, coords = rep('potato', 2), group = group),
+               'potato field')
+  expect_error(distance_to_leader(DT, coords = coords, group = 'potato'),
+               'group column')
+  copy_DT <- copy(DT)
+  setnames(copy_DT, 'rank_position_group_direction', 'potato')
+  expect_error(distance_to_leader(copy_DT, coords = coords, group = group),
+               'did you run leader?')
+})
+
