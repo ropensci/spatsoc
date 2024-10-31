@@ -19,3 +19,5 @@
 #' \code{group_pts} function. The \code{coords} and \code{group} arguments
 #' expect the names of columns in \code{DT} which correspond to the X and Y
 #' coordinates and group columns.
+#'
+#' @inheritParams leader_direction_group
