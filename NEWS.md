@@ -1,3 +1,10 @@
+# v 0.2.6.9000
+
+* `leader_direction_group` function for calculating leadership defined as 
+position within a spatiotemporal group along the mean direction of movement
+[PR 66](https://github.com/ropensci/spatsoc/pull/66)
+
+
 # v 0.2.6
 
 New experimental functions: 

@@ -41,6 +41,10 @@ reference:
     desc: ~
     contents:
     - '`distance_to_centroid`'
+  - title: Leadership functions
+    desc: ~
+    contents:
+    - '`leader_direction_group`'
   - title: Build functions
     desc: ~
     contents:
