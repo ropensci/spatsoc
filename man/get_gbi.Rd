@@ -12,7 +12,7 @@ get_gbi(DT = NULL, group = "group", id = NULL)
 \item{group}{Character string of group column (generated from one of
 spatsoc's spatial grouping functions)}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 }
 \value{
 \code{get_gbi} returns a group by individual matrix (columns

@@ -74,7 +74,7 @@ direction_step(
 direction_group(DT)
 }
 \references{
-See example of using mean group direction:
+See examples of using mean group direction:
 \itemize{
 \item \url{https://doi.org/10.1098/rsos.170148}
 \item \url{https://doi.org/10.1098/rsos.201128}

@@ -55,8 +55,8 @@
 #' @param DT input data.table
 #' @param threshold distance for grouping points, in the units of the
 #'   coordinates
-#' @param id Character string of ID column name
-#' @param coords Character vector of X coordinate and Y coordinate column names.
+#' @param id character string of ID column name
+#' @param coords character vector of X coordinate and Y coordinate column names.
 #' Note: the order is assumed X followed by Y column names.
 #' @param timegroup timegroup field in the DT within which the grouping will be
 #'   calculated

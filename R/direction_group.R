@@ -38,7 +38,7 @@
 #' @family Direction functions
 #'
 #' @references
-#' See example of using mean group direction:
+#' See examples of using mean group direction:
 #'  * <https://doi.org/10.1098/rsos.170148>
 #'  * <https://doi.org/10.1098/rsos.201128>
 #'  * <https://doi.org/10.1016/j.beproc.2018.01.013>

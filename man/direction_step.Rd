@@ -15,9 +15,9 @@ direction_step(
 \arguments{
 \item{DT}{input data.table}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names.
+\item{coords}{character vector of X coordinate and Y coordinate column names.
 Note: the order is assumed X followed by Y column names.}
 
 \item{projection}{numeric or character defining the coordinate reference

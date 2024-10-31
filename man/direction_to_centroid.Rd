@@ -9,7 +9,7 @@ direction_to_centroid(DT = NULL, coords = NULL)
 \arguments{
 \item{DT}{input data.table}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names.
+\item{coords}{character vector of X coordinate and Y coordinate column names.
 Note: the order is assumed X followed by Y column names.}
 }
 \value{

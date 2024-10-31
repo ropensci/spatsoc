@@ -74,10 +74,10 @@ direction_step(
 direction_polarization(DT)
 }
 \references{
-See example of using polarization:
+See examples of using polarization:
 \itemize{
 \item \url{https://doi.org/10.1016/j.cub.2017.08.004}
-\item <10.1371/journal.pcbi.1009437>
+\item \url{https://doi.org/10.1371/journal.pcbi.1009437}
 \item \url{https://doi.org/10.7554/eLife.19505}
 }
 }
