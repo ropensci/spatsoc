@@ -1,5 +1,6 @@
-# Test Random
+# Test randomizations
 context('test randomizations')
+
 library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
