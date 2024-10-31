@@ -59,6 +59,9 @@ test_that('coords are correctly provided or error detected', {
   expect_error(distance_to_leader(copy_DT, coords = coords,
                                   group = group),
                'coords must be numeric')
+  copy_DT <- copy(DT)[, rank_position_group_direction := NULL]
+  expect_error(distance_to_leader(copy_DT, coords = coords,
+                                  group = group))
 })
 
 test_that('message when distance_leader column overwritten', {
