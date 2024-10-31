@@ -37,3 +37,41 @@
 #'  * <https://doi.org/10.1016/j.anbehav.2023.09.009>
 #'  * <https://doi.org/10.1016/j.beproc.2013.10.007>
 #'  * <https://doi.org/10.1371/journal.pone.0036567>
+#'
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Spatial grouping with timegroup
+#' group_pts(DT, threshold = 50, id = 'ID',
+#'           coords = c('X', 'Y'), timegroup = 'timegroup')
+#'
+#' # Calculate direction at each step
+#' direction_step(
+#'   DT = DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   projection = 32736
+#' )
+#'
+#' # Calculate group centroid
+#' centroid_group(DT, coords = c('X', 'Y'))
+#'
+#' # Calculate group direction
+#' direction_group(DT)
+#'
+#' # Calculate leader in terms of position along group direction
+#' leader_direction_group(DT, coords = c('X', 'Y'))
+#'
+#' # Calculate direction to leader
+#' direction_to_leader(DT, coords = c('X', 'Y'), group = 'group')
