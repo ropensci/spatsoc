@@ -146,3 +146,22 @@ direction_to_leader <- function(
       check_has_leader[, paste(group, collapse = ', ')]
     )
   }
+
+  zzz_leader_coords <- c('zzz_leader_xcol', 'zzz_leader_ycol')
+  DT[, c(zzz_leader_coords) :=
+       .SD[which(rank_position_group_direction == 1)],
+     .SDcols = c(coords),
+     by = c(group)]
+
+  DT[!group %in% check_has_leader$group, direction_leader := fifelse(
+    .SD[[1]] == .SD[[3]] &
+      .SD[[2]] == .SD[[4]],
+    NaN,
+    atan2(.SD[[4]] - .SD[[2]], (.SD[[3]] - .SD[[1]]))
+  ),
+  .SDcols = c(coords, zzz_leader_coords)]
+
+  data.table::set(DT, j = zzz_leader_coords, value = NULL)
+
+  return(DT[])
+}
