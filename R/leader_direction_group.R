@@ -30,10 +30,9 @@
 #'
 #' @return \code{leader_direction_group} returns the input \code{DT} appended
 #'   with a \code{position_group_direction} column indicating the position along
-#'   the group direction in the units of the projection and, optionally, a
-#'   \code{rank_position_group_direction} column indicating the
-#'   within group rank position along the group dirtection \code{return_rank =
-#'   TRUE}).
+#'   the group direction in the units of the projection and, optionally when
+#'   \code{return_rank = TRUE}, a \code{rank_position_group_direction} column
+#'   indicating the the ranked position along the group direction.
 #'
 #'   A message is returned when \code{position_group_direction} or
 #'   \code{rank_position_group_direction} columns already exist in the input
