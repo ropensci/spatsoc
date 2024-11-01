@@ -74,12 +74,11 @@
 #' leader_direction_group(
 #'   DT,
 #'   coords = c('X', 'Y'),
-#'   group = 'group',
 #'   return_rank = TRUE
 #' )
 #'
 #' # Calculate direction to leader
-#' direction_to_leader(DT, coords = c('X', 'Y'), group = 'group')
+#' direction_to_leader(DT, coords = c('X', 'Y'))
 direction_to_leader <- function(
     DT = NULL,
     coords = NULL,

@@ -77,12 +77,11 @@
 #' leader_direction_group(
 #'   DT,
 #'   coords = c('X', 'Y'),
-#'   group = 'group',
 #'   return_rank = TRUE
 #' )
 #'
 #' # Calculate distance to leader
-#' distance_to_leader(DT, coords = c('X', 'Y'), group = 'group')
+#' distance_to_leader(DT, coords = c('X', 'Y'))
 distance_to_leader <- function(
     DT = NULL,
     coords = NULL,
