@@ -20,7 +20,7 @@
 #' expect the names of columns in \code{DT} which correspond to the X and Y
 #' coordinates and group columns.
 #'
-#' @inheritParams leader_direction_group
+#' @inheritParams distance_to_leader
 #'
 #' @return \code{direction_to_leader} returns the input \code{DT} appended with
 #'   a \code{direction_leader} column indicating the direction to the group leader.
