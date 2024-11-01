@@ -12,7 +12,7 @@ get_gbi(DT = NULL, group = "group", id = NULL)
 \item{group}{Character string of group column (generated from one of
 spatsoc's spatial grouping functions)}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 }
 \value{
 \code{get_gbi} returns a group by individual matrix (columns
@@ -25,7 +25,7 @@ but is more efficient thanks to
 \code{\link[data.table:dcast.data.table]{data.table::dcast}}.
 }
 \description{
-\code{get_gbi} generates a group by individual matrix. The function accepts a
+\code{get_gbi} generates a group by individual matrix. The function expects a
 \code{data.table} with individual identifiers and a group column. The group
 by individual matrix can then be used to build a network using
 \code{\link[asnipe:get_network]{asnipe::get_network}}.

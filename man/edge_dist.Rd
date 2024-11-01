@@ -21,9 +21,10 @@ edge_dist(
 \item{threshold}{distance for grouping points, in the units of the
 coordinates}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
 
 \item{timegroup}{timegroup field in the DT within which the grouping will be
 calculated}
@@ -52,7 +53,7 @@ temporal with \code{group_times}) thresholds.
 }
 \description{
 \code{edge_dist} returns edge lists defined by a spatial distance within the
-user defined threshold. The function accepts a \code{data.table} with
+user defined threshold. The function expects a \code{data.table} with
 relocation data, individual identifiers and a threshold argument. The
 threshold argument is used to specify the criteria for distance between
 points which defines a group. Relocation data should be in two columns

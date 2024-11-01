@@ -1,7 +1,7 @@
 #' Generate group by individual matrix
 #'
 #'
-#' \code{get_gbi} generates a group by individual matrix. The function accepts a
+#' \code{get_gbi} generates a group by individual matrix. The function expects a
 #' \code{data.table} with individual identifiers and a group column. The group
 #' by individual matrix can then be used to build a network using
 #' \code{\link[asnipe:get_network]{asnipe::get_network}}.

@@ -26,9 +26,10 @@ projection. Use \code{threshold = 0} to compare intersection without buffering.}
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \code{projection = "EPSG:32736"} or \code{projection = 32736}.}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
 
 \item{timegroup}{timegroup field in the DT within which the grouping will be
 calculated}
@@ -61,7 +62,7 @@ input \code{DT}, because it will be overwritten.
 }
 \description{
 \code{group_lines} groups rows into spatial groups by generating LINESTRINGs and
-grouping based on spatial intersection. The function accepts a \code{data.table}
+grouping based on spatial intersection. The function expects a \code{data.table}
 with relocation data, individual identifiers and a distance threshold. The
 relocation data is transformed into sf LINESTRINGs using \link{build_lines} and
 intersecting LINESTRINGs are grouped. The threshold argument is used to
