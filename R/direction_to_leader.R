@@ -83,7 +83,7 @@
 direction_to_leader <- function(
     DT = NULL,
     coords = NULL,
-    group = NULL) {
+    group = 'group') {
   # Due to NSE notes
   direction_leader <- rank_position_group_direction <- has_leader <-
     zzz_N_by_group <- . <- NULL

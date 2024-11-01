@@ -83,7 +83,7 @@
 distance_to_leader <- function(
     DT = NULL,
     coords = NULL,
-    group = NULL) {
+    group = 'group') {
   # Due to NSE notes
   distance_leader <- zzz_N_by_group <- rank_position_group_direction <-
     has_leader <- . <- NULL

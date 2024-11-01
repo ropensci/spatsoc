@@ -92,7 +92,7 @@ leader_direction_group <- function(
     DT = NULL,
     group_direction = 'group_direction',
     coords = NULL,
-    group = NULL,
+    group = 'group',
     return_rank = FALSE,
     ties.method = 'average') {
   # Due to NSE notes
