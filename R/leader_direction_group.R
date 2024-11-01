@@ -65,6 +65,9 @@
 #' # Read example data
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #'
+#' # (Subset example data to reduce example run time)
+#' DT <- DT[year(datetime) == 2016]
+#'
 #' # Cast the character column to POSIXct
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'

@@ -52,6 +52,9 @@
 #' # Cast the character column to POSIXct
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 #'
+#' # (Subset example data to reduce example run time)
+#' DT <- DT[year(datetime) == 2016]
+#'
 #' # Temporal grouping
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
