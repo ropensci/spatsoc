@@ -29,6 +29,7 @@
 #' @param return_rank boolean if rank distance should also be returned, default
 #'   FALSE
 #' @param ties.method see \code{\link[data.table:frank]{?data.table::frank}}
+#' @inheritParams group_pts
 #'
 #' @return \code{distance_to_centroid} returns the input \code{DT} appended with
 #'   a \code{distance_centroid} column indicating the distance to group centroid
