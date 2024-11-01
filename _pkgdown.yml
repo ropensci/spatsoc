@@ -35,12 +35,14 @@ reference:
     contents:
     - '`direction_step`'
     - '`direction_to_centroid`'
+    - '`direction_to_leader`'
     - '`direction_group`'
     - '`direction_polarization`'
   - title: Distance functions
     desc: ~
     contents:
     - '`distance_to_centroid`'
+    - '`distance_to_leader`'
   - title: Leadership functions
     desc: ~
     contents:
