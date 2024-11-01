@@ -71,7 +71,12 @@
 #' direction_group(DT)
 #'
 #' # Calculate leader in terms of position along group direction
-#' leader_direction_group(DT, coords = c('X', 'Y'))
+#' leader_direction_group(
+#'   DT,
+#'   coords = c('X', 'Y'),
+#'   group = 'group',
+#'   return_rank = TRUE
+#' )
 #'
 #' # Calculate distance to leader
 #' distance_to_leader(DT, coords = c('X', 'Y'), group = 'group')
