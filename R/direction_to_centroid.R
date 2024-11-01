@@ -18,6 +18,7 @@
 #' expect the names of columns in \code{DT} which correspond to the X and Y
 #' coordinates and group columns.
 #'
+#' @inheritParams distance_to_centroid
 #' @inheritParams group_pts
 #'
 #' @return \code{direction_to_centroid} returns the input \code{DT} appended

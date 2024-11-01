@@ -100,6 +100,7 @@ direction_step(
 
 Other Direction functions: 
 \code{\link{direction_group}()},
-\code{\link{direction_polarization}()}
+\code{\link{direction_polarization}()},
+\code{\link{direction_to_leader}()}
 }
 \concept{Direction functions}
