@@ -94,6 +94,14 @@ test_that('column added to the result DT is a double', {
   )
 })
 
+test_that('zzz columns not added to the result', {
+  zzz_cols <- c('has_leader', 'zzz_N_by_group')
+
+  expect_false(
+    any(zzz_cols %in% colnames(direction_to_leader(DT, coords = coords)))
+  )
+})
+
 test_that('returns a data.table', {
   expect_s3_class(distance_to_leader(DT, coords = coords, group = group),
                   'data.table')
