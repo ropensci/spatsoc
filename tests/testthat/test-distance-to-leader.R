@@ -98,3 +98,34 @@ test_that('returns a data.table', {
   expect_s3_class(distance_to_leader(DT, coords = coords, group = group),
                   'data.table')
 })
+
+
+expect_DT <- data.table(
+  ID = c('A', 'B'),
+  X = c(0, 10),
+  Y = c(0, 0),
+  group_direction = rep(as_units(0, 'rad'), 2),
+  group = c(1, 1)
+)
+centroid_group(expect_DT, coords = coords)
+leader_direction_group(expect_DT, coords = coords,
+                       return_rank = TRUE, group = group)
+distance_to_leader(expect_DT, coords = c('X', 'Y'))
+
+test_that('expected results for simple case', {
+  expect_lte(
+    expect_DT[, max(distance_leader)],
+    10
+  )
+
+  expect_gte(
+    expect_DT[, min(distance_leader)],
+    0
+  )
+  expect_equal(
+    expect_DT[distance_leader == min(distance_leader), ID],
+    'B'
+  )
+})
+
+
