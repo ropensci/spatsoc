@@ -19,7 +19,8 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
 direction_step(DT, id, coords, projection)
 edges <- edge_dist(DT, threshold = threshold, id = id,
-                   timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
+                   coords = coords, timegroup = timegroup,
+                   returnDist = TRUE, fillNA = FALSE)
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 fusion_id(edges, threshold = threshold)
 
