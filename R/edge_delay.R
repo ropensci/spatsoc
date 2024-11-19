@@ -142,7 +142,13 @@ edge_delay <- function(
   if (!'dyadID' %in% colnames(edges)) {
     stop('dyadID not present in edges, did you run dyad_id?')
   }
-  # TODO: check window isnt in colnames
+  if ('window' %in% colnames(DT)) {
+    setnames(DT, 'window', 'zz_window')
+  }
+
+  if ('window' %in% colnames(edges)) {
+    setnames(edges, 'window', 'zz_window')
+  }
 
   setorder(DT, timegroup)
 
@@ -174,6 +180,14 @@ edge_delay <- function(
     id_tg[, .(timegroup,  dyadID, fusionID,
               ID1 = ID2, ID2 = ID1, dir_corr_delay = - dir_corr_delay)]
   ), use.names = TRUE)
+
+  if ('zz_window' %in% colnames(DT)) {
+    setnames(DT, 'zz_window', 'window')
+  }
+
+  if ('zz_window' %in% colnames(edges)) {
+    setnames(edges, 'zz_window', 'window')
+  }
 
   return(out)
 }
