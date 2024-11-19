@@ -96,7 +96,9 @@ edge_delay <- function(
     stop('input DT required')
   }
 
-  stopifnot(id %in% colnames(DT))
+  if (is.null(edges)) {
+    stop('input edges required')
+  }
 
   setnames(DT, id, 'id')
 
