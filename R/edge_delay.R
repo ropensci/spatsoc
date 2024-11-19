@@ -171,9 +171,10 @@ edge_delay <- function(
         by = c('fusionID')]
 
   id_tg[, delay_tg := {
-    focal_bearing <- DT[timegroup == .BY$tg & id == ID1, bearing]
+    focal_direction <- DT[timegroup == .BY$tg & zzz_id == ID1, direction]
     DT[between(timegroup, min_tg, max_tg) & zzz_id == ID2,
        timegroup[which.min(delta_rad(focal_direction, direction))]]
+  },
   by = c('tg',  'dyadID')]
 
   id_tg[, dir_corr_delay := tg - delay_tg]
