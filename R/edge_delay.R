@@ -127,6 +127,13 @@ edge_delay <- function(
     ))
   }
 
+  if (is.null(window)) {
+    stop('window is required')
+  }
+
+  if (!is.numeric(window)) {
+    stop('window should be a numeric, in the units of timegroup')
+  }
   # TODO: check window isnt in colnames
 
   setorder(DT, timegroup)
