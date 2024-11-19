@@ -152,7 +152,6 @@ edge_delay <- function(
     setnames(edges, 'window', 'zzz_window')
   }
 
-  setnames(DT, id, 'zzz_id')
   data.table::setorderv(DT, 'timegroup')
 
   id_tg <- edges[!is.na(fusionID), .(
@@ -173,9 +172,11 @@ edge_delay <- function(
         by = c('fusionID')]
 
   id_tg[, delay_tg := {
-    focal_direction <- DT[timegroup == .BY$tg & zzz_id == ID1, direction]
-    DT[between(timegroup, min_tg, max_tg) & zzz_id == ID2,
-       timegroup[which.min(delta_rad(focal_direction, direction))]]
+    focal_direction <- DT[timegroup == .BY$tg &
+                            id == ID1, direction]
+    DT[between(timegroup, min_tg, max_tg) & id == ID2,
+       timegroup[which.min(delta_rad(focal_direction, direction))],
+       env = list(id = 'id')]
   },
   by = c('tg',  'dyadID')]
 
@@ -192,9 +193,6 @@ edge_delay <- function(
               ID1 = ID2, ID2 = ID1, dir_corr_delay = - dir_corr_delay)]
   ), use.names = TRUE)
 
-
-  setnames(DT, 'zzz_id', id)
-
   if ('zzz_window' %in% colnames(DT)) {
     setnames(DT, 'zzz_window', 'window')
   }
@@ -205,3 +203,4 @@ edge_delay <- function(
 
   return(out)
 }
+
