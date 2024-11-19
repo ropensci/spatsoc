@@ -121,9 +121,8 @@ direction_step <- function(
   if (sf::st_is_longlat(projection)) {
     DT[, direction := c(
       lwgeom::st_geod_azimuth(
-        sf::st_as_sf(.SD, coords = coords, crs = projection))
-      ),
-      units::set_units(NA, 'rad'),
+        sf::st_as_sf(.SD, coords = coords, crs = projection)),
+      units::set_units(NA, 'rad')),
       by = c(id, splitBy)]
   } else if (!sf::st_is_longlat(projection)) {
     DT[, direction := c(

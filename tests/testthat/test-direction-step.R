@@ -113,3 +113,24 @@ test_that('splitBy returns expected', {
 
   )
 })
+
+
+DT_A <- data.table(
+  x = c(-5, -5, 0, 14, 10, 0),
+  y = c(5, 3, 1, 1, 11, 11),
+  id =  'A'
+)[, timegroup := seq.int(.N)]
+
+# Related to: PR 92
+test_that('longlat NA radian returned', {
+  expect_equal(
+    direction_step(DT_A, id = 'id', coords = c('x', 'y'),
+                   projection = 4326)[]$direction |> class(),
+    'units'
+  )
+  expect_gte(
+    sum(is.na(direction_step(DT_A, id = 'id', coords = c('x', 'y'),
+                   projection = 4326)[]$direction)),
+    1
+  )
+})
