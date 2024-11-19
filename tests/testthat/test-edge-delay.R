@@ -40,3 +40,8 @@ test_that('arguments required, otherwise error detected', {
                'window is required')
 })
 
+test_that('window is numeric', {
+  expect_error(edge_delay(edges, DT, id = id, window = 'potato'),
+               'numeric')
+})
+
