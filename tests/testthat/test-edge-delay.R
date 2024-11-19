@@ -27,3 +27,16 @@ clean_DT <- copy(DT)
 clean_edges <- copy(edges)
 
 # edge_delay(DT = DT, edges = edges, id = id, window = window)
+
+test_that('edges, DT are required', {
+  expect_error(edge_delay(edges, DT = NULL))
+  expect_error(edge_delay(edges = NULL, DT))
+})
+
+test_that('arguments required, otherwise error detected', {
+  expect_error(edge_delay(edges, DT, id = NULL),
+               'id column name required')
+  expect_error(edge_delay(edges, DT, id = id, window = NULL),
+               'window is required')
+})
+
