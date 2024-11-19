@@ -168,6 +168,8 @@ edge_delay <- function(
 
   id_tg[, max_tg :=
           data.table::fifelse(tg + window < min(tg), min(tg), tg + window),
+          # TODO: check max_tg
+          # data.table::fifelse(tg + window > max(tg), max(tg), tg + window),
         by = c('fusionID')]
 
   id_tg[, delay_tg := {
