@@ -87,6 +87,14 @@
 #' )
 #'
 #' print(delay)
+edge_delay <- function(
+    DT,
+    edges,
+    window,
+    id = NULL,
+    direction = 'direction',
+    timegroup = 'timegroup') {
+
   stopifnot(!is.null(id))
   stopifnot(!is.null(window))
 
