@@ -7,11 +7,11 @@
 #' the directional correlation delay. Relocation data should be in two columns
 #' representing the X and Y coordinates.
 #'
-#' The \code{DT} and \code{edges} must be \code{data.table}s. If your data is a
+#' The \code{edges} and \code{DT} must be \code{data.table}s. If your data is a
 #' \code{data.frame}, you can convert it by reference using
 #' \code{\link[data.table:setDT]{data.table::setDT}}.
 #'
-#' The \code{DT} and \code{edges} are internally matched in this function using
+#' The \code{edges} and \code{DT} are internally matched in this function using
 #' the columns \code{timegroup} (from \code{group_times}) and \code{ID1} and
 #' \code{ID2} (in \code{edges}, from \code{dyad_id}) with \code{id} (in
 #' \code{DT}). This function expects a \code{fusionID} present, generated with
@@ -78,16 +78,16 @@
 #'
 #' # Directional correlation delay
 #' delay <- edge_delay(
-#'   DT,
-#'   edges,
+#'   edges = edges,
+#'   DT = DT,
 #'   window = 3,
 #'   id = 'ID'
 #' )
 #'
 #' print(delay)
 edge_delay <- function(
-    DT,
     edges,
+    DT,
     window = NULL,
     id = NULL,
     direction = 'direction') {
