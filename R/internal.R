@@ -11,10 +11,10 @@
 #'
 #' @examples
 delta_rad <- function(target, source,  signed = FALSE) {
-  if (!inherits(target, 'units') || units(target$numerator != 'rad')) {
+  if (!inherits(target, 'units') || units(target)$numerator != 'rad') {
     stop('units(targets) is not radians')
   }
-  if (!inherits(source, 'units') || units(target$numerator != 'rad')) {
+  if (!inherits(source, 'units') || units(source)$numerator != 'rad') {
     stop('units(source) is not radians')
   }
 
