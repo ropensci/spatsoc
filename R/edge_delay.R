@@ -1,11 +1,26 @@
 #' Directional correlation delay based edge lists
 #'
-#' Temporal delay in absolute bearing between individuals
+#' \code{edge_delay} returns edge lists defined by the directional correlation
+#' delay between individuals. The function expects a \code{data.table} with
+#' relocation data, distance based edge lists, individual identifiers and a window argument. The
+#' window argument is used to specify the temporal window within which to consider
+#' the directional correlation delay. Relocation data should be in two columns
+#' representing the X and Y coordinates.
 #'
-#' @param DT relocation data
-#' @param edges edges generated with edges_dist
-#' @param window integer window in timegroups generated with group_times
-edge_delay <- function(DT, id = NULL, edges, window = NULL) {
+#' The \code{DT} and \code{edges} must be \code{data.table}s. If your data is a
+#' \code{data.frame}, you can convert it by reference using
+#' \code{\link[data.table:setDT]{data.table::setDT}}.
+#'
+#' The \code{DT} and \code{edges} are internally matched in this function using
+#' the columns \code{timegroup} (from \code{group_times}) and \code{ID1} and
+#' \code{ID2} (in \code{edges}, from \code{dyad_id}) with \code{id} (in
+#' \code{DT}). This function expects a \code{fusionID} present, generated with
+#' the \code{fusion_id} function. The \code{timegroup} argument expects the
+#' names of a column in \code{edges} which correspond to the timegroup column.
+#' The \code{id}, \code{direction} and \code{timegroup} arguments expect the names
+#' of a column in \code{DT} which correspond to the id, direction and
+#' timegroup columns.
+#'
   stopifnot(!is.null(id))
   stopifnot(!is.null(window))
 
