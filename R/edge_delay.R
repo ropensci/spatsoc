@@ -26,6 +26,11 @@
 #' @param window temporal window in unit of timegroup column generated with
 #'   \code{group_times}, eg. \code{window = 4} corresponds to the 4 timegroups
 #'   before and after the focal observation
+#'
+#' @return \code{edge_delay} returns the input \code{edges} appended with
+#'   a 'dir_corr_delay' column indicating the temporal delay (in units of
+#'   timegroups) at which ID1's direction of movement is most similar to
+#'   ID2's direction of movement, within the temporal window defined.
   stopifnot(!is.null(id))
   stopifnot(!is.null(window))
 
