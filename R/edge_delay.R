@@ -143,13 +143,14 @@ edge_delay <- function(
     stop('dyadID not present in edges, did you run dyad_id?')
   }
   if ('window' %in% colnames(DT)) {
-    setnames(DT, 'window', 'zz_window')
+    setnames(DT, 'window', 'zzz_window')
   }
 
   if ('window' %in% colnames(edges)) {
-    setnames(edges, 'window', 'zz_window')
+    setnames(edges, 'window', 'zzz_window')
   }
 
+  setnames(DT, id, 'zzz_id')
   setorder(DT, timegroup)
 
   id_tg <- edges[!is.na(fusionID), .(
@@ -165,9 +166,9 @@ edge_delay <- function(
 
   id_tg[, delay_tg := {
     focal_bearing <- DT[timegroup == .BY$tg & id == ID1, bearing]
-    DT[between(timegroup, min_tg, max_tg) & id == ID2,
-       timegroup[which.min(delta_rad(focal_bearing, bearing))]]
-  }, by = .(tg,  dyadID)]
+    DT[between(timegroup, min_tg, max_tg) & zzz_id == ID2,
+       timegroup[which.min(delta_rad(focal_direction, direction))]]
+  by = c('tg',  'dyadID')]
 
   id_tg[, dir_corr_delay := tg - delay_tg]
 
@@ -181,12 +182,12 @@ edge_delay <- function(
               ID1 = ID2, ID2 = ID1, dir_corr_delay = - dir_corr_delay)]
   ), use.names = TRUE)
 
-  if ('zz_window' %in% colnames(DT)) {
-    setnames(DT, 'zz_window', 'window')
+  if ('zzz_window' %in% colnames(DT)) {
+    setnames(DT, 'zzz_window', 'window')
   }
 
-  if ('zz_window' %in% colnames(edges)) {
-    setnames(edges, 'zz_window', 'window')
+  if ('zzz_window' %in% colnames(edges)) {
+    setnames(edges, 'zzz_window', 'window')
   }
 
   return(out)
