@@ -73,3 +73,23 @@ test_that('column names must exist in DT', {
                'timegroup field')
 })
 
+test_that('no rows are added to the result edges', {
+  expect_equal(nrow(edges),
+               nrow(edge_delay(edges, DT, id = id, window = window)))
+})
+
+test_that('two columns added to the result DT', {
+  copyEdges <- copy(edges)
+
+  expect_equal(ncol(copyEdges) + 1,
+               ncol(edge_delay(edges, DT, id = id, window = window)))
+})
+
+test_that('column added to the result DT is double', {
+  expect_type(edge_delay(edges, DT, id = id, window = window)$dir_corr_delay, 'double')
+})
+
+test_that('returns a data.table', {
+  expect_s3_class(edge_delay(edges, DT, id = id, window = window), 'data.table')
+})
+
