@@ -15,11 +15,9 @@
 #' the columns \code{timegroup} (from \code{group_times}) and \code{ID1} and
 #' \code{ID2} (in \code{edges}, from \code{dyad_id}) with \code{id} (in
 #' \code{DT}). This function expects a \code{fusionID} present, generated with
-#' the \code{fusion_id} function. The \code{timegroup} argument expects the
-#' names of a column in \code{edges} which correspond to the timegroup column.
-#' The \code{id}, \code{direction} and \code{timegroup} arguments expect the names
-#' of a column in \code{DT} which correspond to the id, direction and
-#' timegroup columns.
+#' the \code{fusion_id} function.
+#' The \code{id}, and \code{direction} arguments expect the names
+#' of a column in \code{DT} which correspond to the id, and direction columns.
 #'
 #' @inheritParams centroid_fusion
 #' @inheritParams direction_group
@@ -92,8 +90,7 @@ edge_delay <- function(
     edges,
     window,
     id = NULL,
-    direction = 'direction',
-    timegroup = 'timegroup') {
+    direction = 'direction') {
 
   stopifnot(!is.null(id))
   stopifnot(!is.null(window))
