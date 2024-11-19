@@ -179,8 +179,9 @@ edge_delay <- function(
 
   id_tg[, dir_corr_delay := tg - delay_tg]
 
-  data.table::setnames(id_tg,  c('tg'), c('timegroup'))
+  data.table::setnames(id_tg,  'tg', 'timegroup')
   data.table::set(id_tg, j = c('min_tg', 'max_tg','delay_tg'), value = NULL)
+
   data.table::setorder(id_tg, timegroup, ID1, ID2, dir_corr_delay)
 
   out <- data.table::rbindlist(list(
