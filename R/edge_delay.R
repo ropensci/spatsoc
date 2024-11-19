@@ -92,8 +92,9 @@ edge_delay <- function(
     id = NULL,
     direction = 'direction') {
 
-  stopifnot(!is.null(id))
-  stopifnot(!is.null(window))
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
 
   stopifnot(id %in% colnames(DT))
 
