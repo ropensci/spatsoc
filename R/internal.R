@@ -19,7 +19,8 @@ delta_rad <- function(target, source,  signed = FALSE) {
   }
 
   d <- source - target
-  d <- (d + pi) %% (2 * pi) - pi
+  pi_rad <- units::as_units(pi, 'rad')
+  d <- (d + pi_rad) %% (2 * pi_rad) - pi_rad
 
   if (signed) {
     return(d)
