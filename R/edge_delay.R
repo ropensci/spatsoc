@@ -100,7 +100,9 @@ edge_delay <- function(
     stop('input edges required')
   }
 
-  setnames(DT, id, 'id')
+  if (is.null(id)) {
+    stop('id column name required')
+  }
 
   stopifnot('dyadID' %in% colnames(edges))
   stopifnot('timegroup' %in% colnames(edges))
