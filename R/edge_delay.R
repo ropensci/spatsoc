@@ -1,4 +1,4 @@
-#' Directional correlation delay edge lists
+#' Directional correlation delay based edge lists
 #'
 #' Temporal delay in absolute bearing between individuals
 #'
