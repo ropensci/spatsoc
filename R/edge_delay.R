@@ -88,7 +88,7 @@
 edge_delay <- function(
     DT,
     edges,
-    window,
+    window = NULL,
     id = NULL,
     direction = 'direction') {
 
