@@ -104,7 +104,7 @@ edge_delay <- function(
     stop('id column name required')
   }
 
-  check_cols_edges <- c('ID1', 'ID2', timegroup)
+  check_cols_edges <- c('ID1', 'ID2', 'timegroup')
   if (any(!(check_cols_edges %in% colnames(edges)))) {
     stop(paste0(
       as.character(paste(setdiff(
@@ -115,7 +115,7 @@ edge_delay <- function(
     ))
   }
 
-  check_cols_DT <- c(id, timegroup, direction)
+  check_cols_DT <- c(id, 'timegroup', direction)
   if (any(!(check_cols_DT %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -153,7 +153,7 @@ edge_delay <- function(
   }
 
   setnames(DT, id, 'zzz_id')
-  setorder(DT, timegroup)
+  data.table::setorderv(DT, 'timegroup')
 
   id_tg <- edges[!is.na(fusionID), .(
     tg = unique(timegroup),
