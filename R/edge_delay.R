@@ -142,6 +142,8 @@ edge_delay <- function(
   if (!'dyadID' %in% colnames(edges)) {
     stop('dyadID not present in edges, did you run dyad_id?')
   }
+
+
   if ('window' %in% colnames(DT)) {
     setnames(DT, 'window', 'zzz_window')
   }
@@ -158,11 +160,15 @@ edge_delay <- function(
     dyadID = unique(dyadID),
     ID1 = first(ID1),
     ID2 = first(ID2)
-  ), by = fusionID]
-  id_tg[, min_tg := data.table::fifelse(tg - window < min(tg), min(tg), tg - window),
-        by = fusionID]
-  id_tg[, max_tg := data.table::fifelse(tg + window < min(tg), min(tg), tg + window),
-        by = fusionID]
+  ), by = c('fusionID')]
+
+  id_tg[, min_tg :=
+          data.table::fifelse(tg - window < min(tg), min(tg), tg - window),
+        by = c('fusionID')]
+
+  id_tg[, max_tg :=
+          data.table::fifelse(tg + window < min(tg), min(tg), tg + window),
+        by = c('fusionID')]
 
   id_tg[, delay_tg := {
     focal_bearing <- DT[timegroup == .BY$tg & id == ID1, bearing]
