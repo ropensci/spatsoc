@@ -81,7 +81,7 @@
 #'   DT,
 #'   edges,
 #'   window = 3,
-#'   id = 'id'
+#'   id = 'ID'
 #' )
 #'
 #' print(delay)
