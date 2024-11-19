@@ -21,6 +21,11 @@
 #' of a column in \code{DT} which correspond to the id, direction and
 #' timegroup columns.
 #'
+#' @inheritParams centroid_fusion
+#' @inheritParams direction_group
+#' @param window temporal window in unit of timegroup column generated with
+#'   \code{group_times}, eg. \code{window = 4} corresponds to the 4 timegroups
+#'   before and after the focal observation
   stopifnot(!is.null(id))
   stopifnot(!is.null(window))
 
