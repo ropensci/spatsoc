@@ -134,6 +134,14 @@ edge_delay <- function(
   if (!is.numeric(window)) {
     stop('window should be a numeric, in the units of timegroup')
   }
+
+  if (!'fusionID' %in% colnames(edges)) {
+    stop('fusionID not present in edges, did you run fusion_id?')
+  }
+
+  if (!'dyadID' %in% colnames(edges)) {
+    stop('dyadID not present in edges, did you run dyad_id?')
+  }
   # TODO: check window isnt in colnames
 
   setorder(DT, timegroup)
