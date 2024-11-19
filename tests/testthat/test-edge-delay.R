@@ -45,3 +45,31 @@ test_that('window is numeric', {
                'numeric')
 })
 
+test_that('column names must exist in DT', {
+  expect_error(edge_delay(edges, DT, id = 'potato'),
+               'potato field')
+
+  copy_edges <- copy(clean_edges)
+  copy_edges[, timegroup := NULL]
+  expect_error(edge_delay(edges, DT, id = id),
+               'timegroup field')
+
+  copy_edges <- copy(clean_edges)
+  copy_edges[, fusionID := NULL]
+  expect_error(edge_delay(edges, DT, id = id),
+               'fusionID field')
+
+  copy_edges <- copy(clean_edges)
+  copy_edges[, dyadID := NULL]
+  expect_error(edge_delay(edges, DT, id = id),
+               'dyadID field')
+
+  expect_error(edge_delay(edges, DT, id = id, direction = 'potato'),
+               'direction field')
+
+  copy_DT <- copy(clean_DT)
+  copy_DT[, timegroup := NULL]
+  expect_error(edge_delay(edges, DT, id = id),
+               'timegroup field')
+})
+
