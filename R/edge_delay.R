@@ -190,6 +190,9 @@ edge_delay <- function(
               ID1 = ID2, ID2 = ID1, dir_corr_delay = - dir_corr_delay)]
   ), use.names = TRUE)
 
+
+  setnames(DT, 'zzz_id', id)
+
   if ('zzz_window' %in% colnames(DT)) {
     setnames(DT, 'zzz_window', 'window')
   }
