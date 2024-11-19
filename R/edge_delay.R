@@ -104,13 +104,28 @@ edge_delay <- function(
     stop('id column name required')
   }
 
-  stopifnot('dyadID' %in% colnames(edges))
-  stopifnot('timegroup' %in% colnames(edges))
-  stopifnot('fusionID' %in% colnames(edges))
-  stopifnot('dyadID' %in% colnames(edges))
+  check_cols_edges <- c('ID1', 'ID2', timegroup)
+  if (any(!(check_cols_edges %in% colnames(edges)))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        check_cols_edges,
+        colnames(edges)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
 
-  stopifnot('bearing' %in% colnames(DT))
-  stopifnot('timegroup' %in% colnames(DT))
+  check_cols_DT <- c(id, timegroup, direction)
+  if (any(!(check_cols_DT %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        check_cols_DT,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
 
   # TODO: check window isnt in colnames
 
