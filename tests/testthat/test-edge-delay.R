@@ -87,8 +87,8 @@ test_that('two columns added to the result DT', {
                ncol(edge_delay(edges, DT, id = id, window = window)))
 })
 
-test_that('column added to the result DT is double', {
-  expect_type(edge_delay(edges, DT, id = id, window = window)$dir_corr_delay, 'double')
+test_that('column added to the result DT is integer', {
+  expect_type(edge_delay(edges, DT, id = id, window = window)$dir_corr_delay, 'integer')
 })
 
 test_that('returns a data.table', {
