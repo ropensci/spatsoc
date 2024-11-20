@@ -52,17 +52,17 @@ test_that('column names must exist in DT', {
 
   copy_edges <- copy(clean_edges)
   copy_edges[, timegroup := NULL]
-  expect_error(edge_delay(edges, DT, id = id),
+  expect_error(edge_delay(copy_edges, DT, id = id, window = window),
                'timegroup field')
 
   copy_edges <- copy(clean_edges)
   copy_edges[, fusionID := NULL]
-  expect_error(edge_delay(edges, DT, id = id),
+  expect_error(edge_delay(copy_edges, DT, id = id, window = window),
                'fusionID field')
 
   copy_edges <- copy(clean_edges)
   copy_edges[, dyadID := NULL]
-  expect_error(edge_delay(edges, DT, id = id),
+  expect_error(edge_delay(copy_edges, DT, id = id, window = window),
                'dyadID field')
 
   expect_error(edge_delay(edges, DT, id = id, direction = 'potato'),
@@ -70,7 +70,7 @@ test_that('column names must exist in DT', {
 
   copy_DT <- copy(clean_DT)
   copy_DT[, timegroup := NULL]
-  expect_error(edge_delay(edges, DT, id = id),
+  expect_error(edge_delay(edges, copy_DT, id = id, window = window),
                'timegroup field')
 })
 
