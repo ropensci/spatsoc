@@ -65,8 +65,9 @@ test_that('column names must exist in DT', {
   expect_error(edge_delay(copy_edges, DT, id = id, window = window),
                'dyadID field')
 
-  expect_error(edge_delay(edges, DT, id = id, direction = 'potato'),
-               'direction field')
+  expect_error(edge_delay(edges, DT, id = id, window = window,
+                          direction = 'potato'),
+               'potato field')
 
   copy_DT <- copy(clean_DT)
   copy_DT[, timegroup := NULL]
