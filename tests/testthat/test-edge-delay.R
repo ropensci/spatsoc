@@ -96,3 +96,4 @@ test_that('returns a data.table', {
   expect_s3_class(edge_delay(edges, DT, id = id, window = window), 'data.table')
 })
 
+# TODO: expected results tests
