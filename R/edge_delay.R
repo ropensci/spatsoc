@@ -136,11 +136,11 @@ edge_delay <- function(
   }
 
   if (!'fusionID' %in% colnames(edges)) {
-    stop('fusionID not present in edges, did you run fusion_id?')
+    stop('fusionID field not present in edges, did you run fusion_id?')
   }
 
   if (!'dyadID' %in% colnames(edges)) {
-    stop('dyadID not present in edges, did you run dyad_id?')
+    stop('dyadID field not present in edges, did you run dyad_id?')
   }
 
 
