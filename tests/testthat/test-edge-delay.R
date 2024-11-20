@@ -82,7 +82,8 @@ test_that('no rows are added to the result edges', {
 test_that('two columns added to the result DT', {
   copyEdges <- copy(edges)
 
-  expect_equal(ncol(copyEdges) + 1,
+  expect_equal(length(c('ID1', 'ID2', 'timegroup',
+                        'dyadID', 'fusionID', 'dir_corr_delay')),
                ncol(edge_delay(edges, DT, id = id, window = window)))
 })
 
