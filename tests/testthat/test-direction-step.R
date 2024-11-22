@@ -144,16 +144,3 @@ DT_B <- data.table(
   ID = 'B'
 )
 direction_step(DT_B, id, coords, projection = 4326)
-DT_B[, deg := units::set_units(direction, 'degree')]
-
-plot(DT_B$X, DT_B$Y)
-text(DT_B$X + c(0.3, -0.3, -0.3, 0.3, NA), DT_B$Y,
-     paste0('t ', DT_B$timegroup, ', dir ', round(DT_B$direction, 2)))
-
-pts <- st_sfc(st_point(c(0, 0)),
-       st_point(c(5, 0)),
-       st_point(c(5, 5)),
-       st_point(c(0, 5)),
-       st_point(c(0, 0)),
-       crs = 4326)
-st_geod_azimuth(pts)
