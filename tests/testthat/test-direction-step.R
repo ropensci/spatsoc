@@ -134,3 +134,12 @@ test_that('longlat NA radian returned', {
     1
   )
 })
+
+
+DT_B <- data.table(
+  X = c(0, 5, 5, 0, 0),
+  Y = c(0, 0, 5, 5, 0),
+  step = c('E', 'N', 'W', 'S', NA),
+  timegroup = seq.int(5),
+  ID = 'B'
+)
