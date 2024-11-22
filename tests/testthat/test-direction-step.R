@@ -145,3 +145,7 @@ DT_B <- data.table(
 )
 direction_step(DT_B, id, coords, projection = 4326)
 DT_B[, deg := units::set_units(direction, 'degree')]
+
+plot(DT_B$X, DT_B$Y)
+text(DT_B$X + c(0.3, -0.3, -0.3, 0.3, NA), DT_B$Y,
+     paste0('t ', DT_B$timegroup, ', dir ', round(DT_B$direction, 2)))
