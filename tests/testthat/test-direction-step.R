@@ -2,6 +2,7 @@
 context('test direction_step')
 
 library(spatsoc)
+library(units)
 
 DT <- fread('../testdata/DT.csv')
 
