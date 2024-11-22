@@ -143,3 +143,5 @@ DT_B <- data.table(
   timegroup = seq.int(5),
   ID = 'B'
 )
+direction_step(DT_B, id, coords, projection = 4326)
+DT_B[, deg := units::set_units(direction, 'degree')]
