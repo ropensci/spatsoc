@@ -144,3 +144,31 @@ DT_B <- data.table(
   ID = 'B'
 )
 direction_step(DT_B, id, coords, projection = 4326)
+
+test_that('East North West South steps', {
+  tolerance <- 0.01
+
+  expect_equal(
+    DT_B[step == 'E', direction],
+    as_units(pi / 2, 'rad'),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    DT_B[step == 'N', direction],
+    as_units(0),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    DT_B[step == 'W', direction],
+    as_units(- pi / 2),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    DT_B[step == 'S', direction],
+    as_units(pi),
+    tolerance = tolerance
+  )
+})
