@@ -10,9 +10,9 @@
 #' @references adapted from https://stackoverflow.com/a/7869457
 #'
 #' @examples
-delta_rad <- function(target, source,  signed = FALSE) {
   if (!inherits(target, 'units') || units(target)$numerator != 'rad') {
     stop('units(targets) is not radians')
+diff_rad <- function(x, y,  signed = FALSE) {
   }
   if (!inherits(source, 'units') || units(source)$numerator != 'rad') {
     stop('units(source) is not radians')
