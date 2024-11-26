@@ -10,15 +10,15 @@
 #' @references adapted from https://stackoverflow.com/a/7869457
 #'
 #' @examples
-  if (!inherits(target, 'units') || units(target)$numerator != 'rad') {
-    stop('units(targets) is not radians')
 diff_rad <- function(x, y,  signed = FALSE) {
+  if (!inherits(x, 'units') || units(x)$numerator != 'rad') {
+    stop('units(x) is not radians')
   }
-  if (!inherits(source, 'units') || units(source)$numerator != 'rad') {
-    stop('units(source) is not radians')
+  if (!inherits(y, 'units') || units(y)$numerator != 'rad') {
+    stop('units(y) is not radians')
   }
 
-  d <- source - target
+  d <- y - x
   pi_rad <- units::as_units(pi, 'rad')
   d <- (d + pi_rad) %% (2 * pi_rad) - pi_rad
 
