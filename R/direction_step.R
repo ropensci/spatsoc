@@ -71,6 +71,17 @@
 #'   coords = c('X', 'Y'),
 #'   projection = 32736
 #' )
+#'
+#' # Example result for East, North, West, South steps
+#' example <- data.table(
+#'   X = c(0, 5, 5, 0, 0),
+#'   Y = c(0, 0, 5, 5, 0),
+#'   step = c('E', 'N', 'W', 'S', NA),
+#'   ID = 'A'
+#' )
+#'
+#' direction_step(example, 'ID', c('X', 'Y'), projection = 4326)
+#' example[, .(direction, units::set_units(direction, 'degree'))]
 direction_step <- function(
     DT = NULL,
     id = NULL,

@@ -2,6 +2,7 @@
 context('test direction_step')
 
 library(spatsoc)
+library(units)
 
 DT <- fread('../testdata/DT.csv')
 
@@ -116,21 +117,59 @@ test_that('splitBy returns expected', {
 
 
 DT_A <- data.table(
-  x = c(-5, -5, 0, 14, 10, 0),
-  y = c(5, 3, 1, 1, 11, 11),
-  id =  'A'
+  X = c(-5, -5, 0, 14, 10, 0),
+  Y = c(5, 3, 1, 1, 11, 11),
+  ID =  'A'
 )[, timegroup := seq.int(.N)]
 
 # Related to: PR 92
 test_that('longlat NA radian returned', {
   expect_equal(
-    direction_step(DT_A, id = 'id', coords = c('x', 'y'),
-                   projection = 4326)[]$direction |> class(),
+    class(direction_step(DT_A, id = id, coords = coords,
+                         projection = 4326)[]$direction),
     'units'
   )
   expect_gte(
-    sum(is.na(direction_step(DT_A, id = 'id', coords = c('x', 'y'),
-                   projection = 4326)[]$direction)),
+    sum(is.na(direction_step(DT_A, id = id, coords = coords,
+                   projection = 4326)$direction)),
     1
+  )
+})
+
+
+DT_B <- data.table(
+  X = c(0, 5, 5, 0, 0),
+  Y = c(0, 0, 5, 5, 0),
+  step = c('E', 'N', 'W', 'S', NA),
+  timegroup = seq.int(5),
+  ID = 'B'
+)
+direction_step(DT_B, id, coords, projection = 4326)
+
+test_that('East North West South steps', {
+  tolerance <- 0.01
+
+  expect_equal(
+    DT_B[step == 'E', direction],
+    as_units(pi / 2, 'rad'),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    DT_B[step == 'N', direction],
+    as_units(0),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    DT_B[step == 'W', direction],
+    as_units(- pi / 2),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    DT_B[step == 'S', direction],
+    as_units(pi),
+    tolerance = tolerance
   )
 })
