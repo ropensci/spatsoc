@@ -28,3 +28,7 @@ delta_rad <- function(target, source,  signed = FALSE) {
     return(abs(d))
   }
 }
+
+
+# Requires version with this PR merged
+# remotes::install_github('https://github.com/r-quantities/units/pull/365')
