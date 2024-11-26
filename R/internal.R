@@ -43,7 +43,7 @@ diff_rad <- function(x, y,  signed = FALSE) {
 
   d <- y - x
   pi_rad <- units::as_units(pi, 'rad')
-  d <- (d + pi_rad) %% (2 * pi_rad) - pi_rad
+  d <- ((d + pi_rad) %% (2 * pi_rad)) - pi_rad
 
   if (signed) {
     return(d)
