@@ -96,4 +96,25 @@ test_that('returns a data.table', {
   expect_s3_class(edge_delay(edges, DT, id = id, window = window), 'data.table')
 })
 
-# TODO: expected results tests
+
+N_id <- 5
+DT_expect <- data.table(
+  X = rep(c(0, 5, 5, 0, 0), each = N_id),
+  Y = rep(c(0, 0, 5, 5, 0), each = N_id),
+  ID = LETTERS[seq.int(N_id)]
+)
+DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
+setorder(DT_expect, timegroup)
+direction_step(DT_expect, id, coords, projection = 4326)
+DT_expect
+
+edges_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
+                          returnDist = TRUE)
+dyad_id(edges_expect, 'ID1', 'ID2')
+fusion_id(edges_expect)
+
+DT_expect[ID %in% c('A', 'B')]
+edges_expect[dyadID == 'A-B']
+edge_delay(edges_expect[dyadID == 'A-B'],
+           DT_expect[ID %in% c('A', 'B')],
+           window = 1, id = id)
