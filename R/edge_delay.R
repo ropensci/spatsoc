@@ -167,15 +167,13 @@ edge_delay <- function(
 
   data.table::setorderv(DT, 'timegroup')
 
-  id_tg <- edges[!is.na(fusionID), .(
-    tg = unique(timegroup),
-    dyadID = unique(dyadID),
-    ID1 = first(ID1),
-    ID2 = first(ID2)
-  ), by = c('fusionID')]
+  # "Forward": all edges ID1 -> ID2
 
   id_tg[, min_tg :=
           data.table::fifelse(tg - window < min(tg), min(tg), tg - window),
+  forward <- edges[!is.na(fusionID),
+                   data.table::first(.SD),
+                   by = .(fusionID, timegroup)]
         by = c('fusionID')]
 
   id_tg[, max_tg :=
