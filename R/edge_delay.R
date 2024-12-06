@@ -178,10 +178,10 @@ edge_delay <- function(
                               timegroup - window),
         by = c('fusionID')]
 
-  id_tg[, max_tg :=
-          data.table::fifelse(tg + window < min(tg), min(tg), tg + window),
-          # TODO: check max_tg
-          # data.table::fifelse(tg + window > max(tg), max(tg), tg + window),
+  forward[, max_timegroup :=
+          data.table::fifelse(timegroup + window > max(timegroup),
+                              max(timegroup),
+                              timegroup + window),
         by = c('fusionID')]
 
   forward[, delay_timegroup := {
