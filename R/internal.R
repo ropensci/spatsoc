@@ -2,8 +2,8 @@
 #'
 #' Internal function
 #'
-#' @param target angle in radians
-#' @param source angle in radians
+#' @param x angle in radians
+#' @param y angle in radians
 #' @param signed boolean if signed difference should be returned, default FALSE
 #'
 #' @return
