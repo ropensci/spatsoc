@@ -165,14 +165,12 @@ edges_expect[dyadID == 'A-B']
 delay <- edge_delay(edges_expect, DT_expect, window = window, id = id)
 
 test_that('expected results are returned', {
-  DT_expect
-  edges_expect
-  delay
-
   expect_lte(nrow(delay), nrow(edges_expect))
   expect_lte(nrow(DT_expect), nrow(delay))
 
-  # Test average with na.rm leader is X
-  # Test max dir corr delay is X
-  # Test min dir corr delay is X
+  mean_delays <- delay[, mean(dir_corr_delay, na.rm = TRUE), by = ID1]
+
+  expect_equal(mean_delays[V1 == min(V1), ID1], LETTERS[1])
+  expect_equal(mean_delays[V1 == median(V1), ID1], LETTERS[ceiling(N_id / 2)])
+  expect_equal(mean_delays[V1 == max(V1), ID1], LETTERS[N_id])
 })
