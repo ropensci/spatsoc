@@ -195,7 +195,9 @@ edge_delay <- function(
 
   forward[, dir_corr_delay := timegroup - delay_timegroup]
 
-  data.table::set(forward, j = c('min_timegroup', 'max_timegroup','delay_timegroup'), value = NULL)
+  data.table::set(forward,
+                  j = c('min_timegroup', 'max_timegroup','delay_timegroup'),
+                  value = NULL)
 
   data.table::setorder(forward, timegroup, ID1, ID2, dir_corr_delay)
 
