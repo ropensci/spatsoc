@@ -198,10 +198,14 @@ edge_delay <- function(
 
   data.table::setorder(forward, timegroup, ID1, ID2, dir_corr_delay)
 
+  # "Reverse": replicate forward but reverse direction ID1 <- ID2
+  reverse <- copy(forward)
+  setnames(reverse, c('ID1', 'ID2'), c('ID2', 'ID1'))
+  reverse[, dir_corr_delay := - dir_corr_delay]
+
   out <- data.table::rbindlist(list(
-    id_tg,
-    id_tg[, .(timegroup,  dyadID, fusionID,
-              ID1 = ID2, ID2 = ID1, dir_corr_delay = - dir_corr_delay)]
+    forward,
+    reverse
   ), use.names = TRUE)
 
   if ('zzz_window' %in% colnames(DT)) {
