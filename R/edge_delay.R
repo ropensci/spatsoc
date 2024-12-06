@@ -157,13 +157,13 @@ edge_delay <- function(
   }
 
 
-  if ('window' %in% colnames(DT)) {
-    setnames(DT, 'window', 'zzz_window')
-  }
-
-  if ('window' %in% colnames(edges)) {
-    setnames(edges, 'window', 'zzz_window')
-  }
+  # if ('window' %in% colnames(DT)) {
+  #   setnames(DT, 'window', 'zzz_window')
+  # }
+  #
+  # if ('window' %in% colnames(edges)) {
+  #   setnames(edges, 'window', 'zzz_window')
+  # }
 
   data.table::setorderv(DT, 'timegroup')
 
@@ -173,16 +173,18 @@ edge_delay <- function(
                    by = .(fusionID, timegroup)]
 
   forward[, min_timegroup :=
-          data.table::fifelse(timegroup - window < min(timegroup),
-                              min(timegroup),
-                              timegroup - window),
-        by = fusionID]
+            data.table::fifelse(timegroup - window < min(timegroup),
+                                min(timegroup),
+                                timegroup - window),
+          by = fusionID,
+          env = list(window = window)]
 
   forward[, max_timegroup :=
-          data.table::fifelse(timegroup + window > max(timegroup),
-                              max(timegroup),
-                              timegroup + window),
-        by = fusionID]
+            data.table::fifelse(timegroup + window > max(timegroup),
+                                max(timegroup),
+                                timegroup + window),
+          by = fusionID,
+          env = list(window = window)]
 
   forward[, delay_timegroup := {
     focal_direction <- DT[timegroup == .BY$timegroup &
@@ -211,13 +213,13 @@ edge_delay <- function(
     reverse
   ), use.names = TRUE)
 
-  if ('zzz_window' %in% colnames(DT)) {
-    setnames(DT, 'zzz_window', 'window')
-  }
-
-  if ('zzz_window' %in% colnames(edges)) {
-    setnames(edges, 'zzz_window', 'window')
-  }
+  # if ('zzz_window' %in% colnames(DT)) {
+  #   setnames(DT, 'zzz_window', 'window')
+  # }
+  #
+  # if ('zzz_window' %in% colnames(edges)) {
+  #   setnames(edges, 'zzz_window', 'window')
+  # }
 
   return(out)
 }
