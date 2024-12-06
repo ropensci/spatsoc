@@ -104,6 +104,9 @@ edge_delay <- function(
     window = NULL,
     id = NULL,
     direction = 'direction') {
+  # due to NSE notes in R CMD check
+  . <- timegroup <- fusionID <- min_timegroup <- max_timegroup <-
+    delay_timegroup <- ID1  <- ID2 <- dir_corr_delay <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
