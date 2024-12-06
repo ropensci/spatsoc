@@ -201,8 +201,6 @@ edge_delay <- function(
                   j = c('min_timegroup', 'max_timegroup','delay_timegroup'),
                   value = NULL)
 
-  data.table::setorder(forward, timegroup, ID1, ID2, dir_corr_delay)
-
   # "Reverse": replicate forward but reverse direction ID1 <- ID2
   reverse <- copy(forward)
   setnames(reverse, c('ID1', 'ID2'), c('ID2', 'ID1'))
@@ -212,6 +210,11 @@ edge_delay <- function(
     forward,
     reverse
   ), use.names = TRUE)
+
+  data.table::setcolorder(
+    out,
+    c('timegroup', 'ID1', 'ID2', 'dyadID', 'fusionID', 'dir_corr_delay')
+  )
 
   return(out)
 }
