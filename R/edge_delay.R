@@ -156,8 +156,7 @@ edge_delay <- function(
     stop('dyadID field not present in edges, did you run dyad_id?')
   }
 
-
-  data.table::setorderv(DT, 'timegroup')
+  data.table::setorder(DT, timegroup)
 
   # "Forward": all edges ID1 -> ID2
   forward <- edges[!is.na(fusionID),
@@ -203,9 +202,10 @@ edge_delay <- function(
     reverse
   ), use.names = TRUE)
 
+  data.table::setorder(out, timegroup)
   data.table::setcolorder(
     out,
-    c('timegroup', 'ID1', 'ID2', 'dyadID', 'fusionID', 'dir_corr_delay')
+    c('timegroup', 'ID1', 'ID2', 'dyadID', 'fusionID')
   )
 
   return(out)
