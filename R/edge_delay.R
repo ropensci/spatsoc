@@ -157,14 +157,6 @@ edge_delay <- function(
   }
 
 
-  # if ('window' %in% colnames(DT)) {
-  #   setnames(DT, 'window', 'zzz_window')
-  # }
-  #
-  # if ('window' %in% colnames(edges)) {
-  #   setnames(edges, 'window', 'zzz_window')
-  # }
-
   data.table::setorderv(DT, 'timegroup')
 
   # "Forward": all edges ID1 -> ID2
