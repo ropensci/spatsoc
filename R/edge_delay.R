@@ -148,6 +148,10 @@ edge_delay <- function(
     stop('window should be a numeric, in the units of timegroup')
   }
 
+  if (!is.integer(DT$timegroup) || !is.integer(edges$timegroup)) {
+    stop('timegroup should be an integer, did you use group_times?')
+  }
+
   if (!'fusionID' %in% colnames(edges)) {
     stop('fusionID field not present in edges, did you run fusion_id?')
   }
