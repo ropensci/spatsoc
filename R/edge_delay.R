@@ -191,6 +191,7 @@ edge_delay <- function(
        timegroup[which.min(diff_rad(focal_direction, direction))]]
   },
   by = c('timegroup',  'dyadID'),
+  env = list(id = id)]
 
   forward[, dir_corr_delay := timegroup - delay_timegroup]
 
