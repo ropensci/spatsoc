@@ -188,7 +188,7 @@ edge_delay <- function(
     focal_direction <- DT[timegroup == .BY$tg &
                             id == ID1, direction]
     DT[between(timegroup, min_tg, max_tg) & id == ID2,
-       timegroup[which.min(delta_rad(focal_direction, direction))],
+       timegroup[which.min(diff_rad(focal_direction, direction))],
        env = list(id = 'id')]
   },
   by = c('tg',  'dyadID')]
