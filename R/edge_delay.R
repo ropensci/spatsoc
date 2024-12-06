@@ -213,14 +213,6 @@ edge_delay <- function(
     reverse
   ), use.names = TRUE)
 
-  # if ('zzz_window' %in% colnames(DT)) {
-  #   setnames(DT, 'zzz_window', 'window')
-  # }
-  #
-  # if ('zzz_window' %in% colnames(edges)) {
-  #   setnames(edges, 'zzz_window', 'window')
-  # }
-
   return(out)
 }
 
