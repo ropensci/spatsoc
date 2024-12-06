@@ -168,12 +168,14 @@ edge_delay <- function(
   data.table::setorderv(DT, 'timegroup')
 
   # "Forward": all edges ID1 -> ID2
-
-  id_tg[, min_tg :=
-          data.table::fifelse(tg - window < min(tg), min(tg), tg - window),
   forward <- edges[!is.na(fusionID),
                    data.table::first(.SD),
                    by = .(fusionID, timegroup)]
+
+  forward[, min_timegroup :=
+          data.table::fifelse(timegroup - window < min(timegroup),
+                              min(timegroup),
+                              timegroup - window),
         by = c('fusionID')]
 
   id_tg[, max_tg :=
@@ -182,21 +184,19 @@ edge_delay <- function(
           # data.table::fifelse(tg + window > max(tg), max(tg), tg + window),
         by = c('fusionID')]
 
-  id_tg[, delay_tg := {
-    focal_direction <- DT[timegroup == .BY$tg &
+  forward[, delay_timegroup := {
+    focal_direction <- DT[timegroup == .BY$timegroup &
                             id == ID1, direction]
-    DT[between(timegroup, min_tg, max_tg) & id == ID2,
-       timegroup[which.min(diff_rad(focal_direction, direction))],
-       env = list(id = 'id')]
+    DT[between(timegroup, min_timegroup, max_timegroup) & id == ID2,
+       timegroup[which.min(diff_rad(focal_direction, direction))]]
   },
-  by = c('tg',  'dyadID')]
+  by = c('timegroup',  'dyadID'),
 
-  id_tg[, dir_corr_delay := tg - delay_tg]
+  forward[, dir_corr_delay := timegroup - delay_timegroup]
 
-  data.table::setnames(id_tg,  'tg', 'timegroup')
-  data.table::set(id_tg, j = c('min_tg', 'max_tg','delay_tg'), value = NULL)
+  data.table::set(forward, j = c('min_timegroup', 'max_timegroup','delay_timegroup'), value = NULL)
 
-  data.table::setorder(id_tg, timegroup, ID1, ID2, dir_corr_delay)
+  data.table::setorder(forward, timegroup, ID1, ID2, dir_corr_delay)
 
   out <- data.table::rbindlist(list(
     id_tg,
