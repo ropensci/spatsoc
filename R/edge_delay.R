@@ -45,6 +45,7 @@
 #'  * <https://doi.org/10.1371/journal.pcbi.1003446>
 #'
 #' @family Edge-list generation
+#' @family Direction functions
 #'
 #' @examples
 #' # Load data.table
