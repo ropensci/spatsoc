@@ -5,6 +5,7 @@
 #' @param x angle in radians
 #' @param y angle in radians
 #' @param signed boolean if signed difference should be returned, default FALSE
+#' @param return_units return difference with units = 'rad'
 #'
 #' @return Difference between x and y in radians. If signed is TRUE, the signed difference is returned. If signed is FALSE, the absolute difference is returned. Note: The difference is the smallest difference, eg.
 #' @references adapted from https://stackoverflow.com/a/7869457
@@ -33,7 +34,7 @@
 #'
 #' # Differences
 #' DT[, diff_rad(direction[1], direction[2])]
-diff_rad <- function(x, y,  signed = FALSE) {
+diff_rad <- function(x, y,  signed = FALSE, return_units = FALSE) {
   if (!inherits(x, 'units') || units(x)$numerator != 'rad') {
     stop('units(x) is not radians')
   }
@@ -45,9 +46,15 @@ diff_rad <- function(x, y,  signed = FALSE) {
   d <- ((d + pi) %% (2 * pi)) - pi
 
   if (signed) {
-    return(d)
+    out <- d
   } else {
-    return(abs(d))
+    out <- abs(d)
+  }
+
+  if (return_units) {
+    return(units::as_units(out, 'rad'))
+  } else {
+    return(out)
   }
 }
 
