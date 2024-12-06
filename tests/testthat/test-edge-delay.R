@@ -45,7 +45,7 @@ test_that('window is numeric, timegroup is integer', {
   expect_error(edge_delay(edges, DT, id = id, window = 'potato'),
                'numeric')
   copy_edges <- copy(clean_edges)
-  copy_edges[, timegroup := as.character(integer)]
+  copy_edges[, timegroup := as.character(timegroup)]
   expect_error(edge_delay(copy_edges, DT, id = id, window = 2),
                'integer')
 
