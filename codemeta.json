@@ -138,7 +138,7 @@
       "@type": "SoftwareApplication",
       "identifier": "data.table",
       "name": "data.table",
-      "version": ">= 1.10.5",
+      "version": ">= 1.15.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -214,7 +214,7 @@
     },
     "SystemRequirements": "GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),\n    sqlite3"
   },
-  "fileSize": "2023.039KB",
+  "fileSize": "2044.39KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",

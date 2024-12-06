@@ -23,7 +23,7 @@ Depends:
     R (>= 3.4)
 Imports: 
     adehabitatHR (>= 0.4.21),
-    data.table (>= 1.10.5),
+    data.table (>= 1.15.0),
     igraph,
     sf,
     lwgeom,
