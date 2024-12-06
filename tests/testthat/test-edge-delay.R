@@ -41,9 +41,18 @@ test_that('arguments required, otherwise error detected', {
                'window is required')
 })
 
-test_that('window is numeric', {
+test_that('window is numeric, timegroup is integer', {
   expect_error(edge_delay(edges, DT, id = id, window = 'potato'),
                'numeric')
+  copy_edges <- copy(clean_edges)
+  copy_edges[, timegroup := as.character(integer)]
+  expect_error(edge_delay(copy_edges, DT, id = id, window = 2),
+               'integer')
+
+  copy_DT <- copy(copy_DT)
+  copy_DT[, timegroup := as.character(integer)]
+  expect_error(edge_delay(edges, copy_DT, id = id, window = 2),
+               'integer')
 })
 
 test_that('column names must exist in DT', {
