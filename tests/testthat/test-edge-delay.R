@@ -108,6 +108,32 @@ test_that('direction colname can different than default', {
                   'data.table')
 })
 
+test_that('window column in edge, DT does not influence results', {
+  copyDT <- copy(clean_DT)
+  copyDT[, window := 42]
+
+  copyEdges <- copy(clean_edges)
+  copyEdges[, window := 42]
+
+  expect_equal(
+    edge_delay(edges, copyDT, id = id, window = window),
+    edge_delay(edges, DT, id = id, window = window)
+  )
+
+  expect_equal(
+    edge_delay(copyEdges, DT, id = id,
+               window = window)[, .SD, .SDcols = -'window'],
+    edge_delay(edges, DT, id = id, window = window)
+  )
+
+  expect_equal(
+    edge_delay(copyEdges, copyDT, id = id,
+               window = window)[, .SD, .SDcols = -'window'],
+    edge_delay(edges, DT, id = id, window = window)
+  )
+
+})
+
 
 N_id <- 5
 DT_expect <- data.table(
