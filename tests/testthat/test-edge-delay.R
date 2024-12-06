@@ -162,6 +162,17 @@ fusion_id(edges_expect)
 
 DT_expect[ID %in% c('A', 'B')]
 edges_expect[dyadID == 'A-B']
-edge_delay(edges_expect[dyadID == 'A-B'],
-           DT_expect[ID %in% c('A', 'B')],
-           window = 1, id = id)
+delay <- edge_delay(edges_expect, DT_expect, window = window, id = id)
+
+test_that('expected results are returned', {
+  DT_expect
+  edges_expect
+  delay
+
+  expect_lte(nrow(delay), nrow(edges_expect))
+  expect_lte(nrow(DT_expect), nrow(delay))
+
+  # Test average with na.rm leader is X
+  # Test max dir corr delay is X
+  # Test min dir corr delay is X
+})
