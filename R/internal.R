@@ -41,9 +41,8 @@ diff_rad <- function(x, y,  signed = FALSE) {
     stop('units(y) is not radians')
   }
 
-  d <- y - x
-  pi_rad <- units::as_units(pi, 'rad')
-  d <- ((d + pi_rad) %% (2 * pi_rad)) - pi_rad
+  d <- units::drop_units(y) - units::drop_units(x)
+  d <- ((d + pi) %% (2 * pi)) - pi
 
   if (signed) {
     return(d)
