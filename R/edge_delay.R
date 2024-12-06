@@ -176,13 +176,13 @@ edge_delay <- function(
           data.table::fifelse(timegroup - window < min(timegroup),
                               min(timegroup),
                               timegroup - window),
-        by = c('fusionID')]
+        by = fusionID]
 
   forward[, max_timegroup :=
           data.table::fifelse(timegroup + window > max(timegroup),
                               max(timegroup),
                               timegroup + window),
-        by = c('fusionID')]
+        by = fusionID]
 
   forward[, delay_timegroup := {
     focal_direction <- DT[timegroup == .BY$timegroup &
