@@ -172,7 +172,11 @@ test_that('expected results are returned', {
 
   mean_delays <- delay[, mean(dir_corr_delay, na.rm = TRUE), by = ID1]
 
-  expect_equal(mean_delays[V1 == min(V1), ID1], LETTERS[1])
+  expect_equal(mean_delays[V1 == min(V1), ID1], LETTERS[N_id])
   expect_equal(mean_delays[V1 == median(V1), ID1], LETTERS[ceiling(N_id / 2)])
-  expect_equal(mean_delays[V1 == max(V1), ID1], LETTERS[N_id])
+  expect_equal(mean_delays[V1 == max(V1), ID1], LETTERS[1])
+
+  mean_delays_wrt_A <- delay[ID1 == 'A', mean(dir_corr_delay, na.rm = TRUE),
+                             by = ID2]
+  expect_equal(mean_delays_wrt_A[V1 == max(V1), ID2], LETTERS[N_id])
 })
