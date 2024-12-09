@@ -9,7 +9,7 @@
 #'
 #' @return Difference between x and y in radians. If signed is TRUE, the signed difference is returned. If signed is FALSE, the absolute difference is returned. Note: The difference is the smallest difference, eg.
 #' @references adapted from https://stackoverflow.com/a/7869457
-#'
+#' @keywords internal
 #' @examples
 #' # Load data.table
 #' library(data.table)
