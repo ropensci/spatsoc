@@ -30,3 +30,5 @@ expect_equal(diff_rad(pt_02 - 2 * pi_rad, pt_01, FALSE, TRUE), pt_01)
 expect_equal(diff_rad(pt_02, pt_01 + 2 * pi_rad, FALSE, TRUE), pt_01)
 expect_equal(diff_rad(pt_02, pt_01 - 2 * pi_rad, FALSE, TRUE), pt_01)
 
+expect_error(diff_rad(pt_01, 0.2), 'rad')
+expect_error(diff_rad(0.1, pt_02), 'rad')
