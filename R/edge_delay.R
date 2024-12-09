@@ -168,8 +168,6 @@ edge_delay <- function(
     stop('dyadID field not present in edges, did you run dyad_id?')
   }
 
-  data.table::setorder(DT, timegroup)
-
   # "Forward": all edges ID1 -> ID2
   forward <- edges[!is.na(fusionID),
                    data.table::first(.SD),
