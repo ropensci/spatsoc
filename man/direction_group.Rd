@@ -88,6 +88,7 @@ See examples of using mean group direction:
 Other Direction functions: 
 \code{\link{direction_polarization}()},
 \code{\link{direction_step}()},
-\code{\link{direction_to_leader}()}
+\code{\link{direction_to_leader}()},
+\code{\link{edge_delay}()}
 }
 \concept{Direction functions}
