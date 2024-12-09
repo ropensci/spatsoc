@@ -88,6 +88,7 @@ See examples of using polarization:
 Other Direction functions: 
 \code{\link{direction_group}()},
 \code{\link{direction_step}()},
-\code{\link{direction_to_leader}()}
+\code{\link{direction_to_leader}()},
+\code{\link{edge_delay}()}
 }
 \concept{Direction functions}

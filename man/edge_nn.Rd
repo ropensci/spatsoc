@@ -120,6 +120,7 @@ edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 }
 \seealso{
 Other Edge-list generation: 
+\code{\link{edge_delay}()},
 \code{\link{edge_dist}()}
 }
 \concept{Edge-list generation}
