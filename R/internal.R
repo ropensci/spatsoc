@@ -33,7 +33,7 @@
 #' )
 #'
 #' # Differences
-#' DT[, diff_rad(direction[1], direction[2])]
+#' spatsoc:::diff_rad(DT[1, direction], DT[2, direction])
 diff_rad <- function(x, y,  signed = FALSE, return_units = FALSE) {
   if (!inherits(x, 'units') || units(x)$numerator != 'rad') {
     stop('units(x) is not radians')
