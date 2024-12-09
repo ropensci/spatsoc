@@ -203,7 +203,7 @@ edge_delay <- function(
                   value = NULL)
 
   # "Reverse": replicate forward but reverse direction ID1 <- ID2
-  reverse <- copy(forward)
+  reverse <- data.table::copy(forward)
   setnames(reverse, c('ID1', 'ID2'), c('ID2', 'ID1'))
   reverse[, dir_corr_delay := - dir_corr_delay]
 
