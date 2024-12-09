@@ -12,14 +12,18 @@
 #' \code{data.frame}, you can convert it by reference using
 #' \code{\link[data.table:setDT]{data.table::setDT}}.
 #'
-#' The rows in \code{edges} and \code{DT} are internally matched in this
-#' function using the columns \code{timegroup} (from \code{group_times}) and
-#' \code{ID1} and \code{ID2} (in \code{edges}, from \code{dyad_id}) with
-#' \code{id} (in \code{DT}). This function expects a \code{fusionID} present,
-#' generated with the \code{fusion_id} function, and a code{dyadID} present,
-#' generated with the \code{dyad_id} function. The \code{id}, and
-#' \code{direction} arguments expect the names of a column in \code{DT} which
-#' correspond to the id, and direction columns.
+#' The \code{edges} argument expects a distance based edge list generated with
+#' \code{edge_nn} or \code{edge_dist}. The \code{DT} argument expects relocation
+#' data with a timegroup column generated with \code{group_times}.
+#'
+#' The rows in \code{edges} and \code{DT} are internally matched in
+#' \code{edge_delay} using the columns \code{timegroup} (from
+#' \code{group_times}) and \code{ID1} and \code{ID2} (in \code{edges}, from
+#' \code{dyad_id}) with \code{id} (in \code{DT}). This function expects a
+#' \code{fusionID} present, generated with the \code{fusion_id} function, and a
+#' code{dyadID} present, generated with the \code{dyad_id} function. The
+#' \code{id}, and \code{direction} arguments expect the names of a column in
+#' \code{DT} which correspond to the id, and direction columns.
 #'
 #' @inheritParams centroid_fusion
 #' @inheritParams direction_group
