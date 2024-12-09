@@ -40,7 +40,7 @@
 #'
 #' @references
 #'
-#' The directional correlation delay is defined in Nagy et al 2010
+#' The directional correlation delay is defined in Nagy et al. 2010
 #' (<https://doi.org/10.1038/nature08891>).
 #'
 #' See examples of measuring the directional correlation delay:
