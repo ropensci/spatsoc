@@ -196,7 +196,7 @@ edge_delay <- function(
   by = c('timegroup',  'dyadID'),
   env = list(id = id, direction = direction)]
 
-  forward[, dir_corr_delay := timegroup - delay_timegroup]
+  forward[, dir_corr_delay := delay_timegroup - timegroup]
 
   data.table::set(forward,
                   j = c('min_timegroup', 'max_timegroup','delay_timegroup'),
