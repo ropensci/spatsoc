@@ -163,8 +163,6 @@ edges_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
 dyad_id(edges_expect, 'ID1', 'ID2')
 fusion_id(edges_expect)
 
-DT_expect[ID %in% c('A', 'B')]
-edges_expect[dyadID == 'A-B']
 delay <- edge_delay(edges_expect, DT_expect, window = window, id = id)
 
 test_that('expected results are returned', {
