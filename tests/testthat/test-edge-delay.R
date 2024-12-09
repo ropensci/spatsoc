@@ -145,9 +145,12 @@ test_that('window column in edge, DT does not influence results', {
 
 
 N_id <- 5
+N_seq <- 10
+seq_xy <- c(seq(0, 5, length.out = N_seq / 2),
+            seq(5.1, 0, length.out = N_seq / 2))
 DT_expect <- data.table(
-  X = rep(c(0, 5, 5, 0, 0), each = N_id),
-  Y = rep(c(0, 0, 5, 5, 0), each = N_id),
+  X = rep(seq_xy, each = N_id),
+  Y = rep(seq_xy, each = N_id),
   ID = LETTERS[seq.int(N_id)]
 )
 DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
