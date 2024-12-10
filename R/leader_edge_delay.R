@@ -102,3 +102,27 @@ leader_edge_delay <- function(
     ties.method = 'average') {
   # Due to NSE notes
   rank_mean_delay <- mean_delay <- ID1
+
+  if (is.null(edges)) {
+    stop('input edges required')
+  }
+
+  check_cols <- c('dir_corr_delay', 'diff_direction',
+                  'ID1', 'ID2', splitBy)
+  if (any(!(check_cols %in% colnames(edges)))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        check_cols,
+        colnames(edges)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input edges'
+    ))
+  }
+
+  if (any(!(edges[, vapply(.SD, is.numeric, TRUE), .SDcols = check_cols[seq.int(2)]]))) {
+    stop('dir_corr_delay and diff_direction must be numeric, did you use edge_delay?')
+  }
+
+  if (is.null(return_rank)) {
+    stop('return_rank required')
+  }
