@@ -26,3 +26,15 @@
 #'   correlation delay.
 #'
 #' @inheritParams edge_delay
+#'
+#' @export
+#' @seealso \code{\link{edge_delay}}
+#' @family Leadership functions
+#'
+#' @references
+#' See examples of measuring leadership using the directional correlation
+#' delay:
+#'  * <https://doi.org/10.1016/j.anbehav.2013.07.005>
+#'  * <https://doi.org/10.1073/pnas.1305552110>
+#'  * <https://doi.org/10.1111/jfb.15315>
+#'  * <https://doi.org/10.1371/journal.pcbi.1003446>
