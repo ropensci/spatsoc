@@ -33,7 +33,7 @@
 #'   with a \code{position_group_direction} column indicating the position along
 #'   the group direction in the units of the projection and, optionally when
 #'   \code{return_rank = TRUE}, a \code{rank_position_group_direction} column
-#'   indicating the the ranked position along the group direction.
+#'   indicating the ranked position along the group direction.
 #'
 #'   A message is returned when \code{position_group_direction} or
 #'   \code{rank_position_group_direction} columns already exist in the input
