@@ -129,3 +129,12 @@ leader_edge_delay <- function(
   }
 
   sub_threshold <- edges[diff_direction < threshold_diff]
+
+  out <- sub_threshold[, .(mean_dyad_delay = mean(dir_corr_delay, na.rm = TRUE)),
+                       by = c('ID1', 'ID2', splitBy)]
+
+  out[, mean_delay := mean(mean_dyad_delay, na.rm = TRUE),
+      by = c('ID1', splitBy)]
+
+  return(out[])
+}
