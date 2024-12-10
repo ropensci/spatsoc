@@ -24,3 +24,5 @@
 #'   delay and, optionally when \code{return_rank = TRUE}, a
 #'   \code{rank_mean_delay} column indicating the ranked mean directional
 #'   correlation delay.
+#'
+#' @inheritParams edge_delay
