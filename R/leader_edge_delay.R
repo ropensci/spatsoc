@@ -119,7 +119,8 @@ leader_edge_delay <- function(
     ))
   }
 
-  if (any(!(edges[, vapply(.SD, is.numeric, TRUE), .SDcols = check_cols[seq.int(2)]]))) {
+  if (any(!(edges[, vapply(.SD, is.numeric, TRUE),
+                  .SDcols = check_cols[seq.int(2)]]))) {
     stop('dir_corr_delay and diff_direction must be numeric, did you use edge_delay?')
   }
 
