@@ -95,3 +95,8 @@
 #'   delay
 #' )
 #'
+leader_edge_delay <- function(
+    edges = NULL,
+    splitBy = NULL,
+    return_rank = FALSE,
+    ties.method = 'average') {
