@@ -98,9 +98,8 @@
 #'
 leader_edge_delay <- function(
     edges = NULL,
-    splitBy = NULL,
-    return_rank = FALSE,
-    ties.method = 'average') {
+    threshold_diff = NULL,
+    splitBy = NULL) {
   # Due to NSE notes
   rank_mean_delay <- mean_delay <- ID1
 
@@ -124,6 +123,4 @@ leader_edge_delay <- function(
     stop('dir_corr_delay and diff_direction must be numeric, did you use edge_delay?')
   }
 
-  if (is.null(return_rank)) {
-    stop('return_rank required')
   }
