@@ -65,7 +65,6 @@
 #' # Load data.table
 #' library(data.table)
 #' \dontshow{data.table::setDTthreads(1)}
-#'
 #' # Read example data
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #'
@@ -196,13 +195,14 @@ edge_delay <- function(
           by = fusionID,
           env = list(window = window)]
 
-  forward[, delay_timegroup := {
+  forward[, c('delay_timegroup', 'diff_direction') := {
     focal_direction <- DT[timegroup == .BY$timegroup &
                             id == ID1, direction]
-    DT[between(timegroup, min_timegroup, max_timegroup) & id == ID2,
-       timegroup[which.min(diff_rad(focal_direction, direction))]]
+    sub <- DT[between(timegroup, min_timegroup, max_timegroup) & id == ID2,
+              .(timegroup, diff = diff_rad(focal_direction, direction))]
+    sub[which.min(diff)]
   },
-  by = c('timegroup',  'dyadID'),
+  by = c('timegroup', 'dyadID'),
   env = list(id = id, direction = direction)]
 
   forward[, dir_corr_delay := delay_timegroup - timegroup]
