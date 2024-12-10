@@ -100,3 +100,5 @@ leader_edge_delay <- function(
     splitBy = NULL,
     return_rank = FALSE,
     ties.method = 'average') {
+  # Due to NSE notes
+  rank_mean_delay <- mean_delay <- ID1
