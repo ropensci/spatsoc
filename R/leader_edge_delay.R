@@ -124,4 +124,8 @@ leader_edge_delay <- function(
     stop('dir_corr_delay and diff_direction must be numeric, did you use edge_delay?')
   }
 
+  if (is.null(threshold_diff)) {
+    threshold_diff <- Inf
   }
+
+  sub_threshold <- edges[diff_direction < threshold_diff]
