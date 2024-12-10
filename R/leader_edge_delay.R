@@ -26,6 +26,8 @@
 #'   correlation delay.
 #'
 #' @inheritParams edge_delay
+#' @params splitBy (optional) column name(s) indicating groups of rows within
+#' which to calculate eg. season or event
 #'
 #' @export
 #' @seealso \code{\link{edge_delay}}
