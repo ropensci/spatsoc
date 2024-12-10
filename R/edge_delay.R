@@ -41,6 +41,10 @@
 #'   values of directional correlation delay indicate a directed leadership
 #'   edge from ID1 to ID2.
 #'
+#'   Note: instead of using a correlation function as in Nagy et al. 2010,
+#'   this function identifies the delay time as the time at the unsigned
+#'   difference in movement directions is minimal, within the defined window.
+#'
 #' @export
 #'
 #' @references
