@@ -38,3 +38,58 @@
 #'  * <https://doi.org/10.1073/pnas.1305552110>
 #'  * <https://doi.org/10.1111/jfb.15315>
 #'  * <https://doi.org/10.1371/journal.pcbi.1003446>
+#'
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Select only individuals A, B, C for this example
+#' DT <- DT[ID %in% c('A', 'B', 'C')]
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Calculate direction
+#' direction_step(
+#'   DT = DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   projection = 32736
+#' )
+#'
+#' # Distance based edge list generation
+#' edges <- edge_dist(
+#'   DT,
+#'   threshold = 100,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   timegroup = 'timegroup',
+#'   returnDist = TRUE,
+#'   fillNA = FALSE
+#' )
+#'
+#' # Generate dyad id
+#' dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
+#'
+#' # Generate fusion id
+#' fusion_id(edges, threshold = 100)
+#'
+#' # Directional correlation delay
+#' delay <- edge_delay(
+#'   edges = edges,
+#'   DT = DT,
+#'   window = 3,
+#'   id = 'ID'
+#' )
+#'
+#' # Leadership from directional correlation delay
+#' leadership <- leader_edge_delay(
+#'   delay
+#' )
+#'
