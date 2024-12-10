@@ -101,7 +101,7 @@ leader_edge_delay <- function(
     threshold_diff = NULL,
     splitBy = NULL) {
   # Due to NSE notes
-  rank_mean_delay <- mean_delay <- ID1
+  rank_mean_delay <- mean_delay <- ID1 <- NULL
 
   if (is.null(edges)) {
     stop('input edges required')
