@@ -49,3 +49,4 @@ spatsoc:::diff_rad(DT[1, direction], DT[2, direction])
 \references{
 adapted from https://stackoverflow.com/a/7869457
 }
+\keyword{internal}
