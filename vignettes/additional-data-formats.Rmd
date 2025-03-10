@@ -19,7 +19,7 @@ library(spatsoc)
 library(data.table)
 ```
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, eval = TRUE, echo = FALSE}
 data.table::setDTthreads(1)
 ```
 
