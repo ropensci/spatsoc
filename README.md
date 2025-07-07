@@ -12,6 +12,8 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.rep
 checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
 [![codecov](https://app.codecov.io/gh/ropensci/spatsoc/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ropensci/spatsoc)
 [![R-CMD-check](https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/ropensci/spatsoc/graph/badge.svg)](https://app.codecov.io/gh/ropensci/spatsoc)
 <!-- badges: end -->
 
 ### [News](#news) - [Installation](#installation) - [Usage](#usage) - [Contributing](#contributing)
@@ -31,7 +33,7 @@ For more details, see the [blog
 post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
 - [Introduction to
-  spatsoc](https://docs.ropensci.org/spatsoc/articles/intro-spatsoc.html)
+  spatsoc](https://docs.ropensci.org/spatsoc/articles/spatsoc.html)
 - [Frequently asked
   questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
 - [Using spatsoc in social network
