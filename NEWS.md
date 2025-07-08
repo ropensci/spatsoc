@@ -9,6 +9,7 @@ Fixes:
 
 * fix bracket typo longlat `direction_step` ([PR 92](https://github.com/ropensci/spatsoc/pull/92))
 * fix test expected direction of steps ([PR 93](https://github.com/ropensci/spatsoc/pull/93))
+* fix GitHub actions: update to workflow versions, add manual install MacOS system dependencies ([PR 101](https://github.com/ropensci/spatsoc/pull/101))
 
 # spatsoc 0.2.7
 
