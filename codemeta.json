@@ -204,7 +204,7 @@
       "@type": "SoftwareApplication",
       "identifier": "units",
       "name": "units",
-      "version": ">= 0.8-5",
+      "version": ">= 0.8-6",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
