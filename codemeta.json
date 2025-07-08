@@ -215,7 +215,7 @@
     },
     "SystemRequirements": "GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),\n    sqlite3"
   },
-  "fileSize": "2048.264KB",
+  "fileSize": "2048.497KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
