@@ -14,7 +14,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.4.1 (2024-06-14)",
+  "runtimePlatform": "R version 4.5.1 (2025-06-13)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -204,7 +204,7 @@
       "@type": "SoftwareApplication",
       "identifier": "units",
       "name": "units",
-      "version": ">= 0.8-5",
+      "version": ">= 0.8-6",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -215,7 +215,7 @@
     },
     "SystemRequirements": "GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),\n    sqlite3"
   },
-  "fileSize": "3586.841KB",
+  "fileSize": "2048.264KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
