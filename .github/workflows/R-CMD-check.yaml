@@ -43,7 +43,7 @@ jobs:
 
       - name: Install macOS system dependencies
         if: runner.os == 'macos'
-        run: brew install libudunits2
+        run: brew install udunits
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
