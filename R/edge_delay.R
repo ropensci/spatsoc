@@ -108,7 +108,7 @@
 #'   id = 'ID'
 #' )
 #'
-#' delay[, mean(dir_corr_delay, na.rm = TRUE), by = .(ID1, ID2)][V1 > 0]
+#' delay[, mean(direction_delay, na.rm = TRUE), by = .(ID1, ID2)][V1 > 0]
 edge_delay <- function(
     edges,
     DT,
