@@ -196,8 +196,6 @@ edge_delay <- function(
   forward[, c('timegroup_delay', 'direction_diff') := {
     focal_direction <- DT[timegroup == .BY$timegroup &
                             id == ID1, direction]
-    DT[between(timegroup, timegroup_min, timegroup_max) & id == ID2,
-       timegroup[which.min(diff_rad(focal_direction, direction))]]
     sub <- DT[between(timegroup, timegroup_min, timegroup_max) & id == ID2,
               .(timegroup, diff = diff_rad(focal_direction, direction))]
     sub[which.min(diff)]
