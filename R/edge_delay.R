@@ -115,8 +115,8 @@ edge_delay <- function(
     id = NULL,
     direction = 'direction') {
   # due to NSE notes in R CMD check
-  . <- timegroup <- fusionID <- min_timegroup <- max_timegroup <-
-    delay_timegroup <- ID1  <- ID2 <- dir_corr_delay <- NULL
+  . <- timegroup <- fusionID <- timegroup_min <- timegroup_max <-
+    timegroup_delay <- ID1  <- ID2 <- dir_corr_delay <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -178,24 +178,24 @@ edge_delay <- function(
                    data.table::first(.SD),
                    by = .(fusionID, timegroup)]
 
-  forward[, min_timegroup :=
+  forward[, timegroup_min :=
             data.table::fifelse(timegroup - window < min(timegroup),
                                 min(timegroup),
                                 timegroup - window),
           by = fusionID,
           env = list(window = window)]
 
-  forward[, max_timegroup :=
+  forward[, timegroup_max :=
             data.table::fifelse(timegroup + window > max(timegroup),
                                 max(timegroup),
                                 timegroup + window),
           by = fusionID,
           env = list(window = window)]
 
-  forward[, delay_timegroup := {
+  forward[, timegroup_delay := {
     focal_direction <- DT[timegroup == .BY$timegroup &
                             id == ID1, direction]
-    DT[between(timegroup, min_timegroup, max_timegroup) & id == ID2,
+    DT[between(timegroup, timegroup_min, timegroup_max) & id == ID2,
        timegroup[which.min(diff_rad(focal_direction, direction))]]
   },
   by = c('timegroup',  'dyadID'),
@@ -204,7 +204,7 @@ edge_delay <- function(
   forward[, direction_delay := timegroup_delay - timegroup]
 
   data.table::set(forward,
-                  j = c('min_timegroup', 'max_timegroup','delay_timegroup'),
+                  j = c('timegroup_min', 'timegroup_max','timegroup_delay'),
                   value = NULL)
 
   # "Reverse": replicate forward but reverse direction ID1 <- ID2
