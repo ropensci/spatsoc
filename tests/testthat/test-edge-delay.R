@@ -92,7 +92,7 @@ test_that('no rows are added to the result edges', {
 test_that('column added to the result DT', {
   copyEdges <- copy(edges)
 
-  expected_cols <- c(colnames(copyEdges), 'dir_corr_delay')
+  expected_cols <- c(colnames(copyEdges), 'direction_delay')
 
   expect_setequal(expected_cols,
                   colnames(edge_delay(edges, DT, id = id, window = window)))
@@ -102,7 +102,7 @@ test_that('column added to the result DT', {
 })
 
 test_that('column added to the result DT is integer', {
-  expect_type(edge_delay(edges, DT, id = id, window = window)$dir_corr_delay, 'integer')
+  expect_type(edge_delay(edges, DT, id = id, window = window)$direction_delay, 'integer')
 })
 
 test_that('returns a data.table', {
@@ -170,13 +170,13 @@ test_that('expected results are returned', {
   expect_lte(nrow(delay), nrow(edges_expect))
   expect_lte(nrow(DT_expect), nrow(delay))
 
-  mean_delays <- delay[, mean(dir_corr_delay, na.rm = TRUE), by = ID1]
+  mean_delays <- delay[, mean(direction_delay, na.rm = TRUE), by = ID1]
 
   expect_equal(mean_delays[V1 == min(V1), ID1], LETTERS[N_id])
   expect_equal(mean_delays[V1 == median(V1), ID1], LETTERS[ceiling(N_id / 2)])
   expect_equal(mean_delays[V1 == max(V1), ID1], LETTERS[1])
 
-  mean_delays_wrt_A <- delay[ID1 == 'A', mean(dir_corr_delay, na.rm = TRUE),
+  mean_delays_wrt_A <- delay[ID1 == 'A', mean(direction_delay, na.rm = TRUE),
                              by = ID2]
   expect_equal(mean_delays_wrt_A[V1 == max(V1), ID2], LETTERS[N_id])
 })
