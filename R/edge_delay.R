@@ -193,11 +193,14 @@ edge_delay <- function(
           by = fusionID,
           env = list(window = window)]
 
-  forward[, timegroup_delay := {
+  forward[, c('timegroup_delay', 'direction_diff') := {
     focal_direction <- DT[timegroup == .BY$timegroup &
                             id == ID1, direction]
     DT[between(timegroup, timegroup_min, timegroup_max) & id == ID2,
        timegroup[which.min(diff_rad(focal_direction, direction))]]
+    sub <- DT[between(timegroup, timegroup_min, timegroup_max) & id == ID2,
+              .(timegroup, diff = diff_rad(focal_direction, direction))]
+    sub[which.min(diff)]
   },
   by = c('timegroup',  'dyadID'),
   env = list(id = id, direction = direction)]
