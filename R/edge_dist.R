@@ -60,6 +60,7 @@
 #' @export
 #'
 #' @family Edge-list generation
+#' @family Direction functions
 #'
 #' @examples
 #' # Load data.table

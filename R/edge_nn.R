@@ -61,6 +61,7 @@
 #' @export
 #'
 #' @family Edge-list generation
+#' @family Distance functions
 #'
 #' @examples
 #' # Load data.table

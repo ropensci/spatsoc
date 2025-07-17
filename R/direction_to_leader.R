@@ -30,6 +30,7 @@
 #'
 #' @export
 #' @family Direction functions
+#' @family Leadership functions
 #' @seealso [distance_to_leader], [leader_direction_group], [group_pts]
 #' @references
 #'

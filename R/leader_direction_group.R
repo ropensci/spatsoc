@@ -49,6 +49,7 @@
 #' @export
 #' @seealso \code{\link{direction_group}}, \code{\link{centroid_group}}
 #' @family Leadership functions
+#' @family Direction functions
 #'
 #' @references
 #' See examples of measuring leadership along group direction (also called

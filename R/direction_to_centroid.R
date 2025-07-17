@@ -31,6 +31,7 @@
 #'
 #' @export
 #' @family Direction functions
+#' @family Centroid functions
 #' @seealso [centroid_group], [group_pts]
 #' @references
 #' See example of using direction to group centroid:
