@@ -109,7 +109,7 @@ test_that('returns a data.table', {
   expect_s3_class(edge_delay(edges, DT, id = id, window = window), 'data.table')
 })
 
-test_that('direction colname can different than default', {
+test_that('direction colname can be different than default', {
   copyDT <- copy(clean_DT)
   setnames(copyDT, 'direction', 'potato')
   expect_s3_class(edge_delay(edges, copyDT, id = id, window = window,
