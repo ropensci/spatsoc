@@ -30,7 +30,7 @@
 #'   in the input \code{DT}, because they will be overwritten.
 #'
 #' @export
-#' @family Distance functions
+#' @family Direction functions
 #' @seealso [centroid_group], [group_pts]
 #' @references
 #' See example of using direction to group centroid:
