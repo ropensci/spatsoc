@@ -101,6 +101,8 @@ leader_edge_delay <- function(
     threshold = NULL,
     splitBy = NULL) {
   # Due to NSE notes
+  . <- direction_diff <- direction_delay <- mean_direction_delay <-
+    mean_direction_delay_dyad <- NULL
 
   if (is.null(edges)) {
     stop('input edges required')
