@@ -24,8 +24,11 @@ edges <- edge_dist(DT, threshold = threshold, id = id,
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 fusion_id(edges, threshold = threshold)
 delay <- edge_delay(edges, DT, id = id, window = window)
+leader_delay <- leader_edge_delay(delay, threshold = 0.5)
 
 # leader_edge_delay(edges = edges, threshold = 0.5, splitBy = 'population')
+
+clean_delay <- copy(delay)
 
 test_that('edges required', {
   expect_error(leader_edge_delay(edges = NULL))
