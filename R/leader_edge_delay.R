@@ -135,7 +135,9 @@ leader_edge_delay <- function(
     }
   }
 
-  out <- data.table::copy(edges)[direction_diff < threshold][,
+  subset_threshold <- edges[direction_diff < threshold]
+
+  out <- subset_threshold[,
     .(mean_direction_delay_dyad = mean(direction_delay, na.rm = TRUE)),
     by = c('ID1', 'ID2', 'dyadID', splitBy)]
 
