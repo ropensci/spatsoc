@@ -89,3 +89,7 @@ test_that('column added to the result DT is double', {
   expect_type(leader_edge_delay(delay)$mean_direction_delay_dyad, 'double')
   expect_type(leader_edge_delay(delay)$mean_direction_delay, 'double')
 })
+
+test_that('returns a data.table', {
+  expect_s3_class(leader_edge_delay(delay), 'data.table')
+})
