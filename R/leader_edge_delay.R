@@ -93,7 +93,8 @@
 #'
 #' # Leadership from directional correlation delay
 #' leadership <- leader_edge_delay(
-#'   delay
+#'   delay,
+#'   threshold = 0.5
 #' )
 #'
 leader_edge_delay <- function(
