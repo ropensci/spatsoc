@@ -33,3 +33,8 @@ clean_delay <- copy(delay)
 test_that('edges required', {
   expect_error(leader_edge_delay(edges = NULL))
 })
+
+test_that('threshold is numeric', {
+  expect_error(leader_edge_delay(delay, threshold = 'potato'),
+               'numeric')
+})
