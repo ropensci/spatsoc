@@ -99,7 +99,7 @@
 #'
 leader_edge_delay <- function(
     edges = NULL,
-    threshold_diff = NULL,
+    threshold = NULL,
     splitBy = NULL) {
   # Due to NSE notes
   rank_mean_delay <- mean_delay <- ID1 <- NULL
@@ -125,8 +125,6 @@ leader_edge_delay <- function(
     stop('direction_delay and direction_diff must be numeric, did you use edge_delay?')
   }
 
-  if (is.null(threshold_diff)) {
-    threshold_diff <- Inf
   }
 
   sub_threshold <- edges[direction_diff < threshold]
