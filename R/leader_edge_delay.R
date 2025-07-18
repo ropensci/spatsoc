@@ -21,8 +21,10 @@
 #'   individual in 'ID1' column.
 #'
 #' @inheritParams edge_delay
-#' @param splitBy (optional) column name(s) indicating groups of rows within
-#' which to calculate eg. season or event
+#' @param threshold (optional) threshold difference in direction used to subset
+#'   rows included in calculation of mean directional delay. eg.
+#'   \code{threshold = 0.5} corresponds to only rows where direction_diff is
+#'   less than 0.5.
 #'
 #' @export
 #' @seealso \code{\link{edge_delay}}
