@@ -200,7 +200,7 @@ edge_delay <- function(
               .(timegroup, diff = diff_rad(focal_direction, direction))]
     sub[which.min(diff)]
   },
-  by = c('timegroup',  'dyadID'),
+  by = c('timegroup', 'dyadID'),
   env = list(id = id, direction = direction)]
 
   forward[, direction_delay := timegroup_delay - timegroup]
