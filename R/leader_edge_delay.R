@@ -5,8 +5,8 @@
 #' group to identify leadership patterns.
 #'
 #' The function accepts an edge list from \code{edge_delay} with columns
-#' "dir_corr_delay" indicating the directional correlation delay between
-#' individuals and "diff_direction" indicating the unsigned difference in
+#' 'direction_delay' indicating the directional correlation delay between
+#' individuals and 'direction_diff' indicating the unsigned difference in
 #' movement directions at the temporal delay.
 #'
 #' The \code{edge} must be a \code{data.table}. If your data is a
