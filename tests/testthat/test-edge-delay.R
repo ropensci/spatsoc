@@ -180,3 +180,15 @@ test_that('expected results are returned', {
                              by = ID2]
   expect_equal(mean_delays_wrt_A[V1 == max(V1), ID2], LETTERS[N_id])
 })
+
+test_that('exaggerated window size returns the same',  {
+  expect_equal(
+    edge_delay(edges_expect, DT_expect, window = window, id = id),
+    edge_delay(edges_expect, DT_expect, window = window + 10, id = id)
+  )
+
+  expect_equal(
+    edge_delay(edges_expect, DT_expect, window = window, id = id),
+    edge_delay(edges_expect, DT_expect, window = window + 1000, id = id)
+  )
+})
