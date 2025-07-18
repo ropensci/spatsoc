@@ -38,3 +38,22 @@ test_that('threshold is numeric', {
   expect_error(leader_edge_delay(delay, threshold = 'potato'),
                'numeric')
 })
+
+test_that('column names must exist in DT', {
+  missing_delay <- copy(clean_delay)[, direction_diff := NULL]
+  expect_error(leader_edge_delay(missing_delay),
+               'direction_diff')
+
+  missing_delay <- copy(clean_delay)[, direction_delay := NULL]
+  expect_error(leader_edge_delay(missing_delay),
+               'direction_delay')
+
+  missing_delay <- copy(clean_delay)[, ID1 := NULL]
+  expect_error(leader_edge_delay(missing_delay),
+               'ID1')
+
+  missing_delay <- copy(clean_delay)[, ID2 := NULL]
+  expect_error(leader_edge_delay(missing_delay),
+               'ID2')
+
+})
