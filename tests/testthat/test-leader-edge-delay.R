@@ -57,3 +57,22 @@ test_that('column names must exist in DT', {
                'ID2')
 
 })
+
+test_that('output length as expected', {
+  # nrow(delay) is less than nrow(leader_delay) since leader_delay is aggregate
+  expect_gt(nrow(delay), nrow(leader_delay))
+
+  # nrow(delay) is less than when threshold is 1e-2 since some dyads will drop
+  expect_gt(
+    nrow(leader_edge_delay(delay)),
+    nrow(leader_edge_delay(delay, threshold = 1e-2))
+  )
+  # nrow(delay) is the same when threshold is 1e3 since no rows will drop
+  expect_equal(
+    nrow(leader_edge_delay(delay)),
+    nrow(leader_edge_delay(delay, threshold = 1e3))
+  )
+
+  # nrow(delay) with tiny threshold is 0 since all rows will drop
+  expect_equal(nrow(leader_edge_delay(delay, threshold = 1e-3)), 0)
+})
