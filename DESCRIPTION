@@ -29,7 +29,7 @@ Imports:
     lwgeom,
     CircStats,
     stats,
-    units
+    units (>= 0.8-6)
 Suggests: 
     asnipe,
     knitr,
@@ -43,4 +43,4 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),
     sqlite3
-Remotes: r-quantities/units@889cf39
+Remotes: r-quantities/units@8dae070bc7e15a1a11f21c67ac3757e73bf6735c

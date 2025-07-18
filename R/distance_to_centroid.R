@@ -43,6 +43,7 @@
 #'
 #' @export
 #' @family Distance functions
+#' @family Centroid functions
 #' @seealso [centroid_group], [group_pts]
 #' @references
 #' See examples of using distance to group centroid:

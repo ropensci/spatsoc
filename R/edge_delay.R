@@ -31,15 +31,16 @@
 #'   \code{group_times}, eg. \code{window = 4} corresponds to the 4 timegroups
 #'   before and after the focal observation
 #'
-#' @return \code{edge_delay} returns the input \code{edges} appended with
-#'   a 'dir_corr_delay' column indicating the temporal delay (in units of
-#'   timegroups) at which ID1's direction of movement is most similar to
-#'   ID2's direction of movement, within the temporal window defined. For
-#'   example, if focal individual 'A' moves in a 45 degree direction at time 2
-#'   and individual 'B' moves in a most similar direction within the window
-#'   at time 5, the directional correlation delay between A and B is 3. Positive
-#'   values of directional correlation delay indicate a directed leadership
-#'   edge from ID1 to ID2.
+#' @return \code{edge_delay} returns the input \code{edges} appended with a
+#'   'direction_delay' column indicating the temporal delay (in units of
+#'   timegroups) at which ID1's direction of movement is most similar to ID2's
+#'   direction of movement, within the temporal window defined, and a
+#'   'direction_diff' column indicating the absolute difference in direction.
+#'   For example, if focal individual 'A' moves in a 45 degree direction at time
+#'   2 and individual 'B' moves in a most similar direction within the window at
+#'   time 5, the directional correlation delay between A and B is 3. Positive
+#'   values of directional correlation delay indicate a directed leadership edge
+#'   from ID1 to ID2.
 #'
 #' @export
 #'
@@ -106,7 +107,7 @@
 #'   id = 'ID'
 #' )
 #'
-#' delay[, mean(dir_corr_delay, na.rm = TRUE), by = .(ID1, ID2)][V1 > 0]
+#' delay[, mean(direction_delay, na.rm = TRUE), by = .(ID1, ID2)][V1 > 0]
 edge_delay <- function(
     edges,
     DT,
@@ -114,8 +115,8 @@ edge_delay <- function(
     id = NULL,
     direction = 'direction') {
   # due to NSE notes in R CMD check
-  . <- timegroup <- fusionID <- min_timegroup <- max_timegroup <-
-    delay_timegroup <- ID1  <- ID2 <- dir_corr_delay <- NULL
+  . <- timegroup <- fusionID <- timegroup_min <- timegroup_max <-
+    timegroup_delay <- ID1  <- ID2 <- direction_delay <- direction_diff <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -177,40 +178,40 @@ edge_delay <- function(
                    data.table::first(.SD),
                    by = .(fusionID, timegroup)]
 
-  forward[, min_timegroup :=
+  forward[, timegroup_min :=
             data.table::fifelse(timegroup - window < min(timegroup),
                                 min(timegroup),
                                 timegroup - window),
           by = fusionID,
           env = list(window = window)]
 
-  forward[, max_timegroup :=
+  forward[, timegroup_max :=
             data.table::fifelse(timegroup + window > max(timegroup),
                                 max(timegroup),
                                 timegroup + window),
           by = fusionID,
           env = list(window = window)]
 
-  forward[, c('delay_timegroup', 'diff_direction') := {
+  forward[, c('timegroup_delay', 'direction_diff') := {
     focal_direction <- DT[timegroup == .BY$timegroup &
                             id == ID1, direction]
-    sub <- DT[between(timegroup, min_timegroup, max_timegroup) & id == ID2,
+    sub <- DT[between(timegroup, timegroup_min, timegroup_max) & id == ID2,
               .(timegroup, diff = diff_rad(focal_direction, direction))]
     sub[which.min(diff)]
   },
   by = c('timegroup', 'dyadID'),
   env = list(id = id, direction = direction)]
 
-  forward[, dir_corr_delay := delay_timegroup - timegroup]
+  forward[, direction_delay := timegroup_delay - timegroup]
 
   data.table::set(forward,
-                  j = c('min_timegroup', 'max_timegroup','delay_timegroup'),
+                  j = c('timegroup_min', 'timegroup_max','timegroup_delay'),
                   value = NULL)
 
   # "Reverse": replicate forward but reverse direction ID1 <- ID2
   reverse <- data.table::copy(forward)
   setnames(reverse, c('ID1', 'ID2'), c('ID2', 'ID1'))
-  reverse[, dir_corr_delay := - dir_corr_delay]
+  reverse[, direction_delay := - direction_delay]
 
   out <- data.table::rbindlist(list(
     forward,

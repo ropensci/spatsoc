@@ -34,7 +34,7 @@
 #'
 #' # Differences
 #' spatsoc:::diff_rad(DT[1, direction], DT[2, direction])
-diff_rad <- function(x, y,  signed = FALSE, return_units = FALSE) {
+ diff_rad <- function(x, y,  signed = FALSE, return_units = FALSE) {
   if (!inherits(x, 'units') || units(x)$numerator != 'rad') {
     stop('units(x) is not radians')
   }
@@ -57,7 +57,3 @@ diff_rad <- function(x, y,  signed = FALSE, return_units = FALSE) {
     return(out)
   }
 }
-
-
-# Requires version with this PR merged
-# remotes::install_github('https://github.com/r-quantities/units/pull/365')

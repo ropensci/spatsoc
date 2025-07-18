@@ -24,15 +24,16 @@ before and after the focal observation}
 "direction"}
 }
 \value{
-\code{edge_delay} returns the input \code{edges} appended with
-a 'dir_corr_delay' column indicating the temporal delay (in units of
-timegroups) at which ID1's direction of movement is most similar to
-ID2's direction of movement, within the temporal window defined. For
-example, if focal individual 'A' moves in a 45 degree direction at time 2
-and individual 'B' moves in a most similar direction within the window
-at time 5, the directional correlation delay between A and B is 3. Positive
-values of directional correlation delay indicate a directed leadership
-edge from ID1 to ID2.
+\code{edge_delay} returns the input \code{edges} appended with a
+'direction_delay' column indicating the temporal delay (in units of
+timegroups) at which ID1's direction of movement is most similar to ID2's
+direction of movement, within the temporal window defined, and a
+'direction_diff' column indicating the absolute difference in direction.
+For example, if focal individual 'A' moves in a 45 degree direction at time
+2 and individual 'B' moves in a most similar direction within the window at
+time 5, the directional correlation delay between A and B is 3. Positive
+values of directional correlation delay indicate a directed leadership edge
+from ID1 to ID2.
 }
 \description{
 \code{edge_delay} returns edge lists defined by the directional correlation
@@ -111,7 +112,7 @@ delay <- edge_delay(
   id = 'ID'
 )
 
-delay[, mean(dir_corr_delay, na.rm = TRUE), by = .(ID1, ID2)][V1 > 0]
+delay[, mean(direction_delay, na.rm = TRUE), by = .(ID1, ID2)][V1 > 0]
 }
 \references{
 The directional correlation delay is defined in Nagy et al. 2010
