@@ -76,3 +76,11 @@ test_that('output length as expected', {
   # nrow(delay) with tiny threshold is 0 since all rows will drop
   expect_equal(nrow(leader_edge_delay(delay, threshold = 1e-3)), 0)
 })
+
+test_that('columns added to the result DT', {
+  expected_cols <- c('ID1', 'ID2', 'dyadID',
+                     'mean_direction_delay_dyad', 'mean_direction_delay')
+
+  expect_setequal(expected_cols, colnames(leader_edge_delay(delay)))
+  expect_equal(ncol(leader_edge_delay(delay)), length(expected_cols))
+})
