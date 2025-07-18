@@ -108,7 +108,7 @@ leader_edge_delay <- function(
     stop('input edges required')
   }
 
-  check_cols <- c('dir_corr_delay', 'diff_direction',
+  check_cols <- c('direction_delay', 'direction_diff',
                   'ID1', 'ID2', splitBy)
   if (any(!(check_cols %in% colnames(edges)))) {
     stop(paste0(
@@ -122,16 +122,16 @@ leader_edge_delay <- function(
 
   if (any(!(edges[, vapply(.SD, is.numeric, TRUE),
                   .SDcols = check_cols[seq.int(2)]]))) {
-    stop('dir_corr_delay and diff_direction must be numeric, did you use edge_delay?')
+    stop('direction_delay and direction_diff must be numeric, did you use edge_delay?')
   }
 
   if (is.null(threshold_diff)) {
     threshold_diff <- Inf
   }
 
-  sub_threshold <- edges[diff_direction < threshold_diff]
+  sub_threshold <- edges[direction_diff < threshold]
 
-  out <- sub_threshold[, .(mean_dyad_delay = mean(dir_corr_delay, na.rm = TRUE)),
+  out <- sub_threshold[, .(mean_dyad_delay = mean(direction_delay, na.rm = TRUE)),
                        by = c('ID1', 'ID2', splitBy)]
 
   out[, mean_delay := mean(mean_dyad_delay, na.rm = TRUE),
