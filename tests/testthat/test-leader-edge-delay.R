@@ -26,3 +26,7 @@ fusion_id(edges, threshold = threshold)
 delay <- edge_delay(edges, DT, id = id, window = window)
 
 # leader_edge_delay(edges = edges, threshold = 0.5, splitBy = 'population')
+
+test_that('edges required', {
+  expect_error(leader_edge_delay(edges = NULL))
+})
