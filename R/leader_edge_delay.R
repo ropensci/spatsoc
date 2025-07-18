@@ -129,6 +129,10 @@ leader_edge_delay <- function(
 
   if (is.null(threshold)) {
     threshold <- Inf
+  } else {
+    if (!is.numeric(threshold)) {
+      stop('threshold must be numeric, in the units of direction_diff (rad)')
+    }
   }
 
   out <- data.table::copy(edges)[direction_diff < threshold][,
