@@ -118,7 +118,7 @@ leader_edge_delay <- function(
         check_cols,
         colnames(edges)
       ), collapse = ', ')),
-      ' field(s) provided are not present in input edges'
+      ' field(s) provided are not present in input edges, did you use edge_delay?'
     ))
   }
 
