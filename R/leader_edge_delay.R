@@ -14,9 +14,11 @@
 #' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
 #' \code{\link[data.table:data.table]{data.table::data.table}}.
 #'
-#'
 #' @return \code{leader_edge_delay} returns the input \code{edges} appended with
-#'   a \code{mean_delay} column indicating the mean directional correlation
+#'   a \code{mean_direction_delay_dyad} column indicating the mean directional
+#'   correlation delay between ID1 and ID2 and a \code{mean_direction_delay}
+#'   column indicating the mean directional correlation delay for each
+#'   individual in 'ID1' column.
 #'
 #' @inheritParams edge_delay
 #' @param splitBy (optional) column name(s) indicating groups of rows within
