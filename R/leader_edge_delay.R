@@ -135,7 +135,7 @@ leader_edge_delay <- function(
     .(mean_direction_delay_dyad = mean(direction_delay, na.rm = TRUE)),
     by = c('ID1', 'ID2', 'dyadID', splitBy)]
 
-  out[, mean_delay := mean(mean_dyad_delay, na.rm = TRUE),
+  out[, mean_direction_delay := mean(mean_direction_delay_dyad, na.rm = TRUE),
       by = c('ID1', splitBy)]
 
   return(out[])
