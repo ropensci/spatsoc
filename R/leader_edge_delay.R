@@ -4,10 +4,11 @@
 #' calculates the mean directional correlation delay for individuals in a
 #' group to identify leadership patterns.
 #'
-#' The function accepts an edge list from \code{edge_delay} with columns
+#' The function expects an edge list from \code{edge_delay} with columns
 #' 'direction_delay' indicating the directional correlation delay between
 #' individuals and 'direction_diff' indicating the unsigned difference in
-#' movement directions at the temporal delay.
+#' movement directions at the temporal delay, columns 'ID1' and 'ID2' indicating
+#' individuals and column 'dyadID' indicating the dyad.
 #'
 #' The \code{edge} must be a \code{data.table}. If your data is a
 #' \code{data.frame}, you can convert it by reference using
