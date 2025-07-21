@@ -1,5 +1,5 @@
 # Test edge_dist
-context("test-edge-dist")
+context('test-edge-dist')
 
 library(spatsoc)
 
@@ -321,15 +321,15 @@ test_that('handles NULL threshold', {
     edge_dist(
       DT,
       threshold = NULL,
-      id = "ID",
-      coords = c("X", "Y"),
+      id = 'ID',
+      coords = c('X', 'Y'),
       timegroup = 'timegroup'
     ),
     edge_dist(
       DT,
       threshold = Inf,
-      id = "ID",
-      coords = c("X", "Y"),
+      id = 'ID',
+      coords = c('X', 'Y'),
       timegroup = 'timegroup'
     )
   )
