@@ -64,6 +64,13 @@ test_that('coords are correctly provided or error detected', {
                                   group = group))
 })
 
+test_that('leader is correctly provided or error detected', {
+  copy_DT <- copy(DT)[, rank_position_group_direction :=
+                        as.character(rank_position_group_direction)]
+  expect_error(direction_to_leader(copy_DT, coords = coords, group = group),
+               'must be numeric')
+})
+
 test_that('message when direction_leader column overwritten', {
   copyDT <- copy(clean_DT)[, direction_leader := 1]
   expect_message(
