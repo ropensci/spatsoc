@@ -130,15 +130,15 @@ test_that('expected results are returned', {
                tolerance = 2)
 
   expect_equal(
-    leader_expect[mean_direction_delay == min(mean_direction_delay), ID1],
+    leader_expect[mean_direction_delay == min(mean_direction_delay), unique(ID1)],
     LETTERS[N_id]
   )
   expect_equal(
-    leader_expect[mean_direction_delay == median(mean_direction_delay), ID1],
+    leader_expect[mean_direction_delay == median(mean_direction_delay), unique(ID1)],
     LETTERS[ceiling(N_id / 2)]
   )
   expect_equal(
-    leader_expect[mean_direction_delay == max(mean_direction_delay), ID1],
+    leader_expect[mean_direction_delay == max(mean_direction_delay), unique(ID1)],
     LETTERS[1]
   )
 })
