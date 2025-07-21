@@ -97,7 +97,7 @@ leadership <- leader_edge_delay(
   delay,
   threshold = 0.5
 )
-
+print(leadership)
 }
 \references{
 See examples of measuring leadership using the directional correlation

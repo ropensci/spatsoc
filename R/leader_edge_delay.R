@@ -98,7 +98,7 @@
 #'   delay,
 #'   threshold = 0.5
 #' )
-#'
+#' print(leadership)
 leader_edge_delay <- function(
     edges = NULL,
     threshold = NULL,
