@@ -71,6 +71,8 @@ centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
 
 Other Centroid functions: 
 \code{\link{centroid_dyad}()},
-\code{\link{centroid_fusion}()}
+\code{\link{centroid_fusion}()},
+\code{\link{direction_to_centroid}()},
+\code{\link{distance_to_centroid}()}
 }
 \concept{Centroid functions}

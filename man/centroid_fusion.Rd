@@ -122,6 +122,8 @@ print(centroids)
 
 Other Centroid functions: 
 \code{\link{centroid_dyad}()},
-\code{\link{centroid_group}()}
+\code{\link{centroid_group}()},
+\code{\link{direction_to_centroid}()},
+\code{\link{distance_to_centroid}()}
 }
 \concept{Centroid functions}

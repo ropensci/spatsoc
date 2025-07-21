@@ -103,7 +103,7 @@ See examples of using distance to leader and position within group:
 \link{direction_to_leader}, \link{leader_direction_group}, \link{group_pts}
 
 Other Distance functions: 
-\code{\link{direction_to_centroid}()},
-\code{\link{distance_to_centroid}()}
+\code{\link{distance_to_centroid}()},
+\code{\link{edge_nn}()}
 }
 \concept{Distance functions}
