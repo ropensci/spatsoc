@@ -314,3 +314,23 @@ test_that('warns about splitBy column', {
     'split_by'
   )
 })
+
+
+test_that('handles NULL threshold', {
+  expect_equal(
+    edge_dist(
+      DT,
+      threshold = NULL,
+      id = "ID",
+      coords = c("X", "Y"),
+      timegroup = 'timegroup'
+    ),
+    edge_dist(
+      DT,
+      threshold = Inf,
+      id = "ID",
+      coords = c("X", "Y"),
+      timegroup = 'timegroup'
+    )
+  )
+})
