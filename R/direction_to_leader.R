@@ -27,7 +27,7 @@
 #'   leader. A value of NaN is returned when the coordinates of the focal
 #'   individual equal the coordinates of the leader.
 #'
-#'   A message is returned when the \code{direction_leader} column is already
+#'   A message is returned when the \code{direction_leader} column already
 #'   exist in the input \code{DT} because it will be overwritten.
 #'
 #' @export
