@@ -122,7 +122,7 @@ edge_dist <- function(DT = NULL,
     stop('coords requires a vector of column names for coordinates X and Y')
   }
 
-  if (missing(timegroup)) {
+  if (missing(timegroup) | is.null(timegroup)) {
     stop('timegroup required')
   }
 
