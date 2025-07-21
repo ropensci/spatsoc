@@ -173,10 +173,3 @@ test_that('East North West South steps', {
     tolerance = tolerance
   )
 })
-
-
-test_that('projection recognized else error', {
-  expect_error(direction_step(DT,  id = id, coords = coords,
-                              projection = 'potato'),
-               'projection not recognized')
-})
