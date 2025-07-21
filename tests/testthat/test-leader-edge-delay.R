@@ -119,3 +119,12 @@ leader_expect <- leader_edge_delay(delay_expect)
 
 test_that('expected results are returned', {
   expect_lte(nrow(leader_expect), delay_expect[, uniqueN(dyadID) * 2])
+
+  expect_equal(leader_expect[, uniqueN(abs(mean_direction_delay_dyad)),
+                             by = dyadID],
+               leader_expect[, 1, by = dyadID])
+
+  expect_equal(leader_expect[, mean(mean_direction_delay_dyad)], 0,
+               tolerance = 2)
+  expect_equal(leader_expect[, mean(mean_direction_delay)], 0,
+               tolerance = 2)
