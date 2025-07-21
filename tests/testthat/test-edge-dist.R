@@ -334,3 +334,15 @@ test_that('handles NULL threshold', {
     )
   )
 })
+
+test_that({'errors if timegroup is null'}, {
+  expect_error(
+    edge_dist(
+      DT,
+      threshold = NULL,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = NULL
+    )
+  )
+})

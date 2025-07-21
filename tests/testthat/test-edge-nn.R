@@ -323,3 +323,15 @@ test_that('warns about splitBy column', {
     'split_by'
   )
 })
+
+test_that({'errors if timegroup is null'}, {
+  expect_error(
+    edge_nn(
+      DT,
+      threshold = NULL,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = NULL
+    )
+  )
+})
