@@ -19,10 +19,11 @@ Note: the order is assumed X followed by Y column names.}
 }
 \value{
 \code{distance_to_leader} returns the input \code{DT} appended with
-a \code{distance_leader} column indicating the distance to the group leader.
+a \code{distance_leader} column indicating the distance to the group
+leader.
 
-A message is returned when the \code{distance_leader} column is already exist in the input \code{DT}
-because it will be overwritten.
+A message is returned when the \code{distance_leader} column is already
+exist in the input \code{DT} because it will be overwritten.
 }
 \description{
 \code{distance_to_leader} calculates the distance to the leader of each
