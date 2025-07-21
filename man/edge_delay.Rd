@@ -21,7 +21,7 @@ before and after the focal observation}
 \item{id}{character string of ID column name}
 
 \item{direction}{character string of direction column name, default
-"direction"}
+"direction", expects that unit of direction column is radians.}
 }
 \value{
 \code{edge_delay} returns the input \code{edges} appended with a

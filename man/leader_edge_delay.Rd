@@ -13,7 +13,7 @@ leader_edge_delay(edges = NULL, threshold = NULL, splitBy = NULL)
 \item{threshold}{(optional) threshold difference in direction used to subset
 rows included in calculation of mean directional delay. eg.
 \code{threshold = 0.5} corresponds to only rows where direction_diff is
-less than 0.5.}
+less than 0.5. Expects that unit is radians, see \code{\link{edge_delay}}.}
 
 \item{splitBy}{(optional) character string or vector of grouping column
 name(s) upon which the mean directional correlation delay will be calculated}

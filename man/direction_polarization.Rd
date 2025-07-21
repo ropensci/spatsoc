@@ -11,7 +11,7 @@ direction_polarization(DT, direction = "direction", group = "group")
 \code{direction_step} and group column generated with \code{group_pts}}
 
 \item{direction}{character string of direction column name, default
-"direction"}
+"direction", expects that unit of direction column is radians.}
 
 \item{group}{character string of group column name, default "group"}
 }
