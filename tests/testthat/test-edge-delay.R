@@ -184,12 +184,12 @@ test_that('expected results are returned', {
 
 test_that('exaggerated window size returns the same',  {
   expect_equal(
-    edge_delay(edges_expect, DT_expect, window = window, id = id),
-    edge_delay(edges_expect, DT_expect, window = window + 10, id = id)
+    edge_delay(edge_expect, DT_expect, window = window, id = id),
+    edge_delay(edge_expect, DT_expect, window = window + 10, id = id)
   )
 
   expect_equal(
-    edge_delay(edges_expect, DT_expect, window = window, id = id),
-    edge_delay(edges_expect, DT_expect, window = window + 1000, id = id)
+    edge_delay(edge_expect, DT_expect, window = window, id = id),
+    edge_delay(edge_expect, DT_expect, window = window + 1000, id = id)
   )
 })
