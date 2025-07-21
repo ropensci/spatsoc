@@ -127,7 +127,8 @@ Other Direction functions:
 \code{\link{direction_to_centroid}()},
 \code{\link{direction_to_leader}()},
 \code{\link{edge_delay}()},
-\code{\link{leader_direction_group}()}
+\code{\link{leader_direction_group}()},
+\code{\link{leader_edge_delay}()}
 }
 \concept{Direction functions}
 \concept{Edge-list generation}

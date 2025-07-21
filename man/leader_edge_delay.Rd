@@ -116,5 +116,16 @@ delay:
 Other Leadership functions: 
 \code{\link{direction_to_leader}()},
 \code{\link{leader_direction_group}()}
+
+Other Direction functions: 
+\code{\link{direction_group}()},
+\code{\link{direction_polarization}()},
+\code{\link{direction_step}()},
+\code{\link{direction_to_centroid}()},
+\code{\link{direction_to_leader}()},
+\code{\link{edge_delay}()},
+\code{\link{edge_dist}()},
+\code{\link{leader_direction_group}()}
 }
+\concept{Direction functions}
 \concept{Leadership functions}

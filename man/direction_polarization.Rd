@@ -11,7 +11,7 @@ direction_polarization(DT, direction = "direction", group = "group")
 \code{direction_step} and group column generated with \code{group_pts}}
 
 \item{direction}{character string of direction column name, default
-"direction", expects that unit of direction column is radians.}
+"direction", expects that the unit of the direction column is radians.}
 
 \item{group}{character string of group column name, default "group"}
 }
@@ -92,6 +92,7 @@ Other Direction functions:
 \code{\link{direction_to_leader}()},
 \code{\link{edge_delay}()},
 \code{\link{edge_dist}()},
-\code{\link{leader_direction_group}()}
+\code{\link{leader_direction_group}()},
+\code{\link{leader_edge_delay}()}
 }
 \concept{Direction functions}

@@ -32,6 +32,7 @@
 #' @export
 #' @seealso \code{\link{edge_delay}}
 #' @family Leadership functions
+#' @family Direction functions
 #'
 #' @references
 #' See examples of measuring leadership using the directional correlation
