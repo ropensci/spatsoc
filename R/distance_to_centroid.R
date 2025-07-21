@@ -133,7 +133,8 @@ distance_to_centroid <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)]))) {
+  if (any(!(DT[, vapply(.SD, is.numeric, TRUE),
+               .SDcols = c(centroid_coords)]))) {
     stop('centroid coords must be numeric')
   }
 
