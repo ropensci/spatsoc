@@ -66,6 +66,11 @@ test_that('centroid column succesfully detected', {
     centroid_fusion(copyEdges, DT, id = id, coords = coords),
     'centroid_X column will be overwritten'
   )
+  copyEdges <- copy(edges)[, centroid_Y := 1]
+  expect_message(
+    centroid_fusion(copyEdges, DT, id = id, coords = coords),
+    'centroid_Y column will be overwritten'
+  )
 })
 
 test_that('no rows are added to the result DT', {
