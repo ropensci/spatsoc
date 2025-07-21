@@ -11,7 +11,7 @@ direction_group(DT, direction = "direction", group = "group")
 \code{direction_step} and group column generated with \code{group_pts}}
 
 \item{direction}{character string of direction column name, default
-"direction"}
+"direction", expects that the unit of the direction column is radians.}
 
 \item{group}{character string of group column name, default "group"}
 }
@@ -88,7 +88,11 @@ See examples of using mean group direction:
 Other Direction functions: 
 \code{\link{direction_polarization}()},
 \code{\link{direction_step}()},
+\code{\link{direction_to_centroid}()},
 \code{\link{direction_to_leader}()},
-\code{\link{edge_delay}()}
+\code{\link{edge_delay}()},
+\code{\link{edge_dist}()},
+\code{\link{leader_direction_group}()},
+\code{\link{leader_edge_delay}()}
 }
 \concept{Direction functions}

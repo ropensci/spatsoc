@@ -103,7 +103,14 @@ See examples of using distance to group centroid:
 \link{centroid_group}, \link{group_pts}
 
 Other Distance functions: 
-\code{\link{direction_to_centroid}()},
-\code{\link{distance_to_leader}()}
+\code{\link{distance_to_leader}()},
+\code{\link{edge_nn}()}
+
+Other Centroid functions: 
+\code{\link{centroid_dyad}()},
+\code{\link{centroid_fusion}()},
+\code{\link{centroid_group}()},
+\code{\link{direction_to_centroid}()}
 }
+\concept{Centroid functions}
 \concept{Distance functions}

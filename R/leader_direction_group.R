@@ -1,10 +1,11 @@
 #' Leadership along group direction
 #'
-#' Given the mean direction of a group of animals, \code{leader_direction_group}
-#' shifts the coordinate system to a new origin at the group centroid and
-#' rotates the coordinate system by the mean direction to return each
-#' individual's position along the mean direction, representing leadership in
-#' terms of the front-back position in each group's mean direction.
+#' Given the mean direction of a group of individuals,
+#' \code{leader_direction_group} shifts the coordinate system to a new origin at
+#' the group centroid and rotates the coordinate system by the mean direction to
+#' return each individual's position along the mean direction, representing
+#' leadership in terms of the front-back position in each group's mean
+#' direction.
 #'
 #' The function accepts a \code{data.table} with relocation data appended with a
 #' \code{group_direction} column from \code{direction_group} and group centroid
@@ -32,7 +33,7 @@
 #'   with a \code{position_group_direction} column indicating the position along
 #'   the group direction in the units of the projection and, optionally when
 #'   \code{return_rank = TRUE}, a \code{rank_position_group_direction} column
-#'   indicating the the ranked position along the group direction.
+#'   indicating the ranked position along the group direction.
 #'
 #'   A message is returned when \code{position_group_direction} or
 #'   \code{rank_position_group_direction} columns already exist in the input

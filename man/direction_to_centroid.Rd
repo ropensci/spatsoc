@@ -75,8 +75,21 @@ See example of using direction to group centroid:
 \seealso{
 \link{centroid_group}, \link{group_pts}
 
-Other Distance functions: 
-\code{\link{distance_to_centroid}()},
-\code{\link{distance_to_leader}()}
+Other Direction functions: 
+\code{\link{direction_group}()},
+\code{\link{direction_polarization}()},
+\code{\link{direction_step}()},
+\code{\link{direction_to_leader}()},
+\code{\link{edge_delay}()},
+\code{\link{edge_dist}()},
+\code{\link{leader_direction_group}()},
+\code{\link{leader_edge_delay}()}
+
+Other Centroid functions: 
+\code{\link{centroid_dyad}()},
+\code{\link{centroid_fusion}()},
+\code{\link{centroid_group}()},
+\code{\link{distance_to_centroid}()}
 }
-\concept{Distance functions}
+\concept{Centroid functions}
+\concept{Direction functions}

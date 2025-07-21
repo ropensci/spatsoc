@@ -10,7 +10,6 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.rep
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
 [![cran
 checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
-[![codecov](https://app.codecov.io/gh/ropensci/spatsoc/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ropensci/spatsoc)
 [![R-CMD-check](https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/ropensci/spatsoc/graph/badge.svg)](https://app.codecov.io/gh/ropensci/spatsoc)

@@ -156,39 +156,40 @@ DT_expect <- data.table(
 DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
 setorder(DT_expect, timegroup)
 direction_step(DT_expect, id, coords, projection = 4326)
-DT_expect
 
-edges_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
-                          returnDist = TRUE)
-dyad_id(edges_expect, 'ID1', 'ID2')
-fusion_id(edges_expect)
+edge_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
+                         returnDist = TRUE)
+dyad_id(edge_expect, 'ID1', 'ID2')
+fusion_id(edge_expect)
 
 window <- 5
-delay <- edge_delay(edges_expect, DT_expect, window = window, id = id)
+delay_expect <- edge_delay(edge_expect, DT_expect, window = window, id = id)
+
+leader_expect <- leader_edge_delay(delay_expect)
 
 test_that('expected results are returned', {
-  expect_lte(nrow(delay), nrow(edges_expect))
-  expect_lte(nrow(DT_expect), nrow(delay))
+  expect_lte(nrow(delay_expect), nrow(edge_expect))
+  expect_lte(nrow(DT_expect), nrow(delay_expect))
 
-  mean_delays <- delay[, mean(direction_delay, na.rm = TRUE), by = ID1]
+  mean_delays <- delay_expect[, mean(direction_delay, na.rm = TRUE), by = ID1]
 
   expect_equal(mean_delays[V1 == min(V1), ID1], LETTERS[N_id])
   expect_equal(mean_delays[V1 == median(V1), ID1], LETTERS[ceiling(N_id / 2)])
   expect_equal(mean_delays[V1 == max(V1), ID1], LETTERS[1])
 
-  mean_delays_wrt_A <- delay[ID1 == 'A', mean(direction_delay, na.rm = TRUE),
-                             by = ID2]
+  mean_delays_wrt_A <- delay_expect[
+    ID1 == 'A', mean(direction_delay, na.rm = TRUE), by = ID2]
   expect_equal(mean_delays_wrt_A[V1 == max(V1), ID2], LETTERS[N_id])
 })
 
 test_that('exaggerated window size returns the same',  {
   expect_equal(
-    edge_delay(edges_expect, DT_expect, window = window, id = id),
-    edge_delay(edges_expect, DT_expect, window = window + 10, id = id)
+    edge_delay(edge_expect, DT_expect, window = window, id = id),
+    edge_delay(edge_expect, DT_expect, window = window + 10, id = id)
   )
 
   expect_equal(
-    edge_delay(edges_expect, DT_expect, window = window, id = id),
-    edge_delay(edges_expect, DT_expect, window = window + 1000, id = id)
+    edge_delay(edge_expect, DT_expect, window = window, id = id),
+    edge_delay(edge_expect, DT_expect, window = window + 1000, id = id)
   )
 })

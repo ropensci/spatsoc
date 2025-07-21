@@ -8,7 +8,7 @@ message: 'To cite package "spatsoc" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship'
-version: 0.2.8
+version: 0.2.9.9000
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.spatsoc
@@ -226,6 +226,17 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.units
   version: '>= 0.8-6'
+- type: software
+  title: asnipe
+  abstract: 'asnipe: Animal Social Network Inference and Permutations for Ecologists'
+  notes: Suggests
+  repository: https://CRAN.R-project.org/package=asnipe
+  authors:
+  - family-names: Farine
+    given-names: Damien R.
+    email: dfarine@ab.mpg.de
+  year: '2025'
+  doi: 10.32614/CRAN.package.asnipe
 - type: software
   title: knitr
   abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'

@@ -21,7 +21,7 @@ before and after the focal observation}
 \item{id}{character string of ID column name}
 
 \item{direction}{character string of direction column name, default
-"direction"}
+"direction", expects that the unit of the direction column is radians.}
 }
 \value{
 \code{edge_delay} returns the input \code{edges} appended with a
@@ -135,7 +135,11 @@ Other Direction functions:
 \code{\link{direction_group}()},
 \code{\link{direction_polarization}()},
 \code{\link{direction_step}()},
-\code{\link{direction_to_leader}()}
+\code{\link{direction_to_centroid}()},
+\code{\link{direction_to_leader}()},
+\code{\link{edge_dist}()},
+\code{\link{leader_direction_group}()},
+\code{\link{leader_edge_delay}()}
 }
 \concept{Direction functions}
 \concept{Edge-list generation}
