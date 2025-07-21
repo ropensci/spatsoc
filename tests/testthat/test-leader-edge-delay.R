@@ -116,3 +116,6 @@ fusion_id(edge_expect)
 window <- 5
 delay_expect <- edge_delay(edge_expect, DT_expect, window = window, id = id)
 leader_expect <- leader_edge_delay(delay_expect)
+
+test_that('expected results are returned', {
+  expect_lte(nrow(leader_expect), delay_expect[, uniqueN(dyadID) * 2])
