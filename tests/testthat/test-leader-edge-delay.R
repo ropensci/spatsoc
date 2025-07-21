@@ -58,6 +58,19 @@ test_that('column names must exist in DT', {
 
 })
 
+test_that('non-numeric cols passed as direction_diff and _delay error', {
+  char_delay <- copy(delay)[, direction_diff := as.character(direction_diff)]
+  expect_error(
+    leader_edge_delay(char_delay, threshold = 0.5),
+    "must be numeric"
+  )
+  char_delay <- copy(delay)[, direction_delay := as.character(direction_delay)]
+  expect_error(
+    leader_edge_delay(char_delay, threshold = 0.5),
+    "must be numeric"
+  )
+})
+
 test_that('output length as expected', {
   # nrow(delay) is less than nrow(leader_delay) since leader_delay is aggregate
   expect_gt(nrow(delay), nrow(leader_delay))
