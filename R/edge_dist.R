@@ -142,35 +142,29 @@ edge_dist <- function(DT = NULL,
     stop('coords must be numeric')
   }
 
-  if (!is.null(timegroup)) {
-    if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
-            c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
-      warning(
-        strwrap(
-          prefix = " ",
-          initial = "",
-          x = 'timegroup provided is a date/time
-          or character type, did you use group_times?'
-        )
-        )
-    }
+  if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+          c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+    warning(
+      strwrap(
+        prefix = " ",
+        initial = "",
+        x = 'timegroup provided is a date/time
+        or character type, did you use group_times?'
+      )
+      )
   }
 
-  if (is.null(timegroup) && is.null(splitBy)) {
-    splitBy <- NULL
-  } else {
-    splitBy <- c(splitBy, timegroup)
-    if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
-      warning(
-        strwrap(
-          prefix = " ",
-          initial = "",
-          x = 'found duplicate id in a
-          timegroup and/or splitBy -
-          does your group_times threshold match the fix rate?'
-        )
+  splitBy <- c(splitBy, timegroup)
+  if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
+    warning(
+      strwrap(
+        prefix = " ",
+        initial = "",
+        x = 'found duplicate id in a
+        timegroup and/or splitBy -
+        does your group_times threshold match the fix rate?'
       )
-    }
+    )
   }
 
   if ('splitBy' %in% colnames(DT)) {
