@@ -128,3 +128,11 @@ test_that('expected results are returned', {
                tolerance = 2)
   expect_equal(leader_expect[, mean(mean_direction_delay)], 0,
                tolerance = 2)
+
+  expect_equal(leader_expect[mean_direction_delay == min(V1), ID1],
+               LETTERS[N_id])
+  expect_equal(leader_expect[mean_direction_delay == median(V1), ID1],
+               LETTERS[ceiling(N_id / 2)])
+  expect_equal(leader_expect[mean_direction_delay == max(V1), ID1],
+               LETTERS[1])
+})
