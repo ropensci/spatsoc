@@ -93,3 +93,26 @@ test_that('column added to the result DT is double', {
 test_that('returns a data.table', {
   expect_s3_class(leader_edge_delay(delay), 'data.table')
 })
+
+
+N_id <- 5
+N_seq <- 10
+seq_xy <- c(seq(0, 5, length.out = N_seq / 2),
+            seq(5.1, 0, length.out = N_seq / 2))
+DT_expect <- data.table(
+  X = rep(seq_xy, each = N_id),
+  Y = rep(seq_xy, each = N_id),
+  ID = LETTERS[seq.int(N_id)]
+)
+DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
+setorder(DT_expect, timegroup)
+direction_step(DT_expect, id, coords, projection = 4326)
+
+edge_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
+                          returnDist = TRUE)
+dyad_id(edge_expect, 'ID1', 'ID2')
+fusion_id(edge_expect)
+
+window <- 5
+delay_expect <- edge_delay(edge_expect, DT_expect, window = window, id = id)
+leader_expect <- leader_edge_delay(delay_expect)
