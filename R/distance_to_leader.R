@@ -150,18 +150,18 @@ distance_to_leader <- function(
 
   DT[, zzz_N_by_group := .N, by = c(group)]
 
-  check_has_leader <- DT[, .(
+  check_leaderless <- DT[, .(
     has_leader = any(rank_position_group_direction == 1)),
     by = c(group)][!(has_leader)]
 
-  if (check_has_leader[, .N > 0]) {
+  if (check_leaderless[, .N > 0]) {
     warning(
       'groups found missing leader (rank_position_group_direction == 1): \n',
-      check_has_leader[, paste(group, collapse = ', ')]
+      check_leaderless[, paste(group, collapse = ', ')]
     )
   }
 
-  DT[!group %in% check_has_leader$group,
+  DT[!group %in% check_leaderless$group,
      c(out_col) := fifelse(
        zzz_N_by_group > 1,
        as.matrix(

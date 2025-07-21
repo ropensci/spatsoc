@@ -146,14 +146,14 @@ direction_to_leader <- function(
     data.table::set(DT, j = out_col, value = NULL)
   }
 
-  check_has_leader <- DT[, .(
+  check_leaderless <- DT[, .(
     has_leader = any(rank_position_group_direction == 1)),
     by = c(group)][!(has_leader)]
 
-  if (check_has_leader[, .N > 0]) {
+  if (check_leaderless[, .N > 0]) {
     warning(
       'groups found missing leader (rank_position_group_direction == 1): \n',
-      check_has_leader[, paste(group, collapse = ', ')]
+      check_leaderless[, paste(group, collapse = ', ')]
     )
   }
 
@@ -163,7 +163,8 @@ direction_to_leader <- function(
      .SDcols = c(coords),
      by = c(group)]
 
-  DT[!group %in% check_has_leader$group, direction_leader := fifelse(
+  DT[!group %in% check_leaderless$group,
+     direction_leader := fifelse(
     .SD[[1]] == .SD[[3]] &
       .SD[[2]] == .SD[[4]],
     NaN,
