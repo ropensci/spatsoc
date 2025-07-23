@@ -15,7 +15,8 @@ group <- 'group'
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-group_pts(DT, threshold = threshold, id = id, coords = coords, timegroup = timegroup)
+group_pts(DT, threshold = threshold, id = id,
+          coords = coords, timegroup = timegroup)
 
 clean_DT <- copy(DT)
 
@@ -91,22 +92,26 @@ DT <- data.table(
 
 test_that('results are expected', {
   expect_equal(
-    centroid_group(copy(DT), coords, na.rm = FALSE)[group == 1, unique(centroid_X)],
+    centroid_group(copy(DT), coords,
+                   na.rm = FALSE)[group == 1, unique(centroid_X)],
     15
   )
 
   expect_equal(
-    centroid_group(copy(DT), coords, na.rm = FALSE)[group == 2, unique(centroid_X)],
+    centroid_group(copy(DT), coords,
+                   na.rm = FALSE)[group == 2, unique(centroid_X)],
     NA_real_
   )
 
   expect_equal(
-    centroid_group(copy(DT), coords, na.rm = TRUE)[group == 1, unique(centroid_X)],
+    centroid_group(copy(DT), coords,
+                   na.rm = TRUE)[group == 1, unique(centroid_X)],
     15
   )
 
   expect_equal(
-    centroid_group(copy(DT), coords, na.rm = TRUE)[group == 2, unique(centroid_X)],
+    centroid_group(copy(DT), coords,
+                   na.rm = TRUE)[group == 2, unique(centroid_X)],
     10
   )
 })

@@ -12,7 +12,8 @@ DT[, yr := year(datetime)]
 utm <- 'EPSG:32736'
 
 group_times(DT, 'datetime', '5 minutes')
-group_pts(DT, 50, timegroup = 'timegroup', id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
+group_pts(DT, 50, timegroup = 'timegroup',
+          id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
 
 test_that('DT is required', {
   expect_error(get_gbi(

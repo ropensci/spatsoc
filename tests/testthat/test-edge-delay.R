@@ -102,7 +102,8 @@ test_that('column added to the result DT', {
 })
 
 test_that('column added to the result DT is integer', {
-  expect_type(edge_delay(edges, DT, id = id, window = window)$direction_delay, 'integer')
+  expect_type(edge_delay(edges, DT, id = id,
+                         window = window)$direction_delay, 'integer')
 })
 
 test_that('returns a data.table', {

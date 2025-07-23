@@ -32,14 +32,16 @@ test_that('arguments required, otherwise error detected', {
                'coords requires a vector')
   expect_error(centroid_dyad(edges, DT, id = NULL),
                'id column name required')
-  expect_error(centroid_dyad(edges, DT, id = id, coords = coords, timegroup = NULL),
+  expect_error(centroid_dyad(edges, DT, id = id,
+                             coords = coords, timegroup = NULL),
                'timegroup column name required')
   expect_error(centroid_dyad(edges, DT, id = id, coords = coords, na.rm = NULL),
                'na.rm is required')
 })
 
 test_that('na.rm is boolean', {
-  expect_error(centroid_dyad(edges, DT, id = id, coords = coords, na.rm = 'potato'),
+  expect_error(centroid_dyad(edges, DT, id = id,
+                             coords = coords, na.rm = 'potato'),
                'boolean')
 })
 
@@ -48,7 +50,8 @@ test_that('column names must exist in DT', {
                'potato field')
   expect_error(centroid_dyad(edges, DT, id = id, coords = rep('potato', 2)),
                'potato field')
-  expect_error(centroid_dyad(edges, DT, id = id, coords = coords, timegroup = 'potato'),
+  expect_error(centroid_dyad(edges, DT, id = id,
+                             coords = coords, timegroup = 'potato'),
                'potato field')
 })
 
@@ -85,12 +88,15 @@ test_that('two columns added to the result DT', {
 })
 
 test_that('two columns added to the result DT are doubles', {
-  expect_type(centroid_dyad(edges, DT, id = id, coords = coords)$centroid_X, 'double')
-  expect_type(centroid_dyad(edges, DT, id = id, coords = coords)$centroid_Y, 'double')
+  expect_type(centroid_dyad(edges, DT,
+                            id = id, coords = coords)$centroid_X, 'double')
+  expect_type(centroid_dyad(edges, DT,
+                            id = id, coords = coords)$centroid_Y, 'double')
 })
 
 test_that('returns a data.table', {
-  expect_s3_class(centroid_dyad(edges, DT, id = id, coords = coords), 'data.table')
+  expect_s3_class(centroid_dyad(edges, DT, id = id,
+                                coords = coords), 'data.table')
 })
 
 expected_DT <- copy(clean_DT)[timegroup < 3]
@@ -132,7 +138,8 @@ test_that('results are expected', {
 
   expect_equal(
     expected_edges[, unique(ID1)],
-    centroid_dyad(expected_edges, expected_DT, id = id, coords = coords)[, unique(ID1)]
+    centroid_dyad(expected_edges, expected_DT,
+                  id = id, coords = coords)[, unique(ID1)]
   )
 })
 
