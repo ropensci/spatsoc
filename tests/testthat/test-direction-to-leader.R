@@ -39,7 +39,8 @@ test_that('arguments required, otherwise error detected', {
 })
 
 test_that('column names must exist in DT', {
-  expect_error(direction_to_leader(DT, coords = rep('potato', 2), group = group),
+  expect_error(direction_to_leader(DT,
+                                   coords = rep('potato', 2), group = group),
                'potato field')
   expect_error(direction_to_leader(DT, coords = coords, group = 'potato'),
                'group column')
@@ -83,14 +84,16 @@ test_that('no rows are added to the result DT', {
   copyDT <- copy(clean_DT)
 
   expect_equal(nrow(copyDT),
-               nrow(direction_to_leader(copyDT, coords = coords, group = group)))
+               nrow(direction_to_leader(copyDT,
+                                        coords = coords, group = group)))
 })
 
 test_that('one column added to the result DT', {
   copyDT <- copy(clean_DT)
 
   expect_equal(ncol(copyDT) + 1,
-               ncol(direction_to_leader(copyDT, coords = coords, group = group)))
+               ncol(direction_to_leader(copyDT,
+                                        coords = coords, group = group)))
 })
 
 test_that('column added to the result DT is a double', {

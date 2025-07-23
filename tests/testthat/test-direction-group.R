@@ -15,7 +15,8 @@ projection <- 32736
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-group_pts(DT, threshold = threshold, id = id, coords = coords, timegroup = timegroup)
+group_pts(DT, threshold = threshold,
+          id = id, coords = coords, timegroup = timegroup)
 direction_step(DT, id = id, coords = coords, projection = projection)
 
 clean_DT <- copy(DT)
