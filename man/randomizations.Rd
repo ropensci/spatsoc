@@ -120,7 +120,8 @@ DT[, yr := year(datetime)]
 group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 
 # Spatial grouping with timegroup
-group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+group_pts(DT, threshold = 5, id = 'ID',
+          coords = c('X', 'Y'), timegroup = 'timegroup')
 
 # Randomization: step
 randStep <- randomizations(
