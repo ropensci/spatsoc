@@ -148,9 +148,9 @@ test_that('expected results for simple case', {
 test_that('warns if group does not have a leader', {
   leaderless <- copy(DT)[group %in% DT[, .N, group][N > 1, group]]
   leaderless[,
-             rank_position_group_direction := fifelse(
-               rank_position_group_direction == 1, 0, rank_position_group_direction
-             )
+    rank_position_group_direction := fifelse(
+      rank_position_group_direction == 1, 0, rank_position_group_direction
+    )
   ]
   leaderless[, .(
     has_leader = any(rank_position_group_direction == 1)),
