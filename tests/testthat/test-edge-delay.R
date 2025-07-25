@@ -144,6 +144,42 @@ test_that('window column in edge, DT does not influence results', {
 
 })
 
+test_that('rows with NAs in ID1, ID2, dyadID, fusionID are dropped', {
+  n_dropped <- 42
+  na_edges <- copy(clean_edges)
+  na_edges[seq.int(n_dropped), ID1 := NA]
+
+  expect_equal(
+    edge_delay(DT, edges = na_edges, window, id)[, .N + n_dropped],
+    edge_delay(DT = DT, edges = edges, window, id)[, .N]
+  )
+
+  na_edges <- copy(clean_edges)
+  na_edges[seq.int(n_dropped), ID2 := NA]
+
+  expect_equal(
+    edge_delay(DT, edges = na_edges, window, id)[, .N + n_dropped],
+    edge_delay(DT = DT, edges = edges, window, id)[, .N]
+  )
+
+  na_edges <- copy(clean_edges)
+  na_edges[seq.int(n_dropped), dyadID := NA]
+
+  expect_equal(
+    edge_delay(DT, edges = na_edges, window, id)[, .N + n_dropped],
+    edge_delay(DT = DT, edges = edges, window, id)[, .N]
+  )
+  na_edges <- copy(clean_edges)
+  na_edges[seq.int(n_dropped), fusionID := NA]
+
+  expect_equal(
+    edge_delay(DT, edges = na_edges, window, id)[, .N + n_dropped],
+    edge_delay(DT = DT, edges = edges, window, id)[, .N]
+  )
+
+})
+
+
 
 N_id <- 5
 N_seq <- 10
