@@ -179,7 +179,21 @@ test_that('rows with NAs in ID1, ID2, dyadID, fusionID are dropped', {
 
 })
 
+test_that('setorder doesnt impact results', {
+  reorder_edges <- copy(edges)
+  setorder(reorder_edges, ID1)
+  expect_equal(
+    edge_delay(edges = edges, DT, window, id)[, sort(direction_delay)],
+    edge_delay(edges = reorder_edges, DT, window, id)[, sort(direction_delay)]
+  )
 
+  reorder_DT <- copy(DT)
+  setorder(reorder_DT, ID)
+  expect_equal(
+    edge_delay(edges = edges, DT, window, id)[, sort(direction_delay)],
+    edge_delay(edges = edges, reorder_DT, window, id)[, sort(direction_delay)]
+  )
+})
 
 N_id <- 5
 N_seq <- 10
