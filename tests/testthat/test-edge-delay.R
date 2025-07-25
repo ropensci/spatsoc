@@ -27,7 +27,7 @@ fusion_id(edges, threshold = threshold)
 clean_DT <- copy(DT)
 clean_edges <- copy(edges)
 
-# edge_delay(DT = DT, edges = edges, id = id, window = window)
+# edge_delay(edges = edges, DT = DT, id = id, window = window)
 
 test_that('edges, DT are required', {
   expect_error(edge_delay(edges, DT = NULL))
@@ -150,31 +150,31 @@ test_that('rows with NAs in ID1, ID2, dyadID, fusionID are dropped', {
   na_edges[seq.int(n_dropped), ID1 := NA]
 
   expect_equal(
-    edge_delay(DT, edges = na_edges, window, id)[, .N + n_dropped],
-    edge_delay(DT = DT, edges = edges, window, id)[, .N]
+    edge_delay(edges = na_edges, DT = DT, window, id)[, .N + n_dropped],
+    edge_delay(edges = edges, DT = DT, window, id)[, .N]
   )
 
   na_edges <- copy(clean_edges)
   na_edges[seq.int(n_dropped), ID2 := NA]
 
   expect_equal(
-    edge_delay(DT, edges = na_edges, window, id)[, .N + n_dropped],
-    edge_delay(DT = DT, edges = edges, window, id)[, .N]
+    edge_delay(edges = na_edges, DT = DT, window, id)[, .N + n_dropped],
+    edge_delay(edges = edges, DT = DT, window, id)[, .N]
   )
 
   na_edges <- copy(clean_edges)
   na_edges[seq.int(n_dropped), dyadID := NA]
 
   expect_equal(
-    edge_delay(DT, edges = na_edges, window, id)[, .N + n_dropped],
-    edge_delay(DT = DT, edges = edges, window, id)[, .N]
+    edge_delay(edges = na_edges, DT = DT, window, id)[, .N + n_dropped],
+    edge_delay(edges = edges, DT = DT, window, id)[, .N]
   )
   na_edges <- copy(clean_edges)
   na_edges[seq.int(n_dropped), fusionID := NA]
 
   expect_equal(
-    edge_delay(DT, edges = na_edges, window, id)[, .N + n_dropped],
-    edge_delay(DT = DT, edges = edges, window, id)[, .N]
+    edge_delay(edges = na_edges, DT = DT, window, id)[, .N + n_dropped],
+    edge_delay(edges = edges, DT = DT, window, id)[, .N]
   )
 
 })
