@@ -214,21 +214,36 @@ edge_delay <- function(
                   value = NULL)
 
   # "Reverse": replicate forward but reverse direction ID1 <- ID2
-  reverse <- data.table::copy(forward)
-  setnames(reverse, c('ID1', 'ID2'), c('ID2', 'ID1'))
-  reverse[, direction_delay := - direction_delay]
 
-  out <- data.table::rbindlist(list(
-    forward,
-    reverse
-  ), use.names = TRUE)
+  reverse[, timegroup_min :=
+            data.table::fifelse(timegroup - window < min(timegroup),
+                                min(timegroup),
+                                timegroup - window),
+          by = fusionID,
+          env = list(window = window)]
 
-  data.table::setorder(out, timegroup)
-  data.table::setcolorder(
-    out,
-    c('timegroup', 'ID1', 'ID2', 'dyadID', 'fusionID')
-  )
+  reverse[, timegroup_max :=
+            data.table::fifelse(timegroup + window > max(timegroup),
+                                max(timegroup),
+                                timegroup + window),
+          by = fusionID,
+          env = list(window = window)]
 
-  return(out)
+  reverse[, c('timegroup_delay', 'direction_diff') := {
+    focal_direction <- DT[timegroup == .BY$timegroup &
+                            id == ID2, direction]
+    sub <- DT[between(timegroup, timegroup_min, timegroup_max) & id == ID1,
+              .(timegroup, diff = diff_rad(focal_direction, direction))]
+    sub[which.min(diff)]
+  },
+  by = c('timegroup', 'dyadID'),
+  env = list(id = id, direction = direction)]
+
+  reverse[, direction_delay := timegroup_delay - timegroup]
+
+  data.table::set(reverse,
+                  j = c('timegroup_min', 'timegroup_max','timegroup_delay'),
+                  value = NULL)
+  return(list('forward' = forward, 'reverse' = reverse))
 }
 
