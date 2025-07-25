@@ -93,7 +93,8 @@ fusion_id <- function(edges = NULL,
                       allow_split = FALSE)  {
 
   # due to NSE notes  in R CMD check
-  . <- both_rleid <- distance <- dyadID <- fusionID <- tg_diff <- timegroup <- within_rleid <- NULL
+  . <- both_rleid <- distance <- dyadID <- fusionID <- tg_diff <- timegroup <-
+    within_rleid <- NULL
 
   if (is.null(edges)) {
     stop('input edges required')
@@ -155,7 +156,8 @@ fusion_id <- function(edges = NULL,
 
   # Get runs on within and timegroup difference. Adjust if runs of isolated
   #  observations together (eg. within T, T but timegroup diff F, F)
-  unique_edges[(within), both_rleid := data.table::rleid(within_rleid, tg_diff), by = dyadID]
+  unique_edges[(within), both_rleid := data.table::rleid(within_rleid, tg_diff),
+               by = dyadID]
   unique_edges[(within) & !(tg_diff),
                both_rleid := (both_rleid + seq.int(.N)) * -1,
                by = dyadID]

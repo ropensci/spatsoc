@@ -19,7 +19,8 @@
 #' @param DT input data.table with group column generated with \code{group_pts}
 #' @inheritParams group_pts
 #' @param group Character string of group column
-#' @param na.rm if NAs should be removed in calculating mean location, see \code{mean}
+#' @param na.rm if NAs should be removed in calculating mean location,
+#' see \code{mean}
 #'
 #' @return \code{centroid_group} returns the input \code{DT} appended with
 #'  centroid columns for the X and Y coordinate columns.

@@ -27,7 +27,8 @@
 #'   \code{threshold = 0.5} corresponds to only rows where direction_diff is
 #'   less than 0.5. Expects that unit is radians, see \code{\link{edge_delay}}.
 #' @param splitBy (optional) character string or vector of grouping column
-#'   name(s) upon which the mean directional correlation delay will be calculated
+#'   name(s) upon which the mean directional correlation delay will be
+#'   calculated
 #'
 #' @export
 #' @seealso \code{\link{edge_delay}}

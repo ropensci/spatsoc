@@ -26,10 +26,11 @@
 #' @inheritParams leader_direction_group
 #'
 #' @return \code{distance_to_leader} returns the input \code{DT} appended with
-#'   a \code{distance_leader} column indicating the distance to the group leader.
+#'   a \code{distance_leader} column indicating the distance to the group
+#'   leader.
 #'
-#'   A message is returned when the \code{distance_leader} column is already exist in the input \code{DT}
-#'   because it will be overwritten.
+#'   A message is returned when the \code{distance_leader} column already
+#'   exist in the input \code{DT} because it will be overwritten.
 #'
 #' @export
 #' @family Distance functions
@@ -149,18 +150,18 @@ distance_to_leader <- function(
 
   DT[, zzz_N_by_group := .N, by = c(group)]
 
-  check_has_leader <- DT[, .(
+  check_leaderless <- DT[, .(
     has_leader = any(rank_position_group_direction == 1)),
     by = c(group)][!(has_leader)]
 
-  if (check_has_leader[, .N > 0]) {
+  if (check_leaderless[, .N > 0]) {
     warning(
       'groups found missing leader (rank_position_group_direction == 1): \n',
-      check_has_leader[, paste(group, collapse = ', ')]
+      check_leaderless[, paste(group, collapse = ', ')]
     )
   }
 
-  DT[!group %in% check_has_leader$group,
+  DT[!group %in% check_leaderless$group,
      c(out_col) := fifelse(
        zzz_N_by_group > 1,
        as.matrix(

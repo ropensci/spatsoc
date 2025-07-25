@@ -39,7 +39,8 @@ test_that('arguments required, otherwise error detected', {
 })
 
 test_that('column names must exist in DT', {
-  expect_error(direction_to_leader(DT, coords = rep('potato', 2), group = group),
+  expect_error(direction_to_leader(DT,
+                                   coords = rep('potato', 2), group = group),
                'potato field')
   expect_error(direction_to_leader(DT, coords = coords, group = 'potato'),
                'group column')
@@ -64,6 +65,13 @@ test_that('coords are correctly provided or error detected', {
                                   group = group))
 })
 
+test_that('leader is correctly provided or error detected', {
+  copy_DT <- copy(DT)[, rank_position_group_direction :=
+                        as.character(rank_position_group_direction)]
+  expect_error(direction_to_leader(copy_DT, coords = coords, group = group),
+               'must be numeric')
+})
+
 test_that('message when direction_leader column overwritten', {
   copyDT <- copy(clean_DT)[, direction_leader := 1]
   expect_message(
@@ -76,14 +84,16 @@ test_that('no rows are added to the result DT', {
   copyDT <- copy(clean_DT)
 
   expect_equal(nrow(copyDT),
-               nrow(direction_to_leader(copyDT, coords = coords, group = group)))
+               nrow(direction_to_leader(copyDT,
+                                        coords = coords, group = group)))
 })
 
 test_that('one column added to the result DT', {
   copyDT <- copy(clean_DT)
 
   expect_equal(ncol(copyDT) + 1,
-               ncol(direction_to_leader(copyDT, coords = coords, group = group)))
+               ncol(direction_to_leader(copyDT,
+                                        coords = coords, group = group)))
 })
 
 test_that('column added to the result DT is a double', {
@@ -134,3 +144,23 @@ test_that('expected results for simple case', {
   )
 })
 
+
+test_that('warns if group does not have a leader', {
+  leaderless <- copy(DT)[group %in% DT[, .N, group][N > 1, group]]
+  leaderless[,
+    rank_position_group_direction := fifelse(
+      rank_position_group_direction == 1, 0, rank_position_group_direction
+    )
+  ]
+  leaderless[, .(
+    has_leader = any(rank_position_group_direction == 1)),
+    by = c(group)][!(has_leader)]
+  expect_warning(
+    direction_to_leader(
+      DT = leaderless,
+      coords = coords,
+      group = 'group'
+    ),
+    'missing leader'
+  )
+})

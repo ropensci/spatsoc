@@ -194,7 +194,8 @@ group_polys <-
         out_disjointed <- data.frame(
           ID1 = sfPolys[[id]][disjointed$row.id],
           ID2 = sfPolys[[id]][disjointed$col.id],
-          area = rep(units::as_units(0, units(out_inter$area)), nrow(disjointed)),
+          area = rep(units::as_units(0, units(out_inter$area)),
+                     nrow(disjointed)),
           proportion = rep(units::set_units(0, 'percent'), nrow(disjointed))
         )
         out <- rbind(out_inter, out_disjointed)
@@ -314,13 +315,19 @@ group_polys <-
               out_disjointed <- data.frame(
                 ID1 = sfPolys[[id]][disjointed$row.id],
                 ID2 = sfPolys[[id]][disjointed$col.id],
-                area = rep(units::as_units(0, units(out_inter$area)),
-                           nrow(disjointed)),
-                proportion = rep(units::set_units(0, 'percent'), nrow(disjointed))
+                area = rep(
+                  units::as_units(0, units(out_inter$area)),
+                  nrow(disjointed)
+                ),
+                proportion = rep(
+                  units::set_units(0, 'percent'),
+                  nrow(disjointed)
+                )
               )
               out <- rbind(out_inter, out_disjointed)
 
-              data.table::setcolorder(out, c('ID1', 'ID2', 'area', 'proportion'))
+              data.table::setcolorder(out,
+                                      c('ID1', 'ID2', 'area', 'proportion'))
               out
             } else {
               out <- data.table(ID = get(..id),

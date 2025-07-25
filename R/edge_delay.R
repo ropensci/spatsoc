@@ -174,10 +174,14 @@ edge_delay <- function(
     stop('dyadID field not present in edges, did you run dyad_id?')
   }
 
+  drop_nas <- data.table::copy(edges)[
+    !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))]
+
   # "Forward": all edges ID1 -> ID2
-  forward <- edges[!is.na(fusionID),
-                   data.table::first(.SD),
-                   by = .(fusionID, timegroup)]
+  forward <- drop_nas[,
+    data.table::first(.SD),
+    by = .(fusionID, timegroup)
+  ]
 
   forward[, timegroup_min :=
             data.table::fifelse(timegroup - window < min(timegroup),

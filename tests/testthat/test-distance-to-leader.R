@@ -65,6 +65,13 @@ test_that('coords are correctly provided or error detected', {
                                   group = group))
 })
 
+test_that('leader is correctly provided or error detected', {
+  copy_DT <- copy(DT)[, rank_position_group_direction :=
+                        as.character(rank_position_group_direction)]
+  expect_error(distance_to_leader(copy_DT, coords = coords, group = group),
+               'must be numeric')
+})
+
 test_that('message when distance_leader column overwritten', {
   copyDT <- copy(clean_DT)[, distance_leader := 1]
   expect_message(
@@ -137,3 +144,23 @@ test_that('expected results for simple case', {
 })
 
 
+
+test_that('warns if group does not have a leader', {
+  leaderless <- copy(DT)[group %in% DT[, .N, group][N > 1, group]]
+  leaderless[,
+    rank_position_group_direction := fifelse(
+      rank_position_group_direction == 1, 0, rank_position_group_direction
+    )
+  ]
+  leaderless[, .(
+    has_leader = any(rank_position_group_direction == 1)),
+    by = c(group)][!(has_leader)]
+  expect_warning(
+    distance_to_leader(
+      DT = leaderless,
+      coords = coords,
+      group = 'group'
+    ),
+    'missing leader'
+  )
+})

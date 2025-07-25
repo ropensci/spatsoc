@@ -16,7 +16,8 @@ rows included in calculation of mean directional delay. eg.
 less than 0.5. Expects that unit is radians, see \code{\link{edge_delay}}.}
 
 \item{splitBy}{(optional) character string or vector of grouping column
-name(s) upon which the mean directional correlation delay will be calculated}
+name(s) upon which the mean directional correlation delay will be
+calculated}
 }
 \value{
 \code{leader_edge_delay} returns the input \code{edges} appended with

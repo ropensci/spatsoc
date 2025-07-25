@@ -48,6 +48,7 @@ reference:
     desc: ~
     contents:
     - '`leader_direction_group`'
+    - '`leader_edge_delay`'
   - title: Build functions
     desc: ~
     contents:

@@ -46,7 +46,8 @@ DT[, datetime := as.POSIXct(datetime)]
 group_times(DT, datetime = 'datetime', threshold = '10 minutes')
 
 # Spatial grouping
-group_pts(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+group_pts(DT, threshold = 50, id = 'ID', 
+          coords = c('X', 'Y'), timegroup = 'timegroup')
 
 
 # Calculate the number of types within each group

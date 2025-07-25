@@ -23,10 +23,12 @@
 #' @inheritParams distance_to_leader
 #'
 #' @return \code{direction_to_leader} returns the input \code{DT} appended with
-#'   a \code{direction_leader} column indicating the direction to the group leader.
+#'   a \code{direction_leader} column indicating the direction to the group
+#'   leader. A value of NaN is returned when the coordinates of the focal
+#'   individual equal the coordinates of the leader.
 #'
-#'   A message is returned when the \code{direction_leader} column is already exist in the input \code{DT}
-#'   because it will be overwritten.
+#'   A message is returned when the \code{direction_leader} column already
+#'   exist in the input \code{DT} because it will be overwritten.
 #'
 #' @export
 #' @family Direction functions
@@ -144,14 +146,14 @@ direction_to_leader <- function(
     data.table::set(DT, j = out_col, value = NULL)
   }
 
-  check_has_leader <- DT[, .(
+  check_leaderless <- DT[, .(
     has_leader = any(rank_position_group_direction == 1)),
     by = c(group)][!(has_leader)]
 
-  if (check_has_leader[, .N > 0]) {
+  if (check_leaderless[, .N > 0]) {
     warning(
       'groups found missing leader (rank_position_group_direction == 1): \n',
-      check_has_leader[, paste(group, collapse = ', ')]
+      check_leaderless[, paste(group, collapse = ', ')]
     )
   }
 
@@ -161,7 +163,8 @@ direction_to_leader <- function(
      .SDcols = c(coords),
      by = c(group)]
 
-  DT[!group %in% check_has_leader$group, direction_leader := fifelse(
+  DT[!group %in% check_leaderless$group,
+     direction_leader := fifelse(
     .SD[[1]] == .SD[[3]] &
       .SD[[2]] == .SD[[4]],
     NaN,

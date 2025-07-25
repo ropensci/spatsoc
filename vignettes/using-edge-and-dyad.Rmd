@@ -170,13 +170,16 @@ dyads[, difftimegrp := timegroup - shifttimegrp]
 dyads[, runid := rleid(difftimegrp), by = dyadID]
 
 # N consecutive observations of dyadIDs
-dyads[, runCount := fifelse(difftimegrp == 1, .N, NA_integer_), by = .(runid, dyadID)]
+dyads[, runCount := fifelse(difftimegrp == 1, .N, NA_integer_), 
+      by = .(runid, dyadID)]
 
 ## Start and end of consecutive relocations for each dyad
 # Dont consider where runs aren't more than one relocation
-dyads[runCount > 1, start := fifelse(timegroup == min(timegroup), TRUE, FALSE), by = .(runid, dyadID)]
+dyads[runCount > 1, start := fifelse(timegroup == min(timegroup), TRUE, FALSE), 
+      by = .(runid, dyadID)]
 
-dyads[runCount > 1, end := fifelse(timegroup == max(timegroup), TRUE, FALSE), by = .(runid, dyadID)]
+dyads[runCount > 1, end := fifelse(timegroup == max(timegroup), TRUE, FALSE), 
+      by = .(runid, dyadID)]
 
 ## Example output
 dyads[dyadID == 'B-H', 

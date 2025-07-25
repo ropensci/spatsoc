@@ -16,7 +16,9 @@ diff_rad(x, y, signed = FALSE, return_units = FALSE)
 \item{return_units}{return difference with units = 'rad'}
 }
 \value{
-Difference between x and y in radians. If signed is TRUE, the signed difference is returned. If signed is FALSE, the absolute difference is returned. Note: The difference is the smallest difference, eg.
+Difference between x and y in radians. If signed is TRUE, the signed
+difference is returned. If signed is FALSE, the absolute difference is
+returned. Note: The difference is the smallest difference, eg.
 }
 \description{
 Internal function

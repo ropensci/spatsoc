@@ -144,7 +144,5 @@ direction_step <- function(
         ),
       units::set_units(NA, 'rad')),
       by = c(id, splitBy)]
-  } else {
-    stop('projection not recognized, please see sf::st_crs')
   }
 }

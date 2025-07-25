@@ -27,7 +27,7 @@ fusion_id(edges, threshold = threshold)
 clean_DT <- copy(DT)
 clean_edges <- copy(edges)
 
-# edge_delay(DT = DT, edges = edges, id = id, window = window)
+# edge_delay(edges = edges, DT = DT, id = id, window = window)
 
 test_that('edges, DT are required', {
   expect_error(edge_delay(edges, DT = NULL))
@@ -102,7 +102,8 @@ test_that('column added to the result DT', {
 })
 
 test_that('column added to the result DT is integer', {
-  expect_type(edge_delay(edges, DT, id = id, window = window)$direction_delay, 'integer')
+  expect_type(edge_delay(edges, DT, id = id,
+                         window = window)$direction_delay, 'integer')
 })
 
 test_that('returns a data.table', {
@@ -143,6 +144,56 @@ test_that('window column in edge, DT does not influence results', {
 
 })
 
+test_that('rows with NAs in ID1, ID2, dyadID, fusionID are dropped', {
+  n_dropped <- 42
+  na_edges <- copy(clean_edges)
+  na_edges[seq.int(n_dropped), ID1 := NA]
+
+  expect_equal(
+    edge_delay(edges = na_edges, DT = DT, window, id)[, .N + n_dropped],
+    edge_delay(edges = edges, DT = DT, window, id)[, .N]
+  )
+
+  na_edges <- copy(clean_edges)
+  na_edges[seq.int(n_dropped), ID2 := NA]
+
+  expect_equal(
+    edge_delay(edges = na_edges, DT = DT, window, id)[, .N + n_dropped],
+    edge_delay(edges = edges, DT = DT, window, id)[, .N]
+  )
+
+  na_edges <- copy(clean_edges)
+  na_edges[seq.int(n_dropped), dyadID := NA]
+
+  expect_equal(
+    edge_delay(edges = na_edges, DT = DT, window, id)[, .N + n_dropped],
+    edge_delay(edges = edges, DT = DT, window, id)[, .N]
+  )
+  na_edges <- copy(clean_edges)
+  na_edges[seq.int(n_dropped), fusionID := NA]
+
+  expect_equal(
+    edge_delay(edges = na_edges, DT = DT, window, id)[, .N + n_dropped],
+    edge_delay(edges = edges, DT = DT, window, id)[, .N]
+  )
+
+})
+
+test_that('setorder doesnt impact results', {
+  reorder_edges <- copy(edges)
+  setorder(reorder_edges, ID1)
+  expect_equal(
+    edge_delay(edges = edges, DT, window, id)[, sort(direction_delay)],
+    edge_delay(edges = reorder_edges, DT, window, id)[, sort(direction_delay)]
+  )
+
+  reorder_DT <- copy(DT)
+  setorder(reorder_DT, ID)
+  expect_equal(
+    edge_delay(edges = edges, DT, window, id)[, sort(direction_delay)],
+    edge_delay(edges = edges, reorder_DT, window, id)[, sort(direction_delay)]
+  )
+})
 
 N_id <- 5
 N_seq <- 10

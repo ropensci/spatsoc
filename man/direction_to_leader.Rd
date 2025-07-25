@@ -19,10 +19,12 @@ Note: the order is assumed X followed by Y column names.}
 }
 \value{
 \code{direction_to_leader} returns the input \code{DT} appended with
-a \code{direction_leader} column indicating the direction to the group leader.
+a \code{direction_leader} column indicating the direction to the group
+leader. A value of NaN is returned when the coordinates of the focal
+individual equal the coordinates of the leader.
 
-A message is returned when the \code{direction_leader} column is already exist in the input \code{DT}
-because it will be overwritten.
+A message is returned when the \code{direction_leader} column already
+exist in the input \code{DT} because it will be overwritten.
 }
 \description{
 \code{direction_to_leader} calculates the direction to the leader of each

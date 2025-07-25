@@ -14,7 +14,8 @@ Note: the order is assumed X followed by Y column names.}
 
 \item{group}{Character string of group column}
 
-\item{na.rm}{if NAs should be removed in calculating mean location, see \code{mean}}
+\item{na.rm}{if NAs should be removed in calculating mean location,
+see \code{mean}}
 }
 \value{
 \code{centroid_group} returns the input \code{DT} appended with
