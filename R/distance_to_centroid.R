@@ -41,6 +41,9 @@
 #'   \code{rank_distance_centroid} columns already exist in the input \code{DT},
 #'   because they will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #' @export
 #' @family Distance functions
 #' @family Centroid functions

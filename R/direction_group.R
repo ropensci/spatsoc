@@ -32,6 +32,9 @@
 #'   A message is returned when the \code{group_direction} columns already
 #'   exists in the input \code{DT}, because it will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #' @export
 #' @seealso \code{\link{direction_step}}, \code{\link{group_pts}},
 #'   [CircStats::circ.mean()]

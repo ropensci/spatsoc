@@ -58,6 +58,11 @@
 #'   neighbours within the threshold distance, they are assigned NA for nearest
 #'   neighbour.
 #'
+#'  Note: unlike many other functions (eg. \code{group_pts}) in \code{spatsoc},
+#'  \code{edge_nn} needs to be reassigned. See details in
+#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
+#'
 #' @export
 #'
 #' @family Edge-list generation

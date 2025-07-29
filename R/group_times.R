@@ -50,6 +50,9 @@
 #'   A message is returned when any of these columns already exist in the input
 #'   \code{DT}, because they will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #'
 #' @inheritParams group_pts
 #' @param datetime name of date time column(s). either 1 POSIXct or 2 IDate and

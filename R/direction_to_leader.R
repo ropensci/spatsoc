@@ -30,6 +30,9 @@
 #'   A message is returned when the \code{direction_leader} column already
 #'   exist in the input \code{DT} because it will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #' @export
 #' @family Direction functions
 #' @family Leadership functions

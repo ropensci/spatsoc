@@ -51,6 +51,8 @@
 #'   A message is returned when a column named \code{group} already exists in
 #'   the input \code{DT}, because it will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @param DT input data.table
 #' @param threshold distance for grouping points, in the units of the

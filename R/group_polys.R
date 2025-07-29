@@ -65,6 +65,11 @@
 #'   now returns area and proportion of overlap with units explicitly specified
 #'   through the `units` package.
 #'
+#'  Note: if area is TRUE, the output of \code{group_polys} needs to be
+#'  reassigned. See details in
+#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
+#'
 #' @inheritParams group_pts
 #' @inheritParams group_lines
 #' @inheritParams build_polys
