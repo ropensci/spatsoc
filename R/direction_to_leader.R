@@ -37,9 +37,9 @@
 #' @references
 #'
 #' See examples of using direction to leader and position within group:
-#'  * <https://doi.org/10.1016/j.anbehav.2023.09.009>
-#'  * <https://doi.org/10.1016/j.beproc.2013.10.007>
-#'  * <https://doi.org/10.1371/journal.pone.0036567>
+#'  * \doi{doi:10.1016/j.anbehav.2023.09.009}
+#'  * \doi{doi:10.1016/j.beproc.2013.10.007}
+#'  * \doi{doi:10.1371/journal.pone.0036567}
 #'
 #' @examples
 #' # Load data.table

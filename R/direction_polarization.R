@@ -35,9 +35,9 @@
 #'
 #' @references
 #' See examples of using polarization:
-#'  * <https://doi.org/10.1016/j.cub.2017.08.004>
-#'  * <https://doi.org/10.1371/journal.pcbi.1009437>
-#'  * <https://doi.org/10.7554/eLife.19505>
+#'  * \doi{doi:10.1016/j.cub.2017.08.004}
+#'  * \doi{doi:10.1371/journal.pcbi.1009437}
+#'  * \doi{doi:10.7554/eLife.19505}
 #'
 #' @examples
 #' # Load data.table

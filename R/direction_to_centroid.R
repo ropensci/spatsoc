@@ -35,7 +35,7 @@
 #' @seealso [centroid_group], [group_pts]
 #' @references
 #' See example of using direction to group centroid:
-#'  * <https://doi.org/10.1016/j.cub.2017.08.004>
+#'  * \doi{doi:10.1016/j.cub.2017.08.004}
 #'
 #' @examples
 #' # Load data.table

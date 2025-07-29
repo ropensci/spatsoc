@@ -47,13 +47,13 @@
 #' @references
 #'
 #' The directional correlation delay is defined in Nagy et al. 2010
-#' (<https://doi.org/10.1038/nature08891>).
+#' (\doi{doi:10.1038/nature08891}).
 #'
 #' See examples of measuring the directional correlation delay:
-#'  * <https://doi.org/10.1016/j.anbehav.2013.07.005>
-#'  * <https://doi.org/10.1073/pnas.1305552110>
-#'  * <https://doi.org/10.1111/jfb.15315>
-#'  * <https://doi.org/10.1371/journal.pcbi.1003446>
+#'  * \doi{doi:10.1016/j.anbehav.2013.07.005}
+#'  * \doi{doi:10.1073/pnas.1305552110}
+#'  * \doi{doi:10.1111/jfb.15315}
+#'  * \doi{doi:10.1371/journal.pcbi.1003446}
 #'
 #' @family Edge-list generation
 #' @family Direction functions
