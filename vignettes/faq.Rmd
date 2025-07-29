@@ -401,10 +401,37 @@ the threshold.
 
 ## Don't I need to reassign to save the output?
 
-(Almost functions in `spatsoc` use data.table's modify-by-reference to reduce
-recopying large datasets and improve performance. The exceptions are
-`group_polys(area = TRUE)`, `randomizations` and the edge list generating
-functions `edge_dist` and `edge_nn`.
+Many functions in `spatsoc` use data.table's modify-by-reference to reduce
+recopying large datasets and improve performance. Included in this list are:
+
+- `group_times`
+- `group_pts`
+- `group_lines`
+- `group_polys(area = FALSE)`
+- `centroid_group`
+- `direction_to_leader`
+- `direction_to_centroid`
+- `direction_step`
+- `direction_group`
+- `direction_polarization`
+- `distance_to_centroid`
+- `distance_to_leader`
+- `fusion_id`
+- `dyad_id`
+- `leader_direction_group`
+
+
+
+Functions that require their outputs be reassigned include:
+
+- `group_polys(area = TRUE)`
+- `edge_dist`
+- `edge_nn`
+- `edge_delay`
+- `centroid_fusion`
+- `centroid_dyad`
+- `leader_edge_delay`
+- `randomizations`
 
 
 ## Why does a function print the result, but columns aren't added to my DT?
