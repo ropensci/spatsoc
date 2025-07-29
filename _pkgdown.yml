@@ -63,7 +63,7 @@ articles:
 - title: Introduction to spatsoc
   navbar: ~
   contents:
-  - spatsoc
+  - intro
 - title: Frequently asked questions about spatsoc
   navbar: ~
   contents:
@@ -89,3 +89,5 @@ navbar:
 
 news:
 - one_page: true
+
+url: https://docs.ropensci.org/spatsoc/

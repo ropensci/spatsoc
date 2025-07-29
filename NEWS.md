@@ -207,7 +207,7 @@ and `edge_nn` ([PR 24](https://github.com/ropensci/spatsoc/pull/24))
 # spatsoc 0.1.8 (2019-04-05)
 
 * update [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html) and
-[Introduction to spatsoc](https://docs.ropensci.org/spatsoc/articles/intro-spatsoc.html) 
+[Introduction to spatsoc](https://docs.ropensci.org/spatsoc/articles/intro.html) 
 vignettes adding entries for edge list generating functions. 
 * added edge list generating function `edge_nn` 
 ([PR 11](https://github.com/ropensci/spatsoc/pull/12))
