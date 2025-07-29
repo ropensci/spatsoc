@@ -1,4 +1,11 @@
-# spatsoc 0.2.9.9000
+# spatsoc 0.2.9.9001
+
+Breaking changes:
+
+* Bug where $Cij != -Cji$ fixed in `edge_delay` , since order of individuals ID1/ID2 should not influence results 
+[PR 106](https://github.com/ropensci/spatsoc/pull/106)
+* Improve output colnames for edge_delay 
+[PR 102](https://github.com/ropensci/spatsoc/pull/102)
 
 New experimental function: 
 
@@ -11,7 +18,7 @@ Fixes:
 [PR 99](https://github.com/ropensci/spatsoc/pull/99))
 * Fix use new GitHub actions [PR 101](https://github.com/ropensci/spatsoc/pull/101)
 * Fix missing keyword internal [PR 98](https://github.com/ropensci/spatsoc/pull/98)
-* Improve output colnames for edge_delay [PR 102](https://github.com/ropensci/spatsoc/pull/102)
+
 * Add test window size for edge_delay [PR 103](https://github.com/ropensci/spatsoc/pull/103)
 
 # spatsoc 0.2.8

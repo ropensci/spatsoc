@@ -117,7 +117,8 @@ edge_delay <- function(
     direction = 'direction') {
   # due to NSE notes in R CMD check
   . <- timegroup <- fusionID <- timegroup_min <- timegroup_max <-
-    timegroup_delay <- ID1  <- ID2 <- direction_delay <- direction_diff <- NULL
+    timegroup_delay <- ID1  <- ID2 <- direction_delay <- direction_diff <-
+    dyadID <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -178,10 +179,7 @@ edge_delay <- function(
     !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))]
 
   # "Forward": all edges ID1 -> ID2
-  forward <- drop_nas[,
-    data.table::first(.SD),
-    by = .(fusionID, timegroup)
-  ]
+  forward <- drop_nas[ID1 == tstrsplit(dyadID, '-')[[1L]]]
 
   forward[, timegroup_min :=
             data.table::fifelse(timegroup - window < min(timegroup),
