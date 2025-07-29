@@ -104,11 +104,11 @@ print(leadership)
 See examples of measuring leadership using the directional correlation
 delay:
 \itemize{
-\item \url{https://doi.org/10.1016/j.anbehav.2013.07.005}
-\item \url{https://doi.org/10.1073/pnas.1305552110}
-\item \url{https://doi.org/10.1126/science.aap7781}
-\item \url{https://doi.org/10.1111/jfb.15315}
-\item \url{https://doi.org/10.1371/journal.pcbi.1003446}
+\item \doi{doi:10.1016/j.anbehav.2013.07.005}
+\item \doi{doi:10.1073/pnas.1305552110}
+\item \doi{doi:10.1126/science.aap7781}
+\item \doi{doi:10.1111/jfb.15315}
+\item \doi{doi:10.1371/journal.pcbi.1003446}
 }
 }
 \seealso{

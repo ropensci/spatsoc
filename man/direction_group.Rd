@@ -76,9 +76,9 @@ direction_group(DT)
 \references{
 See examples of using mean group direction:
 \itemize{
-\item \url{https://doi.org/10.1098/rsos.170148}
-\item \url{https://doi.org/10.1098/rsos.201128}
-\item \url{https://doi.org/10.1016/j.beproc.2018.01.013}
+\item \doi{doi:10.1098/rsos.170148}
+\item \doi{doi:10.1098/rsos.201128}
+\item \doi{doi:10.1016/j.beproc.2018.01.013}
 }
 }
 \seealso{

@@ -94,9 +94,9 @@ distance_to_centroid(
 \references{
 See examples of using distance to group centroid:
 \itemize{
-\item \url{https://doi.org/10.1016/j.anbehav.2021.08.004}
-\item \url{https://doi.org/10.1111/eth.12336}
-\item \url{https://doi.org/10.1007/s13364-018-0400-2}
+\item \doi{doi:10.1016/j.anbehav.2021.08.004}
+\item \doi{doi:10.1111/eth.12336}
+\item \doi{doi:10.1007/s13364-018-0400-2}
 }
 }
 \seealso{

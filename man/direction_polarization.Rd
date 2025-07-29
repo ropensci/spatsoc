@@ -76,9 +76,9 @@ direction_polarization(DT)
 \references{
 See examples of using polarization:
 \itemize{
-\item \url{https://doi.org/10.1016/j.cub.2017.08.004}
-\item \url{https://doi.org/10.1371/journal.pcbi.1009437}
-\item \url{https://doi.org/10.7554/eLife.19505}
+\item \doi{doi:10.1016/j.cub.2017.08.004}
+\item \doi{doi:10.1371/journal.pcbi.1009437}
+\item \doi{doi:10.7554/eLife.19505}
 }
 }
 \seealso{

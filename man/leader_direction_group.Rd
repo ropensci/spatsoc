@@ -116,9 +116,9 @@ leader_direction_group(DT, coords = c('X', 'Y'))
 See examples of measuring leadership along group direction (also called
 forefront index):
 \itemize{
-\item \url{https://doi.org/10.1371/journal.pone.0036567}
-\item \url{https://doi.org/10.1111/jfb.15315}
-\item \url{https://doi.org/10.1098/rspb.2021.0839}
+\item \doi{doi:10.1371/journal.pone.0036567}
+\item \doi{doi:10.1111/jfb.15315}
+\item \doi{doi:10.1098/rspb.2021.0839}
 }
 }
 \seealso{

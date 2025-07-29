@@ -96,9 +96,9 @@ direction_to_leader(DT, coords = c('X', 'Y'))
 \references{
 See examples of using direction to leader and position within group:
 \itemize{
-\item \url{https://doi.org/10.1016/j.anbehav.2023.09.009}
-\item \url{https://doi.org/10.1016/j.beproc.2013.10.007}
-\item \url{https://doi.org/10.1371/journal.pone.0036567}
+\item \doi{doi:10.1016/j.anbehav.2023.09.009}
+\item \doi{doi:10.1016/j.beproc.2013.10.007}
+\item \doi{doi:10.1371/journal.pone.0036567}
 }
 }
 \seealso{
