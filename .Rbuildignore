@@ -12,7 +12,7 @@
 ^CODE_OF_CONDUCT\.md$
 ^CONTRIBUTING\.md$
 Makefile
-^doc$
+^docs$
 ^Meta$
 ^\.github$
 ^CITATION\.cff$

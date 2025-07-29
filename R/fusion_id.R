@@ -48,9 +48,9 @@
 #' @seealso \code{\link{edge_dist}}
 #' @references
 #' See examples of identifying fission-fusion events with spatiotemporal data:
-#'  * <https://doi.org/10.1111/ele.12457>
-#'  * <https://doi.org/10.1016/j.anbehav.2018.03.014>
-#'  * <https://doi.org/10.1890/08-0345.1>
+#'  * \doi{doi:10.1111/ele.12457}
+#'  * \doi{doi:10.1016/j.anbehav.2018.03.014}
+#'  * \doi{doi:10.1890/08-0345.1}
 #' @examples
 #'
 #' # Load data.table

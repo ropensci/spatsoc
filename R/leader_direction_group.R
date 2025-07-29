@@ -55,9 +55,9 @@
 #' @references
 #' See examples of measuring leadership along group direction (also called
 #' forefront index):
-#'  * <https://doi.org/10.1371/journal.pone.0036567>
-#'  * <https://doi.org/10.1111/jfb.15315>
-#'  * <https://doi.org/10.1098/rspb.2021.0839>
+#'  * \doi{doi:10.1371/journal.pone.0036567}
+#'  * \doi{doi:10.1111/jfb.15315}
+#'  * \doi{doi:10.1098/rspb.2021.0839}
 #'
 #' @examples
 #' # Load data.table

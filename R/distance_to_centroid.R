@@ -47,9 +47,9 @@
 #' @seealso [centroid_group], [group_pts]
 #' @references
 #' See examples of using distance to group centroid:
-#'  * <https://doi.org/10.1016/j.anbehav.2021.08.004>
-#'  * <https://doi.org/10.1111/eth.12336>
-#'  * <https://doi.org/10.1007/s13364-018-0400-2>
+#'  * \doi{doi:10.1016/j.anbehav.2021.08.004}
+#'  * \doi{doi:10.1111/eth.12336}
+#'  * \doi{doi:10.1007/s13364-018-0400-2}
 #'
 #' @examples
 #' # Load data.table

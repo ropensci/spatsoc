@@ -39,9 +39,9 @@
 #'
 #' @references
 #' See examples of using mean group direction:
-#'  * <https://doi.org/10.1098/rsos.170148>
-#'  * <https://doi.org/10.1098/rsos.201128>
-#'  * <https://doi.org/10.1016/j.beproc.2018.01.013>
+#'  * \doi{doi:10.1098/rsos.170148}
+#'  * \doi{doi:10.1098/rsos.201128}
+#'  * \doi{doi:10.1016/j.beproc.2018.01.013}
 #'
 #' @examples
 #' # Load data.table

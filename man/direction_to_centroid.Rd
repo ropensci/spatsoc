@@ -69,7 +69,7 @@ direction_to_centroid(DT, coords = c('X', 'Y'))
 \references{
 See example of using direction to group centroid:
 \itemize{
-\item \url{https://doi.org/10.1016/j.cub.2017.08.004}
+\item \doi{doi:10.1016/j.cub.2017.08.004}
 }
 }
 \seealso{

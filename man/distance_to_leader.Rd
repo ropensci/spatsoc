@@ -95,9 +95,9 @@ distance_to_leader(DT, coords = c('X', 'Y'))
 \references{
 See examples of using distance to leader and position within group:
 \itemize{
-\item \url{https://doi.org/10.1111/jfb.15315}
-\item \url{https://doi.org/10.1098/rspb.2017.2629}
-\item \url{https://doi.org/10.1016/j.anbehav.2023.09.009}
+\item \doi{doi:10.1111/jfb.15315}
+\item \doi{doi:10.1098/rspb.2017.2629}
+\item \doi{doi:10.1016/j.anbehav.2023.09.009}
 }
 }
 \seealso{

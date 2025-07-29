@@ -103,9 +103,9 @@ fusion_id(
 \references{
 See examples of identifying fission-fusion events with spatiotemporal data:
 \itemize{
-\item \url{https://doi.org/10.1111/ele.12457}
-\item \url{https://doi.org/10.1016/j.anbehav.2018.03.014}
-\item \url{https://doi.org/10.1890/08-0345.1}
+\item \doi{doi:10.1111/ele.12457}
+\item \doi{doi:10.1016/j.anbehav.2018.03.014}
+\item \doi{doi:10.1890/08-0345.1}
 }
 }
 \seealso{

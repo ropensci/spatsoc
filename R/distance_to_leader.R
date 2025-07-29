@@ -38,9 +38,9 @@
 #' @references
 #'
 #' See examples of using distance to leader and position within group:
-#'  * <https://doi.org/10.1111/jfb.15315>
-#'  * <https://doi.org/10.1098/rspb.2017.2629>
-#'  * <https://doi.org/10.1016/j.anbehav.2023.09.009>
+#'  * \doi{doi:10.1111/jfb.15315}
+#'  * \doi{doi:10.1098/rspb.2017.2629}
+#'  * \doi{doi:10.1016/j.anbehav.2023.09.009}
 #'
 #' @examples
 #' # Load data.table
