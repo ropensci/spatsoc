@@ -20,11 +20,16 @@ name(s) upon which the mean directional correlation delay will be
 calculated}
 }
 \value{
-\code{leader_edge_delay} returns the input \code{edges} appended with
-a \code{mean_direction_delay_dyad} column indicating the mean directional
-correlation delay between ID1 and ID2 and a \code{mean_direction_delay}
-column indicating the mean directional correlation delay for each
-individual in 'ID1' column.
+\code{leader_edge_delay} returns the input \code{edges} aggregated
+with a \code{mean_direction_delay_dyad} column indicating the mean
+directional correlation delay between ID1 and ID2 and a
+\code{mean_direction_delay} column indicating the mean directional
+correlation delay for each individual in 'ID1' column.
+
+Note: since \code{leader_edge_delay} returns an aggregation of the input
+\code{edges}, the output needs to be reassigned unlike some other
+\code{spatsoc} functions like \code{dyad_id}. See details in
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 Given the directional correlation delay, \code{leader_edge_delay}

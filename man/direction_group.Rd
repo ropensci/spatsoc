@@ -25,6 +25,9 @@ which expects units of radians.
 
 A message is returned when the \code{group_direction} columns already
 exists in the input \code{DT}, because it will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{direction_group} calculates the mean direction of all individuals in

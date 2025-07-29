@@ -37,6 +37,9 @@ within group rank distance to group centroid (if \code{return_rank =
 A message is returned when \code{distance_centroid} and optional
 \code{rank_distance_centroid} columns already exist in the input \code{DT},
 because they will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{distance_to_centroid} calculates the distance of each relocation to the

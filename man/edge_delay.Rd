@@ -34,6 +34,10 @@ For example, if focal individual 'A' moves in a 45 degree direction at time
 time 5, the directional correlation delay between A and B is 3. Positive
 values of directional correlation delay indicate a directed leadership edge
 from ID1 to ID2.
+
+Note: due to the merge required within this function, the output needs to be
+reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}.
+See details in \href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{edge_delay} returns edge lists defined by the directional correlation

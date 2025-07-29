@@ -27,6 +27,9 @@ column names prefixed with "centroid_".
 
 A message is returned when centroid columns are already exists in
 the input \code{DT}, because they will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{centroid_group} calculates the centroid (mean location) of all

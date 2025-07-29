@@ -47,6 +47,10 @@ The ID and NN columns represent the edges defined by the nearest neighbours
 If an individual was alone in a timegroup or splitBy, or did not have any
 neighbours within the threshold distance, they are assigned NA for nearest
 neighbour.
+
+Note: unlike many other functions (eg. \code{group_pts}) in \code{spatsoc},
+\code{edge_nn} needs to be reassigned. See details in
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{edge_nn} returns edge lists defined by the nearest neighbour. The
