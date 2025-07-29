@@ -72,6 +72,9 @@
 #'   A message is returned when a column named "group" already exists in the
 #'   input `DT`, because it will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #' @inheritParams group_pts
 #' @inheritParams build_polys
 #' @param threshold The width of the buffer around the lines in the units of the

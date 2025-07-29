@@ -42,7 +42,8 @@
 #'
 #'  Note: due to the merge required within this function, the output needs to be
 #'  reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
-#'  and \code{group_pts}.
+#'  and \code{group_pts}. See details in
+#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #'   A message is returned when centroid columns are already exists in
 #'   the input \code{edges}, because they will be overwritten.

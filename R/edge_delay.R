@@ -42,6 +42,10 @@
 #'   values of directional correlation delay indicate a directed leadership edge
 #'   from ID1 to ID2.
 #'
+#'  Note: due to the merge required within this function, the output needs to be
+#'  reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}.
+#'  See details in [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #' @export
 #'
 #' @references

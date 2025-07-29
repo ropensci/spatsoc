@@ -24,6 +24,9 @@ leader.
 
 A message is returned when the \code{distance_leader} column already
 exist in the input \code{DT} because it will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{distance_to_leader} calculates the distance to the leader of each

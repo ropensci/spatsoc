@@ -43,6 +43,9 @@
 #'   A message is returned when a direction column are already exists in
 #'   the input \code{DT}, because it will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #' @inheritParams group_pts
 #' @inheritParams build_polys
 #'

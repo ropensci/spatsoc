@@ -58,6 +58,10 @@ already exists in the input \code{DT}, because it will be overwritten.
 Along with changes to follow the R-spatial evolution, \code{group_polys} also
 now returns area and proportion of overlap with units explicitly specified
 through the \code{units} package.
+
+Note: if area is TRUE, the output of \code{group_polys} needs to be
+reassigned. See details in
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{group_polys} groups rows into spatial groups by overlapping polygons (home

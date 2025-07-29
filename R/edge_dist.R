@@ -58,6 +58,10 @@
 #'   The ID1 and ID2 columns represent the edges defined by the spatial (and
 #'   temporal with \code{group_times}) thresholds.
 #'
+#'  Note: unlike many other functions (eg. \code{group_pts}) in \code{spatsoc},
+#'  \code{edge_dist} needs to be reassigned. See details in
+#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #' @export
 #'
 #' @family Edge-list generation

@@ -15,7 +15,10 @@
 #'   `edge_dist` or `edge_nn`
 #'
 #' @return `dyad_id` returns the input `data.table` with appended "dyadID"
-#'   column
+#'   column.
+#'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
 #'

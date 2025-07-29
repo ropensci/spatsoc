@@ -38,6 +38,9 @@ would not.
 
 A message is returned when a column named \code{fusionID} already exists in
 the input \code{edges}, because it will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{fusion_id} identifies fusion events in distance based edge lists.

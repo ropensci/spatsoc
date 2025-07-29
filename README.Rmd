@@ -129,30 +129,30 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 ### Temporal grouping
 `group_times` groups rows temporally using a threshold defined in units of minutes (B), hours (C) or days (D). 
 
-<img src="man/figures/fig1.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig1.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Temporal grouping using a threshold defined in units of minutes (B), hours (C) or days (D)"/>
 
 ### Spatial grouping 
 `group_pts` groups points spatially using a distance matrix (B) and a spatial threshold defined by the user (50m in this case). Combined with `group_times`, the returned 'group' column represents spatiotemporal, point based groups (D). 
 
 
-<img src="man/figures/fig2.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig2.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Spatiotemporal grouping (A) defined using a threshold on a distance matrix (B), returning a spatiotemporal group (C, D)"/>
 
 `group_lines` groups sequences of points (forming a line) spatially by buffering each line (A) by the user defined spatial threshold. Combined with `group_times`, the returned 'group' column represents spatiotemporal, line overlap based groups (B). 
 
-<img src="man/figures/fig3.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig3.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Spatiotemporal grouping based on overlap of movement trajectories"/>
 
 
 
 `group_polys` groups home ranges by spatial and proportional overlap. Combined with `group_times`, the returned 'group' column represents spatiotemporal, polygon overlap based groups. 
 
 
-<img src="man/figures/fig4.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig4.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Spatiotemporal grouping based on overlap of home ranges"/>
 
 
 ### Edge-list generating functions
 `edge_dist` and `edge_nn` generate edge-lists. `edge_dist` measures the spatial distance between individuals (A) and returns all pairs within the user specified distance threshold (B). `edge_nn` measures the distance between individuals (C) and returns the nearest neighbour to each individual (D). 
 
-<img src="man/figures/fig5.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig5.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Edge-list generation of neighbours within a specified distance (A, B) and nearest neighbours (C, D)"/>
 
 ### Social network analysis functions
 `randomizations` for data-stream randomization and `get_gbi` for generating group by individual matrices. 

@@ -21,6 +21,9 @@ of 0 to 2 * pi from the positive x-axis.
 
 A message is returned when \code{direction_centroid} column already exist
 in the input \code{DT}, because they will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{direction_to_centroid} calculates the direction of each relocation to

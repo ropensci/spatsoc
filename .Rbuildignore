@@ -18,3 +18,4 @@ Makefile
 ^CITATION\.cff$
 ^CRAN-SUBMISSION$
 ^data-raw$
+^doc$

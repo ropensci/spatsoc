@@ -29,6 +29,9 @@
 #'   A message is returned when \code{direction_centroid} column already exist
 #'   in the input \code{DT}, because they will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #' @export
 #' @family Direction functions
 #' @family Centroid functions

@@ -42,6 +42,9 @@ indicating the ranked position along the group direction.
 A message is returned when \code{position_group_direction} or
 \code{rank_position_group_direction} columns already exist in the input
 \code{DT}, because they will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 Given the mean direction of a group of individuals,

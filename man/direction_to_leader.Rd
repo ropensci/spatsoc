@@ -25,6 +25,9 @@ individual equal the coordinates of the leader.
 
 A message is returned when the \code{direction_leader} column already
 exist in the input \code{DT} because it will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{direction_to_leader} calculates the direction to the leader of each

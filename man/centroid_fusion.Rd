@@ -42,7 +42,8 @@ provided coordinate column names prefixed with "centroid_".
 
 Note: due to the merge required within this function, the output needs to
 be reassigned unlike some other \code{spatsoc} functions like
-\code{fusion_id} and \code{group_pts}.
+\code{fusion_id} and \code{group_pts}. See details in
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 
 A message is returned when centroid columns are already exists in the input
 \code{edges}, because they will be overwritten.

@@ -59,6 +59,9 @@ each group would not.
 
 A message is returned when a column named "group" already exists in the
 input \code{DT}, because it will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{group_lines} groups rows into spatial groups by generating LINESTRINGs and

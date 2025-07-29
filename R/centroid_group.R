@@ -32,6 +32,9 @@
 #'   A message is returned when centroid columns are already exists in
 #'   the input \code{DT}, because they will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #' @export
 #' @seealso \code{\link{group_pts}}
 #' @family Centroid functions
