@@ -91,9 +91,14 @@ test_that('no rows are added to the result DT', {
 test_that('one column added to the result DT', {
   copyDT <- copy(clean_DT)
 
-  expect_equal(ncol(copyDT) + 1,
+  expect_equal(ncol(clean_DT) + 1,
                ncol(direction_to_leader(copyDT,
                                         coords = coords, group = group)))
+
+  # And check modifies by reference
+  copyDT <- copy(clean_DT)
+  direction_to_leader(copyDT, coords = coords, group = group)
+  expect_equal(ncol(clean_DT) + 1, ncol(copyDT))
 })
 
 test_that('column added to the result DT is a double', {
