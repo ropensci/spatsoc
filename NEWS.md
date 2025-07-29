@@ -3,9 +3,9 @@
 Breaking changes:
 
 * Bug where $Cij != -Cji$ fixed in `edge_delay` , since order of individuals ID1/ID2 should not influence results 
-[PR 106](https://github.com/ropensci/spatsoc/pull/106)
+([PR 106](https://github.com/ropensci/spatsoc/pull/106))
 * Improve output colnames for edge_delay 
-[PR 102](https://github.com/ropensci/spatsoc/pull/102)
+([PR 102](https://github.com/ropensci/spatsoc/pull/102))
 
 New experimental function: 
 
@@ -16,10 +16,11 @@ Fixes:
 
 * Fix {units} version requirement ([PR 96](https://github.com/ropensci/spatsoc/pull/96), 
 [PR 99](https://github.com/ropensci/spatsoc/pull/99))
-* Fix use new GitHub actions [PR 101](https://github.com/ropensci/spatsoc/pull/101)
-* Fix missing keyword internal [PR 98](https://github.com/ropensci/spatsoc/pull/98)
-
-* Add test window size for edge_delay [PR 103](https://github.com/ropensci/spatsoc/pull/103)
+* Fix use new GitHub actions ([PR 101](https://github.com/ropensci/spatsoc/pull/101))
+* Fix missing keyword internal ([PR 98](https://github.com/ropensci/spatsoc/pull/98))
+* Add test window size for edge_delay ([PR 103](https://github.com/ropensci/spatsoc/pull/103))
+* Improve documentation of which functions use modify-by-reference 
+([PR 109](https://github.com/ropensci/spatsoc/pull/109))
 
 # spatsoc 0.2.8
 
