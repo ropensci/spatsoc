@@ -33,6 +33,8 @@ the `group_*` functions as usual.
 
 
 ```{r}
+#| fig.alt: >
+#|   Predator prey interactions
 predator <- fread(system.file("extdata", "DT_predator.csv", package = "spatsoc"))
 prey <- fread(system.file("extdata", "DT_prey.csv", package = "spatsoc"))
 
