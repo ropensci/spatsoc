@@ -117,7 +117,8 @@ edge_delay <- function(
     direction = 'direction') {
   # due to NSE notes in R CMD check
   . <- timegroup <- fusionID <- timegroup_min <- timegroup_max <-
-    timegroup_delay <- ID1  <- ID2 <- direction_delay <- direction_diff <- NULL
+    timegroup_delay <- ID1  <- ID2 <- direction_delay <- direction_diff <-
+    dyadID <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
