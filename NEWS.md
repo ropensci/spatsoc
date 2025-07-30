@@ -1,4 +1,4 @@
-# spatsoc 0.2.9.9001
+# spatsoc 0.2.9
 
 Breaking changes:
 
