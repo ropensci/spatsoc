@@ -93,7 +93,7 @@ edge_bearing <- function(DT = NULL,
               renamed to "split_by" to avoid confusion with the argument
               "splitBy"')
     )
-    setnames(DT, 'splitBy', 'split_by')
+    data.table::setnames(DT, 'splitBy', 'split_by')
   }
 
   if (is.null(threshold)) {
