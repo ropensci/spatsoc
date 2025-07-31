@@ -165,7 +165,7 @@ group_lines <-
         stop('id must be provided')
       }
 
-      if (uniqueN(sfLines[[id]]) != nrow(sfLines)) {
+      if (data.table::uniqueN(sfLines[[id]]) != nrow(sfLines)) {
         stop('number of unique values in sfLines does not match nrow(sfLines)')
       }
 
@@ -211,7 +211,7 @@ group_lines <-
 
       if ('group' %in% colnames(DT)) {
         message('group column will be overwritten by this function')
-        set(DT, j = 'group', value = NULL)
+        data.table::set(DT, j = 'group', value = NULL)
       }
     }
 
@@ -308,7 +308,7 @@ group_lines <-
       DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
       DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
          by = c(splitBy, 'withinGroup')]
-      set(DT, j = 'withinGroup', value = NULL)
+      data.table::set(DT, j = 'withinGroup', value = NULL)
       if (DT[is.na(group), .N] > 0) {
         warning(
           strwrap(
