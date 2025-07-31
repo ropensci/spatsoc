@@ -1,6 +1,6 @@
 #' Group Points
 #'
-#' \code{group_pts} groups rows into spatial groups. The function accepts a
+#' \code{group_pts} groups rows into spatial groups. The function expects a
 #' \code{data.table} with relocation data, individual identifiers and a
 #' threshold argument. The threshold argument is used to specify the criteria
 #' for distance between points which defines a group. Relocation data should be
@@ -8,7 +8,8 @@
 #'
 #' The \code{DT} must be a \code{data.table}. If your data is a
 #' \code{data.frame}, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}}.
+#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
+#' \code{\link[data.table:data.table]{data.table::data.table}}.
 #'
 #' The \code{id}, \code{coords}, \code{timegroup} (and optional \code{splitBy})
 #' arguments expect the names of a column in \code{DT} which correspond to the
@@ -50,12 +51,15 @@
 #'   A message is returned when a column named \code{group} already exists in
 #'   the input \code{DT}, because it will be overwritten.
 #'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @param DT input data.table
 #' @param threshold distance for grouping points, in the units of the
 #'   coordinates
-#' @param id Character string of ID column name
-#' @param coords Character vector of X coordinate and Y coordinate column names
+#' @param id character string of ID column name
+#' @param coords character vector of X coordinate and Y coordinate column names.
+#' Note: the order is assumed X followed by Y column names.
 #' @param timegroup timegroup field in the DT within which the grouping will be
 #'   calculated
 #' @param splitBy (optional) character string or vector of grouping column

@@ -1,8 +1,10 @@
-context("test-edge-nn")
+# Test edge_nn
+context('test-edge-nn')
 
 library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
+group_times(DT, 'datetime', '10 minutes')
 
 test_that('DT is required', {
   expect_error(edge_nn(
@@ -111,7 +113,7 @@ test_that('coords are correctly provided or error detected', {
       DT,
       id = 'ID',
       coords = c('X', 'ID'),
-      timegroup = NULL
+      timegroup = 'timegroup'
     ),
     'coords must be numeric'
   )
@@ -299,7 +301,7 @@ test_that('returns a data.table', {
     DT,
     id = 'ID',
     coords = c('X', 'Y'),
-    timegroup = NULL
+    timegroup = 'timegroup'
   ), 'data.table')
 })
 
@@ -316,8 +318,20 @@ test_that('warns about splitBy column', {
       copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
-      timegroup = NULL
+      timegroup = 'timegroup'
     ),
     'split_by'
+  )
+})
+
+test_that({'errors if timegroup is null'}, {
+  expect_error(
+    edge_nn(
+      DT,
+      threshold = NULL,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = NULL
+    )
   )
 })

@@ -1,9 +1,9 @@
 # Test group_times
 context('test group_times')
+
 library(spatsoc)
 
 DT <- fread('../testdata/DT.csv', tz = 'UTC')
-# Sys.setenv(TZ='GMT')
 
 test_that('DT is required', {
   expect_error(group_times(DT = NULL,
@@ -292,7 +292,8 @@ test_that('group_times nearest hour with minutes threshold', {
 })
 
 
-test_that('timegroups are based off years but blocks are consistent across all years', {
+test_that(
+  'timegroups are based off years but blocks are consistent across all years', {
   copyDT <- copy(DT)
   copyDT[, datetime := as.POSIXct(datetime)]
   suppressWarnings(group_times(copyDT, 'datetime', '10 days'))
@@ -303,7 +304,8 @@ test_that('timegroups are based off years but blocks are consistent across all y
     nrow(foverlaps(blocks, blocks)) == nrow(blocks)
   )
 
-  # need multi year data for same jul days to test if n years by block > 1, but n years by timegroup == 1
+  # need multi year data for same jul days to test if
+  # n years by block > 1, but n years by timegroup == 1
 })
 
 

@@ -1,7 +1,7 @@
 #' Group Polygons
 #'
 #' `group_polys` groups rows into spatial groups by overlapping polygons (home
-#' ranges). The function accepts a `data.table` with relocation data, individual
+#' ranges). The function expects a `data.table` with relocation data, individual
 #' identifiers and an `area` argument.  The relocation data is transformed into
 #' home range POLYGONs using [build_polys()] with [adehabitatHR::mcp] or
 #' [adehabitatHR::kernelUD]. If the `area` argument is `FALSE`, `group_polys`
@@ -64,6 +64,11 @@
 #'   Along with changes to follow the R-spatial evolution, `group_polys` also
 #'   now returns area and proportion of overlap with units explicitly specified
 #'   through the `units` package.
+#'
+#'  Note: if area is TRUE, the output of \code{group_polys} needs to be
+#'  reassigned. See details in
+#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
 #'
 #' @inheritParams group_pts
 #' @inheritParams group_lines
@@ -194,7 +199,8 @@ group_polys <-
         out_disjointed <- data.frame(
           ID1 = sfPolys[[id]][disjointed$row.id],
           ID2 = sfPolys[[id]][disjointed$col.id],
-          area = rep(units::as_units(0, units(out_inter$area)), nrow(disjointed)),
+          area = rep(units::as_units(0, units(out_inter$area)),
+                     nrow(disjointed)),
           proportion = rep(units::set_units(0, 'percent'), nrow(disjointed))
         )
         out <- rbind(out_inter, out_disjointed)
@@ -314,13 +320,19 @@ group_polys <-
               out_disjointed <- data.frame(
                 ID1 = sfPolys[[id]][disjointed$row.id],
                 ID2 = sfPolys[[id]][disjointed$col.id],
-                area = rep(units::as_units(0, units(out_inter$area)),
-                           nrow(disjointed)),
-                proportion = rep(units::set_units(0, 'percent'), nrow(disjointed))
+                area = rep(
+                  units::as_units(0, units(out_inter$area)),
+                  nrow(disjointed)
+                ),
+                proportion = rep(
+                  units::set_units(0, 'percent'),
+                  nrow(disjointed)
+                )
               )
               out <- rbind(out_inter, out_disjointed)
 
-              data.table::setcolorder(out, c('ID1', 'ID2', 'area', 'proportion'))
+              data.table::setcolorder(out,
+                                      c('ID1', 'ID2', 'area', 'proportion'))
               out
             } else {
               out <- data.table(ID = get(..id),

@@ -30,9 +30,10 @@ area and proportion of overlap (when \code{TRUE})}
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \code{projection = "EPSG:32736"} or \code{projection = 32736}.}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
 
 \item{splitBy}{(optional) character string or vector of grouping column
 name(s) upon which the grouping will be calculated}
@@ -57,10 +58,14 @@ already exists in the input \code{DT}, because it will be overwritten.
 Along with changes to follow the R-spatial evolution, \code{group_polys} also
 now returns area and proportion of overlap with units explicitly specified
 through the \code{units} package.
+
+Note: if area is TRUE, the output of \code{group_polys} needs to be
+reassigned. See details in
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{group_polys} groups rows into spatial groups by overlapping polygons (home
-ranges). The function accepts a \code{data.table} with relocation data, individual
+ranges). The function expects a \code{data.table} with relocation data, individual
 identifiers and an \code{area} argument.  The relocation data is transformed into
 home range POLYGONs using \code{\link[=build_polys]{build_polys()}} with \link[adehabitatHR:mcp]{adehabitatHR::mcp} or
 \link[adehabitatHR:kernelUD]{adehabitatHR::kernelUD}. If the \code{area} argument is \code{FALSE}, \code{group_polys}

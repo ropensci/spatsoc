@@ -1,5 +1,6 @@
 # Test group_polys
 context('test group_polys')
+
 library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
@@ -24,6 +25,10 @@ test_that('DT or spPts are required but not both', {
     area = FALSE
   ),
   'cannot provide both DT and sfPolys')
+})
+
+test_that('id required', {
+  expect_error(group_polys(DT, area = TRUE, id = NULL), 'id')
 })
 
 test_that('area provided and logical, or error', {

@@ -17,9 +17,10 @@ edge_nn(
 \arguments{
 \item{DT}{input data.table}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
 
 \item{timegroup}{timegroup field in the DT within which the grouping will be
 calculated}
@@ -46,10 +47,14 @@ The ID and NN columns represent the edges defined by the nearest neighbours
 If an individual was alone in a timegroup or splitBy, or did not have any
 neighbours within the threshold distance, they are assigned NA for nearest
 neighbour.
+
+Note: unlike many other functions (eg. \code{group_pts}) in \code{spatsoc},
+\code{edge_nn} needs to be reassigned. See details in
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{edge_nn} returns edge lists defined by the nearest neighbour. The
-function accepts a \code{data.table} with relocation data, individual
+function expects a \code{data.table} with relocation data, individual
 identifiers and a threshold argument. The threshold argument is used to
 specify the criteria for distance between points which defines a group.
 Relocation data should be in two columns representing the X and Y
@@ -119,6 +124,12 @@ edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 }
 \seealso{
 Other Edge-list generation: 
+\code{\link{edge_delay}()},
 \code{\link{edge_dist}()}
+
+Other Distance functions: 
+\code{\link{distance_to_centroid}()},
+\code{\link{distance_to_leader}()}
 }
+\concept{Distance functions}
 \concept{Edge-list generation}

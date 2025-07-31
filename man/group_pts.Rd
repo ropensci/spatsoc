@@ -19,9 +19,10 @@ group_pts(
 \item{threshold}{distance for grouping points, in the units of the
 coordinates}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
 
 \item{timegroup}{timegroup field in the DT within which the grouping will be
 calculated}
@@ -41,9 +42,12 @@ change, but the contents of each group would not.
 
 A message is returned when a column named \code{group} already exists in
 the input \code{DT}, because it will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
-\code{group_pts} groups rows into spatial groups. The function accepts a
+\code{group_pts} groups rows into spatial groups. The function expects a
 \code{data.table} with relocation data, individual identifiers and a
 threshold argument. The threshold argument is used to specify the criteria
 for distance between points which defines a group. Relocation data should be
@@ -52,7 +56,8 @@ in two columns representing the X and Y coordinates.
 \details{
 The \code{DT} must be a \code{data.table}. If your data is a
 \code{data.frame}, you can convert it by reference using
-\code{\link[data.table:setDT]{data.table::setDT}}.
+\code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
+\code{\link[data.table:data.table]{data.table::data.table}}.
 
 The \code{id}, \code{coords}, \code{timegroup} (and optional \code{splitBy})
 arguments expect the names of a column in \code{DT} which correspond to the

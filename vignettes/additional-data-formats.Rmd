@@ -2,7 +2,7 @@
 title: "Additional data formats"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{additional-data-formats}
+  %\VignetteIndexEntry{Additional data formats}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -33,6 +33,8 @@ the `group_*` functions as usual.
 
 
 ```{r}
+#| fig.alt: >
+#|   Predator prey interactions
 predator <- fread(system.file("extdata", "DT_predator.csv", package = "spatsoc"))
 prey <- fread(system.file("extdata", "DT_prey.csv", package = "spatsoc"))
 
@@ -46,7 +48,8 @@ DT[, datetime := as.POSIXct(datetime)]
 group_times(DT, datetime = 'datetime', threshold = '10 minutes')
 
 # Spatial grouping
-group_pts(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+group_pts(DT, threshold = 50, id = 'ID', 
+          coords = c('X', 'Y'), timegroup = 'timegroup')
 
 
 # Calculate the number of types within each group

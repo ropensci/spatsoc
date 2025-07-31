@@ -2,7 +2,7 @@
 #'
 #'
 #' \code{edge_nn} returns edge lists defined by the nearest neighbour. The
-#' function accepts a \code{data.table} with relocation data, individual
+#' function expects a \code{data.table} with relocation data, individual
 #' identifiers and a threshold argument. The threshold argument is used to
 #' specify the criteria for distance between points which defines a group.
 #' Relocation data should be in two columns representing the X and Y
@@ -58,9 +58,15 @@
 #'   neighbours within the threshold distance, they are assigned NA for nearest
 #'   neighbour.
 #'
+#'  Note: unlike many other functions (eg. \code{group_pts}) in \code{spatsoc},
+#'  \code{edge_nn} needs to be reassigned. See details in
+#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
+#'
 #' @export
 #'
 #' @family Edge-list generation
+#' @family Distance functions
 #'
 #' @examples
 #' # Load data.table
@@ -124,7 +130,7 @@ edge_nn <- function(DT = NULL,
     stop('coords requires a vector of column names for coordinates X and Y')
   }
 
-  if (missing(timegroup)) {
+  if (missing(timegroup) | is.null(timegroup)) {
     stop('timegroup required')
   }
 
@@ -144,18 +150,16 @@ edge_nn <- function(DT = NULL,
     stop('coords must be numeric')
   }
 
-  if (!is.null(timegroup)) {
-    if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
-            c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
-      warning(
-        strwrap(
-          prefix = " ",
-          initial = "",
-          x = 'timegroup provided is a date/time
-          or character type, did you use group_times?'
-        )
+  if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+          c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+    warning(
+      strwrap(
+        prefix = " ",
+        initial = "",
+        x = 'timegroup provided is a date/time
+        or character type, did you use group_times?'
       )
-    }
+    )
   }
 
   if ('splitBy' %in% colnames(DT)) {
@@ -168,21 +172,17 @@ edge_nn <- function(DT = NULL,
   }
 
 
-  if (is.null(timegroup) && is.null(splitBy)) {
-    splitBy <- NULL
-  } else {
-    splitBy <- c(splitBy, timegroup)
-    if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
-      warning(
-        strwrap(
-          prefix = " ",
-          initial = "",
-          x = 'found duplicate id in a
-          timegroup and/or splitBy -
-          does your group_times threshold match the fix rate?'
-        )
+  splitBy <- c(splitBy, timegroup)
+  if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
+    warning(
+      strwrap(
+        prefix = " ",
+        initial = "",
+        x = 'found duplicate id in a
+        timegroup and/or splitBy -
+        does your group_times threshold match the fix rate?'
       )
-    }
+    )
   }
 
   DT[, {

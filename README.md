@@ -10,8 +10,9 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.rep
 [![CRAN](https://www.r-pkg.org/badges/version/spatsoc)](https://cran.r-project.org/package=spatsoc)
 [![cran
 checks](https://cranchecks.info/badges/summary/spatsoc)](https://cran.r-project.org/web/checks/check_results_spatsoc.html)
-[![codecov](https://app.codecov.io/gh/ropensci/spatsoc/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ropensci/spatsoc)
 [![R-CMD-check](https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/ropensci/spatsoc/graph/badge.svg)](https://app.codecov.io/gh/ropensci/spatsoc)
 <!-- badges: end -->
 
 ### [News](#news) - [Installation](#installation) - [Usage](#usage) - [Contributing](#contributing)
@@ -31,7 +32,7 @@ For more details, see the [blog
 post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
 - [Introduction to
-  spatsoc](https://docs.ropensci.org/spatsoc/articles/intro-spatsoc.html)
+  spatsoc](https://docs.ropensci.org/spatsoc/articles/spatsoc.html)
 - [Frequently asked
   questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
 - [Using spatsoc in social network
@@ -144,7 +145,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 `group_times` groups rows temporally using a threshold defined in units
 of minutes (B), hours (C) or days (D).
 
-<img src="man/figures/fig1.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig1.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Temporal grouping using a threshold defined in units of minutes (B), hours (C) or days (D)"/>
 
 ### Spatial grouping
 
@@ -153,20 +154,20 @@ spatial threshold defined by the user (50m in this case). Combined with
 `group_times`, the returned ‘group’ column represents spatiotemporal,
 point based groups (D).
 
-<img src="man/figures/fig2.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig2.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Spatiotemporal grouping (A) defined using a threshold on a distance matrix (B), returning a spatiotemporal group (C, D)"/>
 
 `group_lines` groups sequences of points (forming a line) spatially by
 buffering each line (A) by the user defined spatial threshold. Combined
 with `group_times`, the returned ‘group’ column represents
 spatiotemporal, line overlap based groups (B).
 
-<img src="man/figures/fig3.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig3.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Spatiotemporal grouping based on overlap of movement trajectories"/>
 
 `group_polys` groups home ranges by spatial and proportional overlap.
 Combined with `group_times`, the returned ‘group’ column represents
 spatiotemporal, polygon overlap based groups.
 
-<img src="man/figures/fig4.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig4.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Spatiotemporal grouping based on overlap of home ranges"/>
 
 ### Edge-list generating functions
 
@@ -176,7 +177,7 @@ the user specified distance threshold (B). `edge_nn` measures the
 distance between individuals (C) and returns the nearest neighbour to
 each individual (D).
 
-<img src="man/figures/fig5.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;"/>
+<img src="man/figures/fig5.png" style="max-height:400px; display:block; margin-left: auto; margin-right: auto;" alt="Edge-list generation of neighbours within a specified distance (A, B) and nearest neighbours (C, D)"/>
 
 ### Social network analysis functions
 

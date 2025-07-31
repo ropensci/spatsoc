@@ -3,7 +3,6 @@
 \docType{package}
 \name{spatsoc}
 \alias{spatsoc}
-\alias{_PACKAGE}
 \alias{spatsoc-package}
 \title{spatsoc}
 \description{

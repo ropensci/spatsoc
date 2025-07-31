@@ -51,12 +51,24 @@ knitr::kable(DT[, .SD[1:2], ID][order(ID)])
 ```
 
 
-`spatsoc` expects a `data.table` for all of its functions. If you have a `data.frame`, you can use `data.table::setDT()` to convert it by reference. If your data is a CSV, you can use `data.table::fread()` to import it as a `data.table`. 
+`spatsoc` expects a `data.table` for all of its functions. If you have a
+`data.frame`, you can use `data.table::setDT()` to convert it by reference. If
+your data is a CSV, you can use `data.table::fread()` to import it as a
+`data.table`.
 
-The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r DT[, max(yday(datetime)) - min(yday(datetime))]` days. Using these data, we can compare the various grouping methods available in `spatsoc`. Note: these examples will use a subset of the data, only individuals H, I and J. 
+The data consist of relocations of `r DT[, uniqueN(ID)]` individuals over `r
+DT[, max(yday(datetime)) - min(yday(datetime))]` days. Using these data, we can
+compare the various grouping methods available in `spatsoc`. Note: these
+examples will use a subset of the data, only individuals H, I and J.
 
 ## Temporal grouping
-The `group_times` function is used to group relocations temporally. It is flexible to a threshold provided in units of minutes, hours or days. Since GPS fixes taken at regular intervals have some level of variability, we will provide a time threshold (`threshold`), to consider all fixes within this threshold taken at the same time. Alternatively, we may want to understand different scales of grouping, perhaps daily movement trajectories or seasonal home range overlap. 
+The `group_times` function is used to group relocations temporally. It is
+flexible to a threshold provided in units of minutes, hours or days. Since GPS
+fixes taken at regular intervals have some level of variability, we will provide
+a time threshold (`threshold`), to consider all fixes within this threshold
+taken at the same time. Alternatively, we may want to understand different
+scales of grouping, perhaps daily movement trajectories or seasonal home range
+overlap.
 
 ```{r groupmins, echo = TRUE}
 group_times(DT, datetime = 'datetime', threshold = '5 minutes')
@@ -95,12 +107,23 @@ group_times(DT, datetime = 'datetime', threshold = '5 days')
 
 ```{r tabgroupdays, eval = TRUE}
 knitr::kable(
-  group_times(DT, threshold = '5 days', datetime = 'datetime')[, .SD[sample(.N, 3)], by = .(timegroup, block)][order(datetime)][
-        1:nRows, .(ID, X, Y, datetime, block, timegroup)])
+  group_times(
+    DT, 
+    threshold = '5 days', 
+    datetime = 'datetime')[,
+      .SD[sample(.N, 3)], by = .(timegroup, block)][order(datetime)][
+        1:nRows, .(ID, X, Y, datetime, block, timegroup)]
+)
 ```
 
 ## Spatial grouping
-The `group_pts` function compares the relocations of all individuals in each timegroup and groups individuals based on a distance threshold provided by the user. The `group_pts` function uses the "chain rule" where three or more individuals that are all within the defined threshold distance of at least one other individual are considered in the same group. For point based spatial grouping with a distance threshold that does not use the chain rule, see `edge_dist` below.
+The `group_pts` function compares the relocations of all individuals in each
+timegroup and groups individuals based on a distance threshold provided by the
+user. The `group_pts` function uses the "chain rule" where three or more
+individuals that are all within the defined threshold distance of at least one
+other individual are considered in the same group. For point based spatial
+grouping with a distance threshold that does not use the chain rule, see
+`edge_dist` below.
 
 ```{r grouppts, echo = TRUE}
 group_times(DT = DT, datetime = 'datetime', threshold = '15 minutes')
@@ -123,7 +146,10 @@ knitr::kable(
 ```
 
 
-The `group_lines` function groups individuals whose trajectories intersect in a specified time interval. This represents a coarser grouping method than `group_pts` which can help understand shared space at daily, weekly or other temporal resolutions.
+The `group_lines` function groups individuals whose trajectories intersect in a
+specified time interval. This represents a coarser grouping method than
+`group_pts` which can help understand shared space at daily, weekly or other
+temporal resolutions.
 
 ```{r fakegrouplines, echo = TRUE}
 utm <- 32736
@@ -149,9 +175,13 @@ knitr::kable(
 ```
 
 
-The `group_polys` function groups individuals whose home ranges intersect. This represents the coarsest grouping method, to provide a measure of overlap across seasons, years or all available relocations. It can either return the proportion of home range area overlapping between individuals or simple groups. Home ranges are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`. Alternatively, a 
-simple features POLYGON or MULTIPOLYGON object can be provided to the `sfPolys`
-argument along with an id column. 
+The `group_polys` function groups individuals whose home ranges intersect. This
+represents the coarsest grouping method, to provide a measure of overlap across
+seasons, years or all available relocations. It can either return the proportion
+of home range area overlapping between individuals or simple groups. Home ranges
+are calculated using `adehabitatHR::kernelUD` or `adehabitatHR::mcp`.
+Alternatively, a simple features POLYGON or MULTIPOLYGON object can be provided
+to the `sfPolys` argument along with an id column.
 
 ```{r fakegrouppolys, echo = TRUE}
 utm <- 32736
@@ -177,24 +207,32 @@ knitr::kable(
 ```
 
 ## Edge list generation
-The `edge_dist` function calculates the geographic distance between between individuals within each timegroup and returns all paired relocations within the spatial threshold. `edge_dist` uses a distance matrix like group_pts, but, in contrast, does not use the chain rule to group relocations.
+The `edge_dist` function calculates the geographic distance between between
+individuals within each timegroup and returns all paired relocations within the
+spatial threshold. `edge_dist` uses a distance matrix like group_pts, but, in
+contrast, does not use the chain rule to group relocations.
 
 ```{r edgedist, echo = TRUE}
 group_times(DT = DT, datetime = 'datetime', threshold = '15 minutes')
-edge_dist(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
+edge_dist(DT, threshold = 50, id = 'ID', 
+          coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
 ```
 
 ```{r fakeedgedist, eval = TRUE}
 DT <- group_times(DT = DT, datetime = 'datetime', 
                      threshold = '15 minutes')
-edges <- edge_dist(DT, threshold = 50, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
+edges <- edge_dist(DT, threshold = 50, id = 'ID', 
+                   coords = c('X', 'Y'), timegroup = 'timegroup', fillNA = TRUE)
 
 knitr::kable(
   edges[between(timegroup, 158, 160)]
 )
 ```
 
-The `edge_nn` function calculates the nearest neighbour to each individual within each time group. If the optional distance threshold is provided, it is used to limit the maximum distance between neighbours. `edge_nn` returns an edge list of each individual and their nearest neighbour.
+The `edge_nn` function calculates the nearest neighbour to each individual
+within each time group. If the optional distance threshold is provided, it is
+used to limit the maximum distance between neighbours. `edge_nn` returns an edge
+list of each individual and their nearest neighbour.
 
 ```{r edgenn, echo = TRUE}
 group_times(DT = DT, datetime = 'datetime', threshold = '15 minutes')
@@ -211,5 +249,3 @@ knitr::kable(
 )
 ```
 
-## Notes
-Package dependencies for `spatsoc` are `sp`, `rgeos`, `igraph`, `adehabitatHR` and `data.table`. `data.table` provides efficient methods for manipulating large (or small) datasets. As a result, input `DT` for all `spatsoc` functions must be a `data.table` and if it isn't, you can simply use `data.table::setDT(df)` to convert it by reference. 

@@ -26,9 +26,10 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 
 \item{hrParams}{a named list of parameters for \code{adehabitatHR} functions}
 
-\item{id}{Character string of ID column name}
+\item{id}{character string of ID column name}
 
-\item{coords}{Character vector of X coordinate and Y coordinate column names}
+\item{coords}{character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
 
 \item{splitBy}{(optional) character string or vector of grouping column
 name(s) upon which the grouping will be calculated}
@@ -46,7 +47,7 @@ of the respective \code{hrType} \code{adehabitatHR} function.
 }
 \description{
 \code{build_polys} generates a simple feature collection with POLYGONs from a
-\code{data.table}. The function accepts a \code{data.table} with
+\code{data.table}. The function expects a \code{data.table} with
 relocation data, individual identifiers, a projection,
 home range type and parameters. The relocation
 data is transformed into POLYGONs using either \link[adehabitatHR:mcp]{adehabitatHR::mcp} or

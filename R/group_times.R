@@ -1,6 +1,6 @@
 #' Group Times
 #'
-#' \code{group_times} groups rows into time groups. The function accepts date
+#' \code{group_times} groups rows into time groups. The function expects date
 #' time formatted data and a threshold argument. The threshold argument is used
 #' to specify a time window within which rows are grouped.
 #'
@@ -49,6 +49,9 @@
 #'
 #'   A message is returned when any of these columns already exist in the input
 #'   \code{DT}, because they will be overwritten.
+#'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #'
 #' @inheritParams group_pts

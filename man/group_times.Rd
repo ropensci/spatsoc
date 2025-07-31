@@ -37,9 +37,12 @@ identifying the multiday block for each row. }
 
 A message is returned when any of these columns already exist in the input
 \code{DT}, because they will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
-\code{group_times} groups rows into time groups. The function accepts date
+\code{group_times} groups rows into time groups. The function expects date
 time formatted data and a threshold argument. The threshold argument is used
 to specify a time window within which rows are grouped.
 }

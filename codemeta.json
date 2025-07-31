@@ -4,17 +4,17 @@
   "identifier": "spatsoc",
   "description": "Detects spatial and temporal groups in GPS relocations (Robitaille et al. (2019) <doi:10.1111/2041-210X.13215>). It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks In addition, the randomizations function provides data-stream randomization methods suitable for GPS data.",
   "name": "spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship",
-  "relatedLink": ["https://docs.ropensci.org/spatsoc/", "https://CRAN.R-project.org/package=spatsoc"],
+  "relatedLink": "https://docs.ropensci.org/spatsoc/",
   "codeRepository": "https://github.com/ropensci/spatsoc",
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.2",
+  "version": "0.2.9",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.3.1 (2023-06-16)",
+  "runtimePlatform": "R version 4.5.1 (2025-06-13)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -138,7 +138,7 @@
       "@type": "SoftwareApplication",
       "identifier": "data.table",
       "name": "data.table",
-      "version": ">= 1.10.5",
+      "version": ">= 1.15.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -173,13 +173,38 @@
     },
     "6": {
       "@type": "SoftwareApplication",
-      "identifier": "stats",
-      "name": "stats"
+      "identifier": "lwgeom",
+      "name": "lwgeom",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lwgeom"
     },
     "7": {
       "@type": "SoftwareApplication",
+      "identifier": "CircStats",
+      "name": "CircStats",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=CircStats"
+    },
+    "8": {
+      "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
+    },
+    "9": {
+      "@type": "SoftwareApplication",
       "identifier": "units",
       "name": "units",
+      "version": ">= 0.8-6",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -190,7 +215,7 @@
     },
     "SystemRequirements": "GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),\n    sqlite3"
   },
-  "fileSize": "1868.342KB",
+  "fileSize": "2079.306KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -223,15 +248,5 @@
         }
       }
     }
-  ],
-  "releaseNotes": "https://github.com/ropensci/spatsoc/blob/master/NEWS.md",
-  "readme": "https://github.com/ropensci/spatsoc/blob/main/README.md",
-  "contIntegration": ["https://app.codecov.io/gh/ropensci/spatsoc", "https://github.com/ropensci/spatsoc/actions/workflows/R-CMD-check.yaml"],
-  "developmentStatus": "https://www.repostatus.org/",
-  "review": {
-    "@type": "Review",
-    "url": "https://github.com/ropensci/software-review/issues/237",
-    "provider": "https://ropensci.org"
-  },
-  "keywords": ["r", "spatial", "social", "gps", "animal", "network", "r-package", "rstats"]
+  ]
 }

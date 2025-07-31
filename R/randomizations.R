@@ -1,7 +1,7 @@
 #' Data-stream randomizations
 #'
 #' \code{randomizations} performs data-stream social network randomization. The
-#' function accepts a \code{data.table} with relocation data, individual
+#' function expects a \code{data.table} with relocation data, individual
 #' identifiers and a randomization \code{type}. The \code{data.table} is
 #' randomized either using \code{step} or \code{daily} between-individual
 #' methods, or within-individual daily \code{trajectory} method described by
@@ -98,7 +98,8 @@
 #' group_times(DT, datetime = 'datetime', threshold = '5 minutes')
 #'
 #' # Spatial grouping with timegroup
-#' group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'), timegroup = 'timegroup')
+#' group_pts(DT, threshold = 5, id = 'ID',
+#'           coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
 #' # Randomization: step
 #' randStep <- randomizations(
@@ -267,7 +268,8 @@ randomizations <- function(DT = NULL,
       splitBy <- c('jul', 'iteration', 'observed', splitBy)
     }
 
-    idDays[, randomID := .SD[sample(.N, size = .N)], by = c(splitBy), .SDcols = id]
+    idDays[, randomID := .SD[sample(.N, size = .N)], by = c(splitBy),
+           .SDcols = id]
     idDays[(observed), randomID := .SD[[1]], .SDcols = id]
 
     return(merge(repDT, idDays, by = c(splitBy, id), all = TRUE))
@@ -289,7 +291,8 @@ randomizations <- function(DT = NULL,
     )
 
     randomDateCol <- paste0('random', datetime)
-    merged[, (randomDateCol) := as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
+    merged[, (randomDateCol) :=
+             as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
            .SDcols = datetime]
 
     merged[(observed),

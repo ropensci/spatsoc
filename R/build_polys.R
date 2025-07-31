@@ -1,7 +1,7 @@
 #' Build Polygons
 #'
 #' `build_polys` generates a simple feature collection with POLYGONs from a
-#' `data.table`. The function accepts a `data.table` with
+#' `data.table`. The function expects a `data.table` with
 #' relocation data, individual identifiers, a projection,
 #' home range type and parameters. The relocation
 #' data is transformed into POLYGONs using either [adehabitatHR::mcp] or
