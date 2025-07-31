@@ -339,7 +339,7 @@ group_polys <-
                                 ID2 = as.character(NA),
                                 as.numeric(NA),
                                 as.numeric(NA))
-              setnames(out, c(..id, paste0(..id, '2'),
+              data.table::setnames(out, c(..id, paste0(..id, '2'),
                               'area', 'proportion'))
               out
             }
