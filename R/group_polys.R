@@ -156,7 +156,7 @@ group_polys <-
       if (!area) {
         if ('group' %in% colnames(DT)) {
           message('group column will be overwritten by this function')
-          set(DT, j = 'group', value = NULL)
+          data.table::set(DT, j = 'group', value = NULL)
         }
         inter <- sf::st_intersects(sfPolys, sfPolys, sparse = FALSE)
         dimnames(inter) <- list(sfPolys[[id]], sfPolys[[id]])
@@ -188,12 +188,12 @@ group_polys <-
           area_ID1 = units::as_units(inter[['area']], units(areas),
                                      set_units_mode = 'standard')
         )
-        set(out_inter, j = 'proportion',
+        data.table::set(out_inter, j = 'proportion',
             value = units::set_units(
               out_inter[['area']] / out_inter[['area_ID1']],
               'percent')
         )
-        set(out_inter, j = 'area_ID1',  value = NULL)
+        data.table::set(out_inter, j = 'area_ID1',  value = NULL)
 
         disjointed <- data.frame(sf::st_disjoint(sfPolys))
         out_disjointed <- data.frame(
@@ -228,7 +228,7 @@ group_polys <-
       if (!area) {
         if ('group' %in% colnames(DT)) {
           message('group column will be overwritten by this function')
-          set(DT, j = 'group', value = NULL)
+          data.table::set(DT, j = 'group', value = NULL)
         }
         ovrDT <-
           DT[nBy > 5, {
@@ -263,7 +263,7 @@ group_polys <-
         DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
         DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
            by = c(splitBy, 'withinGroup')]
-        set(DT, j = c('withinGroup', 'nBy'), value = NULL)
+        data.table::set(DT, j = c('withinGroup', 'nBy'), value = NULL)
         if (DT[is.na(group), .N] > 0) {
           warning(
             strwrap(
@@ -306,13 +306,13 @@ group_polys <-
                 area_ID1 = units::as_units(inter[['area']], units(areas),
                                            set_units_mode = 'standard')
               )
-              set(out_inter, j = 'proportion',
+              data.table::set(out_inter, j = 'proportion',
                   value = units::set_units(
                     out_inter[['area']] / out_inter[['area_ID1']],
                     'percent')
               )
-              set(out_inter, j = 'area_ID1',  value = NULL)
-              set(out_inter, j = 'proportion',
+              data.table::set(out_inter, j = 'area_ID1',  value = NULL)
+              data.table::set(out_inter, j = 'proportion',
                   i = which(unclass(out_inter$proportion) > 100),
                   value = units::set_units(100, 'percent'))
 
@@ -339,14 +339,14 @@ group_polys <-
                                 ID2 = as.character(NA),
                                 as.numeric(NA),
                                 as.numeric(NA))
-              setnames(out, c(..id, paste0(..id, '2'),
+              data.table::setnames(out, c(..id, paste0(..id, '2'),
                               'area', 'proportion'))
               out
             }
           }, by = c(splitBy), .SDcols = c(coords, id)]
         dropped <-
           unique(DT[nBy <= 5, .SD, .SDcols = c(splitBy, id)])
-        out <- rbindlist(list(dropped, outDT), fill = TRUE)
+        out <- data.table::rbindlist(list(dropped, outDT), fill = TRUE)
         if (out[is.na(area), .N] > 0) {
           warning(
             strwrap(
