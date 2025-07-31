@@ -1,6 +1,6 @@
 #' Bearing difference based edge lists
 #' @family Edge-list generation
-edge_bearing <- function(DT = NULL,
+edge_direction <- function(DT = NULL,
                     threshold,
                     id = NULL,
                     coords = NULL,
