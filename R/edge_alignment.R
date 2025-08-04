@@ -28,3 +28,12 @@
 #' populations, subgroups or other distinct parts, you can provide the name of
 #' the column which identifies them to \code{splitBy}. \code{edge_alignment}
 #' will only consider rows within each \code{splitBy} subgroup.
+#'
+#' @inheritParams edge_dist
+#' @inheritParams direction_polarization
+#' @inheritParams diff_rad
+#' @param timegroup character string of timegroup column name, default "timegroup"
+#' @param group (optional) character string of group column name, used to restrict
+#' the calculation of directional alignment to within spatiotemporal groups
+#' @param splitBy (optional) vector of column names indicating subgroups within
+#'   which the direction alignment will be calculated
