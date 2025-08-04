@@ -45,3 +45,8 @@
 #'  Note: unlike many other functions (eg. \code{group_pts}) in \code{spatsoc},
 #'  \code{edge_alignment} needs to be reassigned. See details in
 #'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
+#' @export
+#'
+#' @family Edge-list generation
+#' @family Direction functions
