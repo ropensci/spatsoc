@@ -102,3 +102,70 @@ edge_alignment <- function(
   group = NULL,
   splitBy = NULL,
   signed = FALSE) {
+
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
+  if (is.null(id)) {
+    stop('ID field required')
+  }
+
+  if (missing(timegroup) | is.null(timegroup)) {
+    stop('timegroup required')
+  }
+
+  if (any(!(
+    c(id, direction, timegroup, group, splitBy) %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(id, direction, timegroup, group, splitBy),
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(direction)] ||
+      DT[, units(.SD[[1]])$numerator != 'rad', .SDcols = c(direction)]) {
+    stop('units(DT$direction) is not radians, did you use direction_step?')
+  }
+
+  if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+    c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+    warning(
+      strwrap(
+        prefix = ' ',
+        initial = '',
+        x = 'timegroup provided is a date/time
+        or character type, did you use group_times?'
+      )
+    )
+  }
+
+  splitBy <- c(splitBy, timegroup)
+  if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
+    warning(
+      strwrap(
+        prefix = ' ',
+        initial = '',
+        x = 'found duplicate id in a
+        timegroup and/or splitBy -
+        does your group_times threshold match the fix rate?'
+      )
+    )
+  }
+
+  if ('splitBy' %in% colnames(DT)) {
+    warning(
+      strwrap(x = 'a column named "splitBy" was found in your data.table,
+              renamed to "split_by" to avoid confusion with the argument
+              "splitBy"')
+    )
+    data.table::setnames(DT, 'splitBy', 'split_by')
+  }
+
+  if (!is.logical(signed)) {
+    stop('signed must be TRUE or FALSE')
+  }
