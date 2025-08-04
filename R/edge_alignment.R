@@ -94,3 +94,11 @@
 #'   group = 'group',
 #'   signed = FALSE
 #' )
+edge_alignment <- function(
+  DT = NULL,
+  id = NULL,
+  direction = 'direction',
+  timegroup = 'timegroup',
+  group = NULL,
+  splitBy = NULL,
+  signed = FALSE) {
