@@ -50,3 +50,47 @@
 #'
 #' @family Edge-list generation
 #' @family Direction functions
+#'
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{
+#' data.table::setDTthreads(1)
+#' }
+#'
+#' # Read example data
+#' DT <- fread(system.file('extdata', 'DT.csv', package = 'spatsoc'))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Calculate direction
+#' direction_step(
+#'   DT = DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   projection = 32736
+#' )
+#'
+#' # Calculate directional alignment edge-list
+#' align <- edge_alignment(
+#'   DT,
+#'   id = 'ID',
+#'   timegroup = 'timegroup',
+#'   signed = FALSE
+#' )
+#'
+#' # Or, calculate directional alignment within spatiotemporal groups
+#' group_pts(DT, threshold = 5, id = 'ID',
+#'           coords = c('X', 'Y'), timegroup = 'timegroup')
+#'
+#' align_group <- edge_alignment(
+#'   DT,
+#'   id = 'ID',
+#'   timegroup = 'timegroup',
+#'   group = 'group',
+#'   signed = FALSE
+#' )
