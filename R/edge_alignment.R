@@ -102,6 +102,8 @@ edge_alignment <- function(
   group = NULL,
   splitBy = NULL,
   signed = FALSE) {
+  # due to NSE notes in R CMD check
+  ID1 <- ID2 <- N <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
