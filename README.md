@@ -32,7 +32,7 @@ For more details, see the [blog
 post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
 - [Introduction to
-  spatsoc](https://docs.ropensci.org/spatsoc/articles/spatsoc.html)
+  spatsoc](https://docs.ropensci.org/spatsoc/articles/intro.html)
 - [Frequently asked
   questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
 - [Using spatsoc in social network
