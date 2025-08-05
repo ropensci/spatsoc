@@ -120,6 +120,10 @@ edge_alignment <- function(
     stop('id required')
   }
 
+  if (is.null(direction)) {
+    stop('direction required')
+  }
+
   if (missing(timegroup) | is.null(timegroup)) {
     stop('timegroup required')
   }
