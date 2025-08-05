@@ -183,7 +183,6 @@ edge_alignment <- function(
     stop('signed must be TRUE or FALSE')
   }
 
-  fun <- diff_rad
   edges <- DT[, {
       m <- outer(direction, direction, FUN = fun)
 
@@ -194,7 +193,7 @@ edge_alignment <- function(
       )[ID1 != ID2]
     },
     by = splitBy,
-    env = list(id = id, direction = direction)
+    env = list(id = id, direction = direction, fun = diff_rad)
   ]
 
   return(edges)
