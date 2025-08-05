@@ -60,3 +60,10 @@ test_that('direction is units, timegroup is integer, signed is logical', {
   expect_error(edge_alignment(DT, id, direction, timegroup, signed = 42),
                'signed')
 })
+
+test_that('duplicate IDs in a timegroup detected', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '8 hours')
+  expect_warning(edge_alignment(copyDT, id, direction, timegroup),
+                 'duplicate')
+})
