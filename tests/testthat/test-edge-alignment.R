@@ -32,3 +32,20 @@ test_that('required arguments are provided else error', {
   expect_error(edge_alignment(DT, id, direction, timegroup = NULL),
                'timegroup')
 })
+
+test_that('column names must exist in DT', {
+  expect_error(edge_alignment(DT, id = 'potato', direction, timegroup),
+               'field')
+
+  expect_error(edge_alignment(DT, id, direction = 'potato', timegroup),
+               'field')
+
+  expect_error(edge_alignment(DT, id, direction, timegroup = 'potato'),
+               'field')
+
+  expect_error(edge_alignment(DT, id, direction, timegroup, group = 'potato'),
+               'field')
+
+  expect_error(edge_alignment(DT, id, direction, timegroup, splitBy = 'potato'),
+               'field')
+})
