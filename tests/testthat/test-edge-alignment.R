@@ -85,3 +85,8 @@ test_that('returned IDs make sense', {
   expect_true(all(eDT$ID2 %in% IDs))
   expect_true(eDT[ID1 == ID2, .N] == 0)
 })
+
+test_that('returns a data.table', {
+  expect_s3_class(edge_alignment(DT, id, direction, timegroup),
+                  'data.table')
+})
