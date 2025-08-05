@@ -184,7 +184,7 @@ edge_alignment <- function(
   }
 
   edges <- DT[, {
-      m <- outer(direction, direction, FUN = fun)
+      m <- outer(direction, direction, FUN = diff_rad, signed = signed)
 
       data.table::data.table(
           ID1 = id[rep(seq_len(nrow(m)), ncol(m))],
@@ -193,7 +193,7 @@ edge_alignment <- function(
       )[ID1 != ID2]
     },
     by = splitBy,
-    env = list(id = id, direction = direction, fun = diff_rad)
+    env = list(id = id, direction = direction)
   ]
 
   return(edges)
