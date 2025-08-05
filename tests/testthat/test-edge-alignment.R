@@ -67,3 +67,12 @@ test_that('duplicate IDs in a timegroup detected', {
   expect_warning(edge_alignment(copyDT, id, direction, timegroup),
                  'duplicate')
 })
+
+test_that('warns about splitBy column', {
+  copyDT <- copy(DT)
+  group_times(copyDT, 'datetime', '5 minutes')
+  copyDT[, splitBy := as.IDate(datetime)]
+
+  expect_warning(edge_alignment(copyDT, id, direction, timegroup),
+                 'split_by')
+})
