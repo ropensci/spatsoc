@@ -124,7 +124,7 @@ edge_alignment <- function(
     stop('direction required')
   }
 
-  if (missing(timegroup) | is.null(timegroup)) {
+  if (is.null(timegroup)) {
     stop('timegroup required')
   }
 
