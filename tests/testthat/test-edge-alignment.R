@@ -76,3 +76,12 @@ test_that('warns about splitBy column', {
   expect_warning(edge_alignment(copyDT, id, direction, timegroup),
                  'split_by')
 })
+
+test_that('returned IDs make sense', {
+  eDT <- edge_alignment(DT, id, direction, timegroup)
+
+  IDs <- DT[, unique(ID)]
+  expect_true(all(eDT$ID1 %in% IDs))
+  expect_true(all(eDT$ID2 %in% IDs))
+  expect_true(eDT[ID1 == ID2, .N] == 0)
+})
