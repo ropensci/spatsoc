@@ -8,7 +8,7 @@ message: 'To cite package "spatsoc" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship'
-version: 0.2.9
+version: 0.2.10
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.spatsoc
@@ -176,8 +176,8 @@ references:
     given-names: Edzer
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
-  year: '2025'
   doi: 10.32614/CRAN.package.lwgeom
+  year: '2025'
 - type: software
   title: CircStats
   abstract: 'CircStats: Circular Statistics, from "Topics in Circular Statistics"
