@@ -169,3 +169,20 @@ edge_alignment <- function(
   if (!is.logical(signed)) {
     stop('signed must be TRUE or FALSE')
   }
+
+  fun <- diff_rad
+  edges <- DT[, {
+      m <- outer(direction, direction, FUN = fun)
+
+      data.table::data.table(
+          ID1 = id[rep(seq_len(nrow(m)), ncol(m))],
+          ID2 = id[rep(seq_len(ncol(m)), each = nrow(m))],
+          direction_diff = c(m)
+      )[ID1 != ID2]
+    },
+    by = splitBy,
+    env = list(id = id, direction = direction)
+  ]
+
+  return(edges)
+}
