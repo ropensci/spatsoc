@@ -113,11 +113,11 @@ edge_alignment <- function(
   ID1 <- ID2 <- N <- NULL
 
   if (is.null(DT)) {
-    stop('input DT required')
+    stop('DT required')
   }
 
   if (is.null(id)) {
-    stop('ID field required')
+    stop('id required')
   }
 
   if (missing(timegroup) | is.null(timegroup)) {
