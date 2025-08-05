@@ -90,3 +90,10 @@ test_that('returns a data.table', {
   expect_s3_class(edge_alignment(DT, id, direction, timegroup),
                   'data.table')
 })
+
+test_that('signed arg works', {
+  expect_lt(
+    mean(edge_alignment(DT, id, signed = TRUE)$direction_diff, na.rm = TRUE),
+    mean(edge_alignment(DT, id, signed = FALSE)$direction_diff, na.rm = TRUE)
+  )
+})
