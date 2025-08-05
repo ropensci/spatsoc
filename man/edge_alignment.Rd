@@ -116,6 +116,14 @@ align_group <- edge_alignment(
   signed = FALSE
 )
 }
+\references{
+See examples of using directional alignment:
+\itemize{
+\item \doi{doi:10.1098/rsif.2013.0529}
+\item \doi{doi:10.1016/j.beproc.2021.104473}
+\item \doi{doi:10.1126/science.aaa5099}
+}
+}
 \seealso{
 Other Edge-list generation: 
 \code{\link{edge_delay}()},

@@ -46,6 +46,13 @@
 #'  \code{edge_alignment} needs to be reassigned. See details in
 #'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
+#' @references
+#'
+#' See examples of using directional alignment:
+#'  * \doi{doi:10.1098/rsif.2013.0529}
+#'  * \doi{doi:10.1016/j.beproc.2021.104473}
+#'  * \doi{doi:10.1126/science.aaa5099}
+#'
 #' @export
 #'
 #' @family Edge-list generation
