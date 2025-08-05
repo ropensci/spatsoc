@@ -1,3 +1,10 @@
+# spatsoc 0.2.10
+
+New experimental function:
+
+* `edge_alignment` function for calculating directional alignment ([PR 111](https://github.com/ropensci/spatsoc/pull/111))
+
+
 # spatsoc 0.2.9
 
 Breaking changes:
@@ -7,7 +14,7 @@ Breaking changes:
 * Improve output colnames for edge_delay 
 ([PR 102](https://github.com/ropensci/spatsoc/pull/102))
 
-New experimental function: 
+New experimental function:
 
 * `leader_edge_delay` function for calculating leadership with the directional
 correlation delay ([PR 96](https://github.com/ropensci/spatsoc/pull/96))

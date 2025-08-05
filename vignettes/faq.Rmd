@@ -428,6 +428,7 @@ Functions that require their outputs be reassigned include:
 - `edge_dist`
 - `edge_nn`
 - `edge_delay`
+- `edge_alignment`
 - `centroid_fusion`
 - `centroid_dyad`
 - `leader_edge_delay`

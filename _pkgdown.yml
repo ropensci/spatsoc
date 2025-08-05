@@ -9,12 +9,13 @@ reference:
     - '`group_lines`'
     - '`group_polys`'
     - '`group_pts`'
-  - title: Edge list generation
+  - title: Edge-list generation
     desc: ~
     contents:
     - '`edge_dist`'
     - '`edge_nn`'
     - '`edge_delay`'
+    - '`edge_alignment`'
   - title: Social network tools
     desc: ~
     contents:
