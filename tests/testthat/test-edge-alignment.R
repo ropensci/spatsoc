@@ -18,3 +18,17 @@ direction_step(
   coords = coords,
   projection = projection
 )
+
+test_that('required arguments are provided else error', {
+  expect_error(edge_alignment(DT = NULL),
+               'DT')
+
+  expect_error(edge_alignment(DT, id = NULL),
+               'id')
+
+  expect_error(edge_alignment(DT, id, direction = NULL),
+               'direction')
+
+  expect_error(edge_alignment(DT, id, direction, timegroup = NULL),
+               'timegroup')
+})
