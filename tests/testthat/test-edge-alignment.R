@@ -49,3 +49,14 @@ test_that('column names must exist in DT', {
   expect_error(edge_alignment(DT, id, direction, timegroup, splitBy = 'potato'),
                'field')
 })
+
+test_that('direction is units, timegroup is integer, signed is logical', {
+  expect_error(edge_alignment(DT, id, direction = 'X', timegroup),
+               'units')
+
+  expect_warning(edge_alignment(DT, id, direction, timegroup = 'ID'),
+                 'timegroup')
+
+  expect_error(edge_alignment(DT, id, direction, timegroup, signed = 42),
+               'signed')
+})
