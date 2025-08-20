@@ -191,6 +191,6 @@ group_pts <- function(DT = NULL,
   by = c(splitBy, timegroup), .SDcols = c(coords, id)]
   DT[, group := .GRP,
      by = c(splitBy, timegroup, 'withinGroup')]
-  set(DT, j = 'withinGroup', value = NULL)
+  data.table::set(DT, j = 'withinGroup', value = NULL)
   return(DT[])
 }

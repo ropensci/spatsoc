@@ -111,7 +111,7 @@ group_times <- function(DT = NULL,
       )), collapse = ', '),
       ' columns found in input DT and will be overwritten by this function'
     ))
-    set(DT, j = intersect(colnames(DT), checkCols), value = NULL)
+    data.table::set(DT, j = intersect(colnames(DT), checkCols), value = NULL)
   }
 
   if (is.null(threshold)) {
@@ -184,8 +184,8 @@ group_times <- function(DT = NULL,
       dtm[hours == 24, c('adjIDate', 'hours') := .(idate + 1, 0)]
 
       dtm[, timegroup := .GRP, by = .(hours, adjIDate)]
-      set(dtm, j = 'adjIDate', value = NULL)
-      set(dtm, j = c('idate', 'itime'), value = NULL)
+      data.table::set(dtm, j = 'adjIDate', value = NULL)
+      data.table::set(dtm, j = c('idate', 'itime'), value = NULL)
       DT[, (colnames(dtm)) := dtm]
 
       return(DT[])
@@ -232,8 +232,8 @@ group_times <- function(DT = NULL,
       dtm[, timegroup := .GRP,
           by = c('adjMinute', 'adjHour', 'adjDate')]
 
-      set(dtm, j = c('adjMinute', 'adjHour', 'adjDate'), value = NULL)
-      set(dtm, j = c('idate', 'itime'), value = NULL)
+      data.table::set(dtm, j = c('adjMinute', 'adjHour', 'adjDate'), value = NULL)
+      data.table::set(dtm, j = c('idate', 'itime'), value = NULL)
 
       DT[, (colnames(dtm)) := dtm]
       return(DT[])
@@ -246,7 +246,7 @@ group_times <- function(DT = NULL,
         dtm[, timegroup := .GRP,
             by = .(data.table::year(idate), data.table::yday(idate))]
 
-        set(dtm, j = c('idate', 'itime'), value = NULL)
+        data.table::set(dtm, j = c('idate', 'itime'), value = NULL)
         DT[, (colnames(dtm)) := dtm]
         return(DT[])
       } else {
@@ -274,7 +274,7 @@ group_times <- function(DT = NULL,
         )]
 
         dtm[, timegroup := .GRP, .(year(idate), block)]
-        set(dtm, j = c('idate', 'itime'),
+        data.table::set(dtm, j = c('idate', 'itime'),
             value = NULL)
         DT[, (colnames(dtm)) := dtm]
         return(DT[])

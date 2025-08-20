@@ -30,7 +30,7 @@ See below for [installation](#installation) and basic [usage](#usage).
 
 For more details, see the [blog post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
 
-* [Introduction to spatsoc](https://docs.ropensci.org/spatsoc/articles/spatsoc.html)
+* [Introduction to spatsoc](https://docs.ropensci.org/spatsoc/articles/intro.html)
 * [Frequently asked questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
 * [Using spatsoc in social network analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html)
 * [Using edge list and dyad id functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
