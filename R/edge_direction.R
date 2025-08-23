@@ -191,7 +191,7 @@ edge_direction <- function(
   }
 
   data.table::set(m, j = c(id1_coords, id2_coords), value = NULL)
-  data.table::setcolorder(m, colnames(edges))
+  data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))
 
   return(m[])
 }
