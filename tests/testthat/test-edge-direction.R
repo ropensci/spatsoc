@@ -91,3 +91,31 @@ test_that('direction_dyad column succesfully detected', {
     'direction_dyad column will be overwritten'
   )
 })
+
+test_that('no rows are added to the result DT', {
+  expect_equal(nrow(edges), nrow(
+    edge_direction(
+      edges,
+      DT,
+      id = id,
+      coords = coords,
+      projection = projection,
+      timegroup = timegroup
+    )
+  ))
+})
+
+test_that('one columns added to the result DT', {
+  copyEdges <- copy(edges)
+
+  expect_equal(ncol(copyEdges) + 1, ncol(
+    edge_direction(
+      edges,
+      DT,
+      id = id,
+      coords = coords,
+      projection = projection,
+      timegroup = timegroup
+    )
+  ))
+})
