@@ -1,16 +1,15 @@
 #' Direction based edge-lists
 #' @family Edge-list generation
-edge_direction <- function(DT = NULL,
-                    threshold,
-                    id = NULL,
-                    coords = NULL,
-                    timegroup,
-                    splitBy = NULL,
-                    returnDist = FALSE,
-                    fillNA = TRUE) {
-
   # due to NSE notes in R CMD check
   N <- ID1 <- ID2 <- value <- . <- NULL
+edge_direction <- function(
+    edges = NULL,
+    DT = NULL,
+    id = NULL,
+    coords = NULL,
+    projection = NULL,
+    timegroup = 'timegroup',
+    na.rm = FALSE) {
 
   if (is.null(DT)) {
     stop('input DT required')
