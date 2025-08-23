@@ -25,7 +25,7 @@ edge_direction <- function(
     stop('coords requires a vector of column names for coordinates X and Y')
   }
 
-  if (missing(timegroup)) {
+  if (is.null(timegroup)) {
     stop('timegroup required')
   }
 
