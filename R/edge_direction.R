@@ -43,6 +43,7 @@
 #'
 #' @export
 #' @family Edge-list generation
+#' @family Direction functions
 #' @seealso [dyad_id] [edge_dist] [edge_nn] [group_times]
 #' @examples
 #' # Load data.table
