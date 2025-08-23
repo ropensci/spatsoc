@@ -30,6 +30,17 @@
 #' @inheritParams centroid_dyad
 #' @inheritParams direction_step
 #' @inheritParams group_pts
+#'
+#' @return \code{edge_direction} returns the input \code{edges} appended with
+#'  a "direction_dyad" column representing the direction between ID1 and ID2.
+#'
+#'  The direction between individuals is calculated with
+#'  \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
+#'
+#'  Note: due to the merge required within this function, the output needs to be
+#'  reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
+#'  and \code{group_pts}. See details in
+#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #' @family Edge-list generation
 edge_direction <- function(
     edges = NULL,
