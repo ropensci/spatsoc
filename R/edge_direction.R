@@ -13,16 +13,6 @@ edge_direction <- function(
     stop('input DT required')
   }
 
-  if (missing(threshold)) {
-    stop('threshold required')
-  }
-
-  if (!is.null(threshold) & !is.numeric(threshold)) {
-    stop('threshold must be numeric or NULL')
-  }
-
-  if (is.numeric(threshold) && threshold <= 0) {
-    stop('threshold must be greater than 0')
   }
 
   if (is.null(id)) {
