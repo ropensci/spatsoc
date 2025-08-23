@@ -41,7 +41,10 @@
 #'  reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
 #'  and \code{group_pts}. See details in
 #'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
+#' @export
 #' @family Edge-list generation
+#' @seealso [dyad_id] [edge_dist] [edge_nn] [group_times]
 edge_direction <- function(
     edges = NULL,
     DT = NULL,
