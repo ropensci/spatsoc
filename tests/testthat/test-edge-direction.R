@@ -69,3 +69,10 @@ test_that('column names must exist in DT', {
   ),
   'potato field')
 })
+
+test_that('coords are correctly provided or error detected', {
+  expect_error(edge_direction(edges, DT, id = id, coords = c('X', NULL)),
+               'coords requires a vector')
+  expect_error(edge_direction(edges, DT, id = id, coords = c('X', 'ID')),
+               'coords must be numeric')
+})
