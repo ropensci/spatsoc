@@ -22,14 +22,13 @@
 #' The \code{edges} and \code{DT} are internally merged in this function using
 #' the columns \code{id}, \code{dyadID} and \code{timegroup}. This function
 #' expects a \code{dyadID} present, generated with the \code{dyad_id} function.
-#' The \code{dyadID} and \code{timegroup} arguments expect the names of a column
-#' in \code{edges} which correspond to the dyadID and timegroup columns. The
-#' \code{id} and \code{timegroup} arguments expect the names of a column in
-#' \code{DT} which correspond to the X and Y coordinates and group columns.
+#' The \code{id}, \code{coords} and \code{timegroup} arguments expect the names
+#' of columns which correspond to the ID, X and Y coordinates and timegroup
+#' columns.
 #'
 #' @inheritParams centroid_dyad
 #' @inheritParams direction_step
-#' @inheritParams group_pts
+#' @inheritParams edge_alignment
 #'
 #' @return \code{edge_direction} returns the input \code{edges} appended with
 #'  a "direction_dyad" column representing the direction between ID1 and ID2.
