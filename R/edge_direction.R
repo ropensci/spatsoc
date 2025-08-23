@@ -56,10 +56,32 @@ edge_direction <- function(
     stop('coords must be numeric')
   }
 
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
 
+  out_col <- 'direction_dyad'
 
+  id1_coords <- paste0('id1_', coords)
+  id2_coords <- paste0('id2_', coords)
 
+  m <- merge(edges,
+             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+             by.x = c('ID1', timegroup),
+             by.y = c(id, timegroup),
+             all.x = TRUE,
+             sort = FALSE)
+  data.table::setnames(m, coords, id1_coords)
+  m <- merge(m,
+             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+             by.x = c('ID2', timegroup),
+             by.y = c(id, timegroup),
+             all.x = TRUE,
+             sort = FALSE)
+  data.table::setnames(m, coords, id2_coords)
 
+  if (out_col %in% colnames(m)) {
+    message(paste(out_col, 'column will be overwritten by this function'))
+    data.table::set(m, j = out_col, value = NULL)
   }
 
 
