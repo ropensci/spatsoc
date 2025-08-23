@@ -20,7 +20,7 @@
 #' the coordinate reference system to be passed to [sf::st_crs]. For example,
 #' for UTM zone 36S (EPSG 32736), the projection argument is
 #' \code{projection = "EPSG:32736"} or \code{projection = 32736}. See
-#' <https://spatialreference.org> for #' a list of EPSG codes.
+#' <https://spatialreference.org> for a list of EPSG codes.
 #'
 #' The \code{splitBy} argument offers further control over grouping. If within
 #' your \code{DT}, you have distinct sampling periods for each individual, you
