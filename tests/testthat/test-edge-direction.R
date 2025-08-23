@@ -54,3 +54,18 @@ test_that('arguments required, otherwise error detected', {
     'projection required'
   )
 })
+
+test_that('column names must exist in DT', {
+  expect_error(edge_direction(edges, DT, id = 'potato', coords = coords),
+               'potato field')
+  expect_error(edge_direction(edges, DT, id = id, coords = rep('potato', 2)),
+               'potato field')
+  expect_error(edge_direction(
+    edges,
+    DT,
+    id = id,
+    coords = coords,
+    timegroup = 'potato'
+  ),
+  'potato field')
+})
