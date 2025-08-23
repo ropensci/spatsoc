@@ -80,7 +80,7 @@
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
 #'   projection = 32736,
-#'   timegroup = 'timegroup', na.rm = TRUE
+#'   timegroup = 'timegroup'
 #' )
 #'
 #' print(dyad_directions)
