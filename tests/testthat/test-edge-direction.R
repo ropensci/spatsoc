@@ -147,3 +147,55 @@ test_that('returns a data.table', {
     'data.table'
   )
 })
+
+
+n <- 4
+DT_B <- data.table(
+  X = c(0, 5, 5, 0),
+  Y = c(0, 0, 5, 5),
+  timegroup = rep(1, n),
+  ID = LETTERS[seq.int(n)]
+)
+edges_B <- edge_dist(DT_B, id = id, coords = coords, timegroup = timegroup,
+                     threshold = NULL, returnDist = TRUE)
+dyad_id(edges_B, 'ID1', 'ID2')
+
+dyad_dirs <- edge_direction(edges_B, DT_B, id = id,
+                            coords = coords, projection = 4326)
+
+test_that('East North West South dyads', {
+  tolerance <- 0.01
+
+  expect_equal(
+    dyad_dirs[dyadID == 'A-B' & ID1 == 'A', direction_dyad],
+    as_units(pi / 2, 'rad'),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    dyad_dirs[dyadID == 'A-C' & ID1 == 'A', direction_dyad],
+    as_units(pi / 4, 'rad'),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    dyad_dirs[dyadID == 'A-D' & ID1 == 'A', direction_dyad],
+    as_units(0, 'rad'),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    dyad_dirs[dyadID == 'A-B' & ID1 == 'B', direction_dyad],
+    -1 * as_units(pi / 2, 'rad'),
+    tolerance = tolerance
+  )
+
+  expect_equal(
+    dyad_dirs[dyadID == 'B-C' & ID1 == 'C', direction_dyad],
+    as_units(pi, 'rad'),
+    tolerance = tolerance
+  )
+
+})
+
+
