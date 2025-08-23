@@ -18,7 +18,7 @@ edge_direction <- function(
   }
 
   if (is.null(id)) {
-    stop('ID field required')
+    stop('id column name required')
   }
 
   if (length(coords) != 2) {
