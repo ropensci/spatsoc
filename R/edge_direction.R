@@ -17,7 +17,7 @@
 #' the coordinate reference system to be passed to [sf::st_crs]. For example,
 #' for UTM zone 36S (EPSG 32736), the projection argument is
 #' \code{projection = "EPSG:32736"} or \code{projection = 32736}. See
-#' <https://spatialreference.org> for #' a list of EPSG codes.
+#' <https://spatialreference.org> for a list of EPSG codes.
 #'
 #' The \code{edges} and \code{DT} are internally merged in this function using
 #' the columns \code{id}, \code{dyadID} and \code{timegroup}. This function
