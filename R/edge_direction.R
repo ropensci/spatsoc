@@ -143,6 +143,7 @@ edge_direction <- function(
   if (is.null(projection)) {
     stop('projection required')
   }
+
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
 
@@ -171,12 +172,23 @@ edge_direction <- function(
     data.table::set(m, j = out_col, value = NULL)
   }
 
-
-  m[, out_col :=
-      lwgeom::st_geod_azimuth(
-        sf::st_as_sf(.SD, coords = id1_coords, crs = projection),
-        sf::st_as_sf(.SD, coords = id2_coords, crs = projection)
-      )]
+  if (sf::st_is_longlat(projection)) {
+    m[, out_col :=
+        lwgeom::st_geod_azimuth(
+          sf::st_as_sf(.SD, coords = id1_coords, crs = projection),
+          sf::st_as_sf(.SD, coords = id2_coords, crs = projection)
+        )]
+  } else if (!sf::st_is_longlat(projection)) {
+    m[, out_col :=
+        lwgeom::st_geod_azimuth(
+          sf::st_transform(
+            sf::st_as_sf(.SD, coords = id1_coords, crs = projection),
+            crs = 4326),
+          sf::st_transform(
+            sf::st_as_sf(.SD, coords = id2_coords, crs = projection),
+            crs = 4326)
+        )]
+  }
 
   data.table::set(m, j = c(id1_coords, id2_coords), value = NULL)
   data.table::setcolorder(m, colnames(edges))
