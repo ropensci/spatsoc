@@ -45,6 +45,45 @@
 #' @export
 #' @family Edge-list generation
 #' @seealso [dyad_id] [edge_dist] [edge_nn] [group_times]
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Edge list generation
+#' edges <- edge_dist(
+#'     DT,
+#'     threshold = 100,
+#'     id = 'ID',
+#'     coords = c('X', 'Y'),
+#'     timegroup = 'timegroup',
+#'     returnDist = TRUE,
+#'     fillNA = FALSE
+#'   )
+#'
+#' # Generate dyad id
+#' dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
+#'
+#' # Direction based edge-lists
+#' dyad_directions <- edge_direction(
+#'   edges,
+#'   DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   projection = 32736,
+#'   timegroup = 'timegroup', na.rm = TRUE
+#' )
+#'
+#' print(dyad_directions)
 edge_direction <- function(
     edges = NULL,
     DT = NULL,
