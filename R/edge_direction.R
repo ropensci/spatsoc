@@ -140,6 +140,9 @@ edge_direction <- function(
     stop('coords must be numeric')
   }
 
+  if (is.null(projection)) {
+    stop('projection required')
+  }
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
 
