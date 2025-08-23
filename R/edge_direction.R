@@ -179,7 +179,7 @@ edge_direction <- function(
           sf::st_as_sf(.SD, coords = id2_coords, crs = projection)
         )]
   } else if (!sf::st_is_longlat(projection)) {
-    m[, out_col :=
+    m[, (out_col) :=
         lwgeom::st_geod_azimuth(
           sf::st_transform(
             sf::st_as_sf(.SD, coords = id1_coords, crs = projection),
