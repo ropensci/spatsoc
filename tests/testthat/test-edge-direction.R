@@ -76,3 +76,18 @@ test_that('coords are correctly provided or error detected', {
   expect_error(edge_direction(edges, DT, id = id, coords = c('X', 'ID')),
                'coords must be numeric')
 })
+
+test_that('direction_dyad column succesfully detected', {
+  copyEdges <- copy(edges)[, direction_dyad := 1]
+  expect_message(
+    edge_direction(
+      copyEdges,
+      DT,
+      id = id,
+      coords = coords,
+      projection = projection,
+      timegroup = timegroup
+    ),
+    'direction_dyad column will be overwritten'
+  )
+})
