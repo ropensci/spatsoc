@@ -1,4 +1,4 @@
-#' Direction difference based edge lists
+#' Direction based edge-lists
 #' @family Edge-list generation
 edge_direction <- function(DT = NULL,
                     threshold,
