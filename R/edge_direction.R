@@ -26,6 +26,10 @@
 #' in \code{edges} which correspond to the dyadID and timegroup columns. The
 #' \code{id} and \code{timegroup} arguments expect the names of a column in
 #' \code{DT} which correspond to the X and Y coordinates and group columns.
+#'
+#' @inheritParams centroid_dyad
+#' @inheritParams direction_step
+#' @inheritParams group_pts
 #' @family Edge-list generation
 edge_direction <- function(
     edges = NULL,
