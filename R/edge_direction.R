@@ -1,7 +1,5 @@
 #' Direction based edge-lists
 #' @family Edge-list generation
-  # due to NSE notes in R CMD check
-  N <- ID1 <- ID2 <- value <- . <- NULL
 edge_direction <- function(
     edges = NULL,
     DT = NULL,
