@@ -30,11 +30,23 @@ edge_direction <- function(
   }
 
   if (any(!(
-    c(timegroup, id, coords, splitBy) %in% colnames(DT)
+    c('dyadID', timegroup) %in% colnames(edges)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timegroup, id, coords, splitBy),
+        c('dyadID', timegroup),
+        colnames(edges)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (any(!(
+    c(id, coords, timegroup) %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(id, coords, timegroup),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
