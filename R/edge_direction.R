@@ -13,6 +13,8 @@ edge_direction <- function(
     stop('input DT required')
   }
 
+  if (is.null(edges)) {
+    stop('input edges required')
   }
 
   if (is.null(id)) {
