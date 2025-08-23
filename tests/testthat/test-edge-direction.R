@@ -28,3 +28,29 @@ test_that('edges, DT are required', {
   expect_error(edge_direction(edges = NULL, DT))
 })
 
+test_that('arguments required, otherwise error detected', {
+  expect_error(edge_direction(edges, DT, id = id, coords = 'X'),
+               'coords requires a vector')
+  expect_error(edge_direction(edges, DT, id = NULL), 'id column name required')
+  expect_error(
+    edge_direction(
+      edges,
+      DT,
+      id = id,
+      coords = coords,
+      timegroup = NULL
+    ),
+    'timegroup required'
+  )
+  expect_error(
+    edge_direction(
+      edges,
+      DT,
+      id = id,
+      coords = coords,
+      timegroup = timegroup,
+      projection = NULL
+    ),
+    'projection required'
+  )
+})
