@@ -119,3 +119,31 @@ test_that('one columns added to the result DT', {
     )
   ))
 })
+
+test_that('column added to the result DT is unit', {
+  expect_s3_class(
+    edge_direction(
+      edges,
+      DT,
+      id = id,
+      coords = coords,
+      projection = projection,
+      timegroup = timegroup
+    )$direction_dyad,
+    'units'
+  )
+})
+
+test_that('returns a data.table', {
+  expect_s3_class(
+    edge_direction(
+      edges,
+      DT,
+      id = id,
+      coords = coords,
+      projection = projection,
+      timegroup = timegroup
+    ),
+    'data.table'
+  )
+})
