@@ -6,8 +6,7 @@ edge_direction <- function(
     id = NULL,
     coords = NULL,
     projection = NULL,
-    timegroup = 'timegroup',
-    na.rm = FALSE) {
+    timegroup = 'timegroup') {
 
   if (is.null(DT)) {
     stop('input DT required')
