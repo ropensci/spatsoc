@@ -112,6 +112,14 @@ dyad_directions <- edge_direction(
 
 print(dyad_directions)
 }
+\references{
+See examples of measuring the direction between individuals:
+\itemize{
+\item \doi{doi:10.1098/rsif.2013.0529}
+\item \doi{doi:10.1098/rstb.2019.0380}
+\item \doi{doi:10.1111/jfb.15315}
+}
+}
 \seealso{
 \link{dyad_id} \link{edge_dist} \link{edge_nn} \link{group_times}
 

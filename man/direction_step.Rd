@@ -110,7 +110,7 @@ direction_step(example, 'ID', c('X', 'Y'), projection = 4326)
 example[, .(direction, units::set_units(direction, 'degree'))]
 }
 \seealso{
-\code{\link[amt:direction_abs]{amt::direction_abs()}}, \code{\link[geosphere:bearing]{geosphere::bearing()}}
+\code{\link[amt:steps]{amt::direction_abs()}}, \code{\link[geosphere:bearing]{geosphere::bearing()}}
 
 Other Direction functions: 
 \code{\link{direction_group}()},
