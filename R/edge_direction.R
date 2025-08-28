@@ -30,6 +30,12 @@
 #' @inheritParams direction_step
 #' @inheritParams edge_alignment
 #'
+#' @references
+#'
+#' See examples of measuring the direction between individuals:
+#'  * \doi{doi:10.1098/rsif.2013.0529}
+#'  * \doi{doi:10.1098/rstb.2019.0380}
+#'  * \doi{doi:10.1111/jfb.15315}
 #' @return \code{edge_direction} returns the input \code{edges} appended with
 #'  a "direction_dyad" column representing the direction between ID1 and ID2.
 #'
