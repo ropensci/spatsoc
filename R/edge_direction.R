@@ -36,6 +36,7 @@
 #'  * \doi{doi:10.1098/rsif.2013.0529}
 #'  * \doi{doi:10.1098/rstb.2019.0380}
 #'  * \doi{doi:10.1111/jfb.15315}
+#'
 #' @return \code{edge_direction} returns the input \code{edges} appended with
 #'  a "direction_dyad" column representing the direction between ID1 and ID2.
 #'
@@ -159,14 +160,14 @@ edge_direction <- function(
   id2_coords <- paste0('id2_', coords)
 
   m <- merge(edges,
-             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+             DT[, .SD, .SDcols = c(coords, id, timegroup)],
              by.x = c('ID1', timegroup),
              by.y = c(id, timegroup),
              all.x = TRUE,
              sort = FALSE)
   data.table::setnames(m, coords, id1_coords)
   m <- merge(m,
-             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+             DT[, .SD, .SDcols = c(coords, id, timegroup)],
              by.x = c('ID2', timegroup),
              by.y = c(id, timegroup),
              all.x = TRUE,
