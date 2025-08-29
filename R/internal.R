@@ -9,7 +9,8 @@
 #'
 #' @return Difference between x and y in radians. If signed is TRUE, the signed
 #'   difference is returned. If signed is FALSE, the absolute difference is
-#'   returned. Note: The difference is the smallest difference, eg.
+#'   returned. Note: The difference is the smallest difference, eg. the
+#'   difference between 2 rad and -2.5 rad is 1.78.
 #' @references adapted from https://stackoverflow.com/a/7869457
 #' @keywords internal
 #' @examples
@@ -36,6 +37,9 @@
 #'
 #' # Differences
 #' spatsoc:::diff_rad(DT[1, direction], DT[2, direction])
+#'
+#' # Note smallest difference returned
+#' spatsoc:::diff_rad(as_units(2, 'rad'), as_units(-2.5, 'rad'))
  diff_rad <- function(x, y,  signed = FALSE, return_units = FALSE) {
   if (!inherits(x, 'units') || units(x)$numerator != 'rad') {
     stop('units(x) is not radians')
