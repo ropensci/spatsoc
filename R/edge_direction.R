@@ -40,6 +40,8 @@
 #' @return \code{edge_direction} returns the input \code{edges} appended with
 #'  a "direction_dyad" column representing the direction between ID1 and ID2.
 #'
+#'  TODO: if direction is in DT, preserved for ID1
+#'
 #'  The direction between individuals is calculated with
 #'  \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
 #'
