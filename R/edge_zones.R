@@ -8,3 +8,10 @@ edge_zones <- function(
     zone_thresholds = NULL,
     zone_labels = NULL,
     blind_volume = NULL) {
+
+  # TODO: check if
+  #  - direction
+  #  - direction_dyad
+  #  - zones
+  #    - zone repulsion < orientation < attraction
+  #  - blind_volume
