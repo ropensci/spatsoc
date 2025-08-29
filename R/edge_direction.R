@@ -159,15 +159,19 @@ edge_direction <- function(
   id1_coords <- paste0('id1_', coords)
   id2_coords <- paste0('id2_', coords)
 
+  merge_cols <- c(coords, id, timegroup)
   m <- merge(edges,
-             DT[, .SD, .SDcols = c(coords, id, timegroup)],
+             DT[, .SD,
+                .SDcols = if ('direction' %in% colnames(DT)) {
+                  c(merge_cols, 'direction')
+                }],
              by.x = c('ID1', timegroup),
              by.y = c(id, timegroup),
              all.x = TRUE,
              sort = FALSE)
   data.table::setnames(m, coords, id1_coords)
   m <- merge(m,
-             DT[, .SD, .SDcols = c(coords, id, timegroup)],
+             DT[, .SD, .SDcols = merge_cols],
              by.x = c('ID2', timegroup),
              by.y = c(id, timegroup),
              all.x = TRUE,
