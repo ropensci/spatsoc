@@ -84,7 +84,7 @@
 #' )
 #'
 #' direction_step(example, 'ID', c('X', 'Y'), projection = 4326)
-#' example[, .(direction, units::set_units(direction, 'degree'))]
+#' example[, .(step, direction, units::set_units(direction, 'degree'))]
 direction_step <- function(
     DT = NULL,
     id = NULL,
