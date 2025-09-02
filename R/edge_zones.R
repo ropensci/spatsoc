@@ -55,6 +55,16 @@
 #' @param blind_volume (optional) interindividual direction to define
 #'   symmetrical window outside of focal individual's perception, eg. 2 becomes
 #'   (-2, 2), see Details
+#'
+#' @return \code{edge_zones} returns the input \code{edges} appended with a zone
+#'   column indicating the behavioural zone, using the zone label provided.
+#'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
+#'   A message is returned when a zone column already exists in the input
+#'   \code{edges}, because it will be overwritten.
+#'
 #' @export
 #' TODO: @references (Couzin 2002, used in eg. Lukeman 2010, Klamser 2021, Klamser 2021)
 #' TODO: @inheritParams centroid_dyad
