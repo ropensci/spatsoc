@@ -80,6 +80,37 @@
 #' @family Distance functions
 #' @family Direction functions
 #' @seealso [edge_dist] [direction_step] [edge_direction]
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{data.table::setDTthreads(1)}
+#'
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' # Cast the character column to POSIXct
+#' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+#'
+#' # Temporal grouping
+#' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+#'
+#' # Edge list generation
+#' edges <- edge_dist(
+#'     DT,
+#'     threshold = 100,
+#'     id = 'ID',
+#'     coords = c('X', 'Y'),
+#'     timegroup = 'timegroup',
+#'     returnDist = TRUE,
+#'     fillNA = FALSE
+#'   )
+#'
+#' # Calculate behavioural zones
+#' edge_zones(
+#'   dyad_directions,
+#'   zone_thresholds = c(25, 50, 75),
+#'   zone_labels = c('repulsion', 'orientation', 'attraction')
+#' )
 edge_zones <- function(
     edges = NULL,
     zone_thresholds = NULL,
