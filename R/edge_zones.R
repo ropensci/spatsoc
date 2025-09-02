@@ -75,6 +75,11 @@
 #'  * \doi{doi:10.1073/pnas.1001763107}
 #'  * \doi{doi:10.1371/journal.pcbi.1008832}
 #'  * \doi{doi:10.3389/fphy.2021.715996}
+#'
+#' @family Edge-list generating functions
+#' @family Distance functions
+#' @family Direction functions
+#' @seealso [edge_dist] [direction_step] [edge_direction]
 edge_zones <- function(
     edges = NULL,
     zone_thresholds = NULL,
