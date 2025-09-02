@@ -66,8 +66,15 @@
 #'   \code{edges}, because it will be overwritten.
 #'
 #' @export
-#' TODO: @references (Couzin 2002, used in eg. Lukeman 2010, Klamser 2021, Klamser 2021)
-#' TODO: @inheritParams centroid_dyad
+#' @references
+#'
+#' The behavioural zones metric is defined in Couzin et al. 2002
+#' (\doi{doi:10.1006/jtbi.2002.3065}).
+#'
+#' See examples of measuring behavioural zones:
+#'  * \doi{doi:10.1073/pnas.1001763107}
+#'  * \doi{doi:10.1371/journal.pcbi.1008832}
+#'  * \doi{doi:10.3389/fphy.2021.715996}
 edge_zones <- function(
     edges = NULL,
     zone_thresholds = NULL,
