@@ -147,3 +147,9 @@ test_that('one column added to the result is a factor', {
                c(zone_labels, 'blind'))
 
 })
+test_that('returns a data.table', {
+  expect_s3_class(edge_zones(edges, zone_thresholds, zone_labels),
+                  'data.table')
+})
+
+
