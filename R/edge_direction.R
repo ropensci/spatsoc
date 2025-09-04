@@ -43,6 +43,9 @@
 #'  The direction between individuals is calculated with
 #'  \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
 #'
+#'  If the "direction" column is found in input DT, it will be retained for
+#'  ID1 in the output for use in downstream functions (eg. \code{edge_zones}).
+#'
 #'  Note: due to the merge required within this function, the output needs to be
 #'  reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
 #'  and \code{group_pts}. See details in
@@ -159,8 +162,14 @@ edge_direction <- function(
   id1_coords <- paste0('id1_', coords)
   id2_coords <- paste0('id2_', coords)
 
+  ID1_cols <- if ('direction' %in% colnames(DT)) {
+    c('direction', coords, id, timegroup)
+  } else {
+    c(coords, id, timegroup)
+  }
+
   m <- merge(edges,
-             DT[, .SD, .SDcols = c(coords, id, timegroup)],
+             DT[, .SD, .SDcols = ID1_cols],
              by.x = c('ID1', timegroup),
              by.y = c(id, timegroup),
              all.x = TRUE,
