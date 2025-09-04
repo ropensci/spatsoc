@@ -127,3 +127,23 @@ test_that('one column added to the result', {
                ncol(edge_zones(copyEdges, zone_thresholds, zone_labels)))
 })
 
+test_that('one column added to the result is a factor', {
+  copyEdges <- copy(edges)
+
+  expect_s3_class(edge_zones(copyEdges, zone_thresholds, zone_labels)$zone,
+                  'factor')
+
+  expect_equal(levels(edge_zones(copyEdges, zone_thresholds, zone_labels)$zone),
+              zone_labels)
+
+  copyDyadDirs <- copy(dyad_directions)
+
+  expect_s3_class(edge_zones(copyDyadDirs, zone_thresholds, zone_labels,
+                         blind_volume)$zone,
+                  'factor')
+
+  expect_equal(levels(edge_zones(copyDyadDirs, zone_thresholds, zone_labels,
+                                 blind_volume)$zone),
+               c(zone_labels, 'blind'))
+
+})
