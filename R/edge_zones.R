@@ -112,6 +112,47 @@
 #'   zone_thresholds = c(25, 50, 75),
 #'   zone_labels = c('repulsion', 'orientation', 'attraction')
 #' )
+#'
+#' # Alternatively, if a user wants to specify a blind volume,
+#' #   we need to measure directions
+#' direction_step(
+#'   DT = DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   projection = 32736
+#' )
+#'
+#' # Edge list generation
+#' edges <- edge_dist(
+#'   DT,
+#'   threshold = 100,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   timegroup = 'timegroup',
+#'   returnDist = TRUE,
+#'   fillNA = FALSE
+#' )
+#'
+#' # Generate dyad id
+#' dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
+#'
+#' # Interindividual directions
+#' dyad_directions <- edge_direction(
+#'   edges,
+#'   DT,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   projection = 32736,
+#'   timegroup = 'timegroup'
+#' )
+#'
+#' # Calculate behavioural zones
+#' edge_zones(
+#'   dyad_directions,
+#'   zone_thresholds = c(25, 50, 75),
+#'   zone_labels = c('repulsion', 'orientation', 'attraction'),
+#'   blind_volume = 2
+#' )
 edge_zones <- function(
     edges = NULL,
     zone_thresholds = NULL,
