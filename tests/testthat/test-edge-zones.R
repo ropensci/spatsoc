@@ -74,3 +74,18 @@ test_that('arguments required, otherwise error detected', {
     'zone_labels'
   )
 })
+
+test_that('columns must exist in edges', {
+  rm_col <- copy(edges)[, .SD, .SDcols = -'distance']
+  expect_error(edge_zones(rm_col, zone_thresholds, zone_labels),
+               'distance')
+
+  rm_col <- copy(dyad_directions)[, .SD, .SDcols = -'direction']
+  expect_error(edge_zones(rm_col, zone_thresholds, zone_labels, blind_volume),
+               'direction')
+
+  rm_col <- copy(dyad_directions)[, .SD, .SDcols = -'direction_dyad']
+  expect_error(edge_zones(rm_col, zone_thresholds, zone_labels, blind_volume),
+               'direction_dyad')
+
+})
