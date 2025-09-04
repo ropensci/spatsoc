@@ -97,18 +97,18 @@
 #'
 #' # Edge list generation
 #' edges <- edge_dist(
-#'     DT,
-#'     threshold = 100,
-#'     id = 'ID',
-#'     coords = c('X', 'Y'),
-#'     timegroup = 'timegroup',
-#'     returnDist = TRUE,
-#'     fillNA = FALSE
-#'   )
+#'   DT,
+#'   threshold = 100,
+#'   id = 'ID',
+#'   coords = c('X', 'Y'),
+#'   timegroup = 'timegroup',
+#'   returnDist = TRUE,
+#'   fillNA = FALSE
+#' )
 #'
 #' # Calculate behavioural zones
 #' edge_zones(
-#'   dyad_directions,
+#'   edges,
 #'   zone_thresholds = c(25, 50, 75),
 #'   zone_labels = c('repulsion', 'orientation', 'attraction')
 #' )
