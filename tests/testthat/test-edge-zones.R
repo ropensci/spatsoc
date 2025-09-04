@@ -153,3 +153,20 @@ test_that('returns a data.table', {
 })
 
 
+
+test_that('results are expected', {
+  expected <- merge(edge_zones(edges, zone_thresholds, zone_labels),
+                    data.table(threshold = zone_thresholds, zone = zone_labels),
+                    by = 'zone')
+
+  expect_true(all(expected[, distance < threshold, by = zone]$V1))
+
+  expected <- merge(edge_zones(dyad_directions, zone_thresholds,
+                               zone_labels, blind_volume),
+                    data.table(threshold = zone_thresholds, zone = zone_labels),
+                    by = 'zone')
+
+  expect_true(all(expected[, distance < threshold, by = zone]$V1))
+
+})
+
