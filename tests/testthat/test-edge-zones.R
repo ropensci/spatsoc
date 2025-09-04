@@ -109,7 +109,7 @@ test_that('zone column succesfully detected', {
   zones_present <- copy(edges)[, zone := 1]
   expect_message(
     edge_zones(zones_present, zone_thresholds, zone_labels),
-    'zones column will be overwritten'
+    'zone column will be overwritten'
   )
 })
 
