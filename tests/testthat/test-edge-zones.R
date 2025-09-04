@@ -104,3 +104,11 @@ test_that('columns are correctly provided or error detected', {
   expect_error(edge_zones(char_col, zone_thresholds, zone_labels, blind_volume),
                'radians')
 })
+
+test_that('zone column succesfully detected', {
+  zones_present <- copy(edges)[, zone := 1]
+  expect_message(
+    edge_zones(zones_present, zone_thresholds, zone_labels),
+    'zones column will be overwritten'
+  )
+})
