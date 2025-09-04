@@ -159,22 +159,68 @@ edge_zones <- function(
     zone_labels = NULL,
     blind_volume = NULL) {
 
-  # TODO: check if
-  #  - direction
-  #  - direction_dyad
-  #  - zones
-  #    - zone repulsion < orientation < attraction
-  #  - blind_volume
+  if (is.null(edges)) {
+    stop('input edges required')
+  }
 
-  edges[, zone := cut(distance, breaks = c(0, zone_thresholds),
-                       labels = c(zone_labels))]
+  if (is.null(zone_thresholds)) {
+    stop('zone_thresholds required')
+  }
+
+  if (is.null(zone_labels)) {
+    stop('zone_labels required')
+  }
+
+  if (!'distance' %in% colnames(edges)) {
+    stop('distance column not found in edges, did you run edge_dist?')
+  }
+
+  if (edges[, !is.numeric(distance)]) {
+    stop('distance must be numeric')
+  }
+
+  if (!Reduce('<', zone_thresholds)) {
+    zone_thresholds <- sort(zone_thresholds)
+    warning('zone thresholds reordered from smallest to greatest: ',
+            zone_thresholds)
+  }
+
+  out_col <- 'zone'
+  if (out_col %in% colnames(edges)) {
+    message(paste(out_col, 'column will be overwritten by this function'))
+    data.table::set(edges, j = out_col, value = NULL)
+  }
+
+  edges[, (out_col) := cut(distance, breaks = c(0, zone_thresholds),
+                           labels = c(zone_labels))]
 
   if (!is.null(blind_volume)) {
+    if (!'direction_dyad' %in% colnames(edges)) {
+      stop('direction_dyad column not found in edges, did you use edge_direction?')
+    }
+
+    if (!'direction' %in% colnames(edges)) {
+      stop('direction column not found in edges, did you use direction_step?')
+    }
+
+    if (edges[, !inherits(direction_dyad, 'units')] ||
+        edges[, units(direction_dyad)$numerator != 'rad']) {
+      stop('units(edges$direction_dyad) is not radians, did you use edge_direction?')
+    }
+
+    if (edges[, !inherits(direction, 'units')] ||
+        edges[, units(direction)$numerator != 'rad']) {
+      stop('units(edges$direction) is not radians, did you use direction_step?')
+    }
+
     edges[, direction_dyad_relative :=
             diff_rad(direction, direction_dyad, signed = TRUE)]
 
-    edges[abs(direction_dyad_relative) > blind_volume & !is.na(zone),
-          zone := 'blind']
+    edges[abs(direction_dyad_relative) > blind_volume & !is.na(get(out_col)),
+          (out_col) := 'blind']
+
   }
+
+  return(edges)
 
 }
