@@ -89,3 +89,18 @@ test_that('columns must exist in edges', {
                'direction_dyad')
 
 })
+
+test_that('columns are correctly provided or error detected', {
+  char_col <- copy(edges)[, distance := as.character(distance)]
+  expect_error(edge_zones(char_col, zone_thresholds, zone_labels),
+               'distance must be numeric')
+
+  char_col <- copy(dyad_directions)[, direction := as.character(direction)]
+  expect_error(edge_zones(char_col, zone_thresholds, zone_labels, blind_volume),
+               'radians',
+              )
+
+  char_col <- copy(dyad_directions)[, direction_dyad := as.character(direction_dyad)]
+  expect_error(edge_zones(char_col, zone_thresholds, zone_labels, blind_volume),
+               'radians')
+})
