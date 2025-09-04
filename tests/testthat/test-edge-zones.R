@@ -1,2 +1,47 @@
 # Test edge_zones
 context('test edge_zones')
+
+library(spatsoc)
+library(units)
+
+DT <- fread('../testdata/DT.csv')
+id <- 'ID'
+datetime <- 'datetime'
+timethreshold <- '20 minutes'
+threshold <- 50
+coords <- c('X', 'Y')
+projection <- 32736
+timegroup <- 'timegroup'
+group <- 'group'
+
+zone_thresholds <- c(5, 20, 50)
+zone_labels <- c('repulsion', 'orientation', 'attraction')
+blind_volume <- 2
+
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+group_times(DT, datetime = datetime, threshold = timethreshold)
+edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
+                   timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
+dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
+
+DT_blind <- copy(DT)
+direction_step(DT_blind, id, coords, projection)
+group_times(DT_blind, datetime = datetime, threshold = timethreshold)
+edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
+                   timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
+dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
+dyad_directions <- edge_direction(edges, DT_blind, id, coords,
+                                  projection, timegroup)
+
+# edge_zones(
+#   edges = edges,
+#   zone_thresholds = zone_thresholds,
+#   zone_labels = zone_labels
+# )
+
+# edge_zones(
+#   edges = dyad_directions,
+#   zone_thresholds = zone_thresholds,
+#   zone_labels = zone_labels,
+#   blind_volume = blind_volume
+# )
