@@ -45,3 +45,32 @@ dyad_directions <- edge_direction(edges, DT_blind, id, coords,
 #   zone_labels = zone_labels,
 #   blind_volume = blind_volume
 # )
+
+test_that('arguments required, otherwise error detected', {
+  expect_error(
+    edge_zones(
+      edges = NULL,
+      zone_thresholds = zone_thresholds,
+      zone_labels = zone_labels
+    ),
+    'edges'
+  )
+
+  expect_error(
+    edge_zones(
+      edges = edges,
+      zone_thresholds = NULL,
+      zone_labels = zone_labels
+    ),
+    'zone_thresholds'
+  )
+
+  expect_error(
+    edge_zones(
+      edges = edges,
+      zone_thresholds = zone_thresholds,
+      zone_labels = NULL
+    ),
+    'zone_labels'
+  )
+})
