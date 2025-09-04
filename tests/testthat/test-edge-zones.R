@@ -112,3 +112,18 @@ test_that('zone column succesfully detected', {
     'zones column will be overwritten'
   )
 })
+
+test_that('no rows are added to the result', {
+  copyEdges <- copy(edges)
+
+  expect_equal(nrow(copyEdges),
+               nrow(edge_zones(copyEdges, zone_thresholds, zone_labels)))
+})
+
+test_that('one column added to the result', {
+  copyEdges <- copy(edges)
+
+  expect_equal(ncol(copyEdges) + 1,
+               ncol(edge_zones(copyEdges, zone_thresholds, zone_labels)))
+})
+
