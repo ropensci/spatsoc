@@ -23,6 +23,7 @@
 #' expected to ensure the relevant direction columns are available:
 #'    1. direction_step(DT)
 #'    1. edges <- edge_dist(DT)
+#'    1. dyad_id(edges)
 #'    1. dyad_directions <- edge_direction(edges, DT)
 #'    1. edge_zones(dyad_directions)
 #'
