@@ -10,8 +10,8 @@
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
 #' This function expects a `rank_position_group_direction` column
 #' generated with `leader_direction_group(return_rank = TRUE)`,

@@ -52,7 +52,7 @@
 #' @export
 #'
 #' @family Build functions
-#' @seealso \code{group_lines}
+#' @seealso `group_lines`
 #'
 #' @import data.table
 #'

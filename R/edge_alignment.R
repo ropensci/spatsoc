@@ -8,7 +8,7 @@
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}}.
+#' [data.table::setDT()].
 #'
 #' The `id`, `direction`, `timegroup`, and optional `group`
 #' and `splitBy` arguments expect the names of a column in `DT` which

@@ -8,8 +8,8 @@
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
 #' The `direction` and `group` arguments expect the names of columns
 #' in `DT` which correspond to the direction and group columns. The
@@ -36,7 +36,7 @@
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
-#' @seealso \code{direction_step}, \code{group_pts},
+#' @seealso `direction_step`, `group_pts`,
 #'   [CircStats::circ.mean()]
 #' @family Direction functions
 #'

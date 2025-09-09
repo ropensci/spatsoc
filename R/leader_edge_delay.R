@@ -12,8 +12,8 @@
 #'
 #' The `edge` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
 #' @return `leader_edge_delay` returns the input `edges` aggregated
 #'   with a `mean_direction_delay_dyad` column indicating the mean
@@ -31,13 +31,13 @@
 #' @param threshold (optional) threshold difference in direction used to subset
 #'   rows included in calculation of mean directional delay. eg.
 #'   `threshold = 0.5` corresponds to only rows where direction_diff is
-#'   less than 0.5. Expects that unit is radians, see \code{edge_delay}.
+#'   less than 0.5. Expects that unit is radians, see `edge_delay`.
 #' @param splitBy (optional) character string or vector of grouping column
 #'   name(s) upon which the mean directional correlation delay will be
 #'   calculated
 #'
 #' @export
-#' @seealso \code{edge_delay}
+#' @seealso `edge_delay`
 #' @family Leadership functions
 #' @family Direction functions
 #'

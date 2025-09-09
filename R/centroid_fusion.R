@@ -12,8 +12,8 @@
 #'
 #' The `edges` and `DT` must be `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
 #' The `edges` and `DT` are internally merged in this function using
 #' the columns `timegroup` (from `group_times`) and `ID1` and

@@ -9,7 +9,7 @@
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}}.
+#' [data.table::setDT()].
 #'
 #' Three randomization `type`s are provided: \enumerate{ \item step -
 #' randomizes identities of relocations between individuals within each time
@@ -37,7 +37,7 @@
 #' The `group` argument is expected only when `type` is 'step' or
 #' 'daily'.
 #'
-#' For example, using \code{\link[data.table:IDateTime]{data.table::year}}:
+#' For example, using [`data.table::year()`][data.table::IDateTime]:
 #'
 #' \preformatted{ DT[, yr := year(datetime)] randomizations(DT, type = 'step',
 #' id = 'ID', datetime = 'timegroup', splitBy = 'yr') }

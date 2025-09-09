@@ -10,7 +10,7 @@
 #'
 #' The `edges` and `DT` must be `data.table`s. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}}.
+#' [data.table::setDT()].
 #'
 #' The `edges` argument expects a distance based edge-list generated with
 #' `edge_nn` or `edge_dist`. The `DT` argument expects relocation

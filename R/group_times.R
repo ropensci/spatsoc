@@ -6,7 +6,7 @@
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}}.
+#' [data.table::setDT()].
 #'
 #' The `datetime` argument expects the name of a column in `DT` which
 #' is of type `POSIXct` or the name of two columns in `DT` which are
@@ -64,8 +64,8 @@
 #' @export
 #'
 #' @family Temporal grouping
-#' @seealso \code{group_pts} \code{group_lines}
-#'   \code{group_polys}
+#' @seealso `group_pts` `group_lines`
+#'   `group_polys`
 #' @examples
 #' # Load data.table
 #' library(data.table)

@@ -9,8 +9,8 @@
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
 #' This function expects a `group` column present generated with the
 #' `group_pts` function and centroid coordinate columns generated with the

@@ -8,8 +8,8 @@
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
 #' The `id`, `coords`, `timegroup` (and optional `splitBy`)
 #' arguments expect the names of a column in `DT` which correspond to the
@@ -23,10 +23,10 @@
 #'
 #' The `timegroup` argument is required to define the temporal groups
 #' within which spatial groups are calculated. The intended framework is to
-#' group rows temporally with \code{group_times} then spatially with
-#' `group_pts` (or \code{group_lines}, \code{group_polys}).
+#' group rows temporally with `group_times` then spatially with
+#' `group_pts` (or `group_lines`, `group_polys`).
 #' If you have already calculated temporal groups without
-#' \code{group_times}, you can pass this column to the `timegroup`
+#' `group_times`, you can pass this column to the `timegroup`
 #' argument. Note that the expectation is that each individual will be observed
 #' only once per timegroup. Caution that accidentally including huge numbers of
 #' rows within timegroups can overload your machine since all pairwise distances
@@ -68,7 +68,7 @@
 #' @export
 #'
 #' @family Spatial grouping
-#' @seealso \code{group_times}
+#' @seealso `group_times`
 #'
 #' @examples
 #' # Load data.table
