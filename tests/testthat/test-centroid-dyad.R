@@ -143,3 +143,29 @@ test_that('results are expected', {
   )
 })
 
+
+test_that('NAs in dyadID result in NAs for centroid', {
+  # Set fillNA = TRUE
+  edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
+                     timegroup = timegroup, returnDist = TRUE,
+                     fillNA = TRUE)
+  dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
+
+  # Set na.rm = TRUE
+  centroids <- centroid_dyad(edges, DT, id, coords, na.rm = TRUE)
+  expect_true(
+    centroids[is.na(dyadID), all(is.na(centroid_X))]
+  )
+  expect_true(
+    centroids[is.na(dyadID), all(is.na(centroid_Y))]
+  )
+
+  # Set na.rm = FALSE
+  centroids <- centroid_dyad(edges, DT, id, coords, na.rm = FALSE)
+  expect_true(
+    centroids[is.na(dyadID), all(is.na(centroid_X))]
+  )
+  expect_true(
+    centroids[is.na(dyadID), all(is.na(centroid_Y))]
+  )
+})
