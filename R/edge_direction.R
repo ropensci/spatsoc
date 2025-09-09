@@ -37,18 +37,19 @@
 #'  * \doi{doi:10.1098/rstb.2019.0380}
 #'  * \doi{doi:10.1111/jfb.15315}
 #'
-#' @return \code{edge_direction} returns the input \code{edges} appended with
-#'  a "direction_dyad" column representing the direction between ID1 and ID2.
+#' @return \code{edge_direction} returns the input \code{edges} appended with a
+#'   "direction_dyad" column representing the direction between ID1 and ID2. The
+#'   direction between individuals is calculated with
+#'   \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
 #'
-#'  TODO: if direction is in DT, preserved for ID1
+#'   If the "direction" column from \code{direction_step} is found, it will be
+#'   preserved in the output for ID1 to be used in downstream functions eg.
+#'   \code{edge_zones}.
 #'
-#'  The direction between individuals is calculated with
-#'  \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
-#'
-#'  Note: due to the merge required within this function, the output needs to be
-#'  reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
-#'  and \code{group_pts}. See details in
-#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'   Note: due to the merge required within this function, the output needs to
+#'   be reassigned unlike some other \code{spatsoc} functions like
+#'   \code{dyad_id} and \code{group_pts}. See details in
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
 #' @family Edge-list generation

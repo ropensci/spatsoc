@@ -33,15 +33,18 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \item{timegroup}{character string of timegroup column name, default "timegroup"}
 }
 \value{
-\code{edge_direction} returns the input \code{edges} appended with
-a "direction_dyad" column representing the direction between ID1 and ID2.
-
-The direction between individuals is calculated with
+\code{edge_direction} returns the input \code{edges} appended with a
+"direction_dyad" column representing the direction between ID1 and ID2. The
+direction between individuals is calculated with
 \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
 
-Note: due to the merge required within this function, the output needs to be
-reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
-and \code{group_pts}. See details in
+If the "direction" column from \code{direction_step} is found, it will be
+preserved in the output for ID1 to be used in downstream functions eg.
+\code{edge_zones}.
+
+Note: due to the merge required within this function, the output needs to
+be reassigned unlike some other \code{spatsoc} functions like
+\code{dyad_id} and \code{group_pts}. See details in
 \href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
