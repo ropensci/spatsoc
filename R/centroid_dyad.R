@@ -195,5 +195,7 @@ centroid_dyad <- function(
   data.table::set(m, j = c(id1_coords, id2_coords), value = NULL)
   data.table::setcolorder(m, colnames(edges))
 
+  m[is.na(dyadID), (c(out_xcol, out_ycol)) := NA]
+
   return(m[])
 }
