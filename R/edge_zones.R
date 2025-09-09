@@ -214,6 +214,8 @@ edge_zones <- function(
     edges[abs(direction_dyad_relative) > blind_volume & !is.na(get(out_col)),
           (out_col) := 'blind']
 
+    data.table::set(edges, j = 'direction_dyad_relative', value = NULL)
+
   }
 
   return(edges)
