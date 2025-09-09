@@ -34,7 +34,7 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 }
 \value{
 \code{edge_direction} returns the input \code{edges} appended with a
-"direction_dyad" column representing the direction between ID1 and ID2. The
+"direction_dyad" column representing the direction from ID1 to ID2. The
 direction between individuals is calculated with
 \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
 
@@ -57,7 +57,7 @@ It is required to use the argument \code{fillNA = FALSE} for
 Relocation data should be in two columns representing the X and Y coordinates.
 }
 \details{
-The \code{edges} and \code{DT} must be \code{data.table}. If your data is a
+The \code{edges} and \code{DT} must be \code{data.table}s. If your data is a
 \code{data.frame}, you can convert it by reference using
 \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
 \code{\link[data.table:data.table]{data.table::data.table}}.
