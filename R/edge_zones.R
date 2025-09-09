@@ -159,6 +159,8 @@ edge_zones <- function(
     zone_thresholds = NULL,
     zone_labels = NULL,
     blind_volume = NULL) {
+  # due to NSE notes in R CMD check
+  distance <- direction_dyad <- direction <- direction_dyad_relative <- NULL
 
   if (is.null(edges)) {
     stop('input edges required')
