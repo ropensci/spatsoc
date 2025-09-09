@@ -36,7 +36,7 @@
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
-#' @seealso \code{\link{group_pts}}
+#' @seealso \code{group_pts}
 #' @family Centroid functions
 #' @examples
 #' # Load data.table

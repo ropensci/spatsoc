@@ -9,16 +9,16 @@
 #'
 #' The spatsoc package provides one temporal grouping function:
 #'
-#' \itemize{ \item \code{\link{group_times}} } three spatial grouping functions:
-#' \itemize{ \item \code{\link{group_pts}} \item \code{\link{group_lines}} \item
-#' \code{\link{group_polys}} }
+#' \itemize{ \item \code{group_times} } three spatial grouping functions:
+#' \itemize{ \item \code{group_pts} \item \code{group_lines} \item
+#' \code{group_polys} }
 #'
 #' two edge-list generating functions:
 #'
-#' \itemize{ \item \code{\link{edge_dist}} \item \code{\link{edge_nn}} }
+#' \itemize{ \item \code{edge_dist} \item \code{edge_nn} }
 #'
 #' and two social network functions: \itemize{ \item
-#' \code{\link{randomizations}} \item \code{\link{get_gbi}} }
+#' \code{randomizations} \item \code{get_gbi} }
 #'
 #' @docType package
 #' @name spatsoc

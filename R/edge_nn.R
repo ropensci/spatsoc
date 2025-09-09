@@ -23,9 +23,9 @@
 #'
 #' The `timegroup` argument is required to define the temporal groups
 #' within which edge nearest neighbours are calculated. The intended framework
-#' is to group rows temporally with \code{\link{group_times}} then spatially
+#' is to group rows temporally with \code{group_times} then spatially
 #' with `edge_nn`. If you have already calculated temporal groups without
-#' \code{\link{group_times}}, you can pass this column to the `timegroup`
+#' \code{group_times}, you can pass this column to the `timegroup`
 #' argument. Note that the expectation is that each individual will be observed
 #' only once per timegroup. Caution that accidentally including huge numbers of
 #' rows within timegroups can overload your machine since all pairwise distances

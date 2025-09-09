@@ -47,7 +47,7 @@
 #' @param allow_split boolean defining if a single observation can be greater
 #'   than the threshold distance without initiating fission event
 #' @export
-#' @seealso \code{\link{edge_dist}}
+#' @seealso \code{edge_dist}
 #' @references
 #' See examples of identifying fission-fusion events with spatiotemporal data:
 #'  * \doi{doi:10.1111/ele.12457}

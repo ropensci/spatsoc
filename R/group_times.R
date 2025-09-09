@@ -64,8 +64,8 @@
 #' @export
 #'
 #' @family Temporal grouping
-#' @seealso \code{\link{group_pts}} \code{\link{group_lines}}
-#'   \code{\link{group_polys}}
+#' @seealso \code{group_pts} \code{group_lines}
+#'   \code{group_polys}
 #' @examples
 #' # Load data.table
 #' library(data.table)

@@ -51,7 +51,7 @@
 #'   `direction_group`, default 'group_direction'
 #'
 #' @export
-#' @seealso \code{\link{direction_group}}, \code{\link{centroid_group}}
+#' @seealso \code{direction_group}, \code{centroid_group}
 #' @family Leadership functions
 #' @family Direction functions
 #'

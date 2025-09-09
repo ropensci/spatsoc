@@ -36,7 +36,7 @@
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
-#' @seealso \code{\link{direction_step}}, \code{\link{group_pts}},
+#' @seealso \code{direction_step}, \code{group_pts},
 #'   [CircStats::circ.mean()]
 #' @family Direction functions
 #'
