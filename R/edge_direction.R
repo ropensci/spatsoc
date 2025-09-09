@@ -163,6 +163,8 @@ edge_direction <- function(
              DT[, .SD,
                 .SDcols = if ('direction' %in% colnames(DT)) {
                   c(merge_cols, 'direction')
+                } else {
+                  merge_cols
                 }],
              by.x = c('ID1', timegroup),
              by.y = c(id, timegroup),
