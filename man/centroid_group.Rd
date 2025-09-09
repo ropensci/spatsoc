@@ -34,15 +34,15 @@ See details for appending outputs using modify-by-reference in the
 \description{
 \code{centroid_group} calculates the centroid (mean location) of all
 individuals in each spatiotemporal group identified by \code{group_pts}. The
-function accepts a \code{data.table} with relocation data appended with a
+function expects a \code{data.table} with relocation data appended with a
 \code{group} column from \code{group_pts}. Relocation data should be in two
 columns representing the X and Y coordinates.
 }
 \details{
 The \code{DT} must be a \code{data.table}. If your data is a
 \code{data.frame}, you can convert it by reference using
-\code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-\code{\link[data.table:data.table]{data.table::data.table}}.
+\code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
+\code{\link[data.table:data.table]{data.table::data.table()}}.
 
 The \code{coords} and \code{group} arguments expect the names of a column in
 \code{DT} which correspond to the X and Y coordinates and group columns. The
@@ -71,7 +71,7 @@ group_pts(DT, threshold = 5, id = 'ID',
 centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
 }
 \seealso{
-\code{\link{group_pts}}
+\code{group_pts}
 
 Other Centroid functions: 
 \code{\link{centroid_dyad}()},

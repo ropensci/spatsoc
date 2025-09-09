@@ -2,7 +2,7 @@
 % Please edit documentation in R/group_lines.R
 \name{group_lines}
 \alias{group_lines}
-\title{Group Lines}
+\title{Group lines}
 \usage{
 group_lines(
   DT = NULL,
