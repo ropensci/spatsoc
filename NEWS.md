@@ -4,6 +4,10 @@ New experimental function:
 
 * `edge_alignment` function for calculating directional alignment ([PR 111](https://github.com/ropensci/spatsoc/pull/111))
 
+Fixes:
+
+* fix missing pkg::function ([PR 110](https://github.com/ropensci/spatsoc/pull/110))
+
 
 # spatsoc 0.2.9
 
