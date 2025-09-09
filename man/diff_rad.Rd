@@ -25,8 +25,9 @@ difference between 2 rad and -2.5 rad is 1.78.
 Internal function
 }
 \examples{
-# Load data.table
+# Load data.table, units
 library(data.table)
+library(units)
 \dontshow{data.table::setDTthreads(1)}
 
 # Read example data

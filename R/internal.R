@@ -14,8 +14,9 @@
 #' @references adapted from https://stackoverflow.com/a/7869457
 #' @keywords internal
 #' @examples
-#' # Load data.table
+#' # Load data.table, units
 #' library(data.table)
+#' library(units)
 #' \dontshow{data.table::setDTthreads(1)}
 #'
 #' # Read example data
