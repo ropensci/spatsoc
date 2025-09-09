@@ -121,16 +121,12 @@ edge_direction <- function(
     stop('timegroup required')
   }
 
-  if (any(!(
-    c('dyadID', timegroup) %in% colnames(edges)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c('dyadID', timegroup),
-        colnames(edges)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
+  if (!'timegroup' %in% colnames(edges)) {
+    stop('timegroup field provided are not present in input edges')
+  }
+
+  if (!'dyadID' %in% colnames(edges)) {
+    stop('dyadID not present in input edges, did you run dyad_id?')
   }
 
   if (any(!(
