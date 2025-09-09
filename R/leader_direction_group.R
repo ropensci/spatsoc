@@ -7,7 +7,7 @@
 #' leadership in terms of the front-back position in each group's mean
 #' direction.
 #'
-#' The function accepts a \code{data.table} with relocation data appended with a
+#' The function expects a \code{data.table} with relocation data appended with a
 #' \code{group_direction} column from \code{direction_group} and group centroid
 #' columns from \code{centroid_group}. Relocation data should be in two columns
 #' representing the X and Y coordinates.

@@ -1,7 +1,7 @@
 #' Fusion centroid
 #'
 #' \code{centroid_fusion} calculates the centroid (mean location) of each
-#' timestep in fusion events. The function accepts an edge-list of fusion events
+#' timestep in fusion events. The function expects an edge-list of fusion events
 #' identified by \code{fusion_id} from edge-lists generated with
 #' \code{edge_dist} and a \code{data.table} with relocation data appended with a
 #' \code{timegroup} column from \code{group_times}. It is recommended to use the

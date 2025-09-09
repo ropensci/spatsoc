@@ -1,7 +1,7 @@
 #' Direction step
 #'
 #' \code{direction_step} calculates the direction of movement steps in radians.
-#' The function accepts a \code{data.table} with relocation data and individual
+#' The function expects a \code{data.table} with relocation data and individual
 #' identifiers. Relocation data should be in two columns representing the X and
 #' Y coordinates. Note the order of rows is not modified by this function and
 #' therefore users must be cautious to set it explicitly. See example for one

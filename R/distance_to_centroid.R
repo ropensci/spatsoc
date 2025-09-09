@@ -2,7 +2,7 @@
 #'
 #' \code{distance_to_centroid} calculates the distance of each relocation to the
 #' centroid of the spatiotemporal group identified by \code{group_pts}. The
-#' function accepts a \code{data.table} with relocation data appended with a
+#' function expects a \code{data.table} with relocation data appended with a
 #' \code{group} column from \code{group_pts} and centroid columns from
 #' \code{centroid_group}. Relocation data should be in planar coordinates
 #' provided in two columns representing the X and Y coordinates.

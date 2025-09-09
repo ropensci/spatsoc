@@ -2,7 +2,7 @@
 #'
 #' \code{centroid_group} calculates the centroid (mean location) of all
 #' individuals in each spatiotemporal group identified by \code{group_pts}. The
-#' function accepts a \code{data.table} with relocation data appended with a
+#' function expects a \code{data.table} with relocation data appended with a
 #' \code{group} column from \code{group_pts}. Relocation data should be in two
 #' columns representing the X and Y coordinates.
 #'

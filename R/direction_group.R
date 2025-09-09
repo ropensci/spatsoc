@@ -2,7 +2,7 @@
 #'
 #' \code{direction_group} calculates the mean direction of all individuals in
 #' each spatiotemporal group identified by \code{group_pts}. The function
-#' accepts a \code{data.table} with relocation data appended with a
+#' expects a \code{data.table} with relocation data appended with a
 #' \code{direction} column from \code{direction_step} and a \code{group} column
 #' from \code{group_pts}.
 #'
