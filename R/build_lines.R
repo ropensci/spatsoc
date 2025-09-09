@@ -11,12 +11,12 @@
 #'
 #'  Please note, spatsoc has followed updates from R spatial, GDAL and PROJ
 #'  for handling projections, see more at
-#'  \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
+#'  <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
 #' In addition, `build_lines` previously used [sp::SpatialLines] but has been
 #' updated to use [sf::st_as_sf] and [sf::st_linestring] according to the
 #' R-spatial evolution, see more at
-#' \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
+#' <https://r-spatial.org/r/2022/04/12/evolution.html>.
 #'
 #' ## Notes on arguments
 #'
@@ -24,7 +24,7 @@
 #' coordinate reference system.
 #' For example, for UTM zone 36N (EPSG 32736), the projection argument is either
 #'  `projection = 'EPSG:32736'` or `projection = 32736`.
-#'  See details in [`sf::st_crs()`] and \url{https://spatialreference.org}
+#'  See details in [`sf::st_crs()`] and <https://spatialreference.org>
 #'  for a list of EPSG codes.
 #'
 #' The `sortBy` argument is used to order the input `DT` when creating
