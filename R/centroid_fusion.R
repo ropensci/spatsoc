@@ -101,6 +101,8 @@ centroid_fusion <- function(
     coords = NULL,
     timegroup = 'timegroup',
     na.rm = FALSE) {
+  # Due to NSE notes in R CMD check
+  fusionID <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')

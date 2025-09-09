@@ -96,6 +96,8 @@ centroid_dyad <- function(
     coords = NULL,
     timegroup = 'timegroup',
     na.rm = FALSE) {
+  # Due to NSE notes in R CMD check
+  dyadID <- NULL
 
   if (is.null(DT)) {
     stop('input DT required')
