@@ -28,6 +28,7 @@
 #'   \code{group_times} matching the input data.table used to generate the edge
 #'   list with \code{edge_nn} or \code{edge_dist}
 #' @inheritParams edge_alignment
+#' @inheritParams group_pts
 #' @param na.rm if NAs should be removed in calculating mean location, see
 #'   \code{rowMeans}
 #'
