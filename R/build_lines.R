@@ -1,5 +1,4 @@
-#' Build Lines
-#'
+#' Build lines
 #'
 #' `build_lines` generates a simple feature collection with LINESTRINGs from a
 #' `data.table`. The function expects a `data.table` with relocation data,

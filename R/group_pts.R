@@ -1,4 +1,4 @@
-#' Group Points
+#' Group points
 #'
 #' \code{group_pts} groups rows into spatial groups. The function expects a
 #' \code{data.table} with relocation data, individual identifiers and a

@@ -1,5 +1,4 @@
-#' Generate group by individual matrix
-#'
+#' Group by individual matrix
 #'
 #' \code{get_gbi} generates a group by individual matrix. The function expects a
 #' \code{data.table} with individual identifiers and a group column. The group

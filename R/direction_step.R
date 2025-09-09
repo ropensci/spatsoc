@@ -1,4 +1,4 @@
-#' Calculate direction at each step
+#' Direction step
 #'
 #' \code{direction_step} calculates the direction of movement steps in radians.
 #' The function accepts a \code{data.table} with relocation data and individual

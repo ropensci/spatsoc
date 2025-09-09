@@ -1,4 +1,4 @@
-#' Group Polygons
+#' Group polygons
 #'
 #' `group_polys` groups rows into spatial groups by overlapping polygons (home
 #' ranges). The function expects a `data.table` with relocation data, individual

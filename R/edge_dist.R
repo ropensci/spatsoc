@@ -1,13 +1,11 @@
 #' Distance based edge-lists
 #'
-#'
 #' \code{edge_dist} returns edge-lists defined by a spatial distance within the
 #' user defined threshold. The function expects a \code{data.table} with
 #' relocation data, individual identifiers and a threshold argument. The
 #' threshold argument is used to specify the criteria for distance between
 #' points which defines a group. Relocation data should be in two columns
 #' representing the X and Y coordinates.
-#'
 #'
 #' The \code{DT} must be a \code{data.table}. If your data is a
 #' \code{data.frame}, you can convert it by reference using
