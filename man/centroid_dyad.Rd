@@ -23,6 +23,9 @@ list with \code{edge_nn} or \code{edge_dist}}
 
 \item{id}{character string of ID column name}
 
+\item{coords}{character vector of X coordinate and Y coordinate column names.
+Note: the order is assumed X followed by Y column names.}
+
 \item{timegroup}{character string of timegroup column name, default "timegroup"}
 
 \item{na.rm}{if NAs should be removed in calculating mean location, see

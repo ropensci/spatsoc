@@ -39,6 +39,9 @@ a "direction_dyad" column representing the direction between ID1 and ID2.
 The direction between individuals is calculated with
 \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
 
+If the "direction" column is found in input DT, it will be retained for
+ID1 in the output for use in downstream functions (eg. \code{edge_zones}).
+
 Note: due to the merge required within this function, the output needs to be
 reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
 and \code{group_pts}. See details in
@@ -138,6 +141,7 @@ Other Direction functions:
 \code{\link{edge_alignment}()},
 \code{\link{edge_delay}()},
 \code{\link{edge_dist}()},
+\code{\link{edge_zones}()},
 \code{\link{leader_direction_group}()},
 \code{\link{leader_edge_delay}()}
 }

@@ -141,6 +141,7 @@ Other Direction functions:
 \code{\link{edge_delay}()},
 \code{\link{edge_direction}()},
 \code{\link{edge_dist}()},
+\code{\link{edge_zones}()},
 \code{\link{leader_edge_delay}()}
 }
 \concept{Direction functions}
