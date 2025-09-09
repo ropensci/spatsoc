@@ -129,7 +129,7 @@ centroid_fusion <- function(
         check_cols_edges,
         colnames(edges)
       ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
+      ' field(s) provided are not present in input edges'
     ))
   }
 
