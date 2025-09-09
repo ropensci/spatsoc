@@ -13,7 +13,7 @@
 #' \itemize{ \item \code{\link{group_pts}} \item \code{\link{group_lines}} \item
 #' \code{\link{group_polys}} }
 #'
-#' two edge list generating functions:
+#' two edge-list generating functions:
 #'
 #' \itemize{ \item \code{\link{edge_dist}} \item \code{\link{edge_nn}} }
 #'

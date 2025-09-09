@@ -1,7 +1,7 @@
-#' Nearest neighbour based edge lists
+#' Nearest neighbour based edge-lists
 #'
 #'
-#' \code{edge_nn} returns edge lists defined by the nearest neighbour. The
+#' \code{edge_nn} returns edge-lists defined by the nearest neighbour. The
 #' function expects a \code{data.table} with relocation data, individual
 #' identifiers and a threshold argument. The threshold argument is used to
 #' specify the criteria for distance between points which defines a group.
@@ -85,15 +85,15 @@
 #' # Temporal grouping
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
-#' # Edge list generation
+#' # Edge-list generation
 #' edges <- edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 #'         timegroup = 'timegroup')
 #'
-#' # Edge list generation using maximum distance threshold
+#' # Edge-list generation using maximum distance threshold
 #' edges <- edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 #'         timegroup = 'timegroup', threshold = 100)
 #'
-#' # Edge list generation, returning distance between nearest neighbours
+#' # Edge-list generation, returning distance between nearest neighbours
 #' edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 #'         timegroup = 'timegroup', threshold = 100,
 #'         returnDist = TRUE)

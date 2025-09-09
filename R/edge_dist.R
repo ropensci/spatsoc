@@ -1,7 +1,7 @@
-#' Distance based edge lists
+#' Distance based edge-lists
 #'
 #'
-#' \code{edge_dist} returns edge lists defined by a spatial distance within the
+#' \code{edge_dist} returns edge-lists defined by a spatial distance within the
 #' user defined threshold. The function expects a \code{data.table} with
 #' relocation data, individual identifiers and a threshold argument. The
 #' threshold argument is used to specify the criteria for distance between
@@ -81,7 +81,7 @@
 #' # Temporal grouping
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
-#' # Edge list generation
+#' # Edge-list generation
 #' edges <- edge_dist(
 #'     DT,
 #'     threshold = 100,
