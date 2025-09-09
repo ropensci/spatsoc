@@ -94,3 +94,6 @@ news:
 - one_page: true
 
 url: https://docs.ropensci.org/spatsoc/
+
+template:
+  bootstrap: 5
