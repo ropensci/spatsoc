@@ -153,6 +153,7 @@
 #'   zone_labels = c('repulsion', 'orientation', 'attraction'),
 #'   blind_volume = 2
 #' )
+#' print(dyad_directions[, .SD[1:3], by = zone])
 edge_zones <- function(
     edges = NULL,
     zone_thresholds = NULL,
