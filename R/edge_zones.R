@@ -179,12 +179,6 @@ edge_zones <- function(
     stop('distance must be numeric')
   }
 
-  if (!Reduce('<', zone_thresholds)) {
-    zone_thresholds <- sort(zone_thresholds)
-    warning('zone thresholds reordered from smallest to greatest: ',
-            zone_thresholds)
-  }
-
   out_col <- 'zone'
   if (out_col %in% colnames(edges)) {
     message(paste(out_col, 'column will be overwritten by this function'))
