@@ -125,6 +125,9 @@ test_that('one column added to the result', {
 
   expect_equal(ncol(copyEdges) + 1,
                ncol(edge_zones(copyEdges, zone_thresholds, zone_labels)))
+
+  expect_false('direction_dyad_relative' %in%
+                 colnames(edge_zones(copyEdges, zone_thresholds, zone_labels)))
 })
 
 test_that('one column added to the result is a factor', {
@@ -169,4 +172,3 @@ test_that('results are expected', {
   expect_true(all(expected[, distance < threshold, by = zone]$V1))
 
 })
-
