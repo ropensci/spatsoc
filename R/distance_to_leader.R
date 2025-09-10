@@ -132,14 +132,13 @@ distance_to_leader <- function(
   leader_col <- 'rank_position_group_direction'
 
   if (!leader_col %in% colnames(DT)) {
-    stop(paste0(
-      leader_col,
-      ' column not present in input DT, ',
-      'did you run leader_direction_group(return_rank = TRUE)?'))
+    stop(leader_col,
+         ' column not present in input DT, ',
+         'did you run leader_direction_group(return_rank = TRUE)?')
   }
 
   if (!is.numeric(DT[[leader_col]])) {
-    stop(paste0(leader_col, ' column must be numeric'))
+    stop(leader_col, ' column must be numeric')
   }
 
 
