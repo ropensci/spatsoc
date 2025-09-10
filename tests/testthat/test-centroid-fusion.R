@@ -158,3 +158,31 @@ test_that('results are expected', {
   )
 })
 
+
+
+test_that('NAs in fusionID result in NAs for centroid', {
+  # Set fillNA = TRUE
+  edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
+                     timegroup = timegroup, returnDist = TRUE,
+                     fillNA = TRUE)
+  dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
+  fusion_id(edges, threshold = threshold)
+
+  # Set na.rm = TRUE
+  centroids <- centroid_fusion(edges, DT, id, coords, na.rm = TRUE)
+  expect_true(
+    centroids[is.na(fusionID), all(is.na(centroid_X))]
+  )
+  expect_true(
+    centroids[is.na(fusionID), all(is.na(centroid_Y))]
+  )
+
+  # Set na.rm = FALSE
+  centroids <- centroid_fusion(edges, DT, id, coords, na.rm = FALSE)
+  expect_true(
+    centroids[is.na(fusionID), all(is.na(centroid_X))]
+  )
+  expect_true(
+    centroids[is.na(fusionID), all(is.na(centroid_Y))]
+  )
+})
