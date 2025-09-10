@@ -125,7 +125,7 @@ centroid_fusion <- function(
   }
 
   check_cols_edges <- c('fusionID', 'ID1', 'ID2', timegroup)
-  if (any(!(check_cols_edges %in% colnames(edges)))) {
+  if (!all((check_cols_edges %in% colnames(edges)))) {
     stop(paste0(
       as.character(paste(setdiff(
         check_cols_edges,
@@ -135,7 +135,7 @@ centroid_fusion <- function(
     ))
   }
 
-  if (any(!(
+  if (!all((
     c(id, coords, timegroup) %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -147,7 +147,7 @@ centroid_fusion <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 

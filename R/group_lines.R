@@ -199,7 +199,7 @@ group_lines <-
         stop('sortBy must be provided')
       }
 
-      if (any(!(c(id, coords, timegroup, sortBy) %in% colnames(DT)))) {
+      if (!all((c(id, coords, timegroup, sortBy) %in% colnames(DT)))) {
         stop(paste0(
           as.character(paste(setdiff(
             c(id, coords), colnames(DT)

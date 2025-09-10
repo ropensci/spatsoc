@@ -114,7 +114,7 @@ direction_to_leader <- function(
 
   check_cols <- c(coords, group)
 
-  if (any(!(check_cols %in% colnames(DT)))) {
+  if (!all((check_cols %in% colnames(DT)))) {
     stop(paste0(
       as.character(paste(setdiff(
         check_cols,
@@ -124,7 +124,7 @@ direction_to_leader <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 
@@ -138,7 +138,7 @@ direction_to_leader <- function(
   }
 
   if (!is.numeric(DT[[leader_col]])) {
-    stop(paste0(leader_col, ' column must be numeric'))
+    stop(leader_col, ' column must be numeric')
   }
 
   out_col <- 'direction_leader'

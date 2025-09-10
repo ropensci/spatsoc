@@ -119,7 +119,7 @@ centroid_dyad <- function(
     stop('timegroup column name required')
   }
 
-  if (any(!(
+  if (!all((
     c('dyadID', timegroup) %in% colnames(edges)
   ))) {
     stop(paste0(
@@ -131,7 +131,7 @@ centroid_dyad <- function(
     ))
   }
 
-  if (any(!(
+  if (!all((
     c(id, coords, timegroup) %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -143,7 +143,7 @@ centroid_dyad <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 

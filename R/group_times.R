@@ -98,7 +98,7 @@ group_times <- function(DT = NULL,
     stop('datetime field required')
   }
 
-  if (all(!(datetime %in% colnames(DT)))) {
+  if (!any((datetime %in% colnames(DT)))) {
     stop('datetime field provided is not found in DT')
   }
 

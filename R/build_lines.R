@@ -113,7 +113,7 @@ build_lines <-
       stop('coords requires a vector of column names for coordinates X and Y')
     }
 
-    if (any(!(c(id, coords, splitBy, sortBy) %in% colnames(DT)))) {
+    if (!all((c(id, coords, splitBy, sortBy) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
           c(id, coords, splitBy, sortBy), colnames(DT)
@@ -123,7 +123,7 @@ build_lines <-
       ))
     }
 
-    if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
       stop('coords must be numeric')
     }
 
@@ -132,7 +132,7 @@ build_lines <-
     } else {
       splitBy <- c(id, splitBy)
     }
-    if (any(!(DT[, lapply(.SD, FUN = function(x) {
+    if (!all((DT[, lapply(.SD, FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
     ), .SDcols = splitBy]))) {

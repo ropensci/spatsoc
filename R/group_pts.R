@@ -131,7 +131,7 @@ group_pts <- function(DT = NULL,
     stop('timegroup required')
   }
 
-  if (any(!(
+  if (!all((
     c(timegroup, id, coords, splitBy) %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -143,7 +143,7 @@ group_pts <- function(DT = NULL,
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 

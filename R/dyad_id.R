@@ -65,7 +65,7 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
     stop('input id2 required')
   }
 
-  if (any(!(
+  if (!all((
     c(id1, id2) %in% colnames(DT)
   ))) {
     stop(paste0(
