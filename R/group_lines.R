@@ -199,7 +199,7 @@ group_lines <-
         stop('sortBy must be provided')
       }
 
-      if (any(!(c(id, coords, timegroup, sortBy) %in% colnames(DT)))) {
+      if (!all((c(id, coords, timegroup, sortBy) %in% colnames(DT)))) {
         stop(paste0(
           as.character(paste(setdiff(
             c(id, coords), colnames(DT)
@@ -244,7 +244,7 @@ group_lines <-
         ovrDT <- data.table::data.table(ID = names(ovr),
                                         group = unlist(ovr))
       } else {
-        ovrDT <- data.table::data.table(ID = DT[[id]], group = as.integer(NA))
+        ovrDT <- data.table::data.table(ID = DT[[id]], group = NA_integer_)
       }
 
       data.table::setnames(ovrDT, c(id, 'group'))
@@ -299,14 +299,14 @@ group_lines <-
                                           unlist(ovr))
             data.table::setnames(out, c(..id, 'withinGroup'))
           } else {
-            out <- data.table(get(..id), withinGroup = as.double(NA))
+            out <- data.table(get(..id), withinGroup = NA_real_)
             data.table::setnames(out, c(..id, 'withinGroup'))
 
           }
         }, by = c(splitBy), .SDcols = c(coords, id, sortBy)]
 
       DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
-      DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
+      DT[, group := ifelse(is.na(withinGroup), NA_integer_, .GRP),
          by = c(splitBy, 'withinGroup')]
       data.table::set(DT, j = 'withinGroup', value = NULL)
       if (DT[is.na(group), .N] > 0) {

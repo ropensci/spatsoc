@@ -120,7 +120,7 @@ leader_edge_delay <- function(
 
   check_cols <- c('direction_delay', 'direction_diff',
                   'ID1', 'ID2', splitBy)
-  if (any(!(check_cols %in% colnames(edges)))) {
+  if (!all((check_cols %in% colnames(edges)))) {
     stop(paste0(
       as.character(paste(setdiff(
         check_cols,
@@ -130,7 +130,7 @@ leader_edge_delay <- function(
     ))
   }
 
-  if (any(!(edges[, vapply(.SD, is.numeric, TRUE),
+  if (!all((edges[, vapply(.SD, is.numeric, TRUE),
                   .SDcols = check_cols[seq.int(2)]]))) {
     stop('direction_delay and direction_diff must be numeric, did you use edge_delay?')
   }

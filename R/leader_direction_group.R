@@ -125,7 +125,7 @@ leader_direction_group <- function(
 
   check_cols <- c(coords, group_direction, centroid_xcol, centroid_ycol)
 
-  if (any(!(check_cols %in% colnames(DT)))) {
+  if (!all((check_cols %in% colnames(DT)))) {
     stop(paste0(
       as.character(paste(setdiff(
         check_cols,
@@ -135,11 +135,11 @@ leader_direction_group <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE),
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE),
                .SDcols = c(centroid_xcol, centroid_ycol)]))) {
     stop('centroid coords must be numeric')
   }

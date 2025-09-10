@@ -87,7 +87,7 @@ direction_polarization <- function(
     stop('group column name required')
   }
 
-  if (any(!(
+  if (!all((
     c(direction, group) %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -99,7 +99,7 @@ direction_polarization <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(direction)]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(direction)]))) {
     stop('direction must be numeric')
   }
 

@@ -11,6 +11,9 @@ Maintenance:
 throughout package, and using consistent language across man pages
 ([#94](https://github.com/ropensci/spatsoc/issues/94), 
 [PR 113](https://github.com/ropensci/spatsoc/pull/113))
+* Used {flir} to fix some lints 
+([PR 115](https://github.com/ropensci/spatsoc/pull/115))
+
 
 # spatsoc 0.2.10
 

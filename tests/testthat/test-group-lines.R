@@ -146,8 +146,7 @@ test_that('timegroup is correctly provided but is not required', {
     'provided are not present', fixed = FALSE
   )
 
-  expect_true('data.table' %in% class(
-    group_lines(
+  expect_true(inherits(group_lines(
       DT = copyDT,
       threshold = 10,
       timegroup = NULL,
@@ -155,7 +154,7 @@ test_that('timegroup is correctly provided but is not required', {
       coords = c('X', 'Y'),
       projection = utm,
       sortBy = 'datetime'
-    ))
+    ), 'data.table')
   )
 })
 
@@ -473,13 +472,11 @@ test_that('sfLines provided returns data.table', {
   )
 
   expect_true(
-    'data.table' %in%
-      class(group_lines(sfLines = sfLines, threshold = 10, id = 'ID'))
+    inherits(group_lines(sfLines = sfLines, threshold = 10, id = 'ID'), 'data.table')
   )
 
   expect_true(
-    'data.table' %in%
-      class(group_lines(sfLines = sfLines, threshold = 0, id = 'ID'))
+    inherits(group_lines(sfLines = sfLines, threshold = 0, id = 'ID'), 'data.table')
   )
 
   expect_equal(

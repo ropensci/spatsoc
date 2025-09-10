@@ -76,7 +76,7 @@ centroid_group <- function(
     stop('group column name required')
   }
 
-  if (any(!(
+  if (!all((
     c(coords, group) %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -88,7 +88,7 @@ centroid_group <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 

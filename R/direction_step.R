@@ -108,7 +108,7 @@ direction_step <- function(
   }
 
   check_cols <- c(id, coords, splitBy)
-  if (any(!(check_cols %in% colnames(DT)
+  if (!all((check_cols %in% colnames(DT)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
@@ -119,7 +119,7 @@ direction_step <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 

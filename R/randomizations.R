@@ -166,7 +166,7 @@ randomizations <- function(DT = NULL,
     stop('datetime field required')
   }
 
-  if (any(!(c(id, datetime, splitBy) %in% colnames(DT)))) {
+  if (!all((c(id, datetime, splitBy) %in% colnames(DT)))) {
     stop(paste0(
       as.character(paste(setdiff(
         c(id, datetime),

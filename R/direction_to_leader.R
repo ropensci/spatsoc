@@ -114,7 +114,7 @@ direction_to_leader <- function(
 
   check_cols <- c(coords, group)
 
-  if (any(!(check_cols %in% colnames(DT)))) {
+  if (!all((check_cols %in% colnames(DT)))) {
     stop(paste0(
       as.character(paste(setdiff(
         check_cols,
@@ -124,21 +124,20 @@ direction_to_leader <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 
   leader_col <- 'rank_position_group_direction'
 
   if (!leader_col %in% colnames(DT)) {
-    stop(paste0(
-      leader_col,
-      ' column not present in input DT, ',
-      'did you run leader_direction_group(return_rank = TRUE)?'))
+    stop(leader_col,
+         ' column not present in input DT, ',
+         'did you run leader_direction_group(return_rank = TRUE)?')
   }
 
   if (!is.numeric(DT[[leader_col]])) {
-    stop(paste0(leader_col, ' column must be numeric'))
+    stop(leader_col, ' column must be numeric')
   }
 
   out_col <- 'direction_leader'
