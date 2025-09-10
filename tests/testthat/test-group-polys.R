@@ -274,7 +274,7 @@ test_that('column and row lengths returned make sense', {
       id = 'ID'
     )
   )
-  expect_equal(nrow(group_sf_polys), length(unique(DT$ID)))
+  expect_length(unique(DT$ID), nrow(group_sf_polys))
   expect_equal(nrow(group_sf_polys_area), length(unique(DT$ID)) ^ 2)
 })
 
