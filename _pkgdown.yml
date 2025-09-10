@@ -16,6 +16,8 @@ reference:
     - '`edge_nn`'
     - '`edge_delay`'
     - '`edge_alignment`'
+    - '`edge_direction`'
+    - '`edge_zones`'
   - title: Social network tools
     desc: ~
     contents:
@@ -92,3 +94,6 @@ news:
 - one_page: true
 
 url: https://docs.ropensci.org/spatsoc/
+
+template:
+  bootstrap: 5

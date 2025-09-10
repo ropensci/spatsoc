@@ -108,6 +108,7 @@ See examples of using distance to leader and position within group:
 
 Other Distance functions: 
 \code{\link{distance_to_centroid}()},
-\code{\link{edge_nn}()}
+\code{\link{edge_nn}()},
+\code{\link{edge_zones}()}
 }
 \concept{Distance functions}

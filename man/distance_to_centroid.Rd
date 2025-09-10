@@ -106,7 +106,8 @@ See examples of using distance to group centroid:
 
 Other Distance functions: 
 \code{\link{distance_to_leader}()},
-\code{\link{edge_nn}()}
+\code{\link{edge_nn}()},
+\code{\link{edge_zones}()}
 
 Other Centroid functions: 
 \code{\link{centroid_dyad}()},

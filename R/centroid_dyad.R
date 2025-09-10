@@ -9,7 +9,7 @@
 #' avoid unnecessarily merging additional rows. Relocation data should be in two
 #' columns representing the X and Y coordinates.
 #'
-#' The `edges` and `DT` must be `data.table`. If your data is a
+#' The `edges` and `DT` must be `data.table`s. If your data is a
 #' `data.frame`, you can convert it by reference using
 #' [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
@@ -17,9 +17,7 @@
 #' The `edges` and `DT` are internally merged in this function using
 #' the columns `id`, `dyadID` and `timegroup`. This function
 #' expects a `dyadID` present, generated with the `dyad_id` function.
-#' The `dyadID` and `timegroup` arguments expect the names of a column
-#' in `edges` which correspond to the dyadID and timegroup columns. The
-#' `id` and `timegroup` arguments expect the names of a column in
+#' The `id` and `timegroup` arguments expect the names of a column in
 #' `DT` which correspond to the X and Y coordinates and group columns. The
 #' `na.rm` argument is passed to the `rowMeans` function to control if
 #' NA values are removed before calculation.
@@ -29,6 +27,7 @@
 #' @param DT input data.table with timegroup column generated with
 #'   `group_times` matching the input data.table used to generate the edge
 #'   list with `edge_nn` or `edge_dist`
+#' @inheritParams edge_alignment
 #' @inheritParams group_pts
 #' @param na.rm if NAs should be removed in calculating mean location, see
 #'   `rowMeans`
