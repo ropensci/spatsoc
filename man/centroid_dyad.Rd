@@ -58,7 +58,7 @@ avoid unnecessarily merging additional rows. Relocation data should be in two
 columns representing the X and Y coordinates.
 }
 \details{
-The \code{edges} and \code{DT} must be \code{data.table}. If your data is a
+The \code{edges} and \code{DT} must be \code{data.table}s. If your data is a
 \code{data.frame}, you can convert it by reference using
 \code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
 \code{\link[data.table:data.table]{data.table::data.table()}}.
@@ -66,10 +66,10 @@ The \code{edges} and \code{DT} must be \code{data.table}. If your data is a
 The \code{edges} and \code{DT} are internally merged in this function using
 the columns \code{id}, \code{dyadID} and \code{timegroup}. This function
 expects a \code{dyadID} present, generated with the \code{dyad_id} function.
-The \code{id}, \code{coords} and \code{timegroup} arguments expect the names
-of a column in \code{DT} which correspond to the ID, X and Y coordinates and
-timegroup columns. The \code{na.rm} argument is passed to the \code{rowMeans}
-function to control if NA values are removed before calculation.
+The \code{id} and \code{timegroup} arguments expect the names of a column in
+\code{DT} which correspond to the X and Y coordinates and group columns. The
+\code{na.rm} argument is passed to the \code{rowMeans} function to control if
+NA values are removed before calculation.
 }
 \examples{
 # Load data.table

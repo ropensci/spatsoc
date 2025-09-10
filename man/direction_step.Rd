@@ -68,7 +68,7 @@ The \code{projection} argument expects a character string or numeric defining
 the coordinate reference system to be passed to \link[sf:st_crs]{sf::st_crs}. For example,
 for UTM zone 36S (EPSG 32736), the projection argument is
 \code{projection = "EPSG:32736"} or \code{projection = 32736}. See
-\url{https://spatialreference.org} for a list of EPSG codes.
+\url{https://spatialreference.org} for #' a list of EPSG codes.
 
 The \code{splitBy} argument offers further control over grouping. If within
 your \code{DT}, you have distinct sampling periods for each individual, you
