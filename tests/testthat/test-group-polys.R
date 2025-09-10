@@ -460,8 +460,7 @@ test_that('splitBy argument doesnt use splitBy column', {
     ))[, uniqueN(jul), group][, all(V1 == 1)]
   )
 
-  expect_true(
-    ! 'splitBy' %in%
+  expect_false('splitBy' %in%
       suppressWarnings(group_polys(
         DT = copyDT,
         projection = utm,
@@ -471,8 +470,7 @@ test_that('splitBy argument doesnt use splitBy column', {
         coords = c('X', 'Y'),
         id = 'ID',
         splitBy = 'jul'
-      ))
-  )
+      )))
 
 })
 
