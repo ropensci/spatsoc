@@ -1,43 +1,43 @@
 #' Leadership in directional correlation delay
 #'
-#' Given the directional correlation delay, \code{leader_edge_delay}
+#' Given the directional correlation delay, `leader_edge_delay`
 #' calculates the mean directional correlation delay for individuals in a
 #' group to identify leadership patterns.
 #'
-#' The function expects an edge list from \code{edge_delay} with columns
+#' The function expects an edge-list from `edge_delay` with columns
 #' 'direction_delay' indicating the directional correlation delay between
 #' individuals and 'direction_diff' indicating the unsigned difference in
 #' movement directions at the temporal delay, columns 'ID1' and 'ID2' indicating
 #' individuals and column 'dyadID' indicating the dyad.
 #'
-#' The \code{edge} must be a \code{data.table}. If your data is a
-#' \code{data.frame}, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' The `edge` must be a `data.table`. If your data is a
+#' `data.frame`, you can convert it by reference using
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
-#' @return \code{leader_edge_delay} returns the input \code{edges} aggregated
-#'   with a \code{mean_direction_delay_dyad} column indicating the mean
+#' @return `leader_edge_delay` returns the input `edges` aggregated
+#'   with a `mean_direction_delay_dyad` column indicating the mean
 #'   directional correlation delay between ID1 and ID2 and a
-#'   \code{mean_direction_delay} column indicating the mean directional
+#'   `mean_direction_delay` column indicating the mean directional
 #'   correlation delay for each individual in 'ID1' column.
 #'
-#'  Note: since \code{leader_edge_delay} returns an aggregation of the input
-#'  \code{edges}, the output needs to be reassigned unlike some other
-#'  \code{spatsoc} functions like \code{dyad_id}. See details in
+#'  Note: since `leader_edge_delay` returns an aggregation of the input
+#'  `edges`, the output needs to be reassigned unlike some other
+#'  `spatsoc` functions like `dyad_id`. See details in
 #'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #'
 #' @inheritParams edge_delay
 #' @param threshold (optional) threshold difference in direction used to subset
 #'   rows included in calculation of mean directional delay. eg.
-#'   \code{threshold = 0.5} corresponds to only rows where direction_diff is
-#'   less than 0.5. Expects that unit is radians, see \code{\link{edge_delay}}.
+#'   `threshold = 0.5` corresponds to only rows where direction_diff is
+#'   less than 0.5. Expects that unit is radians, see `edge_delay`.
 #' @param splitBy (optional) character string or vector of grouping column
 #'   name(s) upon which the mean directional correlation delay will be
 #'   calculated
 #'
 #' @export
-#' @seealso \code{\link{edge_delay}}
+#' @seealso `edge_delay`
 #' @family Leadership functions
 #' @family Direction functions
 #'
@@ -75,7 +75,7 @@
 #'   projection = 32736
 #' )
 #'
-#' # Distance based edge list generation
+#' # Distance based edge-list generation
 #' edges <- edge_dist(
 #'   DT,
 #'   threshold = 100,

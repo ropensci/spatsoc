@@ -5,6 +5,12 @@ Fixes:
 * Fix `centroid_dyad` and `centroid_fusion` return NA for centroids 
 when dyadID / fusionID are NA ([PR 114](https://github.com/ropensci/spatsoc/pull/114))
 
+Maintenance:
+
+* Doc fixes including replacing all roxygen tags (eg. `\code{}`) with Markdown 
+throughout package, and using consistent language across man pages
+([#94](https://github.com/ropensci/spatsoc/issues/94), 
+[PR 113](https://github.com/ropensci/spatsoc/pull/113))
 
 # spatsoc 0.2.10
 

@@ -1,34 +1,34 @@
 #' Direction to group leader
 #'
-#' \code{direction_to_leader} calculates the direction to the leader of each
-#' spatiotemporal group. The function accepts a \code{data.table} with
-#' relocation data appended with a \code{rank_position_group_direction} column
+#' `direction_to_leader` calculates the direction to the leader of each
+#' spatiotemporal group. The function expects a `data.table` with
+#' relocation data appended with a `rank_position_group_direction` column
 #' indicating the ranked position along the group direction generated with
-#' \code{leader_direction_group(return_rank = TRUE)}. Relocation data should be
+#' `leader_direction_group(return_rank = TRUE)`. Relocation data should be
 #' in planar coordinates provided in two columns representing the X and Y
 #' coordinates.
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a
-#' \code{data.frame}, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' The `DT` must be a `data.table`. If your data is a
+#' `data.frame`, you can convert it by reference using
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
-#' This function expects a \code{rank_position_group_direction} column
-#' generated with \code{leader_direction_group(return_rank = TRUE)},
-#' a \code{group} column generated with the
-#' \code{group_pts} function. The \code{coords} and \code{group} arguments
-#' expect the names of columns in \code{DT} which correspond to the X and Y
+#' This function expects a `rank_position_group_direction` column
+#' generated with `leader_direction_group(return_rank = TRUE)`,
+#' a `group` column generated with the
+#' `group_pts` function. The `coords` and `group` arguments
+#' expect the names of columns in `DT` which correspond to the X and Y
 #' coordinates and group columns.
 #'
 #' @inheritParams distance_to_leader
 #'
-#' @return \code{direction_to_leader} returns the input \code{DT} appended with
-#'   a \code{direction_leader} column indicating the direction to the group
+#' @return `direction_to_leader` returns the input `DT` appended with
+#'   a `direction_leader` column indicating the direction to the group
 #'   leader. A value of NaN is returned when the coordinates of the focal
 #'   individual equal the coordinates of the leader.
 #'
-#'   A message is returned when the \code{direction_leader} column already
-#'   exist in the input \code{DT} because it will be overwritten.
+#'   A message is returned when the `direction_leader` column already
+#'   exist in the input `DT` because it will be overwritten.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).

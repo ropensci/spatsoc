@@ -1,28 +1,28 @@
 #' Group centroid
 #'
-#' \code{centroid_group} calculates the centroid (mean location) of all
-#' individuals in each spatiotemporal group identified by \code{group_pts}. The
-#' function accepts a \code{data.table} with relocation data appended with a
-#' \code{group} column from \code{group_pts}. Relocation data should be in two
+#' `centroid_group` calculates the centroid (mean location) of all
+#' individuals in each spatiotemporal group identified by `group_pts`. The
+#' function expects a `data.table` with relocation data appended with a
+#' `group` column from `group_pts`. Relocation data should be in two
 #' columns representing the X and Y coordinates.
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a
-#' \code{data.frame}, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' The `DT` must be a `data.table`. If your data is a
+#' `data.frame`, you can convert it by reference using
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
-#' The \code{coords} and \code{group} arguments expect the names of a column in
-#' \code{DT} which correspond to the X and Y coordinates and group columns. The
-#' \code{na.rm} argument is passed to the \code{mean} function to control if NA
+#' The `coords` and `group` arguments expect the names of a column in
+#' `DT` which correspond to the X and Y coordinates and group columns. The
+#' `na.rm` argument is passed to the `mean` function to control if NA
 #' values are removed before calculation.
 #'
-#' @param DT input data.table with group column generated with \code{group_pts}
+#' @param DT input data.table with group column generated with `group_pts`
 #' @inheritParams group_pts
 #' @param group Character string of group column
 #' @param na.rm if NAs should be removed in calculating mean location,
-#' see \code{mean}
+#' see `mean`
 #'
-#' @return \code{centroid_group} returns the input \code{DT} appended with
+#' @return `centroid_group` returns the input `DT` appended with
 #'  centroid columns for the X and Y coordinate columns.
 #'
 #'   These columns represents the centroid coordinate columns.
@@ -30,13 +30,13 @@
 #'   column names prefixed with "centroid_".
 #'
 #'   A message is returned when centroid columns are already exists in
-#'   the input \code{DT}, because they will be overwritten.
+#'   the input `DT`, because they will be overwritten.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
-#' @seealso \code{\link{group_pts}}
+#' @seealso `group_pts`
 #' @family Centroid functions
 #' @examples
 #' # Load data.table

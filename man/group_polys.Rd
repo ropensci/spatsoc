@@ -2,7 +2,7 @@
 % Please edit documentation in R/group_polys.R
 \name{group_polys}
 \alias{group_polys}
-\title{Group Polygons}
+\title{Group polygons}
 \usage{
 group_polys(
   DT = NULL,

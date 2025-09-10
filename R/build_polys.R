@@ -1,4 +1,4 @@
-#' Build Polygons
+#' Build polygons
 #'
 #' `build_polys` generates a simple feature collection with POLYGONs from a
 #' `data.table`. The function expects a `data.table` with

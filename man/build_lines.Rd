@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_lines.R
 \name{build_lines}
 \alias{build_lines}
-\title{Build Lines}
+\title{Build lines}
 \usage{
 build_lines(
   DT = NULL,
@@ -106,7 +106,7 @@ lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
             sortBy = 'datetime', splitBy = 'yr')
 }
 \seealso{
-\code{\link{group_lines}}
+\code{group_lines}
 
 Other Build functions: 
 \code{\link{build_polys}()}

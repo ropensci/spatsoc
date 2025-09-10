@@ -1,38 +1,38 @@
 #' Polarization
 #'
-#' \code{direction_polarization} calculates the polarization of individual
-#' directions in each spatiotemporal group identified by \code{group_pts}. The
-#' function expects a \code{data.table} with relocation data appended with a
-#' \code{direction} column from \code{direction_step} and a \code{group} column
-#' from \code{group_pts}.
+#' `direction_polarization` calculates the polarization of individual
+#' directions in each spatiotemporal group identified by `group_pts`. The
+#' function expects a `data.table` with relocation data appended with a
+#' `direction` column from `direction_step` and a `group` column
+#' from `group_pts`.
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a
-#' \code{data.frame}, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' The `DT` must be a `data.table`. If your data is a
+#' `data.frame`, you can convert it by reference using
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
-#' The \code{direction} and \code{group} arguments expect the names of columns
-#' in \code{DT} which correspond to the direction and group columns. The
+#' The `direction` and `group` arguments expect the names of columns
+#' in `DT` which correspond to the direction and group columns. The
 #' direction column is expected in units of radians and the polarization is
 #' calculated with [CircStats::r.test()].
 #'
 #' @inheritParams direction_group
 #'
-#' @return \code{direction_polarization} returns the input \code{DT} appended
-#'   with a \code{polarization} column representing the direction polarization
+#' @return `direction_polarization` returns the input `DT` appended
+#'   with a `polarization` column representing the direction polarization
 #'   of all individuals in each spatiotemporal group.
 #'
 #'   The direction polarization is calculated using [CircStats::r.test()]
 #'   which expects units of radians.
 #'
-#'   A message is returned when the \code{polarization} columns already
-#'   exists in the input \code{DT}, because it will be overwritten.
+#'   A message is returned when the `polarization` columns already
+#'   exists in the input `DT`, because it will be overwritten.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
-#' @seealso \code{\link{direction_step}}, \code{\link{group_pts}},
+#' @seealso `direction_step`, `group_pts`,
 #'   [CircStats::r.test()]
 #' @family Direction functions
 #'

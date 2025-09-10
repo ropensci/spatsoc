@@ -1,4 +1,4 @@
-#' Group Lines
+#' Group lines
 #'
 #' `group_lines` groups rows into spatial groups by generating LINESTRINGs and
 #' grouping based on spatial intersection. The function expects a `data.table`
