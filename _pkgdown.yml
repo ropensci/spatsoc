@@ -75,7 +75,7 @@ articles:
   navbar: ~
   contents:
   - using-in-sna
-- title: Using edge list generating functions and dyad_id
+- title: Using edge-list generating functions and dyad_id
   navbar: ~
   contents:
   - using-edge-and-dyad

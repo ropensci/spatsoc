@@ -1,47 +1,47 @@
-#' Calculate direction at each step
+#' Direction step
 #'
-#' \code{direction_step} calculates the direction of movement steps in radians.
-#' The function accepts a \code{data.table} with relocation data and individual
+#' `direction_step` calculates the direction of movement steps in radians.
+#' The function expects a `data.table` with relocation data and individual
 #' identifiers. Relocation data should be in two columns representing the X and
 #' Y coordinates. Note the order of rows is not modified by this function and
 #' therefore users must be cautious to set it explicitly. See example for one
 #' approach to setting order of rows using a datetime field.
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a
-#' \code{data.frame}, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' The `DT` must be a `data.table`. If your data is a
+#' `data.frame`, you can convert it by reference using
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
-#' The \code{id}, \code{coords}, and optional \code{splitBy} arguments expect
-#' the names of a column in \code{DT} which correspond to the individual
+#' The `id`, `coords`, and optional `splitBy` arguments expect
+#' the names of a column in `DT` which correspond to the individual
 #' identifier, X and Y coordinates, and additional grouping columns.
 #'
-#' The \code{projection} argument expects a character string or numeric defining
+#' The `projection` argument expects a character string or numeric defining
 #' the coordinate reference system to be passed to [sf::st_crs]. For example,
 #' for UTM zone 36S (EPSG 32736), the projection argument is
-#' \code{projection = "EPSG:32736"} or \code{projection = 32736}. See
-#' <https://spatialreference.org> for a list of EPSG codes.
+#' `projection = "EPSG:32736"` or `projection = 32736`. See
+#' <https://spatialreference.org> for #' a list of EPSG codes.
 #'
-#' The \code{splitBy} argument offers further control over grouping. If within
-#' your \code{DT}, you have distinct sampling periods for each individual, you
-#' can provide the column name(s) which identify them to \code{splitBy}. The
-#' direction calculation by \code{direction_step} will only consider rows within
-#' each \code{id} and \code{splitBy} subgroup.
+#' The `splitBy` argument offers further control over grouping. If within
+#' your `DT`, you have distinct sampling periods for each individual, you
+#' can provide the column name(s) which identify them to `splitBy`. The
+#' direction calculation by `direction_step` will only consider rows within
+#' each `id` and `splitBy` subgroup.
 #'
-#' @return \code{direction_step} returns the input \code{DT} appended with
-#'  a direction column with units set to radians using the \code{units}
+#' @return `direction_step` returns the input `DT` appended with
+#'  a direction column with units set to radians using the `units`
 #'  package.
 #'
 #'   This column represents the azimuth between the sequence of points for
-#'   each individual computed using \code{lwgeom::st_geod_azimuth}. Note, the
+#'   each individual computed using `lwgeom::st_geod_azimuth`. Note, the
 #'   order of points is not modified by this function and therefore it is
 #'   crucial the user sets the order of rows to their specific question
-#'   before using \code{direction_step}. In addition, the direction column
-#'   will include an \code{NA} value for the last point in each sequence of
+#'   before using `direction_step`. In addition, the direction column
+#'   will include an `NA` value for the last point in each sequence of
 #'   points since there is no future point to calculate a direction to.
 #'
 #'   A message is returned when a direction column are already exists in
-#'   the input \code{DT}, because it will be overwritten.
+#'   the input `DT`, because it will be overwritten.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
@@ -84,7 +84,7 @@
 #' )
 #'
 #' direction_step(example, 'ID', c('X', 'Y'), projection = 4326)
-#' example[, .(direction, units::set_units(direction, 'degree'))]
+#' example[, .(step, direction, units::set_units(direction, 'degree'))]
 direction_step <- function(
     DT = NULL,
     id = NULL,
@@ -108,7 +108,7 @@ direction_step <- function(
   }
 
   check_cols <- c(id, coords, splitBy)
-  if (any(!(check_cols %in% colnames(DT)
+  if (!all((check_cols %in% colnames(DT)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
@@ -119,7 +119,7 @@ direction_step <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(message = TRUE,
 
 The `spatsoc` package provides functionality for analyzing animal relocation data in time and space to identify potential interactions among individuals and build gambit-of-the-group data for constructing social networks. 
 
-The package contains grouping and edge list generating functions that are used for identifying spatially and temporally explicit groups from input data. In addition, we provide social network analysis functions for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals and for generating group by individual matrices.
+The package contains grouping and edge-list generating functions that are used for identifying spatially and temporally explicit groups from input data. In addition, we provide social network analysis functions for randomizing individual identifiers within groups, designed to test whether social networks generated from animal relocation data were based on non-random social proximity among individuals and for generating group by individual matrices.
 
 The functions were developed for application across animal relocation data, for example, proximity based social network analyses and spatial and temporal clustering of points.
 
@@ -206,7 +206,7 @@ knitr::kable(
 )
 ```
 
-## Edge list generation
+## Edge-list generation
 The `edge_dist` function calculates the geographic distance between between
 individuals within each timegroup and returns all paired relocations within the
 spatial threshold. `edge_dist` uses a distance matrix like group_pts, but, in

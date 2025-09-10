@@ -95,7 +95,7 @@ test_that('columns added to the result DT', {
                      'mean_direction_delay_dyad', 'mean_direction_delay')
 
   expect_setequal(expected_cols, colnames(leader_edge_delay(delay)))
-  expect_equal(ncol(leader_edge_delay(delay)), length(expected_cols))
+  expect_length(expected_cols, ncol(leader_edge_delay(delay)))
 })
 
 test_that('column added to the result DT is double', {

@@ -2,7 +2,7 @@
 % Please edit documentation in R/direction_step.R
 \name{direction_step}
 \alias{direction_step}
-\title{Calculate direction at each step}
+\title{Direction step}
 \usage{
 direction_step(
   DT = NULL,
@@ -48,7 +48,7 @@ See details for appending outputs using modify-by-reference in the
 }
 \description{
 \code{direction_step} calculates the direction of movement steps in radians.
-The function accepts a \code{data.table} with relocation data and individual
+The function expects a \code{data.table} with relocation data and individual
 identifiers. Relocation data should be in two columns representing the X and
 Y coordinates. Note the order of rows is not modified by this function and
 therefore users must be cautious to set it explicitly. See example for one
@@ -57,8 +57,8 @@ approach to setting order of rows using a datetime field.
 \details{
 The \code{DT} must be a \code{data.table}. If your data is a
 \code{data.frame}, you can convert it by reference using
-\code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-\code{\link[data.table:data.table]{data.table::data.table}}.
+\code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
+\code{\link[data.table:data.table]{data.table::data.table()}}.
 
 The \code{id}, \code{coords}, and optional \code{splitBy} arguments expect
 the names of a column in \code{DT} which correspond to the individual
@@ -107,7 +107,7 @@ example <- data.table(
 )
 
 direction_step(example, 'ID', c('X', 'Y'), projection = 4326)
-example[, .(direction, units::set_units(direction, 'degree'))]
+example[, .(step, direction, units::set_units(direction, 'degree'))]
 }
 \seealso{
 \code{\link[amt:steps]{amt::direction_abs()}}, \code{\link[geosphere:bearing]{geosphere::bearing()}}

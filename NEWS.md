@@ -1,10 +1,23 @@
-# spatsoc 0.2.11
+# Development version
 
 New experimental functions:
 
 * `edge_direction` function for calculating the direction between individuals ([PR 80](https://github.com/ropensci/spatsoc/pull/80))
 * `edge_zones` function for calculating behavioural zones ([PR 112](https://github.com/ropensci/spatsoc/pull/112))
 
+Fixes:
+
+* Fix `centroid_dyad` and `centroid_fusion` return NA for centroids 
+when dyadID / fusionID are NA ([PR 114](https://github.com/ropensci/spatsoc/pull/114))
+
+Maintenance:
+
+* Doc fixes including replacing all roxygen tags (eg. `\code{}`) with Markdown 
+throughout package, and using consistent language across man pages
+([#94](https://github.com/ropensci/spatsoc/issues/94), 
+[PR 113](https://github.com/ropensci/spatsoc/pull/113))
+* Used {flir} to fix some lints 
+([PR 115](https://github.com/ropensci/spatsoc/pull/115))
 
 # spatsoc 0.2.10
 
@@ -15,7 +28,6 @@ New experimental function:
 Fixes:
 
 * fix missing pkg::function ([PR 110](https://github.com/ropensci/spatsoc/pull/110))
-
 
 # spatsoc 0.2.9
 

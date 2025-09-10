@@ -1,4 +1,4 @@
-#' Group Polygons
+#' Group polygons
 #'
 #' `group_polys` groups rows into spatial groups by overlapping polygons (home
 #' ranges). The function expects a `data.table` with relocation data, individual
@@ -65,7 +65,7 @@
 #'   now returns area and proportion of overlap with units explicitly specified
 #'   through the `units` package.
 #'
-#'  Note: if area is TRUE, the output of \code{group_polys} needs to be
+#'  Note: if area is TRUE, the output of `group_polys` needs to be
 #'  reassigned. See details in
 #'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
@@ -213,7 +213,7 @@ group_polys <-
         stop('cannot provide sfPolys if providing splitBy')
       }
 
-      if (any(!(c(id, splitBy) %in% colnames(DT)))) {
+      if (!all((c(id, splitBy) %in% colnames(DT)))) {
         stop(paste0(
           as.character(paste(setdiff(
             c(id, splitBy), colnames(DT)
@@ -257,11 +257,11 @@ group_polys <-
               out
             } else {
               data.table(ID = get(..id),
-                         withinGroup = as.integer(NA))
+                         withinGroup = NA_integer_)
             }
           }, by = c(splitBy), .SDcols = c(coords, id)]
         DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
-        DT[, group := ifelse(is.na(withinGroup), as.integer(NA), .GRP),
+        DT[, group := ifelse(is.na(withinGroup), NA_integer_, .GRP),
            by = c(splitBy, 'withinGroup')]
         data.table::set(DT, j = c('withinGroup', 'nBy'), value = NULL)
         if (DT[is.na(group), .N] > 0) {
@@ -336,9 +336,9 @@ group_polys <-
               out
             } else {
               out <- data.table(ID = get(..id),
-                                ID2 = as.character(NA),
-                                as.numeric(NA),
-                                as.numeric(NA))
+                                ID2 = NA_character_,
+                                NA_real_,
+                                NA_real_)
               data.table::setnames(out, c(..id, paste0(..id, '2'),
                               'area', 'proportion'))
               out

@@ -39,8 +39,8 @@ from \code{group_pts}.
 \details{
 The \code{DT} must be a \code{data.table}. If your data is a
 \code{data.frame}, you can convert it by reference using
-\code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-\code{\link[data.table:data.table]{data.table::data.table}}.
+\code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
+\code{\link[data.table:data.table]{data.table::data.table()}}.
 
 The \code{direction} and \code{group} arguments expect the names of columns
 in \code{DT} which correspond to the direction and group columns. The
@@ -85,7 +85,7 @@ See examples of using polarization:
 }
 }
 \seealso{
-\code{\link{direction_step}}, \code{\link{group_pts}},
+\code{direction_step}, \code{group_pts},
 \code{\link[CircStats:r.test]{CircStats::r.test()}}
 
 Other Direction functions: 
