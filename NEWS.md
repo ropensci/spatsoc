@@ -1,3 +1,12 @@
+# Development version
+
+Maintenance:
+
+* Doc fixes including replacing all roxygen tags (eg. `\code{}`) with Markdown 
+throughout package, and using consistent language across man pages
+([#94](https://github.com/ropensci/spatsoc/issues/94), 
+[PR 113](https://github.com/ropensci/spatsoc/pull/113))
+
 # spatsoc 0.2.10
 
 New experimental function:
