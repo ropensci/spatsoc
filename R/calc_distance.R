@@ -1,8 +1,7 @@
 calc_distance <- function(
   geometry_a, geometry_b,
   x_a, y_a,
-  x_b, y_b,
-  na.rm = TRUE) {
+  x_b, y_b) {
   if (!missing(geometry_a) & missing(x_a) & missing(y_a)) {
     if (!missing(geometry_b)) {
       sf::st_distance(geometry_a, geometry_b, by_element = TRUE)
