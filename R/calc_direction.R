@@ -1,7 +1,8 @@
 calc_direction <- function(
     geometry_a, geometry_b,
     x_a, y_a,
-    x_b, y_b) {
+    x_b, y_b,
+    crs) {
   if (!missing(geometry_a) & missing(x_a) & missing(y_a)) {
     if (!missing(geometry_b)) {
       lwgeom::st_geod_azimuth(geometry_a, geometry_b)
@@ -10,9 +11,27 @@ calc_direction <- function(
     }
   } else if (missing(geometry_a) & !missing(x_a) & !missing(y_a)) {
     if (!missing(x_b) & !missing(y_b)) {
-      atan2(x_b - x_b, y_b - y_a)
+      if (sf::st_is_longlat(crs)) {
+        lwgeom::st_geod_azimuth(
+          x = sf::st_as_sf(cbind(x_a, y_a), crs = crs),
+          y = sf::st_as_sf(cbind(x_b, y_b), crs = crs)
+        )
+      } else {
+        lwgeom::st_geod_azimuth(
+          x = sf::st_transform(sf::st_as_sf(cbind(x_a, y_a), crs = crs), 4326),
+          y = sf::st_transform(sf::st_as_sf(cbind(x_b, y_b), crs = crs), 4326)
+        )
+      }
     } else {
-      atan2(diff(x_a), diff(y_a))
+      if (sf::st_is_longlat(crs)) {
+        lwgeom::st_geod_azimuth(
+          x = sf::st_as_sf(cbind(x_a, y_a), crs = crs)
+        )
+      } else {
+        lwgeom::st_geod_azimuth(
+          x = sf::st_transform(sf::st_as_sf(cbind(x_a, y_a), crs = crs), 4326)
+        )
+      }
     }
   }
 }
