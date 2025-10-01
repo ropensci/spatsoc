@@ -42,3 +42,9 @@
 #'
 #' # Get geometry
 #' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+get_geometry <- function(
+    DT = NULL,
+    coords = NULL,
+    crs = NULL,
+    output_crs = 4326,
+    geometry_colname = 'geometry') {
