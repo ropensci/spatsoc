@@ -48,3 +48,29 @@ get_geometry <- function(
     crs = NULL,
     output_crs = 4326,
     geometry_colname = 'geometry') {
+
+  if (is.null(DT)) {
+    stop('input DT required')
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!coords %in% colnames(DT)) {
+    stop('coords field(s) provided are not present in input DT')
+  }
+
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
+  }
+
+  if (is.null(crs)) {
+    stop('input crs required')
+  }
+
+  if (geometry_colname %in% colnames(DT)) {
+    message(paste0(geometry_colname,
+                   ' column will be overwritten by this function'))
+    data.table::set(DT, j = geometry_colname, value = NULL)
+  }
