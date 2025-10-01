@@ -74,3 +74,19 @@ get_geometry <- function(
                    ' column will be overwritten by this function'))
     data.table::set(DT, j = geometry_colname, value = NULL)
   }
+
+  DT[, (geo_colname) := {
+    x <- sf::st_as_sf(data.frame(.SD),
+                      coords = coords,
+                      crs = crs,
+                      na.fail = FALSE
+    )
+    if (!any(isFALSE(output_crs) ||
+             crs == sf::st_crs(output_crs) ||
+             is.null(output_crs))) {
+      x <- sf::st_transform(x, output_crs)
+    }
+    x
+  }, .SDcols = coords]
+  return(DT)
+}
