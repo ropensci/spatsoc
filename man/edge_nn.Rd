@@ -126,11 +126,13 @@ edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 Other Edge-list generation: 
 \code{\link{edge_alignment}()},
 \code{\link{edge_delay}()},
+\code{\link{edge_direction}()},
 \code{\link{edge_dist}()}
 
 Other Distance functions: 
 \code{\link{distance_to_centroid}()},
-\code{\link{distance_to_leader}()}
+\code{\link{distance_to_leader}()},
+\code{\link{edge_zones}()}
 }
 \concept{Distance functions}
 \concept{Edge-list generation}

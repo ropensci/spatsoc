@@ -1,5 +1,12 @@
 # Development version
 
+# spatsoc 0.2.11
+
+New experimental functions:
+
+* `edge_direction` function for calculating the direction between individuals ([PR 80](https://github.com/ropensci/spatsoc/pull/80))
+* `edge_zones` function for calculating behavioural zones ([PR 112](https://github.com/ropensci/spatsoc/pull/112))
+
 Fixes:
 
 * Fix `centroid_dyad` and `centroid_fusion` return NA for centroids 
@@ -14,12 +21,15 @@ throughout package, and using consistent language across man pages
 * Used {flir} to fix some lints 
 ([PR 115](https://github.com/ropensci/spatsoc/pull/115))
 
-
 # spatsoc 0.2.10
 
 New experimental function:
 
 * `edge_alignment` function for calculating directional alignment ([PR 111](https://github.com/ropensci/spatsoc/pull/111))
+
+Fixes:
+
+* fix missing pkg::function ([PR 110](https://github.com/ropensci/spatsoc/pull/110))
 
 # spatsoc 0.2.9
 
