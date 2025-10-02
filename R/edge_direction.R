@@ -130,7 +130,7 @@ edge_direction <- function(
     stop('dyadID not present in input edges, did you run dyad_id?')
   }
 
-  if (any(!(
+  if (!all((
     c(id, coords, timegroup) %in% colnames(DT)
   ))) {
     stop(paste0(
@@ -142,7 +142,7 @@ edge_direction <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
     stop('coords must be numeric')
   }
 
