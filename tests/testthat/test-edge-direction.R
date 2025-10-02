@@ -68,6 +68,33 @@ test_that('column names must exist in DT', {
     timegroup = 'potato'
   ),
   'potato field')
+
+  copyEdges <- copy(edges)[, timegroup := NULL]
+  expect_error(
+    edge_direction(
+      copyEdges,
+      DT,
+      id = id,
+      coords = coords,
+      projection = projection,
+      timegroup = timegroup
+    ),
+    'timegroup field'
+  )
+
+  copyEdges <- copy(edges)[, dyadID := NULL]
+  expect_error(
+    edge_direction(
+      copyEdges,
+      DT,
+      id = id,
+      coords = coords,
+      projection = projection,
+      timegroup = timegroup
+    ),
+    'dyadID is not present'
+  )
+
 })
 
 test_that('coords are correctly provided or error detected', {
