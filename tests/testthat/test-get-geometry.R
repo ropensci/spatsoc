@@ -61,3 +61,14 @@ test_that('crs provided correctly, else error', {
   )
 })
 
+test_that('group column succesfully detected', {
+  copyDT <- copy(DT)[, geometry := 1]
+  expect_message(
+    get_geometry(
+      copyDT,
+      coords = coords,
+      crs = crs
+    ),
+    'geometry column will be overwritten'
+  )
+})
