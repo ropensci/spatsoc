@@ -77,8 +77,8 @@ test_that('geometry column returned is sfc, as expected', {
   copyDT <- copy(DT)
   get_geometry(copyDT, coords = coords, crs = crs)
 
-  expect_class(copyDT$geometry, 'sfc_POINT')
-  expect_class(copyDT$geometry, 'sfc')
+  expect_s3_class(copyDT$geometry, 'sfc_POINT')
+  expect_s3_class(copyDT$geometry, 'sfc')
 
   copyDT <- copy(DT)
   get_geometry(copyDT, coords = coords, crs = crs, output_crs = FALSE)
