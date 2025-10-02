@@ -60,14 +60,16 @@ test_that('column names must exist in DT', {
                'potato field')
   expect_error(edge_direction(edges, DT, id = id, coords = rep('potato', 2)),
                'potato field')
+  copyDT <- copy(DT)[, timegroup := NULL]
   expect_error(edge_direction(
     edges,
-    DT,
+    copyDT,
     id = id,
     coords = coords,
-    timegroup = 'potato'
+    projection = projection,
+    timegroup = 'timegroup'
   ),
-  'potato field')
+  'timegroup field')
 
   copyEdges <- copy(edges)[, timegroup := NULL]
   expect_error(
