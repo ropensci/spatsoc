@@ -23,7 +23,9 @@
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @inheritParams group_pts
-#' @inheritParams group_polys
+#' @param crs numeric or character defining the coordinate reference system to
+#'   be passed to [sf::st_crs]. For example, `crs = "EPSG:32736"` or
+#'   `crs = 32736`.
 #' @param output_crs default 4326, the output crs to transform the input
 #'   coordinates into. If output_crs is NULL or FALSE or matching the crs argument,
 #'   the coordinates will not be transformed
