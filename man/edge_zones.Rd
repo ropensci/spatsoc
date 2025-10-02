@@ -70,7 +70,7 @@ expected to ensure the relevant direction columns are available:
 Interindividual distances are converted into behavioural zones using
 \code{cut}. The thresholds provided are used as cut points for a series of
 intervals that are open on the left and closed on the right, starting at 0.
-See details in \code{\link[base:cut]{base::cut}}.
+See details in \code{\link[base:cut]{base::cut()}}.
 
 The (optional) blind volume defines the range of interindividual directions
 between the focal individual (ID1) and the neighbour (ID2) that is outside
@@ -83,8 +83,8 @@ eg. where blind_volume = 2, the symmetrical window is from (-2, 2).
 
 The \code{edges} must be a \code{data.table}. If your data is a
 \code{data.frame}, you can convert it by reference using
-\code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-\code{\link[data.table:data.table]{data.table::data.table}}.
+\code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
+\code{\link[data.table:data.table]{data.table::data.table()}}.
 }
 \examples{
 # Load data.table
