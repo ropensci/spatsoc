@@ -127,7 +127,7 @@ edge_direction <- function(
   }
 
   if (!'dyadID' %in% colnames(edges)) {
-    stop('dyadID not present in input edges, did you run dyad_id?')
+    stop('dyadID is not present in input edges, did you run dyad_id?')
   }
 
   if (!all((
