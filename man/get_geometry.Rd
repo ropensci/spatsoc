@@ -42,8 +42,8 @@ See details for appending outputs using modify-by-reference in the
 \href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
-\code{get_geometry} sets up an input \code{DT} with a 'geometry' column for {spatsoc}'s
-{sf} interface. The function expects a \code{data.table} with relocation data and
+\code{get_geometry} sets up an input \code{DT} with a 'geometry' column for spatsoc's
+sf interface. The function expects a \code{data.table} with relocation data and
 a coordinate reference system.
 }
 \details{
