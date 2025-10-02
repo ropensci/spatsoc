@@ -1,4 +1,4 @@
-#' Build Polygons
+#' Build polygons
 #'
 #' `build_polys` generates a simple feature collection with POLYGONs from a
 #' `data.table`. The function expects a `data.table` with
@@ -136,7 +136,7 @@ build_polys <- function(DT = NULL,
       splitBy <- c(id, splitBy)
     }
 
-    if (any(!(c(splitBy, coords) %in% colnames(DT)))) {
+    if (!all((c(splitBy, coords) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
           c(id, coords), colnames(DT)
@@ -146,12 +146,12 @@ build_polys <- function(DT = NULL,
       ))
     }
 
-    if (any(!(DT[, vapply(.SD, is.numeric, TRUE),
+    if (!all((DT[, vapply(.SD, is.numeric, TRUE),
                  .SDcols = coords]))) {
       stop('coords must be numeric')
     }
 
-    if (any(!(DT[, lapply(
+    if (!all((DT[, lapply(
       .SD,
       FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)

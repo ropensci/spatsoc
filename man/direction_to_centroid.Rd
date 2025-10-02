@@ -28,7 +28,7 @@ See details for appending outputs using modify-by-reference in the
 \description{
 \code{direction_to_centroid} calculates the direction of each relocation to
 the centroid of the spatiotemporal group identified by \code{group_pts}. The
-function accepts a \code{data.table} with relocation data appended with a
+function expects a \code{data.table} with relocation data appended with a
 \code{group} column from \code{group_pts} and centroid columns from
 \code{centroid_group}. Relocation data should be in planar coordinates
 provided in two columns representing the X and Y coordinates.
@@ -36,8 +36,8 @@ provided in two columns representing the X and Y coordinates.
 \details{
 The \code{DT} must be a \code{data.table}. If your data is a
 \code{data.frame}, you can convert it by reference using
-\code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-\code{\link[data.table:data.table]{data.table::data.table}}.
+\code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
+\code{\link[data.table:data.table]{data.table::data.table()}}.
 
 This function expects a \code{group} column present generated with the
 \code{group_pts} function and centroid coordinate columns generated with the
@@ -87,6 +87,7 @@ Other Direction functions:
 \code{\link{edge_delay}()},
 \code{\link{edge_direction}()},
 \code{\link{edge_dist}()},
+\code{\link{edge_zones}()},
 \code{\link{leader_direction_group}()},
 \code{\link{leader_edge_delay}()}
 

@@ -96,8 +96,7 @@ test_that('column added to the result DT', {
 
   expect_setequal(expected_cols,
                   colnames(edge_delay(edges, DT, id = id, window = window)))
-  expect_equal(ncol(edge_delay(edges, DT, id = id, window = window)),
-               length(expected_cols))
+  expect_length(expected_cols, ncol(edge_delay(edges, DT, id = id, window = window)))
 
 })
 

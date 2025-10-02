@@ -35,9 +35,9 @@ Data stream randomization is performed using the `randomizations` function.
 Group by individual matrices are generated using the `get_gbi` function. 
 
 
-**Note**: edge list generating functions are also available and are described 
+**Note**: edge-list generating functions are also available and are described 
 in the vignette 
-[Using edge list generating functions and dyad_id](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html). 
+[Using edge-list generating functions and dyad_id](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html). 
 
 
 # Generate gambit of the group data

@@ -37,19 +37,19 @@
 #'  * \doi{doi:10.1098/rstb.2019.0380}
 #'  * \doi{doi:10.1111/jfb.15315}
 #'
-#' @return \code{edge_direction} returns the input \code{edges} appended with a
-#'   "direction_dyad" column representing the direction from ID1 to ID2. The
-#'   direction between individuals is calculated with
-#'   \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
+#' @return \code{edge_direction} returns the input \code{edges} appended with
+#'  a "direction_dyad" column representing the direction between ID1 and ID2.
 #'
-#'   If the "direction" column from \code{direction_step} is found, it will be
-#'   preserved in the output for ID1 to be used in downstream functions eg.
-#'   \code{edge_zones}.
+#'  The direction between individuals is calculated with
+#'  \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth}}.
 #'
-#'   Note: due to the merge required within this function, the output needs to
-#'   be reassigned unlike some other \code{spatsoc} functions like
-#'   \code{dyad_id} and \code{group_pts}. See details in
-#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'  If the "direction" column is found in input DT, it will be retained for
+#'  ID1 in the output for use in downstream functions (eg. \code{edge_zones}).
+#'
+#'  Note: due to the merge required within this function, the output needs to be
+#'  reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
+#'  and \code{group_pts}. See details in
+#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
 #' @family Edge-list generation
@@ -158,21 +158,21 @@ edge_direction <- function(
   id1_coords <- paste0('id1_', coords)
   id2_coords <- paste0('id2_', coords)
 
-  merge_cols <- c(coords, id, timegroup)
+  ID1_cols <- if ('direction' %in% colnames(DT)) {
+    c('direction', coords, id, timegroup)
+  } else {
+    c(coords, id, timegroup)
+  }
+
   m <- merge(edges,
-             DT[, .SD,
-                .SDcols = if ('direction' %in% colnames(DT)) {
-                  c(merge_cols, 'direction')
-                } else {
-                  merge_cols
-                }],
+             DT[, .SD, .SDcols = ID1_cols],
              by.x = c('ID1', timegroup),
              by.y = c(id, timegroup),
              all.x = TRUE,
              sort = FALSE)
   data.table::setnames(m, coords, id1_coords)
   m <- merge(m,
-             DT[, .SD, .SDcols = merge_cols],
+             DT[, .SD, .SDcols = c(coords, id, timegroup)],
              by.x = c('ID2', timegroup),
              by.y = c(id, timegroup),
              all.x = TRUE,

@@ -1,33 +1,33 @@
 #' Direction to group centroid
 #'
-#' \code{direction_to_centroid} calculates the direction of each relocation to
-#' the centroid of the spatiotemporal group identified by \code{group_pts}. The
-#' function accepts a \code{data.table} with relocation data appended with a
-#' \code{group} column from \code{group_pts} and centroid columns from
-#' \code{centroid_group}. Relocation data should be in planar coordinates
+#' `direction_to_centroid` calculates the direction of each relocation to
+#' the centroid of the spatiotemporal group identified by `group_pts`. The
+#' function expects a `data.table` with relocation data appended with a
+#' `group` column from `group_pts` and centroid columns from
+#' `centroid_group`. Relocation data should be in planar coordinates
 #' provided in two columns representing the X and Y coordinates.
 #'
-#' The \code{DT} must be a \code{data.table}. If your data is a
-#' \code{data.frame}, you can convert it by reference using
-#' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-#' \code{\link[data.table:data.table]{data.table::data.table}}.
+#' The `DT` must be a `data.table`. If your data is a
+#' `data.frame`, you can convert it by reference using
+#' [data.table::setDT()] or by reassigning using
+#' [data.table::data.table()].
 #'
-#' This function expects a \code{group} column present generated with the
-#' \code{group_pts} function and centroid coordinate columns generated with the
-#' \code{centroid_group} function. The \code{coords} and \code{group} arguments
-#' expect the names of columns in \code{DT} which correspond to the X and Y
+#' This function expects a `group` column present generated with the
+#' `group_pts` function and centroid coordinate columns generated with the
+#' `centroid_group` function. The `coords` and `group` arguments
+#' expect the names of columns in `DT` which correspond to the X and Y
 #' coordinates and group columns.
 #'
 #' @inheritParams distance_to_centroid
 #' @inheritParams group_pts
 #'
-#' @return \code{direction_to_centroid} returns the input \code{DT} appended
-#'   with a \code{direction_centroid} column indicating the direction to group
+#' @return `direction_to_centroid` returns the input `DT` appended
+#'   with a `direction_centroid` column indicating the direction to group
 #'   centroid in radians. The direction is measured in radians in the range
 #'   of 0 to 2 * pi from the positive x-axis.
 #'
-#'   A message is returned when \code{direction_centroid} column already exist
-#'   in the input \code{DT}, because they will be overwritten.
+#'   A message is returned when `direction_centroid` column already exist
+#'   in the input `DT`, because they will be overwritten.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
@@ -85,7 +85,7 @@ direction_to_centroid <- function(
   centroid_ycol <- paste0(pre, ycol)
   centroid_coords  <- c(centroid_xcol, centroid_ycol)
 
-  if (any(!(coords %in% colnames(DT)))) {
+  if (!all((coords %in% colnames(DT)))) {
     stop(paste0(
       as.character(paste(setdiff(
         coords,
@@ -95,11 +95,11 @@ direction_to_centroid <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)]))) {
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)]))) {
     stop('coords must be numeric')
   }
 
-  if (any(!(centroid_coords %in% colnames(DT)
+  if (!all((centroid_coords %in% colnames(DT)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
@@ -110,7 +110,7 @@ direction_to_centroid <- function(
     ))
   }
 
-  if (any(!(DT[, vapply(.SD, is.numeric, TRUE),
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE),
                .SDcols = c(centroid_coords)]))) {
     stop('centroid coords must be numeric')
   }

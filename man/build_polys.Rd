@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_polys.R
 \name{build_polys}
 \alias{build_polys}
-\title{Build Polygons}
+\title{Build polygons}
 \usage{
 build_polys(
   DT = NULL,

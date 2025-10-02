@@ -32,15 +32,15 @@ See details for appending outputs using modify-by-reference in the
 \description{
 \code{direction_group} calculates the mean direction of all individuals in
 each spatiotemporal group identified by \code{group_pts}. The function
-accepts a \code{data.table} with relocation data appended with a
+expects a \code{data.table} with relocation data appended with a
 \code{direction} column from \code{direction_step} and a \code{group} column
 from \code{group_pts}.
 }
 \details{
 The \code{DT} must be a \code{data.table}. If your data is a
 \code{data.frame}, you can convert it by reference using
-\code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-\code{\link[data.table:data.table]{data.table::data.table}}.
+\code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
+\code{\link[data.table:data.table]{data.table::data.table()}}.
 
 The \code{direction} and \code{group} arguments expect the names of columns
 in \code{DT} which correspond to the direction and group columns. The
@@ -85,7 +85,7 @@ See examples of using mean group direction:
 }
 }
 \seealso{
-\code{\link{direction_step}}, \code{\link{group_pts}},
+\code{direction_step}, \code{group_pts},
 \code{\link[CircStats:circ.mean]{CircStats::circ.mean()}}
 
 Other Direction functions: 
@@ -97,6 +97,7 @@ Other Direction functions:
 \code{\link{edge_delay}()},
 \code{\link{edge_direction}()},
 \code{\link{edge_dist}()},
+\code{\link{edge_zones}()},
 \code{\link{leader_direction_group}()},
 \code{\link{leader_edge_delay}()}
 }

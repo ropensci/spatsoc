@@ -1,5 +1,4 @@
-#' Build Lines
-#'
+#' Build lines
 #'
 #' `build_lines` generates a simple feature collection with LINESTRINGs from a
 #' `data.table`. The function expects a `data.table` with relocation data,
@@ -12,12 +11,12 @@
 #'
 #'  Please note, spatsoc has followed updates from R spatial, GDAL and PROJ
 #'  for handling projections, see more at
-#'  \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
+#'  <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
 #' In addition, `build_lines` previously used [sp::SpatialLines] but has been
 #' updated to use [sf::st_as_sf] and [sf::st_linestring] according to the
 #' R-spatial evolution, see more at
-#' \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
+#' <https://r-spatial.org/r/2022/04/12/evolution.html>.
 #'
 #' ## Notes on arguments
 #'
@@ -25,7 +24,7 @@
 #' coordinate reference system.
 #' For example, for UTM zone 36N (EPSG 32736), the projection argument is either
 #'  `projection = 'EPSG:32736'` or `projection = 32736`.
-#'  See details in [`sf::st_crs()`] and \url{https://spatialreference.org}
+#'  See details in [`sf::st_crs()`] and <https://spatialreference.org>
 #'  for a list of EPSG codes.
 #'
 #' The `sortBy` argument is used to order the input `DT` when creating
@@ -53,7 +52,7 @@
 #' @export
 #'
 #' @family Build functions
-#' @seealso \code{\link{group_lines}}
+#' @seealso `group_lines`
 #'
 #' @import data.table
 #'
@@ -114,7 +113,7 @@ build_lines <-
       stop('coords requires a vector of column names for coordinates X and Y')
     }
 
-    if (any(!(c(id, coords, splitBy, sortBy) %in% colnames(DT)))) {
+    if (!all((c(id, coords, splitBy, sortBy) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
           c(id, coords, splitBy, sortBy), colnames(DT)
@@ -124,7 +123,7 @@ build_lines <-
       ))
     }
 
-    if (any(!(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
       stop('coords must be numeric')
     }
 
@@ -133,7 +132,7 @@ build_lines <-
     } else {
       splitBy <- c(id, splitBy)
     }
-    if (any(!(DT[, lapply(.SD, FUN = function(x) {
+    if (!all((DT[, lapply(.SD, FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
     ), .SDcols = splitBy]))) {

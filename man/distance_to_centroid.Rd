@@ -25,14 +25,13 @@ Note: the order is assumed X followed by Y column names.}
 \item{return_rank}{boolean if rank distance should also be returned, default
 FALSE}
 
-\item{ties.method}{see \code{\link[data.table:frank]{?data.table::frank}}}
+\item{ties.method}{see \code{\link[data.table:frank]{?data.table::frank()}}}
 }
 \value{
 \code{distance_to_centroid} returns the input \code{DT} appended with
 a \code{distance_centroid} column indicating the distance to group centroid
 and, optionally, a \code{rank_distance_centroid} column indicating the
-within group rank distance to group centroid (if \code{return_rank =
-  TRUE}).
+within group rank distance to group centroid (if \code{return_rank = TRUE}).
 
 A message is returned when \code{distance_centroid} and optional
 \code{rank_distance_centroid} columns already exist in the input \code{DT},
@@ -44,7 +43,7 @@ See details for appending outputs using modify-by-reference in the
 \description{
 \code{distance_to_centroid} calculates the distance of each relocation to the
 centroid of the spatiotemporal group identified by \code{group_pts}. The
-function accepts a \code{data.table} with relocation data appended with a
+function expects a \code{data.table} with relocation data appended with a
 \code{group} column from \code{group_pts} and centroid columns from
 \code{centroid_group}. Relocation data should be in planar coordinates
 provided in two columns representing the X and Y coordinates.
@@ -52,8 +51,8 @@ provided in two columns representing the X and Y coordinates.
 \details{
 The \code{DT} must be a \code{data.table}. If your data is a
 \code{data.frame}, you can convert it by reference using
-\code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
-\code{\link[data.table:data.table]{data.table::data.table}}.
+\code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
+\code{\link[data.table:data.table]{data.table::data.table()}}.
 
 This function expects a \code{group} column present generated with the
 \code{group_pts} function and centroid coordinate columns generated with the
@@ -63,7 +62,7 @@ coordinates and group columns. The \code{return_rank} argument controls if
 the rank of each individual's distance to the group centroid is also
 returned. The \code{ties.method} argument is passed to
 \code{data.table::frank}, see details at
-\code{\link[data.table:frank]{?data.table::frank}}.
+\code{\link[data.table:frank]{?data.table::frank()}}.
 }
 \examples{
 # Load data.table
@@ -107,7 +106,8 @@ See examples of using distance to group centroid:
 
 Other Distance functions: 
 \code{\link{distance_to_leader}()},
-\code{\link{edge_nn}()}
+\code{\link{edge_nn}()},
+\code{\link{edge_zones}()}
 
 Other Centroid functions: 
 \code{\link{centroid_dyad}()},

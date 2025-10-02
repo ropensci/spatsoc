@@ -274,7 +274,7 @@ test_that('column and row lengths returned make sense', {
       id = 'ID'
     )
   )
-  expect_equal(nrow(group_sf_polys), length(unique(DT$ID)))
+  expect_length(unique(DT$ID), nrow(group_sf_polys))
   expect_equal(nrow(group_sf_polys_area), length(unique(DT$ID)) ^ 2)
 })
 
@@ -460,8 +460,7 @@ test_that('splitBy argument doesnt use splitBy column', {
     ))[, uniqueN(jul), group][, all(V1 == 1)]
   )
 
-  expect_true(
-    ! 'splitBy' %in%
+  expect_false('splitBy' %in%
       suppressWarnings(group_polys(
         DT = copyDT,
         projection = utm,
@@ -471,8 +470,7 @@ test_that('splitBy argument doesnt use splitBy column', {
         coords = c('X', 'Y'),
         id = 'ID',
         splitBy = 'jul'
-      ))
-  )
+      )))
 
 })
 

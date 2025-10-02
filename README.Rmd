@@ -33,7 +33,7 @@ For more details, see the [blog post](https://ropensci.org/blog/2018/12/04/spats
 * [Introduction to spatsoc](https://docs.ropensci.org/spatsoc/articles/intro.html)
 * [Frequently asked questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
 * [Using spatsoc in social network analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html)
-* [Using edge list and dyad id functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
+* [Using edge-list and dyad id functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
 
 
 ## News
@@ -87,7 +87,7 @@ and dyad id function:
   
 (feedback welcome as always!)
 
-Both documented further in a vignette: [Using edge list and dyad id functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html).
+Both documented further in a vignette: [Using edge-list and dyad id functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html).
 
 
 Also, our article describing `spatsoc` is published at Methods in Ecology and Evolution. [Link here](https://doi.org/10.1111/2041-210X.13215). Thanks to reviewers and editors at [rOpenSci](https://github.com/ropensci/software-review/issues/237) and at [MEE](https://besjournals.onlinelibrary.wiley.com/journal/2041210x). 

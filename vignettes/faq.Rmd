@@ -34,7 +34,7 @@ by reference using `setDT(DF)`.
 ## Spatial and temporal grouping
 
 `spatsoc` is designed to work in two steps: temporal followed by either spatial
-grouping or edge list generating. Considering your specific study species and
+grouping or edge-list generating. Considering your specific study species and
 system, determine a relevant temporal and spatial grouping threshold. This may
 be 5 minutes and 50 meters or 2 days and 100 meters or any other thresholds -
 the functions provided by `spatsoc` are flexible to user input. In some cases,
@@ -359,7 +359,7 @@ defined by the distance threshold and NAs are returned for individuals within
 each timegroup if they are not within the threshold distance of any other
 individual (if `fillNA` is TRUE).
 
-**See the vignette [Using edge list generating functions and dyad_id](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html) for details about the `edge_dist` function.**
+**See the vignette [Using edge-list generating functions and dyad_id](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html) for details about the `edge_dist` function.**
 
 ## edge_nn
 
@@ -373,14 +373,14 @@ individual (if `fillNA` is TRUE).
 * `threshold`: (optional) spatial distance threshold to set maximum distance 
 between an individual and their neighbour.
 
-This function can be used to generate edge lists defined either by nearest
+This function can be used to generate edge-lists defined either by nearest
 neighbour or nearest neighbour with a maximum distance. NAs are returned for
 nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or
 if the distance between an individual and it's nearest neighbour is greater than
 the threshold.
 
 
-**See the vignette [Using edge list generating functions and dyad_id](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html) for details about the `edge_nn` function.**
+**See the vignette [Using edge-list generating functions and dyad_id](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html) for details about the `edge_nn` function.**
 
 ## randomizations
 
