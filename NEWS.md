@@ -1,5 +1,7 @@
 # Development version
 
+# spatsoc 0.2.11
+
 New experimental functions:
 
 * `edge_direction` function for calculating the direction between individuals ([PR 80](https://github.com/ropensci/spatsoc/pull/80))
