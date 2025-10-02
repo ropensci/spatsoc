@@ -8,7 +8,7 @@
 #' \code{edge_dist} to ensure there are no NAs in the coordinate columns.
 #' Relocation data should be in two columns representing the X and Y coordinates.
 #'
-#' The \code{edges} and \code{DT} must be \code{data.table}. If your data is a
+#' The \code{edges} and \code{DT} must be \code{data.table}s. If your data is a
 #' \code{data.frame}, you can convert it by reference using
 #' \code{\link[data.table:setDT]{data.table::setDT}} or by reassigning using
 #' \code{\link[data.table:data.table]{data.table::data.table}}.
@@ -122,16 +122,12 @@ edge_direction <- function(
     stop('timegroup required')
   }
 
-  if (any(!(
-    c('dyadID', timegroup) %in% colnames(edges)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c('dyadID', timegroup),
-        colnames(edges)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
+  if (!'timegroup' %in% colnames(edges)) {
+    stop('timegroup field provided are not present in input edges')
+  }
+
+  if (!'dyadID' %in% colnames(edges)) {
+    stop('dyadID not present in input edges, did you run dyad_id?')
   }
 
   if (any(!(
