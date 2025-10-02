@@ -77,7 +77,7 @@ get_geometry <- function(
     data.table::set(DT, j = geometry_colname, value = NULL)
   }
 
-  DT[, (geo_colname) := {
+  DT[, (geometry_colname) := {
     x <- sf::st_as_sf(data.frame(.SD),
                       coords = coords,
                       crs = crs,
