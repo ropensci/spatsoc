@@ -72,3 +72,35 @@ test_that('group column succesfully detected', {
     'geometry column will be overwritten'
   )
 })
+
+test_that('geometry column returned is sfc, as expected', {
+  copyDT <- copy(DT)
+  get_geometry(copyDT, coords = coords, crs = crs)
+
+  expect_class(copyDT$geometry, 'sfc_POINT')
+  expect_class(copyDT$geometry, 'sfc')
+
+  copyDT <- copy(DT)
+  get_geometry(copyDT, coords = coords, crs = crs, output_crs = FALSE)
+
+  expect_equal(st_coordinates(copyDT$geometry),
+               copyDT[, as.matrix(.SD), .SDcols = coords])
+
+
+  copyDT <- copy(DT)
+  get_geometry(copyDT, coords = coords, crs = crs, output_crs = NULL)
+
+  expect_equal(st_coordinates(copyDT$geometry),
+               copyDT[, as.matrix(.SD), .SDcols = coords])
+
+  copyDT <- copy(DT)
+  get_geometry(copyDT, coords = coords, crs = crs)
+
+  expect_lt(mean(st_coordinates(copyDT$geometry) -
+                   copyDT[, as.matrix(.SD), .SDcols = coords]),
+            0)
+
+  copyDT <- copy(DT)[sample(seq.int(.N), 10), c(coords) := NA]
+  get_geometry(copyDT, coords = coords, crs = crs)
+  expect_equal(copyDT[is.na(X), .N], copyDT[st_is_empty(geometry), .N])
+})
