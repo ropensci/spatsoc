@@ -14,3 +14,38 @@ test_that('DT is required', {
   ),
   'input DT required')
 })
+
+test_that('coords provided correctly, else error', {
+  expect_error(
+    get_geometry(
+      DT,
+      coords = 'X'
+    ),
+    'coords requires a vector'
+  )
+
+  expect_error(
+    get_geometry(
+      DT,
+      coords = c('potatoX', 'Y')
+    ),
+    'not present in input DT'
+  )
+
+  expect_error(
+    get_geometry(
+      DT,
+      coords = c('X', 'potatoY')
+    ),
+    'not present in input DT'
+  )
+
+  expect_error(
+    get_geometry(
+      DT,
+      coords = c('ID', 'ID')
+    ),
+    'coords must be numeric'
+  )
+
+})
