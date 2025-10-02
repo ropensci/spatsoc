@@ -32,10 +32,10 @@
 #' to the individual identifier, X and Y coordinates, and additional
 #' grouping columns.
 #'
-#' The `projection` argument expects a character string or numeric
+#' The `crs` argument expects a character string or numeric
 #' defining the coordinate reference system to be passed to [sf::st_crs].
 #' For example, for UTM zone 36S (EPSG 32736), the projection
-#' argument is `projection = "EPSG:32736"` or `projection = 32736`.
+#' argument is `crs = "EPSG:32736"` or `crs = 32736`.
 #' See <https://spatialreference.org>
 #' for a list of EPSG codes.
 #'
@@ -64,7 +64,7 @@
 #' or [adehabitatHR::kernelUD]
 #' @param projection numeric or character defining the coordinate reference
 #'   system to be passed to [sf::st_crs]. For example, either
-#'   `projection = "EPSG:32736"` or `projection = 32736`.
+#'   `crs = "EPSG:32736"` or `crs = 32736`.
 #' @export
 #'
 #' @family Build functions
@@ -85,17 +85,17 @@
 #' utm <- 32736
 #'
 #' # Build polygons for each individual using kernelUD and getverticeshr
-#' build_polys(DT, projection = utm, hrType = 'kernel',
+#' build_polys(DT, crs = utm, hrType = 'kernel',
 #'             hrParams = list(grid = 60, percent = 95),
 #'             id = 'ID', coords = c('X', 'Y'))
 #'
 #' # Build polygons for each individual by year
 #' DT[, yr := year(datetime)]
-#' build_polys(DT, projection = utm, hrType = 'mcp',
+#' build_polys(DT, crs = utm, hrType = 'mcp',
 #'             hrParams = list(percent = 95),
 #'             id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
 build_polys <- function(DT = NULL,
-                        projection = NULL,
+                        crs = NULL,
                         hrType = NULL,
                         hrParams = NULL,
                         id = NULL,

@@ -119,7 +119,7 @@ DT_expect <- data.table(
 )
 DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
 setorder(DT_expect, timegroup)
-direction_step(DT_expect, id, coords, projection = 4326)
+direction_step(DT_expect, id, coords, crs = 4326)
 
 edge_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
                           returnDist = TRUE)

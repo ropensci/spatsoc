@@ -79,7 +79,7 @@
 #'   DT = DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736
+#'   crs = 32736
 #' )
 #'
 #' # Calculate directional alignment edge-list

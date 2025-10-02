@@ -51,7 +51,7 @@
 #'
 #' group_polys(DT, area = FALSE, hrType = 'mcp',
 #'             hrParams = list(percent = 95),
-#'             projection = utm, id = 'ID', coords = c('X', 'Y'),
+#'             crs = utm, id = 'ID', coords = c('X', 'Y'),
 #'             splitBy = 'yr')
 #'
 #' gbiMtrx <- get_gbi(DT = DT, group = 'group', id = 'ID')

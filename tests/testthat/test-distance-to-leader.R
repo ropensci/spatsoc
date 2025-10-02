@@ -18,7 +18,7 @@ group_times(DT, datetime = datetime, timethreshold)
 group_pts(DT, threshold = threshold, id = id,
           coords = coords, timegroup = timegroup)
 centroid_group(DT, coords = coords, group = group, na.rm = TRUE)
-direction_step(DT = DT, id = id, coords = coords, projection = projection)
+direction_step(DT = DT, id = id, coords = coords, crs = projection)
 direction_group(DT)
 leader_direction_group(DT, coords = coords, group = group, return_rank = TRUE)
 

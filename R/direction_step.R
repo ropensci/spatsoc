@@ -16,10 +16,10 @@
 #' the names of a column in `DT` which correspond to the individual
 #' identifier, X and Y coordinates, and additional grouping columns.
 #'
-#' The `projection` argument expects a character string or numeric defining
+#' The `crs` argument expects a character string or numeric defining
 #' the coordinate reference system to be passed to [sf::st_crs]. For example,
 #' for UTM zone 36S (EPSG 32736), the projection argument is
-#' `projection = "EPSG:32736"` or `projection = 32736`. See
+#' `crs = "EPSG:32736"` or `crs = 32736`. See
 #' <https://spatialreference.org> for a list of EPSG codes.
 #'
 #' The `splitBy` argument offers further control over grouping. If within
@@ -72,7 +72,7 @@
 #'   DT = DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736
+#'   crs = 32736
 #' )
 #'
 #' # Example result for East, North, West, South steps
@@ -83,13 +83,13 @@
 #'   ID = 'A'
 #' )
 #'
-#' direction_step(example, 'ID', c('X', 'Y'), projection = 4326)
+#' direction_step(example, 'ID', c('X', 'Y'), crs = 4326)
 #' example[, .(step, direction, units::set_units(direction, 'degree'))]
 direction_step <- function(
     DT = NULL,
     id = NULL,
     coords = NULL,
-    projection = NULL,
+    crs = NULL,
     splitBy = NULL) {
 
   # due to NSE notes in R CMD check

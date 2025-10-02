@@ -16,7 +16,7 @@ direction_step(
   DT = DT,
   id = id,
   coords = coords,
-  projection = projection
+  crs = projection
 )
 
 test_that('required arguments are provided else error', {

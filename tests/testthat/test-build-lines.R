@@ -13,7 +13,7 @@ test_that('DT is required', {
       DT = NULL,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'input DT required'
@@ -26,7 +26,7 @@ test_that('coords, id, projection, sortBy must be provided, proper format', {
       DT = DT,
       id = NULL,
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'id must be provided'
@@ -37,7 +37,7 @@ test_that('coords, id, projection, sortBy must be provided, proper format', {
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = NULL,
+      crs = NULL,
       sortBy = 'datetime'
     ),
     'projection must be provided'
@@ -48,7 +48,7 @@ test_that('coords, id, projection, sortBy must be provided, proper format', {
       DT = DT,
       id = 'ID',
       coords = NULL,
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'coords must be provided'
@@ -59,7 +59,7 @@ test_that('coords, id, projection, sortBy must be provided, proper format', {
       DT = DT,
       id = 'ID',
       coords = c('ID', 'ID'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'coords must be numeric'
@@ -69,7 +69,7 @@ test_that('coords, id, projection, sortBy must be provided, proper format', {
       DT = DT,
       id = 'ID',
       coords = c('X'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'coords requires a vector', fixed = FALSE
@@ -80,7 +80,7 @@ test_that('coords, id, projection, sortBy must be provided, proper format', {
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = NULL
     ),
     'sortBy must be provided'
@@ -90,7 +90,7 @@ test_that('coords, id, projection, sortBy must be provided, proper format', {
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'ID'
     ),
     'sortBy provided must be', fixed = FALSE
@@ -105,7 +105,7 @@ test_that('column names must exist in DT', {
       DT = DT,
       id = 'ID',
       coords = c('potatoX', 'potatoY'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'not present in input DT',
@@ -117,7 +117,7 @@ test_that('column names must exist in DT', {
       DT = DT,
       id = 'potato',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'not present in input DT',
@@ -129,7 +129,7 @@ test_that('column names must exist in DT', {
       DT = DT,
       id = 'potato',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'potato'
     ),
     'not present in input DT',
@@ -144,7 +144,7 @@ test_that('returns same number of lines as unique IDs/splitBy provided', {
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     )
   ),
@@ -161,7 +161,7 @@ test_that('returns same number of lines as unique IDs/splitBy provided', {
       DT = subDT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       splitBy = 'jul',
       sortBy = 'datetime'
     )
@@ -179,7 +179,7 @@ test_that("build lines warns if < 2 locs per ID/byField", {
       DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'some rows dropped, cannot build lines with less than two points'
@@ -191,7 +191,7 @@ test_that("build lines warns if < 2 locs per ID/byField", {
       DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       splitBy = 'population',
       sortBy = 'datetime'
     ),
@@ -207,7 +207,7 @@ test_that('splitBy and id provided are not correct format', {
       DT = copyDT,
       id = 'datetime',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'id \\(and splitBy when provided\\) must',
@@ -219,7 +219,7 @@ test_that('splitBy and id provided are not correct format', {
       DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       splitBy = 'datetime',
       sortBy = 'datetime'
     ),
@@ -234,7 +234,7 @@ test_that('splitBy and id provided are not correct format', {
       DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'id \\(and splitBy when provided\\) must be',
@@ -248,7 +248,7 @@ test_that('build_lines returns an sf object with LINESTRINGs', {
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'sf'
@@ -260,7 +260,7 @@ test_that('build_lines returns an sf object with LINESTRINGs', {
       DT = DT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ), by_geometry = FALSE)
   )
@@ -271,7 +271,7 @@ test_that('build_lines builds ordered lines', {
     DT = DT,
     id = 'ID',
     coords = c('X', 'Y'),
-    projection = utm,
+    crs = utm,
     sortBy = 'datetime'
   )
 
@@ -279,7 +279,7 @@ test_that('build_lines builds ordered lines', {
     DT = DT[sample(.N)],
     id = 'ID',
     coords = c('X', 'Y'),
-    projection = utm,
+    crs = utm,
     sortBy = 'datetime'
   )
 
@@ -304,7 +304,7 @@ test_that('splitBy argument doesnt use splitBy column', {
       DT = copyDT,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       splitBy = 'splitBy',
       sortBy = 'datetime'
     )),

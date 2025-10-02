@@ -32,10 +32,10 @@
 #' the names of respective columns in `DT` which correspond to the
 #' individual identifier, X and Y coordinates, and additional grouping columns.
 #'
-#' The `projection` argument expects a character string or numeric
+#' The `crs` argument expects a character string or numeric
 #' defining the coordinate reference system to be passed to [sf::st_crs].
 #' For example, for UTM zone 36S (EPSG 32736), the projection
-#' argument is `projection = "EPSG:32736"` or `projection = 32736`.
+#' argument is `crs = "EPSG:32736"` or `crs = 32736`.
 #' See <https://spatialreference.org>
 #' for a list of EPSG codes.
 #'
@@ -101,11 +101,11 @@
 #' utm <- 32736
 #'
 #' group_polys(DT, area = FALSE, hrType = 'mcp',
-#'             hrParams = list(percent = 95), projection = utm,
+#'             hrParams = list(percent = 95), crs = utm,
 #'             id = 'ID', coords = c('X', 'Y'))
 #'
 #' areaDT <- group_polys(DT, area = TRUE, hrType = 'mcp',
-#'                       hrParams = list(percent = 95), projection = utm,
+#'                       hrParams = list(percent = 95), crs = utm,
 #'                       id = 'ID', coords = c('X', 'Y'))
 #' print(areaDT)
 group_polys <-
@@ -113,7 +113,7 @@ group_polys <-
            area = NULL,
            hrType = NULL,
            hrParams = NULL,
-           projection = NULL,
+           crs = NULL,
            id = NULL,
            coords = NULL,
            splitBy = NULL,
@@ -138,7 +138,7 @@ group_polys <-
         sfPolys <-
           build_polys(
             DT = DT,
-            projection = projection,
+            crs = projection,
             hrType = hrType,
             hrParams = hrParams,
             coords = coords,
@@ -236,7 +236,7 @@ group_polys <-
               sfPolys <-
                 build_polys(
                   DT = .SD,
-                  projection = projection,
+                  crs = projection,
                   hrType = hrType,
                   hrParams = hrParams,
                   coords = ..coords,
@@ -285,7 +285,7 @@ group_polys <-
               sfPolys <-
                 build_polys(
                   DT = .SD,
-                  projection = projection,
+                  crs = projection,
                   hrType = hrType,
                   hrParams = hrParams,
                   id = ..id,

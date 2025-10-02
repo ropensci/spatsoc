@@ -13,10 +13,10 @@
 #' [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' The `projection` argument expects a character string or numeric defining
+#' The `crs` argument expects a character string or numeric defining
 #' the coordinate reference system to be passed to [sf::st_crs]. For example,
 #' for UTM zone 36S (EPSG 32736), the projection argument is
-#' `projection = "EPSG:32736"` or `projection = 32736`. See
+#' `crs = "EPSG:32736"` or `crs = 32736`. See
 #' <https://spatialreference.org> for a list of EPSG codes.
 #'
 #' The `edges` and `DT` are internally merged in this function using
@@ -89,7 +89,7 @@
 #'   DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736,
+#'   crs = 32736,
 #'   timegroup = 'timegroup'
 #' )
 #'
@@ -99,7 +99,7 @@ edge_direction <- function(
     DT = NULL,
     id = NULL,
     coords = NULL,
-    projection = NULL,
+    crs = NULL,
     timegroup = 'timegroup') {
 
   if (is.null(DT)) {

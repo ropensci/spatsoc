@@ -244,7 +244,7 @@ are in).
   
 * `DT`: input `data.table`
 * `threshold`: threshold for grouping 
-* `projection`: projection of coordinates in `DT`
+* `crs`: projection of coordinates in `DT`
 * `id`: column name of IDs in `DT`
 * `coords`: column names of x and y coordinates in `DT`
 * `timegroup`: (optional) column name of time group
@@ -264,10 +264,10 @@ greater than 0, the lines buffered, then grouped by spatial overlap.
 
 ### projection
 
-The `projection` argument expects a character string or numeric 
+The `crs` argument expects a character string or numeric 
 defining the coordinate reference system to be passed to `sf::st_crs`. 
 For example, for UTM zone 36S (EPSG 32736), the projection
-argument is `projection = "EPSG:32736"` or `projection = 32736`. 
+argument is `crs = "EPSG:32736"` or `crs = 32736`. 
 See https://spatialreference.org for a list of EPSG codes. 
 Please note, R spatial has followed updates to GDAL 
 and PROJ for handling projections, see more at 
@@ -287,7 +287,7 @@ to order the rows for each individual (and `splitBy`).
 * `area`: boolean argument if proportional area should be returned
 * `hrType`: type of home range created 
 * `hrParams`: parameters relevant to the type of home range created
-* `projection`: projection of coordinates in `DT`
+* `crs`: projection of coordinates in `DT`
 * `id`: column name of IDs in `DT`
 * `coords`: column names of x and y coordinates in `DT`
 * `splitBy`: (optional) column names of extra variables to group on
@@ -307,10 +307,10 @@ The default unit for area overlap is square meters.
 
 ### projection
 
-The `projection` argument expects a character string or numeric 
+The `crs` argument expects a character string or numeric 
 defining the coordinate reference system to be passed to `sf::st_crs`. 
 For example, for UTM zone 36S (EPSG 32736), the projection
-argument is `projection = "EPSG:32736"` or `projection = 32736`. 
+argument is `crs = "EPSG:32736"` or `crs = 32736`. 
 See https://spatialreference.org for a list of EPSG codes. 
 Please note, R spatial has followed updates to GDAL 
 and PROJ for handling projections, see more at
@@ -331,7 +331,7 @@ for example, both the percent (provided to `getverticeshr`) and grid arguments
 group_polys(
   DT,
   area = FALSE,
-  projection = utm,
+  crs = utm,
   hrType = 'mcp',
   hrParams = list(grid = 60, percent = 95),
   id = 'ID',

@@ -17,7 +17,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
 group_pts(DT, threshold = threshold,
           id = id, coords = coords, timegroup = timegroup)
-direction_step(DT, id = id, coords = coords, projection = projection)
+direction_step(DT, id = id, coords = coords, crs = projection)
 
 clean_DT <- copy(DT)
 
