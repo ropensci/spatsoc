@@ -27,10 +27,10 @@
 #'   be passed to [sf::st_crs]. For example, `crs = "EPSG:32736"` or
 #'   `crs = 32736`.
 #' @param output_crs default 4326, the output crs to transform the input
-#'   coordinates into. If output_crs is NULL or FALSE or matching the crs argument,
-#'   the coordinates will not be transformed
-#' @param geometry_colname default "geometry", optionally set output colname for
-#'   geometry column
+#'   coordinates to with [sf::st_transform]. If output_crs is NULL or FALSE or
+#'   matching the crs argument, the coordinates will not be transformed
+#' @param geometry_colname default "geometry", to optionally set output name
+#'   of simple feature geometry list column
 #'
 #' @export
 #'
