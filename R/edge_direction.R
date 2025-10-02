@@ -122,7 +122,7 @@ edge_direction <- function(
     stop('timegroup required')
   }
 
-  if (!'timegroup' %in% colnames(edges)) {
+  if (!timegroup %in% colnames(edges)) {
     stop('timegroup field provided are not present in input edges')
   }
 
