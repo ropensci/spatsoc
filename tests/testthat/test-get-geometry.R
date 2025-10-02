@@ -49,3 +49,15 @@ test_that('coords provided correctly, else error', {
   )
 
 })
+
+test_that('crs provided correctly, else error', {
+  expect_error(
+    get_geometry(
+      DT,
+      coords = coords,
+      crs = NULL
+    ),
+    'input crs required'
+  )
+})
+
