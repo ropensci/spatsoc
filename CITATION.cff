@@ -177,6 +177,7 @@ references:
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
   doi: 10.32614/CRAN.package.lwgeom
+  version: '>= 0.2.15'
   year: '2025'
 - type: software
   title: CircStats
