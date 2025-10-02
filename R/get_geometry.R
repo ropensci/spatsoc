@@ -59,7 +59,7 @@ get_geometry <- function(
     stop('coords requires a vector of column names for coordinates X and Y')
   }
 
-  if (!coords %in% colnames(DT)) {
+  if (!all(coords %in% colnames(DT))) {
     stop('coords field(s) provided are not present in input DT')
   }
 
