@@ -1,5 +1,11 @@
 # Development version
 
+New experimental functions:
+
+* `get_geometry` helper function for setting up an input DT with a sfc geometry
+column ([PR 117](https://github.com/ropensci/spatsoc/pull/117))
+
+
 # spatsoc 0.2.11
 
 New experimental functions:
