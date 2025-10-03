@@ -62,7 +62,7 @@ test_that('coords, id, projection provided and proper format', {
       coords = c('X', 'Y'),
       crs = NULL
     ),
-    'projection must be provided',
+    'crs must be provided',
     fixed = FALSE
   )
 

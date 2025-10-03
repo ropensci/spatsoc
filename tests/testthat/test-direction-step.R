@@ -11,7 +11,7 @@ setorder(DT, datetime)
 
 id <- 'ID'
 coords <- c('X', 'Y')
-projection <- 32736
+utm <- 32736
 
 clean_DT <- copy(DT)
 
@@ -25,7 +25,7 @@ test_that('args required else error', {
   expect_error(direction_step(DT, id = id, coords = NULL), 'coords requir')
 
   expect_error(direction_step(DT,  id = id, coords = coords, crs = NULL),
-               'projection required')
+               'crs required')
 
   expect_error(direction_step(DT, id = id, coords = 'X'),
                'coords requires a vector')
@@ -34,25 +34,25 @@ test_that('args required else error', {
 
 test_that('column names must exist in DT', {
   expect_error(direction_step(DT, id = 'potato', coords = coords,
-                              crs = projection),
+                              crs = utm),
                'not present')
 
   expect_error(direction_step(DT, id = id, coords = c('potato', 'potato'),
-                              crs = projection),
+                              crs = utm),
                'not present')
 
   expect_error(direction_step(DT, id = id, coords = coords,
-                              crs = projection, splitBy = 'potato'),
+                              crs = crs, splitBy = 'potato'),
                'not present')
 })
 
 test_that('coords are correctly provided or error detected', {
   expect_error(direction_step(DT, id = id, coords = c('X', NULL),
-                              crs = projection),
+                              crs = utm),
                'requires a vector')
 
   expect_error(direction_step(DT, id = id, coords = c('X', 'ID'),
-                              crs = projection),
+                              crs = utm),
                'numeric')
 })
 
@@ -61,13 +61,13 @@ test_that('dimensions returned expected', {
   expect_equal(
     ncol(clean_DT) + 1,
     ncol(direction_step(copy(clean_DT), id = id,
-                        coords = coords, crs = projection))
+                        coords = coords, crs = utm))
   )
 
   expect_equal(
     nrow(clean_DT),
     nrow(direction_step(copy(clean_DT), id = id,
-                        coords = coords, crs = projection))
+                        coords = coords, crs = utm))
   )
 
   expect_true('direction' %in% colnames(
@@ -75,7 +75,7 @@ test_that('dimensions returned expected', {
       copy(clean_DT),
       id = id,
       coords = coords,
-      crs = projection
+      crs = utm
     )
   ))
 
@@ -89,7 +89,7 @@ test_that('direction column succesfully detected', {
       copyDT,
       id = id,
       coords = coords,
-      crs = projection
+      crs = utm
     ),
     'direction column will be overwritten'
   )
@@ -98,7 +98,7 @@ test_that('direction column succesfully detected', {
 
 test_that('returns a data.table', {
   expect_s3_class(direction_step(DT, id = id, coords = coords,
-                                 crs = projection),
+                                 crs = utm),
                   'data.table')
 })
 
@@ -107,10 +107,10 @@ test_that('splitBy returns expected', {
   DT[, split := sample(seq.int(5), .N, replace = TRUE)]
   expect_gte(
     direction_step(DT, id = id, coords = coords,
-                   crs = projection,
+                   crs = utm,
                    splitBy = 'split')[is.na(direction), .N],
     direction_step(DT, id = id, coords = coords,
-                   crs = projection)[is.na(direction), .N]
+                   crs = utm)[is.na(direction), .N]
 
   )
 })

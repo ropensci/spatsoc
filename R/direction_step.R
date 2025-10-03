@@ -18,7 +18,7 @@
 #'
 #' The `crs` argument expects a character string or numeric defining
 #' the coordinate reference system to be passed to [sf::st_crs]. For example,
-#' for UTM zone 36S (EPSG 32736), the projection argument is
+#' for UTM zone 36S (EPSG 32736), the crs argument is
 #' `crs = "EPSG:32736"` or `crs = 32736`. See
 #' <https://spatialreference.org> for a list of EPSG codes.
 #'
@@ -128,21 +128,21 @@ direction_step <- function(
     data.table::set(DT, j = 'direction', value = NULL)
   }
 
-  if (is.null(projection)) {
-    stop('projection required')
+  if (is.null(crs)) {
+    stop('crs required')
   }
 
-  if (sf::st_is_longlat(projection)) {
+  if (sf::st_is_longlat(crs)) {
     DT[, direction := c(
       lwgeom::st_geod_azimuth(
-        sf::st_as_sf(.SD, coords = coords, crs = projection)),
+        sf::st_as_sf(.SD, coords = coords, crs = crs)),
       units::set_units(NA, 'rad')),
       by = c(id, splitBy)]
-  } else if (!sf::st_is_longlat(projection)) {
+  } else if (!sf::st_is_longlat(crs)) {
     DT[, direction := c(
       lwgeom::st_geod_azimuth(
         sf::st_transform(
-          sf::st_as_sf(.SD, coords = coords, crs = projection),
+          sf::st_as_sf(.SD, coords = coords, crs = crs),
           crs = 4326)
         ),
       units::set_units(NA, 'rad')),

@@ -16,7 +16,7 @@ test_that('DT or spPts are required but not both', {
 
 
 
-test_that('coords, id, projection, (splitBy) provided and proper format', {
+test_that('coords, id, crs, (splitBy) provided and proper format', {
   expect_error(
     build_polys(
       DT = DT,
@@ -36,7 +36,7 @@ test_that('coords, id, projection, (splitBy) provided and proper format', {
       coords = c('X', 'Y'),
       id = 'ID'
     ),
-    'projection must be provided'
+    'crs must be provided'
   )
 
   expect_error(

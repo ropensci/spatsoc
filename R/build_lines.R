@@ -10,7 +10,7 @@
 #' ## R-spatial evolution
 #'
 #'  Please note, spatsoc has followed updates from R spatial, GDAL and PROJ
-#'  for handling projections, see more at
+#'  for handling coordinate reference systems, see more at
 #'  <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
 #' In addition, `build_lines` previously used [sp::SpatialLines] but has been
@@ -22,7 +22,7 @@
 #'
 #' The `crs` argument expects a numeric or character defining the
 #' coordinate reference system.
-#' For example, for UTM zone 36N (EPSG 32736), the projection argument is either
+#' For example, for UTM zone 36N (EPSG 32736), the crs argument is either
 #'  `crs = 'EPSG:32736'` or `crs = 32736`.
 #'  See details in [`sf::st_crs()`] and <https://spatialreference.org>
 #'  for a list of EPSG codes.
@@ -102,8 +102,8 @@ build_lines <-
       stop('id must be provided')
     }
 
-    if (is.null(projection)) {
-      stop('projection must be provided')
+    if (is.null(crs)) {
+      stop('crs must be provided')
     }
 
     if (is.null(sortBy)) {
@@ -164,6 +164,6 @@ build_lines <-
     lines <- sf::st_as_sf(
       wo_drop[, .(geometry = sf::st_sfc(sf::st_linestring(as.matrix(.SD)))),
          by = c(splitBy), .SDcols = coords],
-      crs = sf::st_crs(projection)
+      crs = sf::st_crs(crs)
     )
   }

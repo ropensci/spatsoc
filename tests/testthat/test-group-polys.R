@@ -97,7 +97,7 @@ test_that('projection provided or error', {
       coords = c('X', 'Y'),
       id = 'ID'
     ),
-    'projection must be provided'
+    'crs must be provided'
   )
 })
 

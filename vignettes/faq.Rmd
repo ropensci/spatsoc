@@ -240,7 +240,7 @@ are in).
 
 ## group_lines
 
-`group_lines(DT, threshold, projection, id, coords, timegroup, sortBy, splitBy, spLines)`
+`group_lines(DT, threshold, crs, id, coords, timegroup, sortBy, splitBy, spLines)`
   
 * `DT`: input `data.table`
 * `threshold`: threshold for grouping 
@@ -270,7 +270,7 @@ For example, for UTM zone 36S (EPSG 32736), the projection
 argument is `crs = "EPSG:32736"` or `crs = 32736`. 
 See https://spatialreference.org for a list of EPSG codes. 
 Please note, R spatial has followed updates to GDAL 
-and PROJ for handling projections, see more at 
+and PROJ for handling coordinate reference systems, see more at 
 https://r-spatial.org/r/2020/03/17/wkt.html. 
 
 
@@ -281,7 +281,7 @@ to order the rows for each individual (and `splitBy`).
 
 ## group_polys
 
-`group_polys(DT, area, hrType, hrParams, projection, id, coords, splitBy, spLines)`
+`group_polys(DT, area, hrType, hrParams, crs, id, coords, splitBy, spLines)`
   
 * `DT`: input `data.table`
 * `area`: boolean argument if proportional area should be returned
@@ -313,7 +313,7 @@ For example, for UTM zone 36S (EPSG 32736), the projection
 argument is `crs = "EPSG:32736"` or `crs = 32736`. 
 See https://spatialreference.org for a list of EPSG codes. 
 Please note, R spatial has followed updates to GDAL 
-and PROJ for handling projections, see more at
+and PROJ for handling coordinate reference systems, see more at
 https://r-spatial.org/r/2020/03/17/wkt.html. 
 
 

@@ -10,7 +10,7 @@ datetime <- 'datetime'
 timethreshold <- '20 minutes'
 threshold <- 50
 coords <- c('X', 'Y')
-projection <- 32736
+utm <- 32736
 timegroup <- 'timegroup'
 group <- 'group'
 
@@ -25,13 +25,14 @@ edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 
 DT_blind <- copy(DT)
-direction_step(DT_blind, id, coords, projection)
+direction_step(DT_blind, id, coords, utm)
 group_times(DT_blind, datetime = datetime, threshold = timethreshold)
 edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
                    timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
-dyad_directions <- edge_direction(edges, DT_blind, id, coords,
-                                  projection, timegroup)
+dyad_directions <- edge_direction(edges = edges, DT = DT_blind, id = id,
+                                  coords = coords, crs = utm,
+                                  timegroup = timegroup)
 
 # edge_zones(
 #   edges = edges,

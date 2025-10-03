@@ -13,7 +13,7 @@
 #' ## R-spatial evolution
 #'
 #' Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
-#' handling projections, see more below and  details at
+#' handling coordinate reference systems, see more below and  details at
 #' <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
 #' In addition, `group_polys` previously used rgeos::gIntersection,
@@ -32,12 +32,10 @@
 #' the names of respective columns in `DT` which correspond to the
 #' individual identifier, X and Y coordinates, and additional grouping columns.
 #'
-#' The `crs` argument expects a character string or numeric
-#' defining the coordinate reference system to be passed to [sf::st_crs].
-#' For example, for UTM zone 36S (EPSG 32736), the projection
-#' argument is `crs = "EPSG:32736"` or `crs = 32736`.
-#' See <https://spatialreference.org>
-#' for a list of EPSG codes.
+#' The `crs` argument expects a character string or numeric defining the
+#' coordinate reference system to be passed to [sf::st_crs]. For example, for
+#' UTM zone 36S (EPSG 32736), the crs argument is `crs = "EPSG:32736"` or `crs =
+#' 32736`. See <https://spatialreference.org> for a list of EPSG codes.
 #'
 #' The `hrType` must be either one of "kernel" or "mcp". The
 #' `hrParams` must be a named list of arguments matching those of
@@ -138,7 +136,7 @@ group_polys <-
         sfPolys <-
           build_polys(
             DT = DT,
-            crs = projection,
+            crs = crs,
             hrType = hrType,
             hrParams = hrParams,
             coords = coords,
@@ -236,7 +234,7 @@ group_polys <-
               sfPolys <-
                 build_polys(
                   DT = .SD,
-                  crs = projection,
+                  crs = crs,
                   hrType = hrType,
                   hrParams = hrParams,
                   coords = ..coords,
@@ -285,7 +283,7 @@ group_polys <-
               sfPolys <-
                 build_polys(
                   DT = .SD,
-                  crs = projection,
+                  crs = crs,
                   hrType = hrType,
                   hrParams = hrParams,
                   id = ..id,

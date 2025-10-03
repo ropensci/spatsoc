@@ -20,7 +20,7 @@ test_that('DT is required', {
   )
 })
 
-test_that('coords, id, projection, sortBy must be provided, proper format', {
+test_that('coords, id, crs, sortBy must be provided, proper format', {
   expect_error(
     build_lines(
       DT = DT,
@@ -40,7 +40,7 @@ test_that('coords, id, projection, sortBy must be provided, proper format', {
       crs = NULL,
       sortBy = 'datetime'
     ),
-    'projection must be provided'
+    'crs must be provided'
   )
 
   expect_error(
