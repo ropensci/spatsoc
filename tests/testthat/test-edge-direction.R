@@ -177,6 +177,20 @@ test_that('returns a data.table', {
   )
 })
 
+test_that('projection arg is deprecated', {
+  expect_warning(
+    edge_direction(
+      edges,
+      DT,
+      id = id,
+      coords = coords,
+      timegroup = timegroup,
+      projection = utm
+    ),
+    'projection argument is deprecated'
+  )
+})
+
 
 n <- 4
 DT_B <- data.table(

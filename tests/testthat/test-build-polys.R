@@ -308,3 +308,16 @@ test_that('id provided matches id retured', {
 })
 
 
+test_that('projection arg is deprecated', {
+  expect_warning(
+    build_polys(
+      DT = DT,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      coords = c('X', 'Y'),
+      id = 'ID',
+      projection = utm
+    ),
+    'projection argument is deprecated'
+  )
+})

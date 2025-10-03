@@ -173,3 +173,16 @@ test_that('East North West South steps', {
     tolerance = tolerance
   )
 })
+
+
+test_that('projection arg is deprecated', {
+  expect_warning(
+    direction_step(
+      DT,
+      id = id,
+      coords = coords,
+      projection = utm
+    ),
+    'projection argument is deprecated'
+  )
+})

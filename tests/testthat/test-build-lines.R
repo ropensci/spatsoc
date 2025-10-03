@@ -311,3 +311,17 @@ test_that('splitBy argument doesnt use splitBy column', {
     copyDT[, uniqueN(splitBy) * uniqueN(ID)]
   )
 })
+
+
+test_that('projection arg is deprecated', {
+  expect_warning(
+    build_lines(
+      DT = DT,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      sortBy = 'datetime',
+      projection = utm
+    ),
+    'projection argument is deprecated'
+  )
+})

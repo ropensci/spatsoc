@@ -530,3 +530,19 @@ test_that('sfPolys has area column', {
     fixed = TRUE
   )
 })
+
+
+test_that('projection arg is deprecated', {
+  expect_warning(
+    group_polys(
+      DT = DT,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      area = TRUE,
+      coords = c('X', 'Y'),
+      id = 'ID',
+      projection = utm
+    ),
+    'projection argument is deprecated'
+  )
+})

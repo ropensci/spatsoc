@@ -530,3 +530,19 @@ test_that('group_lines can accomodate NULL timegroup and non null splitBy', {
   )
 
 })
+
+
+test_that('projection arg is deprecated', {
+  expect_warning(
+    group_lines(
+      DT = DT,
+      threshold = 0,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      splitBy = 'yr',
+      sortBy = 'datetime',
+      projection = utm
+    ),
+    'projection argument is deprecated'
+  )
+})
