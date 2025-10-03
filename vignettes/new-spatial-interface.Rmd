@@ -1,0 +1,8 @@
+---
+title: "New spatial interface"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{New spatial interface}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
