@@ -58,6 +58,7 @@
 #' of the respective `hrType` `adehabitatHR` function.
 #'
 #'
+#' @inheritParams build_lines
 #' @inheritParams group_polys
 #' @param spPts alternatively, provide solely a SpatialPointsDataFrame with one
 #' column representing the ID of each point, as specified by [adehabitatHR::mcp]

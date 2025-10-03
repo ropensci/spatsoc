@@ -48,6 +48,7 @@
 #'
 #' @inheritParams group_lines
 #' @inheritParams build_polys
+#' @param projection (deprecated) use crs argument instead
 #'
 #' @export
 #'

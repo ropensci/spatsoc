@@ -76,6 +76,7 @@
 #'
 #' @inheritParams group_pts
 #' @inheritParams build_polys
+#' @inheritParams build_lines
 #' @param threshold The width of the buffer around the lines in the units of the
 #'   crs. Use `threshold = 0` to compare intersection without buffering.
 #' @param sfLines Alternatively to providing a DT, provide a simple feature
