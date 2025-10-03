@@ -58,3 +58,32 @@ get_geometry(DT, coords = coords, crs = crs)
 
 print(DT)
 ```
+
+
+### Converting from other packages
+
+Alternatively, coming from other packages, we can convert the objects to 
+data.tables for processing with spatsoc. 
+
+#### Converting from {sftrack}
+
+```{r}
+library(sftrack)
+data("raccoon")
+raccoon$timestamp <- as.POSIXct(raccoon$timestamp, "EST")
+burstz <- list(id = raccoon$animal_id, month = as.POSIXlt(raccoon$timestamp)$mon)
+my_track <- as_sftrack(raccoon,
+  group = burstz, time = "timestamp",
+  error = NA, coords = c("longitude", "latitude")
+)
+
+DT_sftrack <- as.data.table(my_track)
+```
+
+#### Converting from {move2}
+
+```{r}
+library(move2)
+fishers <- mt_read(mt_example(file = "fishers.csv.gz"))
+DT_move2 <- as.data.table(fishers)
+```
