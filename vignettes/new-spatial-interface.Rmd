@@ -42,3 +42,19 @@ datetime <- 'datetime'
 id <- 'ID'
 geometry <- 'geometry'
 ```
+
+## `get_geometry`
+
+`get_geometry` can be used to setup a `DT` with a simple feature geometry list
+column. By default, `get_geometry` transforms the input coordinates to 
+`crs = 4326`.
+
+### Usage
+
+```{r}
+
+# Get geometry
+get_geometry(DT, coords = coords, crs = crs)
+
+print(DT)
+```
