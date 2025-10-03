@@ -2,7 +2,7 @@
 #'
 #' `build_lines` generates a simple feature collection with LINESTRINGs from a
 #' `data.table`. The function expects a `data.table` with relocation data,
-#' individual identifiers, a sorting column and a `projection`. The relocation
+#' individual identifiers, a sorting column and a `crs`. The relocation
 #' data is transformed into LINESTRINGs for each individual and, optionally,
 #' combination of columns listed in `splitBy`. Relocation data should be in two
 #' columns representing the X and Y coordinates.
@@ -10,7 +10,7 @@
 #' ## R-spatial evolution
 #'
 #'  Please note, spatsoc has followed updates from R spatial, GDAL and PROJ
-#'  for handling projections, see more at
+#'  for handling coordinate reference systems, see more at
 #'  <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
 #' In addition, `build_lines` previously used [sp::SpatialLines] but has been
@@ -20,10 +20,10 @@
 #'
 #' ## Notes on arguments
 #'
-#' The `projection` argument expects a numeric or character defining the
+#' The `crs` argument expects a numeric or character defining the
 #' coordinate reference system.
-#' For example, for UTM zone 36N (EPSG 32736), the projection argument is either
-#'  `projection = 'EPSG:32736'` or `projection = 32736`.
+#' For example, for UTM zone 36N (EPSG 32736), the crs argument is either
+#'  `crs = 'EPSG:32736'` or `crs = 32736`.
 #'  See details in [`sf::st_crs()`] and <https://spatialreference.org>
 #'  for a list of EPSG codes.
 #'
@@ -48,6 +48,7 @@
 #'
 #' @inheritParams group_lines
 #' @inheritParams build_polys
+#' @param projection (deprecated) use crs argument instead
 #'
 #' @export
 #'
@@ -71,23 +72,29 @@
 #' utm <- 32736
 #'
 #' # Build lines for each individual
-#' lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
+#' lines <- build_lines(DT, crs = utm, id = 'ID', coords = c('X', 'Y'),
 #'             sortBy = 'datetime')
 #'
 #' # Build lines for each individual by year
 #' DT[, yr := year(datetime)]
-#' lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
+#' lines <- build_lines(DT, crs = utm, id = 'ID', coords = c('X', 'Y'),
 #'             sortBy = 'datetime', splitBy = 'yr')
 build_lines <-
   function(DT = NULL,
-           projection = NULL,
+           crs = NULL,
            id = NULL,
            coords = NULL,
            sortBy = NULL,
-           splitBy = NULL) {
+           splitBy = NULL,
+           projection = NULL) {
 
     # due to NSE notes in R CMD check
     dropped <- . <- NULL
+
+    if (!is.null(projection)) {
+      warning('projection argument is deprecated, setting crs = projection')
+      crs <- projection
+    }
 
     if (is.null(DT)) {
       stop('input DT required')
@@ -101,8 +108,8 @@ build_lines <-
       stop('id must be provided')
     }
 
-    if (is.null(projection)) {
-      stop('projection must be provided')
+    if (is.null(crs)) {
+      stop('crs must be provided')
     }
 
     if (is.null(sortBy)) {
@@ -163,6 +170,6 @@ build_lines <-
     lines <- sf::st_as_sf(
       wo_drop[, .(geometry = sf::st_sfc(sf::st_linestring(as.matrix(.SD)))),
          by = c(splitBy), .SDcols = coords],
-      crs = sf::st_crs(projection)
+      crs = sf::st_crs(crs)
     )
   }

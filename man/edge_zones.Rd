@@ -124,7 +124,7 @@ direction_step(
   DT = DT,
   id = 'ID',
   coords = c('X', 'Y'),
-  projection = 32736
+  crs = 32736
 )
 
 # Edge list generation
@@ -147,7 +147,7 @@ dyad_directions <- edge_direction(
   DT,
   id = 'ID',
   coords = c('X', 'Y'),
-  projection = 32736,
+  crs = 32736,
   timegroup = 'timegroup'
 )
 

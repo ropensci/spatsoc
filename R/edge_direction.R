@@ -13,10 +13,10 @@
 #' [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' The `projection` argument expects a character string or numeric defining
+#' The `crs` argument expects a character string or numeric defining
 #' the coordinate reference system to be passed to [sf::st_crs]. For example,
-#' for UTM zone 36S (EPSG 32736), the projection argument is
-#' `projection = "EPSG:32736"` or `projection = 32736`. See
+#' for UTM zone 36S (EPSG 32736), the crs argument is
+#' `crs = "EPSG:32736"` or `crs = 32736`. See
 #' <https://spatialreference.org> for a list of EPSG codes.
 #'
 #' The `edges` and `DT` are internally merged in this function using
@@ -89,7 +89,7 @@
 #'   DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736,
+#'   crs = 32736,
 #'   timegroup = 'timegroup'
 #' )
 #'
@@ -99,8 +99,14 @@ edge_direction <- function(
     DT = NULL,
     id = NULL,
     coords = NULL,
-    projection = NULL,
-    timegroup = 'timegroup') {
+    crs = NULL,
+    timegroup = 'timegroup',
+    projection = NULL) {
+
+  if (!is.null(projection)) {
+    warning('projection argument is deprecated, setting crs = projection')
+    crs <- projection
+  }
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -146,8 +152,8 @@ edge_direction <- function(
     stop('coords must be numeric')
   }
 
-  if (is.null(projection)) {
-    stop('projection required')
+  if (is.null(crs)) {
+    stop('crs required')
   }
 
   xcol <- data.table::first(coords)
@@ -184,20 +190,20 @@ edge_direction <- function(
     data.table::set(m, j = out_col, value = NULL)
   }
 
-  if (sf::st_is_longlat(projection)) {
+  if (sf::st_is_longlat(crs)) {
     m[, (out_col) :=
         lwgeom::st_geod_azimuth(
-          sf::st_as_sf(.SD, coords = id1_coords, crs = projection),
-          sf::st_as_sf(.SD, coords = id2_coords, crs = projection)
+          sf::st_as_sf(.SD, coords = id1_coords, crs = crs),
+          sf::st_as_sf(.SD, coords = id2_coords, crs = crs)
         )]
-  } else if (!sf::st_is_longlat(projection)) {
+  } else if (!sf::st_is_longlat(crs)) {
     m[, (out_col) :=
         lwgeom::st_geod_azimuth(
           sf::st_transform(
-            sf::st_as_sf(.SD, coords = id1_coords, crs = projection),
+            sf::st_as_sf(.SD, coords = id1_coords, crs = crs),
             crs = 4326),
           sf::st_transform(
-            sf::st_as_sf(.SD, coords = id2_coords, crs = projection),
+            sf::st_as_sf(.SD, coords = id2_coords, crs = crs),
             crs = 4326)
         )]
   }

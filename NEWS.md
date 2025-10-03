@@ -5,6 +5,10 @@ New experimental functions:
 * `get_geometry` helper function for setting up an input DT with a sfc geometry
 column ([PR 117](https://github.com/ropensci/spatsoc/pull/117))
 
+Fixes:
+
+* "projection" argument is soft-deprecated in favour of "crs" argument to better
+align with {sf} ([PR 118](https://github.com/ropensci/spatsoc/pull/118))
 
 # spatsoc 0.2.11
 

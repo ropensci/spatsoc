@@ -11,13 +11,13 @@ threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
 group <- 'group'
-projection <- 32736
+utm <- 32736
 window <- 3
 
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-direction_step(DT, id, coords, projection)
+direction_step(DT, id, coords, utm)
 edges <- edge_dist(DT, threshold = threshold, id = id,
                    coords = coords, timegroup = timegroup,
                    returnDist = TRUE, fillNA = FALSE)
@@ -229,7 +229,7 @@ DT_expect <- data.table(
 )
 DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
 setorder(DT_expect, timegroup)
-direction_step(DT_expect, id, coords, projection = 4326)
+direction_step(DT_expect, id, coords, crs = 4326)
 
 edge_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
                          returnDist = TRUE)

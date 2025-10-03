@@ -16,10 +16,10 @@
 #' the names of a column in `DT` which correspond to the individual
 #' identifier, X and Y coordinates, and additional grouping columns.
 #'
-#' The `projection` argument expects a character string or numeric defining
+#' The `crs` argument expects a character string or numeric defining
 #' the coordinate reference system to be passed to [sf::st_crs]. For example,
-#' for UTM zone 36S (EPSG 32736), the projection argument is
-#' `projection = "EPSG:32736"` or `projection = 32736`. See
+#' for UTM zone 36S (EPSG 32736), the crs argument is
+#' `crs = "EPSG:32736"` or `crs = 32736`. See
 #' <https://spatialreference.org> for a list of EPSG codes.
 #'
 #' The `splitBy` argument offers further control over grouping. If within
@@ -72,7 +72,7 @@
 #'   DT = DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736
+#'   crs = 32736
 #' )
 #'
 #' # Example result for East, North, West, South steps
@@ -83,17 +83,23 @@
 #'   ID = 'A'
 #' )
 #'
-#' direction_step(example, 'ID', c('X', 'Y'), projection = 4326)
+#' direction_step(example, 'ID', c('X', 'Y'), crs = 4326)
 #' example[, .(step, direction, units::set_units(direction, 'degree'))]
 direction_step <- function(
     DT = NULL,
     id = NULL,
     coords = NULL,
-    projection = NULL,
-    splitBy = NULL) {
+    crs = NULL,
+    splitBy = NULL,
+    projection = NULL) {
 
   # due to NSE notes in R CMD check
   direction <- NULL
+
+  if (!is.null(projection)) {
+    warning('projection argument is deprecated, setting crs = projection')
+    crs <- projection
+  }
 
   if (is.null(DT)) {
     stop('input DT required')
@@ -128,21 +134,21 @@ direction_step <- function(
     data.table::set(DT, j = 'direction', value = NULL)
   }
 
-  if (is.null(projection)) {
-    stop('projection required')
+  if (is.null(crs)) {
+    stop('crs required')
   }
 
-  if (sf::st_is_longlat(projection)) {
+  if (sf::st_is_longlat(crs)) {
     DT[, direction := c(
       lwgeom::st_geod_azimuth(
-        sf::st_as_sf(.SD, coords = coords, crs = projection)),
+        sf::st_as_sf(.SD, coords = coords, crs = crs)),
       units::set_units(NA, 'rad')),
       by = c(id, splitBy)]
-  } else if (!sf::st_is_longlat(projection)) {
+  } else if (!sf::st_is_longlat(crs)) {
     DT[, direction := c(
       lwgeom::st_geod_azimuth(
         sf::st_transform(
-          sf::st_as_sf(.SD, coords = coords, crs = projection),
+          sf::st_as_sf(.SD, coords = coords, crs = crs),
           crs = 4326)
         ),
       units::set_units(NA, 'rad')),

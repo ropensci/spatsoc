@@ -31,7 +31,7 @@
 #'
 #' @return `leader_direction_group` returns the input `DT` appended
 #'   with a `position_group_direction` column indicating the position along
-#'   the group direction in the units of the projection and, optionally when
+#'   the group direction in the units of the crs and, optionally when
 #'   `return_rank = TRUE`, a `rank_position_group_direction` column
 #'   indicating the ranked position along the group direction.
 #'
@@ -88,7 +88,7 @@
 #'   DT = DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736
+#'   crs = 32736
 #' )
 #'
 #' # Calculate group centroid

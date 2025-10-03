@@ -35,7 +35,7 @@ FALSE}
 \value{
 \code{leader_direction_group} returns the input \code{DT} appended
 with a \code{position_group_direction} column indicating the position along
-the group direction in the units of the projection and, optionally when
+the group direction in the units of the crs and, optionally when
 \code{return_rank = TRUE}, a \code{rank_position_group_direction} column
 indicating the ranked position along the group direction.
 
@@ -103,7 +103,7 @@ direction_step(
   DT = DT,
   id = 'ID',
   coords = c('X', 'Y'),
-  projection = 32736
+  crs = 32736
 )
 
 # Calculate group centroid

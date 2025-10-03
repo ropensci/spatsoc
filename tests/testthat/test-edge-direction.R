@@ -11,7 +11,7 @@ threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
 group <- 'group'
-projection <- 32736
+utm <- 32736
 
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
@@ -49,9 +49,9 @@ test_that('arguments required, otherwise error detected', {
       id = id,
       coords = coords,
       timegroup = timegroup,
-      projection = NULL
+      crs = NULL
     ),
-    'projection required'
+    'crs required'
   )
 })
 
@@ -66,7 +66,7 @@ test_that('column names must exist in DT', {
     copyDT,
     id = id,
     coords = coords,
-    projection = projection,
+    crs = utm,
     timegroup = 'timegroup'
   ),
   'timegroup field')
@@ -78,7 +78,7 @@ test_that('column names must exist in DT', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     ),
     'timegroup field'
@@ -91,7 +91,7 @@ test_that('column names must exist in DT', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     ),
     'dyadID is not present'
@@ -114,7 +114,7 @@ test_that('direction_dyad column succesfully detected', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     ),
     'direction_dyad column will be overwritten'
@@ -128,7 +128,7 @@ test_that('no rows are added to the result DT', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     )
   ))
@@ -143,7 +143,7 @@ test_that('one columns added to the result DT', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     )
   ))
@@ -156,7 +156,7 @@ test_that('column added to the result DT is unit', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     )$direction_dyad,
     'units'
@@ -170,10 +170,24 @@ test_that('returns a data.table', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     ),
     'data.table'
+  )
+})
+
+test_that('projection arg is deprecated', {
+  expect_warning(
+    edge_direction(
+      edges,
+      DT,
+      id = id,
+      coords = coords,
+      timegroup = timegroup,
+      projection = utm
+    ),
+    'projection argument is deprecated'
   )
 })
 
@@ -190,7 +204,7 @@ edges_B <- edge_dist(DT_B, id = id, coords = coords, timegroup = timegroup,
 dyad_id(edges_B, 'ID1', 'ID2')
 
 dyad_dirs <- edge_direction(edges_B, DT_B, id = id,
-                            coords = coords, projection = 4326)
+                            coords = coords, crs = 4326)
 
 test_that('East North West South dyads', {
   tolerance <- 0.01
