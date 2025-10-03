@@ -11,13 +11,13 @@ threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
 group <- 'group'
-projection <- 32736
+utm <- 32736
 window <- 3
 
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-direction_step(DT, id, coords, projection)
+direction_step(DT, id, coords, utm)
 edges <- edge_dist(DT, threshold = threshold, id = id,
                    coords = coords, timegroup = timegroup,
                    returnDist = TRUE, fillNA = FALSE)

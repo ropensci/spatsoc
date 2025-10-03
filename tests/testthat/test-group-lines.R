@@ -38,7 +38,7 @@ test_that('one of DT or sfLines is required, not both or neither', {
 })
 
 
-test_that('coords, id, projection provided and proper format', {
+test_that('coords, id, crs provided and proper format', {
   copyDT <- copy(DT)
   group_times(copyDT, datetime = 'datetime', threshold = '1 day')
   expect_error(

@@ -87,7 +87,7 @@ test_that('id provided', {
   )
 })
 
-test_that('projection provided or error', {
+test_that('crs provided or error', {
   expect_error(
     group_polys(
       DT = DT,
