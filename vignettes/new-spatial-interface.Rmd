@@ -15,3 +15,30 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+## Introduction
+
+`spatsoc` (> v 0.2.11) provides a new spatial interface. 
+
+### Setup
+
+Load packages
+
+```{r}
+library(spatsoc)
+library(data.table)
+library(sf)
+```
+
+Example data and variables
+
+```{r}
+# Read example data
+DT <- fread(system.file('extdata', 'DT.csv', package = 'spatsoc'))
+
+coords <- c('X', 'Y')
+crs <- 32736
+datetime <- 'datetime'
+id <- 'ID'
+geometry <- 'geometry'
+```
