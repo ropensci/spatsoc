@@ -9,8 +9,9 @@ edge_direction(
   DT = NULL,
   id = NULL,
   coords = NULL,
-  projection = NULL,
-  timegroup = "timegroup"
+  crs = NULL,
+  timegroup = "timegroup",
+  projection = NULL
 )
 }
 \arguments{
@@ -26,11 +27,13 @@ list with \code{edge_nn} or \code{edge_dist}}
 \item{coords}{character vector of X coordinate and Y coordinate column names.
 Note: the order is assumed X followed by Y column names.}
 
-\item{projection}{numeric or character defining the coordinate reference
+\item{crs}{numeric or character defining the coordinate reference
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
-\code{projection = "EPSG:32736"} or \code{projection = 32736}.}
+\code{crs = "EPSG:32736"} or \code{crs = 32736}.}
 
 \item{timegroup}{character string of timegroup column name, default "timegroup"}
+
+\item{projection}{(deprecated) use crs argument instead}
 }
 \value{
 \code{edge_direction} returns the input \code{edges} appended with
@@ -62,10 +65,10 @@ The \code{edges} and \code{DT} must be \code{data.table}s. If your data is a
 \code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
 \code{\link[data.table:data.table]{data.table::data.table()}}.
 
-The \code{projection} argument expects a character string or numeric defining
+The \code{crs} argument expects a character string or numeric defining
 the coordinate reference system to be passed to \link[sf:st_crs]{sf::st_crs}. For example,
-for UTM zone 36S (EPSG 32736), the projection argument is
-\code{projection = "EPSG:32736"} or \code{projection = 32736}. See
+for UTM zone 36S (EPSG 32736), the crs argument is
+\code{crs = "EPSG:32736"} or \code{crs = 32736}. See
 \url{https://spatialreference.org} for a list of EPSG codes.
 
 The \code{edges} and \code{DT} are internally merged in this function using
@@ -109,7 +112,7 @@ dyad_directions <- edge_direction(
   DT,
   id = 'ID',
   coords = c('X', 'Y'),
-  projection = 32736,
+  crs = 32736,
   timegroup = 'timegroup'
 )
 
