@@ -87,3 +87,42 @@ library(move2)
 fishers <- mt_read(mt_example(file = "fishers.csv.gz"))
 DT_move2 <- as.data.table(fishers)
 ```
+
+### Converting to packages
+
+After processing with {spatsoc}, optionally convert output to work with other
+packages. 
+
+#### Converting to {sf}
+
+```{r}
+DT_sf <- st_as_sf(DT, sf_column_name = geometry)
+print(DT_sf)
+plot(DT_sf)
+```
+
+
+#### Converting to {sftrack}
+
+```{r}
+library(sftrack)
+
+# First convert to sf as above, then:
+DT_sftrack <- as_sftrack(DT_sf, group = c(id = id), time = datetime)
+
+head(DT_sftrack)
+plot(DT_sftrack)
+```
+
+#### Converting to {move2}
+
+```{r}
+library(move2)
+
+DT_move2 <- mt_as_move2(DT, 
+                   time_column = datetime, 
+                   track_id_column = id, 
+                   sf_column_name = geometry)
+print(DT_move2)
+plot(DT_move2)
+```
