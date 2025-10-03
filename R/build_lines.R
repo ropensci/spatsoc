@@ -85,10 +85,15 @@ build_lines <-
            coords = NULL,
            sortBy = NULL,
            splitBy = NULL,
-           projection) {
+           projection = NULL) {
 
     # due to NSE notes in R CMD check
     dropped <- . <- NULL
+
+    if (!is.null(projection)) {
+      warning('projection argument is deprecated, setting crs = projection')
+      crs <- projection
+    }
 
     if (is.null(DT)) {
       stop('input DT required')

@@ -100,7 +100,13 @@ edge_direction <- function(
     id = NULL,
     coords = NULL,
     crs = NULL,
-    timegroup = 'timegroup') {
+    timegroup = 'timegroup',
+    projection = NULL) {
+
+  if (!is.null(projection)) {
+    warning('projection argument is deprecated, setting crs = projection')
+    crs <- projection
+  }
 
   if (is.null(DT)) {
     stop('input DT required')

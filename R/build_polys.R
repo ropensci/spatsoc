@@ -101,9 +101,15 @@ build_polys <- function(DT = NULL,
                         id = NULL,
                         coords = NULL,
                         splitBy = NULL,
-                        spPts = NULL) {
+                        spPts = NULL,
+                        projection = NULL) {
   # due to NSE notes in R CMD check
   . <- NULL
+
+  if (!is.null(projection)) {
+    warning('projection argument is deprecated, setting crs = projection')
+    crs <- projection
+  }
 
   if (is.null(DT) && is.null(spPts)) {
     stop('input DT or spPts required')

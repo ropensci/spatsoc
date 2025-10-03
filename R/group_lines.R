@@ -137,10 +137,16 @@ group_lines <-
            timegroup = NULL,
            sortBy = NULL,
            splitBy = NULL,
-           sfLines = NULL) {
+           sfLines = NULL,
+           projection = NULL) {
 
     # due to NSE notes in R CMD check
     group <- ..coords <- ..id <- ..sortBy <- withinGroup <- NULL
+
+    if (!is.null(projection)) {
+      warning('projection argument is deprecated, setting crs = projection')
+      crs <- projection
+    }
 
     if (is.null(threshold)) {
       message('threshold missing, using 0 by default')

@@ -90,10 +90,16 @@ direction_step <- function(
     id = NULL,
     coords = NULL,
     crs = NULL,
-    splitBy = NULL) {
+    splitBy = NULL,
+    projection = NULL) {
 
   # due to NSE notes in R CMD check
   direction <- NULL
+
+  if (!is.null(projection)) {
+    warning('projection argument is deprecated, setting crs = projection')
+    crs <- projection
+  }
 
   if (is.null(DT)) {
     stop('input DT required')

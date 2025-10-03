@@ -115,9 +115,15 @@ group_polys <-
            id = NULL,
            coords = NULL,
            splitBy = NULL,
-           sfPolys = NULL) {
+           sfPolys = NULL,
+           projection = NULL) {
     # due to NSE notes in R CMD check
     nBy <- ..coords <- ..id <- withinGroup <- group <- outGroup <- NULL
+
+    if (!is.null(projection)) {
+      warning('projection argument is deprecated, setting crs = projection')
+      crs <- projection
+    }
 
     if (is.null(area) || !is.logical(area)) {
       stop('area must be provided (TRUE or FALSE)')
