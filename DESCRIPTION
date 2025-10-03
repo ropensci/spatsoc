@@ -34,7 +34,9 @@ Suggests:
     asnipe,
     knitr,
     markdown,
+    move2,
     rmarkdown,
+    sftrack,
     testthat (>= 2.1.0)
 VignetteBuilder: 
     knitr
@@ -43,5 +45,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),
     sqlite3
-Remotes:  
+Remotes: 
     r-spatial/lwgeom

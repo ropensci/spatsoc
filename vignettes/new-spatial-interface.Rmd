@@ -1,0 +1,128 @@
+---
+title: "New spatial interface"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{New spatial interface}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  eval = TRUE,
+  echo = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+`spatsoc` (> v 0.2.11) provides a new spatial interface. 
+
+### Setup
+
+Load packages
+
+```{r}
+library(spatsoc)
+library(data.table)
+library(sf)
+```
+
+Example data and variables
+
+```{r}
+# Read example data
+DT <- fread(system.file('extdata', 'DT.csv', package = 'spatsoc'))
+
+coords <- c('X', 'Y')
+crs <- 32736
+datetime <- 'datetime'
+id <- 'ID'
+geometry <- 'geometry'
+```
+
+## `get_geometry`
+
+`get_geometry` can be used to setup a `DT` with a simple feature geometry list
+column. By default, `get_geometry` transforms the input coordinates to 
+`crs = 4326`.
+
+### Usage
+
+```{r}
+
+# Get geometry
+get_geometry(DT, coords = coords, crs = crs)
+
+print(DT)
+```
+
+
+### Converting from other packages
+
+Alternatively, coming from other packages, we can convert the objects to 
+data.tables for processing with spatsoc. 
+
+#### Converting from {sftrack}
+
+```{r}
+library(sftrack)
+data("raccoon")
+raccoon$timestamp <- as.POSIXct(raccoon$timestamp, "EST")
+burstz <- list(id = raccoon$animal_id, month = as.POSIXlt(raccoon$timestamp)$mon)
+my_track <- as_sftrack(raccoon,
+  group = burstz, time = "timestamp",
+  error = NA, coords = c("longitude", "latitude")
+)
+
+DT_sftrack <- as.data.table(my_track)
+```
+
+#### Converting from {move2}
+
+```{r}
+library(move2)
+fishers <- mt_read(mt_example(file = "fishers.csv.gz"))
+DT_move2 <- as.data.table(fishers)
+```
+
+### Converting to packages
+
+After processing with {spatsoc}, optionally convert output to work with other
+packages. 
+
+#### Converting to {sf}
+
+```{r}
+DT_sf <- st_as_sf(DT, sf_column_name = geometry)
+print(DT_sf)
+plot(DT_sf)
+```
+
+
+#### Converting to {sftrack}
+
+```{r}
+library(sftrack)
+
+# First convert to sf as above, then:
+DT_sftrack <- as_sftrack(DT_sf, group = c(id = id), time = datetime)
+
+head(DT_sftrack)
+plot(DT_sftrack)
+```
+
+#### Converting to {move2}
+
+```{r}
+library(move2)
+
+DT_move2 <- mt_as_move2(DT, 
+                   time_column = datetime, 
+                   track_id_column = id, 
+                   sf_column_name = geometry)
+print(DT_move2)
+plot(DT_move2)
+```
