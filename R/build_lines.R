@@ -100,10 +100,6 @@ build_lines <-
       stop('input DT required')
     }
 
-    if (is.null(coords)) {
-      stop('coords must be provided')
-    }
-
     if (is.null(id)) {
       stop('id must be provided')
     }
@@ -116,22 +112,14 @@ build_lines <-
       stop('sortBy must be provided')
     }
 
-    if (length(coords) != 2) {
-      stop('coords requires a vector of column names for coordinates X and Y')
-    }
-
-    if (!all((c(id, coords, splitBy, sortBy) %in% colnames(DT)))) {
+    if (!all((c(id, splitBy, sortBy) %in% colnames(DT)))) {
       stop(paste0(
         as.character(paste(setdiff(
-          c(id, coords, splitBy, sortBy), colnames(DT)
+          c(id, splitBy, sortBy), colnames(DT)
         ),
         collapse = ', ')),
         ' field(s) provided are not present in input DT'
       ))
-    }
-
-    if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-      stop('coords must be numeric')
     }
 
     if (is.null(splitBy)) {
@@ -139,6 +127,7 @@ build_lines <-
     } else {
       splitBy <- c(id, splitBy)
     }
+
     if (!all((DT[, lapply(.SD, FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
@@ -156,6 +145,27 @@ build_lines <-
       stop('sortBy provided must be 1 column of type POSIXct')
     }
 
+    if (is.null(coords)) {
+      stop('coords must be provided')
+    }
+
+    if (length(coords) != 2) {
+      stop('coords requires a vector of column names for coordinates X and Y')
+    }
+
+    if (!all((coords %in% colnames(DT)))) {
+      stop(paste0(
+        as.character(paste(setdiff(
+          coords, colnames(DT)
+        ),
+        collapse = ', ')),
+        ' field(s) provided are not present in input DT'
+      ))
+    }
+
+    if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+      stop('coords must be numeric')
+    }
 
     dropRows <- DT[, .(dropped = .N < 2), by = c(splitBy)]
 

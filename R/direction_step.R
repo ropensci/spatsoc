@@ -109,13 +109,8 @@ direction_step <- function(
     stop('id column name required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
-  check_cols <- c(id, coords, splitBy)
-  if (!all((check_cols %in% colnames(DT)
-  ))) {
+  check_cols <- c(id, splitBy)
+  if (!all(check_cols %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         check_cols,
@@ -125,10 +120,6 @@ direction_step <- function(
     ))
   }
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
-
   if ('direction' %in% colnames(DT)) {
     message('direction column will be overwritten by this function')
     data.table::set(DT, j = 'direction', value = NULL)
@@ -136,6 +127,24 @@ direction_step <- function(
 
   if (is.null(crs)) {
     stop('crs required')
+  }
+
+  if (!all(coords %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
   }
 
   if (sf::st_is_longlat(crs)) {

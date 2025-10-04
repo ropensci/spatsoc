@@ -68,28 +68,18 @@ centroid_group <- function(
     stop('input DT required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
   if (is.null(group)) {
     stop('group column name required')
   }
 
-  if (!all((
-    c(coords, group) %in% colnames(DT)
-  ))) {
+  if (!group %in% colnames(DT)) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(coords, group),
+        group,
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
     ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
   }
 
   if (is.null(na.rm)) {
@@ -98,6 +88,24 @@ centroid_group <- function(
 
   if (!is.logical(na.rm)) {
     stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
+  }
+
+  if (!all(coords %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
   }
 
   xcol <- data.table::first(coords)

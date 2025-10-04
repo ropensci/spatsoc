@@ -110,10 +110,6 @@ centroid_dyad <- function(
     stop('id column name required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
   if (is.null(timegroup)) {
     stop('timegroup column name required')
   }
@@ -131,19 +127,15 @@ centroid_dyad <- function(
   }
 
   if (!all((
-    c(id, coords, timegroup) %in% colnames(DT)
+    c(id, timegroup) %in% colnames(DT)
   ))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(id, coords, timegroup),
+        c(id, timegroup),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
     ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
   }
 
   if (is.null(na.rm)) {
@@ -152,6 +144,25 @@ centroid_dyad <- function(
 
   if (!is.logical(na.rm)) {
     stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
+  }
+
+  if (!all((coords %in% colnames(DT)
+  ))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    stop('coords must be numeric')
   }
 
   xcol <- data.table::first(coords)
@@ -164,11 +175,11 @@ centroid_dyad <- function(
   id2_coords <- paste0('id2_', coords)
 
   m <- merge(edges,
-        DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
-        by.x = c('ID1', timegroup),
-        by.y = c(id, timegroup),
-        all.x = TRUE,
-        sort = FALSE)
+             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+             by.x = c('ID1', timegroup),
+             by.y = c(id, timegroup),
+             all.x = TRUE,
+             sort = FALSE)
   data.table::setnames(m, coords, id1_coords)
   m <- merge(m,
              DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
