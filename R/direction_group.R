@@ -91,9 +91,7 @@ direction_group <- function(
     stop('group column name required')
   }
 
-  if (!all((
-    c(direction, group) %in% colnames(DT)
-  ))) {
+  if (!all(c(direction, group) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         c(direction, group),
@@ -103,7 +101,7 @@ direction_group <- function(
     ))
   }
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(direction)]))) {
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(direction)])) {
     stop('direction must be numeric')
   }
 

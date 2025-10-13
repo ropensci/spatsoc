@@ -112,7 +112,7 @@ build_lines <-
       stop('sortBy must be provided')
     }
 
-    if (!all((c(id, splitBy, sortBy) %in% colnames(DT)))) {
+    if (!all(c(id, splitBy, sortBy) %in% colnames(DT))) {
       stop(paste0(
         as.character(paste(setdiff(
           c(id, splitBy, sortBy), colnames(DT)
@@ -128,10 +128,10 @@ build_lines <-
       splitBy <- c(id, splitBy)
     }
 
-    if (!all((DT[, lapply(.SD, FUN = function(x) {
+    if (!all(DT[, lapply(.SD, FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
-    ), .SDcols = splitBy]))) {
+    ), .SDcols = splitBy])) {
       stop(
         strwrap(prefix = " ", initial = "",
           x = 'id (and splitBy when provided)
@@ -153,7 +153,7 @@ build_lines <-
       stop('coords requires a vector of column names for coordinates X and Y')
     }
 
-    if (!all((coords %in% colnames(DT)))) {
+    if (!all(coords %in% colnames(DT))) {
       stop(paste0(
         as.character(paste(setdiff(
           coords, colnames(DT)
@@ -163,7 +163,7 @@ build_lines <-
       ))
     }
 
-    if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+    if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
       stop('coords must be numeric')
     }
 

@@ -104,7 +104,7 @@ centroid_group <- function(
     stop('coords requires a vector of column names for coordinates X and Y')
   }
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
     stop('coords must be numeric')
   }
 

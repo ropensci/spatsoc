@@ -128,9 +128,7 @@ edge_dist <- function(DT = NULL,
     stop('timegroup required')
   }
 
-  if (!all((
-    c(timegroup, id, coords, splitBy) %in% colnames(DT)
-  ))) {
+  if (!all(c(timegroup, id, coords, splitBy) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         c(timegroup, id, coords, splitBy),
@@ -140,7 +138,7 @@ edge_dist <- function(DT = NULL,
     ))
   }
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
     stop('coords must be numeric')
   }
 

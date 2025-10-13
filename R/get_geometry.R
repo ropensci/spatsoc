@@ -66,7 +66,7 @@ get_geometry <- function(
     stop('coords field(s) provided are not present in input DT')
   }
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
     stop('coords must be numeric')
   }
 

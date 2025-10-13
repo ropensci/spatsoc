@@ -143,7 +143,7 @@ build_polys <- function(DT = NULL,
       splitBy <- c(id, splitBy)
     }
 
-    if (!all((c(splitBy, coords) %in% colnames(DT)))) {
+    if (!all(c(splitBy, coords) %in% colnames(DT))) {
       stop(paste0(
         as.character(paste(setdiff(
           c(id, coords), colnames(DT)
@@ -153,17 +153,16 @@ build_polys <- function(DT = NULL,
       ))
     }
 
-    if (!all((DT[, vapply(.SD, is.numeric, TRUE),
-                 .SDcols = coords]))) {
+    if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
       stop('coords must be numeric')
     }
 
-    if (!all((DT[, lapply(
+    if (!all(DT[, lapply(
       .SD,
       FUN = function(x) {
         is.numeric(x) | is.character(x) | is.integer(x)
       }
-    ), .SDcols = c(splitBy)]))) {
+    ), .SDcols = c(splitBy)])) {
       stop(
         strwrap(
           prefix = " ",

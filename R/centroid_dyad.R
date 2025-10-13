@@ -114,9 +114,7 @@ centroid_dyad <- function(
     stop('timegroup column name required')
   }
 
-  if (!all((
-    c('dyadID', timegroup) %in% colnames(edges)
-  ))) {
+  if (!all(c('dyadID', timegroup) %in% colnames(edges))) {
     stop(paste0(
       as.character(paste(setdiff(
         c('dyadID', timegroup),
@@ -126,9 +124,7 @@ centroid_dyad <- function(
     ))
   }
 
-  if (!all((
-    c(id, timegroup) %in% colnames(DT)
-  ))) {
+  if (!all(c(id, timegroup) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         c(id, timegroup),
@@ -146,8 +142,7 @@ centroid_dyad <- function(
     stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
   }
 
-  if (!all((coords %in% colnames(DT)
-  ))) {
+  if (!all(coords %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         coords,
@@ -161,7 +156,7 @@ centroid_dyad <- function(
     stop('coords requires a vector of column names for coordinates X and Y')
   }
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
     stop('coords must be numeric')
   }
 

@@ -217,7 +217,7 @@ group_polys <-
         stop('cannot provide sfPolys if providing splitBy')
       }
 
-      if (!all((c(id, splitBy) %in% colnames(DT)))) {
+      if (!all(c(id, splitBy) %in% colnames(DT))) {
         stop(paste0(
           as.character(paste(setdiff(
             c(id, splitBy), colnames(DT)

@@ -128,9 +128,7 @@ edge_alignment <- function(
     stop('timegroup required')
   }
 
-  if (!all((
-    c(id, direction, timegroup, group, splitBy) %in% colnames(DT)
-  ))) {
+  if (!all(c(id, direction, timegroup, group, splitBy) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         c(id, direction, timegroup, group, splitBy),

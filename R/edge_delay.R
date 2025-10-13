@@ -137,7 +137,7 @@ edge_delay <- function(
   }
 
   check_cols_edges <- c('ID1', 'ID2', 'timegroup')
-  if (!all((check_cols_edges %in% colnames(edges)))) {
+  if (!all(check_cols_edges %in% colnames(edges))) {
     stop(paste0(
       as.character(paste(setdiff(
         check_cols_edges,
@@ -148,8 +148,7 @@ edge_delay <- function(
   }
 
   check_cols_DT <- c(id, 'timegroup', direction)
-  if (!all((check_cols_DT %in% colnames(DT)
-  ))) {
+  if (!all(check_cols_DT %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         check_cols_DT,
