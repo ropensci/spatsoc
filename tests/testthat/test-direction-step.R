@@ -22,12 +22,12 @@ test_that('DT is required', {
 test_that('args required else error', {
   expect_error(direction_step(DT,  id = NULL), 'id column')
 
-  expect_error(direction_step(DT, id = id, coords = NULL), 'coords requir')
+  expect_error(direction_step(DT, id = id, coords = NULL, crs = utm), 'coords requir')
 
   expect_error(direction_step(DT,  id = id, coords = coords, crs = NULL),
                'crs required')
 
-  expect_error(direction_step(DT, id = id, coords = 'X'),
+  expect_error(direction_step(DT, id = id, coords = 'X', crs = utm),
                'coords requires a vector')
 })
 
@@ -42,7 +42,7 @@ test_that('column names must exist in DT', {
                'not present')
 
   expect_error(direction_step(DT, id = id, coords = coords,
-                              crs = crs, splitBy = 'potato'),
+                              crs = utm, splitBy = 'potato'),
                'not present')
 })
 
