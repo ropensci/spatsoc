@@ -96,31 +96,12 @@ build_lines <-
       crs <- projection
     }
 
-    if (is.null(DT)) {
-      stop('input DT required')
-    }
-
-    if (is.null(id)) {
-      stop('id must be provided')
-    }
-
-    if (is.null(crs)) {
-      stop('crs must be provided')
-    }
-
-    if (is.null(sortBy)) {
-      stop('sortBy must be provided')
-    }
-
-    if (!all(c(id, splitBy, sortBy) %in% colnames(DT))) {
-      stop(paste0(
-        as.character(paste(setdiff(
-          c(id, splitBy, sortBy), colnames(DT)
-        ),
-        collapse = ', ')),
-        ' field(s) provided are not present in input DT'
-      ))
-    }
+    assert_not_null(DT)
+    assert_is_data_table(DT)
+    assert_not_null(id)
+    assert_not_null(crs)
+    assert_not_null(sortBy)
+    assert_are_colnames(DT, c(id, sortBy))
 
     if (is.null(splitBy)) {
       splitBy <- id
@@ -128,40 +109,14 @@ build_lines <-
       splitBy <- c(id, splitBy)
     }
 
-    if (!all(DT[, lapply(.SD, FUN = function(x) {
-        is.numeric(x) | is.character(x) | is.integer(x)
-      }
-    ), .SDcols = splitBy])) {
-      stop(
-        strwrap(prefix = " ", initial = "",
-          x = 'id (and splitBy when provided)
-          must be character, numeric or integer type'
-        )
-      )
-    }
+    assert_inherits(DT, id, c('numeric', 'character', 'integer'))
+    assert_inherits(DT, splitBy, c('numeric', 'character', 'integer'))
+    assert_inherits(DT, sortBy, 'POSIXct')
 
-    if (!('POSIXct' %in%
-          unlist(lapply(DT[, .SD, .SDcols = c(sortBy)], class)))) {
-      stop('sortBy provided must be 1 column of type POSIXct')
-    }
-
-    if (is.null(coords)) {
-      stop('coords must be provided')
-    }
-
-    if (length(coords) != 2) {
-      stop('coords requires a vector of column names for coordinates X and Y')
-    }
-
-    if (!all(coords %in% colnames(DT))) {
-      stop(paste0(
-        as.character(paste(setdiff(
-          coords, colnames(DT)
-        ),
-        collapse = ', ')),
-        ' field(s) provided are not present in input DT'
-      ))
-    }
+    assert_not_null(coords)
+    assert_length(coords, 2L)
+    assert_are_colnames(DT, coords)
+    assert_inherits(DT, coords, 'numeric')
 
     if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
       stop('coords must be numeric')
