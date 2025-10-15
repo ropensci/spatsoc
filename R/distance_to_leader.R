@@ -97,9 +97,8 @@ distance_to_leader <- function(
   distance_leader <- zzz_N_by_group <- rank_position_group_direction <-
     has_leader <- . <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (is.null(group)) {
     stop('group column name required')

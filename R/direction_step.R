@@ -101,9 +101,8 @@ direction_step <- function(
     crs <- projection
   }
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (is.null(id)) {
     stop('id column name required')

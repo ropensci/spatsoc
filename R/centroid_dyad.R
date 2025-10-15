@@ -98,9 +98,8 @@ centroid_dyad <- function(
   # Due to NSE notes in R CMD check
   dyadID <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (is.null(edges)) {
     stop('input edges required')

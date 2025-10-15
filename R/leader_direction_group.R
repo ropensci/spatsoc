@@ -109,9 +109,8 @@ leader_direction_group <- function(
   # Due to NSE notes
   position_group_direction <- rank_position_group_direction <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')

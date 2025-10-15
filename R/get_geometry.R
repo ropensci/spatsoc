@@ -54,9 +54,8 @@ get_geometry <- function(
     output_crs = 4326,
     geometry_colname = 'geometry') {
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')

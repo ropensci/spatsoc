@@ -124,9 +124,8 @@ edge_delay <- function(
     timegroup_delay <- ID1  <- ID2 <- direction_delay <- direction_diff <-
     dyadID <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (is.null(edges)) {
     stop('input edges required')

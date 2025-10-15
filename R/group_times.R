@@ -90,9 +90,8 @@ group_times <- function(DT = NULL,
   minutes <- block <- hours <- itime <- . <- idate <- timegroup <- NULL
   minday <- maxday <- rangeday <- adjIDate <- adjHour <-  NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (is.null(datetime)) {
     stop('datetime field required')

@@ -100,9 +100,8 @@ edge_dist <- function(DT = NULL,
   # due to NSE notes in R CMD check
   N <- ID1 <- ID2 <- value <- . <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (missing(threshold)) {
     stop('threshold required')

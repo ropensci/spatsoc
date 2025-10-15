@@ -53,9 +53,8 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
   # due to NSE notes in R CMD check
   ID1 <- ID2 <- dyadID <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (is.null(id1)) {
     stop('input id1 required')

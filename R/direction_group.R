@@ -79,9 +79,8 @@ direction_group <- function(
     direction = 'direction',
     group = 'group') {
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (is.null(direction)) {
     stop('direction column name required')

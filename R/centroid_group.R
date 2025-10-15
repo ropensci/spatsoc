@@ -64,9 +64,8 @@ centroid_group <- function(
     group = 'group',
     na.rm = FALSE) {
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (is.null(group)) {
     stop('group column name required')

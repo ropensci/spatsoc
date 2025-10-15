@@ -146,9 +146,8 @@ randomizations <- function(DT = NULL,
   # due to NSE notes in R CMD check
   randomID <- jul <- randomJul <- rowID <- iteration <- observed <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (is.null(type)) {
     stop('type of randomization required')

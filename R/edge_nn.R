@@ -106,9 +106,8 @@ edge_nn <- function(DT = NULL,
   # NSE
   N <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (!is.null(threshold)) {
     if (!is.numeric(threshold)) {
