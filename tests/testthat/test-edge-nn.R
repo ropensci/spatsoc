@@ -24,7 +24,8 @@ test_that('ID and coords column names, threshold correctly provided',
                 DT,
                 threshold = 10,
                 id = 'ID',
-                coords = 'X'
+                coords = 'X',
+                timegroup = 'timegroup'
               ),
               'coords requires a vector',
               fixed = FALSE
@@ -103,7 +104,8 @@ test_that('coords are correctly provided or error detected', {
     edge_nn(
       DT,
       id = 'ID',
-      coords = c('X', NULL)
+      coords = c('X', NULL),
+      timegroup = 'timegroup'
     ),
     'coords requires a vector'
   )

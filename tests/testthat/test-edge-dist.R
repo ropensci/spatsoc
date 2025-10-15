@@ -28,7 +28,8 @@ test_that('ID and coords column names, threshold correctly provided',
                 DT,
                 threshold = 10,
                 id = 'ID',
-                coords = 'X'
+                coords = 'X',
+                timegroup = 'timegroup'
               ),
               'coords requires a vector',
               fixed = FALSE
