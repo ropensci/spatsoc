@@ -110,7 +110,7 @@ build_lines <-
     }
 
     assert_inherits(DT, id, c('numeric', 'character', 'integer'))
-    assert_inherits(DT, splitBy, c('numeric', 'character', 'integer'))
+    assert_inherits(DT, splitBy, c('numeric', 'character', 'integer', 'IDate'))
     assert_inherits(DT, sortBy, 'POSIXct')
 
     assert_not_null(coords)
