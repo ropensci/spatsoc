@@ -127,10 +127,10 @@ group_pts <- function(DT = NULL,
     stop('timegroup required')
   }
 
-  if (!all(c(timegroup, id, coords, splitBy) %in% colnames(DT))) {
+  if (!all(c(timegroup, id, splitBy) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timegroup, id, coords, splitBy),
+        c(timegroup, id, splitBy),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'

@@ -108,16 +108,6 @@ direction_to_leader <- function(
     stop('group column not present in input DT, did you run group_pts?')
   }
 
-  if (!group %in% colnames(DT)) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        group,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
   leader_col <- 'rank_position_group_direction'
 
   if (!leader_col %in% colnames(DT)) {
