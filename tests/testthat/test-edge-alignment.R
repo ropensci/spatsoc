@@ -1,5 +1,5 @@
 # Test edge_alignment
-context('test-edge-alignment')
+context('test edge_alignment')
 
 library(spatsoc)
 
