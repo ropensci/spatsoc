@@ -47,7 +47,7 @@ assert_inherits <- function(x, cols, classes) {
 
 assert_length <- function(x, len) {
   if (length(x) != len) {
-    rlang::abort(paste0(rlang::caller_arg(col), ' must be length ', len),
+    rlang::abort(paste0(rlang::caller_arg(x), ' must be length ', len),
                  call = rlang::caller_env())
   } else {
     return(invisible(NULL))
