@@ -116,16 +116,12 @@ centroid_fusion <- function(
     stop('id column name required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
   if (is.null(timegroup)) {
     stop('timegroup column name required')
   }
 
   check_cols_edges <- c('fusionID', 'ID1', 'ID2', timegroup)
-  if (!all((check_cols_edges %in% colnames(edges)))) {
+  if (!all(check_cols_edges %in% colnames(edges))) {
     stop(paste0(
       as.character(paste(setdiff(
         check_cols_edges,
@@ -135,20 +131,14 @@ centroid_fusion <- function(
     ))
   }
 
-  if (!all((
-    c(id, coords, timegroup) %in% colnames(DT)
-  ))) {
+  if (!all(c(id, timegroup) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(id, coords, timegroup),
+        c(id, timegroup),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
     ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
   }
 
   if (is.null(na.rm)) {
@@ -157,6 +147,24 @@ centroid_fusion <- function(
 
   if (!is.logical(na.rm)) {
     stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
+  }
+
+  if (!all(coords %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
+    stop('coords must be numeric')
   }
 
   xcol <- data.table::first(coords)

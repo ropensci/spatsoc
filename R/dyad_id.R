@@ -65,9 +65,7 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
     stop('input id2 required')
   }
 
-  if (!all((
-    c(id1, id2) %in% colnames(DT)
-  ))) {
+  if (!all(c(id1, id2) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         c(id1, id2),

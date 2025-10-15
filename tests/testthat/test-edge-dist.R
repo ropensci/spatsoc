@@ -1,5 +1,5 @@
 # Test edge_dist
-context('test-edge-dist')
+context('test edge_dist')
 
 library(spatsoc)
 
@@ -28,7 +28,8 @@ test_that('ID and coords column names, threshold correctly provided',
                 DT,
                 threshold = 10,
                 id = 'ID',
-                coords = 'X'
+                coords = 'X',
+                timegroup = 'timegroup'
               ),
               'coords requires a vector',
               fixed = FALSE

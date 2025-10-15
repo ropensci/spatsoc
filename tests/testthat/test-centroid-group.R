@@ -25,7 +25,7 @@ test_that('DT is required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(centroid_group(DT, coords = 'X'),
+  expect_error(centroid_group(DT, group = group, coords = 'X'),
                'coords requires a vector')
   expect_error(centroid_group(DT, coords = coords, group = NULL),
                'group column name required')

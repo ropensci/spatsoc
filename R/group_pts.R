@@ -123,28 +123,18 @@ group_pts <- function(DT = NULL,
     stop('ID field required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
   if (missing(timegroup)) {
     stop('timegroup required')
   }
 
-  if (!all((
-    c(timegroup, id, coords, splitBy) %in% colnames(DT)
-  ))) {
+  if (!all(c(timegroup, id, splitBy) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timegroup, id, coords, splitBy),
+        c(timegroup, id, splitBy),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
     ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
   }
 
   if (!is.null(timegroup)) {
@@ -164,6 +154,24 @@ group_pts <- function(DT = NULL,
   if ('group' %in% colnames(DT)) {
     message('group column will be overwritten by this function')
     data.table::set(DT, j = 'group', value = NULL)
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all(coords %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
+    stop('coords must be numeric')
   }
 
   if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {

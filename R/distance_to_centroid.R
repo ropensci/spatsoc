@@ -96,12 +96,17 @@ distance_to_centroid <- function(
     stop('input DT required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
   if (is.null(return_rank)) {
     stop('return_rank required')
+  }
+
+  if ('distance_centroid' %in% colnames(DT)) {
+    message('distance_centroid column will be overwritten by this function')
+    data.table::set(DT, j = 'distance_centroid', value = NULL)
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
   }
 
   xcol <- data.table::first(coords)
@@ -111,7 +116,7 @@ distance_to_centroid <- function(
   centroid_ycol <- paste0(pre, ycol)
   centroid_coords  <- c(centroid_xcol, centroid_ycol)
 
-  if (!all((coords %in% colnames(DT)))) {
+  if (!all(coords %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         coords,
@@ -121,12 +126,11 @@ distance_to_centroid <- function(
     ))
   }
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)]))) {
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)])) {
     stop('coords must be numeric')
   }
 
-  if (!all((centroid_coords %in% colnames(DT)
-  ))) {
+  if (!all(centroid_coords %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         centroid_coords,
@@ -136,14 +140,8 @@ distance_to_centroid <- function(
     ))
   }
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE),
-               .SDcols = c(centroid_coords)]))) {
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)])) {
     stop('centroid coords must be numeric')
-  }
-
-  if ('distance_centroid' %in% colnames(DT)) {
-    message('distance_centroid column will be overwritten by this function')
-    data.table::set(DT, j = 'distance_centroid', value = NULL)
   }
 
   DT[, distance_centroid :=

@@ -113,37 +113,6 @@ leader_direction_group <- function(
     stop('input DT required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
-
-  centroid_xcol <- paste0('centroid_', gsub(' ', '', xcol))
-  centroid_ycol <- paste0('centroid_', gsub(' ', '', ycol))
-
-  check_cols <- c(coords, group_direction, centroid_xcol, centroid_ycol)
-
-  if (!all((check_cols %in% colnames(DT)))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        check_cols,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE),
-               .SDcols = c(centroid_xcol, centroid_ycol)]))) {
-    stop('centroid coords must be numeric')
-  }
-
   if (is.null(return_rank)) {
     stop('return_rank required')
   }
@@ -160,6 +129,37 @@ leader_direction_group <- function(
     stop(
       'units(DT$group_direction) is not radians, did you use direction_group?'
     )
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+
+  centroid_xcol <- paste0('centroid_', gsub(' ', '', xcol))
+  centroid_ycol <- paste0('centroid_', gsub(' ', '', ycol))
+
+  check_cols <- c(coords, group_direction, centroid_xcol, centroid_ycol)
+
+  if (!all(check_cols %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        check_cols,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
+    stop('coords must be numeric')
+  }
+
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE),
+              .SDcols = c(centroid_xcol, centroid_ycol)])) {
+    stop('centroid coords must be numeric')
   }
 
   DT[, position_group_direction :=

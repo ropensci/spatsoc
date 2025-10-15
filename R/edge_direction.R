@@ -120,9 +120,6 @@ edge_direction <- function(
     stop('id column name required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
 
   if (is.null(timegroup)) {
     stop('timegroup required')
@@ -136,9 +133,25 @@ edge_direction <- function(
     stop('dyadID is not present in input edges, did you run dyad_id?')
   }
 
-  if (!all((
-    c(id, coords, timegroup) %in% colnames(DT)
-  ))) {
+  if (!all(c(id, timegroup) %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(id, timegroup),
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (is.null(crs)) {
+    stop('crs required')
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all(c(id, coords, timegroup) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
         c(id, coords, timegroup),
@@ -148,18 +161,12 @@ edge_direction <- function(
     ))
   }
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
     stop('coords must be numeric')
-  }
-
-  if (is.null(crs)) {
-    stop('crs required')
   }
 
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
-
-  out_col <- 'direction_dyad'
 
   id1_coords <- paste0('id1_', coords)
   id2_coords <- paste0('id2_', coords)
@@ -185,6 +192,7 @@ edge_direction <- function(
              sort = FALSE)
   data.table::setnames(m, coords, id2_coords)
 
+  out_col <- 'direction_dyad'
   if (out_col %in% colnames(m)) {
     message(paste(out_col, 'column will be overwritten by this function'))
     data.table::set(m, j = out_col, value = NULL)

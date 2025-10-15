@@ -1,5 +1,5 @@
 # Test fusion_id
-context("test-fusion-id")
+context("test fusion_id")
 
 library(spatsoc)
 

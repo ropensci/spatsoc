@@ -29,7 +29,7 @@ test_that('edges, DT are required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(edge_direction(edges, DT, id = id, coords = 'X'),
+  expect_error(edge_direction(edges, DT, id = id, coords = 'X', crs = utm),
                'coords requires a vector')
   expect_error(edge_direction(edges, DT, id = NULL), 'id column name required')
   expect_error(
@@ -58,7 +58,8 @@ test_that('arguments required, otherwise error detected', {
 test_that('column names must exist in DT', {
   expect_error(edge_direction(edges, DT, id = 'potato', coords = coords),
                'potato field')
-  expect_error(edge_direction(edges, DT, id = id, coords = rep('potato', 2)),
+  expect_error(edge_direction(edges, DT, id = id, coords = rep('potato', 2),
+                              crs = utm),
                'potato field')
   copyDT <- copy(DT)[, timegroup := NULL]
   expect_error(edge_direction(
@@ -100,9 +101,11 @@ test_that('column names must exist in DT', {
 })
 
 test_that('coords are correctly provided or error detected', {
-  expect_error(edge_direction(edges, DT, id = id, coords = c('X', NULL)),
+  expect_error(edge_direction(edges, DT, id = id, coords = c('X', NULL),
+                              crs = utm),
                'coords requires a vector')
-  expect_error(edge_direction(edges, DT, id = id, coords = c('X', 'ID')),
+  expect_error(edge_direction(edges, DT, id = id, coords = c('X', 'ID'),
+                              crs = utm),
                'coords must be numeric')
 })
 

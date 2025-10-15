@@ -105,32 +105,11 @@ distance_to_leader <- function(
     stop('group column name required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
   if (!group %in% colnames(DT)) {
     stop('group column not present in input DT, did you run group_pts?')
   }
 
-  check_cols <- c(coords, group)
-
-  if (!all((check_cols %in% colnames(DT)))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        check_cols,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
-
   leader_col <- 'rank_position_group_direction'
-
   if (!leader_col %in% colnames(DT)) {
     stop(leader_col,
          ' column not present in input DT, ',
@@ -141,13 +120,30 @@ distance_to_leader <- function(
     stop(leader_col, ' column must be numeric')
   }
 
-
   out_col <- 'distance_leader'
   if (out_col %in% colnames(DT)) {
     message(
       paste0(out_col, ' column will be overwritten by this function')
     )
     data.table::set(DT, j = out_col, value = NULL)
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all(coords %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
+    stop('coords must be numeric')
   }
 
   DT[, zzz_N_by_group := .N, by = c(group)]

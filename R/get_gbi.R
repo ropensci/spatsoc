@@ -73,7 +73,7 @@ get_gbi <-
       stop('ID field required')
     }
 
-    if (!all((c(group, id) %in% colnames(DT)))) {
+    if (!all(c(group, id) %in% colnames(DT))) {
       stop(paste0(
         as.character(paste(setdiff(
           c(group, id),
