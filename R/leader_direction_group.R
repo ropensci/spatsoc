@@ -113,6 +113,24 @@ leader_direction_group <- function(
     stop('input DT required')
   }
 
+  if (is.null(return_rank)) {
+    stop('return_rank required')
+  }
+
+  if ('position_group_direction' %in% colnames(DT)) {
+    message(
+      'position_group_direction column will be overwritten by this function'
+    )
+    data.table::set(DT, j = 'position_group_direction', value = NULL)
+  }
+
+  if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(group_direction)] ||
+      DT[, units(.SD[[1]])$numerator != 'rad', .SDcols = c(group_direction)]) {
+    stop(
+      'units(DT$group_direction) is not radians, did you use direction_group?'
+    )
+  }
+
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')
   }
@@ -142,24 +160,6 @@ leader_direction_group <- function(
   if (!all(DT[, vapply(.SD, is.numeric, TRUE),
               .SDcols = c(centroid_xcol, centroid_ycol)])) {
     stop('centroid coords must be numeric')
-  }
-
-  if (is.null(return_rank)) {
-    stop('return_rank required')
-  }
-
-  if ('position_group_direction' %in% colnames(DT)) {
-    message(
-      'position_group_direction column will be overwritten by this function'
-    )
-    data.table::set(DT, j = 'position_group_direction', value = NULL)
-  }
-
-  if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(group_direction)] ||
-      DT[, units(.SD[[1]])$numerator != 'rad', .SDcols = c(group_direction)]) {
-    stop(
-      'units(DT$group_direction) is not radians, did you use direction_group?'
-    )
   }
 
   DT[, position_group_direction :=

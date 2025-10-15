@@ -119,31 +119,23 @@ edge_nn <- function(DT = NULL,
     }
   }
 
-
   if (is.null(id)) {
     stop('ID field required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
 
   if (missing(timegroup) | is.null(timegroup)) {
     stop('timegroup required')
   }
 
-  if (!all(c(timegroup, id, coords, splitBy) %in% colnames(DT))) {
+  if (!all(c(timegroup, id, splitBy) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timegroup, id, coords, splitBy),
+        c(timegroup, id, splitBy),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
     ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
   }
 
   if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
@@ -158,6 +150,24 @@ edge_nn <- function(DT = NULL,
     )
   }
 
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all(coords %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
+    stop('coords must be numeric')
+  }
+
   if ('splitBy' %in% colnames(DT)) {
     warning(
       strwrap(x = 'a column named "splitBy" was found in your data.table,
@@ -166,7 +176,6 @@ edge_nn <- function(DT = NULL,
     )
     data.table::setnames(DT, 'splitBy', 'split_by')
   }
-
 
   splitBy <- c(splitBy, timegroup)
   if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {

@@ -120,26 +120,18 @@ edge_dist <- function(DT = NULL,
     stop('ID field required')
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
   if (missing(timegroup) | is.null(timegroup)) {
     stop('timegroup required')
   }
 
-  if (!all(c(timegroup, id, coords, splitBy) %in% colnames(DT))) {
+  if (!all(c(timegroup, id, splitBy) %in% colnames(DT))) {
     stop(paste0(
       as.character(paste(setdiff(
-        c(timegroup, id, coords, splitBy),
+        c(timegroup, id, splitBy),
         colnames(DT)
       ), collapse = ', ')),
       ' field(s) provided are not present in input DT'
     ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
   }
 
   if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
@@ -151,7 +143,25 @@ edge_dist <- function(DT = NULL,
         x = 'timegroup provided is a date/time
         or character type, did you use group_times?'
       )
-      )
+    )
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all(coords %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
+    stop('coords must be numeric')
   }
 
   splitBy <- c(splitBy, timegroup)

@@ -74,6 +74,11 @@ direction_to_centroid <- function(
     stop('input DT required')
   }
 
+  if ('direction_centroid' %in% colnames(DT)) {
+    message('direction_centroid column will be overwritten by this function')
+    data.table::set(DT, j = 'direction_centroid', value = NULL)
+  }
+
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')
   }
@@ -111,11 +116,6 @@ direction_to_centroid <- function(
 
   if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)])) {
     stop('centroid coords must be numeric')
-  }
-
-  if ('direction_centroid' %in% colnames(DT)) {
-    message('direction_centroid column will be overwritten by this function')
-    data.table::set(DT, j = 'direction_centroid', value = NULL)
   }
 
   DT[, direction_centroid := fifelse(
