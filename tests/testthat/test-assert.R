@@ -14,3 +14,5 @@ expect_error(assert_inherits(test, 'X', 'numeric'))
 expect_error(assert_inherits(test, c('X', 'Y'), 'numeric'))
 
 expect_error(assert_length(1:2, 3L))
+
+expect_error(assert_relation(1, '>', 3))
