@@ -18,11 +18,12 @@ assert_is_data_table <- function(x) {
   return(invisible(NULL))
 }
 
-assert_are_colnames <- function(x, nms) {
+assert_are_colnames <- function(x, nms, ...) {
   if (length(nms)) {
     for (nm in nms) {
       if(!nm %in% colnames(x)) {
-        rlang::abort(paste0(nm, ' field provided is not present in input DT'),
+        rlang::abort(paste0(nm, ' field provided is not present in input DT',
+                            ...),
                      call = rlang::caller_env())
       } else {
         invisible(NULL)
