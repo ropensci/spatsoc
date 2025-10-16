@@ -95,13 +95,11 @@ distance_to_centroid <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
-  if (is.null(return_rank)) {
-    stop('return_rank required')
-  }
+  assert_not_null(return_rank)
 
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
@@ -110,33 +108,8 @@ distance_to_centroid <- function(
   centroid_ycol <- paste0(pre, ycol)
   centroid_coords  <- c(centroid_xcol, centroid_ycol)
 
-  if (!all(coords %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        coords,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)])) {
-    stop('coords must be numeric')
-  }
-
-  if (!all(centroid_coords %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        centroid_coords,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in DT, did you run centroid_group?'
-    ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)])) {
-    stop('centroid coords must be numeric')
-  }
+  assert_are_colnames(DT, centroid_coords, ', did you run centroid_group?')
+  assert_col_inherits(DT, centroid_coords, 'numeric')
 
   if ('distance_centroid' %in% colnames(DT)) {
     message('distance_centroid column will be overwritten by this function')
@@ -148,13 +121,8 @@ distance_to_centroid <- function(
               (.SD[[ycol]] - .SD[[centroid_ycol]])^2)]
 
   if (return_rank) {
-    if (is.null(group)) {
-      stop('group column name required')
-    }
-
-    if (!group %in% colnames(DT)) {
-      stop('group column not present in input DT, did you run group_pts?')
-    }
+    assert_not_null(group)
+    assert_are_colnames(DT, group, ', did you run group_pts?')
 
     if ('rank_distance_centroid' %in% colnames(DT)) {
       message(

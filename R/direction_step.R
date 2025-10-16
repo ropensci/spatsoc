@@ -103,44 +103,20 @@ direction_step <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
-
   assert_not_null(id)
 
-
   check_cols <- c(id, splitBy)
-  if (!all(check_cols %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        check_cols,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
+  assert_are_colnames(DT, check_cols)
+
+  assert_not_null(crs)
+
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
   if ('direction' %in% colnames(DT)) {
     message('direction column will be overwritten by this function')
     data.table::set(DT, j = 'direction', value = NULL)
-  }
-
-  assert_not_null(crs)
-
-  if (!all(coords %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        coords,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
   }
 
   if (sf::st_is_longlat(crs)) {

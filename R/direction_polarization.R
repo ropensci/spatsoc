@@ -77,28 +77,12 @@ direction_polarization <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
+  assert_not_null(direction)
+  assert_not_null(group)
+  assert_are_colnames(DT, c(direction, group))
 
-  if (is.null(direction)) {
-    stop('direction column name required')
-  }
-
-  if (is.null(group)) {
-    stop('group column name required')
-  }
-
-  if (!all(c(direction, group) %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(direction, group),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(direction)])) {
-    stop('direction must be numeric')
-  }
+  assert_col_inherits(DT, direction, 'units', ', did you use direction_step?')
+  assert_col_radians(DT, direction, ', did you use direction_step?')
 
   out <- 'polarization'
 
