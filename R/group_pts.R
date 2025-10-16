@@ -120,7 +120,7 @@ group_pts <- function(
   check_colnames <- c(timegroup, id, coords, splitBy)
   assert_are_colnames(DT, check_colnames)
 
-  assert_inherits(DT, coords, 'numeric')
+  assert_col_inherits(DT, coords, 'numeric')
 
   if (!is.null(timegroup)) {
     if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%

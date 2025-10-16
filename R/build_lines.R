@@ -109,14 +109,14 @@ build_lines <- function(
     splitBy <- c(id, splitBy)
   }
 
-  assert_inherits(DT, id, c('numeric', 'character', 'integer'))
-  assert_inherits(DT, splitBy, c('numeric', 'character', 'integer', 'IDate'))
-  assert_inherits(DT, sortBy, 'POSIXct')
+  assert_col_inherits(DT, id, c('numeric', 'character', 'integer'))
+  assert_col_inherits(DT, splitBy, c('numeric', 'character', 'integer', 'IDate'))
+  assert_col_inherits(DT, sortBy, 'POSIXct')
 
   assert_not_null(coords)
   assert_length(coords, 2L)
   assert_are_colnames(DT, coords)
-  assert_inherits(DT, coords, 'numeric')
+  assert_col_inherits(DT, coords, 'numeric')
 
   if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
     stop('coords must be numeric')

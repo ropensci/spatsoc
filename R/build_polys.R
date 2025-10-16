@@ -136,8 +136,8 @@ build_polys <- function(
     assert_are_colnames(DT, c(splitBy, coords))
   }
 
-  assert_inherits(DT, coords, 'numeric')
-  assert_inherits(DT, splitBy, c('numeric', 'character', 'integer'))
+  assert_col_inherits(DT, coords, 'numeric')
+  assert_col_inherits(DT, splitBy, c('numeric', 'character', 'integer'))
   assert_not_null(hrType)
 
   if (is.null(hrParams)) {

@@ -46,6 +46,17 @@ assert_col_inherits <- function(x, cols, classes, ...) {
   }
 }
 
+assert_inherits <- function(x, classes, ...) {
+  if(!inherits(x, classes)) {
+    rlang::abort(paste0(rlang::caller_arg(x), ' must be ',
+                        paste0(classes, collapse = '/'),
+                        ...),
+                 call = rlang::caller_env())
+  } else {
+    invisible(NULL)
+  }
+}
+
 assert_length <- function(x, len) {
   if (length(x) != len) {
     rlang::abort(paste0(rlang::caller_arg(x), ' must be length ', len),
