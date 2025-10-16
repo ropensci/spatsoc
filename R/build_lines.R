@@ -118,10 +118,6 @@ build_lines <- function(
   assert_are_colnames(DT, coords)
   assert_col_inherits(DT, coords, 'numeric')
 
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
-  }
-
   dropRows <- DT[, .(dropped = .N < 2), by = c(splitBy)]
 
   if (dropRows[(dropped), .N] > 0) {
