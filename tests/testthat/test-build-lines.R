@@ -16,7 +16,7 @@ test_that('DT is required', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'input DT required'
+    'DT must be provided'
   )
 })
 
@@ -72,7 +72,7 @@ test_that('coords, id, crs, sortBy must be provided, proper format', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'coords requires a vector', fixed = FALSE
+    'coords must be length 2', fixed = FALSE
   )
 
   expect_error(
@@ -93,7 +93,7 @@ test_that('coords, id, crs, sortBy must be provided, proper format', {
       crs = utm,
       sortBy = 'ID'
     ),
-    'sortBy provided must be', fixed = FALSE
+    'sortBy must be', fixed = FALSE
   )
 
 })
@@ -210,7 +210,7 @@ test_that('splitBy and id provided are not correct format', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'id \\(and splitBy when provided\\) must',
+    'id must be numeric/character/integer',
     fixed = FALSE
   )
 
@@ -223,7 +223,7 @@ test_that('splitBy and id provided are not correct format', {
       splitBy = 'datetime',
       sortBy = 'datetime'
     ),
-    'id \\(and splitBy when provided\\) must be',
+    'splitBy must be numeric/character/integer',
     fixed = FALSE
   )
 
@@ -237,7 +237,7 @@ test_that('splitBy and id provided are not correct format', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'id \\(and splitBy when provided\\) must be',
+    'id must be numeric/character/integer',
     fixed = FALSE
   )
 })
