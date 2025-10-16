@@ -53,3 +53,19 @@ assert_length <- function(x, len) {
     return(invisible(NULL))
   }
 }
+
+assert_relation <- function(x, fun, y) {
+  if (!(fun(x, y))) {
+    rlang::abort(
+      paste(
+        rlang::caller_arg(x),
+        'must be',
+        rlang::caller_arg(fun),
+        rlang::caller_arg(y)
+      ),
+      call = rlang::caller_env()
+    )
+  } else {
+    return(invisible(NULL))
+  }
+}
