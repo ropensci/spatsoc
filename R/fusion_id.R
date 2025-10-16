@@ -90,7 +90,7 @@
 #'   )
 fusion_id <- function(
     edges = NULL,
-    threshold = 50,
+    threshold = NULL,
     n_min_length = 0,
     n_max_missing = 0,
     allow_split = FALSE)  {
