@@ -128,9 +128,7 @@ build_polys <- function(
 
     assert_not_null(id)
 
-    if (is.null(crs)) {
-      stop('crs must be provided')
-    }
+    assert_not_null(crs)
 
     if (length(coords) != 2) {
       stop('coords requires a vector of column names for coordinates X and Y')

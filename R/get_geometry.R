@@ -69,9 +69,7 @@ get_geometry <- function(
     stop('coords must be numeric')
   }
 
-  if (is.null(crs)) {
-    stop('input crs required')
-  }
+  assert_not_null(crs)
 
   if (geometry_colname %in% colnames(DT)) {
     message(paste0(geometry_colname,

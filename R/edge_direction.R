@@ -148,9 +148,7 @@ edge_direction <- function(
     stop('coords must be numeric')
   }
 
-  if (is.null(crs)) {
-    stop('crs required')
-  }
+  assert_not_null(crs)
 
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)

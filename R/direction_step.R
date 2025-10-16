@@ -123,9 +123,7 @@ direction_step <- function(
     data.table::set(DT, j = 'direction', value = NULL)
   }
 
-  if (is.null(crs)) {
-    stop('crs required')
-  }
+  assert_not_null(crs)
 
   if (!all(coords %in% colnames(DT))) {
     stop(paste0(

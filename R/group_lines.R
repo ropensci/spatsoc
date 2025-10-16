@@ -187,9 +187,7 @@ group_lines <- function(
     data.table::setnames(out, c('ID', 'group'))
     return(out[])
   } else if (is.null(sfLines) && !is.null(DT)) {
-    if (is.null(crs)) {
-      stop('crs must be provided when DT is')
-    }
+    assert_not_null(crs)
 
     if (is.null(coords)) {
       stop('coords must be provided')
