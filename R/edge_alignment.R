@@ -102,13 +102,13 @@
 #'   signed = FALSE
 #' )
 edge_alignment <- function(
-  DT = NULL,
-  id = NULL,
-  direction = 'direction',
-  timegroup = 'timegroup',
-  group = NULL,
-  splitBy = NULL,
-  signed = FALSE) {
+    DT = NULL,
+    id = NULL,
+    direction = 'direction',
+    timegroup = 'timegroup',
+    group = NULL,
+    splitBy = NULL,
+    signed = FALSE) {
   # due to NSE notes in R CMD check
   ID1 <- ID2 <- N <- NULL
 

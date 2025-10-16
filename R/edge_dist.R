@@ -89,14 +89,15 @@
 #'     returnDist = TRUE,
 #'     fillNA = TRUE
 #'   )
-edge_dist <- function(DT = NULL,
-                      threshold,
-                      id = NULL,
-                      coords = NULL,
-                      timegroup,
-                      splitBy = NULL,
-                      returnDist = FALSE,
-                      fillNA = TRUE) {
+edge_dist <- function(
+    DT = NULL,
+    threshold,
+    id = NULL,
+    coords = NULL,
+    timegroup,
+    splitBy = NULL,
+    returnDist = FALSE,
+    fillNA = TRUE) {
   # due to NSE notes in R CMD check
   N <- ID1 <- ID2 <- value <- . <- NULL
 

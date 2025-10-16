@@ -95,15 +95,16 @@
 #' build_polys(DT, crs = utm, hrType = 'mcp',
 #'             hrParams = list(percent = 95),
 #'             id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
-build_polys <- function(DT = NULL,
-                        crs = NULL,
-                        hrType = NULL,
-                        hrParams = NULL,
-                        id = NULL,
-                        coords = NULL,
-                        splitBy = NULL,
-                        spPts = NULL,
-                        projection = NULL) {
+build_polys <- function(
+    DT = NULL,
+    crs = NULL,
+    hrType = NULL,
+    hrParams = NULL,
+    id = NULL,
+    coords = NULL,
+    splitBy = NULL,
+    spPts = NULL,
+    projection = NULL) {
   # due to NSE notes in R CMD check
   . <- NULL
 

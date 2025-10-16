@@ -96,13 +96,14 @@
 #'         timegroup = 'timegroup', threshold = 100,
 #'         returnDist = TRUE)
 #'
-edge_nn <- function(DT = NULL,
-                    id = NULL,
-                    coords = NULL,
-                    timegroup,
-                    splitBy = NULL,
-                    threshold = NULL,
-                    returnDist = FALSE) {
+edge_nn <- function(
+    DT = NULL,
+    id = NULL,
+    coords = NULL,
+    timegroup,
+    splitBy = NULL,
+    threshold = NULL,
+    returnDist = FALSE) {
   # NSE
   N <- NULL
 

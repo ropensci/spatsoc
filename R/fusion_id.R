@@ -88,11 +88,12 @@
 #'   n_max_missing = 0,
 #'   allow_split = FALSE
 #'   )
-fusion_id <- function(edges = NULL,
-                      threshold = 50,
-                      n_min_length = 0,
-                      n_max_missing = 0,
-                      allow_split = FALSE)  {
+fusion_id <- function(
+    edges = NULL,
+    threshold = 50,
+    n_min_length = 0,
+    n_max_missing = 0,
+    allow_split = FALSE)  {
 
   # due to NSE notes  in R CMD check
   . <- both_rleid <- distance <- dyadID <- fusionID <- tg_diff <- timegroup <-

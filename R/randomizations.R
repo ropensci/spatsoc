@@ -135,14 +135,15 @@
 #'     iterations = 2
 #' )
 #'
-randomizations <- function(DT = NULL,
-                           type = NULL,
-                           id = NULL,
-                           group = NULL,
-                           coords = NULL,
-                           datetime = NULL,
-                           splitBy = NULL,
-                           iterations = NULL) {
+randomizations <- function(
+    DT = NULL,
+    type = NULL,
+    id = NULL,
+    group = NULL,
+    coords = NULL,
+    datetime = NULL,
+    splitBy = NULL,
+    iterations = NULL) {
   # due to NSE notes in R CMD check
   randomID <- jul <- randomJul <- rowID <- iteration <- observed <- NULL
 

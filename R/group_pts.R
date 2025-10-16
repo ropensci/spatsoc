@@ -94,12 +94,13 @@
 #' # Spatial grouping with timegroup and splitBy on population
 #' group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'),
 #'          timegroup = 'timegroup', splitBy = 'population')
-group_pts <- function(DT = NULL,
-                     threshold = NULL,
-                     id = NULL,
-                     coords = NULL,
-                     timegroup,
-                     splitBy = NULL) {
+group_pts <- function(
+    DT = NULL,
+    threshold = NULL,
+    id = NULL,
+    coords = NULL,
+    timegroup,
+    splitBy = NULL) {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL
 

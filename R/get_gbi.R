@@ -56,57 +56,56 @@
 #'
 #' gbiMtrx <- get_gbi(DT = DT, group = 'group', id = 'ID')
 #'
-get_gbi <-
-  function(DT = NULL,
-           group = 'group',
-           id = NULL) {
+get_gbi <- function(DT = NULL,
+    group = 'group',
+    id = NULL) {
 
-    if (is.null(DT)) {
-      stop('input DT required')
-    }
-
-    if (is.null(group)) {
-      stop('group field required')
-    }
-
-    if (is.null(id)) {
-      stop('ID field required')
-    }
-
-    if (!all(c(group, id) %in% colnames(DT))) {
-      stop(paste0(
-        as.character(paste(setdiff(
-          c(group, id),
-          colnames(DT)
-        ), collapse = ', ')),
-        ' field(s) provided are not present in input DT'
-      ))
-    }
-
-
-    if (anyNA(DT[[group]])) {
-      warning('DT contains NA(s) in group column, these rows will be dropped')
-    }
-
-
-
-
-    uDT <-
-      stats::na.omit(unique(DT[, .SD, .SDcols = c(group, id)]),
-              cols = group)
-
-    cDT <-
-      data.table::dcast(
-        uDT,
-        formula = stats::reformulate(id, group),
-        fun.aggregate = length,
-        value.var = group
-      )
-
-    ids <- colnames(cDT)[!grepl(group, colnames(cDT))]
-
-    m <- as.matrix(cDT[, .SD, .SDcols = ids])
-
-    rownames(m) <- cDT[[group]]
-    return(m)
+  if (is.null(DT)) {
+    stop('input DT required')
   }
+
+  if (is.null(group)) {
+    stop('group field required')
+  }
+
+  if (is.null(id)) {
+    stop('ID field required')
+  }
+
+  if (!all(c(group, id) %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        c(group, id),
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+
+  if (anyNA(DT[[group]])) {
+    warning('DT contains NA(s) in group column, these rows will be dropped')
+  }
+
+
+
+
+  uDT <-
+    stats::na.omit(unique(DT[, .SD, .SDcols = c(group, id)]),
+            cols = group)
+
+  cDT <-
+    data.table::dcast(
+      uDT,
+      formula = stats::reformulate(id, group),
+      fun.aggregate = length,
+      value.var = group
+    )
+
+  ids <- colnames(cDT)[!grepl(group, colnames(cDT))]
+
+  m <- as.matrix(cDT[, .SD, .SDcols = ids])
+
+  rownames(m) <- cDT[[group]]
+  return(m)
+}
