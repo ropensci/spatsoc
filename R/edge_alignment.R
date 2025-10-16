@@ -116,9 +116,7 @@ edge_alignment <- function(
     stop('DT required')
   }
 
-  if (is.null(id)) {
-    stop('id required')
-  }
+  assert_not_null(id)
 
   if (is.null(direction)) {
     stop('direction required')

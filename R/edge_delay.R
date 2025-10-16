@@ -131,9 +131,8 @@ edge_delay <- function(
     stop('input edges required')
   }
 
-  if (is.null(id)) {
-    stop('id column name required')
-  }
+  assert_not_null(id)
+
 
   check_cols_edges <- c('ID1', 'ID2', 'timegroup')
   if (!all(check_cols_edges %in% colnames(edges))) {

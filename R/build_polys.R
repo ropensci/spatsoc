@@ -126,9 +126,7 @@ build_polys <- function(
       stop('coords must be provided')
     }
 
-    if (is.null(id)) {
-      stop('id must be provided')
-    }
+    assert_not_null(id)
 
     if (is.null(crs)) {
       stop('crs must be provided')

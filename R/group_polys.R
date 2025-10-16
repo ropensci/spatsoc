@@ -153,9 +153,7 @@ group_polys <- function(
       input <- 'DT'
     }
 
-    if (is.null(id)) {
-      stop('id must be provided')
-    }
+    assert_not_null(id)
 
     if (!area) {
       if ('group' %in% colnames(DT)) {

@@ -104,9 +104,8 @@ direction_step <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
 
-  if (is.null(id)) {
-    stop('id column name required')
-  }
+  assert_not_null(id)
+
 
   check_cols <- c(id, splitBy)
   if (!all(check_cols %in% colnames(DT))) {

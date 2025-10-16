@@ -158,9 +158,7 @@ randomizations <- function(
     stop('type of randomization must be one of: step, daily or trajectory')
   }
 
-  if (is.null(id)) {
-    stop('id field required')
-  }
+  assert_not_null(id)
 
   if (is.null(datetime)) {
     stop('datetime field required')

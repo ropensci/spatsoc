@@ -120,9 +120,7 @@ edge_nn <- function(
   }
 
 
-  if (is.null(id)) {
-    stop('ID field required')
-  }
+  assert_not_null(id)
 
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')

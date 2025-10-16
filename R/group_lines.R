@@ -167,9 +167,7 @@ group_lines <- function(
         !'LINESTRING' %in% sf::st_geometry_type(sfLines)) {
       stop('sfLines provided must be a sf object with LINESTRINGs')
     }
-    if (is.null(id)) {
-      stop('id must be provided')
-    }
+    assert_not_null(id)
 
     if (data.table::uniqueN(sfLines[[id]]) != nrow(sfLines)) {
       stop('number of unique values in sfLines does not match nrow(sfLines)')
@@ -197,9 +195,7 @@ group_lines <- function(
       stop('coords must be provided')
     }
 
-    if (is.null(id)) {
-      stop('id must be provided')
-    }
+    assert_not_null(id)
 
     if (is.null(sortBy)) {
       stop('sortBy must be provided')

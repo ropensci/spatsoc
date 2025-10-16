@@ -68,9 +68,7 @@ get_gbi <- function(DT = NULL,
     stop('group field required')
   }
 
-  if (is.null(id)) {
-    stop('ID field required')
-  }
+  assert_not_null(id)
 
   if (!all(c(group, id) %in% colnames(DT))) {
     stop(paste0(

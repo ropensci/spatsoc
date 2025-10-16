@@ -111,9 +111,8 @@ centroid_fusion <- function(
     stop('input edges required')
   }
 
-  if (is.null(id)) {
-    stop('id column name required')
-  }
+  assert_not_null(id)
+
 
   if (is.null(timegroup)) {
     stop('timegroup column name required')

@@ -115,9 +115,8 @@ edge_direction <- function(
     stop('input edges required')
   }
 
-  if (is.null(id)) {
-    stop('id column name required')
-  }
+  assert_not_null(id)
+
 
   if (length(coords) != 2) {
     stop('coords requires a vector of column names for coordinates X and Y')
