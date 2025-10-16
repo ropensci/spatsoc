@@ -63,7 +63,7 @@ assert_col_typeof <- function(x, cols, type, ...) {
 
 assert_inherits <- function(x, classes, ...) {
   if(!inherits(x, classes)) {
-    rlang::abort(paste0(rlang::caller_arg(x), ' must be ',
+    rlang::abort(paste0(rlang::caller_arg(x), ' must be of class ',
                         paste0(classes, collapse = '/'),
                         ...),
                  call = rlang::caller_env())
