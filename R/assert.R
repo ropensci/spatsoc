@@ -83,7 +83,7 @@ assert_relation <- function(x, fun, y) {
 }
 
 assert_not_missing <- function(x) {
-  if (is.missing(x)) {
+  if (missing(x)) {
     rlang::abort(paste0(rlang::caller_arg(x), ' must be provided'),
                  call = rlang::caller_env())
   }
