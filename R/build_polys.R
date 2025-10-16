@@ -122,17 +122,10 @@ build_polys <- function(
   }
 
   if (!is.null(DT) && is.null(spPts)) {
-    if (is.null(coords)) {
-      stop('coords must be provided')
-    }
-
+    assert_not_null(coords)
     assert_not_null(id)
-
     assert_not_null(crs)
-
-    if (length(coords) != 2) {
-      stop('coords requires a vector of column names for coordinates X and Y')
-    }
+    assert_length(coords, 2)
 
     if (is.null(splitBy)) {
       splitBy <- id
@@ -140,42 +133,12 @@ build_polys <- function(
       splitBy <- c(id, splitBy)
     }
 
-    if (!all(c(splitBy, coords) %in% colnames(DT))) {
-      stop(paste0(
-        as.character(paste(setdiff(
-          c(id, coords), colnames(DT)
-        ),
-        collapse = ', ')),
-        ' field(s) provided are not present in input DT'
-      ))
-    }
-
-    if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-      stop('coords must be numeric')
-    }
-
-    if (!all(DT[, lapply(
-      .SD,
-      FUN = function(x) {
-        is.numeric(x) | is.character(x) | is.integer(x)
-      }
-    ), .SDcols = c(splitBy)])) {
-      stop(
-        strwrap(
-          prefix = " ",
-          initial = "",
-          x = 'id (and splitBy when provided)
-          must be character, numeric or integer type'
-        )
-      )
-    }
-
+    assert_are_colnames(DT, c(splitBy, coords))
   }
 
-
-  if (is.null(hrType)) {
-    stop('hrType must be provided')
-  }
+  assert_inherits(DT, coords, 'numeric')
+  assert_inherits(DT, splitBy, c('numeric', 'character', 'integer'))
+  assert_not_null(hrType)
 
   if (is.null(hrParams)) {
     message('hrParams is not provided, using defaults')

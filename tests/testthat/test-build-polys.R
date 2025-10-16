@@ -58,7 +58,7 @@ test_that('coords, id, crs, (splitBy) provided and proper format', {
       coords = 'X',
       id = 'ID'
     ),
-    'coords requires a vector of',
+    'coords must be length 2',
     fixed = FALSE
   )
 
@@ -97,7 +97,7 @@ test_that('coords, id, crs, (splitBy) provided and proper format', {
       id = 'ID',
       splitBy = 's'
     ),
-    'and splitBy when provided', fixed = FALSE
+    'splitBy must be', fixed = FALSE
   )
 })
 
