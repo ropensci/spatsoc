@@ -99,24 +99,23 @@ fusion_id <- function(
   . <- both_rleid <- distance <- dyadID <- fusionID <- tg_diff <- timegroup <-
     within_rleid <- NULL
 
-  if (is.null(edges)) {
-    stop('input edges required')
-  }
+  assert_not_null(edges)
 
-  stopifnot('dyadID' %in% colnames(edges))
-  stopifnot('timegroup' %in% colnames(edges))
-  stopifnot('distance' %in% colnames(edges))
+  check_colnames <- c('dyadID', 'timegroup', 'distance')
+  assert_are_colnames(edges, check_colnames)
 
-  stopifnot(is.numeric(threshold))
-  stopifnot(is.numeric(n_min_length))
-  stopifnot(is.numeric(n_max_missing))
-  stopifnot(is.logical(allow_split))
+  assert_not_null(threshold)
+  assert_inherits(threshold, 'numeric')
 
-  stopifnot(threshold >= 0)
+  assert_inherits(n_min_length, 'numeric')
+  assert_inherits(n_max_missing, 'numeric')
+  assert_inherits(allow_split, 'logical')
+
+  assert_gte(threshold, 0)
 
   unique_edges <- unique(edges[, .(dyadID, timegroup, distance)])
 
-  setorder(unique_edges, 'timegroup')
+  data.table::setorder(unique_edges, 'timegroup')
 
   # Check if edge distance less than threshold
   unique_edges[, within := distance < threshold]
