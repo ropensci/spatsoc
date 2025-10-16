@@ -107,41 +107,20 @@ group_pts <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
 
-  if (is.null(threshold)) {
-    stop('threshold required')
-  }
-
-  if (!is.numeric(threshold)) {
-    stop('threshold must be numeric')
-  }
-
-  if (threshold <= 0) {
-    stop('threshold must be greater than 0')
-  }
+  assert_not_null(threshold)
+  assert_inherits(threshold, 'numeric')
+  assert_relation(threshold, `<=`, 0)
 
   assert_not_null(id)
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  assert_length(coords, 2)
 
-  if (missing(timegroup)) {
-    stop('timegroup required')
-  }
+  assert_not_missing(timegroup)
 
-  if (!all(c(timegroup, id, coords, splitBy) %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(timegroup, id, coords, splitBy),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
+  check_colnames <- c(timegroup, id, coords, splitBy)
+  assert_are_colnames(DT, check_colnames)
 
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
-  }
+  assert_inherits(DT, coords, 'numeric')
 
   if (!is.null(timegroup)) {
     if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
