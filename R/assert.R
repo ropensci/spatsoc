@@ -108,7 +108,7 @@ assert_not_missing <- function(x) {
 
 assert_col_radians <- function(x, col, ...) {
   if(!identical(units(x[[col]])$numerator, 'rad')) {
-    rlang::abort(paste0(rlang::caller_arg(col), ' must be radians', ...),
+    rlang::abort(paste0(rlang::caller_arg(col), ' must be of units radians', ...),
                  call = rlang::caller_env())
   } else {
     invisible(NULL)
