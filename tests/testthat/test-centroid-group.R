@@ -26,11 +26,11 @@ test_that('DT is required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(centroid_group(DT, group = group, coords = 'X'),
-               'coords requires a vector')
+               'coords must be length 2')
   expect_error(centroid_group(DT, coords = coords, group = NULL),
-               'group column name required')
+               'group must be provided')
   expect_error(centroid_group(DT, coords = coords, na.rm = NULL),
-               'na.rm is required')
+               'na.rm must be provided')
 })
 
 test_that('na.rm is logical', {
@@ -47,9 +47,9 @@ test_that('column names must exist in DT', {
 
 test_that('coords are correctly provided or error detected', {
   expect_error(centroid_group(DT, coords = c('X', NULL)),
-               'coords requires a vector')
+               'coords must be length 2')
   expect_error(centroid_group(DT, coords = c('X', 'ID')),
-               'coords must be numeric')
+               'coords must be of class numeric')
 })
 
 test_that('centroid column succesfully detected', {

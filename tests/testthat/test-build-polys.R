@@ -72,7 +72,7 @@ test_that('coords, id, crs, (splitBy) provided and proper format', {
       coords = c('X', 'Y'),
       id = 'ID'
     ),
-    'coords must be numeric'
+    'coords must be of class numeric'
   )
 
   expect_error(

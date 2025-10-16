@@ -62,7 +62,7 @@ test_that('coords, id, crs, sortBy must be provided, proper format', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'coords must be numeric'
+    'coords must be of class numeric'
   )
   expect_error(
     build_lines(
@@ -210,7 +210,7 @@ test_that('splitBy and id provided are not correct format', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'id must be numeric/character/integer',
+    'id must be of class numeric/character/integer',
     fixed = FALSE
   )
 
@@ -223,7 +223,7 @@ test_that('splitBy and id provided are not correct format', {
       splitBy = 'datetime',
       sortBy = 'datetime'
     ),
-    'splitBy must be numeric/character/integer',
+    'splitBy must be of class numeric/character/integer',
     fixed = FALSE
   )
 
@@ -237,7 +237,7 @@ test_that('splitBy and id provided are not correct format', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'id must be numeric/character/integer',
+    'id must be of class numeric/character/integer',
     fixed = FALSE
   )
 })
