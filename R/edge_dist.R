@@ -39,11 +39,11 @@
 #' `splitBy` subgroup.
 #'
 #' @inheritParams group_pts
-#' @param returnDist boolean indicating if the distance between individuals
+#' @param returnDist logical indicating if the distance between individuals
 #'   should be returned. If FALSE (default), only ID1, ID2 columns (and
 #'   timegroup, splitBy columns if provided) are returned. If TRUE, another
 #'   column "distance" is returned indicating the distance between ID1 and ID2.
-#' @param fillNA boolean indicating if NAs should be returned for individuals
+#' @param fillNA logical indicating if NAs should be returned for individuals
 #'   that were not within the threshold distance of any other. If TRUE, NAs are
 #'   returned. If FALSE, only edges between individuals within the threshold
 #'   distance are returned.

@@ -4,7 +4,7 @@
 #'
 #' @param x angle in radians
 #' @param y angle in radians
-#' @param signed boolean if signed difference should be returned, default FALSE
+#' @param signed logical if signed difference should be returned, default FALSE
 #' @param return_units return difference with units = 'rad'
 #'
 #' @return Difference between x and y in radians. If signed is TRUE, the signed

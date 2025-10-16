@@ -39,10 +39,10 @@ test_that('arguments required, otherwise error detected', {
                'na.rm is required')
 })
 
-test_that('na.rm is boolean', {
+test_that('na.rm is logical', {
   expect_error(centroid_dyad(edges, DT, id = id,
                              coords = coords, na.rm = 'potato'),
-               'boolean')
+               'logical')
 })
 
 test_that('column names must exist in DT', {

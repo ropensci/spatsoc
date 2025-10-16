@@ -71,7 +71,7 @@
 #' @inheritParams group_pts
 #' @inheritParams group_lines
 #' @inheritParams build_polys
-#' @param area boolean indicating either overlap group (when `FALSE`) or
+#' @param area logical indicating either overlap group (when `FALSE`) or
 #'   area and proportion of overlap (when `TRUE`)
 #' @param hrType type of HR estimation, either 'mcp' or 'kernel'
 #' @param hrParams a named list of parameters for `adehabitatHR` functions

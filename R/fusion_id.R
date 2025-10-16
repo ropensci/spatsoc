@@ -44,7 +44,7 @@
 #' @param n_min_length minimum length of fusion events
 #' @param n_max_missing maximum number of missing observations within a fusion
 #'   event
-#' @param allow_split boolean defining if a single observation can be greater
+#' @param allow_split logical defining if a single observation can be greater
 #'   than the threshold distance without initiating fission event
 #' @export
 #' @seealso `edge_dist`

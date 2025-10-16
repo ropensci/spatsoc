@@ -284,7 +284,7 @@ to order the rows for each individual (and `splitBy`).
 `group_polys(DT, area, hrType, hrParams, crs, id, coords, splitBy, spLines)`
   
 * `DT`: input `data.table`
-* `area`: boolean argument if proportional area should be returned
+* `area`: logical argument if proportional area should be returned
 * `hrType`: type of home range created 
 * `hrParams`: parameters relevant to the type of home range created
 * `crs`: crs of coordinates in `DT`
@@ -349,7 +349,7 @@ group_polys(
 * `coords`: column names of x and y coordinates in `DT`
 * `timegroup`: column name of time group
 * `splitBy`: (optional) column names of extra variables to group on
-* `fillNA`: boolean indicating if NAs should be returned for individuals that
+* `fillNA`: logical indicating if NAs should be returned for individuals that
 were not within the threshold distance of any other. If TRUE, NAs are returned.
 If FALSE, only edges between individuals within the threshold distance are 
 returned.
