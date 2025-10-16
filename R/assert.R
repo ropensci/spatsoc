@@ -46,6 +46,21 @@ assert_col_inherits <- function(x, cols, classes, ...) {
   }
 }
 
+assert_col_typeof <- function(x, cols, type, ...) {
+  if (length(cols)) {
+    for (col in cols) {
+      if(!inherits(x[[col]], type)) {
+        rlang::abort(paste0(rlang::caller_arg(cols), ' must be of type ',
+                            paste0(type, collapse = '/'),
+                            ...),
+                     call = rlang::caller_env())
+      } else {
+        invisible(NULL)
+      }
+    }
+  }
+}
+
 assert_inherits <- function(x, classes, ...) {
   if(!inherits(x, classes)) {
     rlang::abort(paste0(rlang::caller_arg(x), ' must be ',
