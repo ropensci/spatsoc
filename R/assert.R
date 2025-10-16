@@ -35,7 +35,7 @@ assert_col_inherits <- function(x, cols, classes, ...) {
   if (length(cols)) {
     for (col in cols) {
       if(!inherits(x[[col]], classes)) {
-        rlang::abort(paste0(rlang::caller_arg(cols), ' must be ',
+        rlang::abort(paste0(rlang::caller_arg(cols), ' must be of class ',
                             paste0(classes, collapse = '/'),
                             ...),
                      call = rlang::caller_env())
