@@ -109,7 +109,7 @@ group_pts <- function(
 
   assert_not_null(threshold)
   assert_inherits(threshold, 'numeric')
-  assert_relation(threshold, `<=`, 0)
+  assert_relation(threshold, `>`, 0)
 
   assert_not_null(id)
 
