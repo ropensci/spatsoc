@@ -234,7 +234,7 @@ direction_step(DT_expect, id, coords, crs = 4326)
 edge_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
                          returnDist = TRUE)
 dyad_id(edge_expect, 'ID1', 'ID2')
-fusion_id(edge_expect)
+fusion_id(edge_expect, threshold = 100)
 
 window <- 5
 delay_expect <- edge_delay(edge_expect, DT_expect, window = window, id = id)

@@ -100,8 +100,8 @@ test_that('allow_split TRUE returns less unique fusionID', {
   # When splits are allowed, more fusion events are combined
   #  resulting in less unique fusion events
   expect_lt(
-    fusion_id(edges, allow_split = TRUE)[, uniqueN(fusionID)],
-    fusion_id(edges, allow_split = FALSE)[, uniqueN(fusionID)]
+    fusion_id(edges, allow_split = TRUE, threshold = 50)[, uniqueN(fusionID)],
+    fusion_id(edges, allow_split = FALSE, threshold = 50)[, uniqueN(fusionID)]
   )
 })
 
@@ -109,8 +109,8 @@ test_that('larger n_max_missing returns less unique fusionID', {
   # When a larger n max missing is provided, more fusion events are combined
   #  resulting in less unique fusion events
   expect_lt(
-    fusion_id(edges, n_max_missing = 3)[, uniqueN(fusionID)],
-    fusion_id(edges, n_max_missing = 0)[, uniqueN(fusionID)]
+    fusion_id(edges, n_max_missing = 3, threshold = 50)[, uniqueN(fusionID)],
+    fusion_id(edges, n_max_missing = 0, threshold = 50)[, uniqueN(fusionID)]
   )
 })
 
@@ -118,8 +118,8 @@ test_that('larger n_min_length returns less unique fusionID', {
   # When a larger n min length is provided, less fusion events are identified
   #  resulting in less unique fusion events
   expect_lt(
-    fusion_id(edges, n_min_length = 3)[, uniqueN(fusionID)],
-    fusion_id(edges, n_min_length = 0)[, uniqueN(fusionID)]
+    fusion_id(edges, n_min_length = 3, threshold = 50)[, uniqueN(fusionID)],
+    fusion_id(edges, n_min_length = 0, threshold = 50)[, uniqueN(fusionID)]
   )
 })
 
