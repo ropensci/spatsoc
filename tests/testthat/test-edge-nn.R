@@ -1,5 +1,5 @@
 # Test edge_nn
-context('test-edge-nn')
+context('test edge_nn')
 
 library(spatsoc)
 

@@ -1,5 +1,5 @@
 # Test edge_dist
-context('test-edge-dist')
+context('test edge_dist')
 
 library(spatsoc)
 
