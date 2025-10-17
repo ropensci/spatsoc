@@ -21,16 +21,16 @@ test_that('id1 and id2 are required', {
   expect_error(dyad_id(DT = edges, id1 = NULL),
                'id1 must be')
 
-  expect_error(dyad_id(DT = edges, id1 = 'ID1', id2 = NULL),
-               'input id2 required')
+  expect_error(dyad_id(DT = edges, id1 = 'ID', id2 = NULL),
+               'id2 must be')
 })
 
 test_that('columns must be in DT', {
   expect_error(dyad_id(DT = edges, id1 = 'potato', id2 = 'ID2'),
                'potato field provided is not present in input DT', fixed = FALSE)
 
-  expect_error(dyad_id(DT = edges, id1 = 'ID1', id2 = 'potato'),
-               'provided are not present in input DT', fixed = FALSE)
+  expect_error(dyad_id(DT = edges, id1 = 'ID', id2 = 'potato'),
+               'potato field provided is not present in input DT', fixed = FALSE)
 })
 
 
