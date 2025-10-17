@@ -1,6 +1,6 @@
-assert_not_null <- function(x) {
+assert_not_null <- function(x, ...) {
   if (is.null(x)) {
-    rlang::abort(paste0(rlang::caller_arg(x), ' must be provided'),
+    rlang::abort(paste0(rlang::caller_arg(x), ' must be provided', ...),
                  call = rlang::caller_env())
   }
   return(invisible(NULL))
