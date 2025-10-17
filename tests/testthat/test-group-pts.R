@@ -14,20 +14,20 @@ test_that('DT is required', {
     threshold = 10,
     id = 'ID'
   ),
-  'input DT required')
+  'DT must be provided')
 })
 
 test_that('ID, coord column names, time, threshold provided correctly',
           {
             expect_error(group_pts(DT, threshold = 10, id = NULL),
-                         'ID field required')
+                         'id must be')
 
             expect_error(group_pts(DT, threshold = NULL, id = 'ID'),
-                         'threshold required')
+                         'threshold must be')
 
             expect_error(group_pts(DT, threshold = 10, id = 'ID',
                                    coords = c('X', 'Y')),
-                         'timegroup required')
+                         'timegroup must be')
 
             expect_error(
               group_pts(
@@ -36,7 +36,7 @@ test_that('ID, coord column names, time, threshold provided correctly',
                 id = 'ID',
                 coords = 'X'
               ),
-              'coords requires a vector',
+              'coords must be length 2',
               fixed = FALSE
             )
           })
@@ -102,13 +102,13 @@ test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
 
   expect_error(group_pts(DT, threshold = -10, id = 'ID'),
-               'threshold must be greater than 0')
+               'threshold must be > 0')
 
   expect_error(group_pts(DT, threshold = 0, id = 'ID'),
-               'threshold must be greater than 0')
+               'threshold must be > 0')
 
   expect_error(group_pts(DT, threshold = '0', id = 'ID'),
-               'threshold must be numeric')
+               'threshold must be of class numeric')
 })
 
 
@@ -120,7 +120,7 @@ test_that('coords are correctly provided or error detected', {
       id = 'ID',
       coords = c('X', NULL)
     ),
-    'coords requires a vector'
+    'coords must be length 2'
   )
 
   expect_error(
@@ -131,7 +131,7 @@ test_that('coords are correctly provided or error detected', {
       coords = c('X', 'ID'),
       timegroup = NULL
     ),
-    'coords must be numeric'
+    'coords must be of class numeric'
   )
 })
 

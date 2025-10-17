@@ -12,7 +12,7 @@ test_that('DT is required', {
   expect_error(get_geometry(
     DT = NULL
   ),
-  'input DT required')
+  'DT must be provided')
 })
 
 test_that('coords provided correctly, else error', {
@@ -21,7 +21,7 @@ test_that('coords provided correctly, else error', {
       DT,
       coords = 'X'
     ),
-    'coords requires a vector'
+    'coords must be length 2'
   )
 
   expect_error(
@@ -45,7 +45,7 @@ test_that('coords provided correctly, else error', {
       DT,
       coords = c('ID', 'ID')
     ),
-    'coords must be numeric'
+    'coords must be of class numeric'
   )
 
 })
@@ -57,7 +57,7 @@ test_that('crs provided correctly, else error', {
       coords = coords,
       crs = NULL
     ),
-    'input crs required'
+    'crs must be provided'
   )
 })
 

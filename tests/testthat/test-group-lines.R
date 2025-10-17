@@ -143,7 +143,7 @@ test_that('timegroup is correctly provided but is not required', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'provided are not present', fixed = FALSE
+    'potato field', fixed = FALSE
   )
 
   expect_true(inherits(group_lines(
@@ -190,7 +190,7 @@ test_that('threshold is correctly provided, or error', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'cannot provide a negative threshold'
+    'threshold must be > 0'
   )
 
   expect_error(
@@ -203,7 +203,7 @@ test_that('threshold is correctly provided, or error', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'threshold must be numeric'
+    'threshold must be of class numeric'
   )
 })
 

@@ -21,7 +21,7 @@ test_that('DT is required', {
     group = 'group',
     id = 'ID'
   ),
-  'input DT required')
+  'DT must be provided')
 })
 
 
@@ -31,14 +31,14 @@ test_that('ID and group column names provided', {
     group = NULL,
     id = 'ID'
   ),
-  'group field required')
+  'group must be')
 
   expect_error(get_gbi(
     DT = DT,
     group = 'group',
     id = NULL
   ),
-  'ID field required')
+  'id must be')
 
 })
 
@@ -49,14 +49,14 @@ test_that('columns in DT', {
     group = 'potato',
     id = 'ID'
   ),
-  'provided are not present in input DT', fixed = FALSE)
+  'potato field provided')
 
   expect_error(get_gbi(
     DT = DT,
     group = 'group',
     id = 'potato'
   ),
-  'provided are not present in input DT', fixed = FALSE)
+  'potato field provided')
 
 })
 

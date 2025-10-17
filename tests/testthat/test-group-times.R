@@ -8,7 +8,7 @@ DT <- fread('../testdata/DT.csv', tz = 'UTC')
 test_that('DT is required', {
   expect_error(group_times(DT = NULL,
                            datetime = NULL, threshold = '10 minutes'),
-               'input DT required')
+               'DT must be provided')
 })
 
 

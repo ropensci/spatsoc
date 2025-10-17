@@ -62,12 +62,12 @@ test_that('non-numeric cols passed as direction_diff and _delay error', {
   char_delay <- copy(delay)[, direction_diff := as.character(direction_diff)]
   expect_error(
     leader_edge_delay(char_delay, threshold = 0.5),
-    "must be numeric"
+    "must be of class numeric"
   )
   char_delay <- copy(delay)[, direction_delay := as.character(direction_delay)]
   expect_error(
     leader_edge_delay(char_delay, threshold = 0.5),
-    "must be numeric"
+    "must be of class integer"
   )
 })
 

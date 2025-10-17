@@ -21,7 +21,7 @@ dyad_id(edges, 'ID1', 'ID2')
 
 test_that('edges is required', {
   expect_error(fusion_id(),
-  'input edges required')
+  'edges must be')
 })
 
 
@@ -48,7 +48,7 @@ test_that('arguments are correctly provided or error detected', {
   ))
   expect_error(fusion_id(
     edges = edges,
-    threshold = "potato"
+    threshold = 'potato'
   ))
 
   expect_error(fusion_id(

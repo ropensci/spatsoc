@@ -54,7 +54,7 @@ test_that('area provided and logical, or error', {
       coords = c('X', 'Y'),
       id = 'ID'
     ),
-    'area must be provided',
+    'area must be of class logical',
     fixed = TRUE
   )
 
@@ -63,7 +63,7 @@ test_that('area provided and logical, or error', {
       DT = DT,
       crs = utm,
       hrType = 'mcp',
-      area = 10,
+      area = NULL,
       coords = c('X', 'Y'),
       id = 'ID'
     ),

@@ -27,9 +27,9 @@ test_that('DT is required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(direction_polarization(DT, group = NULL),
-               'group column name required')
+               'group must be provided')
   expect_error(direction_polarization(DT, direction = NULL),
-               'direction column name required')
+               'direction must be provided')
 })
 
 test_that('column names must exist in DT', {

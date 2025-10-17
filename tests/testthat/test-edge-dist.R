@@ -12,25 +12,26 @@ test_that('DT is required', {
     threshold = 10,
     id = 'ID'
   ),
-  'input DT required')
+  'DT must be provided')
 })
 
 test_that('ID and coords column names, threshold correctly provided',
           {
             expect_error(edge_dist(DT, threshold = 10, id = NULL),
-                         'ID field required')
+                         'id must be')
 
             expect_error(edge_dist(DT, id = 'ID'),
-                         'threshold required')
+                         'threshold must be')
 
             expect_error(
               edge_dist(
                 DT,
                 threshold = 10,
                 id = 'ID',
+                timegroup = 'timegroup',
                 coords = 'X'
               ),
-              'coords requires a vector',
+              'coords must be length 2',
               fixed = FALSE
             )
           })
@@ -96,13 +97,13 @@ test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
 
   expect_error(edge_dist(DT, threshold = -10, id = 'ID'),
-               'threshold must be greater than 0')
+               'threshold must be > 0')
 
   expect_error(edge_dist(DT, threshold = 0, id = 'ID'),
-               'threshold must be greater than 0')
+               'threshold must be > 0')
 
   expect_error(edge_dist(DT, threshold = '0', id = 'ID'),
-               'threshold must be numeric')
+               'threshold must be of class numeric')
 })
 
 
@@ -115,7 +116,7 @@ test_that('coords are correctly provided or error detected', {
       coords = c('X', NULL),
       timegroup = 'timegroup'
     ),
-    'coords requires a vector'
+    'coords must be length 2'
   )
 
   expect_error(
@@ -126,7 +127,7 @@ test_that('coords are correctly provided or error detected', {
       coords = c('X', 'ID'),
       timegroup = 'timegroup'
     ),
-    'coords must be numeric'
+    'coords must be of class numeric'
   )
 })
 
