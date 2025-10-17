@@ -11,7 +11,7 @@ diff_rad(x, y, signed = FALSE, return_units = FALSE)
 
 \item{y}{angle in radians}
 
-\item{signed}{boolean if signed difference should be returned, default FALSE}
+\item{signed}{logical if signed difference should be returned, default FALSE}
 
 \item{return_units}{return difference with units = 'rad'}
 }

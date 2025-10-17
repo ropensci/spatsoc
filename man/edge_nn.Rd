@@ -31,7 +31,7 @@ name(s) upon which the grouping will be calculated}
 \item{threshold}{(optional) spatial distance threshold to set maximum
 distance between an individual and their neighbour.}
 
-\item{returnDist}{boolean indicating if the distance between individuals
+\item{returnDist}{logical indicating if the distance between individuals
 should be returned. If FALSE (default), only ID, NN columns (and timegroup,
 splitBy columns if provided) are returned. If TRUE, another column
 "distance" is returned indicating the distance between ID and NN.}
