@@ -57,17 +57,9 @@ get_geometry <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
-  if (!all(coords %in% colnames(DT))) {
-    stop('coords field(s) provided are not present in input DT')
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
-  }
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
   assert_not_null(crs)
 

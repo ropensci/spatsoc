@@ -110,43 +110,16 @@ edge_direction <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
-
-  if (is.null(edges)) {
-    stop('input edges required')
-  }
-
+  assert_not_null(edges)
   assert_not_null(id)
+  assert_not_null(timegroup)
+  assert_are_colnames(DT, c(id, timegroup))
+  assert_are_colnames(edges, timegroup)
+  assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
-
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
-  if (is.null(timegroup)) {
-    stop('timegroup required')
-  }
-
-  if (!timegroup %in% colnames(edges)) {
-    stop('timegroup field provided are not present in input edges')
-  }
-
-  if (!'dyadID' %in% colnames(edges)) {
-    stop('dyadID is not present in input edges, did you run dyad_id?')
-  }
-
-  if (!all(c(id, coords, timegroup) %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(id, coords, timegroup),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
-  }
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
   assert_not_null(crs)
 

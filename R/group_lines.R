@@ -153,9 +153,9 @@ group_lines <- function(
     message('threshold missing, using 0 by default')
     threshold <- 0
   } else if (!is.numeric(threshold)) {
-    stop('threshold must be numeric')
+    assert_inherits(threshold, 'numeric')
   } else if (threshold < 0) {
-    stop('cannot provide a negative threshold')
+    assert_relation(threshold, `>`, 0)
   }
 
   if (!is.null(sfLines) && !is.null(DT)) {
@@ -188,26 +188,11 @@ group_lines <- function(
     return(out[])
   } else if (is.null(sfLines) && !is.null(DT)) {
     assert_not_null(crs)
-
-    if (is.null(coords)) {
-      stop('coords must be provided')
-    }
-
+    assert_not_null(coords)
     assert_not_null(id)
+    assert_not_null(sortBy)
 
-    if (is.null(sortBy)) {
-      stop('sortBy must be provided')
-    }
-
-    if (!all(c(id, coords, timegroup, sortBy) %in% colnames(DT))) {
-      stop(paste0(
-        as.character(paste(setdiff(
-          c(id, coords), colnames(DT)
-        ),
-        collapse = ', ')),
-        ' field(s) provided are not present in input DT'
-      ))
-    }
+    assert_are_colnames(DT, c(id, coords, timegroup, sortBy))
 
     if ('group' %in% colnames(DT)) {
       message('group column will be overwritten by this function')

@@ -106,12 +106,11 @@ fusion_id <- function(
 
   assert_not_null(threshold)
   assert_inherits(threshold, 'numeric')
+  assert_relation(threshold, `>`, 0)
 
   assert_inherits(n_min_length, 'numeric')
   assert_inherits(n_max_missing, 'numeric')
   assert_inherits(allow_split, 'logical')
-
-  assert_relation(threshold, `>`, 0)
 
   unique_edges <- unique(edges[, .(dyadID, timegroup, distance)])
 

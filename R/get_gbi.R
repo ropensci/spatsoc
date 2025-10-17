@@ -60,33 +60,14 @@ get_gbi <- function(DT = NULL,
     group = 'group',
     id = NULL) {
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
-
-  if (is.null(group)) {
-    stop('group field required')
-  }
-
+  assert_not_null(DT)
+  assert_not_null(group)
   assert_not_null(id)
-
-  if (!all(c(group, id) %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(group, id),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
+  assert_are_colnames(DT, c(group, id))
 
   if (anyNA(DT[[group]])) {
     warning('DT contains NA(s) in group column, these rows will be dropped')
   }
-
-
-
 
   uDT <-
     stats::na.omit(unique(DT[, .SD, .SDcols = c(group, id)]),

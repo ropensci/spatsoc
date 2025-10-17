@@ -103,42 +103,23 @@ edge_dist <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
+  assert_not_missing(threshold)
+  assert_inherits(threshold, c('numeric', 'NULL'))
 
-  if (missing(threshold)) {
-    stop('threshold required')
-  }
-
-  if (!is.null(threshold) & !is.numeric(threshold)) {
-    stop('threshold must be numeric or NULL')
-  }
-
-  if (is.numeric(threshold) && threshold <= 0) {
-    stop('threshold must be greater than 0')
+  if (is.numeric(threshold)) {
+    assert_relation(threshold, `>`, 0)
   }
 
   assert_not_null(id)
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  assert_not_missing(timegroup)
+  assert_not_null(timegroup)
 
-  if (missing(timegroup) | is.null(timegroup)) {
-    stop('timegroup required')
-  }
+  check_cols <- c(timegroup, id, coords, splitBy)
+  assert_are_colnames(DT, check_cols)
 
-  if (!all(c(timegroup, id, coords, splitBy) %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(timegroup, id, coords, splitBy),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
-  }
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
   if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
           c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {

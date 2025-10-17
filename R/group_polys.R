@@ -125,9 +125,8 @@ group_polys <- function(
     crs <- projection
   }
 
-  if (is.null(area) || !is.logical(area)) {
-    stop('area must be provided (TRUE or FALSE)')
-  }
+  assert_not_null(area)
+  assert_inherits(area, 'logical')
 
   if (is.null(DT) && is.null(sfPolys)) {
     stop('must provide either DT or sfPolys')
@@ -214,16 +213,7 @@ group_polys <- function(
     if (!is.null(sfPolys)) {
       stop('cannot provide sfPolys if providing splitBy')
     }
-
-    if (!all(c(id, splitBy) %in% colnames(DT))) {
-      stop(paste0(
-        as.character(paste(setdiff(
-          c(id, splitBy), colnames(DT)
-        ),
-        collapse = ', ')),
-        ' field(s) provided are not present in input DT'
-      ))
-    }
+    assert_are_colnames(DT, c(id, splitBy))
 
     DT[, nBy := .N, c(splitBy, id)]
 
