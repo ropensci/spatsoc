@@ -40,13 +40,9 @@ test_that('column names must exist in DT', {
 })
 
 test_that('radians expected else error', {
-  expect_error(direction_polarization(DT, direction = 'X'),
-               'direction_step')
-})
-
-test_that('direction expected numeric', {
-  expect_error(direction_polarization(DT, direction = 'ID'),
-               'direction must be numeric')
+  copyDT <- copy(clean_DT)[, deg := units::as_units(1.1, 'degree')]
+  expect_error(direction_group(copyDT, direction = 'deg'),
+               'direction must be of units radians')
 })
 
 

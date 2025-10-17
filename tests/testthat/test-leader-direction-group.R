@@ -59,12 +59,15 @@ test_that('coords are correctly provided or error detected', {
                'coords must be of class numeric')
   copy_DT <- copy(clean_DT)[, centroid_X := as.character(centroid_X)]
   expect_error(leader_direction_group(copy_DT, coords = coords),
-               'centroid coords must be numeric')
+               'centroid_xcol must be of class numeric')
+  copy_DT <- copy(clean_DT)[, centroid_Y := as.character(centroid_X)]
+  expect_error(leader_direction_group(copy_DT, coords = coords),
+               'centroid_ycol must be of class numeric')
 })
 
 test_that('radians expected else error', {
-  expect_error(leader_direction_group(DT, coords = coords,
-                                      group_direction = 'X'),
+  copyDT <- copy(DT)[, group_direction := units::set_units(group_direction, 'degree')]
+  expect_error(leader_direction_group(copyDT, coords = coords),
                'direction_group')
 })
 
