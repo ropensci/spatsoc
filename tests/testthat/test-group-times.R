@@ -14,12 +14,12 @@ test_that('DT is required', {
 
 test_that('time field correctly provided or error detected', {
   expect_error(group_times(DT, datetime = NULL, threshold = '10 minutes'),
-               'datetime field required')
+               'datetime must be')
 
   expect_error(group_times(DT,
                            datetime = 'potato',
                            threshold = '10 minutes'),
-               'time field provided is not found in DT')
+               'potato field provided')
 })
 
 test_that('threshold properly provided', {
@@ -71,7 +71,7 @@ test_that('threshold with minutes fails with > 60', {
   copyDT <- copy(DT)[, c('idate', 'itime') := IDateTime(datetime)]
   expect_error(group_times(copyDT, datetime = c('idate', 'itime'),
                            threshold = '70 minutes'),
-               '> 60 minutes', fixed = FALSE)
+               '<= 60', fixed = FALSE)
 })
 
 test_that('threshold with minutes fails if not divisible by 60', {
