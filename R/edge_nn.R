@@ -147,7 +147,6 @@ edge_nn <- function(
     data.table::setnames(DT, 'splitBy', 'split_by')
   }
 
-
   splitBy <- c(splitBy, timegroup)
   if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
     warning(

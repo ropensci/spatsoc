@@ -24,8 +24,8 @@ test_that('ID and coords column names, threshold correctly provided',
                 DT,
                 threshold = 10,
                 id = 'ID',
-                timegroup = 'timegroup',
-                coords = 'X'
+                coords = 'X',
+                timegroup = 'timegroup'
               ),
               'coords must be length 2',
               fixed = FALSE

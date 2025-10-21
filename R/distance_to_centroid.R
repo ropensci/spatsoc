@@ -101,6 +101,15 @@ distance_to_centroid <- function(
 
   assert_not_null(return_rank)
 
+  if ('distance_centroid' %in% colnames(DT)) {
+    message('distance_centroid column will be overwritten by this function')
+    data.table::set(DT, j = 'distance_centroid', value = NULL)
+  }
+
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
   pre <- 'centroid_'
@@ -110,11 +119,6 @@ distance_to_centroid <- function(
 
   assert_are_colnames(DT, centroid_coords, ', did you run centroid_group?')
   assert_col_inherits(DT, centroid_coords, 'numeric')
-
-  if ('distance_centroid' %in% colnames(DT)) {
-    message('distance_centroid column will be overwritten by this function')
-    data.table::set(DT, j = 'distance_centroid', value = NULL)
-  }
 
   DT[, distance_centroid :=
        sqrt((.SD[[xcol]] - .SD[[centroid_xcol]])^2 +

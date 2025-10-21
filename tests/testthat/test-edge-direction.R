@@ -32,6 +32,7 @@ test_that('arguments required, otherwise error detected', {
   expect_error(edge_direction(edges, DT, id = id, coords = 'X'),
                'coords must be length 2')
   expect_error(edge_direction(edges, DT, id = NULL), 'id must be provided')
+
   expect_error(
     edge_direction(
       edges,
@@ -59,7 +60,8 @@ test_that('column names must exist in DT', {
   expect_error(edge_direction(edges, DT, id = 'potato', coords = coords,
                               crs = utm),
                'potato field')
-  expect_error(edge_direction(edges, DT, id = id, coords = rep('potato', 2)),
+  expect_error(edge_direction(edges, DT, id = id, coords = rep('potato', 2),
+                              crs = utm),
                'potato field')
   copyDT <- copy(DT)[, timegroup := NULL]
   expect_error(edge_direction(

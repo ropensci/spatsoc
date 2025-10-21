@@ -126,8 +126,6 @@ edge_direction <- function(
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
 
-  out_col <- 'direction_dyad'
-
   id1_coords <- paste0('id1_', coords)
   id2_coords <- paste0('id2_', coords)
 
@@ -152,6 +150,7 @@ edge_direction <- function(
              sort = FALSE)
   data.table::setnames(m, coords, id2_coords)
 
+  out_col <- 'direction_dyad'
   if (out_col %in% colnames(m)) {
     message(paste(out_col, 'column will be overwritten by this function'))
     data.table::set(m, j = out_col, value = NULL)

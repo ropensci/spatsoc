@@ -141,6 +141,24 @@ group_pts <- function(
     data.table::set(DT, j = 'group', value = NULL)
   }
 
+  if (length(coords) != 2) {
+    stop('coords requires a vector of column names for coordinates X and Y')
+  }
+
+  if (!all(coords %in% colnames(DT))) {
+    stop(paste0(
+      as.character(paste(setdiff(
+        coords,
+        colnames(DT)
+      ), collapse = ', ')),
+      ' field(s) provided are not present in input DT'
+    ))
+  }
+
+  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
+    stop('coords must be numeric')
+  }
+
   if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
     warning(
       strwrap(
