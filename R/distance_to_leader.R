@@ -119,24 +119,6 @@ distance_to_leader <- function(
     data.table::set(DT, j = out_col, value = NULL)
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
-  if (!all(coords %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        coords,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
-  }
-
   DT[, zzz_N_by_group := .N, by = c(group)]
 
   check_leaderless <- DT[, .(

@@ -106,10 +106,6 @@ distance_to_centroid <- function(
     data.table::set(DT, j = 'distance_centroid', value = NULL)
   }
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
   pre <- 'centroid_'
