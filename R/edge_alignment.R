@@ -113,6 +113,8 @@ edge_alignment <- function(
   ID1 <- ID2 <- N <- NULL
 
   assert_not_null(DT)
+  assert_is_data_table(DT)
+
   assert_not_null(id)
   assert_not_null(direction)
   assert_not_null(timegroup)

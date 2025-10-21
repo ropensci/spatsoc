@@ -166,6 +166,7 @@ edge_zones <- function(
   distance <- 'distance'
 
   assert_not_null(edges)
+  assert_is_data_table(edges)
   assert_not_null(zone_thresholds)
   assert_not_null(zone_labels)
   assert_are_colnames(edges, distance, ', did you run edge_dist?')

@@ -117,6 +117,7 @@ leader_edge_delay <- function(
   direction_diff <- 'direction_diff'
 
   assert_not_null(edges)
+  assert_is_data_table(edges)
 
   check_cols <- c(direction_delay, direction_diff, 'ID1', 'ID2', splitBy)
   assert_are_colnames(edges, check_cols, ', did you use edge_delay?')

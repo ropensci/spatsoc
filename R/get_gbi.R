@@ -61,6 +61,7 @@ get_gbi <- function(DT = NULL,
     id = NULL) {
 
   assert_not_null(DT)
+  assert_is_data_table(DT)
   assert_not_null(group)
   assert_not_null(id)
   assert_are_colnames(DT, c(group, id))
