@@ -161,26 +161,16 @@ edge_zones <- function(
     blind_volume = NULL) {
   # due to NSE notes in R CMD check
   distance <- direction_dyad <- direction <- direction_dyad_relative <- NULL
+  direction <- 'direction'
+  direction_dyad <- 'direction_dyad'
+  distance <- 'distance'
 
-  if (is.null(edges)) {
-    stop('input edges required')
-  }
-
-  if (is.null(zone_thresholds)) {
-    stop('zone_thresholds required')
-  }
-
-  if (is.null(zone_labels)) {
-    stop('zone_labels required')
-  }
-
-  if (!'distance' %in% colnames(edges)) {
-    stop('distance column not found in edges, did you run edge_dist?')
-  }
-
-  if (edges[, !is.numeric(distance)]) {
-    stop('distance must be numeric')
-  }
+  assert_not_null(edges)
+  assert_is_data_table(edges)
+  assert_not_null(zone_thresholds)
+  assert_not_null(zone_labels)
+  assert_are_colnames(edges, distance, ', did you run edge_dist?')
+  assert_col_inherits(edges, distance, 'numeric')
 
   out_col <- 'zone'
   if (out_col %in% colnames(edges)) {
@@ -192,23 +182,12 @@ edge_zones <- function(
                            labels = c(zone_labels))]
 
   if (!is.null(blind_volume)) {
-    if (!'direction_dyad' %in% colnames(edges)) {
-      stop('direction_dyad column not found in edges, did you use edge_direction?')
-    }
-
-    if (!'direction' %in% colnames(edges)) {
-      stop('direction column not found in edges, did you use direction_step?')
-    }
-
-    if (edges[, !inherits(direction_dyad, 'units')] ||
-        edges[, units(direction_dyad)$numerator != 'rad']) {
-      stop('units(edges$direction_dyad) is not radians, did you use edge_direction?')
-    }
-
-    if (edges[, !inherits(direction, 'units')] ||
-        edges[, units(direction)$numerator != 'rad']) {
-      stop('units(edges$direction) is not radians, did you use direction_step?')
-    }
+    assert_are_colnames(edges, direction_dyad, ', did you use edge_direction?')
+    assert_are_colnames(edges, direction, ', did you use direction_step?')
+    assert_col_inherits(edges, direction_dyad, 'units', ', did you use direction_step?')
+    assert_col_inherits(edges, direction, 'units', ', did you use direction_step?')
+    assert_col_radians(edges, direction_dyad, ', did you use edge_direction?')
+    assert_col_radians(edges, direction, ', did you use edge_direction?')
 
     edges[, direction_dyad_relative :=
             diff_rad(direction, direction_dyad, signed = TRUE)]

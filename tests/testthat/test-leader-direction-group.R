@@ -30,12 +30,12 @@ test_that('DT is required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(leader_direction_group(DT, coords = NULL),
-               'coords req')
+               'coords ')
   expect_error(leader_direction_group(DT, coords = coords, return_rank = NULL),
-               'return_rank req')
+               'return_rank must be')
   expect_error(leader_direction_group(DT, coords = coords, return_rank = TRUE,
                                       group = NULL),
-               'group column name')
+               'group must be')
 })
 
 test_that('column names must exist in DT', {
@@ -53,18 +53,21 @@ test_that('column names must exist in DT', {
 
 test_that('coords are correctly provided or error detected', {
   expect_error(leader_direction_group(DT, coords = c('X', NULL)),
-               'coords requires a vector')
+               'coords must be length 2')
   copy_DT <- copy(clean_DT)[, X := as.character(X)]
   expect_error(leader_direction_group(copy_DT, coords = coords),
-               'coords must be numeric')
+               'coords must be of class numeric')
   copy_DT <- copy(clean_DT)[, centroid_X := as.character(centroid_X)]
   expect_error(leader_direction_group(copy_DT, coords = coords),
-               'centroid coords must be numeric')
+               'centroid_xcol must be of class numeric')
+  copy_DT <- copy(clean_DT)[, centroid_Y := as.character(centroid_X)]
+  expect_error(leader_direction_group(copy_DT, coords = coords),
+               'centroid_ycol must be of class numeric')
 })
 
 test_that('radians expected else error', {
-  expect_error(leader_direction_group(DT, coords = coords,
-                                      group_direction = 'X'),
+  copyDT <- copy(DT)[, group_direction := units::set_units(group_direction, 'degree')]
+  expect_error(leader_direction_group(copyDT, coords = coords),
                'direction_group')
 })
 

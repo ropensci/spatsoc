@@ -30,7 +30,7 @@ the calculation of directional alignment to within spatiotemporal groups}
 \item{splitBy}{(optional) vector of column names indicating subgroups within
 which the direction alignment will be calculated}
 
-\item{signed}{boolean if signed difference should be returned, default FALSE}
+\item{signed}{logical if signed difference should be returned, default FALSE}
 }
 \value{
 \code{edge_alignment} returns a \code{data.table} with columns ID1, ID2,

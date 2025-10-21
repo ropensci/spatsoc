@@ -79,107 +79,58 @@
 #' DT[, yr := year(datetime)]
 #' lines <- build_lines(DT, crs = utm, id = 'ID', coords = c('X', 'Y'),
 #'             sortBy = 'datetime', splitBy = 'yr')
-build_lines <-
-  function(DT = NULL,
-           crs = NULL,
-           id = NULL,
-           coords = NULL,
-           sortBy = NULL,
-           splitBy = NULL,
-           projection = NULL) {
+build_lines <- function(
+    DT = NULL,
+    crs = NULL,
+    id = NULL,
+    coords = NULL,
+    sortBy = NULL,
+    splitBy = NULL,
+    projection = NULL) {
 
-    # due to NSE notes in R CMD check
-    dropped <- . <- NULL
+  # due to NSE notes in R CMD check
+  dropped <- . <- NULL
 
-    if (!is.null(projection)) {
-      warning('projection argument is deprecated, setting crs = projection')
-      crs <- projection
-    }
-
-    if (is.null(DT)) {
-      stop('input DT required')
-    }
-
-    if (is.null(id)) {
-      stop('id must be provided')
-    }
-
-    if (is.null(crs)) {
-      stop('crs must be provided')
-    }
-
-    if (is.null(sortBy)) {
-      stop('sortBy must be provided')
-    }
-
-    if (!all(c(id, splitBy, sortBy) %in% colnames(DT))) {
-      stop(paste0(
-        as.character(paste(setdiff(
-          c(id, splitBy, sortBy), colnames(DT)
-        ),
-        collapse = ', ')),
-        ' field(s) provided are not present in input DT'
-      ))
-    }
-
-    if (is.null(splitBy)) {
-      splitBy <- id
-    } else {
-      splitBy <- c(id, splitBy)
-    }
-
-    if (!all(DT[, lapply(.SD, FUN = function(x) {
-        is.numeric(x) | is.character(x) | is.integer(x)
-      }
-    ), .SDcols = splitBy])) {
-      stop(
-        strwrap(prefix = " ", initial = "",
-          x = 'id (and splitBy when provided)
-          must be character, numeric or integer type'
-        )
-      )
-    }
-
-    if (!('POSIXct' %in%
-          unlist(lapply(DT[, .SD, .SDcols = c(sortBy)], class)))) {
-      stop('sortBy provided must be 1 column of type POSIXct')
-    }
-
-    if (is.null(coords)) {
-      stop('coords must be provided')
-    }
-
-    if (length(coords) != 2) {
-      stop('coords requires a vector of column names for coordinates X and Y')
-    }
-
-    if (!all(coords %in% colnames(DT))) {
-      stop(paste0(
-        as.character(paste(setdiff(
-          coords, colnames(DT)
-        ),
-        collapse = ', ')),
-        ' field(s) provided are not present in input DT'
-      ))
-    }
-
-    if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-      stop('coords must be numeric')
-    }
-
-    dropRows <- DT[, .(dropped = .N < 2), by = c(splitBy)]
-
-    if (dropRows[(dropped), .N] > 0) {
-      warning('some rows dropped, cannot build lines with less than two points')
-    }
-
-    wo_drop <- DT[dropRows, on = splitBy][!(dropped)]
-
-    data.table::setorderv(wo_drop, sortBy)
-
-    lines <- sf::st_as_sf(
-      wo_drop[, .(geometry = sf::st_sfc(sf::st_linestring(as.matrix(.SD)))),
-         by = c(splitBy), .SDcols = coords],
-      crs = sf::st_crs(crs)
-    )
+  if (!is.null(projection)) {
+    warning('projection argument is deprecated, setting crs = projection')
+    crs <- projection
   }
+
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(id)
+  assert_not_null(crs)
+  assert_not_null(sortBy)
+  assert_are_colnames(DT, c(id, sortBy))
+
+  if (is.null(splitBy)) {
+    splitBy <- id
+  } else {
+    splitBy <- c(id, splitBy)
+  }
+
+  assert_col_inherits(DT, id, c('numeric', 'character', 'integer'))
+  assert_col_inherits(DT, splitBy, c('numeric', 'character', 'integer', 'IDate'))
+  assert_col_inherits(DT, sortBy, 'POSIXct')
+
+  assert_not_null(coords)
+  assert_length(coords, 2L)
+  assert_are_colnames(DT, coords)
+  assert_col_inherits(DT, coords, 'numeric')
+
+  dropRows <- DT[, .(dropped = .N < 2), by = c(splitBy)]
+
+  if (dropRows[(dropped), .N] > 0) {
+    warning('some rows dropped, cannot build lines with less than two points')
+  }
+
+  wo_drop <- DT[dropRows, on = splitBy][!(dropped)]
+
+  data.table::setorderv(wo_drop, sortBy)
+
+  lines <- sf::st_as_sf(
+    wo_drop[, .(geometry = sf::st_sfc(sf::st_linestring(as.matrix(.SD)))),
+       by = c(splitBy), .SDcols = coords],
+    crs = sf::st_crs(crs)
+  )
+}

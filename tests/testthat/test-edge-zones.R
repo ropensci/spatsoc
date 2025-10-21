@@ -92,17 +92,17 @@ test_that('columns must exist in edges', {
 })
 
 test_that('columns are correctly provided or error detected', {
-  char_col <- copy(edges)[, distance := as.character(distance)]
-  expect_error(edge_zones(char_col, zone_thresholds, zone_labels),
-               'distance must be numeric')
+  copyEdges <- copy(edges)[, distance := as.character(distance)]
+  expect_error(edge_zones(copyEdges, zone_thresholds, zone_labels),
+               'distance must be of class numeric')
 
-  char_col <- copy(dyad_directions)[, direction := as.character(direction)]
-  expect_error(edge_zones(char_col, zone_thresholds, zone_labels, blind_volume),
+  copyDyad <- copy(dyad_directions)[, direction := units::set_units(direction, 'degrees')]
+  expect_error(edge_zones(copyDyad, zone_thresholds, zone_labels, blind_volume),
                'radians',
               )
 
-  char_col <- copy(dyad_directions)[, direction_dyad := as.character(direction_dyad)]
-  expect_error(edge_zones(char_col, zone_thresholds, zone_labels, blind_volume),
+  copyDyadDir <- copy(dyad_directions)[, direction_dyad := units::set_units(direction_dyad, 'degrees')]
+  expect_error(edge_zones(copyDyadDir, zone_thresholds, zone_labels, blind_volume),
                'radians')
 })
 

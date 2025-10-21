@@ -8,7 +8,7 @@
   "codeRepository": "https://github.com/ropensci/spatsoc",
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.11.9000",
+  "version": "0.2.11.9002",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -214,9 +214,21 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=units"
     },
+    "10": {
+      "@type": "SoftwareApplication",
+      "identifier": "rlang",
+      "name": "rlang",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
+    },
     "SystemRequirements": "GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),\n    sqlite3"
   },
-  "fileSize": "2138.871KB",
+  "fileSize": "2126.247KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",

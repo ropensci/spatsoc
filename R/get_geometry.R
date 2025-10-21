@@ -54,25 +54,14 @@ get_geometry <- function(
     output_crs = 4326,
     geometry_colname = 'geometry') {
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
-  if (!all(coords %in% colnames(DT))) {
-    stop('coords field(s) provided are not present in input DT')
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
-  }
-
-  if (is.null(crs)) {
-    stop('input crs required')
-  }
+  assert_not_null(crs)
 
   if (geometry_colname %in% colnames(DT)) {
     message(paste0(geometry_colname,

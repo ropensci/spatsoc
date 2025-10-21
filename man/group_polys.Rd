@@ -20,7 +20,7 @@ group_polys(
 \arguments{
 \item{DT}{input data.table}
 
-\item{area}{boolean indicating either overlap group (when \code{FALSE}) or
+\item{area}{logical indicating either overlap group (when \code{FALSE}) or
 area and proportion of overlap (when \code{TRUE})}
 
 \item{hrType}{type of HR estimation, either 'mcp' or 'kernel'}

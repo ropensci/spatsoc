@@ -135,55 +135,37 @@
 #'     iterations = 2
 #' )
 #'
-randomizations <- function(DT = NULL,
-                           type = NULL,
-                           id = NULL,
-                           group = NULL,
-                           coords = NULL,
-                           datetime = NULL,
-                           splitBy = NULL,
-                           iterations = NULL) {
+randomizations <- function(
+    DT = NULL,
+    type = NULL,
+    id = NULL,
+    group = NULL,
+    coords = NULL,
+    datetime = NULL,
+    splitBy = NULL,
+    iterations = NULL) {
   # due to NSE notes in R CMD check
   randomID <- jul <- randomJul <- rowID <- iteration <- observed <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
-
-  if (is.null(type)) {
-    stop('type of randomization required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(type)
 
   if (!(type %in% c('step', 'daily', 'trajectory'))) {
     stop('type of randomization must be one of: step, daily or trajectory')
   }
 
-  if (is.null(id)) {
-    stop('id field required')
-  }
+  assert_not_null(id)
+  assert_not_null(datetime)
 
-  if (is.null(datetime)) {
-    stop('datetime field required')
-  }
-
-  if (!all(c(id, datetime, splitBy) %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(id, datetime),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
+  assert_are_colnames(DT, c(id, datetime, splitBy))
 
   if (is.null(iterations)) {
     warning('iterations is not provided therefore iterations set to 1')
     iterations <- 1L
   }
 
-  if (!is.numeric(iterations)) {
-    stop('either provide a numeric for iterations or NULL')
-  }
+  assert_inherits(iterations, c('numeric', 'integer'))
 
   if (length(datetime) == 1 &&
       any(class(DT[[datetime]]) %in% c('POSIXct', 'POSIXt'))) {
@@ -217,14 +199,12 @@ randomizations <- function(DT = NULL,
     }
   }
   if (type %in% c('step', 'daily')) {
-    if (is.null(group)) {
-      stop('group field must be provided if type is "step" or "daily"')
-    }
+    assert_not_null(group, ' if type is "step" or "daily"')
+    assert_are_colnames(DT, group)
     selCols <- c(splitBy, id, datetime, group)
   } else if (type == 'trajectory') {
-    if (is.null(coords)) {
-      stop('coords must be provided if type is "trajectory"')
-    }
+    assert_not_null(coords, ' if type is "trajectory"')
+    assert_are_colnames(DT, coords)
     selCols <- c(splitBy, id, coords, datetime)
   }
 

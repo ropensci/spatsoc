@@ -113,34 +113,23 @@ leader_edge_delay <- function(
   # Due to NSE notes
   . <- direction_diff <- direction_delay <- mean_direction_delay <-
     mean_direction_delay_dyad <- NULL
+  direction_delay <- 'direction_delay'
+  direction_diff <- 'direction_diff'
 
-  if (is.null(edges)) {
-    stop('input edges required')
-  }
+  assert_not_null(edges)
+  assert_is_data_table(edges)
 
-  check_cols <- c('direction_delay', 'direction_diff',
-                  'ID1', 'ID2', splitBy)
-  if (!all(check_cols %in% colnames(edges))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        check_cols,
-        colnames(edges)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input edges, did you use edge_delay?'
-    ))
-  }
-
-  if (!all(edges[, vapply(.SD, is.numeric, TRUE),
-                 .SDcols = check_cols[seq.int(2)]])) {
-    stop('direction_delay and direction_diff must be numeric, did you use edge_delay?')
-  }
+  check_cols <- c(direction_delay, direction_diff, 'ID1', 'ID2', splitBy)
+  assert_are_colnames(edges, check_cols, ', did you use edge_delay?')
+  assert_col_inherits(edges, direction_delay, 'integer',
+                      ', did you use edge_delay?')
+  assert_col_inherits(edges, direction_diff, 'numeric',
+                      ', did you use edge_delay?')
 
   if (is.null(threshold)) {
     threshold <- Inf
   } else {
-    if (!is.numeric(threshold)) {
-      stop('threshold must be numeric, in the units of direction_diff (rad)')
-    }
+    assert_inherits(threshold, 'numeric')
   }
 
   subset_threshold <- edges[direction_diff < threshold]

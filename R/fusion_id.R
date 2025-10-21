@@ -44,7 +44,7 @@
 #' @param n_min_length minimum length of fusion events
 #' @param n_max_missing maximum number of missing observations within a fusion
 #'   event
-#' @param allow_split boolean defining if a single observation can be greater
+#' @param allow_split logical defining if a single observation can be greater
 #'   than the threshold distance without initiating fission event
 #' @export
 #' @seealso `edge_dist`
@@ -88,34 +88,33 @@
 #'   n_max_missing = 0,
 #'   allow_split = FALSE
 #'   )
-fusion_id <- function(edges = NULL,
-                      threshold = 50,
-                      n_min_length = 0,
-                      n_max_missing = 0,
-                      allow_split = FALSE)  {
+fusion_id <- function(
+    edges = NULL,
+    threshold = NULL,
+    n_min_length = 0,
+    n_max_missing = 0,
+    allow_split = FALSE)  {
 
   # due to NSE notes  in R CMD check
   . <- both_rleid <- distance <- dyadID <- fusionID <- tg_diff <- timegroup <-
     within_rleid <- NULL
 
-  if (is.null(edges)) {
-    stop('input edges required')
-  }
+  assert_not_null(edges)
 
-  stopifnot('dyadID' %in% colnames(edges))
-  stopifnot('timegroup' %in% colnames(edges))
-  stopifnot('distance' %in% colnames(edges))
+  check_colnames <- c('dyadID', 'timegroup', 'distance')
+  assert_are_colnames(edges, check_colnames)
 
-  stopifnot(is.numeric(threshold))
-  stopifnot(is.numeric(n_min_length))
-  stopifnot(is.numeric(n_max_missing))
-  stopifnot(is.logical(allow_split))
+  assert_not_null(threshold)
+  assert_inherits(threshold, 'numeric')
+  assert_relation(threshold, `>`, 0)
 
-  stopifnot(threshold >= 0)
+  assert_inherits(n_min_length, 'numeric')
+  assert_inherits(n_max_missing, 'numeric')
+  assert_inherits(allow_split, 'logical')
 
   unique_edges <- unique(edges[, .(dyadID, timegroup, distance)])
 
-  setorder(unique_edges, 'timegroup')
+  data.table::setorder(unique_edges, 'timegroup')
 
   # Check if edge distance less than threshold
   unique_edges[, within := distance < threshold]

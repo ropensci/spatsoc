@@ -129,203 +129,182 @@
 #'             id = 'ID', coords = c('X', 'Y'),
 #'             timegroup = 'timegroup', sortBy = 'datetime',
 #'             splitBy = 'population')
-group_lines <-
-  function(DT = NULL,
-           threshold = NULL,
-           crs = NULL,
-           id = NULL,
-           coords = NULL,
-           timegroup = NULL,
-           sortBy = NULL,
-           splitBy = NULL,
-           sfLines = NULL,
-           projection = NULL) {
+group_lines <- function(
+    DT = NULL,
+    threshold = NULL,
+    crs = NULL,
+    id = NULL,
+    coords = NULL,
+    timegroup = NULL,
+    sortBy = NULL,
+    splitBy = NULL,
+    sfLines = NULL,
+    projection = NULL) {
 
-    # due to NSE notes in R CMD check
-    group <- ..coords <- ..id <- ..sortBy <- withinGroup <- NULL
+  # due to NSE notes in R CMD check
+  group <- ..coords <- ..id <- ..sortBy <- withinGroup <- NULL
 
-    if (!is.null(projection)) {
-      warning('projection argument is deprecated, setting crs = projection')
-      crs <- projection
+  if (!is.null(projection)) {
+    warning('projection argument is deprecated, setting crs = projection')
+    crs <- projection
+  }
+
+  if (is.null(threshold)) {
+    message('threshold missing, using 0 by default')
+    threshold <- 0
+  } else if (!is.numeric(threshold)) {
+    assert_inherits(threshold, 'numeric')
+  } else if (threshold < 0) {
+    assert_relation(threshold, `>`, 0)
+  }
+
+  if (!is.null(sfLines) && !is.null(DT)) {
+    stop('cannot provide both DT and sfLines')
+  } else if (is.null(sfLines) && is.null(DT)) {
+    stop('must provide either DT or sfLines')
+  } else if (!is.null(sfLines) && is.null(DT)) {
+    if (!inherits(sfLines, 'sf') ||
+        !'LINESTRING' %in% sf::st_geometry_type(sfLines)) {
+      stop('sfLines provided must be a sf object with LINESTRINGs')
+    }
+    assert_not_null(id)
+
+    if (data.table::uniqueN(sfLines[[id]]) != nrow(sfLines)) {
+      stop('number of unique values in sfLines does not match nrow(sfLines)')
     }
 
-    if (is.null(threshold)) {
-      message('threshold missing, using 0 by default')
-      threshold <- 0
-    } else if (!is.numeric(threshold)) {
-      stop('threshold must be numeric')
-    } else if (threshold < 0) {
-      stop('cannot provide a negative threshold')
-    }
-
-    if (!is.null(sfLines) && !is.null(DT)) {
-      stop('cannot provide both DT and sfLines')
-    } else if (is.null(sfLines) && is.null(DT)) {
-      stop('must provide either DT or sfLines')
-    } else if (!is.null(sfLines) && is.null(DT)) {
-      if (!inherits(sfLines, 'sf') ||
-          !'LINESTRING' %in% sf::st_geometry_type(sfLines)) {
-        stop('sfLines provided must be a sf object with LINESTRINGs')
-      }
-      if (is.null(id)) {
-        stop('id must be provided')
-      }
-
-      if (data.table::uniqueN(sfLines[[id]]) != nrow(sfLines)) {
-        stop('number of unique values in sfLines does not match nrow(sfLines)')
-      }
-
-      if (threshold == 0) {
-        inter <- sf::st_intersects(sfLines, sfLines, sparse = FALSE)
-      } else {
-        buffered <- sf::st_buffer(sfLines, dist = threshold)
-        inter <- sf::st_intersects(sfLines, buffered, sparse = FALSE)
-      }
-      dimnames(inter) <- list(sfLines[[id]], sfLines[[id]])
-      g <- igraph::graph_from_adjacency_matrix(inter)
-      ovr <- igraph::components(g)$membership
-      out <- data.table::data.table(names(ovr),
-                                    unlist(ovr))
-      data.table::setnames(out, c('ID', 'group'))
-      return(out[])
-    } else if (is.null(sfLines) && !is.null(DT)) {
-      if (is.null(crs)) {
-        stop('crs must be provided when DT is')
-      }
-
-      if (is.null(coords)) {
-        stop('coords must be provided')
-      }
-
-      if (is.null(id)) {
-        stop('id must be provided')
-      }
-
-      if (is.null(sortBy)) {
-        stop('sortBy must be provided')
-      }
-
-      if (!all(c(id, coords, timegroup, sortBy) %in% colnames(DT))) {
-        stop(paste0(
-          as.character(paste(setdiff(
-            c(id, coords), colnames(DT)
-          ),
-          collapse = ', ')),
-          ' field(s) provided are not present in input DT'
-        ))
-      }
-
-      if ('group' %in% colnames(DT)) {
-        message('group column will be overwritten by this function')
-        data.table::set(DT, j = 'group', value = NULL)
-      }
-    }
-
-    if (is.null(timegroup)) {
-      withCallingHandlers({
-        lns <- build_lines(
-          DT = DT,
-          crs = crs,
-          coords = coords,
-          id = id,
-          sortBy = sortBy,
-          splitBy = splitBy
-        )},
-        warning = function(w){
-          if (startsWith(conditionMessage(w), 'some rows dropped')) {
-            invokeRestart('muffleWarning')
-          }
-        }
-      )
-      if (nrow(lns) != 0) {
-        if (threshold == 0) {
-          inter <- sf::st_intersects(lns, lns, sparse = FALSE)
-        } else {
-          buffered <- sf::st_buffer(lns, dist = threshold)
-          inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
-        }
-        dimnames(inter) <- list(lns[[id]], lns[[id]])
-        g <- igraph::graph_from_adjacency_matrix(inter)
-        ovr <- igraph::components(g)$membership
-        ovrDT <- data.table::data.table(ID = names(ovr),
-                                        group = unlist(ovr))
-      } else {
-        ovrDT <- data.table::data.table(ID = DT[[id]], group = NA_integer_)
-      }
-
-      data.table::setnames(ovrDT, c(id, 'group'))
-      DT[ovrDT, group := group, on = id]
-      if (DT[is.na(group), .N] > 0) {
-        warning(
-          strwrap(
-            prefix = " ",
-            initial = "",
-            x = 'some rows were dropped,
-            cannot build a line with < 2 points.
-            in this case, group set to NA.'
-          )
-        )
-      }
-      return(DT[])
+    if (threshold == 0) {
+      inter <- sf::st_intersects(sfLines, sfLines, sparse = FALSE)
     } else {
+      buffered <- sf::st_buffer(sfLines, dist = threshold)
+      inter <- sf::st_intersects(sfLines, buffered, sparse = FALSE)
+    }
+    dimnames(inter) <- list(sfLines[[id]], sfLines[[id]])
+    g <- igraph::graph_from_adjacency_matrix(inter)
+    ovr <- igraph::components(g)$membership
+    out <- data.table::data.table(names(ovr),
+                                  unlist(ovr))
+    data.table::setnames(out, c('ID', 'group'))
+    return(out[])
+  } else if (is.null(sfLines) && !is.null(DT)) {
+    assert_not_null(crs)
+    assert_not_null(coords)
+    assert_not_null(id)
+    assert_not_null(sortBy)
 
-      if (is.null(splitBy)) {
-        splitBy <- timegroup
-      }
-      else {
-        splitBy <- c(splitBy, timegroup)
-      }
-      ovrDT <-
-        DT[, {
-          withCallingHandlers({
-            lns <- build_lines(
-              DT = .SD,
-              crs = crs,
-              coords = ..coords,
-              id = ..id,
-              sortBy = ..sortBy
-            )},
-            warning = function(w){
-              if (startsWith(conditionMessage(w), 'some rows dropped')) {
-                invokeRestart('muffleWarning')
-              }
-            }
-          )
-          if (!is.null(lns)) {
-            if (threshold == 0) {
-              inter <- sf::st_intersects(lns, lns, sparse = FALSE)
-            } else {
-              buffered <- sf::st_buffer(lns, dist = threshold)
-              inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
-            }
-            dimnames(inter) <- list(lns[[id]], lns[[id]])
-            g <- igraph::graph_from_adjacency_matrix(inter)
-            ovr <- igraph::components(g)$membership
-            out <- data.table::data.table(names(ovr),
-                                          unlist(ovr))
-            data.table::setnames(out, c(..id, 'withinGroup'))
-          } else {
-            out <- data.table(get(..id), withinGroup = NA_real_)
-            data.table::setnames(out, c(..id, 'withinGroup'))
+    assert_are_colnames(DT, c(id, coords, timegroup, sortBy))
 
-          }
-        }, by = c(splitBy), .SDcols = c(coords, id, sortBy)]
-
-      DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
-      DT[, group := ifelse(is.na(withinGroup), NA_integer_, .GRP),
-         by = c(splitBy, 'withinGroup')]
-      data.table::set(DT, j = 'withinGroup', value = NULL)
-      if (DT[is.na(group), .N] > 0) {
-        warning(
-          strwrap(
-            prefix = " ",
-            initial = "",
-            x = 'some rows were dropped,
-            cannot build a line with < 2 points.
-            in this case, group set to NA.'
-          )
-        )
-      }
-      return(DT[])
+    if ('group' %in% colnames(DT)) {
+      message('group column will be overwritten by this function')
+      data.table::set(DT, j = 'group', value = NULL)
     }
   }
+
+  if (is.null(timegroup)) {
+    withCallingHandlers({
+      lns <- build_lines(
+        DT = DT,
+        crs = crs,
+        coords = coords,
+        id = id,
+        sortBy = sortBy,
+        splitBy = splitBy
+      )},
+      warning = function(w){
+        if (startsWith(conditionMessage(w), 'some rows dropped')) {
+          invokeRestart('muffleWarning')
+        }
+      }
+    )
+    if (nrow(lns) != 0) {
+      if (threshold == 0) {
+        inter <- sf::st_intersects(lns, lns, sparse = FALSE)
+      } else {
+        buffered <- sf::st_buffer(lns, dist = threshold)
+        inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
+      }
+      dimnames(inter) <- list(lns[[id]], lns[[id]])
+      g <- igraph::graph_from_adjacency_matrix(inter)
+      ovr <- igraph::components(g)$membership
+      ovrDT <- data.table::data.table(ID = names(ovr),
+                                      group = unlist(ovr))
+    } else {
+      ovrDT <- data.table::data.table(ID = DT[[id]], group = NA_integer_)
+    }
+
+    data.table::setnames(ovrDT, c(id, 'group'))
+    DT[ovrDT, group := group, on = id]
+    if (DT[is.na(group), .N] > 0) {
+      warning(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'some rows were dropped,
+          cannot build a line with < 2 points.
+          in this case, group set to NA.'
+        )
+      )
+    }
+    return(DT[])
+  } else {
+
+    if (is.null(splitBy)) {
+      splitBy <- timegroup
+    }
+    else {
+      splitBy <- c(splitBy, timegroup)
+    }
+    ovrDT <-
+      DT[, {
+        withCallingHandlers({
+          lns <- build_lines(
+            DT = .SD,
+            crs = crs,
+            coords = ..coords,
+            id = ..id,
+            sortBy = ..sortBy
+          )},
+          warning = function(w){
+            if (startsWith(conditionMessage(w), 'some rows dropped')) {
+              invokeRestart('muffleWarning')
+            }
+          }
+        )
+        if (!is.null(lns)) {
+          if (threshold == 0) {
+            inter <- sf::st_intersects(lns, lns, sparse = FALSE)
+          } else {
+            buffered <- sf::st_buffer(lns, dist = threshold)
+            inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
+          }
+          dimnames(inter) <- list(lns[[id]], lns[[id]])
+          g <- igraph::graph_from_adjacency_matrix(inter)
+          ovr <- igraph::components(g)$membership
+          out <- data.table::data.table(names(ovr),
+                                        unlist(ovr))
+          data.table::setnames(out, c(..id, 'withinGroup'))
+        } else {
+          out <- data.table(get(..id), withinGroup = NA_real_)
+          data.table::setnames(out, c(..id, 'withinGroup'))
+
+        }
+      }, by = c(splitBy), .SDcols = c(coords, id, sortBy)]
+
+    DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
+    DT[, group := ifelse(is.na(withinGroup), NA_integer_, .GRP),
+       by = c(splitBy, 'withinGroup')]
+    data.table::set(DT, j = 'withinGroup', value = NULL)
+    if (DT[is.na(group), .N] > 0) {
+      warning(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'some rows were dropped,
+          cannot build a line with < 2 points.
+          in this case, group set to NA.'
+        )
+      )
+    }
+    return(DT[])
+  }
+}

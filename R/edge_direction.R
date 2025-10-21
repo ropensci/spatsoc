@@ -108,62 +108,20 @@ edge_direction <- function(
     crs <- projection
   }
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(edges)
+  assert_not_null(id)
+  assert_not_null(timegroup)
+  assert_are_colnames(DT, c(id, timegroup))
+  assert_are_colnames(edges, timegroup)
+  assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
-  if (is.null(edges)) {
-    stop('input edges required')
-  }
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
-  if (is.null(id)) {
-    stop('id column name required')
-  }
-
-
-  if (is.null(timegroup)) {
-    stop('timegroup required')
-  }
-
-  if (!timegroup %in% colnames(edges)) {
-    stop('timegroup field provided are not present in input edges')
-  }
-
-  if (!'dyadID' %in% colnames(edges)) {
-    stop('dyadID is not present in input edges, did you run dyad_id?')
-  }
-
-  if (!all(c(id, timegroup) %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(id, timegroup),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (is.null(crs)) {
-    stop('crs required')
-  }
-
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
-  if (!all(c(id, coords, timegroup) %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(id, coords, timegroup),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords])) {
-    stop('coords must be numeric')
-  }
+  assert_not_null(crs)
 
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)

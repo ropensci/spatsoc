@@ -29,9 +29,10 @@ test_that('edges, DT are required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(edge_direction(edges, DT, id = id, coords = 'X', crs = utm),
-               'coords requires a vector')
-  expect_error(edge_direction(edges, DT, id = NULL), 'id column name required')
+  expect_error(edge_direction(edges, DT, id = id, coords = 'X'),
+               'coords must be length 2')
+  expect_error(edge_direction(edges, DT, id = NULL), 'id must be provided')
+
   expect_error(
     edge_direction(
       edges,
@@ -40,7 +41,7 @@ test_that('arguments required, otherwise error detected', {
       coords = coords,
       timegroup = NULL
     ),
-    'timegroup required'
+    'timegroup must be'
   )
   expect_error(
     edge_direction(
@@ -51,12 +52,13 @@ test_that('arguments required, otherwise error detected', {
       timegroup = timegroup,
       crs = NULL
     ),
-    'crs required'
+    'crs must be'
   )
 })
 
 test_that('column names must exist in DT', {
-  expect_error(edge_direction(edges, DT, id = 'potato', coords = coords),
+  expect_error(edge_direction(edges, DT, id = 'potato', coords = coords,
+                              crs = utm),
                'potato field')
   expect_error(edge_direction(edges, DT, id = id, coords = rep('potato', 2),
                               crs = utm),
@@ -95,18 +97,16 @@ test_that('column names must exist in DT', {
       crs = utm,
       timegroup = timegroup
     ),
-    'dyadID is not present'
+    'dyadID field'
   )
 
 })
 
 test_that('coords are correctly provided or error detected', {
-  expect_error(edge_direction(edges, DT, id = id, coords = c('X', NULL),
-                              crs = utm),
-               'coords requires a vector')
-  expect_error(edge_direction(edges, DT, id = id, coords = c('X', 'ID'),
-                              crs = utm),
-               'coords must be numeric')
+  expect_error(edge_direction(edges, DT, id = id, coords = c('X', NULL)),
+               'coords must be length 2')
+  expect_error(edge_direction(edges, DT, id = id, coords = c('X', 'ID')),
+               'coords must be of class numeric')
 })
 
 test_that('direction_dyad column succesfully detected', {

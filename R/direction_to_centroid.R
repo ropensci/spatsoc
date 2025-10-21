@@ -70,18 +70,12 @@ direction_to_centroid <- function(
   # Due to NSE notes in R CMD check
   direction_centroid <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
-  if ('direction_centroid' %in% colnames(DT)) {
-    message('direction_centroid column will be overwritten by this function')
-    data.table::set(DT, j = 'direction_centroid', value = NULL)
-  }
-
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
@@ -90,34 +84,14 @@ direction_to_centroid <- function(
   centroid_ycol <- paste0(pre, ycol)
   centroid_coords  <- c(centroid_xcol, centroid_ycol)
 
-  if (!all(coords %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        coords,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
+  assert_are_colnames(DT, centroid_coords, ', did you run centroid_group?')
+  assert_col_inherits(DT, centroid_coords, 'numeric')
 
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(coords)])) {
-    stop('coords must be numeric')
+  if ('direction_centroid' %in% colnames(DT)) {
+    message('direction_centroid column will be overwritten by this function')
+    data.table::set(DT, j = 'direction_centroid', value = NULL)
   }
-
-  if (!all(centroid_coords %in% colnames(DT))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        centroid_coords,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in DT, did you run centroid_group?'
-    ))
-  }
-
-  if (!all(DT[, vapply(.SD, is.numeric, TRUE), .SDcols = c(centroid_coords)])) {
-    stop('centroid coords must be numeric')
-  }
-
+  
   DT[, direction_centroid := fifelse(
     .SD[[xcol]] == .SD[[centroid_xcol]] &
       .SD[[ycol]] == .SD[[centroid_ycol]],

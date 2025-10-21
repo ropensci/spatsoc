@@ -27,9 +27,9 @@ test_that('DT is required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(direction_group(DT, group = NULL),
-               'group column name required')
+               'group must be provided')
   expect_error(direction_group(DT, direction = NULL),
-               'direction column name required')
+               'direction must be provided')
 })
 
 test_that('column names must exist in DT', {
@@ -40,18 +40,13 @@ test_that('column names must exist in DT', {
 })
 
 test_that('radians expected else error', {
-  expect_error(direction_group(DT, direction = 'X'),
-               'direction_step')
+  copyDT <- copy(clean_DT)[, deg := units::as_units(1.1, 'degree')]
+  expect_error(direction_group(copyDT, direction = 'deg'),
+               'direction must be of units radians')
 })
-
-test_that('direction expected numeric', {
-  expect_error(direction_group(DT, direction = 'ID'),
-               'direction must be numeric')
-})
-
 
 test_that('group_direction column succesfully detected', {
-  copyDT <- copy(clean_DT)[, group_direction := 1]
+  copyDT <- copy(clean_DT)[, group_direction := mean(direction)]
   expect_message(
     direction_group(copyDT),
     'group_direction column will be overwritten'

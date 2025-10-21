@@ -16,19 +16,19 @@ utm <- 32736
 clean_DT <- copy(DT)
 
 test_that('DT is required', {
-  expect_error(direction_step(DT = NULL), 'input DT required')
+  expect_error(direction_step(DT = NULL), 'DT must be provided')
 })
 
 test_that('args required else error', {
-  expect_error(direction_step(DT,  id = NULL), 'id column')
+  expect_error(direction_step(DT,  id = NULL), 'id must be')
 
-  expect_error(direction_step(DT, id = id, coords = NULL, crs = utm), 'coords requir')
+  expect_error(direction_step(DT, id = id, coords = NULL, crs = utm), 'coords must')
 
   expect_error(direction_step(DT,  id = id, coords = coords, crs = NULL),
-               'crs required')
+               'crs must')
 
   expect_error(direction_step(DT, id = id, coords = 'X', crs = utm),
-               'coords requires a vector')
+               'coords must be length 2')
 })
 
 
@@ -49,7 +49,7 @@ test_that('column names must exist in DT', {
 test_that('coords are correctly provided or error detected', {
   expect_error(direction_step(DT, id = id, coords = c('X', NULL),
                               crs = utm),
-               'requires a vector')
+               'coords must be')
 
   expect_error(direction_step(DT, id = id, coords = c('X', 'ID'),
                               crs = utm),
