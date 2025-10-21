@@ -9,6 +9,11 @@ Fixes:
 
 * "projection" argument is soft-deprecated in favour of "crs" argument to better
 align with {sf} ([PR 118](https://github.com/ropensci/spatsoc/pull/118))
+* general adjustments of checks and tests before new spatial interface 
+([PR 120](https://github.com/ropensci/spatsoc/pull/120)
+* use new `assert_*` family of internal functions for checking arguments, 
+returning {rlang} errors ([PR 121](https://github.com/ropensci/spatsoc/pull/121)
+
 
 # spatsoc 0.2.11
 
