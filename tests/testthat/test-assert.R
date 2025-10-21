@@ -15,6 +15,7 @@ expect_error(assert_col_inherits(test, 'X', 'numeric'))
 expect_error(assert_col_inherits(test, c('X', 'Y'), 'numeric'))
 
 expect_error(assert_col_typeof(test, 'X', 'units'))
+expect_null(assert_col_typeof(test, 'X', 'character'))
 
 expect_error(assert_inherits(42, 'character'))
 expect_error(assert_inherits(TRUE, 'numeric'))
