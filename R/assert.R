@@ -82,14 +82,16 @@ assert_length <- function(x, len) {
   }
 }
 
-assert_relation <- function(x, fun, y) {
+assert_relation <- function(x, fun, y, ...) {
   if (!(fun(x, y))) {
     rlang::abort(
-      paste(
+      paste0(
         rlang::caller_arg(x),
-        'must be',
+        ' must be ',
         rlang::caller_arg(fun),
-        rlang::caller_arg(y)
+        ' ',
+        rlang::caller_arg(y),
+        ...
       ),
       call = rlang::caller_env()
     )
