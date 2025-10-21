@@ -91,11 +91,6 @@ direction_polarization <- function(
     data.table::set(DT, j = out, value = NULL)
   }
 
-  if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(direction)] ||
-      DT[, units(.SD[[1]])$numerator != 'rad', .SDcols = c(direction)]) {
-    stop('units(DT$direction) is not radians, did you use direction_step?')
-  }
-
   DT[, c(out) :=
        CircStats::r.test(units::drop_units(.SD[[1]]), degree = FALSE)$r.bar,
     by = c(group),
