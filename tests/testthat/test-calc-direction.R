@@ -62,3 +62,12 @@ test_that('units are returned', {
     "rad"
   )
 })
+
+test_that('expected dims returned', {
+  # N - 1 since missing start/dest for direction
+  expect_length(DT[, calc_direction(geometry)], DT[, .N - 1])
+  expect_length(
+    DT[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
+    DT[, .N - 1]
+  )
+})
