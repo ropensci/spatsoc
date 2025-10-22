@@ -47,8 +47,18 @@ test_that('arguments provided correctly else error', {
     DT[, calc_direction(x_b = X, geometry_a = geometry)]
   )
 })
-# TODO: needs warning if combination are provided?. but cant/shouldnt if running by
 
-# TODO: tests
-# - is vect of units out
-# - distances by st_distance and stats::dist are reasonably similar within tol
+test_that('units are returned', {
+  expect_s3_class(DT[, calc_direction(geometry)], 'units')
+  expect_identical(DT[, units(calc_direction(geometry))$numerator], 'rad')
+  expect_s3_class(
+    DT[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
+    'units'
+  )
+  expect_identical(
+    DT[, units(
+      calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)
+    )$numerator],
+    "rad"
+  )
+})
