@@ -18,6 +18,8 @@ get_geometry(DT, coords = coords, crs = crs)
 DT[, dest_geometry := sf::st_centroid(sf::st_union(geometry))]
 DT[, calc_direction(geometry, dest_geometry)]
 
+lonlat_coords <- paste0('lonlat_', coords)
+DT[, (lonlat_coords) := as.data.table(sf::st_coordinates(geometry))]
 # Note: due to st_geod_azimuth not accepting null geometries
 DT[!sf::st_is_empty(geometry) &
         !sf::st_is_empty(centroid),
