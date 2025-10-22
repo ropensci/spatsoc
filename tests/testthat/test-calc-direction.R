@@ -23,6 +23,12 @@ DT[, (lonlat_coords) := as.data.table(sf::st_coordinates(geometry))]
 
 dest_coords <- paste0('dest_', coords)
 DT[, (dest_coords) := as.data.table(sf::st_coordinates(dest_geometry))]
+DT[, calc_direction(x_a = x_coords, y_a = y_coords,
+                    x_b = x_dest, y_b = y_dest,
+                    crs = st_crs(geometry)),
+   env = list(x_coords = first(lonlat_coords), y_coords = last(lonlat_coords),
+              x_dest = first(dest_coords), y_dest = last(dest_coords))]
+
 # Note: due to st_geod_azimuth not accepting null geometries
 DT[!sf::st_is_empty(geometry) &
         !sf::st_is_empty(centroid),
