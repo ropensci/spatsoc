@@ -20,6 +20,9 @@ DT[, calc_direction(geometry, dest_geometry)]
 
 lonlat_coords <- paste0('lonlat_', coords)
 DT[, (lonlat_coords) := as.data.table(sf::st_coordinates(geometry))]
+
+dest_coords <- paste0('dest_', coords)
+DT[, (dest_coords) := as.data.table(sf::st_coordinates(dest_geometry))]
 # Note: due to st_geod_azimuth not accepting null geometries
 DT[!sf::st_is_empty(geometry) &
         !sf::st_is_empty(centroid),
