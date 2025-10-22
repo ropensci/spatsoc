@@ -71,3 +71,20 @@ test_that('expected dims returned', {
     DT[, .N - 1]
   )
 })
+
+test_that('expected range returned', {
+  y <- units::set_units(pi, 'rad')
+  expect_equal(DT[, min(calc_direction(geometry))], -y, tolerance = 0.1)
+  expect_equal(DT[, max(calc_direction(geometry))], y, tolerance = 0.1)
+
+  expect_equal(
+    DT[, min(calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat))],
+    -y,
+    tolerance = 0.1
+  )
+  expect_equal(
+    DT[, max(calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat))],
+    y,
+    tolerance = 0.1
+  )
+})
