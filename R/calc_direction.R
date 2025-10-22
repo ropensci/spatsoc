@@ -12,12 +12,12 @@ calc_direction <- function(
   } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
     if (!missing(x_b) && !missing(y_b)) {
       lwgeom::st_geod_azimuth(
-        x = sf::st_as_sf(cbind(x_a, y_a), crs = crs),
-        y = sf::st_as_sf(cbind(x_b, y_b), crs = crs)
+        x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2)),
+        y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2))
       )
     } else {
       lwgeom::st_geod_azimuth(
-        x = sf::st_as_sf(cbind(x_a, y_a), crs = crs)
+        x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2))
       )
     }
   }
