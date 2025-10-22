@@ -21,4 +21,5 @@ calc_direction <- function(
       )
     }
   }
+  # TODO: rlang::abort() if args not correctly provided
 }
