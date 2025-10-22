@@ -1,14 +1,7 @@
 # Test calc_direction
 context('test calc_direction')
 
-library(spatsoc)
-library(data.table)
-library(sf)
-library(units)
-
-# TODO: use test data later
-# DT <- fread('../testdata/DT.csv')
-DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+DT <- fread('../testdata/DT.csv')
 id <- 'ID'
 datetime <- 'datetime'
 timethreshold <- '20 minutes'
