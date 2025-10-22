@@ -29,6 +29,24 @@ DT[, (dest_coords) := as.data.table(sf::st_coordinates(dest_geometry))]
 # DT[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y,
 #                     x_b = dest_X, y_b = dest_Y,
 #                     crs = crs_lonlat)]
+
+test_that('arguments provided correctly else error', {
+  expect_error(
+    DT[, calc_direction(x_a = X, geometry_a = geometry)]
+  )
+
+  expect_error(
+    DT[, calc_direction(x_b = X, geometry_b = geometry)]
+  )
+
+  expect_error(
+    DT[, calc_direction(y_a = X, geometry_a = geometry)]
+  )
+
+  expect_error(
+    DT[, calc_direction(x_b = X, geometry_a = geometry)]
+  )
+})
 # TODO: needs warning if combination are provided?. but cant/shouldnt if running by
 
 # TODO: tests
