@@ -11,24 +11,12 @@ timegroup <- 'timegroup'
 group <- 'group'
 crs <- 32736
 
-
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-group_pts(DT, threshold = threshold, id = id,
-          coords = coords, timegroup = timegroup)
-
 get_geometry(DT, coords = coords, crs = crs)
 
-source('R/calc_centroid.R')
-source('R/calc_direction.R')
-library(sf)
-DT[, centroid := calc_centroid(geometry = geometry), by = group]
-# Note: due to https://github.com/Rdatatable/data.table/issues/4415
-#  need to recompute the bbox
-DT[, centroid := st_sfc(centroid, recompute_bbox = TRUE)]
-
-DT[, c('centroid_X', 'centroid_Y') := calc_centroid(x = X, y = Y),
-      by = group]
+DT[, dest_geometry := sf::st_centroid(sf::st_union(geometry))]
+DT[, calc_direction(geometry, dest_geometry)]
 
 # Note: due to st_geod_azimuth not accepting null geometries
 DT[!sf::st_is_empty(geometry) &
