@@ -38,6 +38,10 @@ Requirements:
 }
 }
 \examples{
+# Load data.table
+library(data.table)
+\dontshow{data.table::setDTthreads(1)}
+
 # Example result for East, North, West, South directions
 example <- data.table(
   X = c(0, 5, 5, 0, 0),
