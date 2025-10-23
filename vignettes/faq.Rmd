@@ -240,11 +240,11 @@ are in).
 
 ## group_lines
 
-`group_lines(DT, threshold, projection, id, coords, timegroup, sortBy, splitBy, spLines)`
+`group_lines(DT, threshold, crs, id, coords, timegroup, sortBy, splitBy, spLines)`
   
 * `DT`: input `data.table`
 * `threshold`: threshold for grouping 
-* `projection`: projection of coordinates in `DT`
+* `crs`: crs of coordinates in `DT`
 * `id`: column name of IDs in `DT`
 * `coords`: column names of x and y coordinates in `DT`
 * `timegroup`: (optional) column name of time group
@@ -262,15 +262,15 @@ The `threshold` argument represents a buffer area around each line. When
 `threshold = 0`, the lines are grouped by spatial overlap. If the threshold is
 greater than 0, the lines buffered, then grouped by spatial overlap.
 
-### projection
+### crs
 
-The `projection` argument expects a character string or numeric 
+The `crs` argument expects a character string or numeric 
 defining the coordinate reference system to be passed to `sf::st_crs`. 
-For example, for UTM zone 36S (EPSG 32736), the projection
-argument is `projection = "EPSG:32736"` or `projection = 32736`. 
+For example, for UTM zone 36S (EPSG 32736), the crs
+argument is `crs = "EPSG:32736"` or `crs = 32736`. 
 See https://spatialreference.org for a list of EPSG codes. 
 Please note, R spatial has followed updates to GDAL 
-and PROJ for handling projections, see more at 
+and PROJ for handling coordinate reference systems, see more at 
 https://r-spatial.org/r/2020/03/17/wkt.html. 
 
 
@@ -281,13 +281,13 @@ to order the rows for each individual (and `splitBy`).
 
 ## group_polys
 
-`group_polys(DT, area, hrType, hrParams, projection, id, coords, splitBy, spLines)`
+`group_polys(DT, area, hrType, hrParams, crs, id, coords, splitBy, spLines)`
   
 * `DT`: input `data.table`
-* `area`: boolean argument if proportional area should be returned
+* `area`: logical argument if proportional area should be returned
 * `hrType`: type of home range created 
 * `hrParams`: parameters relevant to the type of home range created
-* `projection`: projection of coordinates in `DT`
+* `crs`: crs of coordinates in `DT`
 * `id`: column name of IDs in `DT`
 * `coords`: column names of x and y coordinates in `DT`
 * `splitBy`: (optional) column names of extra variables to group on
@@ -305,15 +305,15 @@ The default unit for area overlap is square meters.
 
 <!-- direction of proportion -->
 
-### projection
+### crs
 
-The `projection` argument expects a character string or numeric 
+The `crs` argument expects a character string or numeric 
 defining the coordinate reference system to be passed to `sf::st_crs`. 
-For example, for UTM zone 36S (EPSG 32736), the projection
-argument is `projection = "EPSG:32736"` or `projection = 32736`. 
+For example, for UTM zone 36S (EPSG 32736), the crs
+argument is `crs = "EPSG:32736"` or `crs = 32736`. 
 See https://spatialreference.org for a list of EPSG codes. 
 Please note, R spatial has followed updates to GDAL 
-and PROJ for handling projections, see more at
+and PROJ for handling coordinate reference systems, see more at
 https://r-spatial.org/r/2020/03/17/wkt.html. 
 
 
@@ -331,7 +331,7 @@ for example, both the percent (provided to `getverticeshr`) and grid arguments
 group_polys(
   DT,
   area = FALSE,
-  projection = utm,
+  crs = utm,
   hrType = 'mcp',
   hrParams = list(grid = 60, percent = 95),
   id = 'ID',
@@ -349,7 +349,7 @@ group_polys(
 * `coords`: column names of x and y coordinates in `DT`
 * `timegroup`: column name of time group
 * `splitBy`: (optional) column names of extra variables to group on
-* `fillNA`: boolean indicating if NAs should be returned for individuals that
+* `fillNA`: logical indicating if NAs should be returned for individuals that
 were not within the threshold distance of any other. If TRUE, NAs are returned.
 If FALSE, only edges between individuals within the threshold distance are 
 returned.
@@ -428,6 +428,7 @@ Functions that require their outputs be reassigned include:
 - `edge_dist`
 - `edge_nn`
 - `edge_delay`
+- `edge_direction`
 - `edge_alignment`
 - `centroid_fusion`
 - `centroid_dyad`

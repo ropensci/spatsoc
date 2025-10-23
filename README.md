@@ -37,7 +37,7 @@ post](https://ropensci.org/blog/2018/12/04/spatsoc/) and vignettes:
   questions](https://docs.ropensci.org/spatsoc/articles/faq.html)
 - [Using spatsoc in social network
   analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html)
-- [Using edge list and dyad id
+- [Using edge-list and dyad id
   functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
 
 ## News
@@ -95,7 +95,7 @@ and dyad id function:
 
 (feedback welcome as always!)
 
-Both documented further in a vignette: [Using edge list and dyad id
+Both documented further in a vignette: [Using edge-list and dyad id
 functions](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html).
 
 Also, our article describing `spatsoc` is published at Methods in

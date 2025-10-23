@@ -9,7 +9,7 @@
 #' avoid unnecessarily merging additional rows. Relocation data should be in two
 #' columns representing the X and Y coordinates.
 #'
-#' The `edges` and `DT` must be `data.table`. If your data is a
+#' The `edges` and `DT` must be `data.table`s. If your data is a
 #' `data.frame`, you can convert it by reference using
 #' [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
@@ -17,9 +17,7 @@
 #' The `edges` and `DT` are internally merged in this function using
 #' the columns `id`, `dyadID` and `timegroup`. This function
 #' expects a `dyadID` present, generated with the `dyad_id` function.
-#' The `dyadID` and `timegroup` arguments expect the names of a column
-#' in `edges` which correspond to the dyadID and timegroup columns. The
-#' `id` and `timegroup` arguments expect the names of a column in
+#' The `id` and `timegroup` arguments expect the names of a column in
 #' `DT` which correspond to the X and Y coordinates and group columns. The
 #' `na.rm` argument is passed to the `rowMeans` function to control if
 #' NA values are removed before calculation.
@@ -29,6 +27,7 @@
 #' @param DT input data.table with timegroup column generated with
 #'   `group_times` matching the input data.table used to generate the edge
 #'   list with `edge_nn` or `edge_dist`
+#' @inheritParams edge_alignment
 #' @inheritParams group_pts
 #' @param na.rm if NAs should be removed in calculating mean location, see
 #'   `rowMeans`
@@ -99,61 +98,19 @@ centroid_dyad <- function(
   # Due to NSE notes in R CMD check
   dyadID <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(edges)
+  assert_not_null(id)
+  assert_not_null(timegroup)
+  assert_are_colnames(edges, c('dyadID', timegroup))
+  assert_are_colnames(DT, c(id, timegroup))
+  assert_not_null(na.rm)
+  assert_inherits(na.rm, 'logical')
 
-  if (is.null(edges)) {
-    stop('input edges required')
-  }
-
-  if (is.null(id)) {
-    stop('id column name required')
-  }
-
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
-  if (is.null(timegroup)) {
-    stop('timegroup column name required')
-  }
-
-  if (!all((
-    c('dyadID', timegroup) %in% colnames(edges)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c('dyadID', timegroup),
-        colnames(edges)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input edges'
-    ))
-  }
-
-  if (!all((
-    c(id, coords, timegroup) %in% colnames(DT)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(id, coords, timegroup),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
-
-  if (is.null(na.rm)) {
-    stop('na.rm is required')
-  }
-
-  if (!is.logical(na.rm)) {
-    stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
-  }
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
@@ -165,11 +122,11 @@ centroid_dyad <- function(
   id2_coords <- paste0('id2_', coords)
 
   m <- merge(edges,
-        DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
-        by.x = c('ID1', timegroup),
-        by.y = c(id, timegroup),
-        all.x = TRUE,
-        sort = FALSE)
+             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+             by.x = c('ID1', timegroup),
+             by.y = c(id, timegroup),
+             all.x = TRUE,
+             sort = FALSE)
   data.table::setnames(m, coords, id1_coords)
   m <- merge(m,
              DT[, .SD, .SDcols = c(coords, id, 'timegroup')],

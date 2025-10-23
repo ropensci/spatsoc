@@ -32,12 +32,12 @@ calculated}
 \item{splitBy}{(optional) character string or vector of grouping column
 name(s) upon which the grouping will be calculated}
 
-\item{returnDist}{boolean indicating if the distance between individuals
+\item{returnDist}{logical indicating if the distance between individuals
 should be returned. If FALSE (default), only ID1, ID2 columns (and
 timegroup, splitBy columns if provided) are returned. If TRUE, another
 column "distance" is returned indicating the distance between ID1 and ID2.}
 
-\item{fillNA}{boolean indicating if NAs should be returned for individuals
+\item{fillNA}{logical indicating if NAs should be returned for individuals
 that were not within the threshold distance of any other. If TRUE, NAs are
 returned. If FALSE, only edges between individuals within the threshold
 distance are returned.}
@@ -124,6 +124,7 @@ edges <- edge_dist(
 Other Edge-list generation: 
 \code{\link{edge_alignment}()},
 \code{\link{edge_delay}()},
+\code{\link{edge_direction}()},
 \code{\link{edge_nn}()}
 
 Other Direction functions: 
@@ -134,6 +135,8 @@ Other Direction functions:
 \code{\link{direction_to_leader}()},
 \code{\link{edge_alignment}()},
 \code{\link{edge_delay}()},
+\code{\link{edge_direction}()},
+\code{\link{edge_zones}()},
 \code{\link{leader_direction_group}()},
 \code{\link{leader_edge_delay}()}
 }

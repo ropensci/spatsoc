@@ -26,10 +26,10 @@ test_that('DT is required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(distance_to_centroid(DT, coords = NULL),
-               'coords req')
+               'coords must be length 2')
   expect_error(distance_to_centroid(DT, coords = coords, group = NULL,
                                     return_rank = TRUE),
-               'group column name required')
+               'group must be provided')
   expect_error(distance_to_centroid(DT, coords = coords, group = group,
                                     return_rank = NULL),
                'return_rank')
@@ -40,7 +40,7 @@ test_that('column names must exist in DT', {
                'potato field')
   expect_error(distance_to_centroid(DT, coords = coords, group = 'potato',
                                     return_rank = TRUE),
-               'group column')
+               'potato field')
   copy_DT <- copy(DT)
   setnames(copy_DT, 'centroid_X', 'potato_X')
   expect_error(distance_to_centroid(copy_DT, coords = coords),
@@ -49,13 +49,13 @@ test_that('column names must exist in DT', {
 
 test_that('coords are correctly provided or error detected', {
   expect_error(distance_to_centroid(DT, coords = c('X', NULL)),
-               'coords requires a vector')
+               'coords must be length 2')
   copy_DT <- copy(DT)[, X := as.character(X)]
   expect_error(distance_to_centroid(copy_DT, coords = coords),
-               'coords must be numeric')
+               'coords must be of class numeric')
   copy_DT <- copy(DT)[, centroid_X := as.character(centroid_X)]
   expect_error(distance_to_centroid(copy_DT, coords = coords),
-               'centroid coords must be numeric')
+               'centroid_coords must be of class numeric')
 })
 
 test_that('distance_centroid column succesfully detected', {

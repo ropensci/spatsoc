@@ -8,7 +8,7 @@ message: 'To cite package "spatsoc" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship'
-version: 0.2.10
+version: 0.2.11.9002
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.spatsoc
@@ -177,6 +177,7 @@ references:
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
   doi: 10.32614/CRAN.package.lwgeom
+  version: '>= 0.2.15'
   year: '2025'
 - type: software
   title: CircStats
@@ -226,6 +227,21 @@ references:
   year: '2025'
   doi: 10.32614/CRAN.package.units
   version: '>= 0.8-6'
+- type: software
+  title: rlang
+  abstract: 'rlang: Functions for Base Types and Core R and ''Tidyverse'' Features'
+  notes: Imports
+  url: https://rlang.r-lib.org
+  repository: https://CRAN.R-project.org/package=rlang
+  authors:
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2025'
+  doi: 10.32614/CRAN.package.rlang
 - type: software
   title: asnipe
   abstract: 'asnipe: Animal Social Network Inference and Permutations for Ecologists'
