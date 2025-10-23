@@ -35,7 +35,8 @@ calc_direction <- function(
     x_a, y_a,
     x_b, y_b,
     crs) {
-  if (!missing(geometry_a) && missing(x_a) && missing(y_a)) {
+  if (!missing(geometry_a) && missing(x_a) && missing(y_a)
+      && missing(x_b) && missing(y_b)) {
     if (!missing(geometry_b)) {
       lwgeom::st_geod_azimuth(geometry_a, geometry_b)
     } else {
