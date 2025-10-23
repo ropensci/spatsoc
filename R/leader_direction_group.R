@@ -31,7 +31,7 @@
 #'
 #' @return `leader_direction_group` returns the input `DT` appended
 #'   with a `position_group_direction` column indicating the position along
-#'   the group direction in the units of the projection and, optionally when
+#'   the group direction in the units of the crs and, optionally when
 #'   `return_rank = TRUE`, a `rank_position_group_direction` column
 #'   indicating the ranked position along the group direction.
 #'
@@ -88,7 +88,7 @@
 #'   DT = DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736
+#'   crs = 32736
 #' )
 #'
 #' # Calculate group centroid
@@ -109,13 +109,11 @@ leader_direction_group <- function(
   # Due to NSE notes
   position_group_direction <- rank_position_group_direction <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
-
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(coords)
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
 
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
@@ -123,30 +121,14 @@ leader_direction_group <- function(
   centroid_xcol <- paste0('centroid_', gsub(' ', '', xcol))
   centroid_ycol <- paste0('centroid_', gsub(' ', '', ycol))
 
-  check_cols <- c(coords, group_direction, centroid_xcol, centroid_ycol)
+  check_cols <- c(group_direction, centroid_xcol, centroid_ycol)
+  assert_are_colnames(DT, check_cols)
 
-  if (!all((check_cols %in% colnames(DT)))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        check_cols,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
+  assert_col_inherits(DT, coords, 'numeric')
+  assert_col_inherits(DT, centroid_xcol, 'numeric')
+  assert_col_inherits(DT, centroid_ycol, 'numeric')
 
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE),
-               .SDcols = c(centroid_xcol, centroid_ycol)]))) {
-    stop('centroid coords must be numeric')
-  }
-
-  if (is.null(return_rank)) {
-    stop('return_rank required')
-  }
+  assert_not_null(return_rank)
 
   if ('position_group_direction' %in% colnames(DT)) {
     message(
@@ -155,12 +137,7 @@ leader_direction_group <- function(
     data.table::set(DT, j = 'position_group_direction', value = NULL)
   }
 
-  if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(group_direction)] ||
-      DT[, units(.SD[[1]])$numerator != 'rad', .SDcols = c(group_direction)]) {
-    stop(
-      'units(DT$group_direction) is not radians, did you use direction_group?'
-    )
-  }
+  assert_col_radians(DT, 'group_direction', ', did you use direction_group?')
 
   DT[, position_group_direction :=
        cos(units::drop_units(.SD[[1]])) * (.SD[[2]] - .SD[[4]]) +
@@ -177,13 +154,8 @@ leader_direction_group <- function(
       data.table::set(DT, j = 'rank_position_group_direction', value = NULL)
     }
 
-    if (is.null(group)) {
-      stop('group column name required')
-    }
-
-    if (!group %in% colnames(DT)) {
-      stop('group column not present in input DT, did you run group_pts?')
-    }
+    assert_not_null(group)
+    assert_are_colnames(DT, group, ', did you run group_pts?')
 
     DT[, rank_position_group_direction :=
          data.table::frank(-position_group_direction,

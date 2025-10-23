@@ -11,13 +11,13 @@ threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
 group <- 'group'
-projection <- 32736
+utm <- 32736
 window <- 3
 
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-direction_step(DT, id, coords, projection)
+direction_step(DT, id, coords, utm)
 edges <- edge_dist(DT, threshold = threshold, id = id,
                    coords = coords, timegroup = timegroup,
                    returnDist = TRUE, fillNA = FALSE)
@@ -36,9 +36,9 @@ test_that('edges, DT are required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(edge_delay(edges, DT, id = NULL),
-               'id column name required')
+               'id must be provided')
   expect_error(edge_delay(edges, DT, id = id, window = NULL),
-               'window is required')
+               'window must be provided')
 })
 
 test_that('window is numeric, timegroup is integer', {
@@ -229,12 +229,12 @@ DT_expect <- data.table(
 )
 DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
 setorder(DT_expect, timegroup)
-direction_step(DT_expect, id, coords, projection = 4326)
+direction_step(DT_expect, id, coords, crs = 4326)
 
 edge_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
                          returnDist = TRUE)
 dyad_id(edge_expect, 'ID1', 'ID2')
-fusion_id(edge_expect)
+fusion_id(edge_expect, threshold = 100)
 
 window <- 5
 delay_expect <- edge_delay(edge_expect, DT_expect, window = window, id = id)

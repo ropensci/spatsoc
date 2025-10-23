@@ -16,11 +16,11 @@ test_that('DT or spPts are required but not both', {
 
 
 
-test_that('coords, id, projection, (splitBy) provided and proper format', {
+test_that('coords, id, crs, (splitBy) provided and proper format', {
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       coords = c('X', 'Y'),
       id = NULL
@@ -31,18 +31,18 @@ test_that('coords, id, projection, (splitBy) provided and proper format', {
   expect_error(
     build_polys(
       DT = DT,
-      projection = NULL,
+      crs = NULL,
       hrType = 'mcp',
       coords = c('X', 'Y'),
       id = 'ID'
     ),
-    'projection must be provided'
+    'crs must be provided'
   )
 
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       coords = NULL,
       id = 'ID'
@@ -53,12 +53,12 @@ test_that('coords, id, projection, (splitBy) provided and proper format', {
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       coords = 'X',
       id = 'ID'
     ),
-    'coords requires a vector of',
+    'coords must be length 2',
     fixed = FALSE
   )
 
@@ -67,18 +67,18 @@ test_that('coords, id, projection, (splitBy) provided and proper format', {
   expect_error(
     build_polys(
       DT = copyDT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       coords = c('X', 'Y'),
       id = 'ID'
     ),
-    'coords must be numeric'
+    'coords must be of class numeric'
   )
 
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = NULL,
       coords = c('X', 'Y'),
       id = 'ID'
@@ -91,13 +91,13 @@ test_that('coords, id, projection, (splitBy) provided and proper format', {
   expect_error(
     build_polys(
       DT = copyDT,
-      projection = utm,
+      crs = utm,
       hrType = NULL,
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 's'
     ),
-    'and splitBy when provided', fixed = FALSE
+    'splitBy must be', fixed = FALSE
   )
 })
 
@@ -106,7 +106,7 @@ test_that('column names must exist in DT', {
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       coords = c('X', 'Y'),
       id = 'potato'
@@ -118,7 +118,7 @@ test_that('column names must exist in DT', {
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       coords = c('potatoX', 'potatoY'),
       id = 'ID'
@@ -130,7 +130,7 @@ test_that('column names must exist in DT', {
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       coords = c('X', 'Y'),
       id = 'ID',
@@ -145,7 +145,7 @@ test_that('hrType either mcp or kernel', {
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'potato',
       coords = c('X', 'Y'),
       id = 'ID'
@@ -160,7 +160,7 @@ test_that('hrParams returns error if params do not match function params', {
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       hrParams = list(percent = 95, potato = TRUE),
       coords = c('X', 'Y'),
@@ -173,7 +173,7 @@ test_that('hrParams returns error if params do not match function params', {
   expect_error(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'kernel',
       hrParams = list(grid = 60, potato = TRUE),
       coords = c('X', 'Y'),
@@ -189,7 +189,7 @@ test_that('if hrParams NULL, warns', {
   paramspromise <- evaluate_promise(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       hrParams = NULL,
       coords = c('X', 'Y'),
@@ -209,7 +209,7 @@ test_that('build_polys returns sf, POLYGONs', {
   expect_s3_class(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'mcp',
       hrParams = list(percent = 95),
       coords = c('X', 'Y'),
@@ -221,7 +221,7 @@ test_that('build_polys returns sf, POLYGONs', {
   expect_s3_class(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'kernel',
       hrParams = list(grid = 60),
       coords = c('X', 'Y'),
@@ -235,7 +235,7 @@ test_that('build_polys returns sf, POLYGONs', {
     sf::st_geometry_type(
       build_polys(
         DT = DT,
-        projection = utm,
+        crs = utm,
         hrType = 'mcp',
         hrParams = list(percent = 95),
         coords = c('X', 'Y'),
@@ -251,7 +251,7 @@ test_that('build_polys returns sf, POLYGONs', {
     sf::st_geometry_type(
         build_polys(
           DT = DT,
-          projection = utm,
+          crs = utm,
           hrType = 'kernel',
           hrParams = list(grid = 60),
           coords = c('X', 'Y'),
@@ -267,7 +267,7 @@ test_that('hrParams can have both vertices and kernel args', {
   expect_s3_class(
     build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'kernel',
       hrParams = list(percent = 95, grid = 60),
       coords = c('X', 'Y'),
@@ -281,7 +281,7 @@ test_that('hrParams can have both vertices and kernel args', {
       sf::st_geometry_type(
         build_polys(
           DT = DT,
-          projection = utm,
+          crs = utm,
           hrType = 'kernel',
           hrParams = list(percent = 95, grid = 60),
           coords = c('X', 'Y'),
@@ -298,7 +298,7 @@ test_that('id provided matches id retured', {
     'ID',
     colnames(build_polys(
       DT = DT,
-      projection = utm,
+      crs = utm,
       hrType = 'kernel',
       hrParams = list(percent = 95, grid = 60),
       coords = c('X', 'Y'),
@@ -308,3 +308,16 @@ test_that('id provided matches id retured', {
 })
 
 
+test_that('projection arg is deprecated', {
+  expect_warning(
+    build_polys(
+      DT = DT,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      coords = c('X', 'Y'),
+      id = 'ID',
+      projection = utm
+    ),
+    'projection argument is deprecated'
+  )
+})

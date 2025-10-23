@@ -120,7 +120,7 @@ group_times(DT, datetime = 'datetime', threshold = '1 day')
 group_lines(
   DT,
   threshold = 50,
-  projection = utm,
+  crs = utm,
   id = 'ID',
   coords = c('X', 'Y'),
   timegroup = 'timegroup',
@@ -145,7 +145,7 @@ group_polys(
   area = FALSE,
   hrType = 'mcp',
   hrParams = list(percent = 95),
-  projection = utm,
+  crs = utm,
   id = 'ID',
   coords = c('X', 'Y')
 )
@@ -158,7 +158,7 @@ areaDT <- group_polys(
   area = TRUE,
   hrType = 'mcp',
   hrParams = list(percent = 95),
-  projection = utm,
+  crs = utm,
   id = 'ID',
   coords = c('X', 'Y')
 )

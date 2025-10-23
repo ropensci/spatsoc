@@ -1,5 +1,27 @@
 # Development version
 
+New experimental functions:
+
+* `get_geometry` helper function for setting up an input DT with a sfc geometry
+column ([PR 117](https://github.com/ropensci/spatsoc/pull/117))
+
+Fixes:
+
+* "projection" argument is soft-deprecated in favour of "crs" argument to better
+align with {sf} ([PR 118](https://github.com/ropensci/spatsoc/pull/118))
+* general adjustments of checks and tests before new spatial interface 
+([PR 120](https://github.com/ropensci/spatsoc/pull/120)
+* use new `assert_*` family of internal functions for checking arguments, 
+returning {rlang} errors ([PR 121](https://github.com/ropensci/spatsoc/pull/121)
+
+
+# spatsoc 0.2.11
+
+New experimental functions:
+
+* `edge_direction` function for calculating the direction between individuals ([PR 80](https://github.com/ropensci/spatsoc/pull/80))
+* `edge_zones` function for calculating behavioural zones ([PR 112](https://github.com/ropensci/spatsoc/pull/112))
+
 Fixes:
 
 * Fix `centroid_dyad` and `centroid_fusion` return NA for centroids 
@@ -14,12 +36,15 @@ throughout package, and using consistent language across man pages
 * Used {flir} to fix some lints 
 ([PR 115](https://github.com/ropensci/spatsoc/pull/115))
 
-
 # spatsoc 0.2.10
 
 New experimental function:
 
 * `edge_alignment` function for calculating directional alignment ([PR 111](https://github.com/ropensci/spatsoc/pull/111))
+
+Fixes:
+
+* fix missing pkg::function ([PR 110](https://github.com/ropensci/spatsoc/pull/110))
 
 # spatsoc 0.2.9
 

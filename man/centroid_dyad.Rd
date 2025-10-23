@@ -26,8 +26,7 @@ list with \code{edge_nn} or \code{edge_dist}}
 \item{coords}{character vector of X coordinate and Y coordinate column names.
 Note: the order is assumed X followed by Y column names.}
 
-\item{timegroup}{timegroup field in the DT within which the grouping will be
-calculated}
+\item{timegroup}{character string of timegroup column name, default "timegroup"}
 
 \item{na.rm}{if NAs should be removed in calculating mean location, see
 \code{rowMeans}}
@@ -59,7 +58,7 @@ avoid unnecessarily merging additional rows. Relocation data should be in two
 columns representing the X and Y coordinates.
 }
 \details{
-The \code{edges} and \code{DT} must be \code{data.table}. If your data is a
+The \code{edges} and \code{DT} must be \code{data.table}s. If your data is a
 \code{data.frame}, you can convert it by reference using
 \code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
 \code{\link[data.table:data.table]{data.table::data.table()}}.
@@ -67,9 +66,7 @@ The \code{edges} and \code{DT} must be \code{data.table}. If your data is a
 The \code{edges} and \code{DT} are internally merged in this function using
 the columns \code{id}, \code{dyadID} and \code{timegroup}. This function
 expects a \code{dyadID} present, generated with the \code{dyad_id} function.
-The \code{dyadID} and \code{timegroup} arguments expect the names of a column
-in \code{edges} which correspond to the dyadID and timegroup columns. The
-\code{id} and \code{timegroup} arguments expect the names of a column in
+The \code{id} and \code{timegroup} arguments expect the names of a column in
 \code{DT} which correspond to the X and Y coordinates and group columns. The
 \code{na.rm} argument is passed to the \code{rowMeans} function to control if
 NA values are removed before calculation.

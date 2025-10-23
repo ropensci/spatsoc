@@ -94,58 +94,33 @@
 #' # Spatial grouping with timegroup and splitBy on population
 #' group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'),
 #'          timegroup = 'timegroup', splitBy = 'population')
-group_pts <- function(DT = NULL,
-                     threshold = NULL,
-                     id = NULL,
-                     coords = NULL,
-                     timegroup,
-                     splitBy = NULL) {
+group_pts <- function(
+    DT = NULL,
+    threshold = NULL,
+    id = NULL,
+    coords = NULL,
+    timegroup,
+    splitBy = NULL) {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
-  if (is.null(threshold)) {
-    stop('threshold required')
-  }
+  assert_not_null(threshold)
+  assert_inherits(threshold, 'numeric')
+  assert_relation(threshold, `>`, 0)
 
-  if (!is.numeric(threshold)) {
-    stop('threshold must be numeric')
-  }
+  assert_not_null(id)
 
-  if (threshold <= 0) {
-    stop('threshold must be greater than 0')
-  }
+  assert_length(coords, 2)
 
-  if (is.null(id)) {
-    stop('ID field required')
-  }
+  assert_not_missing(timegroup)
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  check_colnames <- c(timegroup, id, coords, splitBy)
+  assert_are_colnames(DT, check_colnames)
 
-  if (missing(timegroup)) {
-    stop('timegroup required')
-  }
-
-  if (!all((
-    c(timegroup, id, coords, splitBy) %in% colnames(DT)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(timegroup, id, coords, splitBy),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
+  assert_col_inherits(DT, coords, 'numeric')
 
   if (!is.null(timegroup)) {
     if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
