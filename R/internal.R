@@ -79,9 +79,14 @@ calc_distance <- function(
    }
  } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
    if (!missing(x_b) && !missing(y_b)) {
-     sqrt((x_a - x_b) ^ 2 + (y_a - y_b) ^ 2)
+     sf::st_distance(
+       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2)),
+       y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2))
+     )
    } else {
-     stats::dist(cbind(x_a, y_a), method = 'euclidean')
+     sf::st_distance(
+       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2))
+     )
    }
  }
 }
