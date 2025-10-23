@@ -88,5 +88,13 @@ calc_distance <- function(
        x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2))
      )
    }
+ } else {
+   rlang::abort(c(
+     'arguments incorrectly provided, use one of the following combinations:',
+     '1. geometry_a',
+     '2. geometry_a and geometry_b',
+     '3. x_a, y_a',
+     '4. x_a, y_a, and x_b, y_b'
+   ))
  }
 }
