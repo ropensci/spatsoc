@@ -1,3 +1,35 @@
+#' Calculate direction
+#'
+#' **Internal function** - not developed to be used outside of spatsoc functions
+#'
+#' Calculate direction using [lwgeom::st_geod_azimuth()] between one of:
+#' - the sequence of points in geometry_a
+#' - the sequence of points in x_a, y_a
+#' - the pairwise points in geometry_a and geometry_b
+#' - the pairwise points in x_a, y_a and x_b, y_b
+#'
+#' Requirements:
+#' - matching length between a and b objects if b provided
+#' - crs is longlat, check with [sf::st_is_longlat()]
+#'
+#' @param geometry_a,geometry_b sfc (simple feature geometry list column) from [get_geometry()]
+#' @param x_a,x_b X coordinate column, numeric
+#' @param y_a,y_b Y coordinate column, numeric
+#' @param crs crs for x_a, y_a (and if provided, x_b, y_b) coordinates,
+#' ignored for geometry_a and geometry_b arguments
+#'
+#' @returns
+#'
+#' Direction in units of radians, in range of pi, -pi where North = 0.
+#'
+#' @examples
+#' # Example result for East, North, West, South directions
+#' example <- data.table(
+#'   X = c(0, 5, 5, 0, 0),
+#'   Y = c(0, 0, 5, 5, 0)
+#' )
+#' # E, N, W, S
+#' example[, calc_direction(x_a = X, y_a = Y, crs = 4326)]
 calc_direction <- function(
     geometry_a, geometry_b,
     x_a, y_a,
