@@ -41,6 +41,18 @@ test_that('arguments provided correctly else error', {
     DT[, calc_distance(x_b = X, geometry_a = geometry)]
   )
 })
+
+test_that('units are returned', {
+  expect_s3_class(DT[, calc_distance(geometry)], 'units')
+  expect_s3_class(
+    DT[, calc_distance(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
+    'units'
+  )
+  expect_s3_class(
+    DT[, calc_distance(x_a = X, y_a = Y, crs = crs)],
+    'units'
+  )
+})
 # TODO: tests
 # - is vect of units out
 # - n NA out is eq n sf st is empty in
