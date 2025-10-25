@@ -110,17 +110,21 @@ calc_distance <- function(
  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
      missing(x_b) && missing(y_b)) {
    if (!missing(geometry_b)) {
+     # Pairwise
      sf::st_distance(geometry_a, geometry_b, by_element = TRUE)
    } else {
+     # Matrix
      sf::st_distance(geometry_a, by_element = FALSE)
    }
  } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
    if (!missing(x_b) && !missing(y_b)) {
+     # Pairwise
      sf::st_distance(
        x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2)),
        y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2))
      )
    } else {
+     # Matrix
      sf::st_distance(
        x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2))
      )
