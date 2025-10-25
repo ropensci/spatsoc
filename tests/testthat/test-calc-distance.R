@@ -70,6 +70,19 @@ test_that('expected dims returned', {
     N
   )
 })
+
+test_that('expected range returned', {
+  expect_gte(DT[, min(calc_distance(geometry))],
+                units::set_units(0, 'm'))
+  expect_gte(DT[, min(calc_distance(x_a = X, y_a = Y, crs = crs))],
+                units::set_units(0, 'm'))
+  expect_gte(DT[, min(calc_distance(geometry, geometry_b = dest_geometry))],
+             units::set_units(0, 'm'))
+  expect_gte(DT[, min(calc_distance(x_a = lonlat_X, y_a = lonlat_Y,
+                                    x_b = dest_X, y_b = dest_Y,
+                                    crs = crs_lonlat))],
+             units::set_units(0, 'm'))
+})
 # TODO: tests
 # - is vect of units out
 # - n NA out is eq n sf st is empty in
