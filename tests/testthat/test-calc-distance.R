@@ -24,12 +24,23 @@ DT[, (dest_coords) := as.data.table(sf::st_coordinates(dest_geometry))]
 #                     x_b = dest_X, y_b = dest_Y,
 #                     crs = crs_lonlat)]
 
-DT_sf[sample(.N, 10)]
+test_that('arguments provided correctly else error', {
+  expect_error(
+    DT[, calc_distance(x_a = X, geometry_a = geometry)]
+  )
 
-# TODO: needs warning if combination are provided?. but cant/shouldnt if running by
-DT_sf[1:10, calc_distance(geometry_a = geometry, x_a = X)]
+  expect_error(
+    DT[, calc_distance(x_b = X, geometry_b = geometry)]
+  )
 
+  expect_error(
+    DT[, calc_distance(y_a = X, geometry_a = geometry)]
+  )
 
+  expect_error(
+    DT[, calc_distance(x_b = X, geometry_a = geometry)]
+  )
+})
 # TODO: tests
 # - is vect of units out
 # - n NA out is eq n sf st is empty in
