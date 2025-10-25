@@ -53,6 +53,23 @@ test_that('units are returned', {
     'units'
   )
 })
+
+test_that('expected dims returned', {
+  N <- 10
+  expect_length(DT[seq.int(N), calc_distance(geometry)], N * N)
+  expect_length(DT[seq.int(N), calc_distance(geometry, dest_geometry)], N)
+
+  expect_length(
+    DT[seq.int(N), calc_distance(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
+    N * N
+  )
+  expect_length(
+    DT[seq.int(N), calc_distance(x_a = lonlat_X, y_a = lonlat_Y,
+                                 x_b = dest_X, y_b = dest_Y,
+                                 crs = crs_lonlat)],
+    N
+  )
+})
 # TODO: tests
 # - is vect of units out
 # - n NA out is eq n sf st is empty in
