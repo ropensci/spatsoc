@@ -1,42 +1,28 @@
 # Test calc_distance
 context('test calc_distance')
 
-library(spatsoc)
-library(data.table)
-library(sf)
-
-# TODO: use test data later
-# DT <- fread('../testdata/DT.csv')
-DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
-id <- 'ID'
-datetime <- 'datetime'
-timethreshold <- '20 minutes'
-threshold <- 50
+DT <- fread('../testdata/DT.csv')
 coords <- c('X', 'Y')
-timegroup <- 'timegroup'
-group <- 'group'
-projection <- 32736
+crs <- 32736
+crs_lonlat <- 4326
 
-DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
-group_times(DT, datetime = datetime, threshold = timethreshold)
-group_pts(DT, threshold = threshold, id = id,
-          coords = coords, timegroup = timegroup)
+# Reduce test data size
+# DT <- DT[ID %in% c('A', 'B', 'C')]
 
-DT_sf <- get_geometry(DT, coords = coords, crs = projection)
+get_geometry(DT, coords = coords, crs = crs)
 
-DT_sf[, centroid := calc_centroid(geometry = geometry), by = group]
-# Note: due to https://github.com/Rdatatable/data.table/issues/4415
-#  need to recompute the bbox
-DT_sf[, centroid := st_sfc(centroid, recompute_bbox = TRUE)]
+DT[, dest_geometry := sf::st_centroid(sf::st_union(geometry))]
 
-DT_sf[, c('centroid_X', 'centroid_Y') := calc_centroid(x = X, y = Y),
-      by = group]
+lonlat_coords <- paste0('lonlat_', coords)
+DT[, (lonlat_coords) := as.data.table(sf::st_coordinates(geometry))]
 
-DT_sf[, distance := calc_distance(geometry_a = geometry, geometry_b = centroid)]
-DT_sf[, distance_XY := calc_distance(x_a = X, y_a = Y, x_b = centroid_X, y_b = centroid_Y)]
+dest_coords <- paste0('dest_', coords)
+DT[, (dest_coords) := as.data.table(sf::st_coordinates(dest_geometry))]
 
-DT_sf[1:10, calc_distance(geometry_a = geometry)]
-DT_sf[1:10, calc_distance(x_a = X, y_a = Y)]
+# DT[, calc_distance(geometry_a = geometry, geometry_b = dest_geometry)]
+# DT[, calc_distance(x_a = lonlat_X, y_a = lonlat_Y,
+#                     x_b = dest_X, y_b = dest_Y,
+#                     crs = crs_lonlat)]
 
 DT_sf[sample(.N, 10)]
 
