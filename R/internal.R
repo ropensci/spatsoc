@@ -120,13 +120,18 @@ calc_distance <- function(
    if (!missing(x_b) && !missing(y_b)) {
      # Pairwise
      sf::st_distance(
-       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2)),
-       y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2))
+       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
+                        na.fail = FALSE),
+       y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2),
+                        na.fail = FALSE),
+       by_element = TRUE
      )
    } else {
      # Matrix
      sf::st_distance(
-       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2))
+       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
+                        na.fail = FALSE),
+       by_element = FALSE
      )
    }
  } else {
