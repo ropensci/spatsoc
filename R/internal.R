@@ -65,7 +65,43 @@
   }
 }
 
-
+ #' Calculate distance
+ #'
+ #' **Internal function** - not developed to be used outside of spatsoc functions
+ #'
+ #' Calculate distance using [sf::st_distance()] for one of the following combinations:
+ #' - the distance matrix of points in geometry_a
+ #' - the distance matrix of points in x_a, y_a
+ #' - the pairwise distance between points in geometry_a and geometry_b
+ #' - the pairwise distance between points in x_a, y_a and x_b, y_b
+ #'
+ #' Requirements:
+ #' - matching length between a and b objects if b provided
+ #'
+ #' @param geometry_a,geometry_b sfc (simple feature geometry list column)
+ #' from [get_geometry()]
+ #' @param x_a,x_b X coordinate column, numeric
+ #' @param y_a,y_b Y coordinate column, numeric
+ #' @param crs crs for x_a, y_a (and if provided, x_b, y_b) coordinates,
+ #' ignored for geometry_a and geometry_b arguments
+ #'
+ #' @returns
+ #'
+ #' Distance with unit of measurement, see details in [sf::st_distance()]
+ #'
+ #' @keywords internal
+ #' @examples
+ #' # Load data.table
+ #' library(data.table)
+ #' \dontshow{data.table::setDTthreads(1)}
+ #'
+ #' # Example points
+ #' example <- data.table(
+ #'   X = c(0, 5, 5, 0, 0, NA_real_, 0,        NA_real_),
+ #'   Y = c(0, 0, 5, 5, 0, 0,        NA_real_, NA_real_)
+ #' )
+ #' # E, N, W, S
+ #' example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326)]
 calc_distance <- function(
   geometry_a, geometry_b,
   x_a, y_a,
