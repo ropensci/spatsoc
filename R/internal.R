@@ -11,6 +11,7 @@
 #' Requirements:
 #' - matching length between a and b objects if b provided
 #' - crs is longlat, check with [sf::st_is_longlat()]
+#' - no missing values in coordinates
 #'
 #' @param geometry_a,geometry_b sfc (simple feature geometry list column) from [get_geometry()]
 #' @param x_a,x_b X coordinate column, numeric
