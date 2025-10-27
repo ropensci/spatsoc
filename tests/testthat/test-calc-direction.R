@@ -72,6 +72,13 @@ test_that('expected dims returned', {
     DT[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
     DT[, .N - 1]
   )
+
+  expect_length(DT[, calc_direction(geometry, geometry)], DT[, .N])
+  expect_length(
+    DT[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y,
+                        x_b = lonlat_X, y_b = lonlat_Y, crs = crs_lonlat)],
+    DT[, .N]
+  )
 })
 
 test_that('expected range returned', {
