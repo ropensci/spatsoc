@@ -83,24 +83,6 @@ test_that('expected range returned', {
                                     crs = crs_lonlat))],
              units::set_units(0, 'm'))
 })
-# TODO: tests
-# - is vect of units out
-# - n NA out is eq n sf st is empty in
-# - distances by st_distance and stats::dist are reasonably similar within tol
-
-# Sequential not available directly:
-# DT_sf[1:2, st_distance(geometry, geometry, by_element = TRUE)]
-# from {amt}
-# DT_sf[, sf::st_distance(head(geometry, -1), tail(geometry, -1), by_element = TRUE)]
-
-# Matrix
-DT_sf[1:2, st_distance(geometry, by_element = FALSE)]
-
-# Accepts NAs if CRS matches
-DT_sf[1, st_distance(geometry, st_sfc(st_point(), crs = st_crs(geometry)))]
-
-# TODO: return units either approach?
-# TODO: check classes input in calling function
 
 test_that('NAs returned as expected', {
   # NAs in coordinates are not allowed in sf::st_as_sf unless na.fail = FALSE
