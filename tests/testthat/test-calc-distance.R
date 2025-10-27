@@ -95,13 +95,13 @@ test_that('NAs returned as expected', {
   res <- X_NA[, calc_distance(x_a = X, y_a = Y, crs = crs)]
   expect_length(res, nrow(X_NA) * nrow(X_NA))
   expect_true(any(is.na(X_NA$X)))
-  expect_false(any(is.na(res)))
+  expect_true(any(is.na(res)))
 
   Y_NA <- copy(DT)[seq.int(100)][sample(.N, 10), Y := NA]
   res <- Y_NA[, calc_distance(x_a = X, y_a = Y, crs = crs)]
   expect_length(res, nrow(Y_NA) * nrow(Y_NA))
   expect_true(any(is.na(Y_NA$Y)))
-  expect_false(any(is.na(res)))
+  expect_true(any(is.na(res)))
 
   # NAs in both X and Y columns returns NA
   XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (coords) := NA]
