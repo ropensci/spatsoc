@@ -65,6 +65,15 @@
   }
 }
 
+#' Calculate centroid
+#'
+#' **Internal function** - not developed to be used outside of spatsoc functions
+#'
+#' Calculate centroid using [sf::st_centroid()] for one of:
+#' - geometry
+#' - the points in x, y
+#' - the pairwise points in geometry_a and geometry_b
+#' - the pairwise points in x_a, y_a and x_b, y_b
 #' @param geometry sfc (simple feature geometry list column) from [get_geometry()]
 #' @param x X coordinate column, numeric
 #' @param y Y coordinate column, numeric
