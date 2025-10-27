@@ -76,3 +76,11 @@ calc_centroid <- function(geometry, x, y, na.rm = TRUE) {
     if (length(x) > 1L & length(y) > 1L) {
       list(mean(x, na.rm = na.rm), mean(y, na.rm = na.rm))
     }
+  } else {
+    rlang::abort(c(
+      'arguments incorrectly provided, use one of the following combinations:',
+      '1. geometry',
+      '2. x, y'
+    ))
+  }
+}
