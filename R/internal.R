@@ -65,6 +65,15 @@
   }
 }
 
+#' @param geometry sfc (simple feature geometry list column) from [get_geometry()]
+#' @param x X coordinate column, numeric
+#' @param y Y coordinate column, numeric
+#' @param crs crs for x, y coordinates, ignored for geometry argument
+#'
+#' @returns
+#'
+#' Centroid of the geometry or coordinates in x,y provided
+#'
 #' @keywords internal
 #' @examples
 #' # Load data.table
