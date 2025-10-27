@@ -88,3 +88,17 @@ test_that('expected range returned', {
     tolerance = 0.1
   )
 })
+
+test_that('NAs returned as expected', {
+  X_NA <- copy(DT)[seq.int(100)][sample(.N, 10), lonlat_X := NA]
+  expect_error(X_NA[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
+               'missing values in coordinates')
+
+  Y_NA <- copy(DT)[seq.int(100)][sample(.N, 10), lonlat_Y := NA]
+  expect_error(Y_NA[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
+               'missing values in coordinates')
+
+  XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (lonlat_coords) := NA]
+  expect_error(XY_NA[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
+               'missing values in coordinates')
+})
