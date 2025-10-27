@@ -41,7 +41,13 @@ calc_direction <- function(
     crs) {
   if (!missing(geometry_a) && missing(x_a) && missing(y_a)
       && missing(x_b) && missing(y_b)) {
+    if(any(rowSums(is.na(st_coordinates(geometry_a))) == 2)) {
+      rlang::abort('missing values in coordinates')
+    }
     if (!missing(geometry_b)) {
+      if(any(rowSums(is.na(st_coordinates(geometry_b))) == 2)) {
+        rlang::abort('missing values in coordinates')
+      }
       lwgeom::st_geod_azimuth(geometry_a, geometry_b)
     } else {
       lwgeom::st_geod_azimuth(geometry_a)
