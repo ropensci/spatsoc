@@ -1,6 +1,8 @@
 # Test calc_direction
 context('test calc_direction')
 
+library(sf)
+
 DT <- fread('../testdata/DT.csv')
 id <- 'ID'
 datetime <- 'datetime'
@@ -100,5 +102,11 @@ test_that('NAs returned as expected', {
 
   XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (lonlat_coords) := NA]
   expect_error(XY_NA[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
+               'missing values in coordinates')
+
+  get_geometry(XY_NA, lonlat_coords, crs_lonlat)
+  expect_error(XY_NA[, calc_direction(geometry)],
+               'missing values in coordinates')
+  expect_error(XY_NA[, calc_direction(geometry, geometry_b = geometry)],
                'missing values in coordinates')
 })
