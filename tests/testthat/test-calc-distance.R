@@ -7,7 +7,7 @@ crs <- 32736
 crs_lonlat <- 4326
 
 # Reduce test data size
-# DT <- DT[ID %in% c('A', 'B', 'C')]
+DT <- DT[ID %in% c('A', 'B', 'C')]
 
 get_geometry(DT, coords = coords, crs = crs)
 
