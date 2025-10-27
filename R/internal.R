@@ -65,6 +65,17 @@
   }
 }
 
+#' @keywords internal
+#' @examples
+#' # Load data.table
+#' library(data.table)
+#' \dontshow{
+#' data.table::setDTthreads(1)
+#' }
+#' # Read example data
+#' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+#'
+#' DT[, spatsoc:::calc_centroid(x = X, y = Y, crs = 32736)]
 calc_centroid <- function(geometry, x, y, na.rm = TRUE) {
   if (!missing(geometry) & missing(x) & missing(y)) {
     if (length(geometry) > 1L) {
