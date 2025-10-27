@@ -104,9 +104,9 @@ test_that('NAs returned as expected', {
   expect_true(any(is.na(res)))
 
   # NAs in both X and Y columns returns NA
-  XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (coords) := NA]
-  res <- XY_NA[, calc_distance(x_a = X, y_a = Y, crs = 4326)]
+  XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (lonlat_coords) := NA]
+  res <- XY_NA[, calc_distance(x_a = lonlat_X, y_a = lonlat_Y, crs = 4326)]
   expect_length(res, nrow(XY_NA) * nrow(XY_NA))
-  expect_true(any(is.na(c(XY_NA$X, XY_NA$Y))))
+  expect_true(any(is.na(c(XY_NA$lonlat_X, XY_NA$lonlat_Y))))
   expect_true(any(is.na(res)))
 })
