@@ -109,4 +109,11 @@ test_that('NAs returned as expected', {
   expect_length(res, nrow(XY_NA) * nrow(XY_NA))
   expect_true(any(is.na(c(XY_NA$lonlat_X, XY_NA$lonlat_Y))))
   expect_true(any(is.na(res)))
+
+  # NAs in geometry
+  get_geometry(XY_NA, lonlat_coords, crs_lonlat)
+  res <- XY_NA[, calc_distance(geometry)]
+  expect_length(res, nrow(XY_NA) * nrow(XY_NA))
+  expect_true(any(sf::st_is_empty(XY_NA$geometry)))
+  expect_true(any(is.na(res)))
 })
