@@ -102,3 +102,29 @@ DT_sf[1, st_distance(geometry, st_sfc(st_point(), crs = st_crs(geometry)))]
 # TODO: return units either approach?
 # TODO: check classes input in calling function
 
+test_that('NAs returned as expected', {
+  # NAs in coordinates are not allowed in sf::st_as_sf unless na.fail = FALSE
+  # When passed to get_geometry, NAs (with na.fail = FALSE) return POINT EMPTYs
+
+  # TODO: distances may be NA if NA in X or Y with future fix to s2/sf distances
+
+  # NAs in only X or Y column returns distance (in non NA column)
+  X_NA <- copy(DT)[seq.int(100)][sample(.N, 10), X := NA]
+  res <- X_NA[, calc_distance(x_a = X, y_a = Y, crs = crs)]
+  expect_length(res, nrow(X_NA) * nrow(X_NA))
+  expect_true(any(is.na(X_NA$X)))
+  expect_false(any(is.na(res)))
+
+  Y_NA <- copy(DT)[seq.int(100)][sample(.N, 10), Y := NA]
+  res <- Y_NA[, calc_distance(x_a = X, y_a = Y, crs = crs)]
+  expect_length(res, nrow(Y_NA) * nrow(Y_NA))
+  expect_true(any(is.na(Y_NA$Y)))
+  expect_false(any(is.na(res)))
+
+  # NAs in both X and Y columns returns NA
+  XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (coords) := NA]
+  res <- XY_NA[, calc_distance(x_a = X, y_a = Y, crs = 4326)]
+  expect_length(res, nrow(XY_NA) * nrow(XY_NA))
+  expect_true(any(is.na(c(XY_NA$X, XY_NA$Y))))
+  expect_true(any(is.na(res)))
+})
