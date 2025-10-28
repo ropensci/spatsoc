@@ -48,3 +48,9 @@ test_that('sfc is returned', {
     'sfc_POINT'
   )
 })
+
+test_that('expected dims returned', {
+  expect_length(DT[, calc_centroid(geometry)], 1L)
+  expect_length(DT[, calc_centroid(x = lonlat_X, y = lonlat_Y, crs = crs_lonlat)],
+                1L)
+})
