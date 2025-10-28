@@ -35,3 +35,16 @@ test_that('arguments provided correctly else error', {
     DT[, calc_centroid(y = Y, geometry = geometry)]
   )
 })
+
+test_that('sfc is returned', {
+  expect_s3_class(DT[, calc_centroid(geometry)], 'sfc_POINT')
+  expect_s3_class(DT[, calc_centroid(geometry)], 'sfc')
+  expect_s3_class(
+    DT[, calc_centroid(x = lonlat_X, y = lonlat_Y, crs = crs_lonlat)],
+    'sfc_POINT'
+  )
+  expect_s3_class(
+    DT[, calc_centroid(x = X, y = Y, crs = crs)],
+    'sfc_POINT'
+  )
+})
