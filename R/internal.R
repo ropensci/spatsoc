@@ -94,17 +94,18 @@
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #'
 #' DT[, spatsoc:::calc_centroid(x = X, y = Y, crs = 32736)]
-calc_centroid <- function(geometry, x, y, na.rm = TRUE) {
-  if (!missing(geometry) & missing(x) & missing(y)) {
-    if (length(geometry) > 1L) {
-      sf::st_sf(sf::st_centroid(sf::st_combine(geometry)))
-    } else {
-      sf::st_sf(sf::st_sfc(sf::st_point(), crs = sf::st_crs(geometry)))
-    }
-  } else if (missing(geometry) & !missing(x) & !missing(y)) {
-    if (length(x) > 1L & length(y) > 1L) {
-      list(mean(x, na.rm = na.rm), mean(y, na.rm = na.rm))
-    }
+calc_centroid <- function(geometry, x, y, crs) {
+  if (!missing(geometry) && missing(x) && missing(y)) {
+    sf::st_centroid(sf::st_combine(geometry))
+  } else if (missing(geometry) && !missing(x) && !missing(y)) {
+    sf::st_centroid(sf::st_combine(
+      sf::st_as_sf(
+        data.frame(x, y),
+        crs = crs,
+        coords = seq.int(2),
+        na.fail = FALSE
+      )
+    ))
   } else {
     rlang::abort(c(
       'arguments incorrectly provided, use one of the following combinations:',
