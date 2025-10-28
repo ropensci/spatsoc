@@ -26,8 +26,12 @@ DT[, (dest_coords) := as.data.table(sf::st_coordinates(dest_geometry))]
 #  need to recompute the bbox
 # DT_sf[, centroid := st_sfc(centroid, recompute_bbox = TRUE)]
 
-DT_sf[, c('centroid_X', 'centroid_Y') := calc_centroid(x = X, y = Y),
-      by = group]
+test_that('arguments provided correctly else error', {
+  expect_error(
+    DT[, calc_centroid(x = X, geometry = geometry)]
+  )
 
-DT_sf[group == 1]
-DT_sf[group == 39]
+  expect_error(
+    DT[, calc_centroid(y = Y, geometry = geometry)]
+  )
+})
