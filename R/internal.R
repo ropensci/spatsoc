@@ -123,7 +123,7 @@ calc_direction <- function(
 #'
 #' # Note smallest difference returned
 #' spatsoc:::diff_rad(as_units(2, 'rad'), as_units(-2.5, 'rad'))
- diff_rad <- function(x, y,  signed = FALSE, return_units = FALSE) {
+diff_rad <- function(x, y, signed = FALSE, return_units = FALSE) {
   if (!inherits(x, 'units') || units(x)$numerator != 'rad') {
     stop('units(x) is not radians')
   }
