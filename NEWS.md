@@ -4,6 +4,10 @@ New experimental functions:
 
 * `get_geometry` helper function for setting up an input DT with a sfc geometry
 column ([PR 117](https://github.com/ropensci/spatsoc/pull/117))
+* internal `calc_distance` function for sf interface (see https://github.com/ropensci/spatsoc/issues/116) 
+([PR 122](https://github.com/ropensci/spatsoc/pull/122))
+* internal `calc_distance` function for sf interface (see https://github.com/ropensci/spatsoc/issues/116) 
+([PR 123](https://github.com/ropensci/spatsoc/pull/123))
 
 Fixes:
 
