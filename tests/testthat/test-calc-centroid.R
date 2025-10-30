@@ -28,11 +28,13 @@ DT[, (dest_coords) := as.data.table(sf::st_coordinates(dest_geometry))]
 
 test_that('arguments provided correctly else error', {
   expect_error(
-    DT[, calc_centroid(x = X, geometry = geometry)]
+    DT[, calc_centroid(x = X, geometry = geometry)],
+    'arguments incorrectly provided'
   )
 
   expect_error(
-    DT[, calc_centroid(y = Y, geometry = geometry)]
+    DT[, calc_centroid(y = Y, geometry = geometry)],
+    'arguments incorrectly provided'
   )
 })
 
