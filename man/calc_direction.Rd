@@ -35,6 +35,7 @@ Requirements:
 \itemize{
 \item matching length between a and b objects if b provided
 \item crs is longlat, check with \code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}
+\item no missing values in coordinates
 }
 }
 \examples{
