@@ -11,14 +11,14 @@ threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
 group <- 'group'
-projection <- 32736
+utm <- 32736
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, timethreshold)
 group_pts(DT, threshold = threshold, id = id,
           coords = coords, timegroup = timegroup)
 centroid_group(DT, coords = coords, group = group, na.rm = TRUE)
-direction_step(DT = DT, id = id, coords = coords, projection = projection)
+direction_step(DT = DT, id = id, coords = coords, crs = utm)
 direction_group(DT)
 leader_direction_group(DT, coords = coords, group = group, return_rank = TRUE)
 
@@ -32,10 +32,10 @@ test_that('DT is required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(direction_to_leader(DT, coords = NULL, group = group),
-               'coords req')
+  expect_error(direction_to_leader(DT, coords = c('X'), group = group),
+               'coords must be length 2')
   expect_error(direction_to_leader(DT, coords = coords, group = NULL),
-               'group column name required')
+               'group must be provided')
 })
 
 test_that('column names must exist in DT', {
@@ -43,7 +43,7 @@ test_that('column names must exist in DT', {
                                    coords = rep('potato', 2), group = group),
                'potato field')
   expect_error(direction_to_leader(DT, coords = coords, group = 'potato'),
-               'group column')
+               'potato field')
   copy_DT <- copy(DT)
   setnames(copy_DT, 'rank_position_group_direction', 'potato')
   expect_error(direction_to_leader(copy_DT, coords = coords, group = group),
@@ -52,14 +52,14 @@ test_that('column names must exist in DT', {
 
 test_that('coords are correctly provided or error detected', {
   expect_error(direction_to_leader(DT, coords = c('X', NULL), group = group),
-               'coords requires a vector')
+               'coords must be length 2')
   copy_DT <- copy(DT)[, X := as.character(X)]
   expect_error(direction_to_leader(copy_DT, coords = coords, group = group),
-               'coords must be numeric')
+               'coords must be of class numeric')
   copy_DT <- copy(DT)[, X := as.character(X)]
   expect_error(direction_to_leader(copy_DT, coords = coords,
                                   group = group),
-               'coords must be numeric')
+               'coords must be of class numeric')
   copy_DT <- copy(DT)[, rank_position_group_direction := NULL]
   expect_error(direction_to_leader(copy_DT, coords = coords,
                                   group = group))
@@ -69,7 +69,7 @@ test_that('leader is correctly provided or error detected', {
   copy_DT <- copy(DT)[, rank_position_group_direction :=
                         as.character(rank_position_group_direction)]
   expect_error(direction_to_leader(copy_DT, coords = coords, group = group),
-               'must be numeric')
+               'must be of class numeric')
 })
 
 test_that('message when direction_leader column overwritten', {

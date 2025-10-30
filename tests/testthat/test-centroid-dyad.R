@@ -29,20 +29,20 @@ test_that('edges, DT are required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(centroid_dyad(edges, DT, id = id, coords = 'X'),
-               'coords requires a vector')
+               'coords must be length 2')
   expect_error(centroid_dyad(edges, DT, id = NULL),
-               'id column name required')
+               'id must be provided')
   expect_error(centroid_dyad(edges, DT, id = id,
                              coords = coords, timegroup = NULL),
-               'timegroup column name required')
+               'timegroup must be provided')
   expect_error(centroid_dyad(edges, DT, id = id, coords = coords, na.rm = NULL),
-               'na.rm is required')
+               'na.rm must be provided')
 })
 
-test_that('na.rm is boolean', {
+test_that('na.rm is logical', {
   expect_error(centroid_dyad(edges, DT, id = id,
                              coords = coords, na.rm = 'potato'),
-               'boolean')
+               'na.rm must be of class logical')
 })
 
 test_that('column names must exist in DT', {
@@ -57,9 +57,9 @@ test_that('column names must exist in DT', {
 
 test_that('coords are correctly provided or error detected', {
   expect_error(centroid_dyad(edges, DT, id = id, coords = c('X', NULL)),
-               'coords requires a vector')
+               'coords must be length 2')
   expect_error(centroid_dyad(edges, DT, id = id, coords = c('X', 'ID')),
-               'coords must be numeric')
+               'coords must be of class numeric')
 })
 
 test_that('centroid column succesfully detected', {

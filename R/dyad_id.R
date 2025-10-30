@@ -53,29 +53,11 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
   # due to NSE notes in R CMD check
   ID1 <- ID2 <- dyadID <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
-
-  if (is.null(id1)) {
-    stop('input id1 required')
-  }
-
-  if (is.null(id2)) {
-    stop('input id2 required')
-  }
-
-  if (!all((
-    c(id1, id2) %in% colnames(DT)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(id1, id2),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(id1)
+  assert_not_null(id2)
+  assert_are_colnames(DT, c(id1, id2))
 
   if ('dyadID' %in% colnames(DT)) {
     message('dyadID column will be overwritten by this function')

@@ -39,7 +39,7 @@
 #'
 #' @param threshold (optional) spatial distance threshold to set maximum
 #'   distance between an individual and their neighbour.
-#' @param returnDist boolean indicating if the distance between individuals
+#' @param returnDist logical indicating if the distance between individuals
 #'   should be returned. If FALSE (default), only ID, NN columns (and timegroup,
 #'   splitBy columns if provided) are returned. If TRUE, another column
 #'   "distance" is returned indicating the distance between ID and NN.
@@ -96,57 +96,35 @@
 #'         timegroup = 'timegroup', threshold = 100,
 #'         returnDist = TRUE)
 #'
-edge_nn <- function(DT = NULL,
-                    id = NULL,
-                    coords = NULL,
-                    timegroup,
-                    splitBy = NULL,
-                    threshold = NULL,
-                    returnDist = FALSE) {
+edge_nn <- function(
+    DT = NULL,
+    id = NULL,
+    coords = NULL,
+    timegroup,
+    splitBy = NULL,
+    threshold = NULL,
+    returnDist = FALSE) {
   # NSE
   N <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
   if (!is.null(threshold)) {
-    if (!is.numeric(threshold)) {
-      stop('threshold must be numeric')
-    }
-    if (threshold <= 0) {
-      stop('threshold must be greater than 0')
-    }
+    assert_inherits(threshold, 'numeric')
+    assert_relation(threshold, `>`, 0)
   }
 
+  assert_not_null(id)
 
-  if (is.null(id)) {
-    stop('ID field required')
-  }
+  assert_not_missing(timegroup)
+  assert_not_null(timegroup)
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  check_cols <- c(timegroup, id, coords, splitBy)
+  assert_are_colnames(DT, check_cols)
 
-  if (missing(timegroup) | is.null(timegroup)) {
-    stop('timegroup required')
-  }
-
-  if (!all((
-    c(timegroup, id, coords, splitBy) %in% colnames(DT)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(timegroup, id, coords, splitBy),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
   if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
           c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
@@ -168,7 +146,6 @@ edge_nn <- function(DT = NULL,
     )
     data.table::setnames(DT, 'splitBy', 'split_by')
   }
-
 
   splitBy <- c(splitBy, timegroup)
   if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {

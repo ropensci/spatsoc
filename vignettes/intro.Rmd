@@ -155,7 +155,7 @@ temporal resolutions.
 utm <- 32736
 
 group_times(DT = DT, datetime = 'datetime', threshold = '1 day')
-group_lines(DT, threshold = 50, projection = utm, 
+group_lines(DT, threshold = 50, crs = utm, 
             id = 'ID', coords = c('X', 'Y'),
             timegroup = 'timegroup', sortBy = 'datetime')
 ```
@@ -166,7 +166,7 @@ utm <- 32736
 DT <- group_times(DT = DT, datetime = 'datetime', 
                 threshold = '1 day')
 DT <- group_lines(DT,
-                  threshold = 50, projection = utm, 
+                  threshold = 50, crs = utm, 
                   id = 'ID', coords = c('X', 'Y'), 
                   sortBy = 'datetime', timegroup = 'timegroup')
 knitr::kable(
@@ -188,7 +188,7 @@ utm <- 32736
 group_times(DT = DT, datetime = 'datetime', threshold = '8 days')
 group_polys(DT = DT, area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
-           projection = utm,
+           crs = utm,
            coords = c('X', 'Y'), id = 'ID')
 ```
 
@@ -200,7 +200,7 @@ knitr::kable(
     DT, 
     area = TRUE, hrType = 'mcp',
            hrParams = list('percent' = 95),
-           projection = utm,
+           crs = utm,
            coords = c('X', 'Y'), id = 'ID')[
              , .(ID1, ID2, area, proportion)])
 )

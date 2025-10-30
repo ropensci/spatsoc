@@ -19,22 +19,22 @@ group_pts(
 
 test_that('DT, type, id, datetime, (group) are required', {
   expect_error(randomizations(DT = NULL),
-               'input DT required')
+               'DT must be provided')
 
   expect_error(randomizations(DT = DT,
                               type = NULL),
-               'type of randomization', fixed = FALSE)
+               'type must be', fixed = FALSE)
 
   expect_error(randomizations(DT = DT,
                               type = 'step',
                               id = NULL),
-               'id field required')
+               'id must be provided')
 
   expect_error(randomizations(DT = DT,
                               type = 'step',
                               id = 'ID',
                               datetime = NULL),
-               'datetime field required')
+               'datetime must be')
 
   # Group required for daily and step
   expect_error(randomizations(DT = DT,
@@ -43,7 +43,7 @@ test_that('DT, type, id, datetime, (group) are required', {
                               iterations = 1,
                               group = NULL,
                               datetime = 'timegroup'),
-               'group field must be provided if type is "step" or "daily"')
+               'group must be provided if type is "step" or "daily"')
 
   expect_error(randomizations(DT = DT,
                               type = 'daily',
@@ -51,7 +51,7 @@ test_that('DT, type, id, datetime, (group) are required', {
                               group = NULL,
                               iterations = 1,
                               datetime = 'datetime'),
-               'group field must be provided if type is "step" or "daily"')
+               'group must be provided if type is "step" or "daily"')
 
 })
 
@@ -66,20 +66,20 @@ test_that('fields provided must be in DT', {
                               type = 'step',
                               id = 'potato',
                               datetime = 'datetime'),
-               'field(s) provided are not present', fixed = TRUE)
+               'potato field', fixed = TRUE)
 
   expect_error(randomizations(DT = DT,
                               type = 'step',
                               id = 'ID',
                               datetime = 'potato'),
-               'field(s) provided are not present', fixed = TRUE)
+               'potato field', fixed = TRUE)
 
   expect_error(randomizations(DT = DT,
                               type = 'step',
                               id = 'ID',
                               datetime = 'datetime',
                               splitBy = 'potato'),
-               'field(s) provided are not present', fixed = TRUE)
+               'potato field', fixed = TRUE)
 })
 
 test_that('iterations is NULL or correctly provided', {
@@ -90,14 +90,14 @@ test_that('iterations is NULL or correctly provided', {
                               group = 'group',
                               datetime = 'datetime',
                               iterations = NULL),
-               'iterations is not', fixed = FALSE)
+               'iterations is not provided', fixed = FALSE)
 
   expect_error(randomizations(DT = DT,
                               type = 'step',
                               id = 'ID',
                               datetime = 'datetime',
                               iterations = 'potato'),
-               'either provide a numeric for iterations or NULL', fixed = FALSE)
+               'iterations must be of class', fixed = FALSE)
 })
 
 test_that('dateFormatted or not depending on randomization type', {

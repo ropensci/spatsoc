@@ -8,8 +8,9 @@ direction_step(
   DT = NULL,
   id = NULL,
   coords = NULL,
-  projection = NULL,
-  splitBy = NULL
+  crs = NULL,
+  splitBy = NULL,
+  projection = NULL
 )
 }
 \arguments{
@@ -20,12 +21,14 @@ direction_step(
 \item{coords}{character vector of X coordinate and Y coordinate column names.
 Note: the order is assumed X followed by Y column names.}
 
-\item{projection}{numeric or character defining the coordinate reference
+\item{crs}{numeric or character defining the coordinate reference
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
-\code{projection = "EPSG:32736"} or \code{projection = 32736}.}
+\code{crs = "EPSG:32736"} or \code{crs = 32736}.}
 
 \item{splitBy}{(optional) character string or vector of grouping column
 name(s) upon which the grouping will be calculated}
+
+\item{projection}{(deprecated) use crs argument instead}
 }
 \value{
 \code{direction_step} returns the input \code{DT} appended with
@@ -64,11 +67,11 @@ The \code{id}, \code{coords}, and optional \code{splitBy} arguments expect
 the names of a column in \code{DT} which correspond to the individual
 identifier, X and Y coordinates, and additional grouping columns.
 
-The \code{projection} argument expects a character string or numeric defining
+The \code{crs} argument expects a character string or numeric defining
 the coordinate reference system to be passed to \link[sf:st_crs]{sf::st_crs}. For example,
-for UTM zone 36S (EPSG 32736), the projection argument is
-\code{projection = "EPSG:32736"} or \code{projection = 32736}. See
-\url{https://spatialreference.org} for #' a list of EPSG codes.
+for UTM zone 36S (EPSG 32736), the crs argument is
+\code{crs = "EPSG:32736"} or \code{crs = 32736}. See
+\url{https://spatialreference.org} for a list of EPSG codes.
 
 The \code{splitBy} argument offers further control over grouping. If within
 your \code{DT}, you have distinct sampling periods for each individual, you
@@ -95,7 +98,7 @@ direction_step(
   DT = DT,
   id = 'ID',
   coords = c('X', 'Y'),
-  projection = 32736
+  crs = 32736
 )
 
 # Example result for East, North, West, South steps
@@ -106,7 +109,7 @@ example <- data.table(
   ID = 'A'
 )
 
-direction_step(example, 'ID', c('X', 'Y'), projection = 4326)
+direction_step(example, 'ID', c('X', 'Y'), crs = 4326)
 example[, .(step, direction, units::set_units(direction, 'degree'))]
 }
 \seealso{
@@ -119,7 +122,9 @@ Other Direction functions:
 \code{\link{direction_to_leader}()},
 \code{\link{edge_alignment}()},
 \code{\link{edge_delay}()},
+\code{\link{edge_direction}()},
 \code{\link{edge_dist}()},
+\code{\link{edge_zones}()},
 \code{\link{leader_direction_group}()},
 \code{\link{leader_edge_delay}()}
 }

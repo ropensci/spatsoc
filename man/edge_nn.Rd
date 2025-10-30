@@ -31,7 +31,7 @@ name(s) upon which the grouping will be calculated}
 \item{threshold}{(optional) spatial distance threshold to set maximum
 distance between an individual and their neighbour.}
 
-\item{returnDist}{boolean indicating if the distance between individuals
+\item{returnDist}{logical indicating if the distance between individuals
 should be returned. If FALSE (default), only ID, NN columns (and timegroup,
 splitBy columns if provided) are returned. If TRUE, another column
 "distance" is returned indicating the distance between ID and NN.}
@@ -126,11 +126,13 @@ edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
 Other Edge-list generation: 
 \code{\link{edge_alignment}()},
 \code{\link{edge_delay}()},
+\code{\link{edge_direction}()},
 \code{\link{edge_dist}()}
 
 Other Distance functions: 
 \code{\link{distance_to_centroid}()},
-\code{\link{distance_to_leader}()}
+\code{\link{distance_to_leader}()},
+\code{\link{edge_zones}()}
 }
 \concept{Distance functions}
 \concept{Edge-list generation}

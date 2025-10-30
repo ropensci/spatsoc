@@ -64,41 +64,17 @@ centroid_group <- function(
     group = 'group',
     na.rm = FALSE) {
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  assert_not_null(group)
+  assert_are_colnames(DT, group)
+  assert_not_null(na.rm)
+  assert_inherits(na.rm, 'logical')
 
-  if (is.null(group)) {
-    stop('group column name required')
-  }
-
-  if (!all((
-    c(coords, group) %in% colnames(DT)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(coords, group),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
-
-  if (is.null(na.rm)) {
-    stop('na.rm is required')
-  }
-
-  if (!is.logical(na.rm)) {
-    stop('na.rm should be a boolean (TRUE/FALSE), see ?mean')
-  }
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)

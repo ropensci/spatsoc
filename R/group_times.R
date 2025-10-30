@@ -83,24 +83,18 @@
 #'
 #' group_times(DT, datetime = 'datetime', threshold = '10 days')
 #'
-group_times <- function(DT = NULL,
-                        datetime = NULL,
-                        threshold = NULL) {
+group_times <- function(
+    DT = NULL,
+    datetime = NULL,
+    threshold = NULL) {
   # due to NSE notes in R CMD check
   minutes <- block <- hours <- itime <- . <- idate <- timegroup <- NULL
   minday <- maxday <- rangeday <- adjIDate <- adjHour <-  NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
-
-  if (is.null(datetime)) {
-    stop('datetime field required')
-  }
-
-  if (!any((datetime %in% colnames(DT)))) {
-    stop('datetime field provided is not found in DT')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(datetime)
+  assert_are_colnames(DT, datetime)
 
   checkCols <- c('hours', 'minutes', 'block', 'timegroup')
 
@@ -206,9 +200,8 @@ group_times <- function(DT = NULL,
         nMins <- as.integer(nMins)
       }
 
-      if (nMins > 60) {
-        stop('threshold provided with > 60 minutes')
-      }
+      assert_relation(nMins, `<=`, 60, ' minutes')
+
       if (60 %% nMins != 0) {
         stop('threshold not evenly divisible by 60')
       }
