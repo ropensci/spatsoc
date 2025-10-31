@@ -40,7 +40,7 @@
 #' @export
 #' @family Direction functions
 #' @family Centroid functions
-#' @seealso [centroid_group], [group_pts]
+#' @seealso [centroid_group], [group_pts], [lwgeom::st_geod_azimuth()]
 #' @references
 #' See example of using direction to group centroid:
 #'  * \doi{doi:10.1016/j.cub.2017.08.004}

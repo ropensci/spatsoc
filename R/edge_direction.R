@@ -57,7 +57,8 @@
 #' @export
 #' @family Edge-list generation
 #' @family Direction functions
-#' @seealso [dyad_id] [edge_dist] [edge_nn] [group_times]
+#' @seealso [dyad_id], [edge_dist], [edge_nn], [group_times],
+#'   [lwgeom::st_geod_azimuth()]
 #' @examples
 #' # Load data.table
 #' library(data.table)

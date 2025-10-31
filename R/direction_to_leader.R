@@ -41,7 +41,8 @@
 #' @export
 #' @family Direction functions
 #' @family Leadership functions
-#' @seealso [distance_to_leader], [leader_direction_group], [group_pts]
+#' @seealso [distance_to_leader], [leader_direction_group], [group_pts],
+#'   [lwgeom::st_geod_azimuth()]
 #' @references
 #'
 #' See examples of using direction to leader and position within group:
