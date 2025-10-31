@@ -18,13 +18,17 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \code{crs = "EPSG:32736"} or \code{crs = 32736}.}
 }
 \value{
-\code{direction_to_centroid} returns the input \code{DT} appended
-with a \code{direction_centroid} column indicating the direction to group
-centroid in radians. The direction is measured in radians in the range
-of 0 to 2 * pi from the positive x-axis.
+\code{direction_to_centrod} returns the input \code{DT} appended with a
+\code{direction_centroid} column indicating the direction to the group centroid
+in radians. A value of NaN is returned when the coordinates of the focal
+individual equal the coordinates of the centroid.
 
 A message is returned when \code{direction_centroid} column already exist
 in the input \code{DT}, because they will be overwritten.
+
+An error is returned if there are any missing values in coordinates for
+the focal individual or the group leader, as the underlying direction
+function (\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}) does not accept missing values.
 
 See details for appending outputs using modify-by-reference in the
 \href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
@@ -80,7 +84,7 @@ See example of using direction to group centroid:
 }
 }
 \seealso{
-\link{centroid_group}, \link{group_pts}
+\link{centroid_group}, \link{group_pts}, \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}
 
 Other Direction functions: 
 \code{\link{direction_group}()},

@@ -36,11 +36,14 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \item{projection}{(deprecated) use crs argument instead}
 }
 \value{
-\code{edge_direction} returns the input \code{edges} appended with
-a "direction_dyad" column representing the direction between ID1 and ID2.
+\code{edge_direction} returns the input \code{edges} appended with a
+"direction_dyad" column representing the direction between ID1 and ID2 in
+radians. A value of NaN is returned when the coordinates of ID1 equal the
+coordinates of ID2.
 
-The direction between individuals is calculated with
-\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}.
+An error is returned if there are any missing values in coordinates for the
+focal individual or the group leader, as the underlying direction function
+(\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}) does not accept missing values.
 
 If the "direction" column is found in input DT, it will be retained for
 ID1 in the output for use in downstream functions (eg. \code{edge_zones}).
@@ -127,7 +130,8 @@ See examples of measuring the direction between individuals:
 }
 }
 \seealso{
-\link{dyad_id} \link{edge_dist} \link{edge_nn} \link{group_times}
+\link{dyad_id}, \link{edge_dist}, \link{edge_nn}, \link{group_times},
+\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}
 
 Other Edge-list generation: 
 \code{\link{edge_alignment}()},
