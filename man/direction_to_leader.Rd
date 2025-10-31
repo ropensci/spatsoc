@@ -4,7 +4,7 @@
 \alias{direction_to_leader}
 \title{Direction to group leader}
 \usage{
-direction_to_leader(DT = NULL, coords = NULL, group = "group")
+direction_to_leader(DT = NULL, coords = NULL, group = "group", crs = NULL)
 }
 \arguments{
 \item{DT}{input data.table with 'rank_position_group_direction' column
@@ -94,7 +94,7 @@ leader_direction_group(
 )
 
 # Calculate direction to leader
-direction_to_leader(DT, coords = c('X', 'Y'))
+direction_to_leader(DT, coords = c('X', 'Y'), crs = 32736)
 }
 \references{
 See examples of using direction to leader and position within group:
