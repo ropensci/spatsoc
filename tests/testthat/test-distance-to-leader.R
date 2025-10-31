@@ -110,7 +110,7 @@ test_that('zzz columns not added to the result', {
   zzz_cols <- c('has_leader', 'zzz_N_by_group')
 
   expect_false(
-    any(zzz_cols %in% colnames(direction_to_leader(DT, coords = coords)))
+    any(zzz_cols %in% colnames(direction_to_leader(DT, coords = coords, crs = utm)))
   )
 })
 

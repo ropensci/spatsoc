@@ -46,6 +46,10 @@ points since there is no future point to calculate a direction to.
 A message is returned when a direction column are already exists in
 the input \code{DT}, because it will be overwritten.
 
+An error is returned if there are any missing values in coordinates for
+the focal individual or the group leader, as the underlying direction
+function (\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}) does not accept missing values.
+
 See details for appending outputs using modify-by-reference in the
 \href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
@@ -113,7 +117,7 @@ direction_step(example, 'ID', c('X', 'Y'), crs = 4326)
 example[, .(step, direction, units::set_units(direction, 'degree'))]
 }
 \seealso{
-\code{\link[amt:steps]{amt::direction_abs()}}, \code{\link[geosphere:bearing]{geosphere::bearing()}}
+\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}, \code{\link[amt:steps]{amt::direction_abs()}}, \code{\link[geosphere:bearing]{geosphere::bearing()}}
 
 Other Direction functions: 
 \code{\link{direction_group}()},

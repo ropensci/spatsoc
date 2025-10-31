@@ -21,11 +21,16 @@
 #' coordinates and group columns.
 #'
 #' @inheritParams distance_to_leader
+#' @inheritParams direction_step
 #'
-#' @return `direction_to_leader` returns the input `DT` appended with
-#'   a `direction_leader` column indicating the direction to the group
-#'   leader. A value of NaN is returned when the coordinates of the focal
+#' @return `direction_to_leader` returns the input `DT` appended with a
+#'   `direction_leader` column indicating the direction to the group leader in
+#'   radians. A value of NaN is returned when the coordinates of the focal
 #'   individual equal the coordinates of the leader.
+#'
+#'   An error is returned if there are any missing values in coordinates for
+#'   the focal individual or the group leader, as the underlying direction
+#'   function ([lwgeom::st_geod_azimuth()]) does not accept missing values.
 #'
 #'   A message is returned when the `direction_leader` column already
 #'   exist in the input `DT` because it will be overwritten.
@@ -36,7 +41,8 @@
 #' @export
 #' @family Direction functions
 #' @family Leadership functions
-#' @seealso [distance_to_leader], [leader_direction_group], [group_pts]
+#' @seealso [distance_to_leader], [leader_direction_group], [group_pts],
+#'   [lwgeom::st_geod_azimuth()]
 #' @references
 #'
 #' See examples of using direction to leader and position within group:
@@ -87,11 +93,12 @@
 #' )
 #'
 #' # Calculate direction to leader
-#' direction_to_leader(DT, coords = c('X', 'Y'))
+#' direction_to_leader(DT, coords = c('X', 'Y'), crs = 32736)
 direction_to_leader <- function(
     DT = NULL,
     coords = NULL,
-    group = 'group') {
+    group = 'group',
+    crs = NULL) {
   # Due to NSE notes
   direction_leader <- rank_position_group_direction <- has_leader <-
     zzz_N_by_group <- . <- NULL
@@ -100,6 +107,7 @@ direction_to_leader <- function(
   assert_is_data_table(DT)
   assert_not_null(group)
   assert_are_colnames(DT, group)
+  assert_not_null(crs)
 
   assert_not_null(coords)
   assert_are_colnames(DT, coords)
@@ -123,6 +131,13 @@ direction_to_leader <- function(
     has_leader = any(rank_position_group_direction == 1)),
     by = c(group)][!(has_leader)]
 
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+  pre <- 'zzz_leader_'
+  zzz_leader_x <- paste0(pre, xcol)
+  zzz_leader_y <- paste0(pre, ycol)
+  zzz_leader_coords  <- c(zzz_leader_x, zzz_leader_y)
+
   if (check_leaderless[, .N > 0]) {
     warning(
       'groups found missing leader (rank_position_group_direction == 1): \n',
@@ -130,20 +145,18 @@ direction_to_leader <- function(
     )
   }
 
-  zzz_leader_coords <- c('zzz_leader_xcol', 'zzz_leader_ycol')
   DT[, c(zzz_leader_coords) :=
        .SD[which(rank_position_group_direction == 1)],
      .SDcols = c(coords),
      by = c(group)]
 
-  DT[!group %in% check_leaderless$group,
-     direction_leader := fifelse(
-    .SD[[1]] == .SD[[3]] &
-      .SD[[2]] == .SD[[4]],
-    NaN,
-    atan2(.SD[[4]] - .SD[[2]], (.SD[[3]] - .SD[[1]]))
-  ),
-  .SDcols = c(coords, zzz_leader_coords)]
+  DT[!group %in% check_leaderless$group, direction_leader := calc_direction(
+    x_a = .SD[[xcol]],
+    y_a = .SD[[ycol]],
+    x_b = .SD[[zzz_leader_x]],
+    y_b = .SD[[zzz_leader_y]],
+    crs = crs
+    )]
 
   data.table::set(DT, j = zzz_leader_coords, value = NULL)
 
