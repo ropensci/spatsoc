@@ -123,6 +123,7 @@ direction_step <- function(
     x_a = .SD[[data.table::first(coords)]],
     y_a = .SD[[data.table::last(coords)]],
     crs = crs
-  ), units::set_units(NA, 'rad'))
+  ), units::set_units(NA, 'rad')),
+  by = c(id, splitBy)
   ]
 }
