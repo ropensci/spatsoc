@@ -125,6 +125,7 @@ direction_to_leader <- function(
   check_leaderless <- DT[, .(
     has_leader = any(rank_position_group_direction == 1)),
     by = c(group)][!(has_leader)]
+
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
   pre <- 'zzz_leader_'
@@ -144,7 +145,7 @@ direction_to_leader <- function(
      .SDcols = c(coords),
      by = c(group)]
 
-  DT[!group %in% check_leaderless$group,, direction_leader := calc_direction(
+  DT[!group %in% check_leaderless$group, direction_leader := calc_direction(
     x_a = .SD[[xcol]],
     y_a = .SD[[ycol]],
     x_b = .SD[[zzz_leader_x]],
