@@ -124,6 +124,12 @@ direction_to_leader <- function(
   check_leaderless <- DT[, .(
     has_leader = any(rank_position_group_direction == 1)),
     by = c(group)][!(has_leader)]
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+  pre <- 'zzz_leader_'
+  zzz_leader_x <- paste0(pre, xcol)
+  zzz_leader_y <- paste0(pre, ycol)
+  zzz_leader_coords  <- c(zzz_leader_x, zzz_leader_y)
 
   if (check_leaderless[, .N > 0]) {
     warning(
@@ -132,7 +138,6 @@ direction_to_leader <- function(
     )
   }
 
-  zzz_leader_coords <- c('zzz_leader_xcol', 'zzz_leader_ycol')
   DT[, c(zzz_leader_coords) :=
        .SD[which(rank_position_group_direction == 1)],
      .SDcols = c(coords),
