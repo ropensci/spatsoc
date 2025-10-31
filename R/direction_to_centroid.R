@@ -93,19 +93,14 @@ direction_to_centroid <- function(
     message('direction_centroid column will be overwritten by this function')
     data.table::set(DT, j = 'direction_centroid', value = NULL)
   }
-  
-  DT[, direction_centroid := fifelse(
-    .SD[[xcol]] == .SD[[centroid_xcol]] &
-      .SD[[ycol]] == .SD[[centroid_ycol]],
-    units::as_units(NaN, 'rad'),
-    units::as_units(
-      atan2(.SD[[centroid_ycol]] - .SD[[ycol]],
-            (.SD[[centroid_xcol]] - .SD[[xcol]])),
-      'rad'
-    )
+
+  DT[, direction_centroid := calc_direction(
+    x_a = .SD[[xcol]],
+    y_a = .SD[[ycol]],
+    x_b = .SD[[centroid_xcol]],
+    y_b = .SD[[centroid_ycol]],
+    crs = crs
   )]
-  DT[direction_centroid < units::as_units(0, 'rad'),
-     direction_centroid := direction_centroid + units::as_units(2 * pi, 'rad')]
 
   return(DT[])
 }

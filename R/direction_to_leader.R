@@ -143,14 +143,13 @@ direction_to_leader <- function(
      .SDcols = c(coords),
      by = c(group)]
 
-  DT[!group %in% check_leaderless$group,
-     direction_leader := fifelse(
-    .SD[[1]] == .SD[[3]] &
-      .SD[[2]] == .SD[[4]],
-    NaN,
-    atan2(.SD[[4]] - .SD[[2]], (.SD[[3]] - .SD[[1]]))
-  ),
-  .SDcols = c(coords, zzz_leader_coords)]
+  DT[!group %in% check_leaderless$group,, direction_leader := calc_direction(
+    x_a = .SD[[xcol]],
+    y_a = .SD[[ycol]],
+    x_b = .SD[[zzz_leader_x]],
+    y_b = .SD[[zzz_leader_y]],
+    crs = crs
+    )]
 
   data.table::set(DT, j = zzz_leader_coords, value = NULL)
 
