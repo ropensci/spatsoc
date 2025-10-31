@@ -158,21 +158,18 @@ test_that('expected results for simple case', {
 
 
 test_that('warns if group does not have a leader', {
-  leaderless <- copy(DT)[group %in% DT[, .N, group][N > 1, group]]
-  leaderless[,
-    rank_position_group_direction := fifelse(
-      rank_position_group_direction == 1, 0, rank_position_group_direction
-    )
-  ]
-  leaderless[, .(
-    has_leader = any(rank_position_group_direction == 1)),
-    by = c(group)][!(has_leader)]
+  leaderless <- copy(clean_DT)
+  sel_group <- leaderless[, .N, group][N > 1, sample(group, 1)]
+  leaderless[group == sel_group, group_direction := NA]
+  leader_direction_group(leaderless, coords = coords, group = group, return_rank = TRUE)
+
   expect_warning(
     direction_to_leader(
       DT = leaderless,
       coords = coords,
-      group = 'group'
+      group = 'group',
+      crs = utm
     ),
-    'missing leader'
+    'groups found missing leader'
   )
 })
