@@ -22,7 +22,7 @@ returned. Note: The difference is the smallest difference, eg. the
 difference between 2 rad and -2.5 rad is 1.78.
 }
 \description{
-Internal function
+\strong{Internal function} - not developed to be used outside of spatsoc functions
 }
 \examples{
 # Load data.table, units
