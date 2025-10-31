@@ -19,6 +19,7 @@
 #' coordinates and group columns.
 #'
 #' @inheritParams distance_to_centroid
+#' @inheritParams direction_step
 #' @inheritParams group_pts
 #'
 #' @return `direction_to_centroid` returns the input `DT` appended
@@ -62,7 +63,7 @@
 #' centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
 #'
 #' # Calculate direction to group centroid
-#' direction_to_centroid(DT, coords = c('X', 'Y'))
+#' direction_to_centroid(DT, coords = c('X', 'Y'), crs = 32736)
 direction_to_centroid <- function(
     DT = NULL,
     coords = NULL,

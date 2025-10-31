@@ -21,6 +21,7 @@
 #' coordinates and group columns.
 #'
 #' @inheritParams distance_to_leader
+#' @inheritParams direction_step
 #'
 #' @return `direction_to_leader` returns the input `DT` appended with
 #'   a `direction_leader` column indicating the direction to the group
@@ -87,7 +88,7 @@
 #' )
 #'
 #' # Calculate direction to leader
-#' direction_to_leader(DT, coords = c('X', 'Y'))
+#' direction_to_leader(DT, coords = c('X', 'Y'), crs = 32736)
 direction_to_leader <- function(
     DT = NULL,
     coords = NULL,
