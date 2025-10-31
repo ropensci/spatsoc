@@ -22,10 +22,10 @@
 #' @inheritParams direction_step
 #' @inheritParams group_pts
 #'
-#' @return `direction_to_centroid` returns the input `DT` appended
-#'   with a `direction_centroid` column indicating the direction to group
-#'   centroid in radians. The direction is measured in radians in the range
-#'   of 0 to 2 * pi from the positive x-axis.
+#' @return `direction_to_centrod` returns the input `DT` appended with a
+#'   `direction_centroid` column indicating the direction to the group centroid
+#'   in radians. A value of NaN is returned when the coordinates of the focal
+#'   individual equal the coordinates of the centroid.
 #'
 #'   A message is returned when `direction_centroid` column already exist
 #'   in the input `DT`, because they will be overwritten.

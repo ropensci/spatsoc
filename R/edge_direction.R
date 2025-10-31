@@ -37,11 +37,11 @@
 #'  * \doi{doi:10.1098/rstb.2019.0380}
 #'  * \doi{doi:10.1111/jfb.15315}
 #'
-#' @return `edge_direction` returns the input `edges` appended with
-#'  a "direction_dyad" column representing the direction between ID1 and ID2.
+#' @return `edge_direction` returns the input `edges` appended with a
+#'   "direction_dyad" column representing the direction between ID1 and ID2 in
+#'   radians. A value of NaN is returned when the coordinates of ID1 equal the
+#'   coordinates of ID2.
 #'
-#'  The direction between individuals is calculated with
-#'  [lwgeom::st_geod_azimuth()].
 #'   An error is returned if there are any missing values in coordinates for the
 #'   focal individual or the group leader, as the underlying direction function
 #'   ([lwgeom::st_geod_azimuth()]) does not accept missing values.

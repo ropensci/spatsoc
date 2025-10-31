@@ -23,9 +23,9 @@
 #' @inheritParams distance_to_leader
 #' @inheritParams direction_step
 #'
-#' @return `direction_to_leader` returns the input `DT` appended with
-#'   a `direction_leader` column indicating the direction to the group
-#'   leader. A value of NaN is returned when the coordinates of the focal
+#' @return `direction_to_leader` returns the input `DT` appended with a
+#'   `direction_leader` column indicating the direction to the group leader in
+#'   radians. A value of NaN is returned when the coordinates of the focal
 #'   individual equal the coordinates of the leader.
 #'
 #'   An error is returned if there are any missing values in coordinates for
