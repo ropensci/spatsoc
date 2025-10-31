@@ -156,23 +156,13 @@ edge_direction <- function(
     data.table::set(m, j = out_col, value = NULL)
   }
 
-  if (sf::st_is_longlat(crs)) {
-    m[, (out_col) :=
-        lwgeom::st_geod_azimuth(
-          sf::st_as_sf(.SD, coords = id1_coords, crs = crs),
-          sf::st_as_sf(.SD, coords = id2_coords, crs = crs)
-        )]
-  } else if (!sf::st_is_longlat(crs)) {
-    m[, (out_col) :=
-        lwgeom::st_geod_azimuth(
-          sf::st_transform(
-            sf::st_as_sf(.SD, coords = id1_coords, crs = crs),
-            crs = 4326),
-          sf::st_transform(
-            sf::st_as_sf(.SD, coords = id2_coords, crs = crs),
-            crs = 4326)
-        )]
-  }
+  m[, (out_col) := calc_direction(
+    x_a = .SD[[data.table::first(id1_coords)]],
+    y_a = .SD[[data.table::last(id1_coords)]],
+    x_b = .SD[[data.table::first(id2_coords)]],
+    y_b = .SD[[data.table::last(id2_coords)]],
+    crs = crs
+  )]
 
   data.table::set(m, j = c(id1_coords, id2_coords), value = NULL)
   data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))

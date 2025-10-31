@@ -119,20 +119,10 @@ direction_step <- function(
     data.table::set(DT, j = 'direction', value = NULL)
   }
 
-  if (sf::st_is_longlat(crs)) {
-    DT[, direction := c(
-      lwgeom::st_geod_azimuth(
-        sf::st_as_sf(.SD, coords = coords, crs = crs)),
-      units::set_units(NA, 'rad')),
-      by = c(id, splitBy)]
-  } else if (!sf::st_is_longlat(crs)) {
-    DT[, direction := c(
-      lwgeom::st_geod_azimuth(
-        sf::st_transform(
-          sf::st_as_sf(.SD, coords = coords, crs = crs),
-          crs = 4326)
-        ),
-      units::set_units(NA, 'rad')),
-      by = c(id, splitBy)]
-  }
+  DT[, direction := c(calc_direction(
+    x_a = .SD[[data.table::first(coords)]],
+    y_a = .SD[[data.table::last(coords)]],
+    crs = crs
+  ), units::set_units(NA, 'rad'))
+  ]
 }
