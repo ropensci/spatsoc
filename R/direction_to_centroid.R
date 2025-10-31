@@ -65,13 +65,15 @@
 #' direction_to_centroid(DT, coords = c('X', 'Y'))
 direction_to_centroid <- function(
     DT = NULL,
-    coords = NULL) {
+    coords = NULL,
+    crs = NULL) {
 
   # Due to NSE notes in R CMD check
   direction_centroid <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
+  assert_not_null(crs)
 
   assert_are_colnames(DT, coords)
   assert_length(coords, 2)

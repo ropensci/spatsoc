@@ -91,7 +91,8 @@
 direction_to_leader <- function(
     DT = NULL,
     coords = NULL,
-    group = 'group') {
+    group = 'group',
+    crs = NULL) {
   # Due to NSE notes
   direction_leader <- rank_position_group_direction <- has_leader <-
     zzz_N_by_group <- . <- NULL
@@ -100,6 +101,7 @@ direction_to_leader <- function(
   assert_is_data_table(DT)
   assert_not_null(group)
   assert_are_colnames(DT, group)
+  assert_not_null(crs)
 
   assert_not_null(coords)
   assert_are_colnames(DT, coords)
