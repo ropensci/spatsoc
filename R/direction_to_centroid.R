@@ -30,6 +30,10 @@
 #'   A message is returned when `direction_centroid` column already exist
 #'   in the input `DT`, because they will be overwritten.
 #'
+#'   An error is returned if there are any missing values in coordinates for
+#'   the focal individual or the group leader, as the underlying direction
+#'   function ([lwgeom::st_geod_azimuth()]) does not accept missing values.
+#'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'

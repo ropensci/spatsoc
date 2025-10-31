@@ -28,6 +28,10 @@
 #'   leader. A value of NaN is returned when the coordinates of the focal
 #'   individual equal the coordinates of the leader.
 #'
+#'   An error is returned if there are any missing values in coordinates for
+#'   the focal individual or the group leader, as the underlying direction
+#'   function ([lwgeom::st_geod_azimuth()]) does not accept missing values.
+#'
 #'   A message is returned when the `direction_leader` column already
 #'   exist in the input `DT` because it will be overwritten.
 #'

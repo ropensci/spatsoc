@@ -42,6 +42,9 @@
 #'
 #'  The direction between individuals is calculated with
 #'  [lwgeom::st_geod_azimuth()].
+#'   An error is returned if there are any missing values in coordinates for the
+#'   focal individual or the group leader, as the underlying direction function
+#'   ([lwgeom::st_geod_azimuth()]) does not accept missing values.
 #'
 #'  If the "direction" column is found in input DT, it will be retained for
 #'  ID1 in the output for use in downstream functions (eg. `edge_zones`).
