@@ -35,7 +35,9 @@ Suggests:
     asnipe,
     knitr,
     markdown,
+    move2,
     rmarkdown,
+    sftrack,
     testthat (>= 2.1.0)
 VignetteBuilder: 
     knitr
