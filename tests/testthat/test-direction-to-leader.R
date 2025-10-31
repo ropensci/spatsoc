@@ -132,7 +132,7 @@ expect_DT <- data.table(
   ID = c('A', 'B'),
   X = c(0, 10),
   Y = c(0, 0),
-  group_direction = rep(as_units(0, 'rad'), 2),
+  group_direction = rep(units::as_units(0, 'rad'), 2),
   group = c(1, 1)
 )
 centroid_group(expect_DT, coords = coords)
@@ -143,7 +143,7 @@ direction_to_leader(expect_DT, coords = c('X', 'Y'), crs = utm)
 test_that('expected results for simple case', {
   expect_lte(
     expect_DT[, max(direction_leader, na.rm = TRUE)],
-    10
+    units::as_units(10, 'rad')
   )
 
   expect_equal(
