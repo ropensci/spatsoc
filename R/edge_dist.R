@@ -112,6 +112,7 @@ edge_dist <- function(
     id = NULL,
     coords = NULL,
     timegroup,
+    crs = NULL,
     splitBy = NULL,
     returnDist = FALSE,
     fillNA = TRUE) {
