@@ -35,6 +35,7 @@
 #'   FALSE
 #' @param ties.method see [`?data.table::frank()`][data.table::frank]
 #' @inheritParams group_pts
+#' @inheritParams direction_step
 #'
 #' @return `distance_to_centroid` returns the input `DT` appended with a
 #'   `distance_centroid` column indicating the distance to the group centroid

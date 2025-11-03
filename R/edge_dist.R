@@ -47,6 +47,7 @@
 #' `splitBy` subgroup.
 #'
 #' @inheritParams group_pts
+#' @inheritParams direction_step
 #' @param returnDist logical indicating if the distance between individuals
 #'   should be returned. If FALSE (default), only individual columns (and
 #'   timegroup, splitBy columns if provided) are returned. If TRUE, a column
