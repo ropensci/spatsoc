@@ -130,9 +130,13 @@ distance_to_centroid <- function(
   assert_are_colnames(DT, centroid_coords, ', did you run centroid_group?')
   assert_col_inherits(DT, centroid_coords, 'numeric')
 
-  DT[, distance_centroid :=
-       sqrt((.SD[[xcol]] - .SD[[centroid_xcol]])^2 +
-              (.SD[[ycol]] - .SD[[centroid_ycol]])^2)]
+  DT[, distance_centroid := calc_distance(
+    x_a = .SD[[xcol]],
+    y_a = .SD[[ycol]],
+    x_b = .SD[[centroid_xcol]],
+    y_b = .SD[[centroid_ycol]],
+    crs = crs
+  )]
 
   if (return_rank) {
     assert_not_null(group)

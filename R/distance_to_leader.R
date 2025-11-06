@@ -155,18 +155,21 @@ distance_to_leader <- function(
     )
   }
 
-  DT[!group %in% check_leaderless$group,
-     c(out_col) := fifelse(
-       zzz_N_by_group > 1,
-       as.matrix(
-         stats::dist(cbind(.SD[[1]], .SD[[2]]))
-       )[, which(.SD[[3]] == 1)],
-       0
-     ),
-     .SDcols = c(coords, 'rank_position_group_direction'),
+  DT[, c(zzz_leader_coords) :=
+       .SD[which(rank_position_group_direction == 1)],
+     .SDcols = c(coords),
      by = c(group)]
 
+  DT[!group %in% check_leaderless$group, c(out_col) := calc_distance(
+    x_a = .SD[[xcol]],
+    y_a = .SD[[ycol]],
+    x_b = .SD[[zzz_leader_x]],
+    y_b = .SD[[zzz_leader_y]],
+    crs = crs
+  )]
+
   data.table::set(DT, j = 'zzz_N_by_group', value = NULL)
+  data.table::set(DT, j = zzz_leader_coords, value = NULL)
 
   return(DT[])
 }
