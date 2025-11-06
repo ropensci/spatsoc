@@ -120,11 +120,6 @@ edge_dist <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
   assert_not_missing(threshold)
-  assert_inherits(threshold, c('numeric', 'NULL'))
-
-  if (is.numeric(threshold)) {
-    assert_relation(threshold, `>`, 0)
-  }
 
   assert_not_null(id)
 
@@ -200,6 +195,14 @@ edge_dist <- function(
     },
     by = splitBy, .SDcols = c(id, coords)]
   } else {
+
+    assert_threshold(threshold, crs)
+
+    if (isFALSE(inherits(threshold, 'units') &
+                identical(crs, sf::NA_crs_))) {
+      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+    }
+
     edges <- DT[, {
 
       distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)

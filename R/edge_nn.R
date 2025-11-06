@@ -116,11 +116,6 @@ edge_nn <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
 
-  if (!is.null(threshold)) {
-    assert_inherits(threshold, 'numeric')
-    assert_relation(threshold, `>`, 0)
-  }
-
   assert_not_null(id)
 
   assert_not_missing(timegroup)
@@ -131,6 +126,13 @@ edge_nn <- function(
 
   if (is.null(crs)) {
     crs <- sf::NA_crs_
+  }
+
+  assert_threshold(threshold, crs)
+
+  if (isFALSE(inherits(threshold, 'units') &
+              identical(crs, sf::NA_crs_))) {
+    threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
   }
 
   assert_length(coords, 2)
