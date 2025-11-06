@@ -62,6 +62,10 @@
 #' Note: the order is assumed X followed by Y column names.
 #' @param timegroup timegroup field in the DT within which the grouping will be
 #'   calculated
+#' @param crs numeric or character defining the coordinate reference
+#'   system to be passed to [sf::st_crs]. For example, either
+#'   `crs = "EPSG:32736"` or `crs = 32736`. If `crs = NULL`, the `crs` will be
+#'   internally set to `sf::NA_crs_`.
 #' @param splitBy (optional) character string or vector of grouping column
 #'   name(s) upon which the grouping will be calculated
 #'
