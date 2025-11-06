@@ -133,9 +133,8 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
                       `>`,
                       units::as_units(0, units(sf::st_crs(crs)$SemiMajor)),
                       n = 2)
-      return(units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor)))
     }
-    return(threshold)
+    return(invisible(NULL))
   }
 }
 
