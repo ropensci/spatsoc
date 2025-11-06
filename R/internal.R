@@ -117,6 +117,29 @@ assert_relation <- function(x, fun, y, ...) {
   }
 }
 
+assert_threshold <- function(threshold = NULL, crs = NULL) {
+  if (inherits(threshold, 'units')) {
+    if (any(is.null(crs), is.na(crs))) {
+      assert_relation(threshold, `>`, units::as_units(0, units(threshold)))
+    } else {
+      assert_units_match(threshold, sf::st_crs(crs)$SemiMajor, n = 2)
+      assert_relation(threshold, `>`, units::as_units(0, units(threshold)))
+    }
+  } else {
+    if (any(is.null(crs), is.na(crs))) {
+      assert_relation(threshold, `>`, 0)
+    } else {
+      assert_relation(units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor)),
+                      `>`,
+                      units::as_units(0, units(sf::st_crs(crs)$SemiMajor)),
+                      n = 2)
+      return(units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor)))
+    }
+    return(threshold)
+  }
+}
+
+
 #' Calculate centroid
 #'
 #' **Internal function** - not developed to be used outside of spatsoc functions
@@ -166,6 +189,7 @@ calc_centroid <- function(geometry, x, y, crs) {
     ))
   }
 }
+
 
 #' Calculate direction
 #'
