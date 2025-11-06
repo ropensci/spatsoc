@@ -39,11 +39,8 @@
 #'
 #' @param threshold (optional) spatial distance threshold to set maximum
 #'   distance between an individual and their neighbour.
-#' @param returnDist logical indicating if the distance between individuals
-#'   should be returned. If FALSE (default), only ID, NN columns (and timegroup,
-#'   splitBy columns if provided) are returned. If TRUE, another column
-#'   "distance" is returned indicating the distance between ID and NN.
 #' @inheritParams group_pts
+#' @inheritParams edge_dist
 #'
 #' @return `edge_nn` returns a `data.table`  with three columns:
 #'   timegroup, ID and NN. If 'returnDist' is TRUE, column 'distance' is
