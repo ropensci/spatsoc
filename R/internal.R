@@ -138,6 +138,22 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
   }
 }
 
+assert_units_match <- function(x, y, n = 1) {
+  if (isFALSE(identical(units(x), units(y)))) {
+    rlang::abort(
+      paste0(
+        'units of ',
+        rlang::caller_arg(x),
+        ' (', units(x), ')',
+        ' do not match units of ',
+        rlang::caller_arg(y),
+        ' (', units(y), ')'
+      ),
+      call = rlang::caller_env(n = n)
+    )
+  }
+  return(invisible(NULL))
+}
 
 #' Calculate direction
 #'
