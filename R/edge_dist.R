@@ -32,6 +32,14 @@
 #' rows within timegroups can overload your machine since all pairwise distances
 #' are calculated within each timegroup.
 #'
+#' The `crs` argument expects a character string or numeric defining the
+#' coordinate reference system to be passed to [sf::st_crs]. For example, for
+#' UTM zone 36S (EPSG 32736), the crs argument is `crs = "EPSG:32736"` or
+#' `crs = 32736`. See <https://spatialreference.org> for a list of EPSG codes.
+#' Note: previous versions of `edge_dist` did not use a `crs` argument - to
+#' prevent breaking changes, if the `crs` argument is NULL (default) the
+#' distance measurement is unchanged.
+#'
 #' The `splitBy` argument offers further control over grouping. If within
 #' your `DT`, you have multiple populations, subgroups or other distinct
 #' parts, you can provide the name of the column which identifies them to
