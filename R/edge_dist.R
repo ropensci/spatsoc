@@ -48,9 +48,10 @@
 #'
 #' @inheritParams group_pts
 #' @param returnDist logical indicating if the distance between individuals
-#'   should be returned. If FALSE (default), only ID1, ID2 columns (and
-#'   timegroup, splitBy columns if provided) are returned. If TRUE, another
-#'   column "distance" is returned indicating the distance between ID1 and ID2.
+#'   should be returned. If FALSE (default), only individual columns (and
+#'   timegroup, splitBy columns if provided) are returned. If TRUE, a column
+#'   "distance" is also returned indicating the distance between individuals in
+#'   the units of the `crs`, or if `crs = NULL` no units are set.
 #' @param fillNA logical indicating if NAs should be returned for individuals
 #'   that were not within the threshold distance of any other. If TRUE, NAs are
 #'   returned. If FALSE, only edges between individuals within the threshold
