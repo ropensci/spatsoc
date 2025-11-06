@@ -56,22 +56,28 @@
 #'   returned. If FALSE, only edges between individuals within the threshold
 #'   distance are returned.
 #'
-#' @return `edge_dist` returns a `data.table` with columns ID1, ID2,
-#'   timegroup (if supplied) and any columns provided in splitBy. If
-#'   'returnDist' is TRUE, column 'distance' is returned indicating the distance
-#'   between ID1 and ID2.
+#' @return `edge_dist` returns a `data.table` with columns ID1, ID2, timegroup
+#'   (if supplied) and any columns provided in splitBy. If 'returnDist' is TRUE,
+#'   column 'distance' is returned indicating the distance between ID1 and ID2
+#'   in the units of the `crs`. If `crs` is NULL, the 'distance' column will not
+#'   have units set.
 #'
 #'   The ID1 and ID2 columns represent the edges defined by the spatial (and
 #'   temporal with `group_times`) thresholds.
 #'
-#'  Note: unlike many other functions (eg. `group_pts`) in `spatsoc`,
-#'  `edge_dist` needs to be reassigned. See details in
-#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'   The underlying distance function ([sf::st_distance]) uses different
+#'   distance measures depending on the input `crs` and the option returned by
+#'   [sf::sf_use_s2]. See more details under `?sf_distance`.
+#'
+#'   Note: unlike many other functions (eg. `group_pts`) in `spatsoc`,
+#'   `edge_dist` needs to be reassigned. See details in
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
 #'
 #' @family Edge-list generation
 #' @family Direction functions
+#' @seealso [sf::st_distance()]
 #'
 #' @examples
 #' # Load data.table

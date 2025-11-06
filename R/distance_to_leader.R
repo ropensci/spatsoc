@@ -30,9 +30,15 @@
 #'   `group_pts`
 #' @inheritParams leader_direction_group
 #'
-#' @return `distance_to_leader` returns the input `DT` appended with
-#'   a `distance_leader` column indicating the distance to the group
-#'   leader.
+#' @return `distance_to_leader` returns the input `DT` appended with a
+#'   `distance_leader` column indicating the distance to the group leader in the
+#'   units of the crs (`units(st_crs(crs)$SemiMajor)`) or if `crs = NULL`, no
+#'   units are set. A value of 0 is returned when the coordinates of the focal
+#'   individual equal the coordinates of the leader.
+#'
+#'   The underlying distance function ([sf::st_distance]) uses different
+#'   distance measures depending on the input `crs` and the option returned by
+#'   [sf::sf_use_s2]. See more details under `?sf_distance`.
 #'
 #'   A message is returned when the `distance_leader` column already
 #'   exist in the input `DT` because it will be overwritten.
@@ -42,7 +48,8 @@
 #'
 #' @export
 #' @family Distance functions
-#' @seealso [direction_to_leader], [leader_direction_group], [group_pts]
+#' @seealso [direction_to_leader], [leader_direction_group], [group_pts],
+#' [sf::st_distance()]
 #' @references
 #'
 #' See examples of using distance to leader and position within group:

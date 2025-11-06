@@ -52,7 +52,8 @@
 #'
 #' @return `edge_nn` returns a `data.table`  with three columns:
 #'   timegroup, ID and NN. If 'returnDist' is TRUE, column 'distance' is
-#'   returned indicating the distance between ID and NN.
+#'   returned indicating the distance between ID and NN in the units of the `crs`.
+#'   If `crs` is NULL, the 'distance' column will not have units set.
 #'
 #'   The ID and NN columns represent the edges defined by the nearest neighbours
 #'   (and temporal thresholds with `group_times`).

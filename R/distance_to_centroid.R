@@ -36,11 +36,17 @@
 #' @param ties.method see [`?data.table::frank()`][data.table::frank]
 #' @inheritParams group_pts
 #'
-#' @return `distance_to_centroid` returns the input `DT` appended with
-#'   a `distance_centroid` column indicating the distance to group centroid
-#'   and, optionally, a `rank_distance_centroid` column indicating the
-#'   within group rank distance to group centroid (if `return_rank =
-#'   TRUE`).
+#' @return `distance_to_centroid` returns the input `DT` appended with a
+#'   `distance_centroid` column indicating the distance to the group centroid
+#'   and, optionally, a `rank_distance_centroid` column indicating the within
+#'   group rank distance to the group centroid (if `return_rank = TRUE`). The
+#'   distance is returned in the units of the crs
+#'   (`units(st_crs(crs)$SemiMajor)`). A value of 0 is returned when the
+#'   coordinates of the focal individual equal the coordinates of the centroid.
+#'
+#'   The underlying distance function ([sf::st_distance]) uses different
+#'   distance measures depending on the input `crs` and the option returned by
+#'   [sf::sf_use_s2]. See more details under `?sf_distance`.
 #'
 #'   A message is returned when `distance_centroid` and optional
 #'   `rank_distance_centroid` columns already exist in the input `DT`,
@@ -52,7 +58,7 @@
 #' @export
 #' @family Distance functions
 #' @family Centroid functions
-#' @seealso [centroid_group], [group_pts]
+#' @seealso [centroid_group], [group_pts], [sf::st_distance()]
 #' @references
 #' See examples of using distance to group centroid:
 #'  * \doi{doi:10.1016/j.anbehav.2021.08.004}
