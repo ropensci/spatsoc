@@ -170,10 +170,12 @@ edge_nn <- function(
     )
   }
 
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+
   DT[, {
 
-    distMatrix <-
-      as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
+    distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
     diag(distMatrix) <- NA
 
     if (is.null(threshold)) {

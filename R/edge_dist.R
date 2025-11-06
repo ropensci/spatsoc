@@ -175,11 +175,13 @@ edge_dist <- function(
     data.table::setnames(DT, 'splitBy', 'split_by')
   }
 
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+
   if (is.null(threshold)) {
     edges <- DT[, {
 
-      distMatrix <-
-        as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
+      distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
       diag(distMatrix) <- NA
 
       if (returnDist) {
@@ -200,8 +202,7 @@ edge_dist <- function(
   } else {
     edges <- DT[, {
 
-      distMatrix <-
-        as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
+      distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
       diag(distMatrix) <- NA
 
       w <- which(distMatrix < threshold, arr.ind = TRUE)
@@ -218,7 +219,6 @@ edge_dist <- function(
     },
     by = splitBy, .SDcols = c(id, coords)]
   }
-
 
   if (fillNA) {
     merge(edges,

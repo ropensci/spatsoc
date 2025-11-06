@@ -168,12 +168,11 @@ group_pts <- function(
     )
   }
 
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+
   DT[, withinGroup := {
-    distMatrix <-
-      as.matrix(stats::dist(cbind(
-        get(..coords[1]), get(..coords[2])
-      ),
-      method = 'euclidean'))
+    distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
     graphAdj <-
       igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
     igraph::components(graphAdj)$membership
