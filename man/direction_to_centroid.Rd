@@ -18,7 +18,7 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \code{crs = "EPSG:32736"} or \code{crs = 32736}.}
 }
 \value{
-\code{direction_to_centrod} returns the input \code{DT} appended with a
+\code{direction_to_centroid} returns the input \code{DT} appended with a
 \code{direction_centroid} column indicating the direction to the group centroid
 in radians. A value of NaN is returned when the coordinates of the focal
 individual equal the coordinates of the centroid.
