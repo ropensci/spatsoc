@@ -94,6 +94,7 @@
 #'     id = 'ID',
 #'     coords = c('X', 'Y'),
 #'     timegroup = 'timegroup',
+#'     crs = 32736,
 #'     returnDist = TRUE,
 #'     fillNA = TRUE
 #'   )

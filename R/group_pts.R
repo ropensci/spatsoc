@@ -111,6 +111,7 @@ group_pts <- function(
     id = NULL,
     coords = NULL,
     timegroup,
+    crs = NULL,
     splitBy = NULL) {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL

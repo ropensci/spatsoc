@@ -93,11 +93,13 @@
 #' )
 #'
 #' # Calculate distance to leader
-#' distance_to_leader(DT, coords = c('X', 'Y'))
+#' distance_to_leader(DT, coords = c('X', 'Y'), crs = 32736)
 distance_to_leader <- function(
     DT = NULL,
     coords = NULL,
-    group = 'group') {
+    group = 'group',
+    crs = NULL) {
+
   # Due to NSE notes
   distance_leader <- zzz_N_by_group <- rank_position_group_direction <-
     has_leader <- . <- NULL

@@ -85,12 +85,14 @@
 #'   DT,
 #'   coords = c('X', 'Y'),
 #'   group = 'group',
+#'   crs = 32736,
 #'   return_rank = TRUE
 #' )
 distance_to_centroid <- function(
     DT = NULL,
     coords = NULL,
     group = 'group',
+    crs = NULL,
     return_rank = FALSE,
     ties.method = NULL) {
 
