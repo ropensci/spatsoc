@@ -22,7 +22,7 @@
 #' @inheritParams direction_step
 #' @inheritParams group_pts
 #'
-#' @return `direction_to_centrod` returns the input `DT` appended with a
+#' @return `direction_to_centroid` returns the input `DT` appended with a
 #'   `direction_centroid` column indicating the direction to the group centroid
 #'   in radians. A value of NaN is returned when the coordinates of the focal
 #'   individual equal the coordinates of the centroid.
