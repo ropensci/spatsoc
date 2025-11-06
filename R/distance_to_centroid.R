@@ -107,8 +107,10 @@ distance_to_centroid <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
-  assert_not_null(crs)
 
+  if (is.null(crs)) {
+    crs <- sf::NA_crs_
+  }
   assert_are_colnames(DT, coords)
   assert_length(coords, 2)
   assert_col_inherits(DT, coords, 'numeric')

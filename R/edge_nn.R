@@ -129,6 +129,10 @@ edge_nn <- function(
   check_cols <- c(timegroup, id, coords, splitBy)
   assert_are_colnames(DT, check_cols)
 
+  if (is.null(crs)) {
+    crs <- sf::NA_crs_
+  }
+
   assert_length(coords, 2)
   assert_col_inherits(DT, coords, 'numeric')
 

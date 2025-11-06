@@ -125,6 +125,9 @@ group_pts <- function(
 
   assert_not_null(id)
 
+  if (is.null(crs)) {
+    crs <- sf::NA_crs_
+  }
   assert_length(coords, 2)
 
   assert_not_missing(timegroup)

@@ -116,7 +116,10 @@ distance_to_leader <- function(
   assert_is_data_table(DT)
   assert_not_null(group)
   assert_are_colnames(DT, group)
-  assert_not_null(crs)
+
+  if (is.null(crs)) {
+    crs <- sf::NA_crs_
+  }
 
   assert_are_colnames(DT, coords)
   assert_length(coords, 2)
