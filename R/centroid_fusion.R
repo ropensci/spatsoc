@@ -98,6 +98,7 @@ centroid_fusion <- function(
     coords = NULL,
     timegroup = 'timegroup',
     crs = NULL,
+    geometry = 'geometry') {
   # Due to NSE notes in R CMD check
   fusionID <- NULL
 
