@@ -148,16 +148,16 @@ assert_relation <- function(x, fun, y, ...) {
 #' DT[, spatsoc:::calc_centroid(x = X, y = Y, crs = 32736)]
 calc_centroid <- function(geometry, x, y, crs) {
   if (!missing(geometry) && missing(x) && missing(y)) {
-    sf::st_centroid(sf::st_combine(geometry))
+    sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
   } else if (missing(geometry) && !missing(x) && !missing(y)) {
-    sf::st_centroid(sf::st_combine(
+    sf::st_as_sf(sf::st_centroid(sf::st_combine(
       sf::st_as_sf(
         data.frame(x, y),
         crs = crs,
         coords = seq.int(2),
         na.fail = FALSE
       )
-    ))
+    )))
   } else {
     rlang::abort(c(
       'arguments incorrectly provided, use one of the following combinations:',
