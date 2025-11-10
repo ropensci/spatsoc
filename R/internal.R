@@ -146,6 +146,12 @@ assert_relation <- function(x, fun, y, ...) {
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #'
 #' DT[, spatsoc:::calc_centroid(x = X, y = Y, crs = 32736)]
+#'
+#' # Calculating centroids with by = requires recomputing the bbox
+#' DT[, centroid := spatsoc:::calc_centroid(x = X, y = Y, crs = 32736),
+#'    by = ID]
+#' DT[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
+#' plot(DT$centroid)
 calc_centroid <- function(geometry, x, y, crs) {
   if (!missing(geometry) && missing(x) && missing(y)) {
     sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
