@@ -19,15 +19,20 @@
 #' coordinates and group columns.
 #'
 #' @inheritParams distance_to_centroid
+#' @inheritParams direction_step
 #' @inheritParams group_pts
 #'
-#' @return `direction_to_centroid` returns the input `DT` appended
-#'   with a `direction_centroid` column indicating the direction to group
-#'   centroid in radians. The direction is measured in radians in the range
-#'   of 0 to 2 * pi from the positive x-axis.
+#' @return `direction_to_centroid` returns the input `DT` appended with a
+#'   `direction_centroid` column indicating the direction to the group centroid
+#'   in radians. A value of NaN is returned when the coordinates of the focal
+#'   individual equal the coordinates of the centroid.
 #'
 #'   A message is returned when `direction_centroid` column already exist
 #'   in the input `DT`, because they will be overwritten.
+#'
+#'   An error is returned if there are any missing values in coordinates for
+#'   the focal individual or the group leader, as the underlying direction
+#'   function ([lwgeom::st_geod_azimuth()]) does not accept missing values.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
@@ -35,7 +40,7 @@
 #' @export
 #' @family Direction functions
 #' @family Centroid functions
-#' @seealso [centroid_group], [group_pts]
+#' @seealso [centroid_group], [group_pts], [lwgeom::st_geod_azimuth()]
 #' @references
 #' See example of using direction to group centroid:
 #'  * \doi{doi:10.1016/j.cub.2017.08.004}
@@ -62,16 +67,18 @@
 #' centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
 #'
 #' # Calculate direction to group centroid
-#' direction_to_centroid(DT, coords = c('X', 'Y'))
+#' direction_to_centroid(DT, coords = c('X', 'Y'), crs = 32736)
 direction_to_centroid <- function(
     DT = NULL,
-    coords = NULL) {
+    coords = NULL,
+    crs = NULL) {
 
   # Due to NSE notes in R CMD check
   direction_centroid <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
+  assert_not_null(crs)
 
   assert_are_colnames(DT, coords)
   assert_length(coords, 2)
@@ -91,19 +98,14 @@ direction_to_centroid <- function(
     message('direction_centroid column will be overwritten by this function')
     data.table::set(DT, j = 'direction_centroid', value = NULL)
   }
-  
-  DT[, direction_centroid := fifelse(
-    .SD[[xcol]] == .SD[[centroid_xcol]] &
-      .SD[[ycol]] == .SD[[centroid_ycol]],
-    units::as_units(NaN, 'rad'),
-    units::as_units(
-      atan2(.SD[[centroid_ycol]] - .SD[[ycol]],
-            (.SD[[centroid_xcol]] - .SD[[xcol]])),
-      'rad'
-    )
+
+  DT[, direction_centroid := calc_direction(
+    x_a = .SD[[xcol]],
+    y_a = .SD[[ycol]],
+    x_b = .SD[[centroid_xcol]],
+    y_b = .SD[[centroid_ycol]],
+    crs = crs
   )]
-  DT[direction_centroid < units::as_units(0, 'rad'),
-     direction_centroid := direction_centroid + units::as_units(2 * pi, 'rad')]
 
   return(DT[])
 }

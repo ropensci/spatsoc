@@ -37,11 +37,14 @@
 #'  * \doi{doi:10.1098/rstb.2019.0380}
 #'  * \doi{doi:10.1111/jfb.15315}
 #'
-#' @return `edge_direction` returns the input `edges` appended with
-#'  a "direction_dyad" column representing the direction between ID1 and ID2.
+#' @return `edge_direction` returns the input `edges` appended with a
+#'   "direction_dyad" column representing the direction between ID1 and ID2 in
+#'   radians. A value of NaN is returned when the coordinates of ID1 equal the
+#'   coordinates of ID2.
 #'
-#'  The direction between individuals is calculated with
-#'  [lwgeom::st_geod_azimuth()].
+#'   An error is returned if there are any missing values in coordinates for the
+#'   focal individual or the group leader, as the underlying direction function
+#'   ([lwgeom::st_geod_azimuth()]) does not accept missing values.
 #'
 #'  If the "direction" column is found in input DT, it will be retained for
 #'  ID1 in the output for use in downstream functions (eg. `edge_zones`).
@@ -54,7 +57,8 @@
 #' @export
 #' @family Edge-list generation
 #' @family Direction functions
-#' @seealso [dyad_id] [edge_dist] [edge_nn] [group_times]
+#' @seealso [dyad_id], [edge_dist], [edge_nn], [group_times],
+#'   [lwgeom::st_geod_azimuth()]
 #' @examples
 #' # Load data.table
 #' library(data.table)
@@ -156,23 +160,13 @@ edge_direction <- function(
     data.table::set(m, j = out_col, value = NULL)
   }
 
-  if (sf::st_is_longlat(crs)) {
-    m[, (out_col) :=
-        lwgeom::st_geod_azimuth(
-          sf::st_as_sf(.SD, coords = id1_coords, crs = crs),
-          sf::st_as_sf(.SD, coords = id2_coords, crs = crs)
-        )]
-  } else if (!sf::st_is_longlat(crs)) {
-    m[, (out_col) :=
-        lwgeom::st_geod_azimuth(
-          sf::st_transform(
-            sf::st_as_sf(.SD, coords = id1_coords, crs = crs),
-            crs = 4326),
-          sf::st_transform(
-            sf::st_as_sf(.SD, coords = id2_coords, crs = crs),
-            crs = 4326)
-        )]
-  }
+  m[, (out_col) := calc_direction(
+    x_a = .SD[[data.table::first(id1_coords)]],
+    y_a = .SD[[data.table::last(id1_coords)]],
+    x_b = .SD[[data.table::first(id2_coords)]],
+    y_b = .SD[[data.table::last(id2_coords)]],
+    crs = crs
+  )]
 
   data.table::set(m, j = c(id1_coords, id2_coords), value = NULL)
   data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))
