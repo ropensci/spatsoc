@@ -114,57 +114,59 @@ centroid_fusion <- function(
   check_cols_DT <- c(id, timegroup)
   assert_are_colnames(DT, check_cols_DT)
 
+  if (is.null(coords)) {
+    m <- merge(edges,
+               DT[, .SD, .SDcols = c(geometry, id, 'timegroup')],
+               by.x = c('ID1', timegroup),
+               by.y = c(id, timegroup),
+               all.x = TRUE,
+               sort = FALSE)
 
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
-
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
-
-  out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
-  out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
-
-  id1_coords <- paste0('id1_', coords)
-  id2_coords <- paste0('id2_', coords)
-
-  m <- merge(edges,
-             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
-             by.x = c('ID1', timegroup),
-             by.y = c(id, timegroup),
-             all.x = TRUE,
-             sort = FALSE)
-  data.table::setnames(m, coords, id1_coords)
-  m <- merge(m,
-             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
-             by.x = c('ID2', timegroup),
-             by.y = c(id, timegroup),
-             all.x = TRUE,
-             sort = FALSE)
-  data.table::setnames(m, coords, id2_coords)
-
-  if (out_xcol %in% colnames(m)) {
-    message(paste(out_xcol, 'column will be overwritten by this function'))
-    data.table::set(m, j = out_xcol, value = NULL)
+    m[, centroid := calc_centroid(geometry = .SD[[1]], crs = crs),
+      .SDcols = c(geometry),
+      by = fusionID]
+    m[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
+  } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
     }
+
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+
+    out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
+    out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
+
+    m <- merge(edges,
+               DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+               by.x = c('ID1', timegroup),
+               by.y = c(id, timegroup),
+               all.x = TRUE,
+               sort = FALSE)
+
+    if (out_xcol %in% colnames(m)) {
+      message(paste(out_xcol, 'column will be overwritten by this function'))
+      data.table::set(m, j = out_xcol, value = NULL)
+    }
+
+    if (out_ycol %in% colnames(m)) {
+      message(paste(out_ycol, 'column will be overwritten by this function'))
+      data.table::set(m, j = out_ycol, value = NULL)
+    }
+
+    m[, (c(out_xcol, out_ycol)) :=
+        data.table::data.table(sf::st_coordinates(
+          calc_centroid(x = .SD[[xcol]], y = .SD[[ycol]], crs = crs)
+        )),
+      by = fusionID]
+    data.table::set(m, j = coords, value = NULL)
+    data.table::setcolorder(m, colnames(edges))
+    m[is.na(fusionID), (c(out_xcol, out_ycol)) := NA]
   }
-
-  if (out_ycol %in% colnames(m)) {
-    message(paste(out_ycol, 'column will be overwritten by this function'))
-    data.table::set(m, j = out_ycol, value = NULL)
-  }
-
-  m[, c(out_xcol) := rowMeans(.SD, na.rm = na.rm),
-    .SDcols = c(data.table::first(id1_coords), data.table::first(id2_coords))]
-  m[, c(out_ycol) := rowMeans(.SD, na.rm = na.rm),
-    .SDcols = c(data.table::last(id1_coords), data.table::last(id2_coords))]
-
-  data.table::set(m, j = c(id1_coords, id2_coords), value = NULL)
-  data.table::setcolorder(m, colnames(edges))
-
-  m[is.na(fusionID), (c(out_xcol, out_ycol)) := NA]
 
   return(m[])
 }
