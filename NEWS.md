@@ -8,6 +8,8 @@ column ([PR 117](https://github.com/ropensci/spatsoc/pull/117))
 ([PR 122](https://github.com/ropensci/spatsoc/pull/122))
 * internal `calc_distance` function for sf interface (see https://github.com/ropensci/spatsoc/issues/116) 
 ([PR 123](https://github.com/ropensci/spatsoc/pull/123))
+* internal `calc_centroid` function for sf interface (see https://github.com/ropensci/spatsoc/issues/116) 
+([PR 124](https://github.com/ropensci/spatsoc/pull/124))
 
 Fixes:
 
