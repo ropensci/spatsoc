@@ -97,6 +97,7 @@ centroid_fusion <- function(
     id = NULL,
     coords = NULL,
     timegroup = 'timegroup',
+    crs = NULL,
   # Due to NSE notes in R CMD check
   fusionID <- NULL
 
@@ -144,6 +145,9 @@ centroid_fusion <- function(
   if (out_xcol %in% colnames(m)) {
     message(paste(out_xcol, 'column will be overwritten by this function'))
     data.table::set(m, j = out_xcol, value = NULL)
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
+    }
   }
 
   if (out_ycol %in% colnames(m)) {
