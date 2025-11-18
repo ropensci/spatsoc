@@ -71,6 +71,7 @@
 #' # Set order using data.table::setorder
 #' setorder(DT, datetime)
 #'
+#'
 #' # Calculate direction
 #' direction_step(
 #'   DT = DT,
@@ -78,6 +79,10 @@
 #'   coords = c('X', 'Y'),
 #'   crs = 32736
 #' )
+#'
+#' # Or: sfc interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' direction_step(DT, id = 'ID')
 #'
 #' # Example result for East, North, West, South steps
 #' example <- data.table(
@@ -116,4 +121,20 @@ direction_step <- function(
     data.table::set(DT, j = 'direction', value = NULL)
   }
 
+  if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when geometry provided')
+    }
+
+    assert_are_colnames(DT, geometry)
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+
+    DT[, direction := c(calc_direction(
+      geometry_a = .SD[[1]]
+    ), units::set_units(NA, 'rad')),
+    by = c(id, splitBy),
+    .SDcols = c(geometry)
+    ]
+
+  } else {
 }

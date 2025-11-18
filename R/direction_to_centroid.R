@@ -86,22 +86,24 @@ direction_to_centroid <- function(
     data.table::set(DT, j = out_colname, value = NULL)
   }
 
+  if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when geometry provided')
+    }
 
-  assert_are_colnames(DT, centroid_coords, ', did you run centroid_group?')
-  assert_col_inherits(DT, centroid_coords, 'numeric')
+    centroid_column <- 'centroid'
 
-  if ('direction_centroid' %in% colnames(DT)) {
-    message('direction_centroid column will be overwritten by this function')
-    data.table::set(DT, j = 'direction_centroid', value = NULL)
-  }
+    assert_are_colnames(DT, geometry)
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+    assert_are_colnames(DT, centroid_column, ', did you run centroid_group?')
+    assert_col_inherits(DT, centroid_column, 'sfc_POINT')
 
-  DT[, direction_centroid := calc_direction(
-    x_a = .SD[[xcol]],
-    y_a = .SD[[ycol]],
-    x_b = .SD[[centroid_xcol]],
-    y_b = .SD[[centroid_ycol]],
-    crs = crs
-  )]
+    DT[, c(out_colname) := calc_direction(
+      geometry_a = focal,
+      geometry_b = centroid
+    ),
+    env = list(focal = geometry, centroid = 'centroid')]
 
+  } else {
   return(DT[])
 }
