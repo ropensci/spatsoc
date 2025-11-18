@@ -22,7 +22,8 @@ test_that('DT is required', {
 test_that('args required else error', {
   expect_error(direction_step(DT,  id = NULL), 'id must be')
 
-  expect_error(direction_step(DT, id = id, coords = NULL, crs = utm), 'coords must')
+  # TODO: since coords can now be NULL
+  # expect_error(direction_step(DT, id = id, coords = NULL, crs = utm), 'coords must')
 
   expect_error(direction_step(DT,  id = id, coords = coords, crs = NULL),
                'crs must')
