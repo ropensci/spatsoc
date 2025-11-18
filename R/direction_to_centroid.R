@@ -79,18 +79,13 @@ direction_to_centroid <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
-  assert_not_null(crs)
 
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
+  out_colname <- 'direction_centroid'
+  if (out_colname %in% colnames(DT)) {
+    message(out_colname, ' column will be overwritten by this function')
+    data.table::set(DT, j = out_colname, value = NULL)
+  }
 
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
-  pre <- 'centroid_'
-  centroid_xcol <- paste0(pre, xcol)
-  centroid_ycol <- paste0(pre, ycol)
-  centroid_coords  <- c(centroid_xcol, centroid_ycol)
 
   assert_are_colnames(DT, centroid_coords, ', did you run centroid_group?')
   assert_col_inherits(DT, centroid_coords, 'numeric')

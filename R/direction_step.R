@@ -109,26 +109,11 @@ direction_step <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
   assert_not_null(id)
-
-  check_cols <- c(id, splitBy)
-  assert_are_colnames(DT, check_cols)
-
-  assert_not_null(crs)
-
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
+  assert_are_colnames(DT, c(id, splitBy))
 
   if ('direction' %in% colnames(DT)) {
     message('direction column will be overwritten by this function')
     data.table::set(DT, j = 'direction', value = NULL)
   }
 
-  DT[, direction := c(calc_direction(
-    x_a = .SD[[data.table::first(coords)]],
-    y_a = .SD[[data.table::last(coords)]],
-    crs = crs
-  ), units::set_units(NA, 'rad')),
-  by = c(id, splitBy)
-  ]
 }
