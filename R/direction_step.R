@@ -137,4 +137,21 @@ direction_step <- function(
     ]
 
   } else {
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
+    }
+
+    DT[, direction := c(calc_direction(
+      x_a = .SD[[data.table::first(coords)]],
+      y_a = .SD[[data.table::last(coords)]],
+      crs = crs
+    ), units::set_units(NA, 'rad')),
+    by = c(id, splitBy)
+    ]
+  }
+
 }

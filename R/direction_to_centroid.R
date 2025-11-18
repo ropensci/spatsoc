@@ -105,5 +105,32 @@ direction_to_centroid <- function(
     env = list(focal = geometry, centroid = 'centroid')]
 
   } else {
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+    pre <- 'centroid_'
+    centroid_xcol <- paste0(pre, xcol)
+    centroid_ycol <- paste0(pre, ycol)
+    centroid_coords  <- c(centroid_xcol, centroid_ycol)
+
+    assert_are_colnames(DT, centroid_coords, ', did you run centroid_group?')
+    assert_col_inherits(DT, centroid_coords, 'numeric')
+
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
+    }
+
+    DT[, c(out_colname) := calc_direction(
+      x_a = x_focal, y_a = y_focal,
+      x_b = x_centroid, y_b = y_centroid,
+      crs = crs
+    ),
+    env = list(x_focal = xcol, y_focal = ycol,
+               x_centroid = centroid_xcol, y_centroid = centroid_ycol)]
+  }
+
   return(DT[])
 }
