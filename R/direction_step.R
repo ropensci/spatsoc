@@ -95,6 +95,7 @@ direction_step <- function(
     coords = NULL,
     crs = NULL,
     splitBy = NULL,
+    geometry = 'geometry',
     projection = NULL) {
 
   # due to NSE notes in R CMD check

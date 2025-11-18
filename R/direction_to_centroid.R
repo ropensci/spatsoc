@@ -71,7 +71,8 @@
 direction_to_centroid <- function(
     DT = NULL,
     coords = NULL,
-    crs = NULL) {
+    crs = NULL,
+    geometry = 'geometry') {
 
   # Due to NSE notes in R CMD check
   direction_centroid <- NULL
