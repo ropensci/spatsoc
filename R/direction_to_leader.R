@@ -107,58 +107,69 @@ direction_to_leader <- function(
   assert_is_data_table(DT)
   assert_not_null(group)
   assert_are_colnames(DT, group)
-  assert_not_null(crs)
 
-  assert_not_null(coords)
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
 
   leader_col <- 'rank_position_group_direction'
-  assert_are_colnames(DT, leader_col,
-                      ', did you run leader_direction_group(return_rank = TRUE)?')
+  assert_are_colnames(
+    DT, leader_col,
+    ', did you run leader_direction_group(return_rank = TRUE)?'
+  )
   assert_col_inherits(DT, leader_col, 'numeric')
-
-  out_col <- 'direction_leader'
-  if (out_col %in% colnames(DT)) {
-    message(
-      paste0(out_col, ' column will be overwritten by this function')
-    )
-    data.table::set(DT, j = out_col, value = NULL)
-  }
 
   check_leaderless <- DT[, .(
     has_leader = any(rank_position_group_direction == 1)),
     by = c(group)][!(has_leader)]
 
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
-  pre <- 'zzz_leader_'
-  zzz_leader_x <- paste0(pre, xcol)
-  zzz_leader_y <- paste0(pre, ycol)
-  zzz_leader_coords  <- c(zzz_leader_x, zzz_leader_y)
+  out_col <- 'direction_leader'
 
-  if (check_leaderless[, .N > 0]) {
-    warning(
-      'groups found missing leader (rank_position_group_direction == 1): \n',
-      check_leaderless[, paste(group, collapse = ', ')]
-    )
-  }
+  if (is.null(coords)) {
 
-  DT[, c(zzz_leader_coords) :=
-       .SD[which(rank_position_group_direction == 1)],
-     .SDcols = c(coords),
-     by = c(group)]
+  } else {
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+    assert_not_null(crs)
 
-  DT[!group %in% check_leaderless$group, direction_leader := calc_direction(
-    x_a = .SD[[xcol]],
-    y_a = .SD[[ycol]],
-    x_b = .SD[[zzz_leader_x]],
-    y_b = .SD[[zzz_leader_y]],
-    crs = crs
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+    pre <- 'zzz_leader_'
+    zzz_xcol_leader <- paste0(pre, xcol)
+    zzz_ycol_leader <- paste0(pre, ycol)
+    zzz_coords_leader  <- c(zzz_xcol_leader, zzz_ycol_leader)
+
+    DT[, c(zzz_coords_leader) :=
+         .SD[which(rank_position_group_direction == 1)],
+       .SDcols = c(coords),
+       by = c(group)]
+
+    if (check_leaderless[, .N > 0]) {
+      warning(
+        'groups found missing leader (rank_position_group_direction == 1): \n',
+        check_leaderless[, paste(group, collapse = ', ')]
+      )
+    }
+
+    if (out_col %in% colnames(DT)) {
+      message(
+        paste0(out_col, ' column will be overwritten by this function')
+      )
+      data.table::set(DT, j = out_col, value = NULL)
+    }
+
+    DT[!group %in% check_leaderless$group, direction_leader := calc_direction(
+      x_a = x,
+      y_a = y,
+      x_b = x_leader,
+      y_b = y_leader,
+      crs = crs
+    ),
+    env = list(
+      x = xcol, y = ycol, x_leader = zzz_xcol_leader, y_leader = zzz_ycol_leader
     )]
 
-  data.table::set(DT, j = zzz_leader_coords, value = NULL)
+    data.table::set(DT, j = zzz_coords_leader, value = NULL)
+
+  }
 
   return(DT[])
 }
