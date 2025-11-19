@@ -99,10 +99,10 @@ direction_to_centroid <- function(
     }
 
     DT[, c(out_colname) := calc_direction(
-      geometry_a = focal,
-      geometry_b = centroid
+      geometry_a = geo,
+      geometry_b = cent
     ),
-    env = list(focal = geometry, centroid = 'centroid')]
+    env = list(geo = geometry, cent = centroid_col)]
 
   } else {
     assert_are_colnames(DT, coords)
@@ -112,12 +112,12 @@ direction_to_centroid <- function(
     xcol <- data.table::first(coords)
     ycol <- data.table::last(coords)
     pre <- 'centroid_'
-    centroid_xcol <- paste0(pre, xcol)
-    centroid_ycol <- paste0(pre, ycol)
-    centroid_coords  <- c(centroid_xcol, centroid_ycol)
+    xcol_centroid <- paste0(pre, xcol)
+    ycol_centroid <- paste0(pre, ycol)
+    coords_centroid  <- c(xcol_centroid, ycol_centroid)
 
-    assert_are_colnames(DT, centroid_coords, ', did you run centroid_group?')
-    assert_col_inherits(DT, centroid_coords, 'numeric')
+    assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
+    assert_col_inherits(DT, coords_centroid, 'numeric')
 
     if (is.null(crs)) {
       crs <- sf::NA_crs_
@@ -127,12 +127,12 @@ direction_to_centroid <- function(
     }
 
     DT[, c(out_colname) := calc_direction(
-      x_a = x_focal, y_a = y_focal,
+      x_a = x, y_a = y,
       x_b = x_centroid, y_b = y_centroid,
       crs = crs
     ),
-    env = list(x_focal = xcol, y_focal = ycol,
-               x_centroid = centroid_xcol, y_centroid = centroid_ycol)]
+    env = list(x = xcol, y = ycol,
+               x_centroid = xcol_centroid, y_centroid = ycol_centroid)]
   }
 
   return(DT[])
