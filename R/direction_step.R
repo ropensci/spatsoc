@@ -71,7 +71,6 @@
 #' # Set order using data.table::setorder
 #' setorder(DT, datetime)
 #'
-#'
 #' # Calculate direction
 #' direction_step(
 #'   DT = DT,
@@ -116,11 +115,6 @@ direction_step <- function(
   assert_not_null(id)
   assert_are_colnames(DT, c(id, splitBy))
 
-  if ('direction' %in% colnames(DT)) {
-    message('direction column will be overwritten by this function')
-    data.table::set(DT, j = 'direction', value = NULL)
-  }
-
   if (is.null(coords)) {
     if (!is.null(crs)) {
       message('crs argument is ignored when geometry provided')
@@ -128,6 +122,11 @@ direction_step <- function(
 
     assert_are_colnames(DT, geometry)
     assert_col_inherits(DT, geometry, 'sfc_POINT')
+
+    if ('direction' %in% colnames(DT)) {
+      message('direction column will be overwritten by this function')
+      data.table::set(DT, j = 'direction', value = NULL)
+    }
 
     DT[, direction := c(calc_direction(
       geometry_a = .SD[[1]]
@@ -143,6 +142,9 @@ direction_step <- function(
 
     if (is.null(crs)) {
       crs <- sf::NA_crs_
+    if ('direction' %in% colnames(DT)) {
+      message('direction column will be overwritten by this function')
+      data.table::set(DT, j = 'direction', value = NULL)
     }
 
     DT[, direction := c(calc_direction(
