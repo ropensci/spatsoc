@@ -1,9 +1,10 @@
 #' Direction step
 #'
-#' `direction_step` calculates the direction of movement steps in radians.
-#' The function expects a `data.table` with relocation data and individual
+#' `direction_step` calculates the direction of movement steps in radians. The
+#' function expects a `data.table` with relocation data and individual
 #' identifiers. Relocation data should be in two columns representing the X and
-#' Y coordinates. Note the order of rows is not modified by this function and
+#' Y coordinates, or in a geometry column prepared by the helper function
+#' [get_geometry()]. Note the order of rows is not modified by this function and
 #' therefore users must be cautious to set it explicitly. See example for one
 #' approach to setting order of rows using a datetime field.
 #'
