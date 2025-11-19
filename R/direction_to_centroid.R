@@ -84,12 +84,12 @@ direction_to_centroid <- function(
 
   if (is.null(coords)) {
     if (!is.null(crs)) {
-      message('crs argument is ignored when geometry provided')
+      message('crs argument is ignored when coords are null, using geometry')
     }
 
     centroid_column <- 'centroid'
 
-    assert_are_colnames(DT, geometry)
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
     assert_col_inherits(DT, geometry, 'sfc_POINT')
     assert_are_colnames(DT, centroid_column, ', did you run centroid_group?')
     assert_col_inherits(DT, centroid_column, 'sfc_POINT')
