@@ -108,6 +108,7 @@ direction_to_centroid <- function(
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
     assert_col_inherits(DT, coords, 'numeric')
+    assert_not_null(crs)
 
     xcol <- data.table::first(coords)
     ycol <- data.table::last(coords)
@@ -119,8 +120,6 @@ direction_to_centroid <- function(
     assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
     assert_col_inherits(DT, coords_centroid, 'numeric')
 
-    if (is.null(crs)) {
-      crs <- sf::NA_crs_
     if (out_colname %in% colnames(DT)) {
       message(out_colname, ' column will be overwritten by this function')
       data.table::set(DT, j = out_colname, value = NULL)
