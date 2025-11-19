@@ -117,7 +117,7 @@ direction_step <- function(
 
   if (is.null(coords)) {
     if (!is.null(crs)) {
-      message('crs argument is ignored when geometry provided')
+      message('crs argument is ignored when coords are null, using geometry')
     }
 
     assert_are_colnames(DT, geometry)
