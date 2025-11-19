@@ -120,7 +120,7 @@ direction_step <- function(
       message('crs argument is ignored when coords are null, using geometry')
     }
 
-    assert_are_colnames(DT, geometry)
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
     assert_col_inherits(DT, geometry, 'sfc_POINT')
 
     if ('direction' %in% colnames(DT)) {
