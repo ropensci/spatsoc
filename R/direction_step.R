@@ -139,9 +139,8 @@ direction_step <- function(
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
     assert_col_inherits(DT, coords, 'numeric')
+    assert_not_null(crs)
 
-    if (is.null(crs)) {
-      crs <- sf::NA_crs_
     if ('direction' %in% colnames(DT)) {
       message('direction column will be overwritten by this function')
       data.table::set(DT, j = 'direction', value = NULL)
