@@ -129,10 +129,10 @@ direction_step <- function(
     }
 
     DT[, direction := c(calc_direction(
-      geometry_a = .SD[[1]]
+      geometry_a = geo
     ), units::set_units(NA, 'rad')),
     by = c(id, splitBy),
-    .SDcols = c(geometry)
+    env = list(geo = geometry)
     ]
 
   } else {
@@ -148,11 +148,12 @@ direction_step <- function(
     }
 
     DT[, direction := c(calc_direction(
-      x_a = .SD[[data.table::first(coords)]],
-      y_a = .SD[[data.table::last(coords)]],
+      x_a = x,
+      y_a = y,
       crs = crs
     ), units::set_units(NA, 'rad')),
-    by = c(id, splitBy)
+    by = c(id, splitBy),
+    env = list(x = data.table::first(coords), y = data.table::last(coords))
     ]
   }
 
