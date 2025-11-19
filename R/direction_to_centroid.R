@@ -1,23 +1,24 @@
 #' Direction to group centroid
 #'
-#' `direction_to_centroid` calculates the direction of each relocation to
-#' the centroid of the spatiotemporal group identified by `group_pts`. The
-#' function expects a `data.table` with relocation data appended with a
-#' `group` column from `group_pts` and centroid columns from
-#' `centroid_group`. Relocation data should be in planar coordinates
-#' provided in two columns representing the X and Y coordinates.
+#' `direction_to_centroid` calculates the direction of each relocation to the
+#' centroid of the spatiotemporal group identified by `group_pts`. The function
+#' expects a `data.table` with relocation data appended with a `group` column
+#' from `group_pts` and centroid columns from `centroid_group`. Relocation data
+#' should be in two columns representing the X and Y coordinates, or in a
+#' geometry column prepared by the helper function [get_geometry()].
 #'
-#' The `DT` must be a `data.table`. If your data is a
-#' `data.frame`, you can convert it by reference using
-#' [data.table::setDT()] or by reassigning using
+#' The `DT` must be a `data.table`. If your data is a `data.frame`, you can
+#' convert it by reference using [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' This function expects a `group` column present generated with the
-#' `group_pts` function and centroid coordinate columns generated with the
-#' `centroid_group` function. The `coords` and `group` arguments
-#' expect the names of columns in `DT` which correspond to the X and Y
-#' coordinates and group columns.
+#' This function expects a `group` column present generated with the `group_pts`
+#' function and centroid coordinates generated with the `centroid_group`
+#' function. The `group` argument expects the name of the column in `DT` which
+#' correspond to the group column.
 #'
+#' See details under Interface for two options for providing coordinates.
+#'
+#' @inheritSection direction_step Interface
 #' @inheritParams distance_to_centroid
 #' @inheritParams direction_step
 #' @inheritParams group_pts
