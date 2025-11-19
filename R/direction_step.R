@@ -8,9 +8,8 @@
 #' therefore users must be cautious to set it explicitly. See example for one
 #' approach to setting order of rows using a datetime field.
 #'
-#' The `DT` must be a `data.table`. If your data is a
-#' `data.frame`, you can convert it by reference using
-#' [data.table::setDT()] or by reassigning using
+#' The `DT` must be a `data.table`. If your data is a `data.frame`, you can
+#' convert it by reference using [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
 #' The `id`, and optional `splitBy` arguments expect the names of a column in
@@ -25,23 +24,24 @@
 #' direction calculation by `direction_step` will only consider rows within
 #' each `id` and `splitBy` subgroup.
 #'
-#' @section Interface
+#' @section Interface:
 #'  Two interfaces are available for providing coordinates:
 #'
-#'  1. Provide `coords` and `crs`. The `coords` argument expects the names of the
-#'  X and Y coordinate columns. The `crs` argument expects a character string or
-#'  numeric defining the coordinate reference system to be passed to
-#'  [sf::st_crs]. For example, for UTM zone 36S (EPSG 32736), the crs argument is
-#'  `crs = "EPSG:32736"` or `crs = 32736`. See <https://spatialreference.org> for
-#'  a list of EPSG codes.
-#'  2. (New!) Provide `geometry`. The `geometry` argument allows the user to supply a
-#'  `geometry` column that represents the coordinates as a simple feature
-#'  geometry list column. This interface expects the user to prepare their input
-#'  DT with [get_geometry()]. To access this interface, leave the `coords` and
-#'  `crs` arguments `NULL`, and the default argument for `geometry` ('geometry')
-#'  will be used directly.
+#'  1. Provide `coords` and `crs`. The `coords` argument expects the names of
+#'  the X and Y coordinate columns. The `crs` argument expects a character
+#'  string or numeric defining the coordinate reference system to be passed to
+#'  [sf::st_crs]. For example, for UTM zone 36S (EPSG 32736), the crs argument
+#'  is `crs = "EPSG:32736"` or `crs = 32736`. See <https://spatialreference.org>
+#'  for a list of EPSG codes.
+#'  2. (New!) Provide `geometry`. The `geometry` argument allows the user to
+#'  supply a `geometry` column that represents the coordinates as a simple
+#'  feature geometry list column. This interface expects the user to prepare
+#'  their input DT with [get_geometry()]. To access this interface, leave the
+#'  `coords` and `crs` arguments `NULL`, and the default argument for `geometry`
+#'  ('geometry') will be used directly.
+#'
 #' @return `direction_step` returns the input `DT` appended with
-#'  a direction column with units set to radians using the `units`
+#'  a `direction` column with units set to radians using the `units`
 #'  package.
 #'
 #'   This column represents the azimuth between the sequence of points for
@@ -70,7 +70,8 @@
 #'   [get_geometry()]. Default 'geometry', see details in Interface
 #'
 #' @family Direction functions
-#' @seealso [lwgeom::st_geod_azimuth()], [amt::direction_abs()], [geosphere::bearing()]
+#' @seealso [lwgeom::st_geod_azimuth()], [amt::direction_abs()],
+#' [geosphere::bearing()]
 #' @export
 #'
 #' @examples
