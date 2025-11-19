@@ -98,7 +98,9 @@ direction_to_leader <- function(
     DT = NULL,
     coords = NULL,
     group = 'group',
-    crs = NULL) {
+    crs = NULL,
+    geometry = 'geometry') {
+
   # Due to NSE notes
   direction_leader <- rank_position_group_direction <- has_leader <-
     zzz_N_by_group <- . <- NULL
@@ -107,7 +109,6 @@ direction_to_leader <- function(
   assert_is_data_table(DT)
   assert_not_null(group)
   assert_are_colnames(DT, group)
-
 
   leader_col <- 'rank_position_group_direction'
   assert_are_colnames(
@@ -123,6 +124,42 @@ direction_to_leader <- function(
   out_col <- 'direction_leader'
 
   if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
+
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+
+    zzz_geometry_leader <- 'zzz_geometry_leader'
+    DT[, c(zzz_geometry_leader) :=
+      sf::st_sf(rep(geo[which(rank_position_group_direction == 1)], .N)),
+       env = list(geo = geometry),
+       by = c(group)]
+
+    if (check_leaderless[, .N > 0]) {
+      warning(
+        'groups found missing leader (rank_position_group_direction == 1): \n',
+        check_leaderless[, paste(group, collapse = ', ')]
+      )
+    }
+
+    if (out_col %in% colnames(DT)) {
+      message(
+        paste0(out_col, ' column will be overwritten by this function')
+      )
+      data.table::set(DT, j = out_col, value = NULL)
+    }
+
+    DT[!group %in% check_leaderless$group, direction_leader := calc_direction(
+      geometry_a = geo,
+      geometry_b = lead
+    ),
+    env = list(
+      geo = geometry, lead = zzz_geometry_leader
+    )]
+
+    data.table::set(DT, j = zzz_geometry_leader, value = NULL)
 
   } else {
     assert_are_colnames(DT, coords)
