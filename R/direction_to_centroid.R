@@ -81,10 +81,6 @@ direction_to_centroid <- function(
   assert_is_data_table(DT)
 
   out_colname <- 'direction_centroid'
-  if (out_colname %in% colnames(DT)) {
-    message(out_colname, ' column will be overwritten by this function')
-    data.table::set(DT, j = out_colname, value = NULL)
-  }
 
   if (is.null(coords)) {
     if (!is.null(crs)) {
@@ -97,6 +93,10 @@ direction_to_centroid <- function(
     assert_col_inherits(DT, geometry, 'sfc_POINT')
     assert_are_colnames(DT, centroid_column, ', did you run centroid_group?')
     assert_col_inherits(DT, centroid_column, 'sfc_POINT')
+    if (out_colname %in% colnames(DT)) {
+      message(out_colname, ' column will be overwritten by this function')
+      data.table::set(DT, j = out_colname, value = NULL)
+    }
 
     DT[, c(out_colname) := calc_direction(
       geometry_a = focal,
@@ -121,6 +121,9 @@ direction_to_centroid <- function(
 
     if (is.null(crs)) {
       crs <- sf::NA_crs_
+    if (out_colname %in% colnames(DT)) {
+      message(out_colname, ' column will be overwritten by this function')
+      data.table::set(DT, j = out_colname, value = NULL)
     }
 
     DT[, c(out_colname) := calc_direction(
