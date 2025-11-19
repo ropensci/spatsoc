@@ -105,6 +105,7 @@ edge_direction <- function(
     coords = NULL,
     crs = NULL,
     timegroup = 'timegroup',
+    geometry = 'geometry',
     projection = NULL) {
 
   if (!is.null(projection)) {
@@ -124,6 +125,53 @@ edge_direction <- function(
   out_col <- 'direction_dyad'
 
   if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
+
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+
+    geometry_id1 <- paste0(geometry, '_id1')
+    geometry_id2 <- paste0(geometry, '_id2')
+
+    ID1_cols <- if ('direction' %in% colnames(DT)) {
+      c('direction', geometry, id, timegroup)
+    } else {
+      c(geometry, id, timegroup)
+    }
+
+    m <- merge(edges,
+               DT[, .SD, .SDcols = ID1_cols],
+               by.x = c('ID1', timegroup),
+               by.y = c(id, timegroup),
+               all.x = TRUE,
+               sort = FALSE)
+    data.table::setnames(m, geometry, geometry_id1)
+    m <- merge(m,
+               DT[, .SD, .SDcols = c(geometry, id, timegroup)],
+               by.x = c('ID2', timegroup),
+               by.y = c(id, timegroup),
+               all.x = TRUE,
+               sort = FALSE)
+    data.table::setnames(m, geometry, geometry_id2)
+
+    if (out_col %in% colnames(m)) {
+      message(paste(out_col, 'column will be overwritten by this function'))
+      data.table::set(m, j = out_col, value = NULL)
+    }
+
+    m[, (out_col) := calc_direction(
+      geometry_a = geo_id1,
+      geometry_b = geo_id2
+    ),
+    env = list(
+      geo_id1 = geometry_id1,
+      geo_id2 = geometry_id2
+    )]
+
+    data.table::set(m, j = c(geometry_id1, geometry_id2), value = NULL)
+    data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))
 
   } else {
     assert_are_colnames(DT, coords)
