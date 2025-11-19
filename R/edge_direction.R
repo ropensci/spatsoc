@@ -121,55 +121,66 @@ edge_direction <- function(
   assert_are_colnames(edges, timegroup)
   assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
-
-  assert_not_null(crs)
-
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
-
-  id1_coords <- paste0('id1_', coords)
-  id2_coords <- paste0('id2_', coords)
-
-  ID1_cols <- if ('direction' %in% colnames(DT)) {
-    c('direction', coords, id, timegroup)
-  } else {
-    c(coords, id, timegroup)
-  }
-
-  m <- merge(edges,
-             DT[, .SD, .SDcols = ID1_cols],
-             by.x = c('ID1', timegroup),
-             by.y = c(id, timegroup),
-             all.x = TRUE,
-             sort = FALSE)
-  data.table::setnames(m, coords, id1_coords)
-  m <- merge(m,
-             DT[, .SD, .SDcols = c(coords, id, timegroup)],
-             by.x = c('ID2', timegroup),
-             by.y = c(id, timegroup),
-             all.x = TRUE,
-             sort = FALSE)
-  data.table::setnames(m, coords, id2_coords)
-
   out_col <- 'direction_dyad'
-  if (out_col %in% colnames(m)) {
-    message(paste(out_col, 'column will be overwritten by this function'))
-    data.table::set(m, j = out_col, value = NULL)
+
+  if (is.null(coords)) {
+
+  } else {
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+    assert_not_null(crs)
+
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+    coords_id1 <- paste0('id1_', coords)
+    coords_id2 <- paste0('id2_', coords)
+
+    ID1_cols <- if ('direction' %in% colnames(DT)) {
+      c('direction', coords, id, timegroup)
+    } else {
+      c(coords, id, timegroup)
+    }
+
+    m <- merge(edges,
+               DT[, .SD, .SDcols = ID1_cols],
+               by.x = c('ID1', timegroup),
+               by.y = c(id, timegroup),
+               all.x = TRUE,
+               sort = FALSE)
+    data.table::setnames(m, coords, coords_id1)
+    m <- merge(m,
+               DT[, .SD, .SDcols = c(coords, id, timegroup)],
+               by.x = c('ID2', timegroup),
+               by.y = c(id, timegroup),
+               all.x = TRUE,
+               sort = FALSE)
+    data.table::setnames(m, coords, coords_id2)
+
+    if (out_col %in% colnames(m)) {
+      message(paste(out_col, 'column will be overwritten by this function'))
+      data.table::set(m, j = out_col, value = NULL)
+    }
+
+    m[, (out_col) := calc_direction(
+      x_a = x_id1,
+      y_a = y_id1,
+      x_b = x_id2,
+      y_b = y_id2,
+      crs = crs
+    ),
+    env = list(
+      x_id1 = data.table::first(coords_id1),
+      y_id1 = data.table::last(coords_id1),
+      x_id2 = data.table::first(coords_id2),
+      y_id2 = data.table::last(coords_id2)
+    )]
+
+    data.table::set(m, j = c(coords_id1, coords_id2), value = NULL)
+    data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))
   }
 
-  m[, (out_col) := calc_direction(
-    x_a = .SD[[data.table::first(id1_coords)]],
-    y_a = .SD[[data.table::last(id1_coords)]],
-    x_b = .SD[[data.table::first(id2_coords)]],
-    y_b = .SD[[data.table::last(id2_coords)]],
-    crs = crs
-  )]
 
-  data.table::set(m, j = c(id1_coords, id2_coords), value = NULL)
-  data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))
 
   return(m[])
 }
