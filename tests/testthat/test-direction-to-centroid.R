@@ -52,7 +52,7 @@ test_that('coords are correctly provided or error detected', {
                'coords must be of class numeric')
   copy_DT <- copy(clean_DT)[, centroid_X := as.character(centroid_X)]
   expect_error(direction_to_centroid(copy_DT, coords = coords, crs = utm),
-               'centroid_coords must be of class numeric')
+               'coords_centroid must be of class numeric')
 })
 
 test_that('direction_centroid column succesfully detected', {
