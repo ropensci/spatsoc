@@ -27,7 +27,6 @@ expect_error(assert_relation(1, '>', 3))
 
 expect_error((function(x) assert_not_missing(x))())
 
-
 expect_error(assert_threshold(0), '> 0')
 expect_error(assert_threshold(-1), '> 0')
 expect_silent(assert_threshold(1))
@@ -35,3 +34,5 @@ expect_error(assert_threshold(units::as_units(-1, 'm')), '>')
 expect_error(assert_threshold(units::as_units(1, 'degree'), 4326), 'do not match')
 expect_silent(assert_threshold(units::as_units(1, 'm'), 4326))
 expect_silent(assert_threshold(units::as_units(1, 'm'), 32649))
+expect_silent(assert_threshold(units::as_units(1, 'm'), 32649))
+expect_error(assert_threshold(-1, 4326), 'must be')
