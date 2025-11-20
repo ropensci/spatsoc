@@ -184,18 +184,24 @@ assert_units_match <- function(x, y, n = 1) {
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #'
 #' DT[, spatsoc:::calc_centroid(x = X, y = Y, crs = 32736)]
+#'
+#' # Calculating centroids with by = requires recomputing the bbox
+#' DT[, centroid := spatsoc:::calc_centroid(x = X, y = Y, crs = 32736),
+#'    by = ID]
+#' DT[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
+#' plot(DT$centroid)
 calc_centroid <- function(geometry, x, y, crs) {
   if (!missing(geometry) && missing(x) && missing(y)) {
-    sf::st_centroid(sf::st_combine(geometry))
+    sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
   } else if (missing(geometry) && !missing(x) && !missing(y)) {
-    sf::st_centroid(sf::st_combine(
+    sf::st_as_sf(sf::st_centroid(sf::st_combine(
       sf::st_as_sf(
         data.frame(x, y),
         crs = crs,
         coords = seq.int(2),
         na.fail = FALSE
       )
-    ))
+    )))
   } else {
     rlang::abort(c(
       'arguments incorrectly provided, use one of the following combinations:',

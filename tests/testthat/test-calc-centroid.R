@@ -38,16 +38,26 @@ test_that('arguments provided correctly else error', {
   )
 })
 
-test_that('sfc is returned', {
-  expect_s3_class(DT[, calc_centroid(geometry)], 'sfc_POINT')
-  expect_s3_class(DT[, calc_centroid(geometry)], 'sfc')
+test_that('sf is returned', {
+  expect_s3_class(DT[, calc_centroid(geometry)], 'sf')
+  expect_s3_class(DT[, .(centroid = calc_centroid(geometry))][[1]], 'sfc')
   expect_s3_class(
     DT[, calc_centroid(x = lonlat_X, y = lonlat_Y, crs = crs_lonlat)],
-    'sfc_POINT'
+    'sf'
   )
   expect_s3_class(
-    DT[, calc_centroid(x = X, y = Y, crs = crs)],
-    'sfc_POINT'
+    DT[, .(centroid = calc_centroid(x = X, y = Y, crs = crs))][[1]],
+    'sfc'
+  )
+
+  expect_s3_class(
+    DT[, calc_centroid(x = X, y = Y, crs = crs), by = ID],
+    'data.table'
+  )
+
+  expect_s3_class(
+    DT[, centroid := calc_centroid(x = X, y = Y, crs = crs), by = ID]$centroid,
+    'sfc'
   )
 })
 
