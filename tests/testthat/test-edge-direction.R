@@ -286,6 +286,9 @@ test_that('sfc interface returns expected', {
 
   expect_true('direction_dyad' %in% colnames(edge_direction(copyEdges, DT, id = id)))
 
+  direction_step(DT, id = id)
+  expect_true('direction' %in% colnames(edge_direction(copyEdges, DT, id = id)))
+
   outEdges <- edge_direction(copyEdges, DT, id = id)
   expect_type(outEdges$direction_dyad, 'double')
   expect_s3_class(outEdges$direction_dyad, 'units')
@@ -294,5 +297,7 @@ test_that('sfc interface returns expected', {
                tolerance = 0.01)
   expect_equal(min(outEdges$direction_dyad, na.rm = TRUE), units::as_units(-pi, 'rad'),
                tolerance = 0.01)
+
+
 })
 
