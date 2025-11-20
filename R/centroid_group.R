@@ -12,15 +12,11 @@
 #' [data.table::data.table()].
 #'
 #' The `coords` and `group` arguments expect the names of a column in
-#' `DT` which correspond to the X and Y coordinates and group columns. The
-#' `na.rm` argument is passed to the `mean` function to control if NA
-#' values are removed before calculation.
+#' `DT` which correspond to the X and Y coordinates and group columns.
 #'
 #' @param DT input data.table with group column generated with `group_pts`
 #' @inheritParams group_pts
 #' @param group Character string of group column
-#' @param na.rm if NAs should be removed in calculating mean location,
-#' see `mean`
 #'
 #' @return `centroid_group` returns the input `DT` appended with
 #'  centroid columns for the X and Y coordinate columns.
@@ -57,20 +53,17 @@
 #'           coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
 #' # Calculate group centroid
-#' centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
+#' centroid_group(DT, coords = c('X', 'Y'), group = 'group')
 centroid_group <- function(
     DT = NULL,
     coords = NULL,
     group = 'group',
-    na.rm = FALSE) {
 
   assert_not_null(DT)
   assert_is_data_table(DT)
 
   assert_not_null(group)
   assert_are_colnames(DT, group)
-  assert_not_null(na.rm)
-  assert_inherits(na.rm, 'logical')
 
   assert_are_colnames(DT, coords)
   assert_length(coords, 2)
