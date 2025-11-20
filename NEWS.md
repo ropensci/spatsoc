@@ -1,5 +1,12 @@
 # Development version
 
+Major changes:
+
+* use new internal `calc_direction` function in and provide sf interface for
+`direction_step`, `direction_to_centroid`, `direction_to_leader` and 
+`edge_direction` ([PR 125](https://github.com/ropensci/spatsoc/pull/125))
+
+
 New experimental functions:
 
 * `get_geometry` helper function for setting up an input DT with a sfc geometry
