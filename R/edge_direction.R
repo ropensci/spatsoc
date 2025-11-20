@@ -14,7 +14,7 @@
 #' [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' See details under Interface for two options for providing coordinates.
+#' See below under Interface for details on providing coordinates.
 #'
 #' The `edges` and `DT` are internally merged in this function using the columns
 #' `id`, `dyadID` and `timegroup`. This function expects a `dyadID` present,

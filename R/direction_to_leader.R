@@ -17,7 +17,7 @@
 #' the `group_pts` function. The `group` argument expects the name of the column
 #' in `DT` which correspond to the group column.
 #'
-#' See details under Interface for two options for providing coordinates.
+#' See below under Interface for details on providing coordinates.
 #'
 #' @inheritSection direction_step Interface
 #' @inheritParams distance_to_leader
