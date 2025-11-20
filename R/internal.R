@@ -99,7 +99,7 @@ assert_not_null <- function(x, ...) {
   return(invisible(NULL))
 }
 
-assert_relation <- function(x, fun, y, ...) {
+assert_relation <- function(x, fun, y, ..., n = 1) {
   if (!(fun(x, y))) {
     rlang::abort(
       paste0(
@@ -110,11 +110,10 @@ assert_relation <- function(x, fun, y, ...) {
         rlang::caller_arg(y),
         ...
       ),
-      call = rlang::caller_env()
+      call = rlang::caller_env(n = n)
     )
-  } else {
-    return(invisible(NULL))
   }
+  return(invisible(NULL))
 }
 
 assert_threshold <- function(threshold = NULL, crs = NULL) {
@@ -204,7 +203,6 @@ calc_centroid <- function(geometry, x, y, crs) {
     ))
   }
 }
-
 
 #' Calculate direction
 #'

@@ -32,6 +32,14 @@
 #' rows within timegroups can overload your machine since all pairwise distances
 #' are calculated within each timegroup.
 #'
+#' The `crs` argument expects a character string or numeric defining the
+#' coordinate reference system to be passed to [sf::st_crs]. For example, for
+#' UTM zone 36S (EPSG 32736), the crs argument is `crs = "EPSG:32736"` or
+#' `crs = 32736`. See <https://spatialreference.org> for a list of EPSG codes.
+#' Note: previous versions of `edge_dist` did not use a `crs` argument - to
+#' prevent breaking changes, if the `crs` argument is NULL (default) the
+#' distance measurement is unchanged.
+#'
 #' The `splitBy` argument offers further control over grouping. If within
 #' your `DT`, you have multiple populations, subgroups or other distinct
 #' parts, you can provide the name of the column which identifies them to
@@ -39,31 +47,39 @@
 #' `splitBy` subgroup.
 #'
 #' @inheritParams group_pts
+#' @inheritParams direction_step
 #' @param returnDist logical indicating if the distance between individuals
-#'   should be returned. If FALSE (default), only ID1, ID2 columns (and
-#'   timegroup, splitBy columns if provided) are returned. If TRUE, another
-#'   column "distance" is returned indicating the distance between ID1 and ID2.
+#'   should be returned. If FALSE (default), only individual columns (and
+#'   timegroup, splitBy columns if provided) are returned. If TRUE, a column
+#'   "distance" is also returned indicating the distance between individuals in
+#'   the units of the `crs`, or if `crs = NULL` no units are set.
 #' @param fillNA logical indicating if NAs should be returned for individuals
 #'   that were not within the threshold distance of any other. If TRUE, NAs are
 #'   returned. If FALSE, only edges between individuals within the threshold
 #'   distance are returned.
 #'
-#' @return `edge_dist` returns a `data.table` with columns ID1, ID2,
-#'   timegroup (if supplied) and any columns provided in splitBy. If
-#'   'returnDist' is TRUE, column 'distance' is returned indicating the distance
-#'   between ID1 and ID2.
+#' @return `edge_dist` returns a `data.table` with columns ID1, ID2, timegroup
+#'   (if supplied) and any columns provided in splitBy. If 'returnDist' is TRUE,
+#'   column 'distance' is returned indicating the distance between ID1 and ID2
+#'   in the units of the `crs`. If `crs` is NULL, the 'distance' column will not
+#'   have units set.
 #'
 #'   The ID1 and ID2 columns represent the edges defined by the spatial (and
 #'   temporal with `group_times`) thresholds.
 #'
-#'  Note: unlike many other functions (eg. `group_pts`) in `spatsoc`,
-#'  `edge_dist` needs to be reassigned. See details in
-#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'   The underlying distance function ([sf::st_distance]) uses different
+#'   distance measures depending on the input `crs` and the option returned by
+#'   [sf::sf_use_s2]. See more details under `?sf_distance`.
+#'
+#'   Note: unlike many other functions (eg. `group_pts`) in `spatsoc`,
+#'   `edge_dist` needs to be reassigned. See details in
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
 #'
 #' @family Edge-list generation
 #' @family Direction functions
+#' @seealso [sf::st_distance()]
 #'
 #' @examples
 #' # Load data.table
@@ -86,6 +102,7 @@
 #'     id = 'ID',
 #'     coords = c('X', 'Y'),
 #'     timegroup = 'timegroup',
+#'     crs = 32736,
 #'     returnDist = TRUE,
 #'     fillNA = TRUE
 #'   )
@@ -95,6 +112,7 @@ edge_dist <- function(
     id = NULL,
     coords = NULL,
     timegroup,
+    crs = NULL,
     splitBy = NULL,
     returnDist = FALSE,
     fillNA = TRUE) {
@@ -104,11 +122,6 @@ edge_dist <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
   assert_not_missing(threshold)
-  assert_inherits(threshold, c('numeric', 'NULL'))
-
-  if (is.numeric(threshold)) {
-    assert_relation(threshold, `>`, 0)
-  }
 
   assert_not_null(id)
 
@@ -117,6 +130,10 @@ edge_dist <- function(
 
   check_cols <- c(timegroup, id, coords, splitBy)
   assert_are_colnames(DT, check_cols)
+
+  if (is.null(crs)) {
+    crs <- sf::NA_crs_
+  }
 
   assert_length(coords, 2)
   assert_col_inherits(DT, coords, 'numeric')
@@ -155,11 +172,13 @@ edge_dist <- function(
     data.table::setnames(DT, 'splitBy', 'split_by')
   }
 
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+
   if (is.null(threshold)) {
     edges <- DT[, {
 
-      distMatrix <-
-        as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
+      distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
       diag(distMatrix) <- NA
 
       if (returnDist) {
@@ -178,10 +197,17 @@ edge_dist <- function(
     },
     by = splitBy, .SDcols = c(id, coords)]
   } else {
+
+    assert_threshold(threshold, crs)
+
+    if (isFALSE(inherits(threshold, 'units') &
+                identical(crs, sf::NA_crs_))) {
+      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+    }
+
     edges <- DT[, {
 
-      distMatrix <-
-        as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
+      distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
       diag(distMatrix) <- NA
 
       w <- which(distMatrix < threshold, arr.ind = TRUE)
@@ -198,7 +224,6 @@ edge_dist <- function(
     },
     by = splitBy, .SDcols = c(id, coords)]
   }
-
 
   if (fillNA) {
     merge(edges,

@@ -32,6 +32,13 @@
 #' rows within timegroups can overload your machine since all pairwise distances
 #' are calculated within each timegroup.
 #'
+#' The `crs` argument expects a character string or numeric defining the
+#' coordinate reference system to be passed to [sf::st_crs]. For example, for
+#' UTM zone 36S (EPSG 32736), the crs argument is `crs = "EPSG:32736"` or
+#' `crs = 32736`. See <https://spatialreference.org> for a list of EPSG codes.
+#' Note: previous versions of `group_pts` did not use a `crs` argument - to
+#' prevent breaking changes, if the `crs` argument is NULL (default) the
+#' distance measurement is unchanged.
 #'
 #' The `splitBy` argument offers further control over grouping. If within
 #' your `DT`, you have multiple populations, subgroups or other distinct
@@ -62,6 +69,10 @@
 #' Note: the order is assumed X followed by Y column names.
 #' @param timegroup timegroup field in the DT within which the grouping will be
 #'   calculated
+#' @param crs numeric or character defining the coordinate reference
+#'   system to be passed to [sf::st_crs]. For example, either
+#'   `crs = "EPSG:32736"` or `crs = 32736`. If `crs = NULL`, the `crs` will be
+#'   internally set to `sf::NA_crs_`.
 #' @param splitBy (optional) character string or vector of grouping column
 #'   name(s) upon which the grouping will be calculated
 #'
@@ -100,6 +111,7 @@ group_pts <- function(
     id = NULL,
     coords = NULL,
     timegroup,
+    crs = NULL,
     splitBy = NULL) {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL
@@ -107,11 +119,18 @@ group_pts <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
 
-  assert_not_null(threshold)
-  assert_inherits(threshold, 'numeric')
-  assert_relation(threshold, `>`, 0)
-
   assert_not_null(id)
+
+  if (is.null(crs)) {
+    crs <- sf::NA_crs_
+  }
+
+  assert_threshold(threshold, crs)
+
+  if (isFALSE(inherits(threshold, 'units') &
+              identical(crs, sf::NA_crs_))) {
+    threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+  }
 
   assert_length(coords, 2)
 
@@ -153,12 +172,11 @@ group_pts <- function(
     )
   }
 
+  xcol <- data.table::first(coords)
+  ycol <- data.table::last(coords)
+
   DT[, withinGroup := {
-    distMatrix <-
-      as.matrix(stats::dist(cbind(
-        get(..coords[1]), get(..coords[2])
-      ),
-      method = 'euclidean'))
+    distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
     graphAdj <-
       igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
     igraph::components(graphAdj)$membership
