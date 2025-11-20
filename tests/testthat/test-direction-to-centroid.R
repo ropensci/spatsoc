@@ -26,9 +26,9 @@ test_that('DT is required', {
   expect_error(direction_to_centroid(DT = NULL))
 })
 
-test_that('arguments required, otherwise error detected', {
+test_that('if coords null, geometry required', {
   expect_error(direction_to_centroid(DT, coords = NULL, crs = utm),
-               'coords must be')
+               'get_geometry?')
 })
 
 test_that('column names must exist in DT', {

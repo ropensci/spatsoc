@@ -109,6 +109,11 @@ test_that('coords are correctly provided or error detected', {
                'coords must be of class numeric')
 })
 
+test_that('if coords null, geometry required', {
+  expect_error(edge_direction(edges, DT, id = id, coords = NULL),
+               'get_geometry?')
+})
+
 test_that('direction_dyad column succesfully detected', {
   copyEdges <- copy(edges)[, direction_dyad := 1]
   expect_message(
