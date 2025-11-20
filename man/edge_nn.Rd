@@ -132,6 +132,7 @@ Other Edge-list generation:
 Other Distance functions: 
 \code{\link{distance_to_centroid}()},
 \code{\link{distance_to_leader}()},
+\code{\link{edge_dist}()},
 \code{\link{edge_zones}()}
 }
 \concept{Distance functions}

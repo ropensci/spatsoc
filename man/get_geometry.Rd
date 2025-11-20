@@ -53,6 +53,12 @@ convert it by reference using \code{\link[data.table:setDT]{data.table::setDT()}
 
 The \code{coords} argument expects the names of columns in \code{DT} which correspond
 to the X and Y coordinates.
+
+The \code{output_crs} argument allows the user to set an output \code{crs} for their
+geometry column. Note: some functions in spatsoc (eg. those that measure
+directions like \code{edge_direction} and \code{direction_to_leader}) require
+geographic coordinates and it is therefore simpler to leave the default
+\code{output_crs = 4326}.
 }
 \examples{
 # Load data.table
