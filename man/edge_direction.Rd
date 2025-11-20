@@ -26,7 +26,7 @@ list with \code{edge_nn} or \code{edge_dist}}
 \item{id}{character string of ID column name}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{crs}{numeric or character defining the coordinate reference
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
@@ -73,7 +73,7 @@ The \code{edges} and \code{DT} must be \code{data.table}s. If your data is a
 \code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
 \code{\link[data.table:data.table]{data.table::data.table()}}.
 
-See details under Interface for two options for providing coordinates.
+See below under Interface for details on providing coordinates.
 
 The \code{edges} and \code{DT} are internally merged in this function using the columns
 \code{id}, \code{dyadID} and \code{timegroup}. This function expects a \code{dyadID} present,

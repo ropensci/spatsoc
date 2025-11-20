@@ -20,7 +20,7 @@ direction_step(
 \item{id}{character string of ID column name}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{crs}{numeric or character defining the coordinate reference
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
@@ -77,7 +77,7 @@ The \code{id}, and optional \code{splitBy} arguments expect the names of a colum
 \code{DT} which correspond to the individual identifier and additional grouping
 columns.
 
-See details below under Interface for two approaches to provide coordinates.
+See below under Interface for details on providing coordinates.
 
 The \code{splitBy} argument offers further control over grouping. If within
 your \code{DT}, you have distinct sampling periods for each individual, you

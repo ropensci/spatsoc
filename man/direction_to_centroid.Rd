@@ -16,7 +16,7 @@ direction_to_centroid(
 \code{centroid_group}}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{crs}{numeric or character defining the coordinate reference
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
@@ -59,7 +59,7 @@ function and centroid coordinates generated with the \code{centroid_group}
 function. The \code{group} argument expects the name of the column in \code{DT} which
 correspond to the group column.
 
-See details under Interface for two options for providing coordinates.
+See below under Interface for details on providing coordinates.
 }
 \section{Interface}{
 

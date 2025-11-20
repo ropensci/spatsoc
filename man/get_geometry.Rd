@@ -16,7 +16,7 @@ get_geometry(
 \item{DT}{input data.table}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{crs}{numeric or character defining the coordinate reference system to
 be passed to \link[sf:st_crs]{sf::st_crs}. For example, \code{crs = "EPSG:32736"} or
