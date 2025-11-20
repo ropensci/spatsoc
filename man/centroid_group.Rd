@@ -10,7 +10,7 @@ centroid_group(DT = NULL, coords = NULL, group = "group", na.rm = FALSE)
 \item{DT}{input data.table with group column generated with \code{group_pts}}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{group}{Character string of group column}
 

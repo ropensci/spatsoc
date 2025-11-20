@@ -63,7 +63,7 @@
 #' @export
 #'
 #' @family Edge-list generation
-#' @family Direction functions
+#' @family Distance functions
 #'
 #' @examples
 #' # Load data.table

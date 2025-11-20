@@ -245,3 +245,59 @@ test_that('East North West South dyads', {
 })
 
 
+# sfc interface
+test_that('if coords null, geometry required', {
+  expect_error(edge_direction(edges, DT, id = id, coords = NULL),
+               'get_geometry?')
+})
+
+test_that('crs provided with geometry gives message crs ignored', {
+  get_geometry(DT, coords = coords, crs = utm)
+  expect_message(edge_direction(edges, DT, id = id, crs = utm),
+                 'ignored')
+})
+
+test_that('geometry correctly provided else error', {
+  expect_error(edge_direction(edges, DT, id = id, geometry = 'potato'),
+               'is not present')
+  expect_error(edge_direction(edges, DT, id = id, geometry = 'X'),
+               'must be of class')
+})
+
+test_that('sfc interface message before overwrite', {
+  copyEdges <- copy(edges)[, direction_dyad := 42]
+  expect_message(edge_direction(copyEdges, DT, id = id),
+                 'overwritten')
+})
+
+test_that('sfc interface returns expected', {
+  copyEdges <- copy(edges)
+  get_geometry(DT, coords = coords, crs = utm)
+
+  expect_equal(
+    ncol(copyEdges) + 1,
+    ncol(edge_direction(copyEdges, DT, id = id))
+  )
+
+  expect_equal(
+    nrow(copyEdges),
+    nrow(edge_direction(copyEdges, DT, id = id))
+  )
+
+  expect_true('direction_dyad' %in% colnames(edge_direction(copyEdges, DT, id = id)))
+
+  direction_step(DT, id = id)
+  expect_true('direction' %in% colnames(edge_direction(copyEdges, DT, id = id)))
+
+  outEdges <- edge_direction(copyEdges, DT, id = id)
+  expect_type(outEdges$direction_dyad, 'double')
+  expect_s3_class(outEdges$direction_dyad, 'units')
+
+  expect_equal(max(outEdges$direction_dyad, na.rm = TRUE), units::as_units(pi, 'rad'),
+               tolerance = 0.01)
+  expect_equal(min(outEdges$direction_dyad, na.rm = TRUE), units::as_units(-pi, 'rad'),
+               tolerance = 0.01)
+
+
+})
+

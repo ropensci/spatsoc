@@ -30,7 +30,7 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \item{id}{character string of ID column name}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{timegroup}{timegroup field in the DT within which the grouping will be
 calculated}
