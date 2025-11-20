@@ -105,6 +105,9 @@ edge_direction <- function(
     geometry = 'geometry',
     projection = NULL) {
 
+  # Due to NSE notes in R CMD check
+  geo_id1 <- geo_id2 <- x_id1 <- y_id1 <- x_id2 <- y_id2 <- NULL
+
   if (!is.null(projection)) {
     warning('projection argument is deprecated, setting crs = projection')
     crs <- projection

@@ -120,7 +120,7 @@ direction_step <- function(
     projection = NULL) {
 
   # due to NSE notes in R CMD check
-  direction <- NULL
+  geo <- x <- y <- NULL
 
   if (!is.null(projection)) {
     warning('projection argument is deprecated, setting crs = projection')
@@ -131,6 +131,8 @@ direction_step <- function(
   assert_is_data_table(DT)
   assert_not_null(id)
   assert_are_colnames(DT, c(id, splitBy))
+
+  out_colname <- 'direction'
 
   if (is.null(coords)) {
     if (!is.null(crs)) {
@@ -145,7 +147,7 @@ direction_step <- function(
       data.table::set(DT, j = 'direction', value = NULL)
     }
 
-    DT[, direction := c(calc_direction(
+    DT[, c(out_colname) := c(calc_direction(
       geometry_a = geo
     ), units::set_units(NA, 'rad')),
     by = c(id, splitBy),
@@ -158,12 +160,12 @@ direction_step <- function(
     assert_col_inherits(DT, coords, 'numeric')
     assert_not_null(crs)
 
-    if ('direction' %in% colnames(DT)) {
-      message('direction column will be overwritten by this function')
+    if (out_colname %in% colnames(DT)) {
+      message(out_colname, ' column will be overwritten by this function')
       data.table::set(DT, j = 'direction', value = NULL)
     }
 
-    DT[, direction := c(calc_direction(
+    DT[, c(out_colname) := c(calc_direction(
       x_a = x,
       y_a = y,
       crs = crs

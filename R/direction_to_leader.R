@@ -102,8 +102,8 @@ direction_to_leader <- function(
     geometry = 'geometry') {
 
   # Due to NSE notes
-  direction_leader <- rank_position_group_direction <- has_leader <-
-    zzz_N_by_group <- . <- NULL
+  geo <- lead <- x <- y <- x_leader <- y_leader <- . <-
+    rank_position_group_direction <- has_leader <- direction_leader <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
