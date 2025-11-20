@@ -26,11 +26,6 @@ test_that('DT is required', {
   expect_error(direction_to_centroid(DT = NULL))
 })
 
-test_that('if coords null, geometry required', {
-  expect_error(direction_to_centroid(DT, coords = NULL, crs = utm),
-               'get_geometry?')
-})
-
 test_that('column names must exist in DT', {
   expect_error(direction_to_centroid(DT, coords = rep('potato', 2),
                                      crs = utm),
@@ -90,3 +85,9 @@ test_that('returns a data.table', {
   expect_s3_class(direction_to_centroid(DT, coords = coords, crs = utm), 'data.table')
 })
 
+
+# sfc interface
+test_that('if coords null, geometry required', {
+  expect_error(direction_to_centroid(DT, coords = NULL, crs = utm),
+               'get_geometry?')
+})

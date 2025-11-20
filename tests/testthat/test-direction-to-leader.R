@@ -54,12 +54,6 @@ test_that('column names must exist in DT', {
                'did you run leader?')
 })
 
-test_that('if coords null, geometry required', {
-  expect_error(direction_to_leader(DT, coords = NULL, group = group,
-                                   crs = utm),
-               'get_geometry?')
-})
-
 test_that('coords are correctly provided or error detected', {
   expect_error(direction_to_leader(DT, coords = c('X', NULL), group = group,
                                    crs = utm),
@@ -178,4 +172,11 @@ test_that('warns if group does not have a leader', {
     ),
     'groups found missing leader'
   )
+})
+
+# sfc interface
+test_that('if coords null, geometry required', {
+  expect_error(direction_to_leader(DT, coords = NULL, group = group,
+                                   crs = utm),
+               'get_geometry?')
 })
