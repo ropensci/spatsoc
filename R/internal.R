@@ -190,24 +190,35 @@ assert_units_match <- function(x, y, n = 1) {
 #'    by = ID]
 #' DT[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
 #' plot(DT$centroid)
-  if (!missing(geometry) && missing(x) && missing(y)) {
-    sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
-  } else if (missing(geometry) && !missing(x) && !missing(y)) {
-    data.frame(sf::st_coordinates(sf::st_centroid(sf::st_combine(
-      sf::st_as_sf(
-        data.frame(x, y),
-        crs = crs,
-        coords = seq.int(2),
-        na.fail = FALSE
-      )
-    ))))
 calc_centroid <- function(geometry, x, y, crs, use_s2) {
+  if (isTRUE(use_s2)) {
+    if (!missing(geometry) && missing(x) && missing(y)) {
+      if (identical(length(geometry), 1L)) {
+        return(sf::st_as_sf(geometry))
+      } else {
+        sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
+      }
+    } else if (missing(geometry) && !missing(x) && !missing(y)) {
+      if (identical(length(x), 1L) & identical(length(y), 1L)) {
+        return(data.frame(x, y))
+      } else {
+        data.frame(sf::st_coordinates(sf::st_centroid(sf::st_combine(
+          sf::st_as_sf(
+            data.frame(x, y),
+            crs = crs,
+            coords = seq.int(2),
+            na.fail = FALSE
+          )
+        ))))
+      }
+    } else {
+      rlang::abort(c(
+        'arguments incorrectly provided, use one of the following combinations:',
+        '1. geometry',
+        '2. x, y'
+      ))
+    }
   } else {
-    rlang::abort(c(
-      'arguments incorrectly provided, use one of the following combinations:',
-      '1. geometry',
-      '2. x, y'
-    ))
   }
 }
 
