@@ -194,14 +194,14 @@ calc_centroid <- function(geometry, x, y, crs) {
   if (!missing(geometry) && missing(x) && missing(y)) {
     sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
   } else if (missing(geometry) && !missing(x) && !missing(y)) {
-    sf::st_as_sf(sf::st_centroid(sf::st_combine(
+    data.frame(sf::st_coordinates(sf::st_centroid(sf::st_combine(
       sf::st_as_sf(
         data.frame(x, y),
         crs = crs,
         coords = seq.int(2),
         na.fail = FALSE
       )
-    )))
+    ))))
   } else {
     rlang::abort(c(
       'arguments incorrectly provided, use one of the following combinations:',
