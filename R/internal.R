@@ -190,26 +190,59 @@ assert_units_match <- function(x, y, n = 1) {
 #'    by = ID]
 #' DT[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
 #' plot(DT$centroid)
-calc_centroid <- function(geometry, x, y, crs) {
-  if (!missing(geometry) && missing(x) && missing(y)) {
-    sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
-  } else if (missing(geometry) && !missing(x) && !missing(y)) {
-    data.frame(sf::st_coordinates(sf::st_centroid(sf::st_combine(
-      sf::st_as_sf(
-        data.frame(x, y),
-        crs = crs,
-        coords = seq.int(2),
-        na.fail = FALSE
-      )
-    ))))
+calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
+  if (isFALSE(use_mean)) {
+    if (!missing(geometry) && missing(x) && missing(y)) {
+      if (identical(length(geometry), 1L)) {
+        return(sf::st_as_sf(geometry))
+      } else {
+        sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
+      }
+    } else if (missing(geometry) && !missing(x) && !missing(y)) {
+      if (identical(length(x), 1L) & identical(length(y), 1L)) {
+        return(data.frame(x, y))
+      } else {
+        data.frame(sf::st_coordinates(sf::st_centroid(sf::st_combine(
+          sf::st_as_sf(
+            data.frame(x, y),
+            crs = crs,
+            coords = seq.int(2),
+            na.fail = FALSE
+          )
+        ))))
+      }
+    } else {
+      rlang::abort(c(
+        'arguments incorrectly provided, use one of the following combinations:',
+        '1. geometry',
+        '2. x, y'
+      ))
+    }
   } else {
-    rlang::abort(c(
-      'arguments incorrectly provided, use one of the following combinations:',
-      '1. geometry',
-      '2. x, y'
-    ))
+    if (!missing(geometry) && missing(x) && missing(y)) {
+      if (identical(length(geometry), 1L)) {
+        return(sf::st_as_sf(geometry))
+      } else {
+        sf::st_as_sf(
+          data.frame(apply(sf::st_coordinates(geometry), 2, mean, na.rm = TRUE,
+                           simplify = FALSE)), coords = seq.int(2), crs = crs)
+      }
+    } else if (missing(geometry) && !missing(x) && !missing(y)) {
+      if (identical(length(x), 1L) & identical(length(y), 1L)) {
+        return(data.frame(x, y))
+      } else {
+        data.frame(mean(x, na.rm = TRUE), mean(y, na.rm = TRUE))
+      }
+    } else {
+      rlang::abort(c(
+        'arguments incorrectly provided, use one of the following combinations:',
+        '1. geometry',
+        '2. x, y'
+      ))
+    }
   }
 }
+
 
 
 #' Calculate direction
