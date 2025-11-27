@@ -66,6 +66,10 @@ centroid_group <- function(
   assert_not_null(group)
   assert_are_colnames(DT, group)
 
+  if (is.null(crs)) {
+    crs <- sf::NA_crs_
+  }
+
   assert_are_colnames(DT, coords)
   assert_length(coords, 2)
   assert_col_inherits(DT, coords, 'numeric')
