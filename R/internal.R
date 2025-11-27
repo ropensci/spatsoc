@@ -190,7 +190,7 @@ assert_units_match <- function(x, y, n = 1) {
 #'    by = ID]
 #' DT[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
 #' plot(DT$centroid)
-calc_centroid <- function(geometry, x, y, crs, use_s2) {
+calc_centroid <- function(geometry, x, y, crs, use_s2 = TRUE) {
   if (isTRUE(use_s2)) {
     if (!missing(geometry) && missing(x) && missing(y)) {
       if (identical(length(geometry), 1L)) {
