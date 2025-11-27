@@ -70,45 +70,48 @@ centroid_group <- function(
   assert_not_null(group)
   assert_are_colnames(DT, group)
 
-  if (is.null(crs)) {
-    crs <- sf::NA_crs_
-  }
 
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
+  } else {
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
+    }
 
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
 
-  out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
-  out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
 
-  if (out_xcol %in% colnames(DT)) {
-    message(paste(out_xcol, 'column will be overwritten by this function'))
-    data.table::set(DT, j = out_xcol, value = NULL)
-  }
+    out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
+    out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
 
-  if (out_ycol %in% colnames(DT)) {
-    message(paste(out_ycol, 'column will be overwritten by this function'))
-    data.table::set(DT, j = out_ycol, value = NULL)
-  }
+    if (out_xcol %in% colnames(DT)) {
+      message(paste(out_xcol, 'column will be overwritten by this function'))
+      data.table::set(DT, j = out_xcol, value = NULL)
+    }
 
-  if (isTRUE(sf::st_is_longlat(crs))) {
-    if (sf::sf_use_s2()) {
-      use_mean <- FALSE
+    if (out_ycol %in% colnames(DT)) {
+      message(paste(out_ycol, 'column will be overwritten by this function'))
+      data.table::set(DT, j = out_ycol, value = NULL)
+    }
+
+    if (isTRUE(sf::st_is_longlat(crs))) {
+      if (sf::sf_use_s2()) {
+        use_mean <- FALSE
+      } else {
+        warning('st_centroid does not give correct centroids for longlat',
+                '\nsee ?sf::st_centroid')
+        use_mean <- TRUE
+      }
     } else {
-      warning('st_centroid does not give correct centroids for longlat',
-              '\nsee ?sf::st_centroid')
       use_mean <- TRUE
     }
-  } else {
-    use_mean <- TRUE
-  }
-  DT[, (c(out_xcol, out_ycol)) :=
+    DT[, (c(out_xcol, out_ycol)) :=
          calc_centroid(, x, y, crs = crs, use_mean = use_mean),
-     by = c(group),
-     env = list(x = xcol, y = ycol)]
+       by = c(group),
+       env = list(x = xcol, y = ycol)]
+  }
 
   return(DT[])
 }
