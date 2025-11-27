@@ -96,6 +96,17 @@ centroid_group <- function(
 
   DT[, c(out_xcol) := mean(.SD[[xcol]], na.rm = na.rm), by = c(group)]
   DT[, c(out_ycol) := mean(.SD[[ycol]], na.rm = na.rm), by = c(group)]
+  if (isTRUE(sf::st_is_longlat(crs))) {
+    if (sf::sf_use_s2()) {
+      use_mean <- FALSE
+    } else {
+      warning('st_centroid does not give correct centroids for longlat',
+              '\nsee ?sf::st_centroid')
+      use_mean <- TRUE
+    }
+  } else {
+    use_mean <- TRUE
+  }
 
   return(DT[])
 }
