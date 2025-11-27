@@ -74,28 +74,28 @@ test_that('calc_centroid equals st_centroid for mean and length 1 inputs', {
   i_seq <- DT[, sample(.I, 100)]
 
   expect_equal(
-    setnames(DT[i_seq, calc_centroid(x = X, y = Y, crs = crs, use_s2 = FALSE)], new = new_nms),
+    setnames(DT[i_seq, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)], new = new_nms),
     data.frame(st_coordinates(
       st_centroid(st_combine(st_as_sf(DT[i_seq, .(X, Y)], coords = seq.int(2), crs = crs)))
     ))
   )
 
   expect_equal(
-    setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_s2 = FALSE)], new = new_nms),
+    setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)], new = new_nms),
     data.frame(st_coordinates(
       st_centroid(st_combine(st_as_sf(DT[i, .(X, Y)], coords = seq.int(2), crs = crs)))
     ))
   )
 
   expect_equal(
-    setnames(DT[i_seq, calc_centroid(x = X, y = Y, crs = NA_crs_, use_s2 = FALSE)], new = new_nms),
+    setnames(DT[i_seq, calc_centroid(x = X, y = Y, crs = NA_crs_, use_mean = TRUE)], new = new_nms),
     data.frame(st_coordinates(
       st_centroid(st_combine(st_as_sf(DT[i_seq, .(X, Y)], coords = seq.int(2), crs = NA_crs_)))
     ))
   )
 
   expect_equal(
-    setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_s2 = FALSE)], , new = new_nms),
+    setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)], , new = new_nms),
     data.frame(st_coordinates(
       st_centroid(st_combine(st_as_sf(DT[i, .(X, Y)], coords = seq.int(2), crs = NA_crs_)))
     ))
