@@ -219,8 +219,30 @@ calc_centroid <- function(geometry, x, y, crs, use_s2) {
       ))
     }
   } else {
+    if (!missing(geometry) && missing(x) && missing(y)) {
+      if (identical(length(geometry), 1L)) {
+        return(sf::st_as_sf(geometry))
+      } else {
+        sf::st_as_sf(
+          data.frame(apply(sf::st_coordinates(geometry), 2, mean, na.rm = TRUE,
+                           simplify = FALSE)), coords = seq.int(2), crs = crs)
+      }
+    } else if (missing(geometry) && !missing(x) && !missing(y)) {
+      if (identical(length(x), 1L) & identical(length(y), 1L)) {
+        return(data.frame(x, y))
+      } else {
+        data.frame(mean(x, na.rm = TRUE), mean(y, na.rm = TRUE))
+      }
+    } else {
+      rlang::abort(c(
+        'arguments incorrectly provided, use one of the following combinations:',
+        '1. geometry',
+        '2. x, y'
+      ))
+    }
   }
 }
+
 
 
 #' Calculate direction
