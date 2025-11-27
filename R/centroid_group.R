@@ -57,6 +57,7 @@
 centroid_group <- function(
     DT = NULL,
     coords = NULL,
+    crs = NULL,
     group = 'group',
 
   assert_not_null(DT)
