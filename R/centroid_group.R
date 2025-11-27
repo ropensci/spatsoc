@@ -94,8 +94,6 @@ centroid_group <- function(
     data.table::set(DT, j = out_ycol, value = NULL)
   }
 
-  DT[, c(out_xcol) := mean(.SD[[xcol]], na.rm = na.rm), by = c(group)]
-  DT[, c(out_ycol) := mean(.SD[[ycol]], na.rm = na.rm), by = c(group)]
   if (isTRUE(sf::st_is_longlat(crs))) {
     if (sf::sf_use_s2()) {
       use_mean <- FALSE
@@ -107,6 +105,10 @@ centroid_group <- function(
   } else {
     use_mean <- TRUE
   }
+  DT[, (c(out_xcol, out_ycol)) :=
+         calc_centroid(, x, y, crs = crs, use_mean = use_mean),
+     by = c(group),
+     env = list(x = xcol, y = ycol)]
 
   return(DT[])
 }
