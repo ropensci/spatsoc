@@ -61,6 +61,9 @@ centroid_group <- function(
     group = 'group',
     geometry = 'geometry') {
 
+  # Due to NSE notes in R CMD check
+  x <- y <- NULL
+
   assert_not_null(DT)
   assert_is_data_table(DT)
 
