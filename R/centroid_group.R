@@ -100,6 +100,8 @@ centroid_group <- function(
          calc_centroid(geo, use_mean = use_mean),
        by = c(group),
        env = list(geo = geometry)]
+    DT[, (out) := sf::st_sfc(cent, recompute_bbox = TRUE),
+       env = list(cent = out)]
 
   } else {
     if (is.null(crs)) {
