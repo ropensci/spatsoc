@@ -70,6 +70,36 @@ centroid_group <- function(
   assert_not_null(group)
   assert_are_colnames(DT, group)
 
+  if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
+
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+
+    out <- 'centroid'
+    if (out %in% colnames(DT)) {
+      message(out, ' column will be overwritten by this function')
+      data.table::set(DT, j = out, value = NULL)
+    }
+
+    if (isTRUE(sf::st_is_longlat(sf::st_crs(DT[[geometry]])))) {
+      if (sf::sf_use_s2()) {
+        use_mean <- FALSE
+      } else {
+        warning('st_centroid does not give correct centroids for longlat',
+                '\nsee ?sf::st_centroid')
+        use_mean <- TRUE
+      }
+    } else {
+      use_mean <- TRUE
+    }
+
+    DT[, (out) :=
+         calc_centroid(geo, use_mean = use_mean),
+       by = c(group),
+       env = list(geo = geometry)]
 
   } else {
     if (is.null(crs)) {
