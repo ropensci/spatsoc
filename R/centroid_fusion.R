@@ -113,6 +113,8 @@ centroid_ <- function(
     timegroup = 'timegroup',
     geometry = 'geometry') {
 
+  assert_not_null(centroid_groupings)
+
   assert_not_null(DT)
   assert_is_data_table(DT)
 
@@ -120,7 +122,7 @@ centroid_ <- function(
   assert_not_null(id)
   assert_not_null(timegroup)
 
-  check_cols_edges <- c('fusionID', 'ID1', 'ID2', timegroup)
+  check_cols_edges <- c(centroid_groupings, 'ID1', 'ID2', timegroup)
   assert_are_colnames(edges, check_cols_edges)
   check_cols_DT <- c(id, timegroup)
   assert_are_colnames(DT, check_cols_DT)
@@ -133,9 +135,10 @@ centroid_ <- function(
                all.x = TRUE,
                sort = FALSE)
 
-    m[, centroid := calc_centroid(geometry = .SD[[1]], crs = crs),
-      .SDcols = c(geometry),
-      by = fusionID]
+    m[!is.na(centroid_groupings),
+      centroid := calc_centroid(geometry = geo, use_mean = use_mean),
+      env = list(geo = geometry, centroid_groupings = centroid_groupings),
+      by = centroid_groupings]
     m[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
   } else {
     if (is.null(crs)) {
@@ -169,11 +172,11 @@ centroid_ <- function(
       data.table::set(m, j = out_ycol, value = NULL)
     }
 
-    m[, (c(out_xcol, out_ycol)) :=
-        data.table::data.table(sf::st_coordinates(
-          calc_centroid(x = .SD[[xcol]], y = .SD[[ycol]], crs = crs)
-        )),
-      by = fusionID]
+    m[!is.na(centroid_groupings),
+      (c(out_xcol, out_ycol)) :=
+        calc_centroid(, x, y, crs = crs, use_mean = use_mean),
+      env = list(x = xcol, y = ycol, centroid_groupings = centroid_groupings),
+      by = centroid_groupings]
     data.table::set(m, j = coords, value = NULL)
     data.table::setcolorder(m, colnames(edges))
     m[is.na(fusionID), (c(out_xcol, out_ycol)) := NA]
