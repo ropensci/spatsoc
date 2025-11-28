@@ -12,15 +12,11 @@
 #' [data.table::data.table()].
 #'
 #' The `coords` and `group` arguments expect the names of a column in
-#' `DT` which correspond to the X and Y coordinates and group columns. The
-#' `na.rm` argument is passed to the `mean` function to control if NA
-#' values are removed before calculation.
+#' `DT` which correspond to the X and Y coordinates and group columns.
 #'
 #' @param DT input data.table with group column generated with `group_pts`
 #' @inheritParams group_pts
 #' @param group Character string of group column
-#' @param na.rm if NAs should be removed in calculating mean location,
-#' see `mean`
 #'
 #' @return `centroid_group` returns the input `DT` appended with
 #'  centroid columns for the X and Y coordinate columns.
@@ -57,43 +53,75 @@
 #'           coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
 #' # Calculate group centroid
-#' centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
+#' centroid_group(DT, coords = c('X', 'Y'), group = 'group')
 centroid_group <- function(
     DT = NULL,
     coords = NULL,
+    crs = NULL,
     group = 'group',
-    na.rm = FALSE) {
+    geometry = 'geometry') {
+
+  # Due to NSE notes in R CMD check
+  x <- y <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
 
   assert_not_null(group)
   assert_are_colnames(DT, group)
-  assert_not_null(na.rm)
-  assert_inherits(na.rm, 'logical')
 
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
+  if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
 
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
 
-  out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
-  out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
+    out <- 'centroid'
+    if (out %in% colnames(DT)) {
+      message(out, ' column will be overwritten by this function')
+      data.table::set(DT, j = out, value = NULL)
+    }
 
-  if (out_xcol %in% colnames(DT)) {
-    message(paste(out_xcol, 'column will be overwritten by this function'))
-    data.table::set(DT, j = out_xcol, value = NULL)
+    use_mean <- crs_use_mean(sf::st_crs(DT[[geometry]]))
+
+    DT[, (out) := calc_centroid(geo, use_mean = use_mean),
+       env = list(geo = geometry),
+       by = c(group)]
+    DT[, (out) := sf::st_sfc(cent, recompute_bbox = TRUE),
+       env = list(cent = out)]
+
+  } else {
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
+    }
+
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+
+    out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
+    out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
+
+    if (out_xcol %in% colnames(DT)) {
+      message(paste(out_xcol, 'column will be overwritten by this function'))
+      data.table::set(DT, j = out_xcol, value = NULL)
+    }
+
+    if (out_ycol %in% colnames(DT)) {
+      message(paste(out_ycol, 'column will be overwritten by this function'))
+      data.table::set(DT, j = out_ycol, value = NULL)
+    }
+    use_mean <- crs_use_mean(crs)
+    DT[, (c(out_xcol, out_ycol)) :=
+         calc_centroid(, x, y, crs = crs, use_mean = use_mean),
+       env = list(x = xcol, y = ycol),
+       by = c(group)]
   }
-
-  if (out_ycol %in% colnames(DT)) {
-    message(paste(out_ycol, 'column will be overwritten by this function'))
-    data.table::set(DT, j = out_ycol, value = NULL)
-  }
-
-  DT[, c(out_xcol) := mean(.SD[[xcol]], na.rm = na.rm), by = c(group)]
-  DT[, c(out_ycol) := mean(.SD[[ycol]], na.rm = na.rm), by = c(group)]
 
   return(DT[])
 }
