@@ -25,7 +25,7 @@
 #'   The naming of these columns will correspond to the provided coordinate
 #'   column names prefixed with "centroid_".
 #'
-#'   A message is returned when centroid columns already exists in
+#'   A message is returned when centroid columns are already exists in
 #'   the input `DT`, because they will be overwritten.
 #'
 #'   See details for appending outputs using modify-by-reference in the
