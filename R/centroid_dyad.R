@@ -93,68 +93,21 @@ centroid_dyad <- function(
     DT = NULL,
     id = NULL,
     coords = NULL,
+    crs = NULL,
     timegroup = 'timegroup',
-    na.rm = FALSE) {
+    geometry = 'geometry') {
+
   # Due to NSE notes in R CMD check
-  dyadID <- NULL
+  fusionID <- NULL
 
-  assert_not_null(DT)
-  assert_is_data_table(DT)
-  assert_not_null(edges)
-  assert_not_null(id)
-  assert_not_null(timegroup)
-  assert_are_colnames(edges, c('dyadID', timegroup))
-  assert_are_colnames(DT, c(id, timegroup))
-  assert_not_null(na.rm)
-  assert_inherits(na.rm, 'logical')
-
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
-
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
-
-  out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
-  out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
-
-  id1_coords <- paste0('id1_', coords)
-  id2_coords <- paste0('id2_', coords)
-
-  m <- merge(edges,
-             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
-             by.x = c('ID1', timegroup),
-             by.y = c(id, timegroup),
-             all.x = TRUE,
-             sort = FALSE)
-  data.table::setnames(m, coords, id1_coords)
-  m <- merge(m,
-             DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
-             by.x = c('ID2', timegroup),
-             by.y = c(id, timegroup),
-             all.x = TRUE,
-             sort = FALSE)
-  data.table::setnames(m, coords, id2_coords)
-
-  if (out_xcol %in% colnames(m)) {
-    message(paste(out_xcol, 'column will be overwritten by this function'))
-    data.table::set(m, j = out_xcol, value = NULL)
-  }
-
-  if (out_ycol %in% colnames(m)) {
-    message(paste(out_ycol, 'column will be overwritten by this function'))
-    data.table::set(m, j = out_ycol, value = NULL)
-  }
-
-  m[, c(out_xcol) := rowMeans(.SD, na.rm = na.rm),
-    .SDcols = c(data.table::first(id1_coords), data.table::first(id2_coords))]
-  m[, c(out_ycol) := rowMeans(.SD, na.rm = na.rm),
-    .SDcols = c(data.table::last(id1_coords), data.table::last(id2_coords))]
-
-  data.table::set(m, j = c(id1_coords, id2_coords), value = NULL)
-  data.table::setcolorder(m, colnames(edges))
-
-  m[is.na(dyadID), (c(out_xcol, out_ycol)) := NA]
-
-  return(m[])
+  centroid_(
+    'dyadID',
+    edges = edges,
+    DT = DT,
+    id = id,
+    coords = coords,
+    crs = crs,
+    timegroup = timegroup,
+    geometry = geometry
+  )
 }
