@@ -86,10 +86,9 @@ centroid_group <- function(
 
     use_mean <- crs_use_mean(sf::st_crs(DT[[geometry]]))
 
-    DT[, (out) :=
-         calc_centroid(geo, use_mean = use_mean),
-       by = c(group),
-       env = list(geo = geometry)]
+    DT[, (out) := calc_centroid(geo, use_mean = use_mean),
+       env = list(geo = geometry),
+       by = c(group)]
     DT[, (out) := sf::st_sfc(cent, recompute_bbox = TRUE),
        env = list(cent = out)]
 
@@ -120,8 +119,8 @@ centroid_group <- function(
     use_mean <- crs_use_mean(crs)
     DT[, (c(out_xcol, out_ycol)) :=
          calc_centroid(, x, y, crs = crs, use_mean = use_mean),
-       by = c(group),
-       env = list(x = xcol, y = ycol)]
+       env = list(x = xcol, y = ycol),
+       by = c(group)]
   }
 
   return(DT[])
