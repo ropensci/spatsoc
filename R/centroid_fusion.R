@@ -44,8 +44,8 @@
 #'   `fusion_id` and `group_pts`. See details in
 #'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
-#'   A message is returned when centroid columns are already exists in the input
-#'   `edges`, because they will be overwritten.
+#'   A message is returned when centroid columns already exist in the input
+#'   because they will be overwritten.
 #'
 #' @export
 #' @family Centroid functions
