@@ -405,6 +405,22 @@ calc_distance <- function(
  }
 }
 
+crs_use_mean <- function(crs) {
+  if (isTRUE(sf::st_is_longlat(crs))) {
+    if (sf::sf_use_s2()) {
+      use_mean <- FALSE
+    } else {
+      warning('st_centroid does not give correct centroids for longlat',
+              '\nsee ?sf::st_centroid')
+      use_mean <- TRUE
+    }
+  } else {
+    use_mean <- TRUE
+  }
+  return(use_mean)
+}
+
+
 #' Difference of two angles measured in radians
 #'
 #' **Internal function** - not developed to be used outside of spatsoc functions

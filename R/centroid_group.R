@@ -84,17 +84,7 @@ centroid_group <- function(
       data.table::set(DT, j = out, value = NULL)
     }
 
-    if (isTRUE(sf::st_is_longlat(sf::st_crs(DT[[geometry]])))) {
-      if (sf::sf_use_s2()) {
-        use_mean <- FALSE
-      } else {
-        warning('st_centroid does not give correct centroids for longlat',
-                '\nsee ?sf::st_centroid')
-        use_mean <- TRUE
-      }
-    } else {
-      use_mean <- TRUE
-    }
+    use_mean <- crs_use_mean(sf::st_crs(DT[[geometry]]))
 
     DT[, (out) :=
          calc_centroid(geo, use_mean = use_mean),
@@ -127,18 +117,7 @@ centroid_group <- function(
       message(paste(out_ycol, 'column will be overwritten by this function'))
       data.table::set(DT, j = out_ycol, value = NULL)
     }
-
-    if (isTRUE(sf::st_is_longlat(crs))) {
-      if (sf::sf_use_s2()) {
-        use_mean <- FALSE
-      } else {
-        warning('st_centroid does not give correct centroids for longlat',
-                '\nsee ?sf::st_centroid')
-        use_mean <- TRUE
-      }
-    } else {
-      use_mean <- TRUE
-    }
+    use_mean <- crs_use_mean(crs)
     DT[, (c(out_xcol, out_ycol)) :=
          calc_centroid(, x, y, crs = crs, use_mean = use_mean),
        by = c(group),
