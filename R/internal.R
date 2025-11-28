@@ -185,9 +185,11 @@ assert_units_match <- function(x, y, n = 1) {
 #'
 #' DT[, spatsoc:::calc_centroid(x = X, y = Y, crs = 32736)]
 #'
-#' # Calculating centroids with by = requires recomputing the bbox
-#' DT[, centroid := spatsoc:::calc_centroid(x = X, y = Y, crs = 32736),
-#'    by = ID]
+#' get_geomtery(DT, coords = c('X', 'Y'), crs = 32736)
+#'
+#' # Calculating centroids requires recomputing the bbox when:
+#' #  1- by = , 2- providing geometry
+#' DT[, centroid := spatsoc:::calc_centroid(geometry), by = ID]
 #' DT[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
 #' plot(DT$centroid)
 calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
