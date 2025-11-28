@@ -96,11 +96,24 @@ centroid_fusion <- function(
     DT = NULL,
     id = NULL,
     coords = NULL,
-    timegroup = 'timegroup',
     crs = NULL,
+    timegroup = 'timegroup',
     geometry = 'geometry') {
+
   # Due to NSE notes in R CMD check
   fusionID <- NULL
+
+  centroid_(
+    centroid_groupings = 'fusionID',
+    edges = edges,
+    DT = DT,
+    id = id,
+    coords = coords,
+    crs = crs,
+    timegroup = timegroup,
+    geometry = geometry
+  )
+}
 
 # Internal function reused for centroid_dyad and centroid_fusion
 centroid_ <- function(
