@@ -192,13 +192,13 @@ assert_units_match <- function(x, y, n = 1) {
 #' plot(DT$centroid)
 calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
   if (isFALSE(use_mean)) {
-    if (!missing(geometry) && missing(x) && missing(y)) {
+    if (!missing(geometry) && missing(x) && missing(y) && missing(crs)) {
       if (identical(length(geometry), 1L)) {
         return(sf::st_as_sf(geometry))
       } else {
         sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
       }
-    } else if (missing(geometry) && !missing(x) && !missing(y)) {
+    } else if (missing(geometry) && !missing(x) && !missing(y) && !missing(crs)) {
       if (identical(length(x), 1L) & identical(length(y), 1L)) {
         return(data.frame(x, y))
       } else {
@@ -215,11 +215,11 @@ calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
       rlang::abort(c(
         'arguments incorrectly provided, use one of the following combinations:',
         '1. geometry',
-        '2. x, y'
+        '2. x, y, crs'
       ))
     }
   } else {
-    if (!missing(geometry) && missing(x) && missing(y)) {
+    if (!missing(geometry) && missing(x) && missing(y) && missing(crs)) {
       if (identical(length(geometry), 1L)) {
         return(sf::st_as_sf(geometry))
       } else {
@@ -227,7 +227,7 @@ calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
           data.frame(apply(sf::st_coordinates(geometry), 2, mean, na.rm = TRUE,
                            simplify = FALSE)), coords = seq.int(2), crs = crs)
       }
-    } else if (missing(geometry) && !missing(x) && !missing(y)) {
+    } else if (missing(geometry) && !missing(x) && !missing(y) && !missing(crs)) {
       if (identical(length(x), 1L) & identical(length(y), 1L)) {
         return(data.frame(x, y))
       } else {
@@ -237,7 +237,7 @@ calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
       rlang::abort(c(
         'arguments incorrectly provided, use one of the following combinations:',
         '1. geometry',
-        '2. x, y'
+        '2. x, y, crs'
       ))
     }
   }
