@@ -135,11 +135,14 @@ centroid_ <- function(
                all.x = TRUE,
                sort = FALSE)
 
+    use_mean <- crs_use_mean(sf::st_crs(DT[[geometry]]))
+
     m[!is.na(centroid_groupings),
       centroid := calc_centroid(geometry = geo, use_mean = use_mean),
       env = list(geo = geometry, centroid_groupings = centroid_groupings),
       by = centroid_groupings]
     m[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
+
   } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
@@ -172,11 +175,14 @@ centroid_ <- function(
       data.table::set(m, j = out_ycol, value = NULL)
     }
 
+    use_mean <- crs_use_mean(crs)
+
     m[!is.na(centroid_groupings),
       (c(out_xcol, out_ycol)) :=
         calc_centroid(, x, y, crs = crs, use_mean = use_mean),
       env = list(x = xcol, y = ycol, centroid_groupings = centroid_groupings),
       by = centroid_groupings]
+
     data.table::set(m, j = coords, value = NULL)
     data.table::setcolorder(m, colnames(edges))
     m[is.na(fusionID), (c(out_xcol, out_ycol)) := NA]
