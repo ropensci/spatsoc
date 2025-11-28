@@ -184,9 +184,8 @@ centroid_ <- function(
       by = centroid_groupings]
 
     data.table::set(m, j = coords, value = NULL)
-    data.table::setcolorder(m, colnames(edges))
-    m[is.na(fusionID), (c(out_xcol, out_ycol)) := NA]
   }
 
+  data.table::setcolorder(m, colnames(edges))
   return(m[])
 }
