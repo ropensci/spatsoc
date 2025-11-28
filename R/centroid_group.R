@@ -1,6 +1,6 @@
 #' Group centroid
 #'
-#' `centroid_group` calculates the centroid (mean location) of all
+#' `centroid_group` calculates the centroid of all
 #' individuals in each spatiotemporal group identified by `group_pts`. The
 #' function expects a `data.table` with relocation data appended with a
 #' `group` column from `group_pts`. Relocation data should be in two
