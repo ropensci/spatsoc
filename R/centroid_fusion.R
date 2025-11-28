@@ -102,6 +102,17 @@ centroid_fusion <- function(
   # Due to NSE notes in R CMD check
   fusionID <- NULL
 
+# Internal function reused for centroid_dyad and centroid_fusion
+centroid_ <- function(
+    centroid_groupings = NULL,
+    edges = NULL,
+    DT = NULL,
+    id = NULL,
+    coords = NULL,
+    crs = NULL,
+    timegroup = 'timegroup',
+    geometry = 'geometry') {
+
   assert_not_null(DT)
   assert_is_data_table(DT)
 
