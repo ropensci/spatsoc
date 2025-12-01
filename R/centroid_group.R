@@ -12,8 +12,10 @@
 #' [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' The `coords` and `group` arguments expect the names of a column in
-#' `DT` which correspond to the X and Y coordinates and group columns.
+#' The `group` argument expects the name of a column in
+#' `DT` which correspond to the group column.
+#'
+#' See below under Interface for details on providing coordinates.
 #'
 #' @inheritSection direction_step Interface
 #'
