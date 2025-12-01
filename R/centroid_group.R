@@ -17,7 +17,23 @@
 #'
 #' See below under Interface for details on providing coordinates.
 #'
-#' @inheritSection direction_step Interface
+#' @section Interface:
+#'  Two interfaces are available for providing coordinates:
+#'
+#'  1. Provide `coords` and optionally `crs`. The `coords` argument expects the
+#'  names of the X and Y coordinate columns. The `crs` argument expects a
+#'  character string or numeric defining the coordinate reference system to be
+#'  passed to [sf::st_crs]. For example, for UTM zone 36S (EPSG 32736), the crs
+#'  argument is `crs = "EPSG:32736"` or `crs = 32736`. See
+#'  <https://spatialreference.org> for a list of EPSG codes. For centroid
+#'  calculations, if `crs` is NULL, it will be internally set to `NA_crs_`. 2.
+#'  (New!) Provide `geometry`. The `geometry` argument allows the user to supply
+#'  a `geometry` column that represents the coordinates as a simple feature
+#'  geometry list column. This interface expects the user to prepare their input
+#'  DT with [get_geometry()]. To use this interface, leave the `coords` and
+#'  `crs` arguments `NULL`, and the default argument for `geometry` ('geometry')
+#'  will be used directly.
+#'
 #'
 #' @param DT input data.table with group column generated with `group_pts`
 #' @inheritParams group_pts
