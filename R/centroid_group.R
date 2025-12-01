@@ -25,14 +25,17 @@
 #' @inheritParams direction_step
 #'
 #' @return `centroid_group` returns the input `DT` appended with
-#'  centroid columns for the X and Y coordinate columns or, if the geometry
-#'  interface is used, a single "centroid" column.
+#'  centroid column(s) for each group.
 #'
-#'   These columns represents the centroid coordinates for the dyad at each
-#'   timestep.
+#'  If the `crs` for `coords` or `st_crs(geometry)` for `geometry` is long lat
+#'  (see [sf::st_is_longlat()]), centroids will be calculated using
+#'  [s2::s2_centroid()] through [sf::st_centroid()]. If the `crs` for `coords`
+#'  or `st_crs(geometry)` for `geometry` is projected or NA, the centroids will
+#'  be calculated using a mean on the coordinates.
 #'
-#'   If `coords` were provided, the naming of the centroid columns will
-#'   correspond to the provided column names prefixed with "centroid_".
+#'  If `coords` are provided, the centroid columns will be named by prefixing
+#'  the coordinate column names with "centroid_" (eg. "X" = "centroid_X"). If
+#'  `geometry` is used, the centroid column will be named "centroid".
 #'
 #'  Note: due to the merge required within this function, the output needs to be
 #'  reassigned unlike some other `spatsoc` functions like `dyad_id`
