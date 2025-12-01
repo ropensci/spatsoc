@@ -14,6 +14,8 @@
 #' The `coords` and `group` arguments expect the names of a column in
 #' `DT` which correspond to the X and Y coordinates and group columns.
 #'
+#' @inheritSection direction_step Interface
+#'
 #' @param DT input data.table with group column generated with `group_pts`
 #' @inheritParams group_pts
 #' @param group Character string of group column
