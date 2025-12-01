@@ -18,9 +18,7 @@
 #' the columns `id`, `dyadID` and `timegroup`. This function
 #' expects a `dyadID` present, generated with the `dyad_id` function.
 #' The `id` and `timegroup` arguments expect the names of a column in
-#' `DT` which correspond to the X and Y coordinates and group columns. The
-#' `na.rm` argument is passed to the `rowMeans` function to control if
-#' NA values are removed before calculation.
+#' `DT` which correspond to the id and timegroup columns.
 #'
 #' @inheritSection direction_step Interface
 #'
@@ -31,8 +29,6 @@
 #'   list with `edge_nn` or `edge_dist`
 #' @inheritParams edge_alignment
 #' @inheritParams group_pts
-#' @param na.rm if NAs should be removed in calculating mean location, see
-#'   `rowMeans`
 #' @inheritParams direction_step
 #'
 #' @return `centroid_dyad` returns the input `edges` appended with
