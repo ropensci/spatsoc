@@ -154,8 +154,10 @@ centroid_ <- function(
 
     m[!is.na(centroid_groupings),
       centroid := calc_centroid(geometry = geo, use_mean = use_mean),
-      env = list(geo = geometry, centroid_groupings = centroid_groupings),
-      by = centroid_groupings]
+      env = list(geo = geometry,
+                 centroid_groupings = centroid_groupings,
+                 timegroup = timegroup),
+      by = .(centroid_groupings, timegroup)]
     m[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
 
   } else {
@@ -195,8 +197,10 @@ centroid_ <- function(
     m[!is.na(centroid_groupings),
       (c(out_xcol, out_ycol)) :=
         calc_centroid(, x, y, crs = crs, use_mean = use_mean),
-      env = list(x = xcol, y = ycol, centroid_groupings = centroid_groupings),
-      by = centroid_groupings]
+      env = list(x = xcol, y = ycol,
+                 centroid_groupings = centroid_groupings,
+                 timegroup = timegroup),
+      by = .(centroid_groupings, timegroup)]
 
     data.table::set(m, j = coords, value = NULL)
   }
