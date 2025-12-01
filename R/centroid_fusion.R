@@ -4,7 +4,8 @@
 #' The function expects an edge-list of fusion events identified by [fusion_id()]
 #' from edge-lists generated with [edge_dist()] and a `data.table` with relocation
 #' data appended with a `timegroup` column from [group_times()]. Relocation data
-#' should be in two columns representing the X and Y coordinates.
+#' should be in two columns representing the X and Y coordinates, or in a
+#' geometry column prepared by the helper function [get_geometry()].
 #'
 #' The `edges` and `DT` must be `data.table`s. If your data is a `data.frame`,
 #' you can convert it by reference using [data.table::setDT()] or by reassigning

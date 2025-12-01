@@ -3,8 +3,9 @@
 #' `centroid_group` calculates the centroid of all
 #' individuals in each spatiotemporal group identified by `group_pts`. The
 #' function expects a `data.table` with relocation data appended with a
-#' `group` column from `group_pts`. Relocation data should be in two
-#' columns representing the X and Y coordinates.
+#' `group` column from `group_pts`. Relocation data
+#' should be in two columns representing the X and Y coordinates, or in a
+#' geometry column prepared by the helper function [get_geometry()].
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using

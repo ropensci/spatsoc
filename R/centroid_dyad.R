@@ -32,7 +32,8 @@
 #' @inheritParams direction_step
 #'
 #' @return `centroid_dyad` returns the input `edges` appended with
-#'  centroid columns for the X and Y coordinate columns.
+#'  centroid columns for the X and Y coordinate columns. If the geometry
+#'  interface is used, a single "centroid" column is returned.
 #'
 #'   These columns represents the centroid coordinate columns for the dyad.
 #'   The naming of these columns will correspond to the provided coordinate
