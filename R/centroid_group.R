@@ -1,11 +1,11 @@
 #' Group centroid
 #'
-#' `centroid_group` calculates the centroid of all
-#' individuals in each spatiotemporal group identified by `group_pts`. The
-#' function expects a `data.table` with relocation data appended with a
-#' `group` column from `group_pts`. Relocation data
-#' should be in two columns representing the X and Y coordinates, or in a
-#' geometry column prepared by the helper function [get_geometry()].
+#' `centroid_group` calculates the centroid of all individuals in each
+#' spatiotemporal group identified by `group_pts`. The function expects a
+#' `data.table` with relocation data appended with a `group` column from
+#' `group_pts`. Relocation data should be in two columns representing the X and
+#' Y coordinates, or in a geometry column prepared by the helper function
+#' [get_geometry()].
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
@@ -26,13 +26,13 @@
 #'  passed to [sf::st_crs]. For example, for UTM zone 36S (EPSG 32736), the crs
 #'  argument is `crs = "EPSG:32736"` or `crs = 32736`. See
 #'  <https://spatialreference.org> for a list of EPSG codes. For centroid
-#'  calculations, if `crs` is NULL, it will be internally set to `NA_crs_`. 2.
-#'  (New!) Provide `geometry`. The `geometry` argument allows the user to supply
-#'  a `geometry` column that represents the coordinates as a simple feature
-#'  geometry list column. This interface expects the user to prepare their input
-#'  DT with [get_geometry()]. To use this interface, leave the `coords` and
-#'  `crs` arguments `NULL`, and the default argument for `geometry` ('geometry')
-#'  will be used directly.
+#'  calculations, if `crs` is NULL, it will be internally set to `NA_crs_`.
+#'  2. (New!) Provide `geometry`. The `geometry` argument allows the user to
+#'  supply a `geometry` column that represents the coordinates as a simple
+#'  feature geometry list column. This interface expects the user to prepare
+#'  their input DT with [get_geometry()]. To use this interface, leave the
+#'  `coords` and `crs` arguments `NULL`, and the default argument for `geometry`
+#'  ('geometry') will be used directly.
 #'
 #'
 #' @param DT input data.table with group column generated with `group_pts`
@@ -54,12 +54,12 @@
 #'  `geometry` is used, the centroid column will be named "centroid".
 #'
 #'  Note: due to the merge required within this function, the output needs to be
-#'  reassigned unlike some other `spatsoc` functions like `dyad_id`
-#'  and `group_pts`. See details in
+#'  reassigned unlike some other `spatsoc` functions like `dyad_id` and
+#'  `group_pts`. See details in
 #'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
-#'   A message is returned when the centroid column(s) already exist in the input
-#'   because they will be overwritten.
+#'  A message is returned when the centroid column(s) already exist in the
+#'  input because they will be overwritten.
 #'
 #' @export
 #' @seealso `group_pts`

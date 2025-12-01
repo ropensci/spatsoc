@@ -1,11 +1,12 @@
 #' Fusion centroid
 #'
 #' `centroid_fusion` calculates the centroid of each timestep in fusion events.
-#' The function expects an edge-list of fusion events identified by [fusion_id()]
-#' from edge-lists generated with [edge_dist()] and a `data.table` with relocation
-#' data appended with a `timegroup` column from [group_times()]. Relocation data
-#' should be in two columns representing the X and Y coordinates, or in a
-#' geometry column prepared by the helper function [get_geometry()].
+#' The function expects an edge-list of fusion events identified by
+#' [fusion_id()] from edge-lists generated with [edge_dist()] and a `data.table`
+#' with relocation data appended with a `timegroup` column from [group_times()].
+#' Relocation data should be in two columns representing the X and Y
+#' coordinates, or in a geometry column prepared by the helper function
+#' [get_geometry()].
 #'
 #' The `edges` and `DT` must be `data.table`s. If your data is a `data.frame`,
 #' you can convert it by reference using [data.table::setDT()] or by reassigning
@@ -16,8 +17,8 @@
 #' `dyad_id`) and `id` (in `DT`). This function expects a `fusionID` present,
 #' generated with the [fusion_id()] function. The `timegroup` argument expects
 #' the names of a column in `edges` which correspond to the timegroup column.
-#' The `id` and `timegroup` arguments expect the names of columns in
-#' `DT` which correspond to the id, and timegroup columns.
+#' The `id` and `timegroup` arguments expect the names of columns in `DT` which
+#' correspond to the id, and timegroup columns.
 #'
 #' See below under Interface for details on providing coordinates.
 #'
@@ -45,12 +46,12 @@
 #'  `geometry` is used, the centroid column will be named "centroid".
 #'
 #'  Note: due to the merge required within this function, the output needs to be
-#'  reassigned unlike some other `spatsoc` functions like `dyad_id`
-#'  and `group_pts`. See details in
+#'  reassigned unlike some other `spatsoc` functions like `dyad_id` and
+#'  `group_pts`. See details in
 #'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
-#'   A message is returned when the centroid column(s) already exist in the input
-#'   because they will be overwritten.
+#'  A message is returned when the centroid column(s) already exist in the input
+#'  because they will be overwritten.
 #'
 #' @export
 #' @family Centroid functions
