@@ -25,17 +25,22 @@
 #' @inheritParams direction_step
 #'
 #' @return `centroid_group` returns the input `DT` appended with
-#'  centroid columns for the X and Y coordinate columns.
+#'  centroid columns for the X and Y coordinate columns or, if the geometry
+#'  interface is used, a single "centroid" column.
 #'
-#'   These columns represents the centroid coordinate columns.
-#'   The naming of these columns will correspond to the provided coordinate
-#'   column names prefixed with "centroid_".
+#'   These columns represents the centroid coordinates for the dyad at each
+#'   timestep.
 #'
-#'   A message is returned when centroid columns are already exists in
-#'   the input `DT`, because they will be overwritten.
+#'   If `coords` were provided, the naming of the centroid columns will
+#'   correspond to the provided column names prefixed with "centroid_".
 #'
-#'   See details for appending outputs using modify-by-reference in the
-#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'  Note: due to the merge required within this function, the output needs to be
+#'  reassigned unlike some other `spatsoc` functions like `dyad_id`
+#'  and `group_pts`. See details in
+#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'
+#'   A message is returned when the centroid column(s) already exist in the input
+#'   because they will be overwritten.
 #'
 #' @export
 #' @seealso `group_pts`
