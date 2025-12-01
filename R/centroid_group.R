@@ -19,6 +19,7 @@
 #' @param DT input data.table with group column generated with `group_pts`
 #' @inheritParams group_pts
 #' @param group Character string of group column
+#' @inheritParams direction_step
 #'
 #' @return `centroid_group` returns the input `DT` appended with
 #'  centroid columns for the X and Y coordinate columns.

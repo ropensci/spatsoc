@@ -33,6 +33,7 @@
 #' @inheritParams group_pts
 #' @param na.rm if NAs should be removed in calculating mean location, see
 #'   `rowMeans`
+#' @inheritParams direction_step
 #'
 #' @return `centroid_dyad` returns the input `edges` appended with
 #'  centroid columns for the X and Y coordinate columns.

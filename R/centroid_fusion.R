@@ -25,6 +25,7 @@
 #'   [group_times()] matching the input data.table used to generate the edge
 #'   list with [edge_nn()] or [edge_dist()]
 #' @inheritParams group_pts
+#' @inheritParams direction_step
 #'
 #' @return `centroid_fusion` returns the input `edges` appended with
 #'   centroid columns for the X and Y coordinate columns.
