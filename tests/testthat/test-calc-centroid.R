@@ -62,7 +62,9 @@ test_that('data.table/numeric returned when coords provided, sf when geo', {
 test_that('expected dims returned', {
   expect_length(DT[, calc_centroid(geometry)], 1L)
   expect_length(DT[, calc_centroid(x = lonlat_X, y = lonlat_Y, crs = crs_lonlat)],
-                1L)
+                2L)
+  expect_equal(ncol(DT[, calc_centroid(x = lonlat_X, y = lonlat_Y, crs = crs_lonlat)]),
+               2L)
 })
 
 test_that('calc_centroid equals st_centroid for mean and length 1 inputs', {
