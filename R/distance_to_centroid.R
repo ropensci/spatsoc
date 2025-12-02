@@ -155,16 +155,19 @@ distance_to_centroid <- function(
     assert_not_null(group)
     assert_are_colnames(DT, group, ', did you run group_pts?')
 
-    if ('rank_distance_centroid' %in% colnames(DT)) {
+    out_rank <- 'rank_distance_centroid'
+    if (out_rank %in% colnames(DT)) {
       message(
-        'rank_distance_centroid column will be overwritten by this function'
+        out_rank, ' column will be overwritten by this function'
       )
-      data.table::set(DT, j = 'rank_distance_centroid', value = NULL)
+      data.table::set(DT, j = out_rank, value = NULL)
     }
 
-    DT[, rank_distance_centroid :=
-         data.table::frank(distance_centroid,  ties.method = ties.method),
-       by = c(group)]
+    DT[, c(out_rank) :=
+         data.table::frank(out,  ties.method = ties.method),
+       by = group,
+       env = list(out = out, group = group)]
   }
+
   return(DT[])
 }
