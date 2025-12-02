@@ -1,6 +1,9 @@
 # Test assert family
 context('test assert_*')
 
+test <- data.table(X = LETTERS, Y = LETTERS, ANGLE = runif(length(LETTERS), 0, 180))
+units(test$ANGLE) <- 'degrees'
+
 test_that('assert_not_null', {
   expect_error(assert_not_null(NULL))
 })
@@ -11,9 +14,6 @@ test_that('assert_is_data_table', {
 })
 
 test_that('assert_are_colnames', {
-  test <- data.table(X = LETTERS, Y = LETTERS, ANGLE = runif(length(LETTERS), 0, 180))
-  units(test$ANGLE) <- 'degrees'
-
   expect_error(assert_are_colnames(test, 'Z'))
   expect_error(assert_are_colnames(test, c('X', 'Z')))
 })
