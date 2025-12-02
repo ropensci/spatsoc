@@ -59,7 +59,7 @@
 #'           coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
 #' # Calculate group centroid
-#' centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
+#' centroid_group(DT, coords = c('X', 'Y'), group = 'group')
 #'
 #' # Calculate direction to group centroid
 #' direction_to_centroid(DT, coords = c('X', 'Y'))
@@ -91,7 +91,7 @@ direction_to_centroid <- function(
     message('direction_centroid column will be overwritten by this function')
     data.table::set(DT, j = 'direction_centroid', value = NULL)
   }
-  
+
   DT[, direction_centroid := fifelse(
     .SD[[xcol]] == .SD[[centroid_xcol]] &
       .SD[[ycol]] == .SD[[centroid_ycol]],

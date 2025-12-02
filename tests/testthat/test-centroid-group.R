@@ -29,13 +29,6 @@ test_that('arguments required, otherwise error detected', {
                'coords must be length 2')
   expect_error(centroid_group(DT, coords = coords, group = NULL),
                'group must be provided')
-  expect_error(centroid_group(DT, coords = coords, na.rm = NULL),
-               'na.rm must be provided')
-})
-
-test_that('na.rm is logical', {
-  expect_error(centroid_group(DT, coords = coords, na.rm = 'potato'),
-               'logical')
 })
 
 test_that('column names must exist in DT', {
@@ -92,26 +85,20 @@ DT <- data.table(
 
 test_that('results are expected', {
   expect_equal(
-    centroid_group(copy(DT), coords,
-                   na.rm = FALSE)[group == 1, unique(centroid_X)],
+    centroid_group(copy(DT), coords)[
+      group == 1, unique(centroid_X)],
     15
   )
 
   expect_equal(
-    centroid_group(copy(DT), coords,
-                   na.rm = FALSE)[group == 2, unique(centroid_X)],
-    NA_real_
-  )
-
-  expect_equal(
-    centroid_group(copy(DT), coords,
-                   na.rm = TRUE)[group == 1, unique(centroid_X)],
+    centroid_group(copy(DT), coords)[
+      group == 1, unique(centroid_X)],
     15
   )
 
   expect_equal(
-    centroid_group(copy(DT), coords,
-                   na.rm = TRUE)[group == 2, unique(centroid_X)],
+    centroid_group(copy(DT), coords)[
+      group == 2, unique(centroid_X)],
     10
   )
 })
