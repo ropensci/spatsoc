@@ -158,22 +158,44 @@ distance_to_leader <- function(
       check_leaderless[, paste(group, collapse = ', ')]
     )
   }
+  if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
 
-  DT[, c(zzz_leader_coords) :=
-       .SD[which(rank_position_group_direction == 1)],
-     .SDcols = c(coords),
-     by = c(group)]
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
 
-  DT[!group %in% check_leaderless$group, c(out_col) := calc_distance(
-    x_a = .SD[[xcol]],
-    y_a = .SD[[ycol]],
-    x_b = .SD[[zzz_leader_x]],
-    y_b = .SD[[zzz_leader_y]],
-    crs = crs
-  )]
+    zzz_geometry_leader <- 'zzz_geometry_leader'
+    DT[, c(zzz_geometry_leader) :=
+         sf::st_sf(rep(geo[which(rank_position_group_direction == 1)], .N)),
+       env = list(geo = geometry, group = group),
+       by = group]
 
-  data.table::set(DT, j = 'zzz_N_by_group', value = NULL)
-  data.table::set(DT, j = zzz_leader_coords, value = NULL)
+    if (check_leaderless[, .N > 0]) {
+      warning(
+        'groups found missing leader (rank_position_group_direction == 1): \n',
+        check_leaderless[, paste(group, collapse = ', ')]
+      )
+    }
+
+    if (out_col %in% colnames(DT)) {
+      message(
+        paste0(out_col, ' column will be overwritten by this function')
+      )
+      data.table::set(DT, j = out_col, value = NULL)
+    }
+
+    DT[!group %in% check_leaderless$group, distance_leader := calc_distance(
+      geometry_a = geo,
+      geometry_b = lead
+    ),
+    env = list(
+      geo = geometry, lead = zzz_geometry_leader
+    )]
+
+    data.table::set(DT, j = zzz_geometry_leader, value = NULL)
+
   } else {
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
