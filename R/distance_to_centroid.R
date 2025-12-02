@@ -164,12 +164,12 @@ distance_to_centroid <- function(
     DT[, c(out) := calc_distance(
       x_a = x,
       y_a = y,
-      x_b = x_cent,
-      y_b = y_cent,
+      x_b = x_centroid,
+      y_b = y_centroid,
       crs = crs
     ),
     env = list(x = xcol, y = ycol,
-               x_cent = xcol_centroid, y_cent = ycol_centroid)
+               x_centroid = xcol_centroid, y_centroid = ycol_centroid)
     ]
 
   }
