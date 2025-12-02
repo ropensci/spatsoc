@@ -122,6 +122,7 @@ distance_to_centroid <- function(
     message('distance_centroid column will be overwritten by this function')
     data.table::set(DT, j = 'distance_centroid', value = NULL)
   }
+  out <- 'distance_centroid'
 
   xcol <- data.table::first(coords)
   ycol <- data.table::last(coords)
@@ -141,6 +142,12 @@ distance_to_centroid <- function(
     crs = crs
   )]
 
+    if (out %in% colnames(DT)) {
+      message(out, ' column will be overwritten by this function')
+      data.table::set(DT, j = out, value = NULL)
+    }
+
+    DT[, c(out) := calc_distance(
   if (return_rank) {
     assert_not_null(group)
     assert_are_colnames(DT, group, ', did you run group_pts?')
