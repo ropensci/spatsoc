@@ -109,44 +109,29 @@ distance_to_centroid <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
 
-  if (is.null(crs)) {
-    crs <- sf::NA_crs_
-  }
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
-
   assert_not_null(return_rank)
 
-  if ('distance_centroid' %in% colnames(DT)) {
-    message('distance_centroid column will be overwritten by this function')
-    data.table::set(DT, j = 'distance_centroid', value = NULL)
-  }
   out <- 'distance_centroid'
 
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
-  pre <- 'centroid_'
-  centroid_xcol <- paste0(pre, xcol)
-  centroid_ycol <- paste0(pre, ycol)
-  centroid_coords  <- c(centroid_xcol, centroid_ycol)
 
-  assert_are_colnames(DT, centroid_coords, ', did you run centroid_group?')
-  assert_col_inherits(DT, centroid_coords, 'numeric')
+  } else {
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
+    }
 
-  DT[, distance_centroid := calc_distance(
-    x_a = .SD[[xcol]],
-    y_a = .SD[[ycol]],
-    x_b = .SD[[centroid_xcol]],
-    y_b = .SD[[centroid_ycol]],
-    crs = crs
-  )]
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+
     xcol <- data.table::first(coords)
     ycol <- data.table::last(coords)
     pre <- 'centroid_'
     xcol_centroid <- paste0(pre, xcol)
     ycol_centroid <- paste0(pre, ycol)
     coords_centroid  <- c(xcol_centroid, ycol_centroid)
+
+    assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
+    assert_col_inherits(DT, coords_centroid, 'numeric')
 
     if (out %in% colnames(DT)) {
       message(out, ' column will be overwritten by this function')
@@ -165,6 +150,7 @@ distance_to_centroid <- function(
     ]
 
   }
+
   if (return_rank) {
     assert_not_null(group)
     assert_are_colnames(DT, group, ', did you run group_pts?')
