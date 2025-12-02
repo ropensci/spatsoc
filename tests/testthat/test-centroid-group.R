@@ -83,7 +83,7 @@ DT <- data.table(
   Y = c(10, 20, 10, 20)
 )
 
-test_that('results are expected', {
+test_that('xy results are expected', {
   expect_equal(
     centroid_group(copy(DT), coords)[
       group == 1, unique(centroid_X)],
@@ -101,5 +101,34 @@ test_that('results are expected', {
       group == 2, unique(centroid_X)],
     10
   )
+})
+
+DT <- data.table(
+  group = c(1, 1, 2, 2),
+  X = c(10, 20, 10, NA),
+  Y = c(10, 20, 10, 20)
+)
+
+get_geometry(DT, c('X', 'Y'), 32736, output_crs = FALSE)
+
+test_that('geometry results are expected', {
+  expect_equal(
+    centroid_group(copy(DT))[
+      group == 1, sf::st_coordinates(unique(centroid))[,1]],
+      setNames(15, 'X')
+  )
+
+  expect_equal(
+    centroid_group(copy(DT))[
+      group == 1, sf::st_coordinates(unique(centroid))[,2]],
+    setNames(15, 'Y')
+  )
+
+  expect_equal(
+    centroid_group(copy(DT))[
+      group == 2, sf::st_coordinates(unique(centroid))[,1]],
+    setNames(10, 'X')
+  )
+
 })
 
