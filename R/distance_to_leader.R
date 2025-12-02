@@ -118,46 +118,18 @@ distance_to_leader <- function(
   assert_not_null(group)
   assert_are_colnames(DT, group)
 
-  if (is.null(crs)) {
-    crs <- sf::NA_crs_
-  }
-
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
-
   leader_col <- 'rank_position_group_direction'
-  assert_are_colnames(DT, leader_col,
-                      ', did you run leader_direction_group(return_rank = TRUE)?')
+  assert_are_colnames(
+    DT, leader_col,
+    ', did you run leader_direction_group(return_rank = TRUE)?'
+  )
   assert_col_inherits(DT, leader_col, 'numeric')
-
-  out_col <- 'distance_leader'
-  if (out_col %in% colnames(DT)) {
-    message(
-      paste0(out_col, ' column will be overwritten by this function')
-    )
-    data.table::set(DT, j = out_col, value = NULL)
-  }
-
-  DT[, zzz_N_by_group := .N, by = c(group)]
 
   check_leaderless <- DT[, .(
     has_leader = any(rank_position_group_direction == 1)),
-    by = c(group)][!(has_leader)]
+    by = group,
+    env = list(group = group)][!(has_leader)]
 
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
-  pre <- 'zzz_leader_'
-  zzz_leader_x <- paste0(pre, xcol)
-  zzz_leader_y <- paste0(pre, ycol)
-  zzz_leader_coords  <- c(zzz_leader_x, zzz_leader_y)
-
-  if (check_leaderless[, .N > 0]) {
-    warning(
-      'groups found missing leader (rank_position_group_direction == 1): \n',
-      check_leaderless[, paste(group, collapse = ', ')]
-    )
-  }
   out_col <- 'direction_leader'
 
   if (is.null(coords)) {
