@@ -101,7 +101,8 @@ distance_to_centroid <- function(
     group = 'group',
     crs = NULL,
     return_rank = FALSE,
-    ties.method = NULL) {
+    ties.method = NULL,
+    geometry = 'geometry') {
 
   # Due to NSE notes in R CMD check
   distance_centroid <- rank_distance_centroid <- NULL
@@ -113,6 +114,28 @@ distance_to_centroid <- function(
 
   out <- 'distance_centroid'
 
+  if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
+
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+    centroid_col <- 'centroid'
+    assert_are_colnames(DT, centroid_col, ', did you run centroid_group?')
+    assert_col_inherits(DT, centroid_col, 'sfc_POINT')
+
+    if (out %in% colnames(DT)) {
+      message(out, ' column will be overwritten by this function')
+      data.table::set(DT, j = out, value = NULL)
+    }
+
+    DT[, c(out) := calc_distance(
+      geometry_a = geo,
+      geometry_b = cent
+    ),
+    env = list(geo = geometry, cent = centroid_col)
+    ]
 
   } else {
     if (is.null(crs)) {
