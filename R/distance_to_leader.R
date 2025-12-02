@@ -174,6 +174,53 @@ distance_to_leader <- function(
 
   data.table::set(DT, j = 'zzz_N_by_group', value = NULL)
   data.table::set(DT, j = zzz_leader_coords, value = NULL)
+  } else {
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+    assert_not_null(crs)
+
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+    pre <- 'zzz_leader_'
+    zzz_xcol_leader <- paste0(pre, xcol)
+    zzz_ycol_leader <- paste0(pre, ycol)
+    zzz_coords_leader  <- c(zzz_xcol_leader, zzz_ycol_leader)
+
+    DT[, c(zzz_coords_leader) :=
+         .SD[which(rank_position_group_direction == 1)],
+       .SDcols = c(coords),
+       env = list(group = group),
+       by = group]
+
+    if (check_leaderless[, .N > 0]) {
+      warning(
+        'groups found missing leader (rank_position_group_direction == 1): \n',
+        check_leaderless[, paste(group, collapse = ', ')]
+      )
+    }
+
+    if (out_col %in% colnames(DT)) {
+      message(
+        paste0(out_col, ' column will be overwritten by this function')
+      )
+      data.table::set(DT, j = out_col, value = NULL)
+    }
+
+    DT[!group %in% check_leaderless$group, distance_leader := calc_distance(
+      x_a = x,
+      y_a = y,
+      x_b = x_leader,
+      y_b = y_leader,
+      crs = crs
+    ),
+    env = list(
+      x = xcol, y = ycol, x_leader = zzz_xcol_leader, y_leader = zzz_ycol_leader
+    )]
+
+    data.table::set(DT, j = zzz_coords_leader, value = NULL)
+
+  }
 
   return(DT[])
 }
