@@ -22,82 +22,9 @@ dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 clean_DT <- copy(DT)
 clean_edges <- copy(edges)
 
-test_that('edges, DT are required', {
-  expect_error(centroid_dyad(edges, DT = NULL))
-  expect_error(centroid_dyad(edges = NULL, DT))
-})
-
-test_that('arguments required, otherwise error detected', {
-  expect_error(centroid_dyad(edges, DT, id = id, coords = 'X'),
-               'coords must be length 2')
-  expect_error(centroid_dyad(edges, DT, id = NULL),
-               'id must be provided')
-  expect_error(centroid_dyad(edges, DT, id = id,
-                             coords = coords, timegroup = NULL),
-               'timegroup must be provided')
-  expect_error(centroid_dyad(edges, DT, id = id, coords = coords, na.rm = NULL),
-               'na.rm must be provided')
-})
-
-test_that('na.rm is logical', {
-  expect_error(centroid_dyad(edges, DT, id = id,
-                             coords = coords, na.rm = 'potato'),
-               'na.rm must be of class logical')
-})
-
-test_that('column names must exist in DT', {
-  expect_error(centroid_dyad(edges, DT, id = 'potato', coords = coords),
-               'potato field')
-  expect_error(centroid_dyad(edges, DT, id = id, coords = rep('potato', 2)),
-               'potato field')
-  expect_error(centroid_dyad(edges, DT, id = id,
-                             coords = coords, timegroup = 'potato'),
-               'potato field')
-})
-
-test_that('coords are correctly provided or error detected', {
-  expect_error(centroid_dyad(edges, DT, id = id, coords = c('X', NULL)),
-               'coords must be length 2')
-  expect_error(centroid_dyad(edges, DT, id = id, coords = c('X', 'ID')),
-               'coords must be of class numeric')
-})
-
-test_that('centroid column succesfully detected', {
-  copyEdges <- copy(edges)[, centroid_X := 1]
-  expect_message(
-    centroid_dyad(copyEdges, DT, id = id, coords = coords),
-    'centroid_X column will be overwritten'
-  )
-  copyEdges <- copy(edges)[, centroid_Y := 1]
-  expect_message(
-    centroid_dyad(copyEdges, DT, id = id, coords = coords),
-    'centroid_Y column will be overwritten'
-  )
-})
-
-test_that('no rows are added to the result DT', {
-  expect_equal(nrow(edges),
-               nrow(centroid_dyad(edges, DT, id = id, coords = coords)))
-})
-
-test_that('two columns added to the result DT', {
-  copyEdges <- copy(edges)
-
-  expect_equal(ncol(copyEdges) + 2,
-               ncol(centroid_dyad(edges, DT, id = id, coords = coords)))
-})
-
-test_that('two columns added to the result DT are doubles', {
-  expect_type(centroid_dyad(edges, DT,
-                            id = id, coords = coords)$centroid_X, 'double')
-  expect_type(centroid_dyad(edges, DT,
-                            id = id, coords = coords)$centroid_Y, 'double')
-})
-
-test_that('returns a data.table', {
-  expect_s3_class(centroid_dyad(edges, DT, id = id,
-                                coords = coords), 'data.table')
-})
+# Note: since centroid_dyad and centroid_fusion share an internal function
+#       that orchestrates the centroid calculation for both, testing is
+#       overlapping. See test-centroid-fusion for full testing suite.
 
 expected_DT <- copy(clean_DT)[timegroup < 3]
 expected_DT[, X := timegroup * 10 + .I]
@@ -108,11 +35,6 @@ expected_DT[ID %in% first(expected_edges$ID1), X := NA]
 
 test_that('results are expected', {
   expect_equal(
-    centroid_dyad(expected_edges, expected_DT, id = id, coords = coords,
-                  na.rm = FALSE)[timegroup == 1, unique(centroid_X)],
-    NA_real_
-  )
-
     centroid_dyad(expected_edges, expected_DT, id = id, coords = coords)[
       timegroup == 1, unique(centroid_Y)],
     10
