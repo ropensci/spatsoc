@@ -105,7 +105,7 @@ distance_to_centroid <- function(
     geometry = 'geometry') {
 
   # Due to NSE notes in R CMD check
-  distance_centroid <- rank_distance_centroid <- NULL
+  geo <- cent <- x <- y <- x_centroid <- y_centroid <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
