@@ -158,6 +158,8 @@ distance_to_leader <- function(
       check_leaderless[, paste(group, collapse = ', ')]
     )
   }
+  out_col <- 'direction_leader'
+
   if (is.null(coords)) {
     if (!is.null(crs)) {
       message('crs argument is ignored when coords are null, using geometry')
