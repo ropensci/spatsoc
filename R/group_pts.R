@@ -158,11 +158,6 @@ group_pts <- function(
     }
 
     assert_threshold(threshold, crs)
-
-    if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_)) {
-      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
-    }
-
     assert_length(coords, 2)
     assert_are_colnames(DT, coords)
     assert_col_inherits(DT, coords, 'numeric')
@@ -176,6 +171,11 @@ group_pts <- function(
     }
 
     use_dist <- isFALSE(sf::st_is_longlat(crs))
+
+    if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
+        !use_dist) {
+      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+    }
 
     DT[, withinGroup := {
       distMatrix <- calc_distance(x_a = x, y_a = y, crs = crs,
