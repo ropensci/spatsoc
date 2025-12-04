@@ -119,28 +119,80 @@ group_pts <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
-
   assert_not_null(id)
+  assert_not_missing(timegroup)
+  check_colnames <- c(timegroup, id, splitBy)
+  assert_are_colnames(DT, check_colnames)
 
-  if (is.null(crs)) {
-    crs <- sf::NA_crs_
+  if (!is.null(timegroup)) {
+    if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+            c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+      warning(
+        strwrap(
+          prefix = " ",
+          initial = "",
+          x = 'timegroup provided is a date/time
+          or character type, did you use group_times?'
+        )
+      )
+    }
   }
 
-  assert_threshold(threshold, crs)
+  if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
+    warning(
+      strwrap(
+        prefix = " ",
+        initial = "",
+        x = 'found duplicate id in a
+          timegroup and/or splitBy -
+          does your group_times threshold match the fix rate?'
+      )
+    )
+  }
+
+  if (is.null(coords)) {
+
+  } else {
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
+    }
+
+    assert_threshold(threshold, crs)
+
     if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_)) {
       threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
     }
 
+    assert_length(coords, 2)
+    assert_are_colnames(DT, coords)
+    assert_col_inherits(DT, coords, 'numeric')
+
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+
+    if ('group' %in% colnames(DT)) {
+      message('group column will be overwritten by this function')
+      data.table::set(DT, j = 'group', value = NULL)
+    }
+
+    DT[, withinGroup := {
+      distMatrix <- calc_distance(x_a = x, y_a = y, crs = crs)
+      graphAdj <-
+        igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
+      igraph::components(graphAdj)$membership
+    },
+    by = c(splitBy, timegroup),
+    env = list(x = xcol, y = ycol)]
   }
 
-  assert_length(coords, 2)
+  DT[, group := .GRP,
+     by = c(splitBy, timegroup, 'withinGroup')]
+  data.table::set(DT, j = 'withinGroup', value = NULL)
 
-  assert_not_missing(timegroup)
+  return(DT[])
+}
 
-  check_colnames <- c(timegroup, id, coords, splitBy)
-  assert_are_colnames(DT, check_colnames)
 
-  assert_col_inherits(DT, coords, 'numeric')
 
   if (!is.null(timegroup)) {
     if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
