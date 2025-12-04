@@ -175,8 +175,11 @@ group_pts <- function(
       data.table::set(DT, j = 'group', value = NULL)
     }
 
+    use_dist <- isFALSE(sf::st_is_longlat(crs))
+
     DT[, withinGroup := {
-      distMatrix <- calc_distance(x_a = x, y_a = y, crs = crs)
+      distMatrix <- calc_distance(x_a = x, y_a = y, crs = crs,
+                                  use_dist = use_dist)
       graphAdj <-
         igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
       igraph::components(graphAdj)$membership
