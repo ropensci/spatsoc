@@ -42,15 +42,25 @@ test_that('arguments provided correctly else error', {
   )
 })
 
-test_that('units are returned', {
-  expect_s3_class(DT[, calc_distance(geometry)], 'units')
+test_that('units are returned when use_dist is FALSE else numeric', {
+  expect_s3_class(DT[, calc_distance(geometry, use_dist = FALSE)], 'units')
+  expect_s3_class(DT[, calc_distance(geometry, st_shift_longitude(geometry),
+                                     use_dist = FALSE)],
+                  'units')
   expect_s3_class(
-    DT[, calc_distance(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat)],
+    DT[, calc_distance(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat,
+                       use_dist = FALSE)],
     'units'
   )
+
   expect_s3_class(
-    DT[, calc_distance(x_a = X, y_a = Y, crs = crs)],
-    'units'
+    DT[, calc_distance(x_a = X, y_a = Y, crs = crs, use_dist = TRUE)],
+    'dist'
+  )
+  expect_s3_class(
+    DT[, calc_distance(x_a = X, y_a = Y, x_b = X + 100, y_b = Y + 100,
+                       crs = crs, use_dist = TRUE)],
+    'dist'
   )
 })
 
