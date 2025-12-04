@@ -325,7 +325,8 @@ calc_distance <- function(
   geometry_a, geometry_b,
   x_a, y_a,
   x_b, y_b,
-  crs) {
+  crs,
+  use_dist) {
  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
      missing(x_b) && missing(y_b)) {
    if (!missing(geometry_b)) {
