@@ -365,6 +365,19 @@ calc_distance <- function(
  }
 }
 
+pairwise_dist <- function(geometry_a, geometry_b,
+                          x_a, y_a,
+                          x_b, y_b) {
+  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
+      !missing(geometry_b)) {
+    a <- sf::st_coordinates(geometry_a)
+    b <- sf::st_coordinates(geometry_b)
+    sqrt((a[, 1] - b[, 1]) ^ 2 + (a[, 2] - b[, 2]) ^ 2)
+  } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a) &&
+             !missing(x_b) && !missing(y_b)) {
+    sqrt((x_a - x_b) ^ 2 + (y_a - y_b) ^ 2)
+  }
+}
 #' Difference of two angles measured in radians
 #'
 #' **Internal function** - not developed to be used outside of spatsoc functions
