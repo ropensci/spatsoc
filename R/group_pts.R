@@ -112,7 +112,8 @@ group_pts <- function(
     coords = NULL,
     timegroup,
     crs = NULL,
-    splitBy = NULL) {
+    splitBy = NULL,
+    geometry = 'geometry') {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL
 
