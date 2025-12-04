@@ -322,47 +322,53 @@ calc_direction <- function(
 #' # E, N, W, S
 #' example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326)]
 calc_distance <- function(
-  geometry_a, geometry_b,
-  x_a, y_a,
-  x_b, y_b,
-  crs,
-  use_dist) {
- if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
-     missing(x_b) && missing(y_b)) {
-   if (!missing(geometry_b)) {
-     # Pairwise
-     sf::st_distance(geometry_a, geometry_b, by_element = TRUE)
-   } else {
-     # Matrix
-     sf::st_distance(geometry_a, by_element = FALSE)
-   }
- } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
-   if (!missing(x_b) && !missing(y_b)) {
-     # Pairwise
-     sf::st_distance(
-       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                        na.fail = FALSE),
-       y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2),
-                        na.fail = FALSE),
-       by_element = TRUE
-     )
-   } else {
-     # Matrix
-     sf::st_distance(
-       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                        na.fail = FALSE),
-       by_element = FALSE
-     )
-   }
- } else {
-   rlang::abort(c(
-     'arguments incorrectly provided, use one of the following combinations:',
-     '1. geometry_a',
-     '2. geometry_a and geometry_b',
-     '3. x_a, y_a',
-     '4. x_a, y_a, and x_b, y_b'
-   ))
- }
+    geometry_a, geometry_b,
+    x_a, y_a,
+    x_b, y_b,
+    crs,
+    use_dist) {
+  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
+    missing(x_b) && missing(y_b)) {
+    if (!missing(geometry_b)) {
+      # Pairwise
+      sf::st_distance(geometry_a, geometry_b, by_element = TRUE)
+    } else {
+      # Matrix
+      sf::st_distance(geometry_a, by_element = FALSE)
+    }
+  } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
+    if (!missing(x_b) && !missing(y_b)) {
+      # Pairwise
+      sf::st_distance(
+        x = sf::st_as_sf(data.frame(x_a, y_a),
+          crs = crs, coords = seq.int(2),
+          na.fail = FALSE
+        ),
+        y = sf::st_as_sf(data.frame(x_b, y_b),
+          crs = crs, coords = seq.int(2),
+          na.fail = FALSE
+        ),
+        by_element = TRUE
+      )
+    } else {
+      # Matrix
+      sf::st_distance(
+        x = sf::st_as_sf(data.frame(x_a, y_a),
+          crs = crs, coords = seq.int(2),
+          na.fail = FALSE
+        ),
+        by_element = FALSE
+      )
+    }
+  } else {
+    rlang::abort(c(
+      'arguments incorrectly provided, use one of the following combinations:',
+      '1. geometry_a',
+      '2. geometry_a and geometry_b',
+      '3. x_a, y_a',
+      '4. x_a, y_a, and x_b, y_b'
+    ))
+  }
 }
 
 pairwise_dist <- function(geometry_a, geometry_b,
