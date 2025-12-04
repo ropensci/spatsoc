@@ -126,10 +126,10 @@ group_pts <- function(
   }
 
   assert_threshold(threshold, crs)
+    if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_)) {
+      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+    }
 
-  if (isFALSE(inherits(threshold, 'units') &
-              identical(crs, sf::NA_crs_))) {
-    threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
   }
 
   assert_length(coords, 2)
