@@ -75,8 +75,27 @@ test_that('expected dims returned', {
 
   expect_length(
     DT[seq.int(N), calc_distance(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat,
+                                 use_dist = FALSE)],
+    N * N
+  )
+  expect_length(
+    DT[seq.int(N), calc_distance(x_a = lonlat_X, y_a = lonlat_Y,
+                                 x_b = dest_X, y_b = dest_Y,
+                                 crs = crs_lonlat,
+                                 use_dist = FALSE)],
+    N
+  )
+
+  expect_length(DT[seq.int(N), calc_distance(proj_geometry, use_dist = TRUE)],
+                N * N)
+  expect_length(DT[seq.int(N), calc_distance(proj_geometry, proj_geometry[1],
+                                             use_dist = TRUE)],
+                N)
+
+  expect_length(
+    DT[seq.int(N), calc_distance(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat,
                                  use_dist = TRUE)],
-    N * N / 2 - (N / 2)
+    N * N
   )
   expect_length(
     DT[seq.int(N), calc_distance(x_a = lonlat_X, y_a = lonlat_Y,
