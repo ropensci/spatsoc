@@ -161,12 +161,15 @@ distance_to_centroid <- function(
       data.table::set(DT, j = out, value = NULL)
     }
 
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
+
     DT[, c(out) := calc_distance(
       x_a = x,
       y_a = y,
       x_b = x_centroid,
       y_b = y_centroid,
-      crs = crs
+      crs = crs,
+      use_dist = use_dist
     ),
     env = list(x = xcol, y = ycol,
                x_centroid = xcol_centroid, y_centroid = ycol_centroid)

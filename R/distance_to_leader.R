@@ -206,12 +206,15 @@ distance_to_leader <- function(
       data.table::set(DT, j = out_col, value = NULL)
     }
 
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
+
     DT[!group %in% check_leaderless$group, distance_leader := calc_distance(
       x_a = x,
       y_a = y,
       x_b = x_leader,
       y_b = y_leader,
-      crs = crs
+      crs = crs,
+      use_dist = use_dist
     ),
     env = list(
       x = xcol, y = ycol, x_leader = zzz_xcol_leader, y_leader = zzz_ycol_leader
