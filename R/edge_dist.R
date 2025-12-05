@@ -114,6 +114,7 @@ edge_dist <- function(
     timegroup,
     crs = NULL,
     splitBy = NULL,
+    geometry = 'geometry',
     returnDist = FALSE,
     fillNA = TRUE) {
   # due to NSE notes in R CMD check
