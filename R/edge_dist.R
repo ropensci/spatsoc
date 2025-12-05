@@ -132,13 +132,6 @@ edge_dist <- function(
   check_cols <- c(timegroup, id, coords, splitBy)
   assert_are_colnames(DT, check_cols)
 
-  if (is.null(crs)) {
-    crs <- sf::NA_crs_
-  }
-
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
-
   if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
           c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
     warning(
@@ -173,57 +166,69 @@ edge_dist <- function(
     data.table::setnames(DT, 'splitBy', 'split_by')
   }
 
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
 
-  if (is.null(threshold)) {
-    edges <- DT[, {
-
-      distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
-      diag(distMatrix) <- NA
-
-      if (returnDist) {
-        l <- data.table::data.table(
-          ID1 = .SD[[1]][rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
-          ID2 = .SD[[1]][rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
-          distance = c(distMatrix)
-        )[ID1 != ID2]
-      } else {
-        l <- data.table::data.table(
-          ID1 = .SD[[1]][rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
-          ID2 = .SD[[1]][rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
-        )[ID1 != ID2]
-      }
-      l
-    },
-    by = splitBy, .SDcols = c(id, coords)]
-  } else {
-
-    assert_threshold(threshold, crs)
-
-    if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_)) {
-      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+  if (is.null(coords)) {
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
     }
 
-    edges <- DT[, {
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
 
-      distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
-      diag(distMatrix) <- NA
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
 
-      w <- which(distMatrix < threshold, arr.ind = TRUE)
+    if (is.null(threshold)) {
+      edges <- DT[, {
 
-      if (returnDist) {
-        l <- list(ID1 = .SD[[1]][w[, 1]],
-                  ID2 = .SD[[1]][w[, 2]],
-                  distance = distMatrix[w])
-      } else {
-        l <- list(ID1 = .SD[[1]][w[, 1]],
-                  ID2 = .SD[[1]][w[, 2]])
+        distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
+        diag(distMatrix) <- NA
+
+        if (returnDist) {
+          l <- data.table::data.table(
+            ID1 = .SD[[1]][rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+            ID2 = .SD[[1]][rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
+            distance = c(distMatrix)
+          )[ID1 != ID2]
+        } else {
+          l <- data.table::data.table(
+            ID1 = .SD[[1]][rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+            ID2 = .SD[[1]][rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
+          )[ID1 != ID2]
+        }
+        l
+      },
+      by = splitBy, .SDcols = c(id, coords)]
+    } else {
+
+      assert_threshold(threshold, crs)
+
+      if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_)) {
+        threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
       }
-      l
-    },
-    by = splitBy, .SDcols = c(id, coords)]
+
+      edges <- DT[, {
+
+        distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
+        diag(distMatrix) <- NA
+
+        w <- which(distMatrix < threshold, arr.ind = TRUE)
+
+        if (returnDist) {
+          l <- list(ID1 = .SD[[1]][w[, 1]],
+                    ID2 = .SD[[1]][w[, 2]],
+                    distance = distMatrix[w])
+        } else {
+          l <- list(ID1 = .SD[[1]][w[, 1]],
+                    ID2 = .SD[[1]][w[, 2]])
+        }
+        l
+      },
+      by = splitBy, .SDcols = c(id, coords)]
+    }
   }
+
+
 
   if (fillNA) {
     merge(edges,
