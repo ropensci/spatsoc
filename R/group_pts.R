@@ -120,6 +120,7 @@ group_pts <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
   assert_not_null(id)
+  assert_not_null(threshold)
   assert_not_missing(timegroup)
   check_colnames <- c(timegroup, id, splitBy)
   assert_are_colnames(DT, check_colnames)
@@ -159,6 +160,8 @@ group_pts <- function(
     assert_col_inherits(DT, geometry, 'sfc_POINT')
 
     crs <- sf::st_crs(DT[[geometry]])
+    assert_threshold(threshold, crs)
+
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
     if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
