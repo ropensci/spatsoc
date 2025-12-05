@@ -33,7 +33,7 @@ test_that('DT is required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(distance_to_leader(DT, coords = NULL, group = group),
-               'coords must be length 2')
+               'geometry field')
   expect_error(distance_to_leader(DT, coords = coords, group = NULL),
                'group must be provided')
 })
@@ -124,7 +124,7 @@ expect_DT <- data.table(
   ID = c('A', 'B'),
   X = c(0, 10),
   Y = c(0, 0),
-  group_direction = rep(as_units(0, 'rad'), 2),
+  group_direction = rep(units::as_units(0, 'rad'), 2),
   group = c(1, 1)
 )
 centroid_group(expect_DT, coords = coords)

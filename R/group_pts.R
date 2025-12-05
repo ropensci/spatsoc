@@ -32,6 +32,13 @@
 #' rows within timegroups can overload your machine since all pairwise distances
 #' are calculated within each timegroup.
 #'
+#' The `crs` argument expects a character string or numeric defining the
+#' coordinate reference system to be passed to [sf::st_crs]. For example, for
+#' UTM zone 36S (EPSG 32736), the crs argument is `crs = "EPSG:32736"` or
+#' `crs = 32736`. See <https://spatialreference.org> for a list of EPSG codes.
+#' Note: previous versions of `group_pts` did not use a `crs` argument - to
+#' prevent breaking changes, if the `crs` argument is NULL (default) the
+#' distance measurement is unchanged.
 #'
 #' The `splitBy` argument offers further control over grouping. If within
 #' your `DT`, you have multiple populations, subgroups or other distinct
@@ -62,6 +69,10 @@
 #' Note: the order is assumed X followed by Y column names.
 #' @param timegroup timegroup field in the DT within which the grouping will be
 #'   calculated
+#' @param crs numeric or character defining the coordinate reference
+#'   system to be passed to [sf::st_crs]. For example, either
+#'   `crs = "EPSG:32736"` or `crs = 32736`. If `crs = NULL`, the `crs` will be
+#'   internally set to `sf::NA_crs_`.
 #' @param splitBy (optional) character string or vector of grouping column
 #'   name(s) upon which the grouping will be calculated
 #'
@@ -100,27 +111,19 @@ group_pts <- function(
     id = NULL,
     coords = NULL,
     timegroup,
-    splitBy = NULL) {
+    crs = NULL,
+    splitBy = NULL,
+    geometry = 'geometry') {
   # due to NSE notes in R CMD check
   N <- withinGroup <- ..id <- ..coords <- group <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
-
-  assert_not_null(threshold)
-  assert_inherits(threshold, 'numeric')
-  assert_relation(threshold, `>`, 0)
-
   assert_not_null(id)
-
-  assert_length(coords, 2)
-
+  assert_not_null(threshold)
   assert_not_missing(timegroup)
-
-  check_colnames <- c(timegroup, id, coords, splitBy)
+  check_colnames <- c(timegroup, id, splitBy)
   assert_are_colnames(DT, check_colnames)
-
-  assert_col_inherits(DT, coords, 'numeric')
 
   if (!is.null(timegroup)) {
     if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
@@ -136,11 +139,6 @@ group_pts <- function(
     }
   }
 
-  if ('group' %in% colnames(DT)) {
-    message('group column will be overwritten by this function')
-    data.table::set(DT, j = 'group', value = NULL)
-  }
-
   if (DT[, .N, by = c(id, splitBy, timegroup)][N > 1, sum(N)] != 0) {
     warning(
       strwrap(
@@ -153,19 +151,90 @@ group_pts <- function(
     )
   }
 
-  DT[, withinGroup := {
-    distMatrix <-
-      as.matrix(stats::dist(cbind(
-        get(..coords[1]), get(..coords[2])
-      ),
-      method = 'euclidean'))
-    graphAdj <-
-      igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
-    igraph::components(graphAdj)$membership
-  },
-  by = c(splitBy, timegroup), .SDcols = c(coords, id)]
-  DT[, group := .GRP,
-     by = c(splitBy, timegroup, 'withinGroup')]
+  if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
+
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+
+    crs <- sf::st_crs(DT[[geometry]])
+    assert_threshold(threshold, crs)
+
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
+
+    if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
+        !use_dist) {
+      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+    }
+
+    DT[, withinGroup := {
+      distMatrix <- calc_distance(
+        geometry_a = geo,
+        use_dist = use_dist
+      )
+      graphAdj <-
+        igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
+      igraph::components(graphAdj)$membership
+    },
+    by = c(splitBy, timegroup),
+    env = list(geo = geometry)]
+
+    if ('group' %in% colnames(DT)) {
+      message('group column will be overwritten by this function')
+      data.table::set(DT, j = 'group', value = NULL)
+    }
+
+    DT[, group := .GRP,
+      by = c(splitBy, timegroup, 'withinGroup')]
+  } else {
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
+    }
+
+    assert_threshold(threshold, crs)
+    assert_length(coords, 2)
+    assert_are_colnames(DT, coords)
+    assert_col_inherits(DT, coords, 'numeric')
+
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+
+    if ('group' %in% colnames(DT)) {
+      message('group column will be overwritten by this function')
+      data.table::set(DT, j = 'group', value = NULL)
+    }
+
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
+
+    if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
+        !use_dist) {
+      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+    }
+
+    DT[!(is.na(x) | is.na(y)),
+      withinGroup := {
+        distMatrix <- calc_distance(
+          x_a = x, y_a = y, crs = crs,
+          use_dist = use_dist
+        )
+        graphAdj <-
+          igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
+        igraph::components(graphAdj)$membership
+      },
+      by = c(splitBy, timegroup),
+      env = list(x = xcol, y = ycol)
+    ]
+
+    DT[!(is.na(x) | is.na(y)),
+      group := .GRP,
+      by = c(splitBy, timegroup, 'withinGroup'),
+      env = list(x = xcol, y = ycol)
+    ]
+  }
+
   data.table::set(DT, j = 'withinGroup', value = NULL)
+
   return(DT[])
 }

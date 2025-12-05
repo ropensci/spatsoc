@@ -99,7 +99,7 @@ assert_not_null <- function(x, ...) {
   return(invisible(NULL))
 }
 
-assert_relation <- function(x, fun, y, ...) {
+assert_relation <- function(x, fun, y, ..., n = 1) {
   if (!(fun(x, y))) {
     rlang::abort(
       paste0(
@@ -110,11 +110,10 @@ assert_relation <- function(x, fun, y, ...) {
         rlang::caller_arg(y),
         ...
       ),
-      call = rlang::caller_env()
+      call = rlang::caller_env(n = n)
     )
-  } else {
-    return(invisible(NULL))
   }
+  return(invisible(NULL))
 }
 
 assert_threshold <- function(threshold = NULL, crs = NULL) {
@@ -125,7 +124,7 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
       assert_units_match(threshold, sf::st_crs(crs)$SemiMajor, n = 2)
       assert_relation(threshold, `>`, units::as_units(0, units(threshold)))
     }
-  } else {
+  } else if (inherits(threshold, 'numeric')){
     if (any(is.null(crs), is.na(crs))) {
       assert_relation(threshold, `>`, 0)
     } else {
@@ -135,6 +134,10 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
                       n = 2)
     }
     return(invisible(NULL))
+  } else if (is.null(threshold)) {
+    return(invisible(NULL))
+  } else {
+    rlang::abort('threshold must be of class numeric, units, or NULL')
   }
 }
 
@@ -204,7 +207,6 @@ calc_centroid <- function(geometry, x, y, crs) {
     ))
   }
 }
-
 
 #' Calculate direction
 #'
@@ -324,47 +326,86 @@ calc_direction <- function(
 #' # E, N, W, S
 #' example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326)]
 calc_distance <- function(
-  geometry_a, geometry_b,
-  x_a, y_a,
-  x_b, y_b,
-  crs) {
- if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
-     missing(x_b) && missing(y_b)) {
-   if (!missing(geometry_b)) {
-     # Pairwise
-     sf::st_distance(geometry_a, geometry_b, by_element = TRUE)
-   } else {
-     # Matrix
-     sf::st_distance(geometry_a, by_element = FALSE)
-   }
- } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
-   if (!missing(x_b) && !missing(y_b)) {
-     # Pairwise
-     sf::st_distance(
-       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                        na.fail = FALSE),
-       y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2),
-                        na.fail = FALSE),
-       by_element = TRUE
-     )
-   } else {
-     # Matrix
-     sf::st_distance(
-       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                        na.fail = FALSE),
-       by_element = FALSE
-     )
-   }
- } else {
-   rlang::abort(c(
-     'arguments incorrectly provided, use one of the following combinations:',
-     '1. geometry_a',
-     '2. geometry_a and geometry_b',
-     '3. x_a, y_a',
-     '4. x_a, y_a, and x_b, y_b'
-   ))
- }
+    geometry_a, geometry_b,
+    x_a, y_a,
+    x_b, y_b,
+    crs,
+    use_dist) {
+  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
+    missing(x_b) && missing(y_b)) {
+    if (!missing(geometry_b)) {
+      # Pairwise
+      if (use_dist) {
+        pairwise_dist(geometry_a, geometry_b)
+      } else {
+        sf::st_distance(geometry_a, geometry_b, by_element = TRUE)
+      }
+    } else {
+      # Matrix
+      if (use_dist) {
+        as.matrix(stats::dist(sf::st_coordinates(geometry_a)))
+      } else {
+        sf::st_distance(geometry_a, by_element = FALSE)
+      }
+    }
+  } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
+    if (!missing(x_b) && !missing(y_b)) {
+      # Pairwise
+      if (use_dist) {
+        pairwise_dist(x_a = x_a, y_a = y_a, x_b = x_b, y_b = y_b)
+      } else {
+        sf::st_distance(
+          x = sf::st_as_sf(data.frame(x_a, y_a),
+                           crs = crs, coords = seq.int(2),
+                           na.fail = FALSE
+          ),
+          y = sf::st_as_sf(data.frame(x_b, y_b),
+                           crs = crs, coords = seq.int(2),
+                           na.fail = FALSE
+          ),
+          by_element = TRUE
+        )
+      }
+    } else {
+      # Matrix
+      if (use_dist) {
+        as.matrix(stats::dist(cbind(x_a, y_a)))
+      } else {
+        sf::st_distance(
+          x = sf::st_as_sf(data.frame(x_a, y_a),
+                           crs = crs, coords = seq.int(2),
+                           na.fail = FALSE
+          ),
+          by_element = FALSE
+        )
+      }
+    }
+  } else {
+    rlang::abort(c(
+      'arguments incorrectly provided, use one of the following combinations:',
+      '1. geometry_a',
+      '2. geometry_a and geometry_b',
+      '3. x_a, y_a, and crs',
+      '4. x_a, y_a, x_b, y_b, and crs'
+    ))
+  }
 }
+
+# Internal pairwise dist used in internal calc_distance
+pairwise_dist <- function(geometry_a, geometry_b,
+                          x_a, y_a,
+                          x_b, y_b) {
+  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
+      !missing(geometry_b)) {
+    a <- sf::st_coordinates(geometry_a)
+    b <- sf::st_coordinates(geometry_b)
+    sqrt((a[, 1] - b[, 1]) ^ 2 + (a[, 2] - b[, 2]) ^ 2)
+  } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a) &&
+             !missing(x_b) && !missing(y_b)) {
+    sqrt((x_a - x_b) ^ 2 + (y_a - y_b) ^ 2)
+  }
+}
+
 
 #' Difference of two angles measured in radians
 #'

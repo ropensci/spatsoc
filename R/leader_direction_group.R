@@ -159,7 +159,8 @@ leader_direction_group <- function(
 
     DT[, rank_position_group_direction :=
          data.table::frank(-position_group_direction,
-                           ties.method = ties.method),
+                           ties.method = ties.method,
+                           na.last = 'keep'),
        by = c(group)]
   }
 

@@ -51,7 +51,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'potato',
       coords = c('X', 'Y'),
-      timegroup = NULL
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -64,7 +64,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'ID',
       coords = c('potatoX', 'potatoY'),
-      timegroup = NULL
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -77,7 +77,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'Y'),
-      timegroup = NULL,
+      timegroup = 'timegroup',
       splitBy = 'potato'
     ),
     'not present in input DT',
@@ -102,13 +102,19 @@ test_that('column names must exist in DT', {
 test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
 
-  expect_error(group_pts(DT, threshold = -10, id = 'ID'),
+  expect_error(group_pts(DT, threshold = -10, id = 'ID',
+                         coords = c('X', 'Y'),
+                         timegroup = 'timegroup'),
                'threshold must be > 0')
 
-  expect_error(group_pts(DT, threshold = 0, id = 'ID'),
+  expect_error(group_pts(DT, threshold = 0, id = 'ID',
+                         coords = c('X', 'Y'),
+                         timegroup = 'timegroup'),
                'threshold must be > 0')
 
-  expect_error(group_pts(DT, threshold = '0', id = 'ID'),
+  expect_error(group_pts(DT, threshold = '0', id = 'ID',
+                         coords = c('X', 'Y'),
+                         timegroup = 'timegroup'),
                'threshold must be of class numeric')
 })
 
@@ -131,7 +137,7 @@ test_that('coords are correctly provided or error detected', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'ID'),
-      timegroup = NULL
+      timegroup = 'timegroup'
     ),
     'coords must be of class numeric'
   )
@@ -322,4 +328,55 @@ test_that('splitBy argument doesnt use splitBy column', {
     )[, uniqueN(splitBy), group][V1 > 1, .N != 0]
   )
 
+})
+
+
+test_that('group_pts returns NA for group when X/Y are NA', {
+  copyDT <- copy(DT)
+
+  n <- 10
+  copyDT[sample(.N, n), X := NA]
+
+  expect_equal(
+    group_pts(
+      copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
+    )[is.na(group), .N],
+    n
+  )
+
+  copyDT <- copy(DT)
+
+  n <- 10
+  copyDT[sample(.N, n), Y := NA]
+
+  expect_equal(
+    group_pts(
+      copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
+    )[is.na(group), .N],
+    n
+  )
+
+  copyDT <- copy(DT)
+
+  n <- 10
+  copyDT[sample(.N, n), c('X', 'Y') := NA]
+
+  expect_equal(
+    group_pts(
+      copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
+    )[is.na(group), .N],
+    n
+  )
 })

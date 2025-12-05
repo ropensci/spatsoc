@@ -31,6 +31,14 @@
 #' rows within timegroups can overload your machine since all pairwise distances
 #' are calculated within each timegroup.
 #'
+#' The `crs` argument expects a character string or numeric defining the
+#' coordinate reference system to be passed to [sf::st_crs]. For example, for
+#' UTM zone 36S (EPSG 32736), the crs argument is `crs = "EPSG:32736"` or
+#' `crs = 32736`. See <https://spatialreference.org> for a list of EPSG codes.
+#' Note: previous versions of `edge_nn` did not use a `crs` argument - to
+#' prevent breaking changes, if the `crs` argument is NULL (default) the
+#' distance measurement is unchanged.
+#'
 #' The `splitBy` argument offers further control over grouping. If within
 #' your `DT`, you have multiple populations, subgroups or other distinct
 #' parts, you can provide the name of the column which identifies them to
@@ -39,15 +47,13 @@
 #'
 #' @param threshold (optional) spatial distance threshold to set maximum
 #'   distance between an individual and their neighbour.
-#' @param returnDist logical indicating if the distance between individuals
-#'   should be returned. If FALSE (default), only ID, NN columns (and timegroup,
-#'   splitBy columns if provided) are returned. If TRUE, another column
-#'   "distance" is returned indicating the distance between ID and NN.
 #' @inheritParams group_pts
+#' @inheritParams edge_dist
 #'
 #' @return `edge_nn` returns a `data.table`  with three columns:
 #'   timegroup, ID and NN. If 'returnDist' is TRUE, column 'distance' is
-#'   returned indicating the distance between ID and NN.
+#'   returned indicating the distance between ID and NN in the units of the `crs`.
+#'   If `crs` is NULL, the 'distance' column will not have units set.
 #'
 #'   The ID and NN columns represent the edges defined by the nearest neighbours
 #'   (and temporal thresholds with `group_times`).
@@ -101,6 +107,7 @@ edge_nn <- function(
     id = NULL,
     coords = NULL,
     timegroup,
+    crs = NULL,
     splitBy = NULL,
     threshold = NULL,
     returnDist = FALSE) {
@@ -110,21 +117,13 @@ edge_nn <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
 
-  if (!is.null(threshold)) {
-    assert_inherits(threshold, 'numeric')
-    assert_relation(threshold, `>`, 0)
-  }
-
   assert_not_null(id)
 
   assert_not_missing(timegroup)
   assert_not_null(timegroup)
 
-  check_cols <- c(timegroup, id, coords, splitBy)
+  check_cols <- c(timegroup, id, splitBy)
   assert_are_colnames(DT, check_cols)
-
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
 
   if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
           c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
@@ -160,31 +159,63 @@ edge_nn <- function(
     )
   }
 
-  DT[, {
+  if (is.null(coords)) {
 
-    distMatrix <-
-      as.matrix(stats::dist(.SD[, 2:3], method = 'euclidean'))
-    diag(distMatrix) <- NA
-
-    if (is.null(threshold)) {
-      wm <- apply(distMatrix, MARGIN = 2, which.min)
-    } else {
-      distMatrix[distMatrix > threshold] <- NA
-      wm <- apply(distMatrix, MARGIN = 2,
-                  function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
+  } else {
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
     }
 
-    if (returnDist) {
-      w <- wm + (length(wm) * (as.numeric(names(wm)) - 1))
-      l <- list(ID = .SD[[1]][as.numeric(names(wm))],
-                NN = .SD[[1]][wm],
-                distance = distMatrix[w])
-    } else {
-      l <- list(ID = .SD[[1]][as.numeric(names(wm))],
-                NN = .SD[[1]][wm])
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
+
+    if (!is.null(threshold)) {
+      assert_threshold(threshold, crs)
+
+      if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
+          !use_dist) {
+        threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+      }
     }
-    l
-  },
-  by = splitBy, .SDcols = c(id, coords)]
+
+    DT[, {
+
+      distMatrix <- calc_distance(
+        x_a = x,
+        y_a = y,
+        crs = crs,
+        use_dist = use_dist
+      )
+      diag(distMatrix) <- NA
+
+      if (is.null(threshold)) {
+        wm <- apply(distMatrix, MARGIN = 2, which.min)
+      } else {
+        distMatrix[distMatrix > threshold] <- NA
+        wm <- apply(distMatrix, MARGIN = 2,
+                    function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
+      }
+
+      if (returnDist) {
+        w <- wm + (length(wm) * (as.numeric(names(wm)) - 1))
+        l <- list(ID = id[as.numeric(names(wm))],
+                  NN = id[wm],
+                  distance = distMatrix[w])
+      } else {
+        l <- list(ID = id[as.numeric(names(wm))],
+                  NN = id[wm])
+      }
+      l
+    },
+    by = splitBy,
+    env = list(x = xcol, y = ycol, id = id)]
+  }
+
+
 }
 
