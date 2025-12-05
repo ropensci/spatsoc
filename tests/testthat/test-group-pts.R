@@ -323,3 +323,54 @@ test_that('splitBy argument doesnt use splitBy column', {
   )
 
 })
+
+
+test_that('group_pts returns NA for group when X/Y are NA', {
+  copyDT <- copy(DT)
+
+  n <- 10
+  copyDT[sample(.N, n), X := NA]
+
+  expect_equal(
+    group_pts(
+      copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
+    )[is.na(group), .N],
+    n
+  )
+
+  copyDT <- copy(DT)
+
+  n <- 10
+  copyDT[sample(.N, n), Y := NA]
+
+  expect_equal(
+    group_pts(
+      copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
+    )[is.na(group), .N],
+    n
+  )
+
+  copyDT <- copy(DT)
+
+  n <- 10
+  copyDT[sample(.N, n), c('X', 'Y') := NA]
+
+  expect_equal(
+    group_pts(
+      copyDT,
+      threshold = 10,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      timegroup = 'timegroup'
+    )[is.na(group), .N],
+    n
+  )
+})
