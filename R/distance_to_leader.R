@@ -160,9 +160,13 @@ distance_to_leader <- function(
       data.table::set(DT, j = out_col, value = NULL)
     }
 
+    crs <- sf::st_crs(DT[[geometry]])
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
+
     DT[!group %in% check_leaderless$group, distance_leader := calc_distance(
       geometry_a = geo,
-      geometry_b = lead
+      geometry_b = lead,
+      use_dist = use_dist
     ),
     env = list(
       geo = geometry, lead = zzz_geometry_leader

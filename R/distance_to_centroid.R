@@ -129,10 +129,13 @@ distance_to_centroid <- function(
       message(out, ' column will be overwritten by this function')
       data.table::set(DT, j = out, value = NULL)
     }
+    crs <- sf::st_crs(DT[[geometry]])
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
     DT[, c(out) := calc_distance(
       geometry_a = geo,
-      geometry_b = cent
+      geometry_b = cent,
+      use_dist = use_dist
     ),
     env = list(geo = geometry, cent = centroid_col)
     ]
