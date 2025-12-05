@@ -130,7 +130,7 @@ distance_to_leader <- function(
     by = group,
     env = list(group = group)][!(has_leader)]
 
-  out_col <- 'direction_leader'
+  out_col <- 'distance_leader'
 
   if (is.null(coords)) {
     if (!is.null(crs)) {
@@ -163,7 +163,7 @@ distance_to_leader <- function(
     crs <- sf::st_crs(DT[[geometry]])
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
-    DT[!group %in% check_leaderless$group, distance_leader := calc_distance(
+    DT[!group %in% check_leaderless$group, c(out_col) := calc_distance(
       geometry_a = geo,
       geometry_b = lead,
       use_dist = use_dist
@@ -214,7 +214,7 @@ distance_to_leader <- function(
 
     DT[!group %in% check_leaderless$group &
         !(is.na(x) | is.na(y)),
-      distance_leader := calc_distance(
+      c(out_col) := calc_distance(
         x_a = x,
         y_a = y,
         x_b = x_leader,
