@@ -339,7 +339,7 @@ calc_distance <- function(
     } else {
       # Matrix
       if (use_dist) {
-        stats::dist(sf::st_coordinates(geometry_a))
+        as.matrix(stats::dist(sf::st_coordinates(geometry_a)))
       } else {
         sf::st_distance(geometry_a, by_element = FALSE)
       }
@@ -365,7 +365,7 @@ calc_distance <- function(
     } else {
       # Matrix
       if (use_dist) {
-        stats::dist(cbind(x_a, y_a))
+        as.matrix(stats::dist(cbind(x_a, y_a)))
       } else {
         sf::st_distance(
           x = sf::st_as_sf(data.frame(x_a, y_a),
