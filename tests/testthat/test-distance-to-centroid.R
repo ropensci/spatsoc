@@ -26,7 +26,7 @@ test_that('DT is required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(distance_to_centroid(DT, coords = NULL),
-               'coords must be length 2')
+               'geometry field')
   expect_error(distance_to_centroid(DT, coords = coords, group = NULL,
                                     return_rank = TRUE),
                'group must be provided')
