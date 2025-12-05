@@ -244,57 +244,72 @@ edge_dist <- function(
     xcol <- data.table::first(coords)
     ycol <- data.table::last(coords)
 
+    if (is.null(crs)) {
+      crs <- sf::NA_crs_
+    }
+
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
+
     if (is.null(threshold)) {
       edges <- DT[, {
-
-        distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
+        distMatrix <- calc_distance(
+          x_a = x,
+          y_a = y,
+          crs = crs,
+          use_dist = use_dist
+        )
         diag(distMatrix) <- NA
 
         if (returnDist) {
           l <- data.table::data.table(
-            ID1 = .SD[[1]][rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
-            ID2 = .SD[[1]][rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
+            ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+            ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
             distance = c(distMatrix)
           )[ID1 != ID2]
         } else {
           l <- data.table::data.table(
-            ID1 = .SD[[1]][rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
-            ID2 = .SD[[1]][rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
+            ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+            ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
           )[ID1 != ID2]
         }
         l
       },
-      by = splitBy, .SDcols = c(id, coords)]
+      by = splitBy,
+      env = list(x = xcol, y = ycol, id = id)]
     } else {
 
       assert_threshold(threshold, crs)
 
-      if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_)) {
+      if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
+          !use_dist) {
         threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
       }
 
       edges <- DT[, {
-
-        distMatrix <- calc_distance(x_a = .SD[[xcol]], y_a = .SD[[ycol]], crs = crs)
+        distMatrix <- calc_distance(
+          x_a = x,
+          y_a = y,
+          crs = crs,
+          use_dist = use_dist
+        )
         diag(distMatrix) <- NA
 
         w <- which(distMatrix < threshold, arr.ind = TRUE)
 
         if (returnDist) {
-          l <- list(ID1 = .SD[[1]][w[, 1]],
-                    ID2 = .SD[[1]][w[, 2]],
+          l <- list(ID1 = id[w[, 1]],
+                    ID2 = id[w[, 2]],
                     distance = distMatrix[w])
         } else {
-          l <- list(ID1 = .SD[[1]][w[, 1]],
-                    ID2 = .SD[[1]][w[, 2]])
+          l <- list(ID1 = id[w[, 1]],
+                    ID2 = id[w[, 2]])
         }
         l
       },
-      by = splitBy, .SDcols = c(id, coords)]
+      by = splitBy,
+      env = list(id = id, x = xcol, y = ycol)]
     }
   }
-
-
 
   if (fillNA) {
     merge(edges,
