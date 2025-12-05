@@ -54,14 +54,14 @@ test_that('units are returned when use_dist is FALSE else numeric', {
     'units'
   )
 
-  expect_s3_class(
+  expect_type(
     DT[, calc_distance(x_a = X, y_a = Y, crs = crs, use_dist = TRUE)],
-    'dist'
+    'double'
   )
-  expect_s3_class(
+  expect_type(
     DT[, calc_distance(x_a = X, y_a = Y, x_b = X + 100, y_b = Y + 100,
                        crs = crs, use_dist = TRUE)],
-    'dist'
+    'double'
   )
 })
 
