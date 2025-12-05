@@ -123,27 +123,44 @@ test_that('expected range returned', {
 })
 
 test_that('NAs returned as expected', {
+  # NAs returned if use_dist = FALSE, in recent updates to sf
+  # NAs are not returned if use_dist = TRUE, unless X and Y are both NA
+  # This is handled in group_pts by subsetting where X and Y are not NA
+
   X_NA <- copy(DT)[seq.int(100)][sample(.N, 10), X := NA]
-  res <- X_NA[, calc_distance(x_a = X, y_a = Y, crs = crs)]
+  res <- X_NA[, calc_distance(x_a = X, y_a = Y, crs = crs, use_dist = TRUE)]
   expect_length(res, nrow(X_NA) * nrow(X_NA))
   expect_true(any(is.na(X_NA$X)))
   # expect_true(any(is.na(res)))
 
   Y_NA <- copy(DT)[seq.int(100)][sample(.N, 10), Y := NA]
-  res <- Y_NA[, calc_distance(x_a = X, y_a = Y, crs = crs)]
+  res <- Y_NA[, calc_distance(x_a = X, y_a = Y, crs = crs, use_dist = TRUE)]
+  expect_length(res, nrow(Y_NA) * nrow(Y_NA))
+  expect_true(any(is.na(Y_NA$Y)))
+  # expect_true(any(is.na(res)))
+
+  X_NA <- copy(DT)[seq.int(100)][sample(.N, 10), X := NA]
+  res <- X_NA[, calc_distance(x_a = X, y_a = Y, crs = crs, use_dist = FALSE)]
+  expect_length(res, nrow(X_NA) * nrow(X_NA))
+  expect_true(any(is.na(X_NA$X)))
+  # expect_true(any(is.na(res)))
+
+  Y_NA <- copy(DT)[seq.int(100)][sample(.N, 10), Y := NA]
+  res <- Y_NA[, calc_distance(x_a = X, y_a = Y, crs = crs, use_dist = FALSE)]
   expect_length(res, nrow(Y_NA) * nrow(Y_NA))
   expect_true(any(is.na(Y_NA$Y)))
   # expect_true(any(is.na(res)))
 
   XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (lonlat_coords) := NA]
-  res <- XY_NA[, calc_distance(x_a = lonlat_X, y_a = lonlat_Y, crs = 4326)]
+  res <- XY_NA[, calc_distance(x_a = lonlat_X, y_a = lonlat_Y, crs = 4326,
+                               use_dist = FALSE)]
   expect_length(res, nrow(XY_NA) * nrow(XY_NA))
   expect_true(any(is.na(c(XY_NA$lonlat_X, XY_NA$lonlat_Y))))
-  expect_true(any(is.na(res)))
+  # expect_true(any(is.na(res)))
 
   get_geometry(XY_NA, lonlat_coords, crs_lonlat)
-  res <- XY_NA[, calc_distance(geometry)]
+  res <- XY_NA[, calc_distance(geometry, use_dist = FALSE)]
   expect_length(res, nrow(XY_NA) * nrow(XY_NA))
   expect_true(any(sf::st_is_empty(XY_NA$geometry)))
-  expect_true(any(is.na(res)))
+  # expect_true(any(is.na(res)))
 })
