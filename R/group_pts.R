@@ -177,7 +177,8 @@ group_pts <- function(
       threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
     }
 
-    DT[, withinGroup := {
+    DT[!(is.na(x) | is.na(y)),
+       withinGroup := {
       distMatrix <- calc_distance(x_a = x, y_a = y, crs = crs,
                                   use_dist = use_dist)
       graphAdj <-
@@ -186,10 +187,14 @@ group_pts <- function(
     },
     by = c(splitBy, timegroup),
     env = list(x = xcol, y = ycol)]
+
+    DT[!(is.na(x) | is.na(y)),
+       group := .GRP,
+       by = c(splitBy, timegroup, 'withinGroup'),
+       env = list(x = xcol, y = ycol)]
+
   }
 
-  DT[, group := .GRP,
-     by = c(splitBy, timegroup, 'withinGroup')]
   data.table::set(DT, j = 'withinGroup', value = NULL)
 
   return(DT[])
