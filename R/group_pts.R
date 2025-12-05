@@ -206,20 +206,24 @@ group_pts <- function(
     }
 
     DT[!(is.na(x) | is.na(y)),
-       withinGroup := {
-      distMatrix <- calc_distance(x_a = x, y_a = y, crs = crs,
-                                  use_dist = use_dist)
-      graphAdj <-
-        igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
-      igraph::components(graphAdj)$membership
-    },
-    by = c(splitBy, timegroup),
-    env = list(x = xcol, y = ycol)]
+      withinGroup := {
+        distMatrix <- calc_distance(
+          x_a = x, y_a = y, crs = crs,
+          use_dist = use_dist
+        )
+        graphAdj <-
+          igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
+        igraph::components(graphAdj)$membership
+      },
+      by = c(splitBy, timegroup),
+      env = list(x = xcol, y = ycol)
+    ]
 
     DT[!(is.na(x) | is.na(y)),
-       group := .GRP,
-       by = c(splitBy, timegroup, 'withinGroup'),
-       env = list(x = xcol, y = ycol)]
+      group := .GRP,
+      by = c(splitBy, timegroup, 'withinGroup'),
+      env = list(x = xcol, y = ycol)
+    ]
 
   }
 
