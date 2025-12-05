@@ -168,6 +168,72 @@ edge_dist <- function(
 
 
   if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
+
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+
+    crs <- sf::st_crs(DT[[geometry]])
+
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
+
+    if (is.null(threshold)) {
+      edges <- DT[, {
+        distMatrix <- calc_distance(
+          geometry_a = geo,
+          use_dist = use_dist
+        )
+        diag(distMatrix) <- NA
+
+        if (returnDist) {
+          l <- data.table::data.table(
+            ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+            ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
+            distance = c(distMatrix)
+          )[ID1 != ID2]
+        } else {
+          l <- data.table::data.table(
+            ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+            ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
+          )[ID1 != ID2]
+        }
+        l
+      },
+      by = splitBy,
+      env = list(geo = geometry, id = id)]
+    } else {
+      assert_threshold(threshold, crs)
+
+      if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
+          !use_dist) {
+        threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+      }
+
+      edges <- DT[, {
+        distMatrix <- calc_distance(
+          geometry_a = geo,
+          use_dist = use_dist
+        )
+        diag(distMatrix) <- NA
+
+        w <- which(distMatrix < threshold, arr.ind = TRUE)
+
+        if (returnDist) {
+          l <- list(ID1 = id[w[, 1]],
+                    ID2 = id[w[, 2]],
+                    distance = distMatrix[w])
+        } else {
+          l <- list(ID1 = id[w[, 1]],
+                    ID2 = id[w[, 2]])
+        }
+        l
+      },
+      by = splitBy,
+      env = list(geo = geometry, id = id)]
+    }
+  } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
     }
