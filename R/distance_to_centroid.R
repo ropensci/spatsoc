@@ -163,16 +163,19 @@ distance_to_centroid <- function(
 
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
-    DT[, c(out) := calc_distance(
-      x_a = x,
-      y_a = y,
-      x_b = x_centroid,
-      y_b = y_centroid,
-      crs = crs,
-      use_dist = use_dist
-    ),
-    env = list(x = xcol, y = ycol,
-               x_centroid = xcol_centroid, y_centroid = ycol_centroid)
+    DT[!(is.na(x) | is.na(y)),
+      c(out) := calc_distance(
+        x_a = x,
+        y_a = y,
+        x_b = x_centroid,
+        y_b = y_centroid,
+        crs = crs,
+        use_dist = use_dist
+      ),
+      env = list(
+        x = xcol, y = ycol,
+        x_centroid = xcol_centroid, y_centroid = ycol_centroid
+      )
     ]
 
   }
