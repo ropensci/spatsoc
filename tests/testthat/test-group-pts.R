@@ -51,7 +51,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'potato',
       coords = c('X', 'Y'),
-      timegroup = NULL
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -64,7 +64,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'ID',
       coords = c('potatoX', 'potatoY'),
-      timegroup = NULL
+      timegroup = 'timegroup'
     ),
     'not present in input DT',
     fixed = FALSE
@@ -77,7 +77,7 @@ test_that('column names must exist in DT', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'Y'),
-      timegroup = NULL,
+      timegroup = 'timegroup',
       splitBy = 'potato'
     ),
     'not present in input DT',
@@ -102,13 +102,19 @@ test_that('column names must exist in DT', {
 test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
 
-  expect_error(group_pts(DT, threshold = -10, id = 'ID'),
+  expect_error(group_pts(DT, threshold = -10, id = 'ID',
+                         coords = c('X', 'Y'),
+                         timegroup = 'timegroup'),
                'threshold must be > 0')
 
-  expect_error(group_pts(DT, threshold = 0, id = 'ID'),
+  expect_error(group_pts(DT, threshold = 0, id = 'ID',
+                         coords = c('X', 'Y'),
+                         timegroup = 'timegroup'),
                'threshold must be > 0')
 
-  expect_error(group_pts(DT, threshold = '0', id = 'ID'),
+  expect_error(group_pts(DT, threshold = '0', id = 'ID',
+                         coords = c('X', 'Y'),
+                         timegroup = 'timegroup'),
                'threshold must be of class numeric')
 })
 
@@ -131,7 +137,7 @@ test_that('coords are correctly provided or error detected', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'ID'),
-      timegroup = NULL
+      timegroup = 'timegroup'
     ),
     'coords must be of class numeric'
   )
