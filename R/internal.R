@@ -124,7 +124,7 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
       assert_units_match(threshold, sf::st_crs(crs)$SemiMajor, n = 2)
       assert_relation(threshold, `>`, units::as_units(0, units(threshold)))
     }
-  } else {
+  } else if (inherits(threshold, 'numeric')){
     if (any(is.null(crs), is.na(crs))) {
       assert_relation(threshold, `>`, 0)
     } else {
@@ -134,6 +134,8 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
                       n = 2)
     }
     return(invisible(NULL))
+  } else {
+    rlang::abort('threshold must be of class numeric or units')
   }
 }
 
