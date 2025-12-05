@@ -170,7 +170,7 @@ group_pts <- function(
       data.table::set(DT, j = 'group', value = NULL)
     }
 
-    use_dist <- isFALSE(sf::st_is_longlat(crs))
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
     if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
         !use_dist) {
