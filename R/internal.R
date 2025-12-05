@@ -134,8 +134,10 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
                       n = 2)
     }
     return(invisible(NULL))
+  } else if (is.null(threshold)) {
+    return(invisible(NULL))
   } else {
-    rlang::abort('threshold must be of class numeric or units')
+    rlang::abort('threshold must be of class numeric, units, or NULL')
   }
 }
 
