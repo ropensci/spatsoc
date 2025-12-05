@@ -190,7 +190,7 @@ distance_to_centroid <- function(
     }
 
     DT[, c(out_rank) :=
-         data.table::frank(out,  ties.method = ties.method),
+         data.table::frank(out,  ties.method = ties.method, na.last = 'keep'),
        by = group,
        env = list(out = out, group = group)]
   }
