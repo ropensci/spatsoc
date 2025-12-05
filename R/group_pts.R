@@ -182,7 +182,7 @@ group_pts <- function(
     env = list(geo = geometry)]
 
     DT[, group := .GRP,
-      by = c(splitBy, timegroup, "withinGroup")]
+      by = c(splitBy, timegroup, 'withinGroup')]
   } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
