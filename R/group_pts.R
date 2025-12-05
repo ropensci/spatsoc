@@ -181,6 +181,11 @@ group_pts <- function(
     by = c(splitBy, timegroup),
     env = list(geo = geometry)]
 
+    if ('group' %in% colnames(DT)) {
+      message('group column will be overwritten by this function')
+      data.table::set(DT, j = 'group', value = NULL)
+    }
+
     DT[, group := .GRP,
       by = c(splitBy, timegroup, 'withinGroup')]
   } else {
@@ -227,7 +232,6 @@ group_pts <- function(
       by = c(splitBy, timegroup, 'withinGroup'),
       env = list(x = xcol, y = ycol)
     ]
-
   }
 
   data.table::set(DT, j = 'withinGroup', value = NULL)
