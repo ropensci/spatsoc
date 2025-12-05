@@ -10,6 +10,7 @@ crs_lonlat <- 4326
 DT <- DT[ID %in% c('A', 'B', 'C')]
 
 get_geometry(DT, coords = coords, crs = crs)
+DT$proj_geometry <- sf::st_transform(DT$geometry, crs)
 
 DT[, dest_geometry := sf::st_centroid(sf::st_union(geometry))]
 
