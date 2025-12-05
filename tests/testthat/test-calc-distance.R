@@ -107,16 +107,19 @@ test_that('expected dims returned', {
 })
 
 test_that('expected range returned', {
-  expect_gte(DT[, min(calc_distance(geometry))],
+  expect_gte(DT[, min(calc_distance(geometry, use_dist = FALSE))],
                 units::set_units(0, 'm'))
-  expect_gte(DT[, min(calc_distance(x_a = X, y_a = Y, crs = crs))],
-                units::set_units(0, 'm'))
-  expect_gte(DT[, min(calc_distance(geometry, geometry_b = dest_geometry))],
+  expect_gte(DT[, min(calc_distance(x_a = X, y_a = Y, crs = crs,
+                                    use_dist = TRUE))],
+                0)
+  expect_gte(DT[, min(calc_distance(geometry, geometry_b = dest_geometry,
+                                    use_dist = FALSE))],
              units::set_units(0, 'm'))
   expect_gte(DT[, min(calc_distance(x_a = lonlat_X, y_a = lonlat_Y,
                                     x_b = dest_X, y_b = dest_Y,
-                                    crs = crs_lonlat))],
-             units::set_units(0, 'm'))
+                                    crs = crs_lonlat,
+                                    use_dist = TRUE))],
+             0)
 })
 
 test_that('NAs returned as expected', {
