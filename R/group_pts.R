@@ -151,7 +151,35 @@ group_pts <- function(
   }
 
   if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
 
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+
+    crs <- sf::st_crs(DT[[geometry]])
+    use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
+
+    if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
+        !use_dist) {
+      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+    }
+
+    DT[, withinGroup := {
+      distMatrix <- calc_distance(
+        geometry_a = geo,
+        use_dist = use_dist
+      )
+      graphAdj <-
+        igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
+      igraph::components(graphAdj)$membership
+    },
+    by = c(splitBy, timegroup),
+    env = list(geo = geometry)]
+
+    DT[, group := .GRP,
+      by = c(splitBy, timegroup, "withinGroup")]
   } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
