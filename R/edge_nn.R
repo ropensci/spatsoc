@@ -48,17 +48,24 @@
 #' @inheritParams group_pts
 #' @inheritParams edge_dist
 #'
-#' @return `edge_nn` returns a `data.table`  with three columns:
-#'   timegroup, ID and NN. If 'returnDist' is TRUE, column 'distance' is
-#'   returned indicating the distance between ID and NN in the units of the `crs`.
-#'   If `crs` is NULL, the 'distance' column will not have units set.
-#'
-#'   The ID and NN columns represent the edges defined by the nearest neighbours
-#'   (and temporal thresholds with `group_times`).
+#' @return `edge_nn` returns a `data.table`  with three columns: timegroup, ID
+#'   and NN. If 'returnDist' is TRUE, column 'distance' is returned indicating
+#'   the distance between ID and NN.  The ID and NN columns represent the edges
+#'   defined by the nearest neighbours (and temporal thresholds with
+#'   `group_times`).
 #'
 #'   If an individual was alone in a timegroup or splitBy, or did not have any
 #'   neighbours within the threshold distance, they are assigned NA for nearest
 #'   neighbour.
+#'
+#'   The underlying distance function used depends on the crs of the coordinates /
+#'   geometry provided. If the crs is longlat degrees (as determined by
+#'   [sf::st_is_lonlat()]), the distance function is [sf::st_distance()] which
+#'   passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
+#'   [lwgeom::st_geod_distance] if [sf::sf_use_s2()] is FALSE. Otherwise, the
+#'   distance function used is [stats::dist()], maintaining expected behaviour
+#'   from previous versions. If the crs is longlat degrees, the distance returned
+#'   has units set matching the crs. Otherwise, no units are set.
 #'
 #'  Note: unlike many other functions (eg. `group_pts`) in `spatsoc`,
 #'  `edge_nn` needs to be reassigned. See details in

@@ -53,6 +53,15 @@
 #'   assigned to a group. If the data was reordered, the `group` may
 #'   change, but the contents of each group would not.
 #'
+#'   The underlying distance function used depends on the crs of the coordinates
+#'   / geometry provided. If the crs is longlat degrees (as determined by
+#'   [sf::st_is_lonlat()]), the distance function is [sf::st_distance()] which
+#'   passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
+#'   [lwgeom::st_geod_distance] if [sf::sf_use_s2()] is FALSE. Otherwise, the
+#'   distance function used is [stats::dist()], maintaining expected behaviour
+#'   from previous versions. If the crs is longlat degrees, the distance
+#'   returned has units set matching the crs. Otherwise, no units are set.
+#'
 #'   A message is returned when a column named `group` already exists in
 #'   the input `DT`, because it will be overwritten.
 #'

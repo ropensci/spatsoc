@@ -53,14 +53,16 @@
 #' @return `distance_to_centroid` returns the input `DT` appended with a
 #'   `distance_centroid` column indicating the distance to the group centroid
 #'   and, optionally, a `rank_distance_centroid` column indicating the within
-#'   group rank distance to the group centroid (if `return_rank = TRUE`). The
-#'   distance is returned in the units of the crs
-#'   (`units(st_crs(crs)$SemiMajor)`). A value of 0 is returned when the
-#'   coordinates of the focal individual equal the coordinates of the centroid.
+#'   group rank distance to the group centroid (if `return_rank = TRUE`).
 #'
-#'   The underlying distance function ([sf::st_distance]) uses different
-#'   distance measures depending on the input `crs` and the option returned by
-#'   [sf::sf_use_s2]. See more details under `?sf_distance`.
+#'   The underlying distance function used depends on the crs of the coordinates
+#'   / geometry provided. If the crs is longlat degrees (as determined by
+#'   [sf::st_is_lonlat()]), the distance function is [sf::st_distance()] which
+#'   passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
+#'   [lwgeom::st_geod_distance] if [sf::sf_use_s2()] is FALSE. Otherwise, the
+#'   distance function used is [stats::dist()], maintaining expected behaviour
+#'   from previous versions. If the crs is longlat degrees, the distance
+#'   returned has units set according to the crs. Otherwise, no units are set.
 #'
 #'   A message is returned when `distance_centroid` and optional
 #'   `rank_distance_centroid` columns already exist in the input `DT`,

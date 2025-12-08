@@ -58,16 +58,19 @@
 #'
 #' @return `edge_dist` returns a `data.table` with columns ID1, ID2, timegroup
 #'   (if supplied) and any columns provided in splitBy. If 'returnDist' is TRUE,
-#'   column 'distance' is returned indicating the distance between ID1 and ID2
-#'   in the units of the `crs`. If `crs` is NULL, the 'distance' column will not
-#'   have units set.
+#'   column 'distance' is returned indicating the distance between ID1 and ID2.
 #'
 #'   The ID1 and ID2 columns represent the edges defined by the spatial (and
 #'   temporal with `group_times`) thresholds.
 #'
-#'   The underlying distance function ([sf::st_distance]) uses different
-#'   distance measures depending on the input `crs` and the option returned by
-#'   [sf::sf_use_s2]. See more details under `?sf_distance`.
+#'   The underlying distance function used depends on the crs of the coordinates
+#'   / geometry provided. If the crs is longlat degrees (as determined by
+#'   [sf::st_is_lonlat()]), the distance function is [sf::st_distance()] which
+#'   passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
+#'   [lwgeom::st_geod_distance] if [sf::sf_use_s2()] is FALSE. Otherwise, the
+#'   distance function used is [stats::dist()], maintaining expected behaviour
+#'   from previous versions. If the crs is longlat degrees, the distance
+#'   returned has units set according to the crs. Otherwise, no units are set.
 #'
 #'   Note: unlike many other functions (eg. `group_pts`) in `spatsoc`,
 #'   `edge_dist` needs to be reassigned. See details in

@@ -32,14 +32,16 @@
 #' @inheritParams group_pts
 #'
 #' @return `distance_to_leader` returns the input `DT` appended with a
-#'   `distance_leader` column indicating the distance to the group leader in the
-#'   units of the crs (`units(st_crs(crs)$SemiMajor)`) or if `crs = NULL`, no
-#'   units are set. A value of 0 is returned when the coordinates of the focal
-#'   individual equal the coordinates of the leader.
+#'   `distance_leader` column indicating the distance to the group leader.
 #'
-#'   The underlying distance function ([sf::st_distance]) uses different
-#'   distance measures depending on the input `crs` and the option returned by
-#'   [sf::sf_use_s2]. See more details under `?sf_distance`.
+#'   The underlying distance function used depends on the crs of the coordinates
+#'   / geometry provided. If the crs is longlat degrees (as determined by
+#'   [sf::st_is_lonlat()]), the distance function is [sf::st_distance()] which
+#'   passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
+#'   [lwgeom::st_geod_distance] if [sf::sf_use_s2()] is FALSE. Otherwise, the
+#'   distance function used is [stats::dist()], maintaining expected behaviour
+#'   from previous versions. If the crs is longlat degrees, the distance
+#'   returned has units set according to the crs. Otherwise, no units are set.
 #'
 #'   A message is returned when the `distance_leader` column already
 #'   exist in the input `DT` because it will be overwritten.
