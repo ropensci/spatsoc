@@ -194,19 +194,30 @@ edge_nn <- function(
       }
       wm <- as.numeric(apply(distMatrix, MARGIN = 2, which.min))
 
-      i <- seq_along(wm)
-      if (returnDist) {
-        w <- wm + (length(wm) * (i - 1))
-        l <- list(ID = id[i],
-                  NN = id[wm],
-                  distance = distMatrix[w])
+      out_id <- id
+      if (all(is.na(wm))) {
+        out_nn <- NA_character_
+        if (returnDist) {
+          out_dist <- NA_real_
+        }
       } else {
-        l <- list(ID = id[i],
-                  NN = id[wm])
+        out_nn <- id[wm]
+        if (returnDist) {
+          w <- wm + (length(wm) * (seq_along(wm) - 1))
+          out_dist <- distMatrix[w]
+        }
       }
+
+      l <- list(ID = out_id,
+                NN = out_nn)
+
+      if (returnDist) {
+        l <- c(l, list(distance = out_dist))
+      }
+
       l
     },
-    by = splitBy,
+    by = c(splitBy),
     env = list(geo = geometry, id = id)]
   } else {
     if (is.null(crs)) {
@@ -245,19 +256,30 @@ edge_nn <- function(
       }
       wm <- as.numeric(apply(distMatrix, MARGIN = 2, which.min))
 
-      i <- seq_along(wm)
-      if (returnDist) {
-        w <- wm + (length(wm) * (i - 1))
-        l <- list(ID = id[i],
-                  NN = id[wm],
-                  distance = distMatrix[w])
+      out_id <- id
+      if (all(is.na(wm))) {
+        out_nn <- NA_character_
+        if (returnDist) {
+          out_dist <- NA_real_
+        }
       } else {
-        l <- list(ID = id[i],
-                  NN = id[wm])
+        out_nn <- id[wm]
+        if (returnDist) {
+          w <- wm + (length(wm) * (seq_along(wm) - 1))
+          out_dist <- distMatrix[w]
+        }
       }
+
+      l <- list(ID = out_id,
+                NN = out_nn)
+
+      if (returnDist) {
+        l <- c(l, list(distance = out_dist))
+      }
+
       l
     },
-    by = splitBy,
+    by = c(splitBy),
     env = list(x = xcol, y = ycol, id = id)]
   }
 
