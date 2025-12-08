@@ -189,13 +189,10 @@ edge_nn <- function(
       )
       diag(distMatrix) <- NA
 
-      if (is.null(threshold)) {
-        wm <- apply(distMatrix, MARGIN = 2, which.min)
-      } else {
+      if (!is.null(threshold)) {
         distMatrix[distMatrix > threshold] <- NA
-        wm <- apply(distMatrix, MARGIN = 2,
-                    function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
       }
+      wm <- as.numeric(apply(distMatrix, MARGIN = 2, which.min))
 
       i <- seq_along(wm)
       if (returnDist) {
@@ -243,13 +240,10 @@ edge_nn <- function(
       )
       diag(distMatrix) <- NA
 
-      if (is.null(threshold)) {
-        wm <- apply(distMatrix, MARGIN = 2, which.min)
-      } else {
+      if (!is.null(threshold)) {
         distMatrix[distMatrix > threshold] <- NA
-        wm <- apply(distMatrix, MARGIN = 2,
-                    function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
       }
+      wm <- as.numeric(apply(distMatrix, MARGIN = 2, which.min))
 
       i <- seq_along(wm)
       if (returnDist) {
