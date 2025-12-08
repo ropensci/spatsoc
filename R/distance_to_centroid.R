@@ -5,7 +5,9 @@
 #' function expects a `data.table` with relocation data appended with a
 #' `group` column from `group_pts` and centroid columns from
 #' `centroid_group`. Relocation data should be in planar coordinates
-#' provided in two columns representing the X and Y coordinates.
+#' provided in two columns representing the X and Y coordinates, or in a
+#' geometry column prepared by the helper function
+#' [get_geometry()].
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using

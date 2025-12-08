@@ -5,7 +5,9 @@
 #' relocation data, individual identifiers and a threshold argument. The
 #' threshold argument is used to specify the criteria for distance between
 #' points which defines a group. Relocation data should be in two columns
-#' representing the X and Y coordinates.
+#' representing the X and Y coordinates, or in a
+#' geometry column prepared by the helper function
+#' [get_geometry()].
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using

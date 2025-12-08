@@ -6,7 +6,9 @@
 #' indicating the ranked position along the group direction generated with
 #' `leader_direction_group(return_rank = TRUE)`. Relocation data should be
 #' in planar coordinates provided in two columns representing the X and Y
-#' coordinates.
+#' coordinates, or in a
+#' geometry column prepared by the helper function
+#' [get_geometry()].
 #'
 #' The `DT` must be a `data.table`. If your data is a
 #' `data.frame`, you can convert it by reference using
