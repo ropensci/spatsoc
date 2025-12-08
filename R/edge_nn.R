@@ -197,13 +197,14 @@ edge_nn <- function(
                     function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
       }
 
+      i <- seq_along(wm)
       if (returnDist) {
-        w <- wm + (length(wm) * (as.numeric(names(wm)) - 1))
-        l <- list(ID = id[as.numeric(names(wm))],
+        w <- wm + (length(wm) * (i - 1))
+        l <- list(ID = id[i],
                   NN = id[wm],
                   distance = distMatrix[w])
       } else {
-        l <- list(ID = id[as.numeric(names(wm))],
+        l <- list(ID = id[i],
                   NN = id[wm])
       }
       l
@@ -250,13 +251,14 @@ edge_nn <- function(
                     function(x) ifelse(sum(!is.na(x)) > 0, which.min(x), NA))
       }
 
+      i <- seq_along(wm)
       if (returnDist) {
-        w <- wm + (length(wm) * (as.numeric(names(wm)) - 1))
-        l <- list(ID = id[as.numeric(names(wm))],
+        w <- wm + (length(wm) * (i - 1))
+        l <- list(ID = id[i],
                   NN = id[wm],
                   distance = distMatrix[w])
       } else {
-        l <- list(ID = id[as.numeric(names(wm))],
+        l <- list(ID = id[i],
                   NN = id[wm])
       }
       l
