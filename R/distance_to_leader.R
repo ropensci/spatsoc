@@ -5,7 +5,7 @@
 #' relocation data appended with a `rank_position_group_direction` column
 #' indicating the ranked position along the group direction generated with
 #' `leader_direction_group(return_rank = TRUE)`. Relocation data should be
-#' in planar coordinates provided in two columns representing the X and Y
+#' in two columns representing the X and Y
 #' coordinates, or in a
 #' geometry column prepared by the helper function
 #' [get_geometry()].
