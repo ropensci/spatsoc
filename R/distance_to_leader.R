@@ -1,25 +1,21 @@
 #' Distance to group leader
 #'
 #' `distance_to_leader` calculates the distance to the leader of each
-#' spatiotemporal group. The function expects a `data.table` with
-#' relocation data appended with a `rank_position_group_direction` column
-#' indicating the ranked position along the group direction generated with
-#' `leader_direction_group(return_rank = TRUE)`. Relocation data should be
-#' in two columns representing the X and Y
-#' coordinates, or in a
-#' geometry column prepared by the helper function
-#' [get_geometry()].
+#' spatiotemporal group. The function expects a `data.table` with relocation
+#' data appended with a `rank_position_group_direction` column indicating the
+#' ranked position along the group direction generated with
+#' `leader_direction_group(return_rank = TRUE)`. Relocation data should be in
+#' two columns representing the X and Y coordinates, or in a geometry column
+#' prepared by the helper function [get_geometry()].
 #'
-#' The `DT` must be a `data.table`. If your data is a
-#' `data.frame`, you can convert it by reference using
-#' [data.table::setDT()] or by reassigning using
+#' The `DT` must be a `data.table`. If your data is a `data.frame`, you can
+#' convert it by reference using [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' This function expects a `rank_position_group_direction` column
-#' generated with `leader_direction_group(return_rank = TRUE)`,
-#' a `group` column generated with the
-#' `group_pts` function. The `group` argument
-#' expect the names of the column in `DT` which corresponds to the group column.
+#' This function expects a `rank_position_group_direction` column generated with
+#' `leader_direction_group(return_rank = TRUE)`, a `group` column generated with
+#' the `group_pts` function. The `group` argument expect the names of the column
+#' in `DT` which corresponds to the group column.
 #'
 #' See below under Interface for details on providing coordinates.
 #'
@@ -43,8 +39,8 @@
 #'   from previous versions. If the crs is longlat degrees, the distance
 #'   returned has units set according to the crs. Otherwise, no units are set.
 #'
-#'   A message is returned when the `distance_leader` column already
-#'   exist in the input `DT` because it will be overwritten.
+#'   A message is returned when the `distance_leader` column already exist in
+#'   the input `DT` because it will be overwritten.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).

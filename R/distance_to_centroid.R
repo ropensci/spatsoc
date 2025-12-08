@@ -1,28 +1,23 @@
 #' Distance to group centroid
 #'
 #' `distance_to_centroid` calculates the distance of each relocation to the
-#' centroid of the spatiotemporal group identified by `group_pts`. The
-#' function expects a `data.table` with relocation data appended with a
-#' `group` column from `group_pts` and centroid columns from
-#' `centroid_group`. Relocation data should be provided in two columns
-#' representing the X and Y coordinates, or in a
-#' geometry column prepared by the helper function
-#' [get_geometry()].
+#' centroid of the spatiotemporal group identified by `group_pts`. The function
+#' expects a `data.table` with relocation data appended with a `group` column
+#' from `group_pts` and centroid columns from `centroid_group`. Relocation data
+#' should be provided in two columns representing the X and Y coordinates, or in
+#' a geometry column prepared by the helper function [get_geometry()].
 #'
-#' The `DT` must be a `data.table`. If your data is a
-#' `data.frame`, you can convert it by reference using
-#' [data.table::setDT()] or by reassigning using
+#' The `DT` must be a `data.table`. If your data is a `data.frame`, you can
+#' convert it by reference using [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' This function expects a `group` column present generated with the
-#' `group_pts` function and centroid coordinate column(s) generated with the
-#' `centroid_group` function. The `group` arguments
-#' expect the names of columns in `DT` which correspond to the
-#' group column. The `return_rank` argument controls if
-#' the rank of each individual's distance to the group centroid is also
-#' returned. The `ties.method` argument is passed to
-#' `data.table::frank`, see details at
-#' [`?data.table::frank()`][data.table::frank].
+#' This function expects a `group` column present generated with the `group_pts`
+#' function and centroid coordinate column(s) generated with the
+#' `centroid_group` function. The `group` arguments expect the names of columns
+#' in `DT` which correspond to the group column. The `return_rank` argument
+#' controls if the rank of each individual's distance to the group centroid is
+#' also returned. The `ties.method` argument is passed to `data.table::frank`,
+#' see details at [`?data.table::frank()`][data.table::frank].
 #'
 #' @section Interface:
 #'  Two interfaces are available for providing coordinates:
@@ -65,8 +60,8 @@
 #'   returned has units set according to the crs. Otherwise, no units are set.
 #'
 #'   A message is returned when `distance_centroid` and optional
-#'   `rank_distance_centroid` columns already exist in the input `DT`,
-#'   because they will be overwritten.
+#'   `rank_distance_centroid` columns already exist in the input `DT`, because
+#'   they will be overwritten.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
