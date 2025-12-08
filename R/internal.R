@@ -336,7 +336,7 @@ calc_distance <- function(
     if (!missing(geometry_b)) {
       # Pairwise
       if (use_dist) {
-        pairwise_dist(geometry_a, geometry_b)
+        calc_distance_pairwise(geometry_a, geometry_b)
       } else {
         sf::st_distance(geometry_a, geometry_b, by_element = TRUE)
       }
@@ -352,7 +352,7 @@ calc_distance <- function(
     if (!missing(x_b) && !missing(y_b)) {
       # Pairwise
       if (use_dist) {
-        pairwise_dist(x_a = x_a, y_a = y_a, x_b = x_b, y_b = y_b)
+        calc_distance_pairwise(x_a = x_a, y_a = y_a, x_b = x_b, y_b = y_b)
       } else {
         sf::st_distance(
           x = sf::st_as_sf(data.frame(x_a, y_a),
@@ -391,8 +391,8 @@ calc_distance <- function(
   }
 }
 
-# Internal pairwise dist used in internal calc_distance
-pairwise_dist <- function(geometry_a, geometry_b,
+# Internal calc pairwise distance used in internal calc_distance
+calc_distance_pairwise <- function(geometry_a, geometry_b,
                           x_a, y_a,
                           x_b, y_b) {
   if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
