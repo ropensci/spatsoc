@@ -53,6 +53,6 @@ example <- data.table(
   Y = c(0, 0, 5, 5, 0)
 )
 # E, N, W, S
-example[, spatsoc:::calc_direction(x_a = X, y_a = Y, crs = 4326)]
+example[, spatsoc:::calc_direction(x_a = X, y_a = Y, crs = 4326, use_transform = FALSE)]
 }
 \keyword{internal}

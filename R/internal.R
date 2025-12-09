@@ -246,7 +246,7 @@ calc_centroid <- function(geometry, x, y, crs) {
 #'   Y = c(0, 0, 5, 5, 0)
 #' )
 #' # E, N, W, S
-#' example[, spatsoc:::calc_direction(x_a = X, y_a = Y, crs = 4326)]
+#' example[, spatsoc:::calc_direction(x_a = X, y_a = Y, crs = 4326, use_transform = FALSE)]
 calc_direction <- function(
     geometry_a, geometry_b,
     x_a, y_a,
