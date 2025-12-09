@@ -219,6 +219,7 @@ edge_nn <- function(
     }
 
     assert_length(coords, 2)
+    assert_are_colnames(DT, coords)
     assert_col_inherits(DT, coords, 'numeric')
 
     xcol <- data.table::first(coords)
