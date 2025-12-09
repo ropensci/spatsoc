@@ -4,7 +4,7 @@
 \alias{calc_distance}
 \title{Calculate distance}
 \usage{
-calc_distance(geometry_a, geometry_b, x_a, y_a, x_b, y_b, crs)
+calc_distance(geometry_a, geometry_b, x_a, y_a, x_b, y_b, crs, use_dist)
 }
 \arguments{
 \item{geometry_a, geometry_b}{sfc (simple feature geometry list column)
@@ -16,15 +16,31 @@ from \code{\link[=get_geometry]{get_geometry()}}}
 
 \item{crs}{crs for x_a, y_a (and if provided, x_b, y_b) coordinates,
 ignored for geometry_a and geometry_b arguments}
+
+\item{use_dist}{boolean predetermine if distance calculated via dist}
 }
 \value{
-Distance with unit of measurement, see details in \code{\link[sf:geos_measures]{sf::st_distance()}}
+The underlying distance function used depends on the crs of the coordinates
+or geometry provided.
+\itemize{
+\item If the crs is longlat degrees (as determined by
+\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), the distance function is \code{\link[sf:geos_measures]{sf::st_distance()}} which
+passes to \code{\link[s2:s2_is_collection]{s2::s2_distance()}} if \code{\link[sf:s2]{sf::sf_use_s2()}} is TRUE and
+\code{\link[lwgeom:geod]{lwgeom::st_geod_distance()}} if \code{\link[sf:s2]{sf::sf_use_s2()}} is FALSE. The distance
+returned has units set according to the crs.
+\item If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
+distance function used is \code{\link[stats:dist]{stats::dist()}} (or Euclidean distance for
+pairwise distances), maintaining expected behaviour from previous versions.
+The distance returned does not have units set.
+}
+
+Note: in both cases, if the coordinates are NA then the result will be NA.
 }
 \description{
 \strong{Internal function} - not developed to be used outside of spatsoc functions
 }
 \details{
-Calculate distance using \code{\link[sf:geos_measures]{sf::st_distance()}} for one of the following combinations:
+Calculate distance for one of the following combinations:
 \itemize{
 \item the distance matrix of points in geometry_a
 \item the distance matrix of points in x_a, y_a
@@ -48,6 +64,6 @@ example <- data.table(
   Y = c(0, 0, 5, 5, 0, 0,        NA_real_, NA_real_)
 )
 # E, N, W, S
-example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326)]
+example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326, use_dist = FALSE)]
 }
 \keyword{internal}

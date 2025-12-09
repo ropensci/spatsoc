@@ -29,7 +29,8 @@ Note: the order is assumed X followed by Y column names.}
 
 \item{crs}{numeric or character defining the coordinate reference
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
-\code{crs = "EPSG:32736"} or \code{crs = 32736}.}
+\code{crs = "EPSG:32736"} or \code{crs = 32736}. If \code{crs = NULL}, the \code{crs} will be
+internally set to \code{sf::NA_crs_}.}
 
 \item{timegroup}{character string of timegroup column name, default "timegroup"}
 
