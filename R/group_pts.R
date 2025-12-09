@@ -170,7 +170,7 @@ group_pts <- function(
       threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
     }
 
-    DT[, withinGroup := {
+    DT[!sf::st_is_empty(geo), withinGroup := {
       distMatrix <- calc_distance(
         geometry_a = geo,
         use_dist = use_dist
@@ -187,8 +187,9 @@ group_pts <- function(
       data.table::set(DT, j = 'group', value = NULL)
     }
 
-    DT[, group := .GRP,
-      by = c(splitBy, timegroup, 'withinGroup')]
+    DT[!sf::st_is_empty(geo), group := .GRP,
+      by = c(splitBy, timegroup, 'withinGroup'),
+      env = list(geo = geometry)]
   } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
@@ -214,7 +215,7 @@ group_pts <- function(
       threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
     }
 
-    DT[,
+    DT[!is.na(x) & !is.na(y),
       withinGroup := {
         distMatrix <- calc_distance(
           x_a = x, y_a = y, crs = crs,
@@ -228,7 +229,7 @@ group_pts <- function(
       env = list(x = xcol, y = ycol)
     ]
 
-    DT[,
+    DT[!is.na(x) & !is.na(y),
       group := .GRP,
       by = c(splitBy, timegroup, 'withinGroup'),
       env = list(x = xcol, y = ycol)
