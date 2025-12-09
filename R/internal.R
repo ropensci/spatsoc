@@ -169,6 +169,7 @@ assert_units_match <- function(x, y, n = 1) {
 #' @param x X coordinate column, numeric
 #' @param y Y coordinate column, numeric
 #' @param crs crs for x, y coordinates, ignored for geometry argument
+#' @param use_mean boolean predetermine if centroid calculated via mean
 #'
 #' @returns
 #'
