@@ -55,28 +55,23 @@
 #'  - If the crs is NULL or NA_crs_, the distance function cannot be used
 #'  and an error is returned.
 #'
-#'  Note: missing values are not accepted by [lwgeom::st_geod_azimuth()]
+#' @return `direction_step` returns the input `DT` appended with a `direction`
+#'   column with units set to radians using the `units` package.
 #'
-#' @return `direction_step` returns the input `DT` appended with
-#'  a `direction` column with units set to radians using the `units`
-#'  package.
+#'   This column represents the azimuth between the sequence of points for each
+#'   individual computed using [lwgeom::st_geod_azimuth()]. Note, the order of
+#'   points is not modified by this function and therefore it is crucial the
+#'   user sets the order of rows to their specific question before using
+#'   `direction_step`. In addition, the direction column will include an `NA`
+#'   value for the last point in each sequence of points since there is no
+#'   future point to calculate a direction to.
 #'
-#'   This column represents the azimuth between the sequence of points for
-#'   each individual computed using [lwgeom::st_geod_azimuth()]. Note, the
-#'   order of points is not modified by this function and therefore it is
-#'   crucial the user sets the order of rows to their specific question
-#'   before using `direction_step`. In addition, the direction column
-#'   will include an `NA` value for the last point in each sequence of
-#'   points since there is no future point to calculate a direction to.
+#'   A message is returned when a direction column are already exists in the
+#'   input `DT`, because it will be overwritten.
 #'
-#'   A message is returned when a direction column are already exists in
-#'   the input `DT`, because it will be overwritten.
-#'
-#'   An error is returned if there are any missing values in coordinates for
-#'   the focal individual or the group leader, as the underlying direction
-#'   function ([lwgeom::st_geod_azimuth()]) does not accept missing values. An
-#'   error is also returned if the `crs` argument is NULL when `coords` are
-#'   provided.
+#'   An error is returned if there are any missing values in coordinates /
+#'   geometry as the underlying direction function ([lwgeom::st_geod_azimuth()])
+#'   does not accept missing values.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
