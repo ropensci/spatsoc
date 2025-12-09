@@ -171,15 +171,17 @@ edge_direction <- function(
       rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform, ', ensure crs is provided for direction functions'))
     }
 
-    m[, (out_col) := calc_direction(
-      geometry_a = geo_id1,
-      geometry_b = geo_id2,
-      use_transform = use_transform
-    ),
-    env = list(
-      geo_id1 = geometry_id1,
-      geo_id2 = geometry_id2
-    )]
+    m[!sf::st_is_empty(geo_id1) & !sf::st_is_empty(geo_id2),
+      (out_col) := calc_direction(
+        geometry_a = geo_id1,
+        geometry_b = geo_id2,
+        use_transform = use_transform
+      ),
+      env = list(
+        geo_id1 = geometry_id1,
+        geo_id2 = geometry_id2
+      )
+    ]
 
     data.table::set(m, j = c(geometry_id1, geometry_id2), value = NULL)
     data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))
@@ -228,20 +230,22 @@ edge_direction <- function(
                           ', ensure crs is provided for direction functions'))
     }
 
-    m[, (out_col) := calc_direction(
-      x_a = x_id1,
-      y_a = y_id1,
-      x_b = x_id2,
-      y_b = y_id2,
-      crs = crs,
-      use_transform = use_transform
-    ),
-    env = list(
-      x_id1 = data.table::first(coords_id1),
-      y_id1 = data.table::last(coords_id1),
-      x_id2 = data.table::first(coords_id2),
-      y_id2 = data.table::last(coords_id2)
-    )]
+    m[!is.na(x_id1) & !is.na(y_id1) & !is.na(x_id2) & !is.na(y_id2),
+      (out_col) := calc_direction(
+        x_a = x_id1,
+        y_a = y_id1,
+        x_b = x_id2,
+        y_b = y_id2,
+        crs = crs,
+        use_transform = use_transform
+      ),
+      env = list(
+        x_id1 = data.table::first(coords_id1),
+        y_id1 = data.table::last(coords_id1),
+        x_id2 = data.table::first(coords_id2),
+        y_id2 = data.table::last(coords_id2)
+      )
+    ]
 
     data.table::set(m, j = c(coords_id1, coords_id2), value = NULL)
     data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))

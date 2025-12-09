@@ -109,12 +109,14 @@ direction_to_centroid <- function(
       rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform, ', ensure crs is provided for direction functions'))
     }
 
-    DT[, c(out_colname) := calc_direction(
-      geometry_a = geo,
-      geometry_b = cent,
-      use_transform = use_transform
-    ),
-    env = list(geo = geometry, cent = centroid_col)]
+    DT[!sf::st_is_empty(geo) & !sf::st_is_empty(cent),
+      c(out_colname) := calc_direction(
+        geometry_a = geo,
+        geometry_b = cent,
+        use_transform = use_transform
+      ),
+      env = list(geo = geometry, cent = centroid_col)
+    ]
 
   } else {
     assert_are_colnames(DT, coords)
@@ -144,14 +146,18 @@ direction_to_centroid <- function(
                           ', ensure crs is provided for direction functions'))
     }
 
-    DT[, c(out_colname) := calc_direction(
-      x_a = x, y_a = y,
-      x_b = x_centroid, y_b = y_centroid,
-      crs = crs,
-      use_transform = use_transform
-    ),
-    env = list(x = xcol, y = ycol,
-               x_centroid = xcol_centroid, y_centroid = ycol_centroid)]
+    DT[!is.na(x) & !is.na(y) & !is.na(x_centroid) & !is.na(y_centroid),
+      c(out_colname) := calc_direction(
+        x_a = x, y_a = y,
+        x_b = x_centroid, y_b = y_centroid,
+        crs = crs,
+        use_transform = use_transform
+      ),
+      env = list(
+        x = xcol, y = ycol,
+        x_centroid = xcol_centroid, y_centroid = ycol_centroid
+      )
+    ]
   }
 
   return(DT[])

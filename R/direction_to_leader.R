@@ -161,14 +161,18 @@ direction_to_leader <- function(
       rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform, ', ensure crs is provided for direction functions'))
     }
 
-    DT[!group %in% check_leaderless$group, direction_leader := calc_direction(
-      geometry_a = geo,
-      geometry_b = lead,
-      use_transform = use_transform
-    ),
-    env = list(
-      geo = geometry, lead = zzz_geometry_leader
-    )]
+    DT[!group %in% check_leaderless$group &
+         !sf::st_is_empty(geo) &
+         !sf::st_is_empty(lead),
+      direction_leader := calc_direction(
+        geometry_a = geo,
+        geometry_b = lead,
+        use_transform = use_transform
+      ),
+      env = list(
+        geo = geometry, lead = zzz_geometry_leader
+      )
+    ]
 
     data.table::set(DT, j = zzz_geometry_leader, value = NULL)
 
@@ -210,18 +214,20 @@ direction_to_leader <- function(
       rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
                           ', ensure crs is provided for direction functions'))
     }
-
-    DT[!group %in% check_leaderless$group, direction_leader := calc_direction(
-      x_a = x,
-      y_a = y,
-      x_b = x_leader,
-      y_b = y_leader,
-      crs = crs,
-      use_transform = use_transform
-    ),
-    env = list(
-      x = xcol, y = ycol, x_leader = zzz_xcol_leader, y_leader = zzz_ycol_leader
-    )]
+    DT[!group %in% check_leaderless$group &
+        !is.na(x) & !is.na(y) & !is.na(x_leader) & !is.na(y_leader),
+      direction_leader := calc_direction(
+        x_a = x,
+        y_a = y,
+        x_b = x_leader,
+        y_b = y_leader,
+        crs = crs,
+        use_transform = use_transform
+      ),
+      env = list(
+        x = xcol, y = ycol, x_leader = zzz_xcol_leader, y_leader = zzz_ycol_leader
+      )
+    ]
 
     data.table::set(DT, j = zzz_coords_leader, value = NULL)
 
