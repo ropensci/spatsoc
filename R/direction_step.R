@@ -164,8 +164,17 @@ direction_step <- function(
       data.table::set(DT, j = 'direction', value = NULL)
     }
 
+    crs <- sf::st_crs(DT[[geometry]])
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
+    }
+
     DT[, c(out_colname) := c(calc_direction(
-      geometry_a = geo
+      geometry_a = geo,
+      use_transform = use_transform
     ), units::set_units(NA, 'rad')),
     by = c(id, splitBy),
     env = list(geo = geometry)
@@ -182,10 +191,18 @@ direction_step <- function(
       data.table::set(DT, j = 'direction', value = NULL)
     }
 
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
+    }
+
     DT[, c(out_colname) := c(calc_direction(
       x_a = x,
       y_a = y,
-      crs = crs
+      crs = crs,
+      use_transform = use_transform
     ), units::set_units(NA, 'rad')),
     by = c(id, splitBy),
     env = list(x = data.table::first(coords), y = data.table::last(coords))

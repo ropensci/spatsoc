@@ -102,9 +102,17 @@ direction_to_centroid <- function(
       data.table::set(DT, j = out_colname, value = NULL)
     }
 
+    crs <- sf::st_crs(DT[[geometry]])
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform, ', ensure crs is provided for direction functions'))
+    }
+
     DT[, c(out_colname) := calc_direction(
       geometry_a = geo,
-      geometry_b = cent
+      geometry_b = cent,
+      use_transform = use_transform
     ),
     env = list(geo = geometry, cent = centroid_col)]
 
@@ -129,10 +137,18 @@ direction_to_centroid <- function(
       data.table::set(DT, j = out_colname, value = NULL)
     }
 
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
+    }
+
     DT[, c(out_colname) := calc_direction(
       x_a = x, y_a = y,
       x_b = x_centroid, y_b = y_centroid,
-      crs = crs
+      crs = crs,
+      use_transform = use_transform
     ),
     env = list(x = xcol, y = ycol,
                x_centroid = xcol_centroid, y_centroid = ycol_centroid)]

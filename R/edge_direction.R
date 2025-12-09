@@ -164,9 +164,17 @@ edge_direction <- function(
       data.table::set(m, j = out_col, value = NULL)
     }
 
+    crs <- sf::st_crs(DT[[geometry]])
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform, ', ensure crs is provided for direction functions'))
+    }
+
     m[, (out_col) := calc_direction(
       geometry_a = geo_id1,
-      geometry_b = geo_id2
+      geometry_b = geo_id2,
+      use_transform = use_transform
     ),
     env = list(
       geo_id1 = geometry_id1,
@@ -213,12 +221,20 @@ edge_direction <- function(
       data.table::set(m, j = out_col, value = NULL)
     }
 
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
+    }
+
     m[, (out_col) := calc_direction(
       x_a = x_id1,
       y_a = y_id1,
       x_b = x_id2,
       y_b = y_id2,
-      crs = crs
+      crs = crs,
+      use_transform = use_transform
     ),
     env = list(
       x_id1 = data.table::first(coords_id1),

@@ -250,7 +250,8 @@ calc_direction <- function(
     geometry_a, geometry_b,
     x_a, y_a,
     x_b, y_b,
-    crs) {
+    crs,
+    use_transform) {
   lonlat_crs <- 4326
 
   if (!missing(geometry_a) && missing(x_a) && missing(y_a)
@@ -268,14 +269,7 @@ calc_direction <- function(
     }
   } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
     if (!missing(x_b) && !missing(y_b)) {
-      if (sf::st_is_longlat(crs)) {
-        lwgeom::st_geod_azimuth(
-          x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                           na.fail = TRUE),
-          y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2),
-                           na.fail = TRUE)
-        )
-      } else {
+      if (use_transform) {
         lwgeom::st_geod_azimuth(
           x = sf::st_transform(
             sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
@@ -288,20 +282,27 @@ calc_direction <- function(
             crs = lonlat_crs
           )
         )
-      }
-    } else {
-      if (sf::st_is_longlat(crs)) {
+      } else {
         lwgeom::st_geod_azimuth(
           x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
+                           na.fail = TRUE),
+          y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2),
                            na.fail = TRUE)
+        )
+      }
+    } else {
+      if (use_transform) {
+        lwgeom::st_geod_azimuth(
+          x = sf::st_transform(
+            sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
+                         na.fail = TRUE),
+            crs = lonlat_crs
+          )
         )
       } else {
         lwgeom::st_geod_azimuth(
-            x = sf::st_transform(
-              sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                           na.fail = TRUE),
-              crs = lonlat_crs
-            )
+          x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
+                           na.fail = TRUE)
         )
       }
     }
@@ -310,8 +311,8 @@ calc_direction <- function(
       'arguments incorrectly provided, use one of the following combinations:',
       '1. geometry_a',
       '2. geometry_a and geometry_b',
-      '3. x_a, y_a',
-      '4. x_a, y_a, and x_b, y_b'
+      '3. x_a, y_a, and crs',
+      '4. x_a, y_a, x_b, y_b, and crs'
     ))
   }
 }
