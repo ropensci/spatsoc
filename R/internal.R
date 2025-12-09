@@ -218,7 +218,9 @@ calc_centroid <- function(geometry, x, y, crs) {
 #'
 #' Requirements:
 #' - matching length between a and b objects if b provided
-#' - crs is longlat, check with [sf::st_is_longlat()]
+#' - crs is provided. If crs is not longlat (as determined by
+#' [sf::st_is_longlat()]), the coordinates or geometry will be transformed to
+#'  `sf::st_crs(4326)`
 #' - no missing values in coordinates
 #'
 #' @param geometry_a,geometry_b sfc (simple feature geometry list column) from [get_geometry()]
@@ -230,6 +232,7 @@ calc_centroid <- function(geometry, x, y, crs) {
 #' @returns
 #'
 #' Direction in units of radians, in range of pi, -pi where North = 0.
+#'
 #' @keywords internal
 #' @examples
 #' # Load data.table
