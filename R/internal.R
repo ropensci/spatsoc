@@ -228,6 +228,7 @@ calc_centroid <- function(geometry, x, y, crs) {
 #' @param y_a,y_b Y coordinate column, numeric
 #' @param crs crs for x_a, y_a (and if provided, x_b, y_b) coordinates,
 #' ignored for geometry_a and geometry_b arguments
+#' @param use_transform boolean predetermine if coordinates/geometry need transform
 #'
 #' @returns
 #'
