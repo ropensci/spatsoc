@@ -35,26 +35,23 @@ name(s) upon which the grouping will be calculated}
 \item{projection}{(deprecated) use crs argument instead}
 }
 \value{
-\code{direction_step} returns the input \code{DT} appended with
-a \code{direction} column with units set to radians using the \code{units}
-package.
+\code{direction_step} returns the input \code{DT} appended with a \code{direction}
+column with units set to radians using the \code{units} package.
 
-This column represents the azimuth between the sequence of points for
-each individual computed using \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}. Note, the
-order of points is not modified by this function and therefore it is
-crucial the user sets the order of rows to their specific question
-before using \code{direction_step}. In addition, the direction column
-will include an \code{NA} value for the last point in each sequence of
-points since there is no future point to calculate a direction to.
+This column represents the azimuth between the sequence of points for each
+individual computed using \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}. Note, the order of
+points is not modified by this function and therefore it is crucial the
+user sets the order of rows to their specific question before using
+\code{direction_step}. In addition, the direction column will include an \code{NA}
+value for the last point in each sequence of points since there is no
+future point to calculate a direction to.
 
-A message is returned when a direction column are already exists in
-the input \code{DT}, because it will be overwritten.
+A message is returned when a direction column are already exists in the
+input \code{DT}, because it will be overwritten.
 
-An error is returned if there are any missing values in coordinates for
-the focal individual or the group leader, as the underlying direction
-function (\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}) does not accept missing values. An
-error is also returned if the \code{crs} argument is NULL when \code{coords} are
-provided.
+An error is returned if there are any missing values in coordinates /
+geometry as the underlying direction function (\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}})
+does not accept missing values.
 
 See details for appending outputs using modify-by-reference in the
 \href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
@@ -77,13 +74,14 @@ The \code{id}, and optional \code{splitBy} arguments expect the names of a colum
 \code{DT} which correspond to the individual identifier and additional grouping
 columns.
 
-See below under Interface for details on providing coordinates.
-
 The \code{splitBy} argument offers further control over grouping. If within
 your \code{DT}, you have distinct sampling periods for each individual, you
 can provide the column name(s) which identify them to \code{splitBy}. The
 direction calculation by \code{direction_step} will only consider rows within
 each \code{id} and \code{splitBy} subgroup.
+
+See below under "Interface" for details on providing coordinates and under
+"Direction function" for details on the underlying direction function used.
 }
 \section{Interface}{
 
@@ -101,6 +99,23 @@ feature geometry list column. This interface expects the user to prepare
 their input DT with \code{\link[=get_geometry]{get_geometry()}}. To use this interface, leave the
 \code{coords} and \code{crs} arguments \code{NULL}, and the default argument for \code{geometry}
 ('geometry') will be used directly.
+}
+}
+
+\section{Direction function}{
+
+
+The underlying distance function used depends on the crs of the coordinates
+or geometry provided.
+\itemize{
+\item If the crs is provided and longlat degrees (as determined by
+\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), the distance function is
+\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}.
+\item If the crs is provided and not longlat degrees (eg. a projected UTM),
+the coordinates or geometry are transformed to \code{sf::st_crs(4326)} before the
+distance is measured using \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}.
+\item If the crs is NULL or NA_crs_, the distance function cannot be used
+and an error is returned.
 }
 }
 

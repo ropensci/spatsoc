@@ -36,12 +36,10 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 radians. A value of NaN is returned when the coordinates of the focal
 individual equal the coordinates of the leader.
 
-An error is returned if there are any missing values in coordinates for
-the focal individual or the group leader, as the underlying direction
-function (\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}) does not accept missing values.
+Missing values in coordinates / geometry are ignored and NA is returned.
 
-A message is returned when the \code{direction_leader} column already
-exist in the input \code{DT} because it will be overwritten.
+A message is returned when the \code{direction_leader} column already exist in
+the input \code{DT} because it will be overwritten.
 
 See details for appending outputs using modify-by-reference in the
 \href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
@@ -65,7 +63,8 @@ This function expects a \code{rank_position_group_direction} column generated wi
 the \code{group_pts} function. The \code{group} argument expects the name of the column
 in \code{DT} which correspond to the group column.
 
-See below under Interface for details on providing coordinates.
+See below under "Interface" for details on providing coordinates and under
+"Direction function" for details on the underlying direction function used.
 }
 \section{Interface}{
 
@@ -83,6 +82,23 @@ feature geometry list column. This interface expects the user to prepare
 their input DT with \code{\link[=get_geometry]{get_geometry()}}. To use this interface, leave the
 \code{coords} and \code{crs} arguments \code{NULL}, and the default argument for \code{geometry}
 ('geometry') will be used directly.
+}
+}
+
+\section{Direction function}{
+
+
+The underlying distance function used depends on the crs of the coordinates
+or geometry provided.
+\itemize{
+\item If the crs is provided and longlat degrees (as determined by
+\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), the distance function is
+\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}.
+\item If the crs is provided and not longlat degrees (eg. a projected UTM),
+the coordinates or geometry are transformed to \code{sf::st_crs(4326)} before the
+distance is measured using \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}.
+\item If the crs is NULL or NA_crs_, the distance function cannot be used
+and an error is returned.
 }
 }
 

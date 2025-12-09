@@ -4,7 +4,7 @@
 \alias{calc_direction}
 \title{Calculate direction}
 \usage{
-calc_direction(geometry_a, geometry_b, x_a, y_a, x_b, y_b, crs)
+calc_direction(geometry_a, geometry_b, x_a, y_a, x_b, y_b, crs, use_transform)
 }
 \arguments{
 \item{geometry_a, geometry_b}{sfc (simple feature geometry list column) from \code{\link[=get_geometry]{get_geometry()}}}
@@ -15,6 +15,8 @@ calc_direction(geometry_a, geometry_b, x_a, y_a, x_b, y_b, crs)
 
 \item{crs}{crs for x_a, y_a (and if provided, x_b, y_b) coordinates,
 ignored for geometry_a and geometry_b arguments}
+
+\item{use_transform}{boolean predetermine if coordinates/geometry need transform}
 }
 \value{
 Direction in units of radians, in range of pi, -pi where North = 0.
@@ -34,7 +36,9 @@ Calculate direction using \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_az
 Requirements:
 \itemize{
 \item matching length between a and b objects if b provided
-\item crs is longlat, check with \code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}
+\item crs is provided. If crs is not longlat (as determined by
+\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), the coordinates or geometry will be transformed to
+\code{sf::st_crs(4326)}
 \item no missing values in coordinates
 }
 }

@@ -45,16 +45,14 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 radians. A value of NaN is returned when the coordinates of ID1 equal the
 coordinates of ID2.
 
-An error is returned if there are any missing values in coordinates for the
-focal individual or the group leader, as the underlying direction function
-(\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}) does not accept missing values.
+If the "direction" column is found in input DT, it will be retained for ID1
+in the output for use in downstream functions (eg. \code{edge_zones}).
 
-If the "direction" column is found in input DT, it will be retained for
-ID1 in the output for use in downstream functions (eg. \code{edge_zones}).
+Missing values in coordinates / geometry are ignored and NA is returned.
 
-Note: due to the merge required within this function, the output needs to be
-reassigned unlike some other \code{spatsoc} functions like \code{dyad_id}
-and \code{group_pts}. See details in
+Note: due to the merge required within this function, the output needs to
+be reassigned unlike some other \code{spatsoc} functions like \code{dyad_id} and
+\code{group_pts}. See details in
 \href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
@@ -73,13 +71,14 @@ The \code{edges} and \code{DT} must be \code{data.table}s. If your data is a
 \code{\link[data.table:setDT]{data.table::setDT()}} or by reassigning using
 \code{\link[data.table:data.table]{data.table::data.table()}}.
 
-See below under Interface for details on providing coordinates.
-
 The \code{edges} and \code{DT} are internally merged in this function using the columns
 \code{id}, \code{dyadID} and \code{timegroup}. This function expects a \code{dyadID} present,
 generated with the \code{dyad_id} function. The \code{id}, and \code{timegroup} arguments
 expect the names of columns which correspond to the ID, and timegroup
 columns.
+
+See below under "Interface" for details on providing coordinates and under
+"Direction function" for details on the underlying direction function used.
 }
 \section{Interface}{
 
@@ -97,6 +96,23 @@ feature geometry list column. This interface expects the user to prepare
 their input DT with \code{\link[=get_geometry]{get_geometry()}}. To use this interface, leave the
 \code{coords} and \code{crs} arguments \code{NULL}, and the default argument for \code{geometry}
 ('geometry') will be used directly.
+}
+}
+
+\section{Direction function}{
+
+
+The underlying distance function used depends on the crs of the coordinates
+or geometry provided.
+\itemize{
+\item If the crs is provided and longlat degrees (as determined by
+\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), the distance function is
+\code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}.
+\item If the crs is provided and not longlat degrees (eg. a projected UTM),
+the coordinates or geometry are transformed to \code{sf::st_crs(4326)} before the
+distance is measured using \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}.
+\item If the crs is NULL or NA_crs_, the distance function cannot be used
+and an error is returned.
 }
 }
 
