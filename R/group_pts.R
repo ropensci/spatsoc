@@ -41,9 +41,11 @@
 #' `splitBy`. The grouping performed by `group_pts` will only consider
 #' rows within each `splitBy` subgroup.
 #'
-#' See below under Interface for details on providing coordinates.
+#' See below under "Interface" for details on providing coordinates and under
+#' "Distance function" for details on underlying distance function used.
 #'
 #' @inheritSection distance_to_centroid Interface
+#' @inheritSection distance_to_centroid Distance function
 #'
 #' @return `group_pts` returns the input `DT` appended with a
 #'   `group` column.
@@ -53,15 +55,6 @@
 #'   represents the identity of a given group where 1 or more individuals are
 #'   assigned to a group. If the data was reordered, the `group` may
 #'   change, but the contents of each group would not.
-#'
-#'   The underlying distance function used depends on the crs of the coordinates
-#'   / geometry provided. If the crs is longlat degrees (as determined by
-#'   [sf::st_is_lonlat()]), the distance function is [sf::st_distance()] which
-#'   passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
-#'   [lwgeom::st_geod_distance] if [sf::sf_use_s2()] is FALSE. Otherwise, the
-#'   distance function used is [stats::dist()], maintaining expected behaviour
-#'   from previous versions. If the crs is longlat degrees, the distance
-#'   returned has units set matching the crs. Otherwise, no units are set.
 #'
 #'   A message is returned when a column named `group` already exists in
 #'   the input `DT`, because it will be overwritten.

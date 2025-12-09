@@ -35,9 +35,11 @@
 #' can provide the name of the column which identifies them to `splitBy`.
 #' `edge_nn` will only consider rows within each `splitBy` subgroup.
 #'
-#' See below under Interface for details on providing coordinates.
+#' See below under "Interface" for details on providing coordinates and under
+#' "Distance function" for details on underlying distance function used.
 #'
 #' @inheritSection distance_to_centroid Interface
+#' @inheritSection distance_to_centroid Distance function
 #'
 #' @param threshold (optional) spatial distance threshold to set maximum
 #'   distance between an individual and their neighbour.
@@ -53,15 +55,6 @@
 #'   If an individual was alone in a timegroup or splitBy, or did not have any
 #'   neighbours within the threshold distance, they are assigned NA for nearest
 #'   neighbour.
-#'
-#'   The underlying distance function used depends on the crs of the coordinates
-#'   / geometry provided. If the crs is longlat degrees (as determined by
-#'   [sf::st_is_lonlat()]), the distance function is [sf::st_distance()] which
-#'   passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
-#'   [lwgeom::st_geod_distance] if [sf::sf_use_s2()] is FALSE. Otherwise, the
-#'   distance function used is [stats::dist()], maintaining expected behaviour
-#'   from previous versions. If the crs is longlat degrees, the distance
-#'   returned has units set matching the crs. Otherwise, no units are set.
 #'
 #'   Note: unlike many other functions (eg. `group_pts`) in `spatsoc`, `edge_nn`
 #'   needs to be reassigned. See details in

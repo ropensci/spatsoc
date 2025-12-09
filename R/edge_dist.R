@@ -36,9 +36,11 @@
 #' can provide the name of the column which identifies them to `splitBy`.
 #' `edge_dist` will only consider rows within each `splitBy` subgroup.
 #'
-#' See below under Interface for details on providing coordinates.
+#' See below under "Interface" for details on providing coordinates and under
+#' "Distance function" for details on underlying distance function used.
 #'
 #' @inheritSection distance_to_centroid Interface
+#' @inheritSection distance_to_centroid Distance function
 #'
 #' @inheritParams group_pts
 #' @inheritParams direction_step
@@ -58,15 +60,6 @@
 #'
 #'   The ID1 and ID2 columns represent the edges defined by the spatial (and
 #'   temporal with `group_times`) thresholds.
-#'
-#'   The underlying distance function used depends on the crs of the coordinates
-#'   / geometry provided. If the crs is longlat degrees (as determined by
-#'   [sf::st_is_lonlat()]), the distance function is [sf::st_distance()] which
-#'   passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
-#'   [lwgeom::st_geod_distance] if [sf::sf_use_s2()] is FALSE. Otherwise, the
-#'   distance function used is [stats::dist()], maintaining expected behaviour
-#'   from previous versions. If the crs is longlat degrees, the distance
-#'   returned has units set according to the crs. Otherwise, no units are set.
 #'
 #'   Note: unlike many other functions (eg. `group_pts`) in `spatsoc`,
 #'   `edge_dist` needs to be reassigned. See details in
