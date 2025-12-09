@@ -292,7 +292,7 @@ calc_direction <- function(
 #'
 #' **Internal function** - not developed to be used outside of spatsoc functions
 #'
-#' Calculate distance using [sf::st_distance()] for one of the following combinations:
+#' Calculate distance for one of the following combinations:
 #' - the distance matrix of points in geometry_a
 #' - the distance matrix of points in x_a, y_a
 #' - the pairwise distance between points in geometry_a and geometry_b
@@ -310,7 +310,22 @@ calc_direction <- function(
 #'
 #' @returns
 #'
-#' Distance with unit of measurement, see details in [sf::st_distance()]
+#'  The underlying distance function used depends on the crs of the coordinates
+#'  or geometry provided.
+#'
+#'  - If the crs is longlat degrees (as determined by
+#'  [sf::st_is_longlat()]), the distance function is [sf::st_distance()] which
+#'  passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
+#'  [lwgeom::st_geod_distance()] if [sf::sf_use_s2()] is FALSE. The distance
+#'  returned has units set according to the crs.
+#'
+#'  - If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
+#'  distance function used is [stats::dist()] (or Euclidean distance for
+#'  pairwise distances), maintaining expected behaviour from previous versions.
+#'  The distance returned does not have units set.
+#'
+#'
+#'  Note: in both cases, if the coordinates are NA then the result will be NA.
 #'
 #' @keywords internal
 #' @examples
@@ -324,7 +339,7 @@ calc_direction <- function(
 #'   Y = c(0, 0, 5, 5, 0, 0,        NA_real_, NA_real_)
 #' )
 #' # E, N, W, S
-#' example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326)]
+#' example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326, use_dist = FALSE)]
 calc_distance <- function(
     geometry_a, geometry_b,
     x_a, y_a,
