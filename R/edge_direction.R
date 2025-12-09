@@ -42,17 +42,15 @@
 #'   radians. A value of NaN is returned when the coordinates of ID1 equal the
 #'   coordinates of ID2.
 #'
-#'   An error is returned if there are any missing values in coordinates for the
-#'   focal individual or the group leader, as the underlying direction function
-#'   ([lwgeom::st_geod_azimuth()]) does not accept missing values.
+#'   If the "direction" column is found in input DT, it will be retained for ID1
+#'   in the output for use in downstream functions (eg. `edge_zones`).
 #'
-#'  If the "direction" column is found in input DT, it will be retained for
-#'  ID1 in the output for use in downstream functions (eg. `edge_zones`).
+#'   Missing values in coordinates / geometry are ignored and NA is returned.
 #'
-#'  Note: due to the merge required within this function, the output needs to be
-#'  reassigned unlike some other `spatsoc` functions like `dyad_id`
-#'  and `group_pts`. See details in
-#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+#'   Note: due to the merge required within this function, the output needs to
+#'   be reassigned unlike some other `spatsoc` functions like `dyad_id` and
+#'   `group_pts`. See details in
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
 #' @family Edge-list generation
