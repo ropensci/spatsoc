@@ -88,13 +88,16 @@ test_that('column names must exist in DT', {
 test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
 
-  expect_error(edge_nn(DT, threshold = -10, timegroup = 'timegroup', id = 'ID'),
+  expect_error(edge_nn(DT, threshold = -10, timegroup = 'timegroup', id = 'ID',
+                       coords = c('X', 'Y')),
                'threshold must be > 0')
 
-  expect_error(edge_nn(DT, threshold = 0, timegroup = 'timegroup', id = 'ID'),
+  expect_error(edge_nn(DT, threshold = 0, timegroup = 'timegroup', id = 'ID',
+                       coords = c('X', 'Y')),
                'threshold must be > 0')
 
-  expect_error(edge_nn(DT, threshold = '0', timegroup = 'timegroup', id = 'ID'),
+  expect_error(edge_nn(DT, threshold = '0', timegroup = 'timegroup', id = 'ID',
+                       coords = c('X', 'Y')),
                'threshold must be of class numeric')
 })
 
