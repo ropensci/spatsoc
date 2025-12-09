@@ -16,9 +16,12 @@
 #' function. The `group` argument expects the name of the column in `DT` which
 #' correspond to the group column.
 #'
-#' See below under Interface for details on providing coordinates.
+#' See below under "Interface" for details on providing coordinates and under
+#' "Direction function" for details on the underlying direction function used.
 #'
 #' @inheritSection direction_step Interface
+#' @inheritSection direction_step Direction function
+#'
 #' @inheritParams distance_to_centroid
 #' @inheritParams direction_step
 #' @inheritParams group_pts

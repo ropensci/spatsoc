@@ -14,15 +14,18 @@
 #' [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' See below under Interface for details on providing coordinates.
-#'
 #' The `edges` and `DT` are internally merged in this function using the columns
 #' `id`, `dyadID` and `timegroup`. This function expects a `dyadID` present,
 #' generated with the `dyad_id` function. The `id`, and `timegroup` arguments
 #' expect the names of columns which correspond to the ID, and timegroup
 #' columns.
 #'
+#' See below under "Interface" for details on providing coordinates and under
+#' "Direction function" for details on the underlying direction function used.
+#'
 #' @inheritSection direction_step Interface
+#' @inheritSection direction_step Direction function
+#'
 #' @inheritParams centroid_dyad
 #' @inheritParams direction_step
 #' @inheritParams edge_alignment

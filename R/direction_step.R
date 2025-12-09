@@ -16,13 +16,14 @@
 #' `DT` which correspond to the individual identifier and additional grouping
 #' columns.
 #'
-#' See below under Interface for details on providing coordinates.
-#'
 #' The `splitBy` argument offers further control over grouping. If within
 #' your `DT`, you have distinct sampling periods for each individual, you
 #' can provide the column name(s) which identify them to `splitBy`. The
 #' direction calculation by `direction_step` will only consider rows within
 #' each `id` and `splitBy` subgroup.
+#'
+#' See below under "Interface" for details on providing coordinates and under
+#' "Direction function" for details on the underlying direction function used.
 #'
 #' @section Interface:
 #'  Two interfaces are available for providing coordinates:
@@ -39,6 +40,22 @@
 #'  their input DT with [get_geometry()]. To use this interface, leave the
 #'  `coords` and `crs` arguments `NULL`, and the default argument for `geometry`
 #'  ('geometry') will be used directly.
+#'
+#' @section Direction function:
+#'
+#'  The underlying distance function used depends on the crs of the coordinates
+#'  or geometry provided.
+#'
+#'  - If the crs is provided and longlat degrees (as determined by
+#'  [sf::st_is_longlat()]), the distance function is
+#'  [lwgeom::st_geod_azimuth()].
+#'  - If the crs is provided and not longlat degrees (eg. a projected UTM),
+#'  the coordinates or geometry are transformed to `sf::st_crs(4326)` before the
+#'  distance is measured using [lwgeom::st_geod_azimuth()].
+#'  - If the crs is NULL or NA_crs_, the distance function cannot be used
+#'  and an error is returned.
+#'
+#'  Note: missing values are not accepted by [lwgeom::st_geod_azimuth()]
 #'
 #' @return `direction_step` returns the input `DT` appended with
 #'  a `direction` column with units set to radians using the `units`
