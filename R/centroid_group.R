@@ -15,7 +15,8 @@
 #' The `group` argument expects the name of a column in
 #' `DT` which correspond to the group column.
 #'
-#' See below under Interface for details on providing coordinates.
+#' See below under "Interface" for details on providing coordinates and under
+#' "Centroid function" for details on the underlying centroid function used.
 #'
 #' @section Interface:
 #'  Two interfaces are available for providing coordinates:
@@ -34,6 +35,20 @@
 #'  `coords` and `crs` arguments `NULL`, and the default argument for `geometry`
 #'  ('geometry') will be used directly.
 #'
+#' @section Centroid function:
+#'
+#' The underlying centroid function used depends on the crs of the coordinates
+#'  or geometry provided.
+#'
+#'  - If the crs is longlat degrees (as determined by
+#'  [sf::st_is_longlat()]) and [sf::sf_use_s2()] is TRUE, the distance function
+#'  is [sf::st_centroid()] which passes to [s2::s2_centroid()].
+#'  - If the crs is longlat degrees but [sf::sf_use_s2()] is FALSE, the centroid
+#'  calculated will be incorrect. See [sf::st_centroid()].
+#'  - If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
+#'  centroid function used is mean.
+#'
+#'  Note: if the input is length 1, the input is returned.
 #'
 #' @param DT input data.table with group column generated with `group_pts`
 #' @inheritParams group_pts
