@@ -138,7 +138,7 @@ expect_DT <- data.table(
 centroid_group(expect_DT, coords = coords)
 leader_direction_group(expect_DT, coords = coords,
                        return_rank = TRUE, group = group)
-direction_to_leader(expect_DT, coords = c('X', 'Y'), crs = utm)
+direction_to_leader(expect_DT, coords = coords, crs = utm)
 
 test_that('expected results for simple case', {
   expect_lte(
@@ -179,4 +179,45 @@ test_that('if coords null, geometry required', {
   expect_error(direction_to_leader(DT, coords = NULL, group = group,
                                    crs = utm),
                'get_geometry?')
+})
+
+
+test_that('NAs in coordinates return NA', {
+  copyDT <- copy(DT)
+  copyDT[sample(.N, 100), X := NA]
+
+  expect_equal(
+    copyDT[is.na(X), .N],
+    direction_to_leader(copyDT, coords = coords, group = group,
+                        crs = utm)[is.na(X)][is.na(direction_leader), .N]
+  )
+
+  copyDT <- copy(DT)
+  copyDT[sample(.N, 100), Y := NA]
+
+  expect_equal(
+    copyDT[is.na(Y), .N],
+    direction_to_leader(copyDT, coords = coords, group = group,
+                        crs = utm)[is.na(Y)][is.na(direction_leader), .N]
+  )
+
+  copyDT <- copy(DT)
+  copyDT[sample(.N, 100), X := NA]
+  get_geometry(copyDT, coords, crs = utm)
+
+  expect_equal(
+    copyDT[is.na(X), .N],
+    direction_to_leader(copyDT, group = group)[
+      is.na(X)][is.na(direction_leader), .N]
+  )
+
+  copyDT <- copy(DT)
+  copyDT[sample(.N, 100), Y := NA]
+  get_geometry(copyDT, coords, crs = utm)
+
+  expect_equal(
+    copyDT[is.na(Y), .N],
+    direction_to_leader(copyDT, group = group)[
+      is.na(Y)][is.na(direction_leader), .N]
+  )
 })

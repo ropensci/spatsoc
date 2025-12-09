@@ -301,3 +301,43 @@ test_that('sfc interface returns expected', {
 
 })
 
+
+test_that('NAs in coordinates return NA', {
+  copyDT <- copy(DT)
+
+  full_edges <- edge_dist(DT, threshold = NULL, id = id, coords = coords,
+                          timegroup = timegroup, returnDist = TRUE,
+                          fillNA = TRUE)
+  dyad_id(full_edges, id1 = 'ID1', id2 = 'ID2')
+
+  copyDT[sample(.N, 100), X := NA]
+
+  expect_lte(
+    copyDT[is.na(X), .N],
+    edge_direction(
+      edges = full_edges,
+      DT = copyDT,
+      id = id,
+      coords = coords,
+      crs = utm,
+      timegroup = timegroup
+    )[is.na(direction_dyad), .N]
+  )
+
+  copyDT <- copy(DT)
+
+  copyDT[sample(.N, 100), Y := NA]
+
+  expect_lte(
+    copyDT[is.na(Y), .N],
+    edge_direction(
+      edges = full_edges,
+      DT = copyDT,
+      id = id,
+      coords = coords,
+      crs = utm,
+      timegroup = timegroup
+    )[is.na(direction_dyad), .N]
+  )
+})
+

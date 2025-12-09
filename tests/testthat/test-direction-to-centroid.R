@@ -91,3 +91,49 @@ test_that('if coords null, geometry required', {
   expect_error(direction_to_centroid(DT, coords = NULL, crs = utm),
                'get_geometry?')
 })
+
+
+test_that('NAs in coordinates return NA', {
+  copyDT <- copy(DT)
+  copyDT[sample(.N, 100), X := NA]
+
+  expect_equal(
+    copyDT[is.na(X), .N],
+    direction_to_centroid(copyDT, coords = coords,
+                          crs = utm)[is.na(X)][is.na(direction_centroid), .N]
+  )
+
+  copyDT <- copy(DT)
+  copyDT[sample(.N, 100), Y := NA]
+
+  expect_equal(
+    copyDT[is.na(Y), .N],
+    direction_to_centroid(copyDT, coords = coords,
+                          crs = utm)[is.na(Y)][is.na(direction_centroid), .N]
+  )
+
+  copyDT <- copy(DT)
+  copyDT[sample(.N, 100), X := NA]
+  copyDT[sample(.N, 100), centroid_X := NA]
+  get_geometry(copyDT, coords, crs = utm)
+  get_geometry(copyDT, c('centroid_X', 'centroid_Y'), crs = utm,
+               geometry_colname = 'centroid')
+
+  expect_equal(
+    copyDT[is.na(Y), .N],
+    direction_to_centroid(copyDT)[is.na(Y)][is.na(direction_centroid), .N]
+  )
+
+  copyDT <- copy(DT)
+  copyDT[sample(.N, 100), Y := NA]
+  copyDT[sample(.N, 100), centroid_Y := NA]
+  get_geometry(copyDT, coords, crs = utm)
+  get_geometry(copyDT, c('centroid_X', 'centroid_Y'), crs = utm,
+               geometry_colname = 'centroid')
+
+  expect_equal(
+    copyDT[is.na(Y), .N],
+    direction_to_centroid(copyDT)[is.na(Y)][is.na(direction_centroid), .N]
+  )
+
+})
