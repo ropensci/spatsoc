@@ -343,7 +343,11 @@ calc_distance <- function(
     } else {
       # Matrix
       if (use_dist) {
-        as.matrix(stats::dist(sf::st_coordinates(geometry_a)))
+        coords <- sf::st_coordinates(geometry_a)
+        m <- as.matrix(stats::dist(coords))
+        m[is.na(coords[, 1]),] <- NA_real_
+        m[, is.na(coords[, 2])] <- NA_real_
+        m
       } else {
         sf::st_distance(geometry_a, by_element = FALSE)
       }
@@ -369,7 +373,10 @@ calc_distance <- function(
     } else {
       # Matrix
       if (use_dist) {
-        as.matrix(stats::dist(cbind(x_a, y_a)))
+        m <- as.matrix(stats::dist(cbind(x_a, y_a)))
+        m[is.na(x_a),] <- NA_real_
+        m[, is.na(y_a)] <- NA_real_
+        m
       } else {
         sf::st_distance(
           x = sf::st_as_sf(data.frame(x_a, y_a),

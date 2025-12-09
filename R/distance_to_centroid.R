@@ -176,7 +176,7 @@ distance_to_centroid <- function(
 
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
-    DT[!(is.na(x) | is.na(y)),
+    DT[,
       c(out) := calc_distance(
         x_a = x,
         y_a = y,

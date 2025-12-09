@@ -210,8 +210,7 @@ distance_to_leader <- function(
 
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
-    DT[!group %in% check_leaderless$group &
-        !(is.na(x) | is.na(y)),
+    DT[!group %in% check_leaderless$group,
       c(out_col) := calc_distance(
         x_a = x,
         y_a = y,
