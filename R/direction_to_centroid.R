@@ -104,7 +104,8 @@ direction_to_centroid <- function(
     use_transform <- !sf::st_is_longlat(crs)
 
     if (is.na(use_transform)) {
-      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform, ', ensure crs is provided for direction functions'))
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
     }
 
     DT[!sf::st_is_empty(geo) & !sf::st_is_empty(cent),

@@ -29,7 +29,8 @@ assert_col_inherits <- function(x, cols, classes, ...) {
 
 assert_col_radians <- function(x, col, ...) {
   if(!identical(units(x[[col]])$numerator, 'rad')) {
-    rlang::abort(paste0(rlang::caller_arg(col), ' must be of units radians', ...),
+    rlang::abort(paste0(rlang::caller_arg(col),
+                        ' must be of units radians', ...),
                  call = rlang::caller_env())
   } else {
     invisible(NULL)
@@ -64,7 +65,8 @@ assert_inherits <- function(x, classes, ...) {
 
 assert_is_data_table <- function(x) {
   if (!data.table::is.data.table(x)) {
-    rlang::abort(paste0('input ', rlang::caller_arg(x), ' must be a data.table'),
+    rlang::abort(paste0('input ', rlang::caller_arg(x),
+                        ' must be a data.table'),
                  call = rlang::caller_env())
   }
   if (nrow(x) == 0L) {
@@ -129,7 +131,8 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
     if (any(is.null(crs), is.na(crs))) {
       assert_relation(threshold, `>`, 0)
     } else {
-      assert_relation(units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor)),
+      assert_relation(units::as_units(threshold,
+                                      units(sf::st_crs(crs)$SemiMajor)),
                       `>`,
                       units::as_units(0, units(sf::st_crs(crs)$SemiMajor)),
                       n = 2)
@@ -165,7 +168,8 @@ assert_units_match <- function(x, y, n = 1) {
 #' - the pairwise points in geometry_a and geometry_b
 #' - the pairwise points in x_a, y_a and x_b, y_b
 #'
-#' @param geometry sfc (simple feature geometry list column) from [get_geometry()]
+#' @param geometry sfc (simple feature geometry list column) from
+#' [get_geometry()]
 #' @param x X coordinate column, numeric
 #' @param y Y coordinate column, numeric
 #' @param crs crs for x, y coordinates, ignored for geometry argument
@@ -213,7 +217,8 @@ calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
       } else {
         sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
       }
-    } else if (missing(geometry) && !missing(x) && !missing(y) && !missing(crs)) {
+    } else if (missing(geometry) && !missing(x) && !missing(y) &&
+               !missing(crs)) {
       if (identical(length(x), 1L) & identical(length(y), 1L)) {
         return(data.frame(x, y))
       } else {
@@ -277,7 +282,8 @@ calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
 #'  `sf::st_crs(4326)`
 #' - no missing values in coordinates
 #'
-#' @param geometry_a,geometry_b sfc (simple feature geometry list column) from [get_geometry()]
+#' @param geometry_a,geometry_b sfc (simple feature geometry list column) from
+#' [get_geometry()]
 #' @param x_a,x_b X coordinate column, numeric
 #' @param y_a,y_b Y coordinate column, numeric
 #' @param crs crs for x_a, y_a (and if provided, x_b, y_b) coordinates,

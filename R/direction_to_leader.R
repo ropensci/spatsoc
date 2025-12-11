@@ -156,7 +156,8 @@ direction_to_leader <- function(
     use_transform <- !sf::st_is_longlat(crs)
 
     if (is.na(use_transform)) {
-      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform, ', ensure crs is provided for direction functions'))
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
     }
 
     DT[!group %in% check_leaderless$group &
@@ -212,6 +213,7 @@ direction_to_leader <- function(
       rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
                           ', ensure crs is provided for direction functions'))
     }
+
     DT[!group %in% check_leaderless$group &
         !is.na(x) & !is.na(y) & !is.na(x_leader) & !is.na(y_leader),
       direction_leader := calc_direction(
