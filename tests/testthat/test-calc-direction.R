@@ -119,4 +119,14 @@ test_that('NAs returned as expected', {
   expect_error(XY_NA[, calc_direction(geometry, geometry_b = geometry,
                                       use_transform = FALSE)],
                'missing values in coordinates')
+
+  get_geometry(XY_NA, lonlat_coords, crs_lonlat)
+  expect_error(calc_direction(DT[1, geometry],
+                              XY_NA[sf::st_is_empty(geometry)][1, geometry],
+                              use_transform = TRUE),
+               'missing values in coordinates')
+  expect_error(calc_direction(DT[1, geometry],
+                              XY_NA[sf::st_is_empty(geometry)][1, geometry],
+                              use_transform = FALSE),
+               'missing values in coordinates')
 })
