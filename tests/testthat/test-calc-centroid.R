@@ -118,7 +118,9 @@ test_that('crs_use_mean decides as expected', {
   expect_true(crs_use_mean(NA))
   expect_true(crs_use_mean(NULL))
   expect_true(crs_use_mean(32736))
-  expect_false(crs_use_mean(4326))
+  expect_false({sf::sf_use_s2(TRUE); crs_use_mean(4326)})
+  expect_true(suppressWarnings({sf::sf_use_s2(FALSE); crs_use_mean(4326)}))
+  expect_warning({sf::sf_use_s2(FALSE); crs_use_mean(4326)})
 })
 
 
