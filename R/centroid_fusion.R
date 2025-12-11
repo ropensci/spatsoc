@@ -32,7 +32,7 @@
 #'   [group_times()] matching the input data.table used to generate the edge
 #'   list with [edge_nn()] or [edge_dist()]
 #' @inheritParams group_pts
-#' @inheritParams direction_step
+#' @inheritParams centroid_group
 #'
 #' @return `centroid_fusion` returns the input `edges` appended with
 #'  centroid column(s) for each timestep and fusion id.

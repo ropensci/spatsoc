@@ -31,7 +31,7 @@
 #'   list with `edge_nn` or `edge_dist`
 #' @inheritParams edge_alignment
 #' @inheritParams group_pts
-#' @inheritParams direction_step
+#' @inheritParams centroid_group
 #'
 #' @return `centroid_dyad` returns the input `edges` appended with centroid
 #'   column(s) for each timestep and dyad id.
