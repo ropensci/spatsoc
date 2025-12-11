@@ -144,6 +144,8 @@ leader_direction_group <- function(
     )
     ]
 
+  } else {
+    assert_not_null(coords)
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
     assert_col_inherits(DT, coords, 'numeric')
@@ -166,15 +168,9 @@ leader_direction_group <- function(
       data.table::set(DT, j = pos_col, value = NULL)
     }
 
-    DT[, position_group_direction := {
-      if (inherits(group_dir, "units")) {
-        cos(units::drop_units(group_dir)) * (x - x_centroid) +
-          sin(units::drop_units(group_dir)) * (y - y_centroid)
-      } else {
-        cos(units::drop_units(group_dir)) * (x - x_centroid) +
-          sin(units::drop_units(group_dir)) * (y - y_centroid)
-      }
-    },
+    DT[, position_group_direction :=
+      cos(units::drop_units(group_dir)) * (x - x_centroid) +
+      sin(units::drop_units(group_dir)) * (y - y_centroid),
     by = .I,
     env = list(
       group_dir = group_direction,
