@@ -163,15 +163,23 @@ leader_direction_group <- function(
     ]
   }
 
-
-      DT[, rank_position_group_direction :=
-           data.table::frank(-position_group_direction,
-                             ties.method = ties.method),
-         by = c(group)]
+  if (return_rank) {
+    rank_col <- 'rank_position_group_direction'
+    if (rank_col %in% colnames(DT)) {
+      message(
+        paste0(rank_col, ' column will be overwritten by this function')
+      )
+      data.table::set(DT, j = rank_col, value = NULL)
     }
+
+    assert_not_null(group)
+    assert_are_colnames(DT, group, ', did you run group_pts?')
+
+    DT[, c(rank_col) :=
+         data.table::frank(-pos, ties.method = ties.method),
+       by = c(group),
+       env = list(pos = pos_col)]
   }
-
-
 
   return(DT[])
 }
