@@ -96,6 +96,15 @@
 #' )
 #'
 #' print(dyad_directions)
+#'
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' dyad_directions <- edge_direction(
+#'   edges,
+#'   DT,
+#'   id = 'ID',
+#'   timegroup = 'timegroup'
+#' )
 edge_direction <- function(
     edges = NULL,
     DT = NULL,

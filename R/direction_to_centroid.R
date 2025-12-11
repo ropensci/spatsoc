@@ -70,6 +70,11 @@
 #'
 #' # Calculate direction to group centroid
 #' direction_to_centroid(DT, coords = c('X', 'Y'), crs = 32736)
+#'
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' centroid_group(DT)
+#' direction_to_centroid(DT)
 direction_to_centroid <- function(
     DT = NULL,
     coords = NULL,

@@ -95,6 +95,20 @@
 #'
 #' # Calculate direction to leader
 #' direction_to_leader(DT, coords = c('X', 'Y'), crs = 32736)
+#'
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' direction_step(
+#'   DT = DT,
+#'   id = 'ID'
+#' )
+#' centroid_group(DT)
+#' direction_group(DT)
+#' leader_direction_group(
+#'   DT,
+#'   return_rank = TRUE
+#' )
+#' direction_to_leader(DT)
 direction_to_leader <- function(
     DT = NULL,
     coords = NULL,
