@@ -114,13 +114,35 @@ leader_direction_group <- function(
   assert_is_data_table(DT)
 
   if (is.null(coords)) {
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
 
-  } else {
-    assert_not_null(return_rank)
-    assert_not_null(coords)
+    centroid <- 'centroid'
+    assert_are_colnames(DT, centroid, ', did you run get_geometry()?')
+    assert_col_inherits(DT, centroid, 'sfc_POINT')
 
-    assert_are_colnames(DT, group_direction)
-    assert_col_radians(DT, group_direction, ', did you use direction_group?')
+    pos_col <- 'position_group_direction'
+    if (pos_col %in% colnames(DT)) {
+      message(
+        pos_col, ' column will be overwritten by this function'
+      )
+      data.table::set(DT, j = pos_col, value = NULL)
+    }
+
+    DT[, position_group_direction := {
+      coords_geo <- sf::st_coordinates(geo)
+      coords_cent <- sf::st_coordinates(cent)
+
+      cos(units::drop_units(group_dir)) * (coords_geo[, 1] - coords_cent[, 1]) +
+        sin(units::drop_units(group_dir)) * (coords_geo[, 2] - coords_cent[, 2])
+    },
+    by = .I,
+    env = list(
+      group_dir = group_direction,
+      geo = geometry,
+      cent = centroid
+    )
+    ]
 
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
