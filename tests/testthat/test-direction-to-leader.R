@@ -26,6 +26,9 @@ leader_direction_group(DT, coords = coords, group = group, return_rank = TRUE)
 DT_with_missing <- copy(DT)
 DT <- copy(DT)[group != 868]
 
+get_geometry(DT_with_missing, coords = coords, crs = utm)
+get_geometry(DT, coords = coords, crs = utm)
+
 clean_DT <- copy(DT)
 
 test_that('DT is required', {
@@ -56,6 +59,7 @@ test_that('column names must exist in DT', {
 })
 
 test_that('coords are correctly provided or error detected', {
+  # coords
   expect_error(direction_to_leader(DT, coords = c('X', NULL), group = group,
                                    crs = utm),
                'coords must be length 2')
@@ -70,6 +74,11 @@ test_that('coords are correctly provided or error detected', {
   copy_DT <- copy(DT)[, rank_position_group_direction := NULL]
   expect_error(direction_to_leader(copy_DT, coords = coords,
                                   group = group, crs = utm))
+
+  # geometry
+  copy_DT <- copy(DT)[, geometry := NULL]
+  expect_error(direction_to_leader(copy_DT, group = group),
+               'get_geometry?')
 })
 
 test_that('leader is correctly provided or error detected', {
@@ -81,10 +90,14 @@ test_that('leader is correctly provided or error detected', {
 
 test_that('message when direction_leader column overwritten', {
   copyDT <- copy(clean_DT)[, direction_leader := 1]
+
+  # coords
   expect_message(
     direction_to_leader(copyDT, coords = coords, group = group, crs = utm),
     'direction_leader column will be overwritten'
   )
+
+  # geometry
 })
 
 test_that('no rows are added to the result DT', {
@@ -159,6 +172,7 @@ test_that('expected results for simple case', {
 
 
 test_that('warns if group does not have a leader', {
+  # coords
   expect_warning(
     direction_to_leader(
       DT = DT_with_missing,
@@ -168,6 +182,7 @@ test_that('warns if group does not have a leader', {
     ),
     'groups found missing leader'
   )
+
 })
 
 test_that('use_transform errors if crs not provided', {

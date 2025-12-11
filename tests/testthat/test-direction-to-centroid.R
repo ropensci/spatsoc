@@ -18,6 +18,9 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, timethreshold)
 group_pts(DT, threshold = threshold, id = id,
           coords = coords, timegroup = timegroup)
+
+DT_without_centroid <- copy(DT)
+
 centroid_group(DT, coords = coords, group = group)
 
 clean_DT <- copy(DT)
@@ -108,8 +111,17 @@ test_that('use_transform errors if crs not provided', {
 
 # sfc interface
 test_that('if coords null, geometry required', {
-  expect_error(direction_to_centroid(DT, coords = NULL, crs = utm),
+  expect_error(direction_to_centroid(DT, crs = utm),
                'get_geometry?')
+
+  get_geometry(DT, coords = coords, crs = utm)
+  expect_error(direction_to_centroid(DT, crs = utm),
+               'centroid_group?')
+
+  copy_DT <- copy(DT)
+  copy_DT[, centroid := 42]
+  expect_error(direction_to_centroid(copy_DT, crs = utm),
+               'sfc_POINT')
 })
 
 
