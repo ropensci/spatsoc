@@ -116,33 +116,35 @@ leader_direction_group <- function(
   if (is.null(coords)) {
 
   } else {
+    assert_not_null(return_rank)
     assert_not_null(coords)
+    assert_not_null(crs)
+
+    assert_are_colnames(DT, group_direction)
+    assert_col_radians(DT, group_direction, ', did you use direction_group?')
+
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
 
     xcol <- data.table::first(coords)
     ycol <- data.table::last(coords)
+    pre <- 'centroid_'
+    centroid_xcol <- paste0(pre, xcol)
+    centroid_ycol <- paste0(pre, ycol)
+    coords_centroid  <- c(centroid_xcol, centroid_ycol)
 
-    centroid_xcol <- paste0('centroid_', gsub(' ', '', xcol))
-    centroid_ycol <- paste0('centroid_', gsub(' ', '', ycol))
+    assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
+    assert_col_inherits(DT, coords_centroid, 'numeric')
 
-    check_cols <- c(group_direction, centroid_xcol, centroid_ycol)
-    assert_are_colnames(DT, check_cols)
-
-    assert_col_inherits(DT, coords, 'numeric')
-    assert_col_inherits(DT, centroid_xcol, 'numeric')
-    assert_col_inherits(DT, centroid_ycol, 'numeric')
-
-    assert_not_null(return_rank)
-
-    if ('position_group_direction' %in% colnames(DT)) {
+    pos_col <- 'position_group_direction'
+    if (pos_col %in% colnames(DT)) {
       message(
-        'position_group_direction column will be overwritten by this function'
+        pos_col, ' column will be overwritten by this function'
       )
-      data.table::set(DT, j = 'position_group_direction', value = NULL)
+      data.table::set(DT, j = pos_col, value = NULL)
     }
 
-    assert_col_radians(DT, 'group_direction', ', did you use direction_group?')
 
     DT[, position_group_direction :=
          cos(units::drop_units(.SD[[1]])) * (.SD[[2]] - .SD[[4]]) +
@@ -159,8 +161,6 @@ leader_direction_group <- function(
         data.table::set(DT, j = 'rank_position_group_direction', value = NULL)
       }
 
-      assert_not_null(group)
-      assert_are_colnames(DT, group, ', did you run group_pts?')
 
       DT[, rank_position_group_direction :=
            data.table::frank(-position_group_direction,
