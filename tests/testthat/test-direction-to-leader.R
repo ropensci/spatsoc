@@ -98,6 +98,10 @@ test_that('message when direction_leader column overwritten', {
   )
 
   # geometry
+  expect_message(
+    direction_to_leader(copyDT, group = group),
+    'direction_leader column will be overwritten'
+  )
 })
 
 test_that('no rows are added to the result DT', {
