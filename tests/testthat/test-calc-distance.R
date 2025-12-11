@@ -1,6 +1,8 @@
 # Test calc_distance
 context('test calc_distance')
 
+library(sf)
+
 DT <- fread('../testdata/DT.csv')
 coords <- c('X', 'Y')
 crs <- 32736
@@ -10,8 +12,7 @@ crs_lonlat <- 4326
 DT <- DT[ID %in% c('A', 'B', 'C')]
 
 get_geometry(DT, coords = coords, crs = crs)
-
-DT[, dest_geometry := sf::st_centroid(sf::st_union(geometry))]
+DT[, dest_geometry := sf::st_sfc(first(geometry), crs = st_crs(geometry))]
 
 lonlat_coords <- paste0('lonlat_', coords)
 DT[, (lonlat_coords) := as.data.table(sf::st_coordinates(geometry))]

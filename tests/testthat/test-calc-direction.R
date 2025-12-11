@@ -18,8 +18,8 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
 get_geometry(DT, coords = coords, crs = crs)
 
-DT[, dest_geometry := sf::st_centroid(sf::st_union(geometry))]
 DT[, calc_direction(geometry, dest_geometry)]
+DT[, dest_geometry := sf::st_sfc(first(geometry), crs = st_crs(geometry))]
 
 lonlat_coords <- paste0('lonlat_', coords)
 DT[, (lonlat_coords) := as.data.table(sf::st_coordinates(geometry))]
