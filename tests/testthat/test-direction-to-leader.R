@@ -23,6 +23,7 @@ direction_group(DT)
 leader_direction_group(DT, coords = coords, group = group, return_rank = TRUE)
 
 # Removing group with missing leader
+DT_with_missing <- copy(DT)
 DT <- copy(DT)[group != 868]
 
 clean_DT <- copy(DT)
@@ -158,14 +159,9 @@ test_that('expected results for simple case', {
 
 
 test_that('warns if group does not have a leader', {
-  leaderless <- copy(clean_DT)
-  sel_group <- leaderless[, .N, group][N > 1, sample(group, 1)]
-  leaderless[group == sel_group, group_direction := NA]
-  leader_direction_group(leaderless, coords = coords, group = group, return_rank = TRUE)
-
   expect_warning(
     direction_to_leader(
-      DT = leaderless,
+      DT = DT_with_missing,
       coords = coords,
       group = 'group',
       crs = utm
