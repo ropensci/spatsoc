@@ -113,7 +113,14 @@ test_that('calc_centroid equals st_centroid for mean and length 1 inputs', {
   )
 })
 
+
+test_that('crs_use_mean decides as expected', {
+  expect_true(crs_use_mean(NA))
+  expect_true(crs_use_mean(NULL))
+  expect_true(crs_use_mean(32736))
+  expect_false(crs_use_mean(4326))
 })
+
 
 # These specific test results require recent commits to sf. Save for later.
 # test_that('NAs returned as expected', {
