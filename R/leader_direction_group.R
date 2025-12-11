@@ -145,21 +145,23 @@ leader_direction_group <- function(
       data.table::set(DT, j = pos_col, value = NULL)
     }
 
-
-    DT[, position_group_direction :=
-         cos(units::drop_units(.SD[[1]])) * (.SD[[2]] - .SD[[4]]) +
-         sin(units::drop_units(.SD[[1]])) * (.SD[[3]] - .SD[[5]]),
-       by = .I,
-       .SDcols = c(group_direction, xcol, ycol, centroid_xcol, centroid_ycol)]
-
-    if (return_rank) {
-      rank_col <- 'rank_position_group_direction'
-      if (rank_col %in% colnames(DT)) {
-        message(
-          paste0(rank_col, ' column will be overwritten by this function')
-        )
-        data.table::set(DT, j = 'rank_position_group_direction', value = NULL)
+    DT[, position_group_direction := {
+      if (inherits(group_dir, "units")) {
+        cos(units::drop_units(group_dir)) * (x - x_centroid) +
+          sin(units::drop_units(group_dir)) * (y - y_centroid)
+      } else {
+        cos(units::drop_units(group_dir)) * (x - x_centroid) +
+          sin(units::drop_units(group_dir)) * (y - y_centroid)
       }
+    },
+    by = .I,
+    env = list(
+      group_dir = group_direction,
+      x = xcol, y = ycol,
+      x_centroid = centroid_xcol, y_centroid = centroid_ycol
+    )
+    ]
+  }
 
 
       DT[, rank_position_group_direction :=
