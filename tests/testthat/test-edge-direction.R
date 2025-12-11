@@ -10,7 +10,6 @@ timethreshold <- '20 minutes'
 threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
-group <- 'group'
 utm <- 32736
 
 
