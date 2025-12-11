@@ -112,7 +112,7 @@ centroid_group <- function(
     geometry = 'geometry') {
 
   # Due to NSE notes in R CMD check
-  x <- y <- NULL
+  centroid <- geo <- cent <- . <- x <- y <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)

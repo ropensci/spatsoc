@@ -102,9 +102,6 @@ centroid_fusion <- function(
     timegroup = 'timegroup',
     geometry = 'geometry') {
 
-  # Due to NSE notes in R CMD check
-  fusionID <- NULL
-
   centroid_(
     centroid_groupings = 'fusionID',
     edges = edges,
@@ -127,6 +124,9 @@ centroid_ <- function(
     crs = NULL,
     timegroup = 'timegroup',
     geometry = 'geometry') {
+
+  # Due to NSE notes in R CMD check
+  centroid <- geo <- . <- x <- y <- NULL
 
   assert_not_null(centroid_groupings)
 
