@@ -1,4 +1,16 @@
-# Development version
+# spatsoc v 0.2.12
+
+Enhancements:
+
+* provide sfc interface for centroid functions (`centroid_group`, `centroid_dyad` 
+and `centroid_fusion`) ([PR 127](https://github.com/ropensci/spatsoc/pull/127)))
+  * improves internal `calc_centroid` efficiency by quickly returning 
+  coordinates/geometry if length is 1, and using mean instead of `sf::st_centroid` 
+  where appropriate
+  * reduce repeated source code and testing by refactoring `centroid_dyad` and 
+  `centroid_fusion` to use a shared internal function
+
+# spatsoc 0.2.12
 
 Major changes:
 

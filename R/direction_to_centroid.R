@@ -66,7 +66,7 @@
 #'           coords = c('X', 'Y'), timegroup = 'timegroup')
 #'
 #' # Calculate group centroid
-#' centroid_group(DT, coords = c('X', 'Y'), group = 'group', na.rm = TRUE)
+#' centroid_group(DT, coords = c('X', 'Y'), group = 'group')
 #'
 #' # Calculate direction to group centroid
 #' direction_to_centroid(DT, coords = c('X', 'Y'), crs = 32736)

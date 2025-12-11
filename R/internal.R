@@ -159,19 +159,32 @@ assert_units_match <- function(x, y, n = 1) {
 #'
 #' **Internal function** - not developed to be used outside of spatsoc functions
 #'
-#' Calculate centroid using [sf::st_centroid()] for one of:
+#' Calculate centroid for one of:
 #' - geometry
 #' - the points in x, y
 #' - the pairwise points in geometry_a and geometry_b
 #' - the pairwise points in x_a, y_a and x_b, y_b
+#'
 #' @param geometry sfc (simple feature geometry list column) from [get_geometry()]
 #' @param x X coordinate column, numeric
 #' @param y Y coordinate column, numeric
 #' @param crs crs for x, y coordinates, ignored for geometry argument
+#' @param use_mean boolean predetermine if centroid calculated via mean
 #'
 #' @returns
 #'
-#' Centroid of the geometry or coordinates in x,y provided
+#' The underlying centroid function used depends on the crs of the coordinates
+#' or geometry provided.
+#'
+#'  - If the crs is longlat degrees (as determined by
+#' [sf::st_is_longlat()]) and [sf::sf_use_s2()] is TRUE, the distance function
+#' is [sf::st_centroid()] which passes to [s2::s2_centroid()].
+#'  - If the crs is longlat degrees but [sf::sf_use_s2()] is FALSE, the centroid
+#' calculated will be incorrect. See [sf::st_centroid()].
+#'  - If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
+#' centroid function used is mean.
+#'
+#' Note: if the input is length 1, the input is returned.
 #'
 #' @keywords internal
 #' @examples
@@ -184,26 +197,67 @@ assert_units_match <- function(x, y, n = 1) {
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #'
 #' DT[, spatsoc:::calc_centroid(x = X, y = Y, crs = 32736)]
-calc_centroid <- function(geometry, x, y, crs) {
-  if (!missing(geometry) && missing(x) && missing(y)) {
-    sf::st_centroid(sf::st_combine(geometry))
-  } else if (missing(geometry) && !missing(x) && !missing(y)) {
-    sf::st_centroid(sf::st_combine(
-      sf::st_as_sf(
-        data.frame(x, y),
-        crs = crs,
-        coords = seq.int(2),
-        na.fail = FALSE
-      )
-    ))
+#'
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#'
+#' # Calculating centroids requires recomputing the bbox when:
+#' #  1- by = , 2- providing geometry
+#' DT[, centroid := spatsoc:::calc_centroid(geometry), by = ID]
+#' DT[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
+#' plot(DT$centroid)
+calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
+  if (isFALSE(use_mean)) {
+    if (!missing(geometry) && missing(x) && missing(y) && missing(crs)) {
+      if (identical(length(geometry), 1L)) {
+        return(sf::st_as_sf(geometry))
+      } else {
+        sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
+      }
+    } else if (missing(geometry) && !missing(x) && !missing(y) && !missing(crs)) {
+      if (identical(length(x), 1L) & identical(length(y), 1L)) {
+        return(data.frame(x, y))
+      } else {
+        data.frame(sf::st_coordinates(sf::st_centroid(sf::st_combine(
+          sf::st_as_sf(
+            data.frame(x, y),
+            crs = crs,
+            coords = seq.int(2),
+            na.fail = FALSE
+          )
+        ))))
+      }
+    } else {
+      rlang::abort(c(
+        'arguments incorrectly provided, use one of the following combinations:',
+        '1. geometry',
+        '2. x, y, crs'
+      ))
+    }
   } else {
-    rlang::abort(c(
-      'arguments incorrectly provided, use one of the following combinations:',
-      '1. geometry',
-      '2. x, y'
-    ))
+    if (!missing(geometry) && missing(x) && missing(y) && missing(crs)) {
+      if (identical(length(geometry), 1L)) {
+        return(sf::st_as_sf(geometry))
+      } else {
+        sf::st_as_sf(
+          data.frame(apply(sf::st_coordinates(geometry), 2, mean, na.rm = TRUE,
+                           simplify = FALSE)), coords = seq.int(2), crs = crs)
+      }
+    } else if (missing(geometry) && !missing(x) && !missing(y) && !missing(crs)) {
+      if (identical(length(x), 1L) & identical(length(y), 1L)) {
+        return(data.frame(x, y))
+      } else {
+        data.frame(mean(x, na.rm = TRUE), mean(y, na.rm = TRUE))
+      }
+    } else {
+      rlang::abort(c(
+        'arguments incorrectly provided, use one of the following combinations:',
+        '1. geometry',
+        '2. x, y, crs'
+      ))
+    }
   }
 }
+
 
 
 #' Calculate direction
@@ -397,6 +451,22 @@ calc_distance <- function(
    ))
  }
 }
+
+crs_use_mean <- function(crs) {
+  if (isTRUE(sf::st_is_longlat(crs))) {
+    if (sf::sf_use_s2()) {
+      use_mean <- FALSE
+    } else {
+      warning('st_centroid does not give correct centroids for longlat',
+              '\nsee ?sf::st_centroid')
+      use_mean <- TRUE
+    }
+  } else {
+    use_mean <- TRUE
+  }
+  return(use_mean)
+}
+
 
 #' Difference of two angles measured in radians
 #'
