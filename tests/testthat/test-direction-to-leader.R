@@ -170,6 +170,28 @@ test_that('warns if group does not have a leader', {
   )
 })
 
+test_that('use_transform errors if crs not provided', {
+  expect_error(
+    direction_to_leader(
+      DT = DT,
+      coords = coords,
+      group = 'group',
+      crs = NA
+    ),
+    'ensure crs is provided'
+  )
+
+  copyDT <- copy(DT)
+  st_crs(DT$geometry) <- NA
+  expect_error(
+    direction_to_leader(
+      DT = DT,
+      group = 'group'
+    ),
+    'ensure crs is provided'
+  )
+})
+
 # sfc interface
 test_that('if coords null, geometry required', {
   expect_error(direction_to_leader(DT, coords = NULL, group = group,
