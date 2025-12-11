@@ -138,5 +138,5 @@ test_that('sfc interface', {
   expect_message(centroid_group(copy(DT), crs = utm), 'crs')
   copyDT <- copy(DT)
   copyDT[, centroid := 42]
-  expect_message(centroid_group(copy(DT), crs = utm), 'centroid')
+  expect_message(centroid_group(copy(DT)), 'centroid')
 })
