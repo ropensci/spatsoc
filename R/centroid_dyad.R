@@ -98,9 +98,6 @@ centroid_dyad <- function(
     timegroup = 'timegroup',
     geometry = 'geometry') {
 
-  # Due to NSE notes in R CMD check
-  fusionID <- NULL
-
   centroid_(
     'dyadID',
     edges = edges,
