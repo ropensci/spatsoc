@@ -4,7 +4,7 @@
 \alias{calc_centroid}
 \title{Calculate centroid}
 \usage{
-calc_centroid(geometry, x, y, crs)
+calc_centroid(geometry, x, y, crs, use_mean = FALSE)
 }
 \arguments{
 \item{geometry}{sfc (simple feature geometry list column) from \code{\link[=get_geometry]{get_geometry()}}}
@@ -14,15 +14,29 @@ calc_centroid(geometry, x, y, crs)
 \item{y}{Y coordinate column, numeric}
 
 \item{crs}{crs for x, y coordinates, ignored for geometry argument}
+
+\item{use_mean}{boolean predetermine if centroid calculated via mean}
 }
 \value{
-Centroid of the geometry or coordinates in x,y provided
+The underlying centroid function used depends on the crs of the coordinates
+or geometry provided.
+\itemize{
+\item If the crs is longlat degrees (as determined by
+\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}) and \code{\link[sf:s2]{sf::sf_use_s2()}} is TRUE, the distance function
+is \code{\link[sf:geos_unary]{sf::st_centroid()}} which passes to \code{\link[s2:s2_boundary]{s2::s2_centroid()}}.
+\item If the crs is longlat degrees but \code{\link[sf:s2]{sf::sf_use_s2()}} is FALSE, the centroid
+calculated will be incorrect. See \code{\link[sf:geos_unary]{sf::st_centroid()}}.
+\item If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
+centroid function used is mean.
+}
+
+Note: if the input is length 1, the input is returned.
 }
 \description{
 \strong{Internal function} - not developed to be used outside of spatsoc functions
 }
 \details{
-Calculate centroid using \code{\link[sf:geos_unary]{sf::st_centroid()}} for one of:
+Calculate centroid for one of:
 \itemize{
 \item geometry
 \item the points in x, y
@@ -40,5 +54,13 @@ data.table::setDTthreads(1)
 DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
 DT[, spatsoc:::calc_centroid(x = X, y = Y, crs = 32736)]
+
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+
+# Calculating centroids requires recomputing the bbox when:
+#  1- by = , 2- providing geometry
+DT[, centroid := spatsoc:::calc_centroid(geometry), by = ID]
+DT[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
+plot(DT$centroid)
 }
 \keyword{internal}
