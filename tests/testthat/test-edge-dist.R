@@ -351,7 +351,7 @@ test_that('handles NULL threshold', {
   )
 })
 
-test_that({'errors if timegroup is null'}, {
+test_that('errors if timegroup is null', {
   expect_error(
     edge_dist(
       DT,
@@ -362,3 +362,5 @@ test_that({'errors if timegroup is null'}, {
     )
   )
 })
+
+
