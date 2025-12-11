@@ -27,12 +27,12 @@ DT[, (dest_coords) := as.data.table(st_coordinates(dest_geometry))]
 
 test_that('arguments provided correctly else error', {
   expect_error(
-    DT[, calc_centroid(x = X, geometry = geometry)],
+    DT[, calc_centroid(x = X, geometry = geometry, use_mean = FALSE)],
     'arguments incorrectly provided'
   )
 
   expect_error(
-    DT[, calc_centroid(y = Y, geometry = geometry)],
+    DT[, calc_centroid(y = Y, geometry = geometry, use_mean = TRUE)],
     'arguments incorrectly provided'
   )
 })
@@ -73,6 +73,29 @@ test_that('calc_centroid equals st_centroid for mean and length 1 inputs', {
   new_nms <- c('X', 'Y')
 
   i <- DT[, sample(.I, 1)]
+
+  expect_equal(
+    data.frame(setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)],
+                        new = new_nms)),
+    data.frame(DT[i, .(X, Y)])
+  )
+
+  expect_equal(
+    data.frame(setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = FALSE)],
+                        new = new_nms)),
+    data.frame(DT[i, .(X, Y)])
+  )
+
+  expect_equal(
+    DT[i, calc_centroid(geometry = geometry, use_mean = FALSE)]$x,
+    DT[i, sf::st_sf(geometry)]$geometry
+  )
+
+  expect_equal(
+    DT[i, calc_centroid(geometry = geometry, use_mean = TRUE)]$x,
+    DT[i, sf::st_sf(geometry)]$geometry
+  )
+
   i_seq <- DT[, sample(.I, 100)]
 
   expect_equal(
@@ -83,25 +106,12 @@ test_that('calc_centroid equals st_centroid for mean and length 1 inputs', {
   )
 
   expect_equal(
-    setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)], new = new_nms),
-    data.frame(st_coordinates(
-      st_centroid(st_combine(st_as_sf(DT[i, .(X, Y)], coords = seq.int(2), crs = crs)))
-    ))
-  )
-
-  expect_equal(
     setnames(DT[i_seq, calc_centroid(x = X, y = Y, crs = NA_crs_, use_mean = TRUE)], new = new_nms),
     data.frame(st_coordinates(
       st_centroid(st_combine(st_as_sf(DT[i_seq, .(X, Y)], coords = seq.int(2), crs = NA_crs_)))
     ))
   )
-
-  expect_equal(
-    setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)], , new = new_nms),
-    data.frame(st_coordinates(
-      st_centroid(st_combine(st_as_sf(DT[i, .(X, Y)], coords = seq.int(2), crs = NA_crs_)))
-    ))
-  )
+})
 
 })
 
