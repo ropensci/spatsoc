@@ -111,57 +111,64 @@ leader_direction_group <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
-  assert_not_null(coords)
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
 
-  xcol <- data.table::first(coords)
-  ycol <- data.table::last(coords)
+  if (is.null(coords)) {
 
-  centroid_xcol <- paste0('centroid_', gsub(' ', '', xcol))
-  centroid_ycol <- paste0('centroid_', gsub(' ', '', ycol))
+  } else {
+    assert_not_null(coords)
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
 
-  check_cols <- c(group_direction, centroid_xcol, centroid_ycol)
-  assert_are_colnames(DT, check_cols)
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
 
-  assert_col_inherits(DT, coords, 'numeric')
-  assert_col_inherits(DT, centroid_xcol, 'numeric')
-  assert_col_inherits(DT, centroid_ycol, 'numeric')
+    centroid_xcol <- paste0('centroid_', gsub(' ', '', xcol))
+    centroid_ycol <- paste0('centroid_', gsub(' ', '', ycol))
 
-  assert_not_null(return_rank)
+    check_cols <- c(group_direction, centroid_xcol, centroid_ycol)
+    assert_are_colnames(DT, check_cols)
 
-  if ('position_group_direction' %in% colnames(DT)) {
-    message(
-      'position_group_direction column will be overwritten by this function'
-    )
-    data.table::set(DT, j = 'position_group_direction', value = NULL)
-  }
+    assert_col_inherits(DT, coords, 'numeric')
+    assert_col_inherits(DT, centroid_xcol, 'numeric')
+    assert_col_inherits(DT, centroid_ycol, 'numeric')
 
-  assert_col_radians(DT, 'group_direction', ', did you use direction_group?')
+    assert_not_null(return_rank)
 
-  DT[, position_group_direction :=
-       cos(units::drop_units(.SD[[1]])) * (.SD[[2]] - .SD[[4]]) +
-       sin(units::drop_units(.SD[[1]])) * (.SD[[3]] - .SD[[5]]),
-     by = .I,
-     .SDcols = c(group_direction, xcol, ycol, centroid_xcol, centroid_ycol)]
-
-  if (return_rank) {
-    rank_col <- 'rank_position_group_direction'
-    if (rank_col %in% colnames(DT)) {
+    if ('position_group_direction' %in% colnames(DT)) {
       message(
-        paste0(rank_col, ' column will be overwritten by this function')
+        'position_group_direction column will be overwritten by this function'
       )
-      data.table::set(DT, j = 'rank_position_group_direction', value = NULL)
+      data.table::set(DT, j = 'position_group_direction', value = NULL)
     }
 
-    assert_not_null(group)
-    assert_are_colnames(DT, group, ', did you run group_pts?')
+    assert_col_radians(DT, 'group_direction', ', did you use direction_group?')
 
-    DT[, rank_position_group_direction :=
-         data.table::frank(-position_group_direction,
-                           ties.method = ties.method),
-       by = c(group)]
+    DT[, position_group_direction :=
+         cos(units::drop_units(.SD[[1]])) * (.SD[[2]] - .SD[[4]]) +
+         sin(units::drop_units(.SD[[1]])) * (.SD[[3]] - .SD[[5]]),
+       by = .I,
+       .SDcols = c(group_direction, xcol, ycol, centroid_xcol, centroid_ycol)]
+
+    if (return_rank) {
+      rank_col <- 'rank_position_group_direction'
+      if (rank_col %in% colnames(DT)) {
+        message(
+          paste0(rank_col, ' column will be overwritten by this function')
+        )
+        data.table::set(DT, j = 'rank_position_group_direction', value = NULL)
+      }
+
+      assert_not_null(group)
+      assert_are_colnames(DT, group, ', did you run group_pts?')
+
+      DT[, rank_position_group_direction :=
+           data.table::frank(-position_group_direction,
+                             ties.method = ties.method),
+         by = c(group)]
+    }
   }
+
+
 
   return(DT[])
 }
