@@ -1,4 +1,4 @@
-# Development version
+# spatsoc v 0.2.12
 
 Enhancements:
 
