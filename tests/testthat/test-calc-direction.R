@@ -5,20 +5,11 @@ library(sf)
 
 DT <- fread('../testdata/DT.csv')
 id <- 'ID'
-datetime <- 'datetime'
-timethreshold <- '20 minutes'
-threshold <- 50
 coords <- c('X', 'Y')
-timegroup <- 'timegroup'
-group <- 'group'
 crs <- 32736
 crs_lonlat <- 4326
 
-DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
-group_times(DT, datetime = datetime, threshold = timethreshold)
 get_geometry(DT, coords = coords, crs = crs)
-
-DT[, calc_direction(geometry, dest_geometry)]
 DT[, dest_geometry := sf::st_sfc(first(geometry), crs = st_crs(geometry))]
 
 lonlat_coords <- paste0('lonlat_', coords)
