@@ -118,7 +118,6 @@ leader_direction_group <- function(
   } else {
     assert_not_null(return_rank)
     assert_not_null(coords)
-    assert_not_null(crs)
 
     assert_are_colnames(DT, group_direction)
     assert_col_radians(DT, group_direction, ', did you use direction_group?')
