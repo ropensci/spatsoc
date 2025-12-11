@@ -112,6 +112,10 @@ leader_direction_group <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
+  assert_not_null(return_rank)
+
+  assert_are_colnames(DT, group_direction)
+  assert_col_radians(DT, group_direction, ', did you use direction_group?')
 
   if (is.null(coords)) {
     assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
