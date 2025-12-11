@@ -73,13 +73,11 @@
 #'  the coordinate column names with "centroid_" (eg. "X" = "centroid_X"). If
 #'  `geometry` is used, the centroid column will be named "centroid".
 #'
-#'  Note: due to the merge required within this function, the output needs to be
-#'  reassigned unlike some other `spatsoc` functions like `dyad_id` and
-#'  `group_pts`. See details in
-#'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
-#'
 #'  A message is returned when the centroid column(s) already exist in the
 #'  input because they will be overwritten.
+#'
+#'   See details for appending outputs using modify-by-reference in the
+#'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @export
 #' @seealso `group_pts`

@@ -42,13 +42,11 @@ If \code{coords} are provided, the centroid columns will be named by prefixing
 the coordinate column names with "centroid_" (eg. "X" = "centroid_X"). If
 \code{geometry} is used, the centroid column will be named "centroid".
 
-Note: due to the merge required within this function, the output needs to be
-reassigned unlike some other \code{spatsoc} functions like \code{dyad_id} and
-\code{group_pts}. See details in
-\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
-
 A message is returned when the centroid column(s) already exist in the
 input because they will be overwritten.
+
+See details for appending outputs using modify-by-reference in the
+\href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
 }
 \description{
 \code{centroid_group} calculates the centroid of all individuals in each
