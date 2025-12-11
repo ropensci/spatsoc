@@ -55,7 +55,7 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 
 DT[, spatsoc:::calc_centroid(x = X, y = Y, crs = 32736)]
 
-get_geomtery(DT, coords = c('X', 'Y'), crs = 32736)
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
 
 # Calculating centroids requires recomputing the bbox when:
 #  1- by = , 2- providing geometry
