@@ -183,6 +183,14 @@ test_that('warns if group does not have a leader', {
     'groups found missing leader'
   )
 
+  # geometry
+  expect_warning(
+    direction_to_leader(
+      DT = DT_with_missing,
+      group = 'group'
+    ),
+    'groups found missing leader'
+  )
 })
 
 test_that('use_transform errors if crs not provided', {
