@@ -104,6 +104,7 @@ leader_direction_group <- function(
     group_direction = 'group_direction',
     coords = NULL,
     group = 'group',
+    geometry = 'geometry',
     return_rank = FALSE,
     ties.method = 'average') {
   # Due to NSE notes
