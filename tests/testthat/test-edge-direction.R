@@ -244,6 +244,22 @@ test_that('East North West South dyads', {
 
 })
 
+test_that('use_transform errors if crs not provided', {
+  expect_error(
+    edge_direction(edges, DT, id = id, coords = coords, crs = NA),
+    'ensure crs is provided'
+  )
+
+  copyDT <- copy(DT)
+  get_geometry(copyDT, coords = coords, crs = utm)
+  st_crs(copyDT$geometry) <- NA
+
+  expect_error(
+    edge_direction(edges, copyDT, id = id),
+    'ensure crs is provided'
+  )
+})
+
 
 # sfc interface
 test_that('if coords null, geometry required', {

@@ -85,6 +85,26 @@ test_that('returns a data.table', {
   expect_s3_class(direction_to_centroid(DT, coords = coords, crs = utm), 'data.table')
 })
 
+test_that('use_transform errors if crs not provided', {
+  expect_error(
+    direction_to_centroid(DT, coords = coords, crs = NA),
+    'ensure crs is provided'
+  )
+
+  copyDT <- copy(DT)
+  get_geometry(copyDT, coords = coords, crs = utm)
+  st_crs(copyDT$geometry) <- NA
+  get_geometry(copyDT, coords = paste0('centroid_', coords), crs = utm,
+               geometry_colname = 'centroid')
+
+  expect_error(
+    direction_to_centroid(
+      DT = copyDT
+    ),
+    'ensure crs is provided'
+  )
+})
+
 
 # sfc interface
 test_that('if coords null, geometry required', {

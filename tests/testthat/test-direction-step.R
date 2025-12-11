@@ -134,6 +134,25 @@ test_that('longlat NA radian returned', {
 })
 
 
+test_that('use_transform errors if crs not provided', {
+  expect_error(
+    direction_step(DT, id = id, coords = coords, crs = NA),
+    'ensure crs is provided'
+  )
+
+  copyDT <- copy(DT)
+  get_geometry(copyDT, coords = coords, crs = utm)
+  st_crs(copyDT$geometry) <- NA
+  expect_error(
+    direction_step(
+      DT = copyDT,
+      id = id
+    ),
+    'ensure crs is provided'
+  )
+})
+
+
 DT_B <- data.table(
   X = c(0, 5, 5, 0, 0),
   Y = c(0, 0, 5, 5, 0),

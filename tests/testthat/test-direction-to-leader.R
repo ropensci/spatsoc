@@ -182,10 +182,11 @@ test_that('use_transform errors if crs not provided', {
   )
 
   copyDT <- copy(DT)
-  st_crs(DT$geometry) <- NA
+  get_geometry(copyDT, coords = coords, crs = utm)
+  st_crs(copyDT$geometry) <- NA
   expect_error(
     direction_to_leader(
-      DT = DT,
+      DT = copyDT,
       group = 'group'
     ),
     'ensure crs is provided'
