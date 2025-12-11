@@ -11,6 +11,7 @@ threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
 group <- 'group'
+utm <- 32736
 
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
@@ -132,3 +133,7 @@ test_that('geometry results are expected', {
 
 })
 
+
+test_that('sfc interface', {
+  expect_message(centroid_group(copy(DT), crs = utm))
+})
