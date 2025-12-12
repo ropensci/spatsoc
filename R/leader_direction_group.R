@@ -104,6 +104,13 @@
 #'
 #' # Calculate leader in terms of position along group direction
 #' leader_direction_group(DT, coords = c('X', 'Y'))
+#'
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' direction_step(DT = DT, id = 'ID')
+#' centroid_group(DT)
+#' direction_group(DT)
+#' leader_direction_group(DT)
 leader_direction_group <- function(
     DT = NULL,
     group_direction = 'group_direction',
