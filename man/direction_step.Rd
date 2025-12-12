@@ -74,11 +74,11 @@ The \code{id}, and optional \code{splitBy} arguments expect the names of a colum
 \code{DT} which correspond to the individual identifier and additional grouping
 columns.
 
-The \code{splitBy} argument offers further control over grouping. If within
-your \code{DT}, you have distinct sampling periods for each individual, you
-can provide the column name(s) which identify them to \code{splitBy}. The
-direction calculation by \code{direction_step} will only consider rows within
-each \code{id} and \code{splitBy} subgroup.
+The \code{splitBy} argument offers further control over grouping. If within your
+\code{DT}, you have distinct sampling periods for each individual, you can provide
+the column name(s) which identify them to \code{splitBy}. The direction
+calculation by \code{\link[=direction_step]{direction_step()}} will only consider rows within each \code{id}
+and \code{splitBy} subgroup.
 
 See below under "Interface" for details on providing coordinates and under
 "Direction function" for details on the underlying direction function used.

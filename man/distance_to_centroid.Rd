@@ -8,7 +8,7 @@ distance_to_centroid(
   DT = NULL,
   coords = NULL,
   group = "group",
-  return_rank = FALSE,
+  return_rank = TRUE,
   ties.method = NULL
 )
 }
@@ -23,7 +23,7 @@ Note: the order is assumed X followed by Y column names}
 'group'}
 
 \item{return_rank}{logical if rank distance should also be returned, default
-FALSE}
+TRUE}
 
 \item{ties.method}{see \code{\link[data.table:frank]{?data.table::frank()}}}
 }

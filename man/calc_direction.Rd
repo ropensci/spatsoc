@@ -7,7 +7,8 @@
 calc_direction(geometry_a, geometry_b, x_a, y_a, x_b, y_b, crs, use_transform)
 }
 \arguments{
-\item{geometry_a, geometry_b}{sfc (simple feature geometry list column) from \code{\link[=get_geometry]{get_geometry()}}}
+\item{geometry_a, geometry_b}{sfc (simple feature geometry list column) from
+\code{\link[=get_geometry]{get_geometry()}}}
 
 \item{x_a, x_b}{X coordinate column, numeric}
 
