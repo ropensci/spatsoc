@@ -22,7 +22,6 @@
 #' @inheritSection direction_step Interface
 #' @inheritSection direction_step Direction function
 #'
-#' @inheritParams distance_to_centroid
 #' @inheritParams direction_step
 #' @inheritParams group_pts
 #'
