@@ -324,9 +324,31 @@ calc_direction <- function(
       if(any(rowSums(is.na(sf::st_coordinates(geometry_b))) == 2)) {
         rlang::abort('missing values in coordinates')
       }
-      lwgeom::st_geod_azimuth(geometry_a, geometry_b)
+      if (use_transform) {
+        lwgeom::st_geod_azimuth(
+          x = sf::st_transform(
+            geometry_a,
+            crs = lonlat_crs
+          ),
+          y = sf::st_transform(
+            geometry_b,
+            crs = lonlat_crs
+          )
+        )
+      } else {
+        lwgeom::st_geod_azimuth(geometry_a, geometry_b)
+      }
     } else {
-      lwgeom::st_geod_azimuth(geometry_a)
+      if (use_transform) {
+        lwgeom::st_geod_azimuth(
+          x = sf::st_transform(
+            geometry_a,
+            crs = lonlat_crs
+          )
+        )
+      } else {
+        lwgeom::st_geod_azimuth(geometry_a)
+      }
     }
   } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
     if (!missing(x_b) && !missing(y_b)) {
