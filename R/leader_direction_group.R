@@ -117,6 +117,8 @@ leader_direction_group <- function(
   assert_are_colnames(DT, group_direction)
   assert_col_radians(DT, group_direction, ', did you use direction_group?')
 
+  pos_col <- 'position_group_direction'
+
   if (is.null(coords)) {
     assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
     assert_col_inherits(DT, geometry, 'sfc_POINT')
@@ -125,7 +127,6 @@ leader_direction_group <- function(
     assert_are_colnames(DT, centroid, ', did you run get_geometry()?')
     assert_col_inherits(DT, centroid, 'sfc_POINT')
 
-    pos_col <- 'position_group_direction'
     if (pos_col %in% colnames(DT)) {
       message(
         pos_col, ' column will be overwritten by this function'
@@ -133,7 +134,7 @@ leader_direction_group <- function(
       data.table::set(DT, j = pos_col, value = NULL)
     }
 
-    DT[, position_group_direction := {
+    DT[, c(pos_col) := {
       coords_geo <- sf::st_coordinates(geo)
       coords_cent <- sf::st_coordinates(cent)
 
@@ -164,7 +165,6 @@ leader_direction_group <- function(
     assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
     assert_col_inherits(DT, coords_centroid, 'numeric')
 
-    pos_col <- 'position_group_direction'
     if (pos_col %in% colnames(DT)) {
       message(
         pos_col, ' column will be overwritten by this function'
@@ -172,7 +172,7 @@ leader_direction_group <- function(
       data.table::set(DT, j = pos_col, value = NULL)
     }
 
-    DT[, position_group_direction :=
+    DT[, c(pos_col) :=
       cos(units::drop_units(group_dir)) * (x - x_centroid) +
       sin(units::drop_units(group_dir)) * (y - y_centroid),
     by = .I,
