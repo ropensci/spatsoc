@@ -29,13 +29,15 @@ test_that('DT is required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(leader_direction_group(DT, coords = NULL),
-               'coords ')
   expect_error(leader_direction_group(DT, coords = coords, return_rank = NULL),
                'return_rank must be')
   expect_error(leader_direction_group(DT, coords = coords, return_rank = TRUE,
                                       group = NULL),
                'group must be')
+
+  # geo
+  expect_error(leader_direction_group(DT, coords = NULL),
+               'geometry')
 })
 
 test_that('column names must exist in DT', {
