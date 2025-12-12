@@ -108,7 +108,7 @@ leader_direction_group <- function(
     return_rank = TRUE,
     ties.method = NULL) {
   # Due to NSE notes
-  position_group_direction <- rank_position_group_direction <- NULL
+  geo <- cent <- group_dir <- x <- x_centroid <- y <- y_centroid <- pos <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
