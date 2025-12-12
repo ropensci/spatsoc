@@ -89,8 +89,7 @@
 #' # Calculate leader in terms of position along group direction
 #' leader_direction_group(
 #'   DT,
-#'   coords = c('X', 'Y'),
-#'   return_rank = TRUE
+#'   coords = c('X', 'Y')
 #' )
 #'
 #' # Calculate direction to leader
@@ -105,8 +104,7 @@
 #' centroid_group(DT)
 #' direction_group(DT)
 #' leader_direction_group(
-#'   DT,
-#'   return_rank = TRUE
+#'   DT
 #' )
 #' direction_to_leader(DT)
 direction_to_leader <- function(
