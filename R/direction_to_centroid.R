@@ -1,20 +1,21 @@
 #' Direction to group centroid
 #'
 #' `direction_to_centroid` calculates the direction of each relocation to the
-#' centroid of the spatiotemporal group identified by `group_pts`. The function
-#' expects a `data.table` with relocation data appended with a `group` column
-#' from `group_pts` and centroid columns from `centroid_group`. Relocation data
-#' should be in two columns representing the X and Y coordinates, or in a
-#' geometry column prepared by the helper function [get_geometry()].
+#' centroid of the spatiotemporal group identified by [group_pts()]. The
+#' function expects a `data.table` with relocation data appended with a `group`
+#' column from [group_pts()] and centroid columns from [centroid_group()].
+#' Relocation data should be in two columns representing the X and Y
+#' coordinates, or in a geometry column prepared by the helper function
+#' [get_geometry()].
 #'
 #' The `DT` must be a `data.table`. If your data is a `data.frame`, you can
 #' convert it by reference using [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' This function expects a `group` column present generated with the `group_pts`
-#' function and centroid coordinates generated with the `centroid_group`
-#' function. The `group` argument expects the name of the column in `DT` which
-#' correspond to the group column.
+#' This function expects a `group` column present generated with the
+#' [group_pts()] function and centroid coordinates generated with the
+#' [centroid_group()] function. The `group` argument expects the name of the
+#' column in `DT` which correspond to the group column.
 #'
 #' See below under "Interface" for details on providing coordinates and under
 #' "Direction function" for details on the underlying direction function used.

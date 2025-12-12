@@ -16,11 +16,11 @@
 #' `DT` which correspond to the individual identifier and additional grouping
 #' columns.
 #'
-#' The `splitBy` argument offers further control over grouping. If within
-#' your `DT`, you have distinct sampling periods for each individual, you
-#' can provide the column name(s) which identify them to `splitBy`. The
-#' direction calculation by `direction_step` will only consider rows within
-#' each `id` and `splitBy` subgroup.
+#' The `splitBy` argument offers further control over grouping. If within your
+#' `DT`, you have distinct sampling periods for each individual, you can provide
+#' the column name(s) which identify them to `splitBy`. The direction
+#' calculation by [direction_step()] will only consider rows within each `id`
+#' and `splitBy` subgroup.
 #'
 #' See below under "Interface" for details on providing coordinates and under
 #' "Direction function" for details on the underlying direction function used.
