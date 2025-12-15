@@ -26,8 +26,8 @@
 #' @param crs numeric or character defining the coordinate reference system to
 #'   be passed to [sf::st_crs]. For example, `crs = "EPSG:32736"` or
 #'   `crs = 32736`.
-#' @param output_crs default 4326, the output crs to transform the input
-#'   coordinates to with [sf::st_transform]. If output_crs is NULL or FALSE or
+#' @param output_crs default NULL, the output crs to transform the input
+#'   coordinates to with [sf::st_transform]. If output_crs is NULL or
 #'   matching the crs argument, the coordinates will not be transformed
 #' @param geometry_colname default "geometry", to optionally set output name
 #'   of simple feature geometry list column
@@ -51,7 +51,7 @@ get_geometry <- function(
     DT = NULL,
     coords = NULL,
     crs = NULL,
-    output_crs = 4326,
+    output_crs = NULL,
     geometry_colname = 'geometry') {
 
   assert_not_null(DT)
@@ -75,9 +75,7 @@ get_geometry <- function(
                       crs = crs,
                       na.fail = FALSE
     )
-    if (!any(isFALSE(output_crs) ||
-             crs == sf::st_crs(output_crs) ||
-             is.null(output_crs))) {
+    if (all(!is.null(output_crs) && crs != sf::st_crs(output_crs))) {
       x <- sf::st_transform(x, output_crs)
     }
     x

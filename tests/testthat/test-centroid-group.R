@@ -110,7 +110,7 @@ DT <- data.table(
   Y = c(10, 20, 10, 20)
 )
 
-get_geometry(DT, c('X', 'Y'), 32736, output_crs = FALSE)
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
 
 test_that('geometry results are expected', {
   expect_equal(
