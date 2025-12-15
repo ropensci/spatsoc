@@ -123,6 +123,7 @@ leader_direction_group <- function(
     coords = NULL,
     group = 'group',
     geometry = 'geometry',
+    crs = NULL,
     return_rank = TRUE,
     ties.method = NULL) {
   # Due to NSE notes
@@ -138,12 +139,23 @@ leader_direction_group <- function(
   pos_col <- 'position_group_direction'
 
   if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
+
     assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
     assert_col_inherits(DT, geometry, 'sfc_POINT')
 
     centroid <- 'centroid'
     assert_are_colnames(DT, centroid, ', did you run get_geometry()?')
     assert_col_inherits(DT, centroid, 'sfc_POINT')
+
+    crs <- sf::st_crs(DT[[geometry]])
+
+    if (!sf::st_is_longlat(crs)) {
+      # TODO: improve msg
+      rlang::abort('crs of geometry column is not longlat')
+    }
 
     if (pos_col %in% colnames(DT)) {
       message(
@@ -182,6 +194,11 @@ leader_direction_group <- function(
 
     assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
     assert_col_inherits(DT, coords_centroid, 'numeric')
+
+    if (!sf::st_is_longlat(crs)) {
+      # TODO: improve msg
+      rlang::abort('crs is not longlat')
+    }
 
     if (pos_col %in% colnames(DT)) {
       message(
