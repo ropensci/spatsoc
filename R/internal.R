@@ -2,7 +2,7 @@ assert_are_colnames <- function(x, nms, ...) {
   if (length(nms)) {
     for (nm in nms) {
       if(!nm %in% colnames(x)) {
-        rlang::abort(paste0(nm, ' field provided is not present in input DT',
+        rlang::abort(paste0(nm, ' field provided is not present in input',
                             ...),
                      call = rlang::caller_env())
       } else {
