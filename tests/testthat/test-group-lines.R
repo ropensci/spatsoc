@@ -105,7 +105,7 @@ test_that('column names must exist in DT', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 
@@ -119,7 +119,7 @@ test_that('column names must exist in DT', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 })

@@ -29,7 +29,7 @@ test_that('coords provided correctly, else error', {
       DT,
       coords = c('potatoX', 'Y')
     ),
-    'not present in input DT'
+    'not present in input'
   )
 
   expect_error(
@@ -37,7 +37,7 @@ test_that('coords provided correctly, else error', {
       DT,
       coords = c('X', 'potatoY')
     ),
-    'not present in input DT'
+    'not present in input'
   )
 
   expect_error(
