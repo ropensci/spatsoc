@@ -1,3 +1,12 @@
+# Development version
+
+
+Breaking changes:
+
+* `get_geometry` default output_crs changed to NULL, to leave input coordinates
+in original crs by default ([PR 132](https://github.com/ropensci/spatsoc/pull/132))
+
+
 # spatsoc v 0.2.12
 
 Enhancements:

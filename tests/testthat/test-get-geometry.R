@@ -81,14 +81,7 @@ test_that('geometry column returned is sfc, as expected', {
   expect_s3_class(copyDT$geometry, 'sfc')
 
   copyDT <- copy(DT)
-  get_geometry(copyDT, coords = coords, crs = crs, output_crs = FALSE)
-
-  expect_equal(st_coordinates(copyDT$geometry),
-               copyDT[, as.matrix(.SD), .SDcols = coords])
-
-
-  copyDT <- copy(DT)
-  get_geometry(copyDT, coords = coords, crs = crs, output_crs = NULL)
+  get_geometry(copyDT, coords = coords, crs = crs)
 
   expect_equal(st_coordinates(copyDT$geometry),
                copyDT[, as.matrix(.SD), .SDcols = coords])
@@ -96,9 +89,11 @@ test_that('geometry column returned is sfc, as expected', {
   copyDT <- copy(DT)
   get_geometry(copyDT, coords = coords, crs = crs)
 
-  expect_lt(mean(st_coordinates(copyDT$geometry) -
-                   copyDT[, as.matrix(.SD), .SDcols = coords]),
-            0)
+  expect_equal(
+    mean(st_coordinates(copyDT$geometry) -
+      copyDT[, as.matrix(.SD), .SDcols = coords]),
+    0
+  )
 
   copyDT <- copy(DT)[sample(seq.int(.N), 10), c(coords) := NA]
   get_geometry(copyDT, coords = coords, crs = crs)

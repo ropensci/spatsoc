@@ -6,24 +6,19 @@ library(sf)
 DT <- fread('../testdata/DT.csv')
 coords <- c('X', 'Y')
 crs <- 32736
-crs_lonlat <- 4326
+crs_longlat <- 4326
 
 get_geometry(DT, coords = coords, crs = crs)
+get_geometry(DT, coords = coords, crs = crs, output_crs = 4326,
+             geometry_colname = 'geometry_longlat')
 
 DT[, dest_geometry := st_centroid(st_union(geometry))]
 
-lonlat_coords <- paste0('lonlat_', coords)
-DT[, (lonlat_coords) := as.data.table(st_coordinates(geometry))]
+coords_longlat <- paste0(coords, '_longlat')
+DT[, (coords_longlat) := as.data.table(st_coordinates(geometry_longlat))]
 
 dest_coords <- paste0('dest_', coords)
 DT[, (dest_coords) := as.data.table(st_coordinates(dest_geometry))]
-
-# DT_sf[, centroid := calc_centroid(geometry = geometry), by = group]
-# Note: due to https://github.com/Rdatatable/data.table/issues/4415
-#  need to recompute the bbox
-# DT_sf[, centroid := st_sfc(centroid, recompute_bbox = TRUE)]
-
-# DT_sf[, centroid := calc_centroid(x = X, y = Y, crs = crs), by = group]
 
 test_that('arguments provided correctly else error', {
   expect_error(
@@ -42,7 +37,7 @@ test_that('data.table/numeric returned when coords provided, sf when geo', {
   expect_s3_class(DT[, .(centroid = calc_centroid(geometry))][[1]], 'sfc')
 
   expect_s3_class(
-    DT[, calc_centroid(x = lonlat_X, y = lonlat_Y, crs = crs_lonlat)],
+    DT[, calc_centroid(x = X_longlat, y = Y_longlat, crs = crs_longlat)],
     'data.frame'
   )
   expect_s3_class(
@@ -63,9 +58,9 @@ test_that('data.table/numeric returned when coords provided, sf when geo', {
 
 test_that('expected dims returned', {
   expect_length(DT[, calc_centroid(geometry)], 1L)
-  expect_length(DT[, calc_centroid(x = lonlat_X, y = lonlat_Y, crs = crs_lonlat)],
+  expect_length(DT[, calc_centroid(x = X_longlat, y = Y_longlat, crs = crs_longlat)],
                 2L)
-  expect_equal(ncol(DT[, calc_centroid(x = lonlat_X, y = lonlat_Y, crs = crs_lonlat)]),
+  expect_equal(ncol(DT[, calc_centroid(x = X_longlat, y = Y_longlat, crs = crs_longlat)]),
                2L)
 })
 
@@ -136,12 +131,12 @@ test_that('crs_use_mean decides as expected', {
 #   expect_length(res, 1L)
 #   expect_false(any(is.na(st_coordinates(res))))
 #
-#   XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (lonlat_coords) := NA]
-#   res <- XY_NA[, calc_centroid(x = lonlat_X, y = lonlat_Y, crs = 4326)]
+#   XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (coords_longlat) := NA]
+#   res <- XY_NA[, calc_centroid(x = X_longlat, y = Y_longlat, crs = 4326)]
 #   expect_length(res, 1L)
 #   expect_false(any(is.na(st_coordinates(res))))
 #
-#   get_geometry(XY_NA, lonlat_coords, crs_lonlat)
+#   get_geometry(XY_NA, coords_longlat, crs_longlat)
 #   res <- XY_NA[, calc_centroid(geometry)]
 #   expect_length(res, 1L)
 #   expect_false(any(is.na(st_coordinates(res))))

@@ -150,7 +150,7 @@ expected_DT[, Y := timegroup * 10]
 expected_edges <- copy(clean_edges)[timegroup < 10]
 expected_DT[ID %in% first(expected_edges$ID1), X := NA]
 
-get_geometry(expected_DT, c('X', 'Y'), 32736, output_crs = FALSE)
+get_geometry(expected_DT, coords = c('X', 'Y'), crs = 32736)
 
 test_that('geometry results as expected', {
   expect_equal(

@@ -7,21 +7,19 @@ DT <- fread('../testdata/DT.csv')
 id <- 'ID'
 coords <- c('X', 'Y')
 crs <- 32736
-crs_lonlat <- 4326
+crs_longlat <- 4326
 
 get_geometry(DT, coords = coords, crs = crs)
-DT[, dest_geometry := sf::st_sfc(first(geometry), crs = st_crs(geometry))]
+get_geometry(DT, coords = coords, crs = crs, output_crs = 4326,
+             geometry_colname = 'geometry_longlat')
 
-lonlat_coords <- paste0('lonlat_', coords)
-DT[, (lonlat_coords) := as.data.table(sf::st_coordinates(geometry))]
+DT[, dest_geometry_longlat := sf::st_centroid(sf::st_union(geometry_longlat))]
+
+coords_longlat <- paste0(coords, '_longlat')
+DT[, (coords_longlat) := as.data.table(sf::st_coordinates(geometry_longlat))]
 
 dest_coords <- paste0('dest_', coords)
-DT[, (dest_coords) := as.data.table(sf::st_coordinates(dest_geometry))]
-
-# DT[, calc_direction(geometry_a = geometry, geometry_b = dest_geometry)]
-# DT[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y,
-#                     x_b = dest_X, y_b = dest_Y,
-#                     crs = crs_lonlat)]
+DT[, (dest_coords) := as.data.table(sf::st_coordinates(dest_geometry_longlat))]
 
 test_that('arguments provided correctly else error', {
   expect_error(
@@ -42,20 +40,19 @@ test_that('arguments provided correctly else error', {
 })
 
 test_that('units are returned', {
-  expect_s3_class(DT[, calc_direction(geometry, use_transform = FALSE)],
+  expect_s3_class(DT[, calc_direction(geometry_longlat, use_transform = FALSE)],
                   'units')
   expect_identical(DT[, units(
-    calc_direction(geometry, use_transform = FALSE))$numerator],
+    calc_direction(geometry_longlat, use_transform = FALSE))$numerator],
     'rad'
   )
-  expect_s3_class(
-    DT[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat,
+    DT[, calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_longlat,
                         use_transform = FALSE)],
     'units'
   )
   expect_identical(
     DT[, units(
-      calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat,
+      calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_lonlat,
                      use_transform = FALSE)
     )$numerator],
     "rad"
@@ -64,19 +61,19 @@ test_that('units are returned', {
 
 test_that('expected dims returned', {
   # N - 1 since missing start/dest for direction
-  expect_length(DT[, calc_direction(geometry, use_transform = FALSE)],
+  expect_length(DT[, calc_direction(geometry_longlat, use_transform = FALSE)], 
                 DT[, .N - 1])
   expect_length(
-    DT[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat,
+    DT[, calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_longlat,
                         use_transform = FALSE)],
     DT[, .N - 1]
   )
 
-  expect_length(DT[, calc_direction(geometry, geometry, use_transform = FALSE)],
-                DT[, .N])
+  expect_length(DT[, calc_direction(geometry_longlat, geometry_longlat,
+                                    use_transform = FALSE)], DT[, .N])
   expect_length(
-    DT[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y,
-                        x_b = lonlat_X, y_b = lonlat_Y, crs = crs_lonlat,
+    DT[, calc_direction(x_a = X_longlat, y_a = Y_longlat,
+                        x_b = X_longlat, y_b = Y_longlat, crs = crs_longlat,
                         use_transform = FALSE)],
     DT[, .N]
   )
@@ -84,20 +81,16 @@ test_that('expected dims returned', {
 
 test_that('expected range returned', {
   y <- units::set_units(pi, 'rad')
-  expect_equal(DT[, min(calc_direction(geometry, use_transform = FALSE))], -y,
-               tolerance = 0.1)
-  expect_equal(DT[, max(calc_direction(geometry, use_transform = FALSE))], y,
-               tolerance = 0.1)
+  expect_equal(DT[, min(calc_direction(geometry_longlat, use_transform = FALSE))], -y, tolerance = 0.1)
+  expect_equal(DT[, max(calc_direction(geometry_longlat, use_transform = FALSE))], y, tolerance = 0.1)
 
   expect_equal(
-    DT[, min(calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat,
-                            use_transform = FALSE))],
+    DT[, min(calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_longlat, use_transform = FALSE))],
     -y,
     tolerance = 0.1
   )
   expect_equal(
-    DT[, max(calc_direction(x_a = lonlat_X, y_a = lonlat_Y, crs = crs_lonlat,
-                            use_transform = FALSE))],
+    DT[, max(calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_longlat, use_transform = FALSE))],
     y,
     tolerance = 0.1
   )
@@ -105,20 +98,20 @@ test_that('expected range returned', {
 
 test_that('NAs returned as expected', {
   X_NA <- copy(DT)[seq.int(100)][sample(.N, 10), lonlat_X := NA]
-  expect_error(X_NA[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y,
-                                     crs = crs_lonlat,
+  expect_error(X_NA[, calc_direction(x_a = X_longlat, y_a = Y_longlat,
+                                     crs = crs_longlat,
                                      use_transform = FALSE)],
                'missing values in coordinates')
 
   Y_NA <- copy(DT)[seq.int(100)][sample(.N, 10), lonlat_Y := NA]
-  expect_error(Y_NA[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y,
-                                     crs = crs_lonlat,
+  expect_error(Y_NA[, calc_direction(x_a = X_longlat, y_a = Y_longlat,
+                                     crs = crs_longlat,
                                      use_transform = FALSE)],
                'missing values in coordinates')
 
-  XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (lonlat_coords) := NA]
-  expect_error(XY_NA[, calc_direction(x_a = lonlat_X, y_a = lonlat_Y,
-                                      crs = crs_lonlat,
+  XY_NA <- copy(DT)[seq.int(100)][sample(.N, 10), (coords_longlat) := NA]
+  expect_error(XY_NA[, calc_direction(x_a = X_longlat, y_a = Y_longlat,
+                                      crs = crs_longlat,
                                       use_transform = FALSE)],
                'missing values in coordinates')
 
@@ -130,13 +123,10 @@ test_that('NAs returned as expected', {
                                       use_transform = FALSE)],
                'missing values in coordinates')
 
-  get_geometry(XY_NA, lonlat_coords, crs_lonlat)
-  expect_error(calc_direction(DT[1, geometry],
-                              XY_NA[sf::st_is_empty(geometry)][1, geometry],
-                              use_transform = TRUE),
+  geometry_NA <- copy(DT)[seq.int(100)][
+    sample(.N, 10), geometry_longlat := st_sfc(st_point())]
+  expect_error(geometry_NA[, calc_direction(geometry_longlat)],
                'missing values in coordinates')
-  expect_error(calc_direction(DT[1, geometry],
-                              XY_NA[sf::st_is_empty(geometry)][1, geometry],
-                              use_transform = FALSE),
+  expect_error(geometry_NA[, calc_direction(geometry_longlat, geometry_longlat)],
                'missing values in coordinates')
 })
