@@ -48,10 +48,13 @@ test_that('arguments required, otherwise error detected', {
   expect_error(leader_direction_group(DT, coords = coords, group = NULL,
                                       crs = NULL),
                'crs must be')
+
   # geo
   copy_DT <- copy(clean_DT_geo)[, geometry := NULL]
-  expect_error(leader_direction_group(DT),
-               'geometry')
+  expect_error(leader_direction_group(copy_DT), 'geometry')
+
+  expect_message(leader_direction_group(DT_geo, crs = 4326),
+                 'ignored')
 })
 
 test_that('column names must exist in DT', {
