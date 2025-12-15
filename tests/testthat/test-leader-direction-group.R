@@ -38,10 +38,11 @@ test_that('DT is required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(leader_direction_group(DT, coords = coords, return_rank = NULL),
+  expect_error(leader_direction_group(DT, coords = coords, return_rank = NULL,
+                                      crs = utm),
                'return_rank must be')
-  expect_error(leader_direction_group(DT, coords = coords,
-                                      group = NULL),
+  expect_error(leader_direction_group(DT, coords = coords, group = NULL,
+                                      crs = utm),
                'group must be')
 
   # geo
@@ -55,9 +56,9 @@ test_that('column names must exist in DT', {
                'potato field')
   copy_DT <- copy(clean_DT)
   setnames(copy_DT, 'centroid_X', 'potato_X')
-  expect_error(leader_direction_group(copy_DT, coords = coords),
+  expect_error(leader_direction_group(copy_DT, coords = coords, crs = utm),
                'centroid_X field')
-  expect_error(leader_direction_group(DT, coords = coords,
+  expect_error(leader_direction_group(DT, coords = coords, crs = utm,
                                       group = 'potato'),
                'group_pts')
 
@@ -69,16 +70,16 @@ test_that('column names must exist in DT', {
 
 
 test_that('coords are correctly provided or error detected', {
-  expect_error(leader_direction_group(DT, coords = c('X', NULL)),
+  expect_error(leader_direction_group(DT, coords = c('X', NULL), crs = utm),
                'coords must be length 2')
   copy_DT <- copy(clean_DT)[, X := as.character(X)]
-  expect_error(leader_direction_group(copy_DT, coords = coords),
+  expect_error(leader_direction_group(copy_DT, coords = coords, crs = utm),
                'coords must be of class numeric')
   copy_DT <- copy(clean_DT)[, centroid_X := as.character(centroid_X)]
-  expect_error(leader_direction_group(copy_DT, coords = coords),
+  expect_error(leader_direction_group(copy_DT, coords = coords, crs = utm),
                'coords_centroid must be of class numeric')
   copy_DT <- copy(clean_DT)[, centroid_Y := as.character(centroid_X)]
-  expect_error(leader_direction_group(copy_DT, coords = coords),
+  expect_error(leader_direction_group(copy_DT, coords = coords, crs = utm),
                'coords_centroid must be of class numeric')
 
   # geo
@@ -88,14 +89,14 @@ test_that('coords are correctly provided or error detected', {
 
 test_that('radians expected else error', {
   copyDT <- copy(DT)[, group_direction := units::set_units(group_direction, 'degree')]
-  expect_error(leader_direction_group(copyDT, coords = coords),
+  expect_error(leader_direction_group(copyDT, coords = coords, crs = utm),
                'direction_group')
 })
 
 test_that('position_group_direction column succesfully detected', {
   copy_DT <- copy(clean_DT)[, position_group_direction := 1]
   expect_message(
-    leader_direction_group(copy_DT, coords = coords),
+    leader_direction_group(copy_DT, coords = coords, crs = utm),
     'position_group_direction column will be overwritten'
   )
 
@@ -108,7 +109,7 @@ test_that('position_group_direction column succesfully detected', {
 test_that('no rows are added to the result DT', {
   copy_DT <- copy(clean_DT)
   expect_equal(nrow(copy_DT),
-               nrow(leader_direction_group(copy_DT, coords = coords)))
+               nrow(leader_direction_group(copy_DT, coords = coords, crs = utm)))
 
   # geo
   copy_DT <- copy(clean_DT_geo)
@@ -119,12 +120,12 @@ test_that('no rows are added to the result DT', {
 test_that('1 or 2 (return_rank = TRUE) column(s) added to the result DT', {
   copy_DT <- copy(clean_DT)
   expect_equal(ncol(copy_DT) + 1,
-               ncol(leader_direction_group(copy_DT, coords = coords,
+               ncol(leader_direction_group(copy_DT, coords = coords, crs = utm,
                                            return_rank = FALSE)))
 
   copy_DT <- copy(clean_DT)
   expect_equal(ncol(copy_DT) + 2,
-               ncol(leader_direction_group(copy_DT, coords = coords,
+               ncol(leader_direction_group(copy_DT, coords = coords, crs = utm,
                                            return_rank = TRUE,
                                            group = 'group')))
 
@@ -143,13 +144,14 @@ test_that('1 or 2 (return_rank = TRUE) column(s) added to the result DT', {
 
 test_that('column(s) added to the result DT are expected type', {
   expect_type(
-    leader_direction_group(DT, coords = coords)$position_group_direction,
+    leader_direction_group(DT, coords = coords, crs = utm)$position_group_direction,
     'double'
   )
   expect_type(
     leader_direction_group(
       DT,
       coords = coords,
+      crs = utm,
       group = 'group',
       return_rank = TRUE)$rank_position_group_direction,
     'double'
@@ -172,26 +174,26 @@ test_that('column(s) added to the result DT are expected type', {
 
 test_that('column(s) added to the result DT are expected range', {
   expect_gt(
-    leader_direction_group(DT, coords = coords)[
+    leader_direction_group(DT, coords = coords, crs = utm)[
       position_group_direction < 0, .N],
     0
   )
 
   expect_gt(
-    leader_direction_group(DT, coords = coords)[
+    leader_direction_group(DT, coords = coords, crs = utm)[
       position_group_direction > 0, .N],
     0
   )
 
   expect_equal(
-    leader_direction_group(DT, coords = coords,
+    leader_direction_group(DT, coords = coords, crs = utm,
                            group = 'group')[
       rank_position_group_direction < 0, .N],
     0
   )
 
   expect_gt(
-    leader_direction_group(DT, coords = coords,
+    leader_direction_group(DT, coords = coords, crs = utm,
                            group = 'group')[
       position_group_direction > 0, .N],
     0
@@ -225,7 +227,7 @@ test_that('column(s) added to the result DT are expected range', {
 })
 
 test_that('returns a data.table', {
-  expect_s3_class(leader_direction_group(DT, coords = coords), 'data.table')
+  expect_s3_class(leader_direction_group(DT, coords = coords, crs = utm), 'data.table')
   expect_s3_class(leader_direction_group(DT_geo), 'data.table')
 })
 
@@ -240,7 +242,8 @@ expect_DT <- data.table(
 )
 centroid_group(expect_DT, coords = coords)
 leader_direction_group(expect_DT, coords = coords,
-                       return_rank = TRUE, group = group)
+                       return_rank = TRUE, group = group,
+                       crs = utm)
 
 test_that('expected results for simple case', {
   expect_lte(
