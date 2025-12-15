@@ -46,6 +46,8 @@ test_that('units are returned', {
     calc_direction(geometry_longlat, use_transform = FALSE))$numerator],
     'rad'
   )
+
+  expect_identical(
     DT[, calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_longlat,
                         use_transform = FALSE)],
     'units'
@@ -61,7 +63,7 @@ test_that('units are returned', {
 
 test_that('expected dims returned', {
   # N - 1 since missing start/dest for direction
-  expect_length(DT[, calc_direction(geometry_longlat, use_transform = FALSE)], 
+  expect_length(DT[, calc_direction(geometry_longlat, use_transform = FALSE)],
                 DT[, .N - 1])
   expect_length(
     DT[, calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_longlat,
