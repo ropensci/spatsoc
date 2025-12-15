@@ -308,4 +308,7 @@ test_that('ud_units must be m', {
   expect_error(leader_direction_group(DT, coords = coords, group = 'group',
                                       crs = 4326),
                'planar')
+
+  expect_error(leader_direction_group(DT_geo, geometry = 'geometry_longlat'),
+               'planar')
 })
