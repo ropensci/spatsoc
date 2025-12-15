@@ -27,17 +27,7 @@
 #'
 #' See below under "Interface" for details on providing coordinates.
 #'
-#' @section Interface:
-#'  Two interfaces are available for providing coordinates:
-#'
-#'  1. Provide `coords`. The `coords` argument expects the names of
-#'  the X and Y coordinate columns.
-#'  2. (New!) Provide `geometry`. The `geometry` argument allows the user to
-#'  supply a `geometry` column that represents the coordinates as a simple
-#'  feature geometry list column. This interface expects the user to prepare
-#'  their input DT with [get_geometry()]. To use this interface, leave the
-#'  `coords` argument `NULL`, and the default argument for `geometry`
-#'  ('geometry') will be used directly.
+#' @inheritSection direction_step Interface
 #'
 #' @return `leader_direction_group` returns the input `DT` appended with a
 #'   `position_group_direction` column indicating the position along the group
