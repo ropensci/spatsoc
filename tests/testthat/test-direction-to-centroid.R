@@ -122,8 +122,18 @@ test_that('if coords null, geometry required', {
   copy_DT[, centroid := 42]
   expect_error(direction_to_centroid(copy_DT, crs = utm),
                'sfc_POINT')
+
 })
 
+test_that('message if overwrite', {
+  copy_DT <- copy(clean_DT)[, direction_centroid := 1]
+  get_geometry(copy_DT, coords = coords, crs = utm)
+  centroid_group(copy_DT)
+  expect_message(
+    direction_to_centroid(copy_DT),
+    'direction_centroid column will be overwritten'
+  )
+})
 
 test_that('NAs in coordinates return NA', {
   copyDT <- copy(DT)
