@@ -81,7 +81,7 @@ get_geometry <- function(
                       crs = crs,
                       na.fail = FALSE
     )
-    if (all(!is.null(output_crs) && crs != sf::st_crs(output_crs))) {
+    if (!is.null(output_crs) && !identical(crs, sf::st_crs(output_crs))) {
       x <- sf::st_transform(x, output_crs)
     }
     x
