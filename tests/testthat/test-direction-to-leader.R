@@ -43,6 +43,9 @@ test_that('arguments required, otherwise error detected', {
   expect_error(direction_to_leader(DT, coords = coords, group = NULL,
                                    crs = utm),
                'group must be provided')
+
+  expect_message(direction_to_leader(DT, group = group, crs = utm),
+                 'crs argument')
 })
 
 test_that('column names must exist in DT', {
