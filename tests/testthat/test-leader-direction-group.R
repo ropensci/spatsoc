@@ -24,9 +24,7 @@ direction_group(DT)
 
 DT_geo <- copy(DT)
 get_geometry(DT_geo, coords = coords, crs = utm)
-get_geometry(DT_geo, coords = coords, crs = utm, output_crs = 4326,
-             geometry_colname = 'geometry_proj')
-centroid_group(DT_geo, geometry = 'geometry_proj')
+centroid_group(DT_geo)
 direction_step(DT_geo, id = id)
 direction_group(DT_geo)
 
@@ -102,7 +100,7 @@ test_that('position_group_direction column succesfully detected', {
 
   # geo
   copy_DT <- copy(clean_DT_geo)[, position_group_direction := 1]
-  expect_message(leader_direction_group(copy_DT, geometry = 'geometry_proj'),
+  expect_message(leader_direction_group(copy_DT),
                  'position_group_direction')
 })
 
@@ -114,7 +112,7 @@ test_that('no rows are added to the result DT', {
   # geo
   copy_DT <- copy(clean_DT_geo)
   expect_equal(nrow(copy_DT),
-               nrow(leader_direction_group(copy_DT, geometry = 'geometry_proj')))
+               nrow(leader_direction_group(copy_DT)))
 })
 
 test_that('1 or 2 (return_rank = TRUE) column(s) added to the result DT', {
@@ -132,12 +130,11 @@ test_that('1 or 2 (return_rank = TRUE) column(s) added to the result DT', {
   # geo
   copy_DT <- copy(clean_DT_geo)
   expect_equal(ncol(copy_DT) + 1,
-               ncol(leader_direction_group(copy_DT, geometry = 'geometry_proj',
-                                           return_rank = FALSE)))
+               ncol(leader_direction_group(copy_DT, return_rank = FALSE)))
 
   copy_DT <- copy(clean_DT_geo)
   expect_equal(ncol(copy_DT) + 2,
-               ncol(leader_direction_group(copy_DT, geometry = 'geometry_proj',
+               ncol(leader_direction_group(copy_DT,
                                            return_rank = TRUE,
                                            group = 'group')))
 })
@@ -160,13 +157,12 @@ test_that('column(s) added to the result DT are expected type', {
   # geo
   copy_DT <- copy(clean_DT_geo)
   expect_type(
-    leader_direction_group(copy_DT, geometry = 'geometry_proj')$position_group_direction,
+    leader_direction_group(copy_DT)$position_group_direction,
     'double'
   )
   expect_type(
     leader_direction_group(
-      copy_DT,
-      geometry = 'geometry_proj')$rank_position_group_direction,
+      copy_DT)$rank_position_group_direction,
     'double'
   )
 
@@ -202,25 +198,25 @@ test_that('column(s) added to the result DT are expected range', {
   # geo
   copy_DT <- copy(clean_DT_geo)
   expect_gt(
-    leader_direction_group(copy_DT, geometry = 'geometry_proj')[
+    leader_direction_group(copy_DT)[
       position_group_direction < 0, .N],
     0
   )
 
   expect_gt(
-    leader_direction_group(copy_DT, geometry = 'geometry_proj')[
+    leader_direction_group(copy_DT)[
       position_group_direction > 0, .N],
     0
   )
 
   expect_equal(
-    leader_direction_group(copy_DT, geometry = 'geometry_proj')[
+    leader_direction_group(copy_DT)[
       rank_position_group_direction < 0, .N],
     0
   )
 
   expect_gt(
-    leader_direction_group(copy_DT, geometry = 'geometry_proj')[
+    leader_direction_group(copy_DT)[
       position_group_direction > 0, .N],
     0
   )
@@ -274,10 +270,9 @@ expect_DT_geo <- data.table(
   group_direction = rep(as_units(0, 'rad'), 2),
   group = c(1, 1)
 )
-get_geometry(expect_DT_geo, coords = coords, crs = utm, output_crs = utm,
-             geometry_colname = 'geometry_proj')
-centroid_group(expect_DT_geo, geometry = 'geometry_proj')
-leader_direction_group(expect_DT_geo, geometry = 'geometry_proj')
+get_geometry(expect_DT_geo, coords = coords, crs = utm)
+centroid_group(expect_DT_geo)
+leader_direction_group(expect_DT_geo)
 
 test_that('expected results for simple case', {
   expect_lte(
