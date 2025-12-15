@@ -60,4 +60,5 @@ test_that('assert_threshold', {
                'do not match')
   expect_silent(assert_threshold(units::as_units(1, 'm'), 4326))
   expect_silent(assert_threshold(units::as_units(1, 'm'), 32649))
+  expect_error(assert_threshold(units::as_units(-1, 'm'), 32736))
 })
