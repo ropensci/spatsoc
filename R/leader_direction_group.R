@@ -140,11 +140,16 @@ leader_direction_group <- function(
     assert_are_colnames(DT, centroid, ', did you run get_geometry()?')
     assert_col_inherits(DT, centroid, 'sfc_POINT')
 
-    crs <- sf::st_crs(DT[[geometry]])
+    crs_ud_unit <- sf::st_crs(DT[[geometry]])$ud_unit
 
-    if (!sf::st_is_longlat(crs)) {
-      # TODO: improve msg
-      rlang::abort('crs of geometry column is not longlat')
+    if (!identical(crs_ud_unit, units::as_units('m'))) {
+      rlang::abort(
+        paste0(
+          'sf::st_crs(crs)$ud_unit is ',
+          ifelse(is.null(crs_ud_unit), NULL, units(crs_ud_unit)),
+          ', leader_direction_group requires planar coordinates in m'
+        )
+      )
     }
 
     if (pos_col %in% colnames(DT)) {
@@ -185,9 +190,16 @@ leader_direction_group <- function(
     assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
     assert_col_inherits(DT, coords_centroid, 'numeric')
 
-    if (!sf::st_is_longlat(crs)) {
-      # TODO: improve msg
-      rlang::abort('crs is not longlat')
+    crs_ud_unit <- sf::st_crs(crs)$ud_unit
+
+    if (!identical(crs_ud_unit, units::as_units('m'))) {
+      rlang::abort(
+        paste0(
+          'sf::st_crs(crs)$ud_unit is ',
+          ifelse(is.null(crs_ud_unit), NULL, units(crs_ud_unit)),
+          ', leader_direction_group requires planar coordinates in m'
+        )
+      )
     }
 
     if (pos_col %in% colnames(DT)) {
