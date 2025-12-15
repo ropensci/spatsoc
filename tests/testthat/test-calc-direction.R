@@ -2,6 +2,7 @@
 context('test calc_direction')
 
 library(sf)
+sf_use_s2(TRUE)
 
 DT <- fread('../testdata/DT.csv')
 id <- 'ID'
@@ -47,14 +48,14 @@ test_that('units are returned', {
     'rad'
   )
 
-  expect_identical(
+  expect_s3_class(
     DT[, calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_longlat,
                         use_transform = FALSE)],
     'units'
   )
   expect_identical(
     DT[, units(
-      calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_lonlat,
+      calc_direction(x_a = X_longlat, y_a = Y_longlat, crs = crs_longlat,
                      use_transform = FALSE)
     )$numerator],
     "rad"
@@ -99,13 +100,13 @@ test_that('expected range returned', {
 })
 
 test_that('NAs returned as expected', {
-  X_NA <- copy(DT)[seq.int(100)][sample(.N, 10), lonlat_X := NA]
+  X_NA <- copy(DT)[seq.int(100)][sample(.N, 10), X_longlat := NA]
   expect_error(X_NA[, calc_direction(x_a = X_longlat, y_a = Y_longlat,
                                      crs = crs_longlat,
                                      use_transform = FALSE)],
                'missing values in coordinates')
 
-  Y_NA <- copy(DT)[seq.int(100)][sample(.N, 10), lonlat_Y := NA]
+  Y_NA <- copy(DT)[seq.int(100)][sample(.N, 10), Y_longlat := NA]
   expect_error(Y_NA[, calc_direction(x_a = X_longlat, y_a = Y_longlat,
                                      crs = crs_longlat,
                                      use_transform = FALSE)],
@@ -117,7 +118,7 @@ test_that('NAs returned as expected', {
                                       use_transform = FALSE)],
                'missing values in coordinates')
 
-  get_geometry(XY_NA, lonlat_coords, crs_lonlat)
+  get_geometry(XY_NA, coords_longlat, crs_longlat)
   expect_error(XY_NA[, calc_direction(geometry,
                                       use_transform = FALSE)],
                'missing values in coordinates')

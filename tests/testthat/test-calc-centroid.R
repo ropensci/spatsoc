@@ -2,6 +2,7 @@
 context('test calc_centroid')
 
 library(sf)
+sf_use_s2(TRUE)
 
 DT <- fread('../testdata/DT.csv')
 coords <- c('X', 'Y')

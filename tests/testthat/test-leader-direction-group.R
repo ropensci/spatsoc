@@ -24,7 +24,7 @@ direction_group(DT)
 
 DT_geo <- copy(DT)
 get_geometry(DT_geo, coords = coords, crs = utm)
-get_geometry(DT_geo, coords = coords, crs = utm, output_crs = FALSE,
+get_geometry(DT_geo, coords = coords, crs = utm, output_crs = 4326,
              geometry_colname = 'geometry_proj')
 centroid_group(DT_geo, geometry = 'geometry_proj')
 direction_step(DT_geo, id = id)
