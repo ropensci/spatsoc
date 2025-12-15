@@ -179,6 +179,7 @@ leader_direction_group <- function(
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
     assert_col_inherits(DT, coords, 'numeric')
+    assert_not_null(crs)
 
     xcol <- data.table::first(coords)
     ycol <- data.table::last(coords)
