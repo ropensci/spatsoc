@@ -166,7 +166,6 @@ leader_direction_group <- function(
       cos(units::drop_units(group_dir)) * (coords_geo[, 1] - coords_cent[, 1]) +
         sin(units::drop_units(group_dir)) * (coords_geo[, 2] - coords_cent[, 2])
     },
-    # by = .I,
     env = list(
       group_dir = group_direction,
       geo = geometry,
@@ -213,7 +212,6 @@ leader_direction_group <- function(
     DT[, c(pos_col) :=
       cos(units::drop_units(group_dir)) * (x - x_centroid) +
       sin(units::drop_units(group_dir)) * (y - y_centroid),
-    # by = .I,
     env = list(
       group_dir = group_direction,
       x = xcol, y = ycol,
