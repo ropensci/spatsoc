@@ -8,7 +8,7 @@ get_geometry(
   DT = NULL,
   coords = NULL,
   crs = NULL,
-  output_crs = 4326,
+  output_crs = NULL,
   geometry_colname = "geometry"
 )
 }
@@ -22,8 +22,8 @@ Note: the order is assumed X followed by Y column names.}
 be passed to \link[sf:st_crs]{sf::st_crs}. For example, \code{crs = "EPSG:32736"} or
 \code{crs = 32736}.}
 
-\item{output_crs}{default 4326, the output crs to transform the input
-coordinates to with \link[sf:st_transform]{sf::st_transform}. If output_crs is NULL or FALSE or
+\item{output_crs}{default NULL, the output crs to transform the input
+coordinates to with \link[sf:st_transform]{sf::st_transform}. If output_crs is NULL or
 matching the crs argument, the coordinates will not be transformed}
 
 \item{geometry_colname}{default "geometry", to optionally set output name

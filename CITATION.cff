@@ -8,7 +8,7 @@ message: 'To cite package "spatsoc" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship'
-version: 0.2.11.9002
+version: 0.2.12.9001
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.spatsoc
@@ -150,6 +150,14 @@ references:
     given-names: Kirill
     email: kirill@cynkra.com
     orcid: https://orcid.org/0000-0002-1416-3412
+  - family-names: Schoch
+    given-names: David
+    email: david.schoch@cynkra.com
+    orcid: https://orcid.org/0000-0003-2952-4812
+  - family-names: Salmon
+    given-names: Maëlle
+    email: maelle@cynkra.com
+    orcid: https://orcid.org/0000-0002-2815-0399
   year: '2025'
   doi: 10.32614/CRAN.package.igraph
 - type: software
@@ -176,9 +184,9 @@ references:
     given-names: Edzer
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
+  year: '2025'
   doi: 10.32614/CRAN.package.lwgeom
   version: '>= 0.2.15'
-  year: '2025'
 - type: software
   title: CircStats
   abstract: 'CircStats: Circular Statistics, from "Topics in Circular Statistics"

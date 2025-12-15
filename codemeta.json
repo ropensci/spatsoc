@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/ropensci/spatsoc",
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.11.9002",
+  "version": "0.2.12.9001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.5.1 (2025-06-13)",
+  "runtimePlatform": "R version 4.5.2 (2025-10-31)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -228,7 +228,7 @@
     },
     "SystemRequirements": "GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),\n    sqlite3"
   },
-  "fileSize": "2126.247KB",
+  "fileSize": "2162.931KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",

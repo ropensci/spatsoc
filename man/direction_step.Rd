@@ -44,8 +44,8 @@ before using \code{direction_step}. In addition, the direction column
 will include an \code{NA} value for the last point in each sequence of
 points since there is no future point to calculate a direction to.
 
-A message is returned when a direction column are already exists in
-the input \code{DT}, because it will be overwritten.
+A message is returned when a direction column already exists in the input
+\code{DT} because it will be overwritten.
 
 See details for appending outputs using modify-by-reference in the
 \href{https://docs.ropensci.org/spatsoc/articles/faq.html}{FAQ}.
