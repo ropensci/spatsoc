@@ -126,10 +126,11 @@ test_that('NAs returned as expected', {
                                       use_transform = FALSE)],
                'missing values in coordinates')
 
-  geometry_NA <- copy(DT)[seq.int(100)][
-    sample(.N, 10), geometry_longlat := st_sfc(st_point())]
-  expect_error(geometry_NA[, calc_direction(geometry_longlat)],
+  geometry_NA <- copy(DT)[seq.int(100)]
+  geometry_NA[, geometry_longlat_miss := geometry]
+  geometry_NA[sample(.N, 10), geometry_longlat_miss := st_sfc(st_point())]
+  expect_error(geometry_NA[, calc_direction(geometry_longlat_miss)],
                'missing values in coordinates')
-  expect_error(geometry_NA[, calc_direction(geometry_longlat, geometry_longlat)],
+  expect_error(geometry_NA[, calc_direction(geometry_longlat, geometry_longlat_miss)],
                'missing values in coordinates')
 })
