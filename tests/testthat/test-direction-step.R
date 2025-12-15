@@ -204,14 +204,16 @@ test_that('projection arg is deprecated', {
 })
 
 # sfc interface
-
 test_that('if coords null, geometry required', {
   expect_error(direction_step(DT, id = id, coords = NULL, crs = utm),
                'get_geometry?')
 })
 
+get_geometry(DT, coords = coords, crs = utm)
+get_geometry(DT, coords = coords, crs = utm, output_crs = 4326,
+             geometry_colname = 'geometry_longlat')
+
 test_that('crs provided with geometry gives message crs ignored', {
-  get_geometry(DT, coords = coords, crs = utm)
   expect_message(direction_step(DT, id = id, crs = utm), 'ignored')
 })
 
@@ -229,6 +231,30 @@ test_that('sfc interface message before overwrite', {
 })
 
 test_that('sfc interface returns expected', {
+  copyDT <- get_geometry(copy(clean_DT), coords = coords, crs = utm,
+                         output_crs = 4326)
+
+  expect_equal(
+    ncol(copyDT) + 1,
+    ncol(direction_step(copyDT, id = id))
+  )
+
+  expect_equal(
+    nrow(copyDT),
+    nrow(direction_step(copy(copyDT), id = id))
+  )
+
+  expect_true('direction' %in% colnames(direction_step(copy(copyDT), id = id)))
+
+  expect_type(copyDT$direction, 'double')
+  expect_s3_class(copyDT$direction, 'units')
+
+  expect_equal(min(copyDT$direction, na.rm = TRUE), units::as_units(-pi, 'rad'),
+               tolerance = 0.01)
+  expect_equal(max(copyDT$direction, na.rm = TRUE), units::as_units(pi, 'rad'),
+               tolerance = 0.01)
+
+
   copyDT <- get_geometry(copy(clean_DT), coords = coords, crs = utm)
 
   expect_equal(
