@@ -24,6 +24,8 @@ direction_group(DT)
 
 DT_geo <- copy(DT)
 get_geometry(DT_geo, coords = coords, crs = utm)
+get_geometry(DT_geo, coords = coords, crs = utm, output_crs = 4326,
+             geometry_colname = 'geometry_longlat')
 centroid_group(DT_geo)
 direction_step(DT_geo, id = id)
 direction_group(DT_geo)
@@ -43,6 +45,9 @@ test_that('arguments required, otherwise error detected', {
                                       crs = utm),
                'group must be')
 
+  expect_error(leader_direction_group(DT, coords = coords, group = NULL,
+                                      crs = NULL),
+               'crs must be')
   # geo
   copy_DT <- copy(clean_DT_geo)[, geometry := NULL]
   expect_error(leader_direction_group(DT),
