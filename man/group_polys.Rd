@@ -35,7 +35,7 @@ internally set to \code{sf::NA_crs_}.}
 \item{id}{character string of ID column name}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{splitBy}{(optional) character string or vector of grouping column
 name(s) upon which the grouping will be calculated}

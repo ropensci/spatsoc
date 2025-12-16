@@ -118,10 +118,15 @@ distance_to_centroid <- function(
     DT = NULL,
     coords = NULL,
     group = 'group',
+<<<<<<< feat/use-calc-distance
     crs = NULL,
     return_rank = TRUE,
     ties.method = NULL,
     geometry = 'geometry') {
+=======
+    return_rank = TRUE,
+    ties.method = NULL) {
+>>>>>>> main
 
   # Due to NSE notes in R CMD check
   geo <- cent <- x <- y <- x_centroid <- y_centroid <- NULL

@@ -67,7 +67,7 @@
 #'   coordinates
 #' @param id character string of ID column name
 #' @param coords character vector of X coordinate and Y coordinate column names.
-#' Note: the order is assumed X followed by Y column names.
+#' Note: the order is assumed X followed by Y column names
 #' @param timegroup timegroup field in the DT within which the grouping will be
 #'   calculated
 #' @param crs numeric or character defining the coordinate reference

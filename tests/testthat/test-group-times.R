@@ -45,7 +45,7 @@ test_that('time fields are already present', {
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
   expect_message(group_times(copyDT, datetime = 'datetime',
                              threshold = '10 minutes'),
-                 'columns found in input DT', fixed = FALSE)
+                 'columns found in input', fixed = FALSE)
 })
 
 test_that('time field is appropriate format', {

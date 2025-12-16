@@ -73,11 +73,18 @@ test_that('no rows are added to the result DT', {
                nrow(distance_to_centroid(copyDT, coords = coords)))
 })
 
-test_that('one column added to the result DT', {
+test_that('1/2 columns added to the result DT (depending on return_rank)', {
+  copyDT <- copy(clean_DT)
+
+  expect_equal(ncol(copyDT) + 2,
+               ncol(distance_to_centroid(copyDT, coords = coords,
+                                         return_rank = TRUE)))
+
   copyDT <- copy(clean_DT)
 
   expect_equal(ncol(copyDT) + 1,
-               ncol(distance_to_centroid(DT, coords = coords)))
+               ncol(distance_to_centroid(copyDT, coords = coords,
+                                         return_rank = FALSE)))
 })
 
 test_that('column added to the result DT is a double', {

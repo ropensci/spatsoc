@@ -200,7 +200,7 @@ group_times <- function(
         nMins <- as.integer(nMins)
       }
 
-      assert_relation(nMins, `<=`, 60, ' minutes')
+      assert_relation(nMins, `<=`, 60, ... = ' minutes')
 
       if (60 %% nMins != 0) {
         stop('threshold not evenly divisible by 60')

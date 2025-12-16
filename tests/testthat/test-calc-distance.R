@@ -1,6 +1,8 @@
 # Test calc_distance
 context('test calc_distance')
 
+library(sf)
+
 DT <- fread('../testdata/DT.csv')
 coords <- c('X', 'Y')
 crs <- 32736

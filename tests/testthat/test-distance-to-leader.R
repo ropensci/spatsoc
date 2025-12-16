@@ -20,7 +20,8 @@ group_pts(DT, threshold = threshold, id = id,
 centroid_group(DT, coords = coords, group = group)
 direction_step(DT = DT, id = id, coords = coords, crs = utm)
 direction_group(DT)
-leader_direction_group(DT, coords = coords, group = group, return_rank = TRUE)
+leader_direction_group(DT, coords = coords, group = group, crs = utm,
+                       return_rank = TRUE)
 
 # Removing group with missing leader
 DT <- copy(DT)[group != 868]
@@ -110,7 +111,7 @@ test_that('zzz columns not added to the result', {
   zzz_cols <- c('has_leader', 'zzz_N_by_group')
 
   expect_false(
-    any(zzz_cols %in% colnames(direction_to_leader(DT, coords = coords)))
+    any(zzz_cols %in% colnames(direction_to_leader(DT, coords = coords, crs = utm)))
   )
 })
 
@@ -128,7 +129,7 @@ expect_DT <- data.table(
   group = c(1, 1)
 )
 centroid_group(expect_DT, coords = coords)
-leader_direction_group(expect_DT, coords = coords,
+leader_direction_group(expect_DT, coords = coords, crs = utm,
                        return_rank = TRUE, group = group)
 distance_to_leader(expect_DT, coords = c('X', 'Y'))
 
