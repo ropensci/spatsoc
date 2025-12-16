@@ -79,6 +79,8 @@ direction_group <- function(
     direction = 'direction',
     group = 'group') {
 
+  dir <- NULL
+
   assert_not_null(DT)
   assert_is_data_table(DT)
 
@@ -96,10 +98,10 @@ direction_group <- function(
   }
 
   DT[, c(out_mean) := units::as_units(
-    CircStats::circ.mean(units::drop_units(.SD)),
+    CircStats::circ.mean(units::drop_units(dir)),
     'rad'),
     by = c(group),
-    .SDcols = c(direction)]
+    env = list(dir = direction)]
 
   return(DT[])
 }
