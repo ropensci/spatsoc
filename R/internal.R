@@ -123,7 +123,7 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
     if (any(is.null(crs), is.na(crs))) {
       assert_relation(threshold, `>`, units::as_units(0, units(threshold)))
     } else {
-      assert_units_match(threshold, sf::st_crs(crs)$SemiMajor, n = 2)
+      assert_units_match(threshold, sf::st_crs(crs)$ud_unit, n = 2)
       assert_relation(threshold, `>`, units::as_units(0, units(threshold)))
     }
   } else if (inherits(threshold, 'numeric')){
@@ -131,9 +131,9 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
       assert_relation(threshold, `>`, 0)
     } else {
       assert_relation(units::as_units(threshold,
-                                      units(sf::st_crs(crs)$SemiMajor)),
+                                      units(sf::st_crs(crs)$ud_unit)),
                       `>`,
-                      units::as_units(0, units(sf::st_crs(crs)$SemiMajor)),
+                      units::as_units(0, units(sf::st_crs(crs)$ud_unit)),
                       n = 2)
     }
     return(invisible(NULL))
