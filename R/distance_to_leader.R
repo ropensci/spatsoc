@@ -118,7 +118,7 @@ distance_to_leader <- function(
   assert_col_inherits(DT, leader_col, 'numeric')
 
   check_leaderless <- DT[, .(
-    has_leader = any(rank_position_group_direction == 1)),
+    has_leader = any(rank_position_group_direction == 1, na.rm = TRUE)),
     by = group,
     env = list(group = group)][!(has_leader)]
 
