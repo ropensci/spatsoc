@@ -313,7 +313,7 @@ calc_direction <- function(
     x_b, y_b,
     crs,
     use_transform) {
-  lonlat_crs <- 4326
+  crs_longlat <- 4326
 
   if (!missing(geometry_a) && missing(x_a) && missing(y_a)
       && missing(x_b) && missing(y_b)) {
@@ -328,11 +328,11 @@ calc_direction <- function(
         lwgeom::st_geod_azimuth(
           x = sf::st_transform(
             geometry_a,
-            crs = lonlat_crs
+            crs = crs_longlat
           ),
           y = sf::st_transform(
             geometry_b,
-            crs = lonlat_crs
+            crs = crs_longlat
           )
         )
       } else {
@@ -343,7 +343,7 @@ calc_direction <- function(
         lwgeom::st_geod_azimuth(
           x = sf::st_transform(
             geometry_a,
-            crs = lonlat_crs
+            crs = crs_longlat
           )
         )
       } else {
@@ -357,12 +357,12 @@ calc_direction <- function(
           x = sf::st_transform(
             sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
                          na.fail = TRUE),
-            crs = lonlat_crs
+            crs = crs_longlat
           ),
           y = sf::st_transform(
             sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2),
                          na.fail = TRUE),
-            crs = lonlat_crs
+            crs = crs_longlat
           )
         )
       } else {
@@ -379,7 +379,7 @@ calc_direction <- function(
           x = sf::st_transform(
             sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
                          na.fail = TRUE),
-            crs = lonlat_crs
+            crs = crs_longlat
           )
         )
       } else {
