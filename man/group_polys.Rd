@@ -29,8 +29,8 @@ area and proportion of overlap (when \code{TRUE})}
 
 \item{crs}{numeric or character defining the coordinate reference
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
-\code{crs = "EPSG:32736"} or \code{crs = 32736}. If \code{crs = NULL}, the \code{crs} will be
-internally set to \code{sf::NA_crs_}.}
+\code{crs = "EPSG:32736"} or \code{crs = 32736}. Used only if coords are provided,
+see details under Interface}
 
 \item{id}{character string of ID column name}
 
@@ -38,7 +38,7 @@ internally set to \code{sf::NA_crs_}.}
 Note: the order is assumed X followed by Y column names}
 
 \item{splitBy}{(optional) character string or vector of grouping column
-name(s) upon which the grouping will be calculated}
+name(s) upon which the output will be calculated}
 
 \item{sfPolys}{Alternatively, provide solely a simple features object with
 POLYGONs or MULTIPOLYGONs. If sfPolys are provided, id is required and
