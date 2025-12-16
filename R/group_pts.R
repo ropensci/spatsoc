@@ -116,7 +116,7 @@ group_pts <- function(
     splitBy = NULL,
     geometry = 'geometry') {
   # due to NSE notes in R CMD check
-  N <- withinGroup <- ..id <- ..coords <- group <- NULL
+  N <- withinGroup <- group <- geo <- x <- y <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)

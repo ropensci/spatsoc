@@ -107,7 +107,7 @@ edge_nn <- function(
     geometry = 'geometry',
     returnDist = FALSE) {
   # NSE
-  N <- NULL
+  N <- geo <- x <- y <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)

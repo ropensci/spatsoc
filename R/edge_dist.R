@@ -108,7 +108,7 @@ edge_dist <- function(
     returnDist = FALSE,
     fillNA = TRUE) {
   # due to NSE notes in R CMD check
-  N <- ID1 <- ID2 <- value <- . <- NULL
+  ID1 <- ID2 <- N <- geo <- x <- y <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
