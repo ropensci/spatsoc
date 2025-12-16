@@ -83,6 +83,11 @@ test_that('coords are correctly provided or error detected', {
   copy_DT <- copy(DT)[, geometry := NULL]
   expect_error(direction_to_leader(copy_DT, group = group),
                'get_geometry?')
+
+  expect_error(direction_to_leader(DT, group = group, geometry = 'potato'),
+               'is not present')
+  expect_error(direction_to_leader(DT, group = group, geometry = 'X'),
+               'must be of class')
 })
 
 test_that('leader is correctly provided or error detected', {
@@ -109,11 +114,17 @@ test_that('message when direction_leader column overwritten', {
 })
 
 test_that('no rows are added to the result DT', {
+  # coords
   copyDT <- copy(clean_DT)
-
   expect_equal(nrow(copyDT),
                nrow(direction_to_leader(copyDT, coords = coords,
                                         group = group, crs = utm)))
+
+  # geometry
+  copyDT <- get_geometry(copy(clean_DT), coords = coords, crs = utm)
+  expect_equal(nrow(copyDT),
+               nrow(direction_to_leader(copyDT, group = group)))
+
 })
 
 test_that('one column added to the result DT', {
@@ -127,11 +138,23 @@ test_that('one column added to the result DT', {
   copyDT <- copy(clean_DT)
   direction_to_leader(copyDT, coords = coords, group = group, crs = utm)
   expect_equal(ncol(clean_DT) + 1, ncol(copyDT))
+
+  # geometry
+  copyDT <- get_geometry(copy(clean_DT), coords = coords, crs = utm)
+  expect_equal(ncol(copyDT) + 1,
+               ncol(direction_to_leader(copyDT, group = group)))
 })
 
 test_that('column added to the result DT is a double', {
   expect_type(
     direction_to_leader(DT, coords = coords, group = group, crs = utm)$direction_leader,
+    'double'
+  )
+
+  # geometry
+  copyDT <- get_geometry(copy(clean_DT), coords = coords, crs = utm)
+  expect_type(
+    direction_to_leader(copyDT, group = group)$direction_leader,
     'double'
   )
 })
@@ -141,6 +164,13 @@ test_that('zzz columns not added to the result', {
 
   expect_false(
     any(zzz_cols %in% colnames(direction_to_leader(DT, coords = coords, crs = utm)))
+  )
+
+  # geometry
+  copyDT <- get_geometry(copy(clean_DT), coords = coords, crs = utm)
+  zzz_cols <- c('has_leader', 'zzz_geometry_leader')
+  expect_false(
+    any(zzz_cols %in% colnames(direction_to_leader(copyDT, group = group)))
   )
 })
 
