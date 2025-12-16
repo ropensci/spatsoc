@@ -21,7 +21,7 @@ edge_dist(
 \item{DT}{input data.table}
 
 \item{threshold}{distance for grouping points, either numeric or units, in
-the units of the crs of the coordinates/geometry}
+the units of the crs / the coordinates or geometry}
 
 \item{id}{character string of ID column name}
 
@@ -169,6 +169,10 @@ edges <- edge_dist(
     returnDist = TRUE,
     fillNA = TRUE
   )
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
 }
 \seealso{
 \code{\link[sf:geos_measures]{sf::st_distance()}}

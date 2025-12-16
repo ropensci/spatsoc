@@ -19,7 +19,7 @@ group_pts(
 \item{DT}{input data.table}
 
 \item{threshold}{distance for grouping points, either numeric or units, in
-the units of the crs of the coordinates/geometry}
+the units of the crs / the coordinates or geometry}
 
 \item{id}{character string of ID column name}
 
@@ -164,6 +164,10 @@ group_pts(DT, threshold = 5, id = 'ID',
 # Spatial grouping with timegroup and splitBy on population
 group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'),
          timegroup = 'timegroup', splitBy = 'population')
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+group_pts(DT, threshold = 50, id = 'ID', timegroup = 'timegroup')
 }
 \seealso{
 \code{group_times}

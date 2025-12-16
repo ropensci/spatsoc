@@ -126,6 +126,11 @@ group_pts(DT, threshold = 5, id = 'ID',
 
 # Calculate group centroid
 centroid_group(DT, coords = c('X', 'Y'), group = 'group')
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
+centroid_group(DT)
 }
 \seealso{
 \code{group_pts}

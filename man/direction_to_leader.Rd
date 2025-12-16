@@ -145,6 +145,7 @@ leader_direction_group(
 
 # Or, using the new geometry interface
 get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
 direction_step(
   DT = DT,
   id = 'ID'

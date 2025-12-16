@@ -170,6 +170,9 @@ edge_nn(DT, id = 'ID', coords = c('X', 'Y'),
         timegroup = 'timegroup', threshold = 100,
         returnDist = TRUE)
 
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+edge_nn(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
 }
 \seealso{
 Other Edge-list generation: 

@@ -73,6 +73,12 @@ direction_step(
 
 # Calculate group direction
 direction_group(DT)
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
+direction_step(DT, id = 'ID')
+direction_group(DT)
 }
 \references{
 See examples of using mean group direction:

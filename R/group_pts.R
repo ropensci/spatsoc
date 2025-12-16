@@ -64,7 +64,7 @@
 #'
 #' @param DT input data.table
 #' @param threshold distance for grouping points, either numeric or units, in
-#'   the units of the crs of the coordinates/geometry
+#'   the units of the crs / the coordinates or geometry
 #' @param id character string of ID column name
 #' @param coords character vector of X coordinate and Y coordinate column names.
 #' Note: the order is assumed X followed by Y column names

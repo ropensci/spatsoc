@@ -146,6 +146,20 @@ leader_direction_group(
 
 # Calculate distance to leader
 distance_to_leader(DT, coords = c('X', 'Y'), crs = 32736)
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
+direction_step(
+  DT = DT,
+  id = 'ID'
+)
+centroid_group(DT)
+direction_group(DT)
+leader_direction_group(
+  DT
+)
+distance_to_leader(DT)
 }
 \references{
 See examples of using distance to leader and position within group:
