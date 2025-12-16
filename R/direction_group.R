@@ -78,8 +78,8 @@ direction_group <- function(
     DT,
     direction = 'direction',
     group = 'group') {
-
-  dir <- NULL
+  # due to NSE notes in R CMD check
+  dir <- out <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
