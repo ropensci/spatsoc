@@ -108,6 +108,10 @@
 #' # Spatial grouping with timegroup and splitBy on population
 #' group_pts(DT, threshold = 5, id = 'ID', coords = c('X', 'Y'),
 #'          timegroup = 'timegroup', splitBy = 'population')
+#'
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' group_pts(DT, threshold = 50, id = 'ID', timegroup = 'timegroup')
 group_pts <- function(
     DT = NULL,
     threshold = NULL,
