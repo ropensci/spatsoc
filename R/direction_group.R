@@ -97,11 +97,10 @@ direction_group <- function(
     data.table::set(DT, j = out_mean, value = NULL)
   }
 
-  DT[, c(out_mean) := units::as_units(
     CircStats::circ.mean(units::drop_units(dir)),
-    'rad'),
     by = c(group),
     env = list(dir = direction)]
+  DT[, out := units::as_units(out, 'rad'), env = list(out = out_mean)]
 
   return(DT[])
 }
