@@ -143,7 +143,7 @@ test_that('column names must exist in DT', {
       coords = c('X', 'Y'),
       id = 'potato'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 
@@ -156,7 +156,7 @@ test_that('column names must exist in DT', {
       coords = c('potatoX', 'potatoY'),
       id = 'ID'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 
@@ -170,7 +170,7 @@ test_that('column names must exist in DT', {
       id = 'ID',
       splitBy = 'potato'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 })

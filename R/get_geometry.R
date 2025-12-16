@@ -11,6 +11,12 @@
 #' The `coords` argument expects the names of columns in `DT` which correspond
 #' to the X and Y coordinates.
 #'
+#' The `output_crs` argument allows the user to set an output `crs` for their
+#' geometry column. Note: some functions in spatsoc (eg. those that measure
+#' directions like `edge_direction` and `direction_to_leader`) require
+#' geographic coordinates and it is therefore simpler to leave the default
+#' `output_crs = 4326`.
+#'
 #' @return `get_geometry` returns the input `DT` appended with a
 #'   `geometry` column which represents the input coordinates
 #'   as a `sfc` (simple feature geometry list column). If the `output_crs`
@@ -75,7 +81,7 @@ get_geometry <- function(
                       crs = crs,
                       na.fail = FALSE
     )
-    if (all(!is.null(output_crs) && crs != sf::st_crs(output_crs))) {
+    if (!is.null(output_crs) && !identical(crs, sf::st_crs(output_crs))) {
       x <- sf::st_transform(x, output_crs)
     }
     x

@@ -1,56 +1,89 @@
 #' Direction step
 #'
-#' `direction_step` calculates the direction of movement steps in radians.
-#' The function expects a `data.table` with relocation data and individual
+#' `direction_step` calculates the direction of movement steps in radians. The
+#' function expects a `data.table` with relocation data and individual
 #' identifiers. Relocation data should be in two columns representing the X and
-#' Y coordinates. Note the order of rows is not modified by this function and
+#' Y coordinates, or in a geometry column prepared by the helper function
+#' [get_geometry()]. Note the order of rows is not modified by this function and
 #' therefore users must be cautious to set it explicitly. See example for one
 #' approach to setting order of rows using a datetime field.
 #'
-#' The `DT` must be a `data.table`. If your data is a
-#' `data.frame`, you can convert it by reference using
-#' [data.table::setDT()] or by reassigning using
+#' The `DT` must be a `data.table`. If your data is a `data.frame`, you can
+#' convert it by reference using [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' The `id`, `coords`, and optional `splitBy` arguments expect
-#' the names of a column in `DT` which correspond to the individual
-#' identifier, X and Y coordinates, and additional grouping columns.
+#' The `id`, and optional `splitBy` arguments expect the names of a column in
+#' `DT` which correspond to the individual identifier and additional grouping
+#' columns.
 #'
-#' The `crs` argument expects a character string or numeric defining
-#' the coordinate reference system to be passed to [sf::st_crs]. For example,
-#' for UTM zone 36S (EPSG 32736), the crs argument is
-#' `crs = "EPSG:32736"` or `crs = 32736`. See
-#' <https://spatialreference.org> for a list of EPSG codes.
+#' The `splitBy` argument offers further control over grouping. If within your
+#' `DT`, you have distinct sampling periods for each individual, you can provide
+#' the column name(s) which identify them to `splitBy`. The direction
+#' calculation by [direction_step()] will only consider rows within each `id`
+#' and `splitBy` subgroup.
 #'
-#' The `splitBy` argument offers further control over grouping. If within
-#' your `DT`, you have distinct sampling periods for each individual, you
-#' can provide the column name(s) which identify them to `splitBy`. The
-#' direction calculation by `direction_step` will only consider rows within
-#' each `id` and `splitBy` subgroup.
+#' See below under "Interface" for details on providing coordinates and under
+#' "Direction function" for details on the underlying direction function used.
 #'
-#' @return `direction_step` returns the input `DT` appended with
-#'  a direction column with units set to radians using the `units`
-#'  package.
+#' @section Interface:
+#'  Two interfaces are available for providing coordinates:
 #'
-#'   This column represents the azimuth between the sequence of points for
-#'   each individual computed using `lwgeom::st_geod_azimuth`. Note, the
-#'   order of points is not modified by this function and therefore it is
-#'   crucial the user sets the order of rows to their specific question
-#'   before using `direction_step`. In addition, the direction column
-#'   will include an `NA` value for the last point in each sequence of
-#'   points since there is no future point to calculate a direction to.
+#'  1. Provide `coords` and `crs`. The `coords` argument expects the names of
+#'  the X and Y coordinate columns. The `crs` argument expects a character
+#'  string or numeric defining the coordinate reference system to be passed to
+#'  [sf::st_crs]. For example, for UTM zone 36S (EPSG 32736), the crs argument
+#'  is `crs = "EPSG:32736"` or `crs = 32736`. See <https://spatialreference.org>
+#'  for a list of EPSG codes.
+#'  2. (New!) Provide `geometry`. The `geometry` argument allows the user to
+#'  supply a `geometry` column that represents the coordinates as a simple
+#'  feature geometry list column. This interface expects the user to prepare
+#'  their input DT with [get_geometry()]. To use this interface, leave the
+#'  `coords` and `crs` arguments `NULL`, and the default argument for `geometry`
+#'  ('geometry') will be used directly.
 #'
-#'   A message is returned when a direction column already exists in the input
-#'   `DT` because it will be overwritten.
+#' @section Direction function:
+#'
+#'  The underlying distance function used depends on the crs of the coordinates
+#'  or geometry provided.
+#'
+#'  - If the crs is provided and longlat degrees (as determined by
+#'  [sf::st_is_longlat()]), the distance function is
+#'  [lwgeom::st_geod_azimuth()].
+#'  - If the crs is provided and not longlat degrees (eg. a projected UTM),
+#'  the coordinates or geometry are transformed to `sf::st_crs(4326)` before the
+#'  distance is measured using [lwgeom::st_geod_azimuth()].
+#'  - If the crs is NULL or NA_crs_, the distance function cannot be used
+#'  and an error is returned.
+#'
+#' @return `direction_step` returns the input `DT` appended with a `direction`
+#'   column with units set to radians using the `units` package.
+#'
+#'   This column represents the azimuth between the sequence of points for each
+#'   individual computed using [lwgeom::st_geod_azimuth()]. Note, the order of
+#'   points is not modified by this function and therefore it is crucial the
+#'   user sets the order of rows to their specific question before using
+#'   `direction_step`. In addition, the direction column will include an `NA`
+#'   value for the last point in each sequence of points since there is no
+#'   future point to calculate a direction to.
+#'
+#'   A message is returned when a direction column are already exists in the
+#'   input `DT`, because it will be overwritten.
+#'
+#'   An error is returned if there are any missing values in coordinates /
+#'   geometry as the underlying direction function ([lwgeom::st_geod_azimuth()])
+#'   does not accept missing values.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 #'
 #' @inheritParams group_pts
 #' @inheritParams build_polys
+#' @param geometry simple feature geometry list column name, generated by
+#'   [get_geometry()]. Default 'geometry', see details under Interface
 #'
 #' @family Direction functions
-#' @seealso [amt::direction_abs()], [geosphere::bearing()]
+#' @seealso [lwgeom::st_geod_azimuth()], [amt::direction_abs()],
+#' [geosphere::bearing()]
 #' @export
 #'
 #' @examples
@@ -75,6 +108,10 @@
 #'   crs = 32736
 #' )
 #'
+#' # Or: sfc interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' direction_step(DT, id = 'ID')
+#'
 #' # Example result for East, North, West, South steps
 #' example <- data.table(
 #'   X = c(0, 5, 5, 0, 0),
@@ -91,10 +128,11 @@ direction_step <- function(
     coords = NULL,
     crs = NULL,
     splitBy = NULL,
+    geometry = 'geometry',
     projection = NULL) {
 
   # due to NSE notes in R CMD check
-  direction <- NULL
+  geo <- x <- y <- NULL
 
   if (!is.null(projection)) {
     warning('projection argument is deprecated, setting crs = projection')
@@ -104,35 +142,66 @@ direction_step <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
   assert_not_null(id)
+  assert_are_colnames(DT, c(id, splitBy))
 
-  check_cols <- c(id, splitBy)
-  assert_are_colnames(DT, check_cols)
+  out_colname <- 'direction'
 
-  assert_not_null(crs)
+  if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
 
-  assert_are_colnames(DT, coords)
-  assert_length(coords, 2)
-  assert_col_inherits(DT, coords, 'numeric')
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
 
-  if ('direction' %in% colnames(DT)) {
-    message('direction column will be overwritten by this function')
-    data.table::set(DT, j = 'direction', value = NULL)
+    if ('direction' %in% colnames(DT)) {
+      message('direction column will be overwritten by this function')
+      data.table::set(DT, j = 'direction', value = NULL)
+    }
+
+    crs <- sf::st_crs(DT[[geometry]])
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
+    }
+
+    DT[, c(out_colname) := c(calc_direction(
+      geometry_a = geo,
+      use_transform = use_transform
+    ), units::set_units(NA, 'rad')),
+    by = c(id, splitBy),
+    env = list(geo = geometry)
+    ]
+
+  } else {
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+    assert_not_null(crs)
+
+    if (out_colname %in% colnames(DT)) {
+      message(out_colname, ' column will be overwritten by this function')
+      data.table::set(DT, j = 'direction', value = NULL)
+    }
+
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
+    }
+
+    DT[, c(out_colname) := c(calc_direction(
+      x_a = x,
+      y_a = y,
+      crs = crs,
+      use_transform = use_transform
+    ), units::set_units(NA, 'rad')),
+    by = c(id, splitBy),
+    env = list(x = data.table::first(coords), y = data.table::last(coords))
+    ]
   }
 
-  if (sf::st_is_longlat(crs)) {
-    DT[, direction := c(
-      lwgeom::st_geod_azimuth(
-        sf::st_as_sf(.SD, coords = coords, crs = crs)),
-      units::set_units(NA, 'rad')),
-      by = c(id, splitBy)]
-  } else if (!sf::st_is_longlat(crs)) {
-    DT[, direction := c(
-      lwgeom::st_geod_azimuth(
-        sf::st_transform(
-          sf::st_as_sf(.SD, coords = coords, crs = crs),
-          crs = 4326)
-        ),
-      units::set_units(NA, 'rad')),
-      by = c(id, splitBy)]
-  }
 }

@@ -84,6 +84,7 @@
 #' leader_direction_group(
 #'   DT,
 #'   coords = c('X', 'Y'),
+#'   crs = 32736,
 #'   return_rank = TRUE
 #' )
 #'

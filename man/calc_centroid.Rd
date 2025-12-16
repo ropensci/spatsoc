@@ -7,7 +7,8 @@
 calc_centroid(geometry, x, y, crs, use_mean = FALSE)
 }
 \arguments{
-\item{geometry}{sfc (simple feature geometry list column) from \code{\link[=get_geometry]{get_geometry()}}}
+\item{geometry}{sfc (simple feature geometry list column) from
+\code{\link[=get_geometry]{get_geometry()}}}
 
 \item{x}{X coordinate column, numeric}
 

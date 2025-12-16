@@ -24,7 +24,7 @@ coordinates}
 \item{id}{character string of ID column name}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{timegroup}{timegroup field in the DT within which the grouping will be
 calculated}
@@ -127,18 +127,11 @@ Other Edge-list generation:
 \code{\link{edge_direction}()},
 \code{\link{edge_nn}()}
 
-Other Direction functions: 
-\code{\link{direction_group}()},
-\code{\link{direction_polarization}()},
-\code{\link{direction_step}()},
-\code{\link{direction_to_centroid}()},
-\code{\link{direction_to_leader}()},
-\code{\link{edge_alignment}()},
-\code{\link{edge_delay}()},
-\code{\link{edge_direction}()},
-\code{\link{edge_zones}()},
-\code{\link{leader_direction_group}()},
-\code{\link{leader_edge_delay}()}
+Other Distance functions: 
+\code{\link{distance_to_centroid}()},
+\code{\link{distance_to_leader}()},
+\code{\link{edge_nn}()},
+\code{\link{edge_zones}()}
 }
-\concept{Direction functions}
+\concept{Distance functions}
 \concept{Edge-list generation}

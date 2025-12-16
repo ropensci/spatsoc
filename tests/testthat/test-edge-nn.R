@@ -42,7 +42,7 @@ test_that('column names must exist in DT', {
       coords = c('X', 'Y'),
       timegroup = 'timegroup'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 
@@ -54,7 +54,7 @@ test_that('column names must exist in DT', {
       coords = c('potatoX', 'potatoY'),
       timegroup = 'timegroup'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 
@@ -67,7 +67,7 @@ test_that('column names must exist in DT', {
       splitBy = 'potato',
       timegroup = 'timegroup'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 
@@ -79,7 +79,7 @@ test_that('column names must exist in DT', {
       coords = c('X', 'Y'),
       timegroup = 'potato'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 })

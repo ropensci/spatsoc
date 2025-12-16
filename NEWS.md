@@ -1,26 +1,32 @@
 # Development version
 
-Enhancements:
-
-* improved speed of `direction_group` ([PR 133](https://github.com/ropensci/spatsoc/pull/133))
-
 Breaking changes:
 
-* `get_geometry` default output_crs changed to NULL, to leave input coordinates
+* `get_geometry` default for "output_crs" changed to NULL, to leave input coordinates
 in original crs by default ([PR 132](https://github.com/ropensci/spatsoc/pull/132))
-
-
-# spatsoc v 0.2.12
+* default for "return_rank" in `distance_to_centroid` changed from FALSE to TRUE
 
 Enhancements:
 
-* provide sfc interface for centroid functions (`centroid_group`, `centroid_dyad` 
-and `centroid_fusion`) ([PR 127](https://github.com/ropensci/spatsoc/pull/127)))
+* use new internal `calc_centroid` function in and provide sfc interface for 
+`centroid_group`, `centroid_dyad` and `centroid_fusion` 
+([PR 127](https://github.com/ropensci/spatsoc/pull/127))
   * improves internal `calc_centroid` efficiency by quickly returning 
   coordinates/geometry if length is 1, and using mean instead of `sf::st_centroid` 
   where appropriate
   * reduce repeated source code and testing by refactoring `centroid_dyad` and 
   `centroid_fusion` to use a shared internal function
+* use new internal `calc_direction` function in and provide sfc interface for
+`direction_step`, `direction_to_centroid`, `direction_to_leader` and 
+`edge_direction` ([PR 125](https://github.com/ropensci/spatsoc/pull/125))
+* add sfc interface and ensure coordinates/geometry are planar for 
+`leader_direction_group` ([PR 125](https://github.com/ropensci/spatsoc/pull/125))
+
+Fixes:
+
+* improve speed of `direction_group` 
+([PR 133](https://github.com/ropensci/spatsoc/pull/133))
+
 
 # spatsoc 0.2.12
 
