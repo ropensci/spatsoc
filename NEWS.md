@@ -1,5 +1,8 @@
 # Development version
 
+Enhancements:
+
+* improved speed of `direction_group` ([PR 133](https://github.com/ropensci/spatsoc/pull/133))
 
 Breaking changes:
 
