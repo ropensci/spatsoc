@@ -60,10 +60,7 @@ test_that('assert_threshold', {
                'do not match')
   expect_silent(assert_threshold(units::as_units(1, 'm'), 4326))
   expect_silent(assert_threshold(units::as_units(1, 'm'), 32649))
-<<<<<<< feat/use-calc-distance
   expect_silent(assert_threshold(NULL))
   expect_silent(assert_threshold(100, 4326))
-=======
   expect_error(assert_threshold(units::as_units(-1, 'm'), 32736))
->>>>>>> main
 })

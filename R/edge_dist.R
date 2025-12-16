@@ -68,12 +68,8 @@
 #' @export
 #'
 #' @family Edge-list generation
-<<<<<<< feat/use-calc-distance
-#' @family Direction functions
-#' @seealso [sf::st_distance()]
-=======
 #' @family Distance functions
->>>>>>> main
+#' @seealso [sf::st_distance()]
 #'
 #' @examples
 #' # Load data.table

@@ -119,7 +119,7 @@ test_that('expected range returned', {
              units::set_units(0, 'm'))
   expect_gte(DT[, min(calc_distance(x_a = X_longlat, y_a = Y_longlat,
                                     x_b = dest_X_longlat, y_b = dest_Y_longlat,
-                                    crs = crs_longlat
+                                    crs = crs_longlat,
                                     use_dist = FALSE))],
              units::set_units(0, 'm'))
 })

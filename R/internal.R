@@ -101,11 +101,7 @@ assert_not_null <- function(x, ...) {
   return(invisible(NULL))
 }
 
-<<<<<<< feat/use-calc-distance
 assert_relation <- function(x, fun, y, ..., n = 1) {
-=======
-assert_relation <- function(x, fun, y, n = 1, ...) {
->>>>>>> main
   if (!(fun(x, y))) {
     rlang::abort(
       paste0(
@@ -544,6 +540,22 @@ calc_distance_pairwise <- function(geometry_a, geometry_b,
              !missing(x_b) && !missing(y_b)) {
     sqrt((x_a - x_b) ^ 2 + (y_a - y_b) ^ 2)
   }
+}
+
+# Internal decider for calc_centroid
+crs_use_mean <- function(crs) {
+  if (isTRUE(sf::st_is_longlat(crs))) {
+    if (sf::sf_use_s2()) {
+      use_mean <- FALSE
+    } else {
+      warning('st_centroid does not give correct centroids for longlat',
+              '\nsee ?sf::st_centroid')
+      use_mean <- TRUE
+    }
+  } else {
+    use_mean <- TRUE
+  }
+  return(use_mean)
 }
 
 
