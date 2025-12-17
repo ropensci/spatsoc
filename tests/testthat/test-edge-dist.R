@@ -239,6 +239,24 @@ test_that('threshold correctly provided or error detected', {
     ),
     'threshold must be > units'
   )
+
+  # geometry
+  expect_error(
+    edge_dist(DT,
+              threshold = units::as_units(-1, 'm'),
+              timegroup = timegroup, id = id
+    ),
+    'threshold must be > units'
+  )
+
+  expect_error(
+    edge_dist(DT,
+              threshold = units::as_units(100, 'km'),
+              timegroup = timegroup, id = id
+    ),
+    'units of threshold'
+  )
+
 })
 
 
