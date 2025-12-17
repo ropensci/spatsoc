@@ -114,8 +114,8 @@ edge_nn <- function(
 
   assert_not_null(DT)
   assert_is_data_table(DT)
-  assert_not_null(id)
   assert_not_missing(timegroup)
+  assert_not_null(id)
   assert_not_null(timegroup)
 
   check_cols <- c(timegroup, id, splitBy)
