@@ -152,3 +152,77 @@ test_that('message if overwritting rank_distance_centroid', {
                                       return_rank = TRUE),
                  'rank_distance_centroid')
 })
+
+test_that('NA for centroid returns NA for distance', {
+  # coords
+  copy_DT <- copy(DT)[sample(.N, 1e3)]
+  copy_DT[sample(.N, 1e2), X := NA]
+  expect_all_true(
+    distance_to_centroid(copy_DT, coords = coords, crs = utm)[
+      is.na(X), is.na(distance_centroid)
+    ]
+  )
+
+  copy_DT <- copy(DT)[sample(.N, 1e3)]
+  copy_DT[sample(.N, 1e2), Y := NA]
+  expect_all_true(
+    distance_to_centroid(copy_DT, coords = coords, crs = utm)[
+      is.na(Y), is.na(distance_centroid)
+    ]
+  )
+
+  copy_DT <- copy(DT)[sample(.N, 1e3)]
+  copy_DT[sample(.N, 1e2), centroid_X := NA]
+  expect_all_true(
+    distance_to_centroid(copy_DT, coords = coords, crs = utm)[
+      is.na(centroid_X), is.na(distance_centroid)
+    ]
+  )
+
+  copy_DT <- copy(DT)[sample(.N, 1e3)]
+  copy_DT[sample(.N, 1e2), centroid_Y := NA]
+  expect_all_true(
+    distance_to_centroid(copy_DT, coords = coords, crs = utm)[
+      is.na(centroid_Y), is.na(distance_centroid)
+    ]
+  )
+
+  # geometry
+  copy_DT <- copy(DT)[sample(.N, 1e3)]
+  copy_DT[sample(.N, 1e2), geometry := st_sfc(st_point())]
+  expect_all_true(
+    distance_to_centroid(copy_DT)[
+      sf::st_is_empty(geometry), is.na(distance_centroid)
+    ]
+  )
+
+  copy_DT <- copy(DT)[sample(.N, 1e3)]
+  copy_DT[sample(.N, 1e2), centroid := st_sfc(st_point())]
+  expect_all_true(
+    distance_to_centroid(copy_DT)[
+      sf::st_is_empty(centroid), is.na(distance_centroid)
+    ]
+  )
+
+  copy_DT <- copy(DT)[sample(.N, 1e3)]
+  get_geometry(copy_DT, coords = coords, crs = utm, output_crs = 4326,
+               geometry_colname = 'geometry_longlat')
+  centroid_group(copy_DT, geometry = 'geometry_longlat')
+  copy_DT[sample(.N, 1e2), geometry_longlat := st_sfc(st_point())]
+  expect_all_true(
+    distance_to_centroid(copy_DT, geometry = 'geometry_longlat')[
+      sf::st_is_empty(geometry_longlat), is.na(distance_centroid)
+    ]
+  )
+
+  copy_DT <- copy(DT)[sample(.N, 1e3)]
+  get_geometry(copy_DT, coords = coords, crs = utm, output_crs = 4326,
+               geometry_colname = 'geometry_longlat')
+  centroid_group(copy_DT, geometry = 'geometry_longlat')
+  copy_DT[sample(.N, 1e2), centroid := st_sfc(st_point())]
+  expect_all_true(
+    distance_to_centroid(copy_DT)[
+      sf::st_is_empty(centroid), is.na(distance_centroid)
+    ]
+  )
+})

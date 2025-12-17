@@ -191,6 +191,31 @@ test_that('returns a data.table', {
                   'data.table')
 })
 
+test_that('NA for leader returns NA for distance', {
+  # coords
+  out <- suppressWarnings(distance_to_leader(
+    DT = DT_with_missing,
+    coords = coords,
+    group = 'group'
+  ))
+  leaderless <- out[, !any(rank_position_group_direction == 1, na.rm = TRUE),
+                    by = group]
+  expect_all_true(
+    out[group %in% leaderless[(V1)]$group, is.na(distance_leader)]
+  )
+
+  # geometry
+  out <- suppressWarnings(distance_to_leader(
+    DT = DT_with_missing,
+    group = 'group'
+  ))
+  leaderless <- out[, !any(rank_position_group_direction == 1, na.rm = TRUE),
+                    by = group]
+  expect_all_true(
+    out[group %in% leaderless[(V1)]$group, is.na(distance_leader)]
+  )
+})
+
 
 expect_DT <- data.table(
   ID = c('A', 'B'),
