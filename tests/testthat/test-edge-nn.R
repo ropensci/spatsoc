@@ -54,7 +54,6 @@ test_that('error/warn/msg if args are not provided as expected', {
   )
 })
 
-
 test_that('column names must exist in DT', {
   expect_error(
     edge_nn(
@@ -165,8 +164,6 @@ test_that('warns about splitBy column', {
 
 
 test_that('threshold correctly provided or error detected', {
-  copyDT <- copy(DT)
-
   expect_error(
     edge_nn(DT,
       threshold = -10, timegroup = timegroup, id = id,
@@ -241,7 +238,6 @@ test_that('threshold correctly provided or error detected', {
     'units of threshold'
   )
 })
-
 
 test_that('coords/geometry are correctly provided or error detected', {
   # coords
@@ -358,7 +354,6 @@ test_that('returned IDs make sense', {
   expect_true(eDT[ID == NN, .N] == 0)
 })
 
-
 test_that('returned columns match', {
   # coords
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
@@ -453,7 +448,6 @@ test_that('returned columns match', {
   expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
   expect_false('distance' %in% colnames(eDT))
 })
-
 
 test_that('distances returned are below threshold', {
   # coords
