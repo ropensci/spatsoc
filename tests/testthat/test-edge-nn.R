@@ -12,6 +12,8 @@ timegroup <- 'timegroup'
 
 group_times(DT, 'datetime', '10 minutes')
 get_geometry(DT, coords = coords, crs = utm)
+get_geometry(DT, coords = coords, crs = utm, output_crs = 4326,
+             geometry_colname = 'geometry_longlat')
 
 test_that('error/warn/msg if args are not provided as expected', {
   expect_error(
@@ -480,6 +482,20 @@ test_that('distances returned are below threshold', {
   )
 
   expect_equal(eDT[distance > threshold, .N], 0)
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    threshold = threshold,
+    geometry = 'geometry_longlat'
+  )
+
+  expect_equal(eDT[distance > units::as_units(threshold, 'm'), .N], 0)
 })
 
 test_that('NAs exist in NN when threshold provided', {
@@ -509,6 +525,19 @@ test_that('NAs exist in NN when threshold provided', {
   )
 
   expect_gt(eDT[is.na(NN), .N], 0)
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    threshold = threshold,
+    geometry = 'geometry_longlat'
+  )
+
+  expect_gt(eDT[is.na(NN), .N], 0)
 })
 
 test_that('returns a data.table', {
@@ -525,5 +554,13 @@ test_that('returns a data.table', {
     DT,
     id = id,
     timegroup = timegroup
+  ), 'data.table')
+
+  # geometry
+  expect_s3_class(edge_nn(
+    DT,
+    id = id,
+    timegroup = timegroup,
+    geometry = 'geometry_longlat'
   ), 'data.table')
 })

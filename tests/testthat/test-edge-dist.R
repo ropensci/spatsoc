@@ -13,6 +13,8 @@ timegroup <- 'timegroup'
 group_times(DT, 'datetime', '10 minutes')
 
 get_geometry(DT, coords = coords, crs = utm)
+get_geometry(DT, coords = coords, crs = utm, output_crs = 4326,
+             geometry_colname = 'geometry_longlat')
 
 test_that('error/warn/msg if args are not provided as expected', {
   expect_error(
@@ -369,6 +371,37 @@ test_that('returned IDs make sense', {
   expect_true(all(eDT$ID1 %in% IDs))
   expect_true(all(eDT$ID2 %in% IDs))
   expect_true(eDT[ID1 == ID2, .N] == 0)
+
+  # longlat
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  eDT <- edge_dist(
+    copyDT,
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup,
+    geometry = 'geometry_longlat',
+    fillNA = TRUE
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$ID1 %in% IDs))
+  expect_true(all(na.omit(eDT$ID2) %in% IDs))
+  expect_true(eDT[ID1 == ID2, .N] == 0)
+
+  eDT <- edge_dist(
+    copyDT,
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup,
+    geometry = 'geometry_longlat',
+    fillNA = FALSE
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$ID1 %in% IDs))
+  expect_true(all(eDT$ID2 %in% IDs))
+  expect_true(eDT[ID1 == ID2, .N] == 0)
 })
 
 
@@ -547,6 +580,15 @@ test_that('returns a data.table', {
     id = id,
     timegroup = timegroup
   ), 'data.table')
+
+  expect_s3_class(edge_dist(
+    DT,
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup,
+    geometry = 'geometry_longlat'
+  ), 'data.table')
+
 })
 
 
@@ -585,6 +627,22 @@ test_that('handles NULL threshold', {
       threshold = Inf,
       id = id,
       timegroup = timegroup
+    )
+  )
+  expect_equal(
+    edge_dist(
+      DT,
+      threshold = NULL,
+      id = id,
+      timegroup = timegroup,
+      geometry = 'geometry_longlat'
+    ),
+    edge_dist(
+      DT,
+      threshold = Inf,
+      id = id,
+      timegroup = timegroup,
+      geometry = 'geometry_longlat'
     )
   )
 })
