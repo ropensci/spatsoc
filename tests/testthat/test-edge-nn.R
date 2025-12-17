@@ -508,10 +508,12 @@ test_that('NAs exist in NN when threshold provided', {
     id = id,
     coords = coords,
     timegroup = timegroup,
-    threshold = threshold
+    threshold = threshold,
+    returnDist = TRUE
   )
 
   expect_gt(eDT[is.na(NN), .N], 0)
+  expect_all_true(eDT[is.na(NN), is.na(distance)])
 
   # geometry
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
@@ -521,11 +523,14 @@ test_that('NAs exist in NN when threshold provided', {
     copyDT,
     id = id,
     timegroup = timegroup,
-    threshold = threshold
+    threshold = threshold,
+    returnDist = TRUE
   )
 
   expect_gt(eDT[is.na(NN), .N], 0)
+  expect_all_true(eDT[is.na(NN), is.na(distance)])
 
+  # longlat
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
   threshold <- 1000
@@ -534,10 +539,13 @@ test_that('NAs exist in NN when threshold provided', {
     id = id,
     timegroup = timegroup,
     threshold = threshold,
-    geometry = 'geometry_longlat'
+    geometry = 'geometry_longlat',
+    returnDist = TRUE
   )
 
   expect_gt(eDT[is.na(NN), .N], 0)
+  expect_all_true(eDT[is.na(NN), is.na(distance)])
+
 })
 
 test_that('returns a data.table', {
