@@ -14,38 +14,45 @@ group_times(DT, 'datetime', '10 minutes')
 
 get_geometry(DT, coords = coords, crs = 32736)
 
-test_that('DT is required', {
+test_that('error/warn/msg if args are not provided as expected', {
   expect_error(
     edge_dist(
-      DT = NULL,
-      threshold = threshold,
-      id = id
+      DT = NULL
     ),
     'DT must be provided'
   )
-})
-
-test_that('ID and coords column names, threshold correctly provided', {
-  expect_error(
-    edge_dist(DT, threshold = threshold, id = NULL),
-    'id must be'
-  )
-
-  expect_error(
-    edge_dist(DT, id = id),
-    'threshold must be'
-  )
 
   expect_error(
     edge_dist(
-      DT,
-      threshold = threshold,
-      id = id,
-      timegroup = timegroup,
-      coords = 'X'
+      DT = data.frame()
     ),
-    'coords must be length 2',
-    fixed = FALSE
+    'data.table'
+  )
+
+  expect_error(
+    edge_dist(DT),
+    'threshold'
+  )
+
+  expect_error(
+    edge_dist(DT, threshold = threshold, id = NULL),
+    'id'
+  )
+
+  expect_error(
+    edge_dist(DT, threshold = threshold, id = id),
+    'timegroup'
+  )
+
+  expect_error(
+    edge_dist(DT, threshold = threshold, id = id, timegroup = NULL),
+    'timegroup'
+  )
+
+  # geometry
+  expect_message(
+    edge_dist(DT, threshold = threshold, id = id, timegroup = timegroup, crs = utm),
+    'crs argument is ignored'
   )
 })
 
