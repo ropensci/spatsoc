@@ -64,3 +64,8 @@ test_that('assert_threshold', {
   expect_silent(assert_threshold(100, 4326))
   expect_error(assert_threshold(units::as_units(-1, 'm'), 32736))
 })
+
+test_that('assert_units_match', {
+  expect_error(assert_units_match(units::as_units(1, 'm'),
+                                  units::as_units(1, 'km')))
+})
