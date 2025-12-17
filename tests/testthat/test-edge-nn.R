@@ -29,28 +29,23 @@ test_that('error/warn/msg if args are not provided as expected', {
   )
 
   expect_error(
-    edge_nn(DT),
-    'threshold'
-  )
-
-  expect_error(
-    edge_nn(DT, threshold = threshold, id = NULL),
+    edge_nn(DT, id = NULL),
     'id'
   )
 
   expect_error(
-    edge_nn(DT, threshold = threshold, id = id),
+    edge_nn(DT, id = id),
     'timegroup'
   )
 
   expect_error(
-    edge_nn(DT, threshold = threshold, id = id, timegroup = NULL),
+    edge_nn(DT, id = id, timegroup = NULL),
     'timegroup'
   )
 
   # geometry
   expect_message(
-    edge_nn(DT, threshold = threshold, id = id, timegroup = timegroup, crs = utm),
+    edge_nn(DT, id = id, timegroup = timegroup, crs = utm),
     'crs argument is ignored'
   )
 })
