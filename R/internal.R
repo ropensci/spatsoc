@@ -109,7 +109,7 @@ assert_relation <- function(x, fun, y, ..., n = 1) {
         ' must be ',
         rlang::caller_arg(fun),
         ' ',
-        rlang::caller_arg(y),
+        y,
         ...
       ),
       call = rlang::caller_env(n = n)
