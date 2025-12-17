@@ -13,38 +13,50 @@ timegroup <- 'timegroup'
 group_times(DT, 'datetime', '10 minutes')
 get_geometry(DT, coords = coords, crs = utm)
 
-test_that('DT is required', {
+test_that('error/warn/msg if args are not provided as expected', {
   expect_error(
     edge_nn(
-      DT = NULL,
-      id = id
+      DT = NULL
     ),
     'DT must be provided'
   )
-})
-
-test_that('ID and coords column names, threshold correctly provided', {
-  expect_error(
-    edge_nn(DT, id = NULL),
-    'id must'
-  )
 
   expect_error(
     edge_nn(
-      DT,
-      threshold = 10,
-      id = id,
-      coords = 'X',
-      timegroup = timegroup
+      DT = data.frame()
     ),
-    'coords must be length 2',
-    fixed = FALSE
+    'data.table'
+  )
+
+  expect_error(
+    edge_nn(DT),
+    'threshold'
+  )
+
+  expect_error(
+    edge_nn(DT, threshold = threshold, id = NULL),
+    'id'
+  )
+
+  expect_error(
+    edge_nn(DT, threshold = threshold, id = id),
+    'timegroup'
+  )
+
+  expect_error(
+    edge_nn(DT, threshold = threshold, id = id, timegroup = NULL),
+    'timegroup'
+  )
+
+  # geometry
+  expect_message(
+    edge_nn(DT, threshold = threshold, id = id, timegroup = timegroup, crs = utm),
+    'crs argument is ignored'
   )
 })
 
 
 test_that('column names must exist in DT', {
-  # where ID field doesn't exist in DT
   expect_error(
     edge_nn(
       DT,
@@ -56,19 +68,6 @@ test_that('column names must exist in DT', {
     fixed = FALSE
   )
 
-  # where coords don't exist
-  expect_error(
-    edge_nn(
-      DT,
-      id = id,
-      coords = c('potatoX', 'potatoY'),
-      timegroup = timegroup
-    ),
-    'not present in input',
-    fixed = FALSE
-  )
-
-  # where group fields doesn't exist
   expect_error(
     edge_nn(
       DT,
@@ -144,10 +143,20 @@ test_that('coords are correctly provided or error detected', {
     ),
     'coords must be of class numeric'
   )
+
+  expect_error(
+    edge_nn(
+      DT,
+      id = id,
+      coords = c('potatoX', 'potatoY'),
+      timegroup = timegroup
+    ),
+    'not present in input',
+    fixed = FALSE
+  )
 })
 
 test_that('warns if timegroup is a datetime or character', {
-  # if datetime is a character
   copyDT <- copy(DT)
   expect_warning(
     edge_nn(
@@ -160,7 +169,6 @@ test_that('warns if timegroup is a datetime or character', {
     fixed = FALSE
   )
 
-  # if datetime is a POSIXct
   copyDT <- copy(DT)
   copyDT[, posix := as.POSIXct(datetime)]
   expect_warning(
@@ -174,7 +182,6 @@ test_that('warns if timegroup is a datetime or character', {
     fixed = FALSE
   )
 
-  # if datetime is an IDate
   copyDT <- copy(DT)
   copyDT[, idate := as.IDate(datetime)]
   expect_warning(
