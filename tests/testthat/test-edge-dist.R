@@ -3,16 +3,16 @@ context('test edge_dist')
 
 library(spatsoc)
 
+DT <- fread('../testdata/DT.csv')
 coords <- c('X', 'Y')
 id <- 'ID'
 utm <- 32736
 threshold <- 10
 timegroup <- 'timegroup'
 
-DT <- fread('../testdata/DT.csv')
 group_times(DT, 'datetime', '10 minutes')
 
-get_geometry(DT, coords = coords, crs = 32736)
+get_geometry(DT, coords = coords, crs = utm)
 
 test_that('error/warn/msg if args are not provided as expected', {
   expect_error(
