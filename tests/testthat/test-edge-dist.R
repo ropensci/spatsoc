@@ -310,6 +310,7 @@ test_that('error coords/geometry are not provided as expected', {
 
 
 test_that('returned IDs make sense', {
+  # coords
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
   eDT <- edge_dist(
@@ -339,11 +340,41 @@ test_that('returned IDs make sense', {
   expect_true(all(eDT$ID1 %in% IDs))
   expect_true(all(eDT$ID2 %in% IDs))
   expect_true(eDT[ID1 == ID2, .N] == 0)
+
+  # geometry
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  eDT <- edge_dist(
+    copyDT,
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup,
+    fillNA = TRUE
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$ID1 %in% IDs))
+  expect_true(all(na.omit(eDT$ID2) %in% IDs))
+  expect_true(eDT[ID1 == ID2, .N] == 0)
+
+  eDT <- edge_dist(
+    copyDT,
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup,
+    fillNA = FALSE
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$ID1 %in% IDs))
+  expect_true(all(eDT$ID2 %in% IDs))
+  expect_true(eDT[ID1 == ID2, .N] == 0)
 })
 
 
 
 test_that('returnDist works', {
+  # coords
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
 
@@ -421,10 +452,86 @@ test_that('returnDist works', {
     withDistNoNA[, max(distance, na.rm = TRUE)],
     threshold
   )
+
+  # geometry
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+
+  withDist <- edge_dist(
+    copyDT,
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    fillNA = TRUE
+  )
+
+  woDist <- edge_dist(
+    copyDT,
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup,
+    returnDist = FALSE,
+    fillNA = TRUE
+  )
+
+  woThresh <- edge_dist(
+    copyDT,
+    threshold = NULL,
+    id = id,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    fillNA = TRUE
+  )
+
+  expect_equal(
+    withDist[, .(ID1, ID2, timegroup)],
+    woDist[, .(ID1, ID2, timegroup)]
+  )
+
+  expect_equal(
+    nrow(withDist),
+    nrow(woDist)
+  )
+
+  expect_equal(
+    withDist[is.na(ID2)],
+    withDist[is.na(distance)]
+  )
+
+  expect_equal(
+    withDist[!is.na(ID2)],
+    withDist[!is.na(distance)]
+  )
+
+  expect_lt(
+    withDist[, max(distance, na.rm = TRUE)],
+    threshold
+  )
+
+  expect_gt(woThresh[, .N], withDist[, .N])
+  expect_gt(woThresh[distance > threshold, .N], 0)
+
+  withDistNoNA <- edge_dist(
+    copyDT,
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    fillNA = FALSE
+  )
+
+  expect_true(withDistNoNA[is.na(distance), .N] == 0)
+  expect_true(withDistNoNA[is.na(ID2), .N] == 0)
+  expect_lt(
+    withDistNoNA[, max(distance, na.rm = TRUE)],
+    threshold
+  )
 })
 
 
 test_that('returns a data.table', {
+  # coords
   expect_s3_class(edge_dist(
     DT,
     threshold = threshold,
@@ -432,30 +539,22 @@ test_that('returns a data.table', {
     coords = coords,
     timegroup = timegroup
   ), 'data.table')
+
+  # geometry
+  expect_s3_class(edge_dist(
+    DT,
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup
+  ), 'data.table')
 })
 
 
 
-test_that('warns about splitBy column', {
-  copyDT <- copy(DT)
-
-  group_times(copyDT, 'datetime', '5 minutes')
-  copyDT[, splitBy := as.IDate(datetime)]
-
-  expect_warning(
-    edge_dist(
-      copyDT,
-      threshold = threshold,
-      id = id,
-      coords = coords,
-      timegroup = timegroup
-    ),
-    'split_by'
-  )
-})
 
 
 test_that('handles NULL threshold', {
+  # coords
   expect_equal(
     edge_dist(
       DT,
@@ -472,16 +571,20 @@ test_that('handles NULL threshold', {
       timegroup = timegroup
     )
   )
-})
 
-test_that('errors if timegroup is null', {
-  expect_error(
+  # geometry
+  expect_equal(
     edge_dist(
       DT,
       threshold = NULL,
       id = id,
-      coords = coords,
-      timegroup = NULL
+      timegroup = timegroup
+    ),
+    edge_dist(
+      DT,
+      threshold = Inf,
+      id = id,
+      timegroup = timegroup
     )
   )
 })
