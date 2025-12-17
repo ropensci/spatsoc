@@ -260,7 +260,8 @@ test_that('threshold correctly provided or error detected', {
 })
 
 
-test_that('coords are correctly provided or error detected', {
+test_that('error coords/geometry are not provided as expected', {
+  # coords
   expect_error(
     edge_dist(
       DT,
@@ -282,67 +283,28 @@ test_that('coords are correctly provided or error detected', {
     ),
     'coords must be of class numeric'
   )
-})
 
-test_that('warns if timegroup is a datetime or character', {
-  # if datetime is a character
-  copyDT <- copy(DT)
-  expect_warning(
+  # geometry
+  expect_error(
     edge_dist(
-      copyDT,
+      DT,
       threshold = threshold,
       id = id,
-      coords = coords,
-      timegroup = 'datetime'
+      timegroup = timegroup,
+      geometry = 'potato'
     ),
-    'timegroup provided is a',
-    fixed = FALSE
+    'did you run'
   )
 
-  # if datetime is a POSIXct
-  copyDT <- copy(DT)
-  copyDT[, posix := as.POSIXct(datetime)]
-  expect_warning(
+  expect_error(
     edge_dist(
-      copyDT,
+      DT,
       threshold = threshold,
       id = id,
-      coords = coords,
-      timegroup = 'posix'
+      timegroup = timegroup,
+      geometry = 'X'
     ),
-    'timegroup provided is a',
-    fixed = FALSE
-  )
-
-  # if datetime is an IDate
-  copyDT <- copy(DT)
-  copyDT[, idate := as.IDate(datetime)]
-  expect_warning(
-    edge_dist(
-      copyDT,
-      threshold = threshold,
-      id = id,
-      coords = coords,
-      timegroup = 'idate'
-    ),
-    'timegroup provided is a',
-    fixed = FALSE
-  )
-})
-
-test_that('duplicate IDs in a timegroup detected', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '8 hours')
-  expect_warning(
-    edge_dist(
-      copyDT,
-      threshold = threshold,
-      id = id,
-      coords = coords,
-      timegroup = timegroup
-    ),
-    'found duplicate id in a timegroup',
-    fixed = FALSE
+    'sfc_POINT'
   )
 })
 
