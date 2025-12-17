@@ -173,7 +173,7 @@ group_pts <- function(
 
     if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
         !use_dist) {
-      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+      threshold <- units::as_units(threshold, 'm')
     }
 
     DT[!sf::st_is_empty(geo), withinGroup := {
@@ -218,7 +218,7 @@ group_pts <- function(
 
     if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
         !use_dist) {
-      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+      threshold <- units::as_units(threshold, 'm')
     }
 
     DT[!is.na(x) & !is.na(y),
