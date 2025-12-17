@@ -152,6 +152,18 @@ centroids <- centroid_dyad(
 )
 
 print(centroids)
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+edges <- edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup')
+dyad_id(edges, id = 'ID1', id2 = 'ID2')
+centroids <- centroid_dyad(
+  edges,
+  DT,
+  id = 'ID',
+  timegroup = 'timegroup'
+)
+print(centroids)
 }
 \seealso{
 \link{dyad_id} \link{edge_dist} \link{edge_nn} \link{group_pts}

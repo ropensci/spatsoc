@@ -101,7 +101,7 @@ assert_not_null <- function(x, ...) {
   return(invisible(NULL))
 }
 
-assert_relation <- function(x, fun, y, n = 1, ...) {
+assert_relation <- function(x, fun, y, ..., n = 1) {
   if (!(fun(x, y))) {
     rlang::abort(
       paste0(
@@ -109,14 +109,13 @@ assert_relation <- function(x, fun, y, n = 1, ...) {
         ' must be ',
         rlang::caller_arg(fun),
         ' ',
-        rlang::caller_arg(y),
+        y,
         ...
       ),
       call = rlang::caller_env(n = n)
     )
-  } else {
-    return(invisible(NULL))
   }
+  return(invisible(NULL))
 }
 
 assert_threshold <- function(threshold = NULL, crs = NULL) {
@@ -124,20 +123,25 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
     if (any(is.null(crs), is.na(crs))) {
       assert_relation(threshold, `>`, units::as_units(0, units(threshold)))
     } else {
-      assert_units_match(threshold, sf::st_crs(crs)$SemiMajor, n = 2)
+      assert_units_match(threshold, sf::st_crs(crs)$ud_unit, n = 2)
       assert_relation(threshold, `>`, units::as_units(0, units(threshold)))
     }
-  } else {
+  } else if (inherits(threshold, 'numeric')){
     if (any(is.null(crs), is.na(crs))) {
       assert_relation(threshold, `>`, 0)
     } else {
-      assert_relation(units::as_units(threshold,
-                                      units(sf::st_crs(crs)$SemiMajor)),
-                      `>`,
-                      units::as_units(0, units(sf::st_crs(crs)$SemiMajor)),
-                      n = 2)
+      threshold <- units::as_units(threshold,
+                                   units(sf::st_crs(crs)$ud_unit))
+      assert_relation(threshold, `>`,
+        units::as_units(0, units(sf::st_crs(crs)$ud_unit)),
+        n = 2
+      )
     }
     return(invisible(NULL))
+  } else if (is.null(threshold)) {
+    return(invisible(NULL))
+  } else {
+    rlang::abort('threshold must be of class numeric, units, or NULL')
   }
 }
 
@@ -262,8 +266,6 @@ calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
     }
   }
 }
-
-
 
 #' Calculate direction
 #'
@@ -404,7 +406,7 @@ calc_direction <- function(
 #'
 #' **Internal function** - not developed to be used outside of spatsoc functions
 #'
-#' Calculate distance using [sf::st_distance()] for one of the following combinations:
+#' Calculate distance for one of the following combinations:
 #' - the distance matrix of points in geometry_a
 #' - the distance matrix of points in x_a, y_a
 #' - the pairwise distance between points in geometry_a and geometry_b
@@ -419,10 +421,26 @@ calc_direction <- function(
 #' @param y_a,y_b Y coordinate column, numeric
 #' @param crs crs for x_a, y_a (and if provided, x_b, y_b) coordinates,
 #' ignored for geometry_a and geometry_b arguments
+#' @param use_dist boolean predetermine if distance calculated via dist
 #'
 #' @returns
 #'
-#' Distance with unit of measurement, see details in [sf::st_distance()]
+#'  The underlying distance function used depends on the crs of the coordinates
+#'  or geometry provided.
+#'
+#'  - If the crs is longlat degrees (as determined by
+#'  [sf::st_is_longlat()]), the distance function is [sf::st_distance()] which
+#'  passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
+#'  [lwgeom::st_geod_distance()] if [sf::sf_use_s2()] is FALSE. The distance
+#'  returned has units set according to the crs.
+#'
+#'  - If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
+#'  distance function used is [stats::dist()] (or Euclidean distance for
+#'  pairwise distances), maintaining expected behaviour from previous versions.
+#'  The distance returned does not have units set.
+#'
+#'
+#'  Note: in both cases, if the coordinates are NA then the result will be NA.
 #'
 #' @keywords internal
 #' @examples
@@ -436,50 +454,96 @@ calc_direction <- function(
 #'   Y = c(0, 0, 5, 5, 0, 0,        NA_real_, NA_real_)
 #' )
 #' # E, N, W, S
-#' example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326)]
+#' example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326, use_dist = FALSE)]
 calc_distance <- function(
-  geometry_a, geometry_b,
-  x_a, y_a,
-  x_b, y_b,
-  crs) {
- if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
-     missing(x_b) && missing(y_b)) {
-   if (!missing(geometry_b)) {
-     # Pairwise
-     sf::st_distance(geometry_a, geometry_b, by_element = TRUE)
-   } else {
-     # Matrix
-     sf::st_distance(geometry_a, by_element = FALSE)
-   }
- } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
-   if (!missing(x_b) && !missing(y_b)) {
-     # Pairwise
-     sf::st_distance(
-       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                        na.fail = FALSE),
-       y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2),
-                        na.fail = FALSE),
-       by_element = TRUE
-     )
-   } else {
-     # Matrix
-     sf::st_distance(
-       x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                        na.fail = FALSE),
-       by_element = FALSE
-     )
-   }
- } else {
-   rlang::abort(c(
-     'arguments incorrectly provided, use one of the following combinations:',
-     '1. geometry_a',
-     '2. geometry_a and geometry_b',
-     '3. x_a, y_a',
-     '4. x_a, y_a, and x_b, y_b'
-   ))
- }
+    geometry_a, geometry_b,
+    x_a, y_a,
+    x_b, y_b,
+    crs,
+    use_dist) {
+  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
+    missing(x_b) && missing(y_b)) {
+    if (!missing(geometry_b)) {
+      # Pairwise
+      if (use_dist) {
+        calc_distance_pairwise(geometry_a, geometry_b)
+      } else {
+        sf::st_distance(geometry_a, geometry_b, by_element = TRUE)
+      }
+    } else {
+      # Matrix
+      if (use_dist) {
+        coords <- sf::st_coordinates(geometry_a)
+        m <- as.matrix(stats::dist(coords))
+        m[is.na(coords[, 1]),] <- NA_real_
+        m[, is.na(coords[, 2])] <- NA_real_
+        m
+      } else {
+        sf::st_distance(geometry_a, by_element = FALSE)
+      }
+    }
+  } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a)) {
+    if (!missing(x_b) && !missing(y_b)) {
+      # Pairwise
+      if (use_dist) {
+        calc_distance_pairwise(x_a = x_a, y_a = y_a, x_b = x_b, y_b = y_b)
+      } else {
+        sf::st_distance(
+          x = sf::st_as_sf(data.frame(x_a, y_a),
+                           crs = crs, coords = seq.int(2),
+                           na.fail = FALSE
+          ),
+          y = sf::st_as_sf(data.frame(x_b, y_b),
+                           crs = crs, coords = seq.int(2),
+                           na.fail = FALSE
+          ),
+          by_element = TRUE
+        )
+      }
+    } else {
+      # Matrix
+      if (use_dist) {
+        m <- as.matrix(stats::dist(cbind(x_a, y_a)))
+        m[is.na(x_a),] <- NA_real_
+        m[, is.na(y_a)] <- NA_real_
+        m
+      } else {
+        sf::st_distance(
+          x = sf::st_as_sf(data.frame(x_a, y_a),
+                           crs = crs, coords = seq.int(2),
+                           na.fail = FALSE
+          ),
+          by_element = FALSE
+        )
+      }
+    }
+  } else {
+    rlang::abort(c(
+      'arguments incorrectly provided, use one of the following combinations:',
+      '1. geometry_a',
+      '2. geometry_a and geometry_b',
+      '3. x_a, y_a, and crs',
+      '4. x_a, y_a, x_b, y_b, and crs'
+    ))
+  }
 }
 
+# Internal calc pairwise distance used in internal calc_distance
+calc_distance_pairwise <- function(geometry_a, geometry_b,
+                          x_a, y_a,
+                          x_b, y_b) {
+  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
+      !missing(geometry_b)) {
+    a <- sf::st_coordinates(geometry_a)
+    b <- sf::st_coordinates(geometry_b)
+    sqrt((a[, 1] - b[, 1]) ^ 2 + (a[, 2] - b[, 2]) ^ 2)
+  } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a) &&
+             !missing(x_b) && !missing(y_b)) {
+    sqrt((x_a - x_b) ^ 2 + (y_a - y_b) ^ 2)
+  }
+}
+
+# Internal decider for calc_centroid
 crs_use_mean <- function(crs) {
   if (isTRUE(sf::st_is_longlat(crs))) {
     if (sf::sf_use_s2()) {

@@ -95,6 +95,7 @@
 #'
 #' # Or, using the new geometry interface
 #' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
 #' direction_step(
 #'   DT = DT,
 #'   id = 'ID'
@@ -129,7 +130,7 @@ direction_to_leader <- function(
   assert_col_inherits(DT, leader_col, 'numeric')
 
   check_leaderless <- DT[, .(
-    has_leader = any(rank_position_group_direction == 1)),
+    has_leader = any(rank_position_group_direction == 1, na.rm = TRUE)),
     by = c(group)][!(has_leader)]
 
   out_col <- 'direction_leader'

@@ -33,7 +33,7 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 Note: the order is assumed X followed by Y column names}
 
 \item{splitBy}{(optional) character string or vector of grouping column
-name(s) upon which the grouping will be calculated}
+name(s) upon which the output will be calculated}
 
 \item{spPts}{alternatively, provide solely a SpatialPointsDataFrame with one
 column representing the ID of each point, as specified by \link[adehabitatHR:mcp]{adehabitatHR::mcp}

@@ -102,6 +102,12 @@ fusion_id(
   n_max_missing = 0,
   allow_split = FALSE
   )
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+edges <- edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
+dyad_id(edges, id = 'ID1', id2 = 'ID2')
+fusion_id(edges, threshold = 100)
 }
 \references{
 See examples of identifying fission-fusion events with spatiotemporal data:

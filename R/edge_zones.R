@@ -154,6 +154,25 @@
 #'   blind_volume = 2
 #' )
 #' print(dyad_directions[, .SD[1:3], by = zone])
+#'
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' direction_step(DT, id = 'ID')
+#' edges <- edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
+#' dyad_id(edges, id = 'ID1', id2 = 'ID2')
+#' dyad_directions <- edge_direction(
+#'   edges,
+#'   DT,
+#'   id = 'ID',
+#'   timegroup = 'timegroup'
+#' )
+#' edge_zones(
+#'   dyad_directions,
+#'   zone_thresholds = c(25, 50, 75),
+#'   zone_labels = c('repulsion', 'orientation', 'attraction'),
+#'   blind_volume = 2
+#' )
+#' print(dyad_directions[, .SD[1:3], by = zone])
 edge_zones <- function(
     edges = NULL,
     zone_thresholds = NULL,

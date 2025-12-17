@@ -59,4 +59,9 @@ edges <- edge_dist(
 
 # Generate dyad IDs
 dyad_id(edges, 'ID1', 'ID2')
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+edges <- edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup')
+dyad_id(edges, id = 'ID1', id2 = 'ID2')
 }

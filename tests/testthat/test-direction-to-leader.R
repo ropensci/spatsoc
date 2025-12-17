@@ -25,7 +25,10 @@ leader_direction_group(DT, coords = coords, group = group, crs = utm,
 
 # Removing group with missing leader
 DT_with_missing <- copy(DT)
-DT <- copy(DT)[group != 868]
+DT <- copy(DT)[
+  !group %in%
+    DT[, any(rank_position_group_direction == 1, na.rm = TRUE), by = group][
+      !(V1), group]]
 
 get_geometry(DT_with_missing, coords = coords, crs = utm)
 get_geometry(DT, coords = coords, crs = utm)

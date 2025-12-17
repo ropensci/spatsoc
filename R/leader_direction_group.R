@@ -233,7 +233,8 @@ leader_direction_group <- function(
     assert_are_colnames(DT, group, ', did you run group_pts?')
 
     DT[, c(rank_col) :=
-         data.table::frank(-pos, ties.method = ties.method),
+         data.table::frank(-pos, ties.method = ties.method,
+                           na.last = 'keep'),
        by = c(group),
        env = list(pos = pos_col)]
   }

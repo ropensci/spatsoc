@@ -5,6 +5,7 @@ Breaking changes:
 * `get_geometry` default for "output_crs" changed to NULL, to leave input coordinates
 in original crs by default ([PR 132](https://github.com/ropensci/spatsoc/pull/132))
 * default for "return_rank" in `distance_to_centroid` changed from FALSE to TRUE
+* `group_pts` now returns NA if coords / geometry are NA (part of ([PR 128](https://github.com/ropensci/spatsoc/pull/128))
 
 Enhancements:
 
@@ -19,8 +20,16 @@ Enhancements:
 * use new internal `calc_direction` function in and provide sfc interface for
 `direction_step`, `direction_to_centroid`, `direction_to_leader` and 
 `edge_direction` ([PR 125](https://github.com/ropensci/spatsoc/pull/125))
+* use new internal `calc_distance` function in and provide sfc interface for
+`group_pts`, `edge_nn`, `edge_dist`, `distance_to_centroid` and 
+`distance_to_leader` ([PR 128](https://github.com/ropensci/spatsoc/pull/128))
+  * location data can be in longlat provided a crs is provided with coordinates
+  or geometry has crs set
+  * previous distance measurement methods are retained to preserve backwards 
+  compatibility if crs is NULL
 * add sfc interface and ensure coordinates/geometry are planar for 
 `leader_direction_group` ([PR 125](https://github.com/ropensci/spatsoc/pull/125))
+
 
 Fixes:
 

@@ -70,6 +70,12 @@
 #'
 #' # Calculate polarization
 #' direction_polarization(DT)
+#'
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
+#' direction_step(DT, id = 'ID')
+#' direction_polarization(DT)
 direction_polarization <- function(
     DT,
     direction = 'direction',
