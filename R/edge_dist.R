@@ -236,10 +236,6 @@ edge_dist <- function(
     xcol <- data.table::first(coords)
     ycol <- data.table::last(coords)
 
-    if (is.null(crs)) {
-      crs <- sf::NA_crs_
-    }
-
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
     if (is.null(threshold)) {
