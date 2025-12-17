@@ -462,6 +462,7 @@ test_that('distances returned are below threshold', {
     copyDT,
     id = id,
     coords = coords,
+    crs = utm,
     timegroup = timegroup,
     returnDist = TRUE,
     threshold = threshold
