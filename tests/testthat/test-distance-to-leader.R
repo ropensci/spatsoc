@@ -83,10 +83,20 @@ test_that('leader is correctly provided or error detected', {
 })
 
 test_that('warns if group does not have a leader', {
+  # coords
   expect_warning(
     distance_to_leader(
       DT = DT_with_missing,
       coords = coords,
+      group = 'group'
+    ),
+    'missing leader'
+  )
+
+  # geometry
+  expect_warning(
+    distance_to_leader(
+      DT = DT_with_missing,
       group = 'group'
     ),
     'missing leader'
