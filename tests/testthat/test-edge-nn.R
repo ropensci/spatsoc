@@ -14,6 +14,8 @@ group_times(DT, 'datetime', '10 minutes')
 get_geometry(DT, coords = coords, crs = utm)
 get_geometry(DT, coords = coords, crs = utm, output_crs = 4326,
              geometry_colname = 'geometry_longlat')
+coords_longlat <- paste0(coords, '_longlat')
+DT[, (coords_longlat) := data.frame(sf::st_coordinates(geometry_longlat))]
 
 test_that('error/warn/msg if args are not provided as expected', {
   expect_error(
@@ -469,6 +471,21 @@ test_that('distances returned are below threshold', {
   )
 
   expect_equal(eDT[distance > threshold, .N], 0)
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords_longlat,
+    crs = 4326,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    threshold = threshold
+  )
+
+  expect_equal(eDT[distance > units::as_units(threshold, 'm'), .N], 0)
 
   # geometry
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
