@@ -58,7 +58,6 @@ test_that('error/warn/msg if args are not provided as expected', {
 
 
 test_that('column names must exist in DT', {
-  # where ID field doesn't exist in DT
   expect_error(
     edge_dist(
       DT,
@@ -67,11 +66,9 @@ test_that('column names must exist in DT', {
       coords = coords,
       timegroup = timegroup
     ),
-    'not present in input',
-    fixed = FALSE
+    'not present in input'
   )
 
-  # where coords don't exist
   expect_error(
     edge_dist(
       DT,
@@ -80,11 +77,9 @@ test_that('column names must exist in DT', {
       coords = c('potatoX', 'potatoY'),
       timegroup = timegroup
     ),
-    'not present in input',
-    fixed = FALSE
+    'not present in input'
   )
 
-  # where group fields doesn't exist
   expect_error(
     edge_dist(
       DT,
@@ -94,11 +89,9 @@ test_that('column names must exist in DT', {
       timegroup = timegroup,
       splitBy = 'potato'
     ),
-    'not present in input',
-    fixed = FALSE
+    'not present in input'
   )
 
-  # where timegroup field doesn't exist
   expect_error(
     edge_dist(
       DT,
@@ -107,7 +100,9 @@ test_that('column names must exist in DT', {
       coords = coords,
       timegroup = 'potato'
     ),
-    'not present in input',
+    'not present in input'
+  )
+})
     fixed = FALSE
   )
 })
