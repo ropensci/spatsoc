@@ -3,32 +3,40 @@ context('test edge_dist')
 
 library(spatsoc)
 
+coords <- c('X', 'Y')
+id <- 'ID'
+utm <- 32736
+threshold <- 10
+timegroup <- 'timegroup'
+
 DT <- fread('../testdata/DT.csv')
 group_times(DT, 'datetime', '10 minutes')
+
+get_geometry(DT, coords = coords, crs = 32736)
 
 test_that('DT is required', {
   expect_error(edge_dist(
     DT = NULL,
-    threshold = 10,
-    id = 'ID'
+    threshold = threshold,
+    id = id
   ),
   'DT must be provided')
 })
 
 test_that('ID and coords column names, threshold correctly provided',
           {
-            expect_error(edge_dist(DT, threshold = 10, id = NULL),
+            expect_error(edge_dist(DT, threshold = threshold, id = NULL),
                          'id must be')
 
-            expect_error(edge_dist(DT, id = 'ID'),
+            expect_error(edge_dist(DT, id = id),
                          'threshold must be')
 
             expect_error(
               edge_dist(
                 DT,
-                threshold = 10,
-                id = 'ID',
-                timegroup = 'timegroup',
+                threshold = threshold,
+                id = id,
+                timegroup = timegroup,
                 coords = 'X'
               ),
               'coords must be length 2',
@@ -42,10 +50,10 @@ test_that('column names must exist in DT', {
   expect_error(
     edge_dist(
       DT,
-      threshold = 10,
+      threshold = threshold,
       id = 'potato',
-      coords = c('X', 'Y'),
-      timegroup = 'timegroup'
+      coords = coords,
+      timegroup = timegroup
     ),
     'not present in input',
     fixed = FALSE
@@ -55,10 +63,10 @@ test_that('column names must exist in DT', {
   expect_error(
     edge_dist(
       DT,
-      threshold = 10,
-      id = 'ID',
+      threshold = threshold,
+      id = id,
       coords = c('potatoX', 'potatoY'),
-      timegroup = 'timegroup'
+      timegroup = timegroup
     ),
     'not present in input',
     fixed = FALSE
@@ -68,10 +76,10 @@ test_that('column names must exist in DT', {
   expect_error(
     edge_dist(
       DT,
-      threshold = 10,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      timegroup = 'timegroup',
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = timegroup,
       splitBy = 'potato'
     ),
     'not present in input',
@@ -82,9 +90,9 @@ test_that('column names must exist in DT', {
   expect_error(
     edge_dist(
       DT,
-      threshold = 10,
-      id = 'ID',
-      coords = c('X', 'Y'),
+      threshold = threshold,
+      id = id,
+      coords = coords,
       timegroup = 'potato'
     ),
     'not present in input',
@@ -96,16 +104,16 @@ test_that('column names must exist in DT', {
 test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
 
-  expect_error(edge_dist(DT, threshold = -10, timegroup = 'timegroup', id = 'ID',
-                         coords = c('X', 'Y')),
+  expect_error(edge_dist(DT, threshold = -10, timegroup = timegroup, id = id,
+                         coords = coords),
                'threshold must be > 0')
 
-  expect_error(edge_dist(DT, threshold = 0, timegroup = 'timegroup', id = 'ID',
-                         coords = c('X', 'Y')),
+  expect_error(edge_dist(DT, threshold = 0, timegroup = timegroup, id = id,
+                         coords = coords),
                'threshold must be > 0')
 
-  expect_error(edge_dist(DT, threshold = '0', timegroup = 'timegroup', id = 'ID',
-                         coords = c('X', 'Y')),
+  expect_error(edge_dist(DT, threshold = '0', timegroup = timegroup, id = id,
+                         coords = coords),
                'threshold must be of class numeric')
 })
 
@@ -114,10 +122,10 @@ test_that('coords are correctly provided or error detected', {
   expect_error(
     edge_dist(
       DT,
-      threshold = 10,
-      id = 'ID',
+      threshold = threshold,
+      id = id,
       coords = c('X', NULL),
-      timegroup = 'timegroup'
+      timegroup = timegroup
     ),
     'coords must be length 2'
   )
@@ -125,10 +133,10 @@ test_that('coords are correctly provided or error detected', {
   expect_error(
     edge_dist(
       DT,
-      threshold = 10,
-      id = 'ID',
+      threshold = threshold,
+      id = id,
       coords = c('X', 'ID'),
-      timegroup = 'timegroup'
+      timegroup = timegroup
     ),
     'coords must be of class numeric'
   )
@@ -141,9 +149,9 @@ test_that('warns if timegroup is a datetime or character',
             expect_warning(
               edge_dist(
                 copyDT,
-                threshold = 10,
-                id = 'ID',
-                coords = c('X', 'Y'),
+                threshold = threshold,
+                id = id,
+                coords = coords,
                 timegroup = 'datetime'
               ),
               'timegroup provided is a',
@@ -156,9 +164,9 @@ test_that('warns if timegroup is a datetime or character',
             expect_warning(
               edge_dist(
                 copyDT,
-                threshold = 10,
-                id = 'ID',
-                coords = c('X', 'Y'),
+                threshold = threshold,
+                id = id,
+                coords = coords,
                 timegroup = 'posix'
               ),
               'timegroup provided is a',
@@ -171,9 +179,9 @@ test_that('warns if timegroup is a datetime or character',
             expect_warning(
               edge_dist(
                 copyDT,
-                threshold = 10,
-                id = 'ID',
-                coords = c('X', 'Y'),
+                threshold = threshold,
+                id = id,
+                coords = coords,
                 timegroup = 'idate'
               ),
               'timegroup provided is a',
@@ -186,10 +194,10 @@ test_that('duplicate IDs in a timegroup detected', {
   group_times(copyDT, datetime = 'datetime', threshold = '8 hours')
   expect_warning(edge_dist(
     copyDT,
-    threshold = 10,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup'
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup
   ),
   'found duplicate id in a timegroup', fixed = FALSE)
 })
@@ -200,10 +208,10 @@ test_that('returned IDs make sense', {
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
   eDT <- edge_dist(
     copyDT,
-    threshold = 50,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
     fillNA = TRUE
   )
 
@@ -214,10 +222,10 @@ test_that('returned IDs make sense', {
 
   eDT <- edge_dist(
     copyDT,
-    threshold = 50,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
     fillNA = FALSE
   )
 
@@ -234,23 +242,22 @@ test_that('returnDist works', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
 
-  thresh <- 50
   withDist <- edge_dist(
     copyDT,
-    threshold = thresh,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
     returnDist = TRUE,
     fillNA = TRUE
   )
 
   woDist <- edge_dist(
     copyDT,
-    threshold = thresh,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
     returnDist = FALSE,
     fillNA = TRUE
   )
@@ -258,9 +265,9 @@ test_that('returnDist works', {
   woThresh <- edge_dist(
     copyDT,
     threshold = NULL,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
     returnDist = TRUE,
     fillNA = TRUE
   )
@@ -278,17 +285,17 @@ test_that('returnDist works', {
                withDist[!is.na(distance)])
 
   expect_lt(withDist[, max(distance, na.rm = TRUE)],
-            thresh)
+            threshold)
 
   expect_gt(woThresh[, .N], withDist[, .N])
-  expect_gt(woThresh[distance > thresh, .N], 0)
+  expect_gt(woThresh[distance > threshold, .N], 0)
 
   withDistNoNA <- edge_dist(
     copyDT,
-    threshold = thresh,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
     returnDist = TRUE,
     fillNA = FALSE
   )
@@ -296,7 +303,7 @@ test_that('returnDist works', {
   expect_true(withDistNoNA[is.na(distance), .N] == 0)
   expect_true(withDistNoNA[is.na(ID2), .N] == 0)
   expect_lt(withDistNoNA[, max(distance, na.rm = TRUE)],
-            thresh)
+            threshold)
 
 })
 
@@ -304,10 +311,10 @@ test_that('returnDist works', {
 test_that('returns a data.table', {
   expect_s3_class(edge_dist(
     DT,
-    threshold = 10,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup'
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup
   ), 'data.table')
 })
 
@@ -322,10 +329,10 @@ test_that('warns about splitBy column', {
   expect_warning(
     edge_dist(
       copyDT,
-      threshold = 10,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      timegroup = 'timegroup'
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = timegroup
     ),
     'split_by'
   )
@@ -337,16 +344,16 @@ test_that('handles NULL threshold', {
     edge_dist(
       DT,
       threshold = NULL,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      timegroup = 'timegroup'
+      id = id,
+      coords = coords,
+      timegroup = timegroup
     ),
     edge_dist(
       DT,
       threshold = Inf,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      timegroup = 'timegroup'
+      id = id,
+      coords = coords,
+      timegroup = timegroup
     )
   )
 })
@@ -356,8 +363,8 @@ test_that('errors if timegroup is null', {
     edge_dist(
       DT,
       threshold = NULL,
-      id = 'ID',
-      coords = c('X', 'Y'),
+      id = id,
+      coords = coords,
       timegroup = NULL
     )
   )
