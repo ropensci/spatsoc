@@ -103,14 +103,86 @@ test_that('column names must exist in DT', {
     'not present in input'
   )
 })
+
+test_that('warns if timegroup is a datetime or character', {
+  copyDT <- copy(DT)
+  expect_warning(
+    edge_dist(
+      copyDT,
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = 'datetime'
+    ),
+    'timegroup provided is a',
+    fixed = FALSE
+  )
+
+  copyDT <- copy(DT)
+  copyDT[, posix := as.POSIXct(datetime)]
+  expect_warning(
+    edge_dist(
+      copyDT,
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = 'posix'
+    ),
+    'timegroup provided is a',
+    fixed = FALSE
+  )
+
+  copyDT <- copy(DT)
+  copyDT[, idate := as.IDate(datetime)]
+  expect_warning(
+    edge_dist(
+      copyDT,
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = 'idate'
+    ),
+    'timegroup provided is a',
+    fixed = FALSE
+  )
+})
+
+test_that('duplicate IDs in a timegroup detected', {
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '8 hours')
+  expect_warning(
+    edge_dist(
+      copyDT,
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = timegroup
+    ),
+    'found duplicate id in a timegroup',
     fixed = FALSE
   )
 })
 
 
-test_that('threshold correctly provided or error detected', {
+test_that('warns about splitBy column', {
   copyDT <- copy(DT)
 
+  group_times(copyDT, 'datetime', '5 minutes')
+  copyDT[, splitBy := as.IDate(datetime)]
+
+  expect_warning(
+    edge_dist(
+      copyDT,
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = timegroup
+    ),
+    'split_by'
+  )
+})
+
+test_that('threshold correctly provided or error detected', {
   expect_error(
     edge_dist(DT,
       threshold = -10, timegroup = timegroup, id = id,
@@ -133,6 +205,39 @@ test_that('threshold correctly provided or error detected', {
       coords = coords
     ),
     'threshold must be of class numeric'
+  )
+
+  expect_error(
+    edge_dist(DT,
+              threshold = -10, timegroup = timegroup, id = id,
+              coords = coords, crs = utm
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    edge_dist(DT,
+              threshold = 0, timegroup = timegroup, id = id,
+              coords = coords, crs = utm
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    edge_dist(DT,
+              threshold = '0', timegroup = timegroup, id = id,
+              coords = coords, crs = utm
+    ),
+    'threshold must be of class numeric'
+  )
+
+  expect_error(
+    edge_dist(DT,
+              threshold = units::as_units(-1, 'm'),
+              timegroup = timegroup, id = id,
+              coords = coords, crs = utm
+    ),
+    'threshold must be > units'
   )
 })
 
