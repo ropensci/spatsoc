@@ -14,30 +14,33 @@ group_times(DT, 'datetime', '10 minutes')
 get_geometry(DT, coords = coords, crs = utm)
 
 test_that('DT is required', {
-  expect_error(edge_nn(
-    DT = NULL,
-    id = id
-  ),
-  'DT must be provided')
+  expect_error(
+    edge_nn(
+      DT = NULL,
+      id = id
+    ),
+    'DT must be provided'
+  )
 })
 
-test_that('ID and coords column names, threshold correctly provided',
-          {
-            expect_error(edge_nn(DT, id = NULL),
-                         'id must')
+test_that('ID and coords column names, threshold correctly provided', {
+  expect_error(
+    edge_nn(DT, id = NULL),
+    'id must'
+  )
 
-            expect_error(
-              edge_nn(
-                DT,
-                threshold = 10,
-                id = id,
-                coords = 'X',
-                timegroup = timegroup
-              ),
-              'coords must be length 2',
-              fixed = FALSE
-            )
-          })
+  expect_error(
+    edge_nn(
+      DT,
+      threshold = 10,
+      id = id,
+      coords = 'X',
+      timegroup = timegroup
+    ),
+    'coords must be length 2',
+    fixed = FALSE
+  )
+})
 
 
 test_that('column names must exist in DT', {
@@ -95,17 +98,29 @@ test_that('column names must exist in DT', {
 test_that('threshold correctly provided or error detected', {
   copyDT <- copy(DT)
 
-  expect_error(edge_nn(DT, threshold = -10, timegroup = timegroup, id = id,
-                       coords = coords),
-               'threshold must be > 0')
+  expect_error(
+    edge_nn(DT,
+      threshold = -10, timegroup = timegroup, id = id,
+      coords = coords
+    ),
+    'threshold must be > 0'
+  )
 
-  expect_error(edge_nn(DT, threshold = 0, timegroup = timegroup, id = id,
-                       coords = coords),
-               'threshold must be > 0')
+  expect_error(
+    edge_nn(DT,
+      threshold = 0, timegroup = timegroup, id = id,
+      coords = coords
+    ),
+    'threshold must be > 0'
+  )
 
-  expect_error(edge_nn(DT, threshold = '0', timegroup = timegroup, id = id,
-                       coords = coords),
-               'threshold must be of class numeric')
+  expect_error(
+    edge_nn(DT,
+      threshold = '0', timegroup = timegroup, id = id,
+      coords = coords
+    ),
+    'threshold must be of class numeric'
+  )
 })
 
 
@@ -131,60 +146,62 @@ test_that('coords are correctly provided or error detected', {
   )
 })
 
-test_that('warns if timegroup is a datetime or character',
-          {
-            # if datetime is a character
-            copyDT <- copy(DT)
-            expect_warning(
-              edge_nn(
-                copyDT,
-                id = id,
-                coords = coords,
-                timegroup = 'datetime'
-              ),
-              'timegroup provided is a',
-              fixed = FALSE
-            )
+test_that('warns if timegroup is a datetime or character', {
+  # if datetime is a character
+  copyDT <- copy(DT)
+  expect_warning(
+    edge_nn(
+      copyDT,
+      id = id,
+      coords = coords,
+      timegroup = 'datetime'
+    ),
+    'timegroup provided is a',
+    fixed = FALSE
+  )
 
-            # if datetime is a POSIXct
-            copyDT <- copy(DT)
-            copyDT[, posix := as.POSIXct(datetime)]
-            expect_warning(
-              edge_nn(
-                copyDT,
-                id = id,
-                coords = coords,
-                timegroup = 'posix'
-              ),
-              'timegroup provided is a',
-              fixed = FALSE
-            )
+  # if datetime is a POSIXct
+  copyDT <- copy(DT)
+  copyDT[, posix := as.POSIXct(datetime)]
+  expect_warning(
+    edge_nn(
+      copyDT,
+      id = id,
+      coords = coords,
+      timegroup = 'posix'
+    ),
+    'timegroup provided is a',
+    fixed = FALSE
+  )
 
-            # if datetime is an IDate
-            copyDT <- copy(DT)
-            copyDT[, idate := as.IDate(datetime)]
-            expect_warning(
-              edge_nn(
-                copyDT,
-                id = id,
-                coords = coords,
-                timegroup = 'idate'
-              ),
-              'timegroup provided is a',
-              fixed = FALSE
-            )
-          })
+  # if datetime is an IDate
+  copyDT <- copy(DT)
+  copyDT[, idate := as.IDate(datetime)]
+  expect_warning(
+    edge_nn(
+      copyDT,
+      id = id,
+      coords = coords,
+      timegroup = 'idate'
+    ),
+    'timegroup provided is a',
+    fixed = FALSE
+  )
+})
 
 test_that('duplicate IDs in a timegroup detected', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '8 hours')
-  expect_warning(edge_nn(
-    copyDT,
-    id = id,
-    coords = coords,
-    timegroup = timegroup
-  ),
-  'found duplicate id in a timegroup', fixed = FALSE)
+  expect_warning(
+    edge_nn(
+      copyDT,
+      id = id,
+      coords = coords,
+      timegroup = timegroup
+    ),
+    'found duplicate id in a timegroup',
+    fixed = FALSE
+  )
 })
 
 
@@ -216,8 +233,6 @@ test_that('returned IDs make sense', {
   expect_true(all(eDT$ID %in% IDs))
   expect_true(all(na.omit(eDT$NN) %in% IDs))
   expect_true(eDT[ID == NN, .N] == 0)
-
-
 })
 
 
@@ -268,8 +283,6 @@ test_that('returned columns match', {
 
   expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
   expect_false('distance' %in% colnames(eDT))
-
-
 })
 
 
@@ -332,14 +345,19 @@ test_that('warns about splitBy column', {
   )
 })
 
-test_that({'errors if timegroup is null'}, {
-  expect_error(
-    edge_nn(
-      DT,
-      threshold = NULL,
-      id = id,
-      coords = coords,
-      timegroup = NULL
+test_that(
+  {
+    'errors if timegroup is null'
+  },
+  {
+    expect_error(
+      edge_nn(
+        DT,
+        threshold = NULL,
+        id = id,
+        coords = coords,
+        timegroup = NULL
+      )
     )
-  )
-})
+  }
+)
