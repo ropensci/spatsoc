@@ -8,10 +8,13 @@ id <- 'ID'
 coords <- c('X', 'Y')
 threshold <- 10
 timegroup <- 'timegroup'
+utm <- 32736
 
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = 'datetime', threshold = '20 minutes')
+get_geometry(DT, coords, utm)
+get_geometry(DT, coords, utm, 4326, 'geometry_longlat')
 
 test_that('args provided as expected else conditions', {
   expect_error(
@@ -38,18 +41,6 @@ test_that('args provided as expected else conditions', {
       coords = coords
     ),
     'timegroup must be'
-  )
-
-  expect_error(
-    group_pts(
-      DT,
-      threshold = threshold,
-      id = id,
-      coords = 'X',
-      timegroup = timegroup
-    ),
-    'coords must be length 2',
-    fixed = FALSE
   )
 })
 
@@ -106,38 +97,84 @@ test_that('column names must exist in DT', {
 
 
 test_that('threshold correctly provided or error detected', {
-  copyDT <- copy(DT)
-
   expect_error(
     group_pts(DT,
-      threshold = -10, id = id,
-      coords = coords,
-      timegroup = timegroup
+            threshold = -10, timegroup = timegroup, id = id,
+            coords = coords
     ),
     'threshold must be > 0'
   )
 
   expect_error(
     group_pts(DT,
-      threshold = 0, id = id,
-      coords = coords,
-      timegroup = timegroup
+            threshold = 0, timegroup = timegroup, id = id,
+            coords = coords
     ),
     'threshold must be > 0'
   )
 
   expect_error(
     group_pts(DT,
-      threshold = '0', id = id,
-      coords = coords,
-      timegroup = timegroup
+            threshold = '0', timegroup = timegroup, id = id,
+            coords = coords
     ),
     'threshold must be of class numeric'
+  )
+
+  expect_error(
+    group_pts(DT,
+            threshold = -10, timegroup = timegroup, id = id,
+            coords = coords, crs = utm
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    group_pts(DT,
+            threshold = 0, timegroup = timegroup, id = id,
+            coords = coords, crs = utm
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    group_pts(DT,
+            threshold = '0', timegroup = timegroup, id = id,
+            coords = coords, crs = utm
+    ),
+    'threshold must be of class numeric'
+  )
+
+  expect_error(
+    group_pts(DT,
+            threshold = units::as_units(-1, 'm'),
+            timegroup = timegroup, id = id,
+            coords = coords, crs = utm
+    ),
+    'threshold must be > 0'
+  )
+
+  # geometry
+  expect_error(
+    group_pts(DT,
+            threshold = units::as_units(-1, 'm'),
+            timegroup = timegroup, id = id
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    group_pts(DT,
+            threshold = units::as_units(100, 'km'),
+            timegroup = timegroup, id = id
+    ),
+    'units of threshold'
   )
 })
 
 
-test_that('coords are correctly provided or error detected', {
+test_that('coords/geometry are correctly provided or error detected', {
+  # coords
   expect_error(
     group_pts(
       DT,
@@ -159,26 +196,29 @@ test_that('coords are correctly provided or error detected', {
     ),
     'coords must be of class numeric'
   )
-})
 
-test_that('DT returned if timegroup, group fields not provided', {
-  copyDT <- copy(DT)
-  expect_equal(
-    ncol(copyDT) + 1,
-    ncol(group_pts(
-      copyDT,
+  # geometry
+  expect_error(
+    group_pts(
+      DT,
       threshold = threshold,
       id = id,
-      coords = coords,
-      timegroup = timegroup
-    ))
+      timegroup = timegroup,
+      geometry = 'potato'
+    ),
+    'did you run'
   )
 
-  # warns if > 1 ID row
-
-  # same but with timegroup
-
-  # and with splitBy
+  expect_error(
+    group_pts(
+      DT,
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup,
+      geometry = 'X'
+    ),
+    'sfc_POINT'
+  )
 })
 
 test_that('warns if timegroup is a datetime or character', {
@@ -226,6 +266,7 @@ test_that('warns if timegroup is a datetime or character', {
 
 
 test_that('group column succesfully detected', {
+  # coords
   copyDT <- copy(DT)[, group := 1]
   expect_message(
     group_pts(
@@ -237,16 +278,37 @@ test_that('group column succesfully detected', {
     ),
     'group column will be overwritten'
   )
+
+  # geometry
+  copyDT <- copy(DT)[, group := 1]
+  expect_message(
+    group_pts(
+      copyDT,
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup
+    ),
+    'group column will be overwritten'
+  )
 })
 
 
 test_that('withinGroup is not returned to the user', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
-
+  # coords
   expect_false('withinGroup' %in% colnames(
     group_pts(
-      copyDT,
+      copy(DT),
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = timegroup
+    )
+  ))
+
+  # geometry
+  expect_false('withinGroup' %in% colnames(
+    group_pts(
+      copy(DT),
       threshold = threshold,
       id = id,
       coords = coords,
@@ -256,14 +318,12 @@ test_that('withinGroup is not returned to the user', {
 })
 
 test_that('no rows are added to the result DT', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
-
+  # coords
   expect_equal(
-    nrow(copyDT),
+    nrow(copy(DT)),
     nrow(
       group_pts(
-        copyDT,
+        copy(DT),
         threshold = threshold,
         id = id,
         coords = coords,
@@ -271,17 +331,28 @@ test_that('no rows are added to the result DT', {
       )
     )
   )
+
+  # geometry
+  expect_equal(
+    nrow(copy(DT)),
+    nrow(
+      group_pts(
+        copy(DT),
+        threshold = threshold,
+        id = id,
+        timegroup = timegroup
+      )
+    )
+  )
 })
 
-test_that('only one column added to the result DT', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
-
+test_that('group column added to the result DT', {
+  # coords
   expect_equal(
-    ncol(copyDT) + 1,
+    ncol(copy(DT)) + 1,
     ncol(
       group_pts(
-        copyDT,
+        copy(DT),
         threshold = threshold,
         id = id,
         coords = coords,
@@ -289,18 +360,37 @@ test_that('only one column added to the result DT', {
       )
     )
   )
-})
 
-test_that('group column is added to result', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '5 minutes')
   expect_true('group' %in%
     colnames(
       group_pts(
-        copyDT,
+        copy(DT),
         threshold = threshold,
         id = id,
         coords = coords,
+        timegroup = timegroup
+      )
+    ))
+
+  # geometry
+  expect_equal(
+    ncol(copy(DT)) + 1,
+    ncol(
+      group_pts(
+        copy(DT),
+        threshold = threshold,
+        id = id,
+        timegroup = timegroup
+      )
+    )
+  )
+
+  expect_true('group' %in%
+    colnames(
+      group_pts(
+        copy(DT),
+        threshold = threshold,
+        id = id,
         timegroup = timegroup
       )
     ))
@@ -322,18 +412,24 @@ test_that('duplicate IDs in a timegroup detected', {
   )
 })
 
-
-
 test_that('returns a data.table', {
+  # coords
   expect_s3_class(group_pts(
-    DT,
+    copy(DT),
     threshold = threshold,
     id = id,
     coords = coords,
     timegroup = timegroup
   ), 'data.table')
-})
 
+  # geometry
+  expect_s3_class(group_pts(
+    copy(DT),
+    threshold = threshold,
+    id = id,
+    timegroup = timegroup
+  ), 'data.table')
+})
 
 
 test_that('splitBy argument doesnt use splitBy column', {
@@ -354,8 +450,8 @@ test_that('splitBy argument doesnt use splitBy column', {
 
 
 test_that('group_pts returns NA for group when X/Y are NA', {
+  # coords
   copyDT <- copy(DT)
-
   n <- 10
   copyDT[sample(.N, n), X := NA]
 
@@ -371,7 +467,6 @@ test_that('group_pts returns NA for group when X/Y are NA', {
   )
 
   copyDT <- copy(DT)
-
   n <- 10
   copyDT[sample(.N, n), Y := NA]
 
@@ -387,7 +482,6 @@ test_that('group_pts returns NA for group when X/Y are NA', {
   )
 
   copyDT <- copy(DT)
-
   n <- 10
   copyDT[sample(.N, n), c('X', 'Y') := NA]
 
@@ -398,6 +492,37 @@ test_that('group_pts returns NA for group when X/Y are NA', {
       id = id,
       coords = coords,
       timegroup = timegroup
+    )[is.na(group), .N],
+    n
+  )
+
+  # geometry
+  copyDT <- copy(DT)
+  n <- 10
+  copyDT[sample(.N, n), geometry := st_sfc(st_point())]
+
+  expect_equal(
+    group_pts(
+      copyDT,
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup
+    )[is.na(group), .N],
+    n
+  )
+
+  # longlat
+  copyDT <- copy(DT)
+  n <- 10
+  copyDT[sample(.N, n), geometry_longlat := st_sfc(st_point())]
+
+  expect_equal(
+    group_pts(
+      copyDT,
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup,
+      geometry = 'geometry_longlat'
     )[is.na(group), .N],
     n
   )
