@@ -130,11 +130,12 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
     if (any(is.null(crs), is.na(crs))) {
       assert_relation(threshold, `>`, 0)
     } else {
-      assert_relation(units::as_units(threshold,
-                                      units(sf::st_crs(crs)$ud_unit)),
-                      `>`,
-                      units::as_units(0, units(sf::st_crs(crs)$ud_unit)),
-                      n = 2)
+      threshold <- units::as_units(threshold,
+                                   units(sf::st_crs(crs)$ud_unit))
+      assert_relation(threshold, `>`,
+        units::as_units(0, units(sf::st_crs(crs)$ud_unit)),
+        n = 2
+      )
     }
     return(invisible(NULL))
   } else if (is.null(threshold)) {
