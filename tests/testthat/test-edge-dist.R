@@ -237,7 +237,7 @@ test_that('threshold correctly provided or error detected', {
               timegroup = timegroup, id = id,
               coords = coords, crs = utm
     ),
-    'threshold must be > units'
+    'threshold must be > 0'
   )
 
   # geometry
@@ -246,7 +246,7 @@ test_that('threshold correctly provided or error detected', {
               threshold = units::as_units(-1, 'm'),
               timegroup = timegroup, id = id
     ),
-    'threshold must be > units'
+    'threshold must be > 0'
   )
 
   expect_error(
