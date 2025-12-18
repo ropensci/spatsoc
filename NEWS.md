@@ -1,9 +1,63 @@
 # Development version
 
+Breaking changes:
+
+* `get_geometry` default for "output_crs" changed to NULL, to leave input coordinates
+in original crs by default ([PR 132](https://github.com/ropensci/spatsoc/pull/132))
+* default for "return_rank" in `distance_to_centroid` changed from FALSE to TRUE
+* `group_pts` now returns NA if coords / geometry are NA (part of ([PR 128](https://github.com/ropensci/spatsoc/pull/128))
+
+Enhancements:
+
+* use new internal `calc_centroid` function in and provide sfc interface for 
+`centroid_group`, `centroid_dyad` and `centroid_fusion` 
+([PR 127](https://github.com/ropensci/spatsoc/pull/127))
+  * improves internal `calc_centroid` efficiency by quickly returning 
+  coordinates/geometry if length is 1, and using mean instead of `sf::st_centroid` 
+  where appropriate
+  * reduce repeated source code and testing by refactoring `centroid_dyad` and 
+  `centroid_fusion` to use a shared internal function
+* use new internal `calc_direction` function in and provide sfc interface for
+`direction_step`, `direction_to_centroid`, `direction_to_leader` and 
+`edge_direction` ([PR 125](https://github.com/ropensci/spatsoc/pull/125))
+* use new internal `calc_distance` function in and provide sfc interface for
+`group_pts`, `edge_nn`, `edge_dist`, `distance_to_centroid` and 
+`distance_to_leader` ([PR 128](https://github.com/ropensci/spatsoc/pull/128))
+  * location data can be in longlat provided a crs is provided with coordinates
+  or geometry has crs set
+  * previous distance measurement methods are retained to preserve backwards 
+  compatibility if crs is NULL
+* add sfc interface and ensure coordinates/geometry are planar for 
+`leader_direction_group` ([PR 125](https://github.com/ropensci/spatsoc/pull/125))
+
+
+Fixes:
+
+* improve speed of `direction_group` 
+([PR 133](https://github.com/ropensci/spatsoc/pull/133))
+
+
+# spatsoc 0.2.12
+
 New experimental functions:
 
 * `get_geometry` helper function for setting up an input DT with a sfc geometry
 column ([PR 117](https://github.com/ropensci/spatsoc/pull/117))
+* internal `calc_distance` function for sf interface (see https://github.com/ropensci/spatsoc/issues/116) 
+([PR 122](https://github.com/ropensci/spatsoc/pull/122))
+* internal `calc_distance` function for sf interface (see https://github.com/ropensci/spatsoc/issues/116) 
+([PR 123](https://github.com/ropensci/spatsoc/pull/123))
+* internal `calc_centroid` function for sf interface (see https://github.com/ropensci/spatsoc/issues/116) 
+([PR 124](https://github.com/ropensci/spatsoc/pull/124))
+
+Fixes:
+
+* "projection" argument is soft-deprecated in favour of "crs" argument to better
+align with {sf} ([PR 118](https://github.com/ropensci/spatsoc/pull/118))
+* general adjustments of checks and tests before new spatial interface 
+([PR 120](https://github.com/ropensci/spatsoc/pull/120)
+* use new `assert_*` family of internal functions for checking arguments, 
+returning {rlang} errors ([PR 121](https://github.com/ropensci/spatsoc/pull/121)
 
 
 # spatsoc 0.2.11

@@ -11,7 +11,7 @@ diff_rad(x, y, signed = FALSE, return_units = FALSE)
 
 \item{y}{angle in radians}
 
-\item{signed}{boolean if signed difference should be returned, default FALSE}
+\item{signed}{logical if signed difference should be returned, default FALSE}
 
 \item{return_units}{return difference with units = 'rad'}
 }
@@ -22,7 +22,7 @@ returned. Note: The difference is the smallest difference, eg. the
 difference between 2 rad and -2.5 rad is 1.78.
 }
 \description{
-Internal function
+\strong{Internal function} - not developed to be used outside of spatsoc functions
 }
 \examples{
 # Load data.table, units
@@ -44,7 +44,7 @@ direction_step(
   DT = DT,
   id = 'ID',
   coords = c('X', 'Y'),
-  projection = 32736
+  crs = 32736
 )
 
 # Differences

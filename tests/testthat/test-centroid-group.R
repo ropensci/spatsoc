@@ -11,6 +11,7 @@ threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
 group <- 'group'
+utm <- 32736
 
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
@@ -25,17 +26,10 @@ test_that('DT is required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(centroid_group(DT, coords = 'X'),
-               'coords requires a vector')
+  expect_error(centroid_group(DT, group = group, coords = 'X'),
+               'coords must be length 2')
   expect_error(centroid_group(DT, coords = coords, group = NULL),
-               'group column name required')
-  expect_error(centroid_group(DT, coords = coords, na.rm = NULL),
-               'na.rm is required')
-})
-
-test_that('na.rm is boolean', {
-  expect_error(centroid_group(DT, coords = coords, na.rm = 'potato'),
-               'boolean')
+               'group must be provided')
 })
 
 test_that('column names must exist in DT', {
@@ -47,9 +41,9 @@ test_that('column names must exist in DT', {
 
 test_that('coords are correctly provided or error detected', {
   expect_error(centroid_group(DT, coords = c('X', NULL)),
-               'coords requires a vector')
+               'coords must be length 2')
   expect_error(centroid_group(DT, coords = c('X', 'ID')),
-               'coords must be numeric')
+               'coords must be of class numeric')
 })
 
 test_that('centroid column succesfully detected', {
@@ -90,29 +84,59 @@ DT <- data.table(
   Y = c(10, 20, 10, 20)
 )
 
-test_that('results are expected', {
+test_that('xy results are expected', {
   expect_equal(
-    centroid_group(copy(DT), coords,
-                   na.rm = FALSE)[group == 1, unique(centroid_X)],
+    centroid_group(copy(DT), coords)[
+      group == 1, unique(centroid_X)],
     15
   )
 
   expect_equal(
-    centroid_group(copy(DT), coords,
-                   na.rm = FALSE)[group == 2, unique(centroid_X)],
-    NA_real_
-  )
-
-  expect_equal(
-    centroid_group(copy(DT), coords,
-                   na.rm = TRUE)[group == 1, unique(centroid_X)],
+    centroid_group(copy(DT), coords)[
+      group == 1, unique(centroid_X)],
     15
   )
 
   expect_equal(
-    centroid_group(copy(DT), coords,
-                   na.rm = TRUE)[group == 2, unique(centroid_X)],
+    centroid_group(copy(DT), coords)[
+      group == 2, unique(centroid_X)],
     10
   )
 })
 
+DT <- data.table(
+  group = c(1, 1, 2, 2),
+  X = c(10, 20, 10, NA),
+  Y = c(10, 20, 10, 20)
+)
+
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+
+test_that('geometry results are expected', {
+  expect_equal(
+    centroid_group(copy(DT))[
+      group == 1, sf::st_coordinates(unique(centroid))[,1]],
+      setNames(15, 'X')
+  )
+
+  expect_equal(
+    centroid_group(copy(DT))[
+      group == 1, sf::st_coordinates(unique(centroid))[,2]],
+    setNames(15, 'Y')
+  )
+
+  expect_equal(
+    centroid_group(copy(DT))[
+      group == 2, sf::st_coordinates(unique(centroid))[,1]],
+    setNames(10, 'X')
+  )
+
+})
+
+
+test_that('sfc interface', {
+  expect_message(centroid_group(copy(DT), crs = utm), 'crs')
+  copyDT <- copy(DT)
+  copyDT[, centroid := 42]
+  expect_message(centroid_group(copyDT), 'centroid')
+})

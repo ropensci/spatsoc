@@ -30,21 +30,12 @@ test_that('edges, DT are required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(centroid_fusion(edges, DT, id = id, coords = 'X'),
-               'coords requires a vector')
+               'coords must be length 2')
   expect_error(centroid_fusion(edges, DT, id = NULL),
-               'id column name required')
+               'id must be provided')
   expect_error(centroid_fusion(edges, DT, id = id,
                                coords = coords, timegroup = NULL),
-               'timegroup column name required')
-  expect_error(centroid_fusion(edges, DT, id = id,
-                               coords = coords, na.rm = NULL),
-               'na.rm is required')
-})
-
-test_that('na.rm is boolean', {
-  expect_error(centroid_fusion(edges, DT, id = id,
-                               coords = coords, na.rm = 'potato'),
-               'boolean')
+               'timegroup must be provided')
 })
 
 test_that('column names must exist in DT', {
@@ -59,9 +50,9 @@ test_that('column names must exist in DT', {
 
 test_that('coords are correctly provided or error detected', {
   expect_error(centroid_fusion(edges, DT, id = id, coords = c('X', NULL)),
-               'coords requires a vector')
+               'coords must be length 2')
   expect_error(centroid_fusion(edges, DT, id = id, coords = c('X', 'ID')),
-               'coords must be numeric')
+               'coords must be of class numeric')
 })
 
 test_that('centroid column succesfully detected', {
@@ -108,28 +99,22 @@ expected_DT[, Y := timegroup * 10]
 expected_edges <- copy(clean_edges)[timegroup < 10]
 expected_DT[ID %in% first(expected_edges$ID1), X := NA]
 
-test_that('results are expected', {
+test_that('xy results as expected', {
   expect_equal(
-    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords,
-                  na.rm = FALSE)[timegroup == 1, unique(centroid_X)],
-    NA_real_
-  )
-
-  expect_equal(
-    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords,
-                  na.rm = TRUE)[timegroup == 1, unique(centroid_Y)],
+    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords)[
+      timegroup == 1, unique(centroid_Y)],
     10
   )
 
   expect_equal(
-    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords,
-                  na.rm = FALSE)[timegroup == 2, .N],
+    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords)[
+      timegroup == 2, .N],
     0
   )
 
   expect_gt(
-    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords,
-                  na.rm = TRUE)[timegroup == 1, unique(centroid_X)],
+    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords)[
+                    timegroup == 1, unique(centroid_X)],
     10
   )
 
@@ -146,18 +131,57 @@ test_that('results are expected', {
   )
 
   expect_gte(
-    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords,
-                    na.rm = TRUE)[, uniqueN(centroid_X)],
+    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords)[
+      , uniqueN(centroid_X)],
     expected_edges[, uniqueN(fusionID)]
   )
 
   expect_gte(
-    centroid_fusion(expected_edges, expected_DT,
-                    id = id, coords = coords)[, uniqueN(centroid_Y)],
+    centroid_fusion(expected_edges, expected_DT, id = id, coords = coords)[
+      , uniqueN(centroid_Y)],
     expected_edges[, uniqueN(fusionID)]
   )
 })
 
+expected_DT <- copy(clean_DT)[timegroup < 10]
+expected_DT[, X := timegroup * 10 + .I]
+expected_DT[, Y := timegroup * 10]
+
+expected_edges <- copy(clean_edges)[timegroup < 10]
+expected_DT[ID %in% first(expected_edges$ID1), X := NA]
+
+get_geometry(expected_DT, coords = c('X', 'Y'), crs = 32736)
+
+test_that('geometry results as expected', {
+  expect_equal(
+    centroid_fusion(expected_edges, expected_DT, id = id)[
+      timegroup == 1, unique(centroid)],
+    st_geometry(st_point(c(16, 10)))
+  )
+
+  expect_equal(
+    centroid_fusion(expected_edges, expected_DT, id = id)[
+      timegroup == 2, .N],
+    0
+  )
+
+  expect_equal(
+    expected_edges[, .N],
+    centroid_fusion(expected_edges, expected_DT, id = id)[, .N]
+  )
+
+  expect_equal(
+    expected_edges[, unique(ID1)],
+    centroid_fusion(expected_edges, expected_DT, id = id)[, unique(ID1)]
+  )
+
+  expect_gte(
+    centroid_fusion(expected_edges, expected_DT, id = id)[
+      , length(unique(centroid))],
+    expected_edges[, uniqueN(fusionID)]
+  )
+
+})
 
 
 test_that('NAs in fusionID result in NAs for centroid', {
@@ -168,8 +192,7 @@ test_that('NAs in fusionID result in NAs for centroid', {
   dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
   fusion_id(edges, threshold = threshold)
 
-  # Set na.rm = TRUE
-  centroids <- centroid_fusion(edges, DT, id, coords, na.rm = TRUE)
+  centroids <- centroid_fusion(edges, DT, id, coords)
   expect_true(
     centroids[is.na(fusionID), all(is.na(centroid_X))]
   )
@@ -177,12 +200,5 @@ test_that('NAs in fusionID result in NAs for centroid', {
     centroids[is.na(fusionID), all(is.na(centroid_Y))]
   )
 
-  # Set na.rm = FALSE
-  centroids <- centroid_fusion(edges, DT, id, coords, na.rm = FALSE)
-  expect_true(
-    centroids[is.na(fusionID), all(is.na(centroid_X))]
-  )
-  expect_true(
-    centroids[is.na(fusionID), all(is.na(centroid_Y))]
-  )
 })
+

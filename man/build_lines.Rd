@@ -6,30 +6,34 @@
 \usage{
 build_lines(
   DT = NULL,
-  projection = NULL,
+  crs = NULL,
   id = NULL,
   coords = NULL,
   sortBy = NULL,
-  splitBy = NULL
+  splitBy = NULL,
+  projection = NULL
 )
 }
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{numeric or character defining the coordinate reference
+\item{crs}{numeric or character defining the coordinate reference
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
-\code{projection = "EPSG:32736"} or \code{projection = 32736}.}
+\code{crs = "EPSG:32736"} or \code{crs = 32736}. Used only if coords are provided,
+see details under Interface}
 
 \item{id}{character string of ID column name}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{sortBy}{Character string of date time column(s) to sort rows by. Must
 be a POSIXct.}
 
 \item{splitBy}{(optional) character string or vector of grouping column
-name(s) upon which the grouping will be calculated}
+name(s) upon which the output will be calculated}
+
+\item{projection}{(deprecated) use crs argument instead}
 }
 \value{
 \code{build_lines} returns an sf LINESTRING object with a line
@@ -42,7 +46,7 @@ build a line.
 \description{
 \code{build_lines} generates a simple feature collection with LINESTRINGs from a
 \code{data.table}. The function expects a \code{data.table} with relocation data,
-individual identifiers, a sorting column and a \code{projection}. The relocation
+individual identifiers, a sorting column and a \code{crs}. The relocation
 data is transformed into LINESTRINGs for each individual and, optionally,
 combination of columns listed in \code{splitBy}. Relocation data should be in two
 columns representing the X and Y coordinates.
@@ -51,7 +55,7 @@ columns representing the X and Y coordinates.
 \subsection{R-spatial evolution}{
 
 Please note, spatsoc has followed updates from R spatial, GDAL and PROJ
-for handling projections, see more at
+for handling coordinate reference systems, see more at
 \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 
 In addition, \code{build_lines} previously used \link[sp:SpatialLines]{sp::SpatialLines} but has been
@@ -62,10 +66,10 @@ R-spatial evolution, see more at
 
 \subsection{Notes on arguments}{
 
-The \code{projection} argument expects a numeric or character defining the
+The \code{crs} argument expects a numeric or character defining the
 coordinate reference system.
-For example, for UTM zone 36N (EPSG 32736), the projection argument is either
-\code{projection = 'EPSG:32736'} or \code{projection = 32736}.
+For example, for UTM zone 36N (EPSG 32736), the crs argument is either
+\code{crs = 'EPSG:32736'} or \code{crs = 32736}.
 See details in \code{\link[sf:st_crs]{sf::st_crs()}} and \url{https://spatialreference.org}
 for a list of EPSG codes.
 
@@ -97,12 +101,12 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 utm <- 32736
 
 # Build lines for each individual
-lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
+lines <- build_lines(DT, crs = utm, id = 'ID', coords = c('X', 'Y'),
             sortBy = 'datetime')
 
 # Build lines for each individual by year
 DT[, yr := year(datetime)]
-lines <- build_lines(DT, projection = utm, id = 'ID', coords = c('X', 'Y'),
+lines <- build_lines(DT, crs = utm, id = 'ID', coords = c('X', 'Y'),
             sortBy = 'datetime', splitBy = 'yr')
 }
 \seealso{

@@ -6,21 +6,22 @@
 \usage{
 build_polys(
   DT = NULL,
-  projection = NULL,
+  crs = NULL,
   hrType = NULL,
   hrParams = NULL,
   id = NULL,
   coords = NULL,
   splitBy = NULL,
-  spPts = NULL
+  spPts = NULL,
+  projection = NULL
 )
 }
 \arguments{
 \item{DT}{input data.table}
 
-\item{projection}{numeric or character defining the coordinate reference
+\item{crs}{numeric or character defining the coordinate reference
 system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
-\code{projection = "EPSG:32736"} or \code{projection = 32736}.}
+\code{crs = "EPSG:32736"} or \code{crs = 32736}.}
 
 \item{hrType}{type of HR estimation, either 'mcp' or 'kernel'}
 
@@ -29,14 +30,16 @@ system to be passed to \link[sf:st_crs]{sf::st_crs}. For example, either
 \item{id}{character string of ID column name}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{splitBy}{(optional) character string or vector of grouping column
-name(s) upon which the grouping will be calculated}
+name(s) upon which the output will be calculated}
 
 \item{spPts}{alternatively, provide solely a SpatialPointsDataFrame with one
 column representing the ID of each point, as specified by \link[adehabitatHR:mcp]{adehabitatHR::mcp}
 or \link[adehabitatHR:kernelUD]{adehabitatHR::kernelUD}}
+
+\item{projection}{(deprecated) use crs argument instead}
 }
 \value{
 \code{build_polys} returns a simple feature collection with POLYGONs
@@ -48,7 +51,7 @@ of the respective \code{hrType} \code{adehabitatHR} function.
 \description{
 \code{build_polys} generates a simple feature collection with POLYGONs from a
 \code{data.table}. The function expects a \code{data.table} with
-relocation data, individual identifiers, a projection,
+relocation data, individual identifiers, a crs,
 home range type and parameters. The relocation
 data is transformed into POLYGONs using either \link[adehabitatHR:mcp]{adehabitatHR::mcp} or
 \link[adehabitatHR:kernelUD]{adehabitatHR::kernelUD} for each individual and, optionally,
@@ -61,7 +64,7 @@ polygons created from relocations.
 \subsection{R-spatial evolution}{
 
 Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
-handling projections, see more below and  details at
+handling coordinate reference systems, see more below and  details at
 \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 
 In addition, \code{build_polys} previously used \link[sp:SpatialPoints]{sp::SpatialPoints} but has been
@@ -79,10 +82,10 @@ expect the names of respective columns in \code{DT} which correspond
 to the individual identifier, X and Y coordinates, and additional
 grouping columns.
 
-The \code{projection} argument expects a character string or numeric
+The \code{crs} argument expects a character string or numeric
 defining the coordinate reference system to be passed to \link[sf:st_crs]{sf::st_crs}.
-For example, for UTM zone 36S (EPSG 32736), the projection
-argument is \code{projection = "EPSG:32736"} or \code{projection = 32736}.
+For example, for UTM zone 36S (EPSG 32736), the crs
+argument is \code{crs = "EPSG:32736"} or \code{crs = 32736}.
 See \url{https://spatialreference.org}
 for a list of EPSG codes.
 
@@ -113,13 +116,13 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 utm <- 32736
 
 # Build polygons for each individual using kernelUD and getverticeshr
-build_polys(DT, projection = utm, hrType = 'kernel',
+build_polys(DT, crs = utm, hrType = 'kernel',
             hrParams = list(grid = 60, percent = 95),
             id = 'ID', coords = c('X', 'Y'))
 
 # Build polygons for each individual by year
 DT[, yr := year(datetime)]
-build_polys(DT, projection = utm, hrType = 'mcp',
+build_polys(DT, crs = utm, hrType = 'mcp',
             hrParams = list(percent = 95),
             id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
 }

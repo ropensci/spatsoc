@@ -10,7 +10,7 @@ datetime <- 'datetime'
 timethreshold <- '20 minutes'
 threshold <- 50
 coords <- c('X', 'Y')
-projection <- 32736
+utm <- 32736
 timegroup <- 'timegroup'
 group <- 'group'
 
@@ -25,13 +25,14 @@ edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 
 DT_blind <- copy(DT)
-direction_step(DT_blind, id, coords, projection)
+direction_step(DT_blind, id, coords, utm)
 group_times(DT_blind, datetime = datetime, threshold = timethreshold)
 edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
                    timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
-dyad_directions <- edge_direction(edges, DT_blind, id, coords,
-                                  projection, timegroup)
+dyad_directions <- edge_direction(edges = edges, DT = DT_blind, id = id,
+                                  coords = coords, crs = utm,
+                                  timegroup = timegroup)
 
 # edge_zones(
 #   edges = edges,
@@ -91,17 +92,17 @@ test_that('columns must exist in edges', {
 })
 
 test_that('columns are correctly provided or error detected', {
-  char_col <- copy(edges)[, distance := as.character(distance)]
-  expect_error(edge_zones(char_col, zone_thresholds, zone_labels),
-               'distance must be numeric')
+  copyEdges <- copy(edges)[, distance := as.character(distance)]
+  expect_error(edge_zones(copyEdges, zone_thresholds, zone_labels),
+               'distance must be of class numeric')
 
-  char_col <- copy(dyad_directions)[, direction := as.character(direction)]
-  expect_error(edge_zones(char_col, zone_thresholds, zone_labels, blind_volume),
+  copyDyad <- copy(dyad_directions)[, direction := units::set_units(direction, 'degrees')]
+  expect_error(edge_zones(copyDyad, zone_thresholds, zone_labels, blind_volume),
                'radians',
               )
 
-  char_col <- copy(dyad_directions)[, direction_dyad := as.character(direction_dyad)]
-  expect_error(edge_zones(char_col, zone_thresholds, zone_labels, blind_volume),
+  copyDyadDir <- copy(dyad_directions)[, direction_dyad := units::set_units(direction_dyad, 'degrees')]
+  expect_error(edge_zones(copyDyadDir, zone_thresholds, zone_labels, blind_volume),
                'radians')
 })
 

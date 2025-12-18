@@ -11,6 +11,12 @@
 #' The `coords` argument expects the names of columns in `DT` which correspond
 #' to the X and Y coordinates.
 #'
+#' The `output_crs` argument allows the user to set an output `crs` for their
+#' geometry column. Note: some functions in spatsoc (eg. those that measure
+#' directions like `edge_direction` and `direction_to_leader`) require
+#' geographic coordinates and it is therefore simpler to leave the default
+#' `output_crs = 4326`.
+#'
 #' @return `get_geometry` returns the input `DT` appended with a
 #'   `geometry` column which represents the input coordinates
 #'   as a `sfc` (simple feature geometry list column). If the `output_crs`
@@ -26,8 +32,8 @@
 #' @param crs numeric or character defining the coordinate reference system to
 #'   be passed to [sf::st_crs]. For example, `crs = "EPSG:32736"` or
 #'   `crs = 32736`.
-#' @param output_crs default 4326, the output crs to transform the input
-#'   coordinates to with [sf::st_transform]. If output_crs is NULL or FALSE or
+#' @param output_crs default NULL, the output crs to transform the input
+#'   coordinates to with [sf::st_transform]. If output_crs is NULL or
 #'   matching the crs argument, the coordinates will not be transformed
 #' @param geometry_colname default "geometry", to optionally set output name
 #'   of simple feature geometry list column
@@ -51,28 +57,17 @@ get_geometry <- function(
     DT = NULL,
     coords = NULL,
     crs = NULL,
-    output_crs = 4326,
+    output_crs = NULL,
     geometry_colname = 'geometry') {
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
+  assert_are_colnames(DT, coords)
+  assert_length(coords, 2)
+  assert_col_inherits(DT, coords, 'numeric')
 
-  if (!all(coords %in% colnames(DT))) {
-    stop('coords field(s) provided are not present in input DT')
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
-
-  if (is.null(crs)) {
-    stop('input crs required')
-  }
+  assert_not_null(crs)
 
   if (geometry_colname %in% colnames(DT)) {
     message(paste0(geometry_colname,
@@ -86,9 +81,7 @@ get_geometry <- function(
                       crs = crs,
                       na.fail = FALSE
     )
-    if (!any(isFALSE(output_crs) ||
-             crs == sf::st_crs(output_crs) ||
-             is.null(output_crs))) {
+    if (!is.null(output_crs) && !identical(crs, sf::st_crs(output_crs))) {
       x <- sf::st_transform(x, output_crs)
     }
     x

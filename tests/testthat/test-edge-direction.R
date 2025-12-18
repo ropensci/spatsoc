@@ -10,8 +10,7 @@ timethreshold <- '20 minutes'
 threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
-group <- 'group'
-projection <- 32736
+utm <- 32736
 
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
@@ -30,8 +29,9 @@ test_that('edges, DT are required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(edge_direction(edges, DT, id = id, coords = 'X'),
-               'coords requires a vector')
-  expect_error(edge_direction(edges, DT, id = NULL), 'id column name required')
+               'coords must be length 2')
+  expect_error(edge_direction(edges, DT, id = NULL), 'id must be provided')
+
   expect_error(
     edge_direction(
       edges,
@@ -40,7 +40,7 @@ test_that('arguments required, otherwise error detected', {
       coords = coords,
       timegroup = NULL
     ),
-    'timegroup required'
+    'timegroup must be'
   )
   expect_error(
     edge_direction(
@@ -49,16 +49,18 @@ test_that('arguments required, otherwise error detected', {
       id = id,
       coords = coords,
       timegroup = timegroup,
-      projection = NULL
+      crs = NULL
     ),
-    'projection required'
+    'crs must be'
   )
 })
 
 test_that('column names must exist in DT', {
-  expect_error(edge_direction(edges, DT, id = 'potato', coords = coords),
+  expect_error(edge_direction(edges, DT, id = 'potato', coords = coords,
+                              crs = utm),
                'potato field')
-  expect_error(edge_direction(edges, DT, id = id, coords = rep('potato', 2)),
+  expect_error(edge_direction(edges, DT, id = id, coords = rep('potato', 2),
+                              crs = utm),
                'potato field')
   copyDT <- copy(DT)[, timegroup := NULL]
   expect_error(edge_direction(
@@ -66,7 +68,7 @@ test_that('column names must exist in DT', {
     copyDT,
     id = id,
     coords = coords,
-    projection = projection,
+    crs = utm,
     timegroup = 'timegroup'
   ),
   'timegroup field')
@@ -78,7 +80,7 @@ test_that('column names must exist in DT', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     ),
     'timegroup field'
@@ -91,19 +93,19 @@ test_that('column names must exist in DT', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     ),
-    'dyadID is not present'
+    'dyadID field'
   )
 
 })
 
 test_that('coords are correctly provided or error detected', {
   expect_error(edge_direction(edges, DT, id = id, coords = c('X', NULL)),
-               'coords requires a vector')
+               'coords must be length 2')
   expect_error(edge_direction(edges, DT, id = id, coords = c('X', 'ID')),
-               'coords must be numeric')
+               'coords must be of class numeric')
 })
 
 test_that('direction_dyad column succesfully detected', {
@@ -114,7 +116,7 @@ test_that('direction_dyad column succesfully detected', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     ),
     'direction_dyad column will be overwritten'
@@ -128,7 +130,7 @@ test_that('no rows are added to the result DT', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     )
   ))
@@ -143,7 +145,7 @@ test_that('one columns added to the result DT', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     )
   ))
@@ -156,7 +158,7 @@ test_that('column added to the result DT is unit', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     )$direction_dyad,
     'units'
@@ -170,10 +172,24 @@ test_that('returns a data.table', {
       DT,
       id = id,
       coords = coords,
-      projection = projection,
+      crs = utm,
       timegroup = timegroup
     ),
     'data.table'
+  )
+})
+
+test_that('projection arg is deprecated', {
+  expect_warning(
+    edge_direction(
+      edges,
+      DT,
+      id = id,
+      coords = coords,
+      timegroup = timegroup,
+      projection = utm
+    ),
+    'projection argument is deprecated'
   )
 })
 
@@ -190,7 +206,7 @@ edges_B <- edge_dist(DT_B, id = id, coords = coords, timegroup = timegroup,
 dyad_id(edges_B, 'ID1', 'ID2')
 
 dyad_dirs <- edge_direction(edges_B, DT_B, id = id,
-                            coords = coords, projection = 4326)
+                            coords = coords, crs = 4326)
 
 test_that('East North West South dyads', {
   tolerance <- 0.01
@@ -227,4 +243,116 @@ test_that('East North West South dyads', {
 
 })
 
+test_that('use_transform errors if crs not provided', {
+  expect_error(
+    edge_direction(edges, DT, id = id, coords = coords, crs = NA),
+    'ensure crs is provided'
+  )
+
+  copyDT <- copy(DT)
+  get_geometry(copyDT, coords = coords, crs = utm)
+  st_crs(copyDT$geometry) <- NA
+
+  expect_error(
+    edge_direction(edges, copyDT, id = id),
+    'ensure crs is provided'
+  )
+})
+
+
+# sfc interface
+test_that('if coords null, geometry required', {
+  expect_error(edge_direction(edges, DT, id = id, coords = NULL),
+               'get_geometry?')
+})
+
+test_that('crs provided with geometry gives message crs ignored', {
+  get_geometry(DT, coords = coords, crs = utm)
+  expect_message(edge_direction(edges, DT, id = id, crs = utm),
+                 'ignored')
+})
+
+test_that('geometry correctly provided else error', {
+  expect_error(edge_direction(edges, DT, id = id, geometry = 'potato'),
+               'is not present')
+  expect_error(edge_direction(edges, DT, id = id, geometry = 'X'),
+               'must be of class')
+})
+
+test_that('sfc interface message before overwrite', {
+  copyEdges <- copy(edges)[, direction_dyad := 42]
+  expect_message(edge_direction(copyEdges, DT, id = id),
+                 'overwritten')
+})
+
+test_that('sfc interface returns expected', {
+  copyEdges <- copy(edges)
+  get_geometry(DT, coords = coords, crs = utm)
+
+  expect_equal(
+    ncol(copyEdges) + 1,
+    ncol(edge_direction(copyEdges, DT, id = id))
+  )
+
+  expect_equal(
+    nrow(copyEdges),
+    nrow(edge_direction(copyEdges, DT, id = id))
+  )
+
+  expect_true('direction_dyad' %in% colnames(edge_direction(copyEdges, DT, id = id)))
+
+  direction_step(DT, id = id)
+  expect_true('direction' %in% colnames(edge_direction(copyEdges, DT, id = id)))
+
+  outEdges <- edge_direction(copyEdges, DT, id = id)
+  expect_type(outEdges$direction_dyad, 'double')
+  expect_s3_class(outEdges$direction_dyad, 'units')
+
+  expect_equal(max(outEdges$direction_dyad, na.rm = TRUE), units::as_units(pi, 'rad'),
+               tolerance = 0.01)
+  expect_equal(min(outEdges$direction_dyad, na.rm = TRUE), units::as_units(-pi, 'rad'),
+               tolerance = 0.01)
+
+
+})
+
+
+test_that('NAs in coordinates return NA', {
+  copyDT <- copy(DT)
+
+  full_edges <- edge_dist(DT, threshold = NULL, id = id, coords = coords,
+                          timegroup = timegroup, returnDist = TRUE,
+                          fillNA = TRUE)
+  dyad_id(full_edges, id1 = 'ID1', id2 = 'ID2')
+
+  copyDT[sample(.N, 100), X := NA]
+
+  expect_lte(
+    copyDT[is.na(X), .N],
+    edge_direction(
+      edges = full_edges,
+      DT = copyDT,
+      id = id,
+      coords = coords,
+      crs = utm,
+      timegroup = timegroup
+    )[is.na(direction_dyad), .N]
+  )
+
+  copyDT <- copy(DT)
+
+  copyDT[sample(.N, 100), Y := NA]
+
+  expect_lte(
+    copyDT[is.na(Y), .N],
+    edge_direction(
+      edges = full_edges,
+      DT = copyDT,
+      id = id,
+      coords = coords,
+      crs = utm,
+      timegroup = timegroup
+    )[is.na(direction_dyad), .N]
+  )
+})
 

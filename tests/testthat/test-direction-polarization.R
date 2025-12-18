@@ -11,13 +11,13 @@ threshold <- 50
 coords <- c('X', 'Y')
 timegroup <- 'timegroup'
 group <- 'group'
-projection <- 32736
+utm <- 32736
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
 group_pts(DT, threshold = threshold, id = id,
           coords = coords, timegroup = timegroup)
-direction_step(DT, id = id, coords = coords, projection = projection)
+direction_step(DT, id = id, coords = coords, crs = utm)
 
 clean_DT <- copy(DT)
 
@@ -27,9 +27,9 @@ test_that('DT is required', {
 
 test_that('arguments required, otherwise error detected', {
   expect_error(direction_polarization(DT, group = NULL),
-               'group column name required')
+               'group must be provided')
   expect_error(direction_polarization(DT, direction = NULL),
-               'direction column name required')
+               'direction must be provided')
 })
 
 test_that('column names must exist in DT', {
@@ -40,13 +40,9 @@ test_that('column names must exist in DT', {
 })
 
 test_that('radians expected else error', {
-  expect_error(direction_polarization(DT, direction = 'X'),
-               'direction_step')
-})
-
-test_that('direction expected numeric', {
-  expect_error(direction_polarization(DT, direction = 'ID'),
-               'direction must be numeric')
+  copyDT <- copy(clean_DT)[, deg := units::as_units(1.1, 'degree')]
+  expect_error(direction_group(copyDT, direction = 'deg'),
+               'direction must be of units radians')
 })
 
 

@@ -124,7 +124,7 @@ direction_step(
   DT = DT,
   id = 'ID',
   coords = c('X', 'Y'),
-  projection = 32736
+  crs = 32736
 )
 
 # Edge list generation
@@ -147,11 +147,30 @@ dyad_directions <- edge_direction(
   DT,
   id = 'ID',
   coords = c('X', 'Y'),
-  projection = 32736,
+  crs = 32736,
   timegroup = 'timegroup'
 )
 
 # Calculate behavioural zones
+edge_zones(
+  dyad_directions,
+  zone_thresholds = c(25, 50, 75),
+  zone_labels = c('repulsion', 'orientation', 'attraction'),
+  blind_volume = 2
+)
+print(dyad_directions[, .SD[1:3], by = zone])
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+direction_step(DT, id = 'ID')
+edges <- edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
+dyad_id(edges, id = 'ID1', id2 = 'ID2')
+dyad_directions <- edge_direction(
+  edges,
+  DT,
+  id = 'ID',
+  timegroup = 'timegroup'
+)
 edge_zones(
   dyad_directions,
   zone_thresholds = c(25, 50, 75),
@@ -177,6 +196,7 @@ See examples of measuring behavioural zones:
 Other Distance functions: 
 \code{\link{distance_to_centroid}()},
 \code{\link{distance_to_leader}()},
+\code{\link{edge_dist}()},
 \code{\link{edge_nn}()}
 
 Other Direction functions: 
@@ -188,7 +208,6 @@ Other Direction functions:
 \code{\link{edge_alignment}()},
 \code{\link{edge_delay}()},
 \code{\link{edge_direction}()},
-\code{\link{edge_dist}()},
 \code{\link{leader_direction_group}()},
 \code{\link{leader_edge_delay}()}
 }

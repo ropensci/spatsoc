@@ -84,7 +84,7 @@
 #'   DT = DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736
+#'   crs = 32736
 #' )
 #'
 #' # Distance based edge-list generation
@@ -113,6 +113,19 @@
 #' )
 #'
 #' delay[, mean(direction_delay, na.rm = TRUE), by = .(ID1, ID2)][V1 > 0]
+#'
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' direction_step(DT, id = 'ID')
+#' edges <- edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
+#' dyad_id(edges, id = 'ID1', id2 = 'ID2')
+#' fusion_id(edges, threshold = 100)
+#' delay <- edge_delay(
+#'   edges = edges,
+#'   DT = DT,
+#'   window = 3,
+#'   id = 'ID'
+#' )
 edge_delay <- function(
     edges,
     DT,
@@ -124,60 +137,25 @@ edge_delay <- function(
     timegroup_delay <- ID1  <- ID2 <- direction_delay <- direction_diff <-
     dyadID <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
-
-  if (is.null(edges)) {
-    stop('input edges required')
-  }
-
-  if (is.null(id)) {
-    stop('id column name required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(edges)
+  assert_not_null(id)
 
   check_cols_edges <- c('ID1', 'ID2', 'timegroup')
-  if (!all((check_cols_edges %in% colnames(edges)))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        check_cols_edges,
-        colnames(edges)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input edges'
-    ))
-  }
+  assert_are_colnames(edges, check_cols_edges)
 
   check_cols_DT <- c(id, 'timegroup', direction)
-  if (!all((check_cols_DT %in% colnames(DT)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        check_cols_DT,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
+  assert_are_colnames(DT, check_cols_DT)
 
-  if (is.null(window)) {
-    stop('window is required')
-  }
+  assert_not_null(window)
+  assert_inherits(window, 'numeric')
 
-  if (!is.numeric(window)) {
-    stop('window should be a numeric, in the units of timegroup')
-  }
+  assert_col_inherits(DT, 'timegroup', 'integer')
+  assert_col_inherits(edges, 'timegroup', 'integer')
 
-  if (!is.integer(DT$timegroup) || !is.integer(edges$timegroup)) {
-    stop('timegroup should be an integer, did you use group_times?')
-  }
-
-  if (!'fusionID' %in% colnames(edges)) {
-    stop('fusionID field not present in edges, did you run fusion_id?')
-  }
-
-  if (!'dyadID' %in% colnames(edges)) {
-    stop('dyadID field not present in edges, did you run dyad_id?')
-  }
+  assert_are_colnames(edges, 'fusionID', ', did you run fusion_id?')
+  assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
   drop_nas <- data.table::copy(edges)[
     !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))]

@@ -27,7 +27,7 @@ test_that('one of DT or sfLines is required, not both or neither', {
       threshold = 10,
       sfLines = build_lines(
         DT,
-        projection = utm,
+        crs = utm,
         coords = c('X', 'Y'),
         id = 'ID',
         sortBy = 'datetime'
@@ -38,7 +38,7 @@ test_that('one of DT or sfLines is required, not both or neither', {
 })
 
 
-test_that('coords, id, projection provided and proper format', {
+test_that('coords, id, crs provided and proper format', {
   copyDT <- copy(DT)
   group_times(copyDT, datetime = 'datetime', threshold = '1 day')
   expect_error(
@@ -48,7 +48,7 @@ test_that('coords, id, projection provided and proper format', {
       timegroup = 'timegroup',
       id = NULL,
       coords = c('X', 'Y'),
-      projection = utm
+      crs = utm
     ),
     'id must be provided'
   )
@@ -60,9 +60,9 @@ test_that('coords, id, projection provided and proper format', {
       timegroup = 'timegroup',
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = NULL
+      crs = NULL
     ),
-    'projection must be provided',
+    'crs must be provided',
     fixed = FALSE
   )
 
@@ -73,7 +73,7 @@ test_that('coords, id, projection provided and proper format', {
       timegroup = 'timegroup',
       id = 'ID',
       coords = NULL,
-      projection = utm
+      crs = utm
     ),
     'coords must be provided'
   )
@@ -85,7 +85,7 @@ test_that('coords, id, projection provided and proper format', {
       timegroup = 'timegroup',
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = NULL
     ),
     'sortBy must be provided'
@@ -102,10 +102,10 @@ test_that('column names must exist in DT', {
       timegroup = 'timegroup',
       id = 'potatoID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 
@@ -116,10 +116,10 @@ test_that('column names must exist in DT', {
       timegroup = 'timegroup',
       id = 'ID',
       coords = c('potatoX', 'potatoY'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 })
@@ -140,10 +140,10 @@ test_that('timegroup is correctly provided but is not required', {
       timegroup = 'potato',
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
-    'provided are not present', fixed = FALSE
+    'potato field', fixed = FALSE
   )
 
   expect_true(inherits(group_lines(
@@ -152,7 +152,7 @@ test_that('timegroup is correctly provided but is not required', {
       timegroup = NULL,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ), 'data.table')
   )
@@ -174,7 +174,7 @@ test_that('threshold is correctly provided, or error', {
       timegroup = 'timegroup',
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'threshold missing, using 0 by default'
@@ -187,10 +187,10 @@ test_that('threshold is correctly provided, or error', {
       timegroup = 'timegroup',
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
-    'cannot provide a negative threshold'
+    'threshold must be > 0'
   )
 
   expect_error(
@@ -200,10 +200,10 @@ test_that('threshold is correctly provided, or error', {
       timegroup = 'timegroup',
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
-    'threshold must be numeric'
+    'threshold must be of class numeric'
   )
 })
 
@@ -223,7 +223,7 @@ test_that('group lines returns a single warning for <2 locs', {
       timegroup = 'timegroup',
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'some rows were dropped, cannot build a line with',
@@ -239,7 +239,7 @@ test_that('group lines returns a single warning for <2 locs', {
       timegroup = NULL,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     ),
     'some rows were dropped, cannot build a line with', fixed = FALSE
@@ -263,7 +263,7 @@ test_that('group column is added to result or NA if < 2 locs', {
                     timegroup = 'timegroup',
                     id = 'ID',
                     coords = c('X', 'Y'),
-                    projection = utm,
+                    crs = utm,
                     sortBy = 'datetime'
                   )
                 ))
@@ -276,7 +276,7 @@ test_that('group column is added to result or NA if < 2 locs', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     )[is.na(group), .N] != 0)
   )
@@ -288,7 +288,7 @@ test_that('group column is added to result or NA if < 2 locs', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     )[is.na(group), .N] != 0)
   )
@@ -310,7 +310,7 @@ test_that('only one column added to the result DT', {
                    timegroup = 'timegroup',
                    id = 'ID',
                    coords = c('X', 'Y'),
-                   projection = utm,
+                   crs = utm,
                    sortBy = 'datetime'
                  )
                ))
@@ -332,7 +332,7 @@ test_that('no rows are added to the result DT', {
                    timegroup = 'timegroup',
                    id = 'ID',
                    coords = c('X', 'Y'),
-                   projection = utm,
+                   crs = utm,
                    sortBy = 'datetime'
                  )
                ))
@@ -353,7 +353,7 @@ test_that('withinGroup is not returned to the user', {
       timegroup = 'timegroup',
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       sortBy = 'datetime'
     )
   ))
@@ -369,7 +369,7 @@ test_that('only 1 unique timegroup * splitBy', {
     timegroup = 'mnth',
     id = 'ID',
     coords = c('X', 'Y'),
-    projection = utm,
+    crs = utm,
     splitBy = 'yr',
     sortBy = 'datetime'
   )
@@ -398,7 +398,7 @@ test_that('group column succesfully detected', {
       timegroup = 'mnth',
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       splitBy = 'yr',
       sortBy = 'datetime'
     ),
@@ -411,7 +411,7 @@ test_that('group column succesfully detected', {
       threshold = 0,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       splitBy = 'yr',
       sortBy = 'datetime'
     ),
@@ -427,7 +427,7 @@ test_that('group column succesfully detected', {
 #   splitBy = 'family',
 #   id = 'ID',
 #   coords = c('X', 'Y'),
-#   projection = utm
+#   crs = utm
 # )
 
 
@@ -445,7 +445,7 @@ test_that('sfLines id provided, uniqueN(id) match n rows', {
     DT = DT,
     id = 'ID',
     coords = c('X', 'Y'),
-    projection = utm,
+    crs = utm,
     sortBy = 'datetime'
   )
 
@@ -467,7 +467,7 @@ test_that('sfLines provided returns data.table', {
     DT = DT,
     id = 'ID',
     coords = c('X', 'Y'),
-    projection = utm,
+    crs = utm,
     sortBy = 'datetime'
   )
 
@@ -501,7 +501,7 @@ test_that('splitBy argument doesnt use splitBy column', {
       threshold = 0,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       timegroup = 'timegroup',
       splitBy = 'splitBy',
       sortBy = 'datetime'
@@ -521,7 +521,7 @@ test_that('group_lines can accomodate NULL timegroup and non null splitBy', {
       threshold = 10,
       id = 'ID',
       coords = c('X', 'Y'),
-      projection = utm,
+      crs = utm,
       timegroup = NULL,
       splitBy = 'yr',
       sortBy = 'datetime'
@@ -529,4 +529,20 @@ test_that('group_lines can accomodate NULL timegroup and non null splitBy', {
     'group'
   )
 
+})
+
+
+test_that('projection arg is deprecated', {
+  expect_warning(
+    group_lines(
+      DT = DT,
+      threshold = 0,
+      id = 'ID',
+      coords = c('X', 'Y'),
+      splitBy = 'yr',
+      sortBy = 'datetime',
+      projection = utm
+    ),
+    'projection argument is deprecated'
+  )
 })

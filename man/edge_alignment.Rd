@@ -30,7 +30,7 @@ the calculation of directional alignment to within spatiotemporal groups}
 \item{splitBy}{(optional) vector of column names indicating subgroups within
 which the direction alignment will be calculated}
 
-\item{signed}{boolean if signed difference should be returned, default FALSE}
+\item{signed}{logical if signed difference should be returned, default FALSE}
 }
 \value{
 \code{edge_alignment} returns a \code{data.table} with columns ID1, ID2,
@@ -93,14 +93,13 @@ direction_step(
   DT = DT,
   id = 'ID',
   coords = c('X', 'Y'),
-  projection = 32736
+  crs = 32736
 )
 
 # Calculate directional alignment edge-list
 align <- edge_alignment(
   DT,
   id = 'ID',
-  timegroup = 'timegroup',
   signed = FALSE
 )
 
@@ -111,7 +110,17 @@ group_pts(DT, threshold = 5, id = 'ID',
 align_group <- edge_alignment(
   DT,
   id = 'ID',
-  timegroup = 'timegroup',
+  group = 'group',
+  signed = FALSE
+)
+
+# Or, using the new geometry interface
+get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
+direction_step(DT, id = 'ID')
+align_group <- edge_alignment(
+  DT,
+  id = 'ID',
   group = 'group',
   signed = FALSE
 )
@@ -139,7 +148,6 @@ Other Direction functions:
 \code{\link{direction_to_leader}()},
 \code{\link{edge_delay}()},
 \code{\link{edge_direction}()},
-\code{\link{edge_dist}()},
 \code{\link{edge_zones}()},
 \code{\link{leader_direction_group}()},
 \code{\link{leader_edge_delay}()}

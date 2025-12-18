@@ -8,18 +8,18 @@ DT <- fread('../testdata/DT.csv', tz = 'UTC')
 test_that('DT is required', {
   expect_error(group_times(DT = NULL,
                            datetime = NULL, threshold = '10 minutes'),
-               'input DT required')
+               'DT must be provided')
 })
 
 
 test_that('time field correctly provided or error detected', {
   expect_error(group_times(DT, datetime = NULL, threshold = '10 minutes'),
-               'datetime field required')
+               'datetime must be')
 
   expect_error(group_times(DT,
                            datetime = 'potato',
                            threshold = '10 minutes'),
-               'time field provided is not found in DT')
+               'potato field provided')
 })
 
 test_that('threshold properly provided', {
@@ -45,7 +45,7 @@ test_that('time fields are already present', {
   group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
   expect_message(group_times(copyDT, datetime = 'datetime',
                              threshold = '10 minutes'),
-                 'columns found in input DT', fixed = FALSE)
+                 'columns found in input', fixed = FALSE)
 })
 
 test_that('time field is appropriate format', {
@@ -71,7 +71,7 @@ test_that('threshold with minutes fails with > 60', {
   copyDT <- copy(DT)[, c('idate', 'itime') := IDateTime(datetime)]
   expect_error(group_times(copyDT, datetime = c('idate', 'itime'),
                            threshold = '70 minutes'),
-               '> 60 minutes', fixed = FALSE)
+               '<= 60', fixed = FALSE)
 })
 
 test_that('threshold with minutes fails if not divisible by 60', {

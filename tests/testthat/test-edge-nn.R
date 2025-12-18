@@ -1,311 +1,149 @@
 # Test edge_nn
-context('test-edge-nn')
+context('test edge_nn')
 
 library(spatsoc)
 
 DT <- fread('../testdata/DT.csv')
-group_times(DT, 'datetime', '10 minutes')
+coords <- c('X', 'Y')
+id <- 'ID'
+utm <- 32736
+threshold <- 10
+timegroup <- 'timegroup'
 
-test_that('DT is required', {
-  expect_error(edge_nn(
-    DT = NULL,
-    id = 'ID'
-  ),
-  'input DT required')
+group_times(DT, 'datetime', '10 minutes')
+get_geometry(DT, coords = coords, crs = utm)
+get_geometry(DT, coords = coords, crs = utm, output_crs = 4326,
+             geometry_colname = 'geometry_longlat')
+coords_longlat <- paste0(coords, '_longlat')
+DT[, (coords_longlat) := data.frame(sf::st_coordinates(geometry_longlat))]
+
+test_that('error/warn/msg if args are not provided as expected', {
+  expect_error(
+    edge_nn(
+      DT = NULL
+    ),
+    'DT must be provided'
+  )
+
+  expect_error(
+    edge_nn(
+      DT = data.frame()
+    ),
+    'data.table'
+  )
+
+  expect_error(
+    edge_nn(DT, id = NULL),
+    'id'
+  )
+
+  expect_error(
+    edge_nn(DT, id = id),
+    'timegroup'
+  )
+
+  expect_error(
+    edge_nn(DT, id = id, timegroup = NULL),
+    'timegroup'
+  )
+
+  # geometry
+  expect_message(
+    edge_nn(DT, id = id, timegroup = timegroup, crs = utm),
+    'crs argument is ignored'
+  )
 })
 
-test_that('ID and coords column names, threshold correctly provided',
-          {
-            expect_error(edge_nn(DT, id = NULL),
-                         'ID field required')
-
-            expect_error(
-              edge_nn(
-                DT,
-                threshold = 10,
-                id = 'ID',
-                coords = 'X'
-              ),
-              'coords requires a vector',
-              fixed = FALSE
-            )
-          })
-
-
 test_that('column names must exist in DT', {
-  # where ID field doesn't exist in DT
   expect_error(
     edge_nn(
       DT,
       id = 'potato',
-      coords = c('X', 'Y'),
-      timegroup = 'timegroup'
+      coords = coords,
+      timegroup = timegroup
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 
-  # where coords don't exist
   expect_error(
     edge_nn(
       DT,
-      id = 'ID',
-      coords = c('potatoX', 'potatoY'),
-      timegroup = 'timegroup'
-    ),
-    'not present in input DT',
-    fixed = FALSE
-  )
-
-  # where group fields doesn't exist
-  expect_error(
-    edge_nn(
-      DT,
-      id = 'ID',
-      coords = c('X', 'Y'),
+      id = id,
+      coords = coords,
       splitBy = 'potato',
-      timegroup = 'timegroup'
+      timegroup = timegroup
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 
-  # where timegroup field doesn't exist
   expect_error(
     edge_nn(
       DT,
-      id = 'ID',
-      coords = c('X', 'Y'),
+      id = id,
+      coords = coords,
       timegroup = 'potato'
     ),
-    'not present in input DT',
+    'not present in input',
     fixed = FALSE
   )
 })
 
-
-test_that('threshold correctly provided or error detected', {
+test_that('warns if timegroup is a datetime or character', {
   copyDT <- copy(DT)
-
-  expect_error(edge_nn(DT, threshold = -10, id = 'ID'),
-               'threshold must be greater than 0')
-
-  expect_error(edge_nn(DT, threshold = 0, id = 'ID'),
-               'threshold must be greater than 0')
-
-  expect_error(edge_nn(DT, threshold = '0', id = 'ID'),
-               'threshold must be numeric')
-})
-
-
-test_that('coords are correctly provided or error detected', {
-  expect_error(
+  expect_warning(
     edge_nn(
-      DT,
-      id = 'ID',
-      coords = c('X', NULL)
+      copyDT,
+      id = id,
+      coords = coords,
+      timegroup = 'datetime'
     ),
-    'coords requires a vector'
+    'timegroup provided is a',
+    fixed = FALSE
   )
 
-  expect_error(
+  copyDT <- copy(DT)
+  copyDT[, posix := as.POSIXct(datetime)]
+  expect_warning(
     edge_nn(
-      DT,
-      id = 'ID',
-      coords = c('X', 'ID'),
-      timegroup = 'timegroup'
+      copyDT,
+      id = id,
+      coords = coords,
+      timegroup = 'posix'
     ),
-    'coords must be numeric'
+    'timegroup provided is a',
+    fixed = FALSE
+  )
+
+  copyDT <- copy(DT)
+  copyDT[, idate := as.IDate(datetime)]
+  expect_warning(
+    edge_nn(
+      copyDT,
+      id = id,
+      coords = coords,
+      timegroup = 'idate'
+    ),
+    'timegroup provided is a',
+    fixed = FALSE
   )
 })
-
-test_that('warns if timegroup is a datetime or character',
-          {
-            # if datetime is a character
-            copyDT <- copy(DT)
-            expect_warning(
-              edge_nn(
-                copyDT,
-                id = 'ID',
-                coords = c('X', 'Y'),
-                timegroup = 'datetime'
-              ),
-              'timegroup provided is a',
-              fixed = FALSE
-            )
-
-            # if datetime is a POSIXct
-            copyDT <- copy(DT)
-            copyDT[, posix := as.POSIXct(datetime)]
-            expect_warning(
-              edge_nn(
-                copyDT,
-                id = 'ID',
-                coords = c('X', 'Y'),
-                timegroup = 'posix'
-              ),
-              'timegroup provided is a',
-              fixed = FALSE
-            )
-
-            # if datetime is an IDate
-            copyDT <- copy(DT)
-            copyDT[, idate := as.IDate(datetime)]
-            expect_warning(
-              edge_nn(
-                copyDT,
-                id = 'ID',
-                coords = c('X', 'Y'),
-                timegroup = 'idate'
-              ),
-              'timegroup provided is a',
-              fixed = FALSE
-            )
-          })
 
 test_that('duplicate IDs in a timegroup detected', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '8 hours')
-  expect_warning(edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup'
-  ),
-  'found duplicate id in a timegroup', fixed = FALSE)
+  expect_warning(
+    edge_nn(
+      copyDT,
+      id = id,
+      coords = coords,
+      timegroup = timegroup
+    ),
+    'found duplicate id in a timegroup',
+    fixed = FALSE
+  )
 })
-
-
-test_that('returned IDs make sense', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
-  eDT <- edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup'
-  )
-
-  IDs <- copyDT[, unique(ID)]
-  expect_true(all(eDT$ID %in% IDs))
-  expect_true(all(na.omit(eDT$NN) %in% IDs))
-  expect_true(eDT[ID == NN, .N] == 0)
-
-  # With threshold
-  eDT <- edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
-    threshold = 100
-  )
-
-  IDs <- copyDT[, unique(ID)]
-  expect_true(all(eDT$ID %in% IDs))
-  expect_true(all(na.omit(eDT$NN) %in% IDs))
-  expect_true(eDT[ID == NN, .N] == 0)
-
-
-})
-
-
-
-
-
-
-test_that('returned columns match', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
-  eDT <- edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup'
-  )
-
-  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
-  expect_false('distance' %in% colnames(eDT))
-
-
-  eDT <- edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
-    returnDist = TRUE
-  )
-
-  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
-
-
-  eDT <- edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
-    returnDist = TRUE,
-    threshold = 1000
-  )
-
-  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
-
-  eDT <- edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
-    returnDist = FALSE,
-    threshold = 1000
-  )
-
-  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
-  expect_false('distance' %in% colnames(eDT))
-
-
-})
-
-
-test_that('distances returned are below threshold', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
-  thresh <- 1000
-  eDT <- edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
-    returnDist = TRUE,
-    threshold = thresh
-  )
-
-  expect_equal(eDT[distance > thresh, .N], 0)
-})
-
-test_that('NAs exist in NN when threshold provided', {
-  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
-  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
-  thresh <- 1000
-  eDT <- edge_nn(
-    copyDT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup',
-    threshold = thresh
-  )
-
-  expect_gt(eDT[is.na(NN), .N], 0)
-})
-
-test_that('returns a data.table', {
-  expect_s3_class(edge_nn(
-    DT,
-    id = 'ID',
-    coords = c('X', 'Y'),
-    timegroup = 'timegroup'
-  ), 'data.table')
-})
-
-
 
 test_that('warns about splitBy column', {
   copyDT <- copy(DT)
@@ -316,22 +154,433 @@ test_that('warns about splitBy column', {
   expect_warning(
     edge_nn(
       copyDT,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      timegroup = 'timegroup'
+      id = id,
+      coords = coords,
+      timegroup = timegroup
     ),
     'split_by'
   )
 })
 
-test_that({'errors if timegroup is null'}, {
+
+test_that('threshold correctly provided or error detected', {
+  expect_error(
+    edge_nn(DT,
+      threshold = -10, timegroup = timegroup, id = id,
+      coords = coords
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    edge_nn(DT,
+      threshold = 0, timegroup = timegroup, id = id,
+      coords = coords
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    edge_nn(DT,
+      threshold = '0', timegroup = timegroup, id = id,
+      coords = coords
+    ),
+    'threshold must be of class numeric'
+  )
+
+  expect_error(
+    edge_nn(DT,
+              threshold = -10, timegroup = timegroup, id = id,
+              coords = coords, crs = utm
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    edge_nn(DT,
+              threshold = 0, timegroup = timegroup, id = id,
+              coords = coords, crs = utm
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    edge_nn(DT,
+              threshold = '0', timegroup = timegroup, id = id,
+              coords = coords, crs = utm
+    ),
+    'threshold must be of class numeric'
+  )
+
+  expect_error(
+    edge_nn(DT,
+              threshold = units::as_units(-1, 'm'),
+              timegroup = timegroup, id = id,
+              coords = coords, crs = utm
+    ),
+    'threshold must be > 0'
+  )
+
+  # geometry
+  expect_error(
+    edge_nn(DT,
+              threshold = units::as_units(-1, 'm'),
+              timegroup = timegroup, id = id
+    ),
+    'threshold must be > 0'
+  )
+
+  expect_error(
+    edge_nn(DT,
+              threshold = units::as_units(100, 'km'),
+              timegroup = timegroup, id = id
+    ),
+    'units of threshold'
+  )
+})
+
+test_that('coords/geometry are correctly provided or error detected', {
+  # coords
   expect_error(
     edge_nn(
       DT,
-      threshold = NULL,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      timegroup = NULL
-    )
+      id = id,
+      timegroup = timegroup,
+      coords = c('X', NULL)
+    ),
+    'coords must be length 2'
   )
+
+  expect_error(
+    edge_nn(
+      DT,
+      id = id,
+      coords = c('X', 'ID'),
+      timegroup = timegroup
+    ),
+    'coords must be of class numeric'
+  )
+
+  expect_error(
+    edge_nn(
+      DT,
+      id = id,
+      coords = c('potatoX', 'potatoY'),
+      timegroup = timegroup
+    ),
+    'not present in input',
+    fixed = FALSE
+  )
+
+  # geometry
+  expect_error(
+    edge_nn(
+      DT,
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup,
+      geometry = 'potato'
+    ),
+    'did you run'
+  )
+
+  expect_error(
+    edge_nn(
+      DT,
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup,
+      geometry = 'X'
+    ),
+    'sfc_POINT'
+  )
+})
+
+test_that('returned IDs make sense', {
+  # coords
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords,
+    timegroup = timegroup
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$ID %in% IDs))
+  expect_true(all(na.omit(eDT$NN) %in% IDs))
+  expect_true(eDT[ID == NN, .N] == 0)
+
+  # With threshold
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
+    threshold = 100
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$ID %in% IDs))
+  expect_true(all(na.omit(eDT$NN) %in% IDs))
+  expect_true(eDT[ID == NN, .N] == 0)
+
+  # geometry
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$ID %in% IDs))
+  expect_true(all(na.omit(eDT$NN) %in% IDs))
+  expect_true(eDT[ID == NN, .N] == 0)
+
+  # With threshold
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    threshold = 100
+  )
+
+  IDs <- copyDT[, unique(ID)]
+  expect_true(all(eDT$ID %in% IDs))
+  expect_true(all(na.omit(eDT$NN) %in% IDs))
+  expect_true(eDT[ID == NN, .N] == 0)
+})
+
+test_that('returned columns match', {
+  # coords
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords,
+    timegroup = timegroup
+  )
+
+  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
+  expect_false('distance' %in% colnames(eDT))
+
+
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
+    returnDist = TRUE
+  )
+
+  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
+
+
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    threshold = threshold
+  )
+
+  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
+
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
+    returnDist = FALSE,
+    threshold = threshold
+  )
+
+  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
+  expect_false('distance' %in% colnames(eDT))
+
+  # geometry
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords,
+    timegroup = timegroup
+  )
+
+  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
+  expect_false('distance' %in% colnames(eDT))
+
+
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    returnDist = TRUE
+  )
+
+  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
+
+
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    threshold = threshold
+  )
+
+  expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
+
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    returnDist = FALSE,
+    threshold = threshold
+  )
+
+  expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
+  expect_false('distance' %in% colnames(eDT))
+})
+
+test_that('distances returned are below threshold', {
+  # coords
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords,
+    crs = utm,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    threshold = threshold
+  )
+
+  expect_equal(eDT[distance > threshold, .N], 0)
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords_longlat,
+    crs = 4326,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    threshold = threshold
+  )
+
+  expect_equal(eDT[distance > units::as_units(threshold, 'm'), .N], 0)
+
+  # geometry
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    threshold = threshold
+  )
+
+  expect_equal(eDT[distance > threshold, .N], 0)
+
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    threshold = threshold,
+    geometry = 'geometry_longlat'
+  )
+
+  expect_equal(eDT[distance > units::as_units(threshold, 'm'), .N], 0)
+})
+
+test_that('NAs exist in NN when threshold provided', {
+  # coords
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
+    threshold = threshold,
+    returnDist = TRUE
+  )
+
+  expect_gt(eDT[is.na(NN), .N], 0)
+  expect_all_true(eDT[is.na(NN), is.na(distance)])
+
+  # geometry
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    threshold = threshold,
+    returnDist = TRUE
+  )
+
+  expect_gt(eDT[is.na(NN), .N], 0)
+  expect_all_true(eDT[is.na(NN), is.na(distance)])
+
+  # longlat
+  copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
+  group_times(copyDT, datetime = 'datetime', threshold = '10 minutes')
+  threshold <- 1000
+  eDT <- edge_nn(
+    copyDT,
+    id = id,
+    timegroup = timegroup,
+    threshold = threshold,
+    geometry = 'geometry_longlat',
+    returnDist = TRUE
+  )
+
+  expect_gt(eDT[is.na(NN), .N], 0)
+  expect_all_true(eDT[is.na(NN), is.na(distance)])
+
+})
+
+test_that('returns a data.table', {
+  # coords
+  expect_s3_class(edge_nn(
+    DT,
+    id = id,
+    coords = coords,
+    timegroup = timegroup
+  ), 'data.table')
+
+  # geometry
+  expect_s3_class(edge_nn(
+    DT,
+    id = id,
+    timegroup = timegroup
+  ), 'data.table')
+
+  # geometry
+  expect_s3_class(edge_nn(
+    DT,
+    id = id,
+    timegroup = timegroup,
+    geometry = 'geometry_longlat'
+  ), 'data.table')
 })

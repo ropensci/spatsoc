@@ -79,14 +79,13 @@
 #'   DT = DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736
+#'   crs = 32736
 #' )
 #'
 #' # Calculate directional alignment edge-list
 #' align <- edge_alignment(
 #'   DT,
 #'   id = 'ID',
-#'   timegroup = 'timegroup',
 #'   signed = FALSE
 #' )
 #'
@@ -97,53 +96,44 @@
 #' align_group <- edge_alignment(
 #'   DT,
 #'   id = 'ID',
-#'   timegroup = 'timegroup',
+#'   group = 'group',
+#'   signed = FALSE
+#' )
+#'
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
+#' direction_step(DT, id = 'ID')
+#' align_group <- edge_alignment(
+#'   DT,
+#'   id = 'ID',
 #'   group = 'group',
 #'   signed = FALSE
 #' )
 edge_alignment <- function(
-  DT = NULL,
-  id = NULL,
-  direction = 'direction',
-  timegroup = 'timegroup',
-  group = NULL,
-  splitBy = NULL,
-  signed = FALSE) {
+    DT = NULL,
+    id = NULL,
+    direction = 'direction',
+    timegroup = 'timegroup',
+    group = NULL,
+    splitBy = NULL,
+    signed = FALSE) {
   # due to NSE notes in R CMD check
   ID1 <- ID2 <- N <- NULL
 
-  if (is.null(DT)) {
-    stop('DT required')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
 
-  if (is.null(id)) {
-    stop('id required')
-  }
+  assert_not_null(id)
+  assert_not_null(direction)
+  assert_not_null(timegroup)
 
-  if (is.null(direction)) {
-    stop('direction required')
-  }
+  check_colnames <- c(id, direction, timegroup, group, splitBy)
+  assert_are_colnames(DT, check_colnames)
 
-  if (is.null(timegroup)) {
-    stop('timegroup required')
-  }
+  assert_col_radians(DT, direction, ', did you use direction_step?')
 
-  if (!all((
-    c(id, direction, timegroup, group, splitBy) %in% colnames(DT)
-  ))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        c(id, direction, timegroup, group, splitBy),
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (DT[, !inherits(.SD[[1]], 'units'), .SDcols = c(direction)] ||
-      DT[, units(.SD[[1]])$numerator != 'rad', .SDcols = c(direction)]) {
-    stop('units(DT$direction) is not radians, did you use direction_step?')
-  }
+  assert_inherits(signed, 'logical')
 
   if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
     c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
@@ -177,10 +167,6 @@ edge_alignment <- function(
               "splitBy"')
     )
     data.table::setnames(DT, 'splitBy', 'split_by')
-  }
-
-  if (!is.logical(signed)) {
-    stop('signed must be TRUE or FALSE')
   }
 
   edges <- DT[, {

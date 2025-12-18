@@ -12,7 +12,7 @@ test_that('DT is required', {
   expect_error(get_geometry(
     DT = NULL
   ),
-  'input DT required')
+  'DT must be provided')
 })
 
 test_that('coords provided correctly, else error', {
@@ -21,7 +21,7 @@ test_that('coords provided correctly, else error', {
       DT,
       coords = 'X'
     ),
-    'coords requires a vector'
+    'coords must be length 2'
   )
 
   expect_error(
@@ -29,7 +29,7 @@ test_that('coords provided correctly, else error', {
       DT,
       coords = c('potatoX', 'Y')
     ),
-    'not present in input DT'
+    'not present in input'
   )
 
   expect_error(
@@ -37,7 +37,7 @@ test_that('coords provided correctly, else error', {
       DT,
       coords = c('X', 'potatoY')
     ),
-    'not present in input DT'
+    'not present in input'
   )
 
   expect_error(
@@ -45,7 +45,7 @@ test_that('coords provided correctly, else error', {
       DT,
       coords = c('ID', 'ID')
     ),
-    'coords must be numeric'
+    'coords must be of class numeric'
   )
 
 })
@@ -57,7 +57,7 @@ test_that('crs provided correctly, else error', {
       coords = coords,
       crs = NULL
     ),
-    'input crs required'
+    'crs must be provided'
   )
 })
 
@@ -81,14 +81,7 @@ test_that('geometry column returned is sfc, as expected', {
   expect_s3_class(copyDT$geometry, 'sfc')
 
   copyDT <- copy(DT)
-  get_geometry(copyDT, coords = coords, crs = crs, output_crs = FALSE)
-
-  expect_equal(st_coordinates(copyDT$geometry),
-               copyDT[, as.matrix(.SD), .SDcols = coords])
-
-
-  copyDT <- copy(DT)
-  get_geometry(copyDT, coords = coords, crs = crs, output_crs = NULL)
+  get_geometry(copyDT, coords = coords, crs = crs)
 
   expect_equal(st_coordinates(copyDT$geometry),
                copyDT[, as.matrix(.SD), .SDcols = coords])
@@ -96,9 +89,11 @@ test_that('geometry column returned is sfc, as expected', {
   copyDT <- copy(DT)
   get_geometry(copyDT, coords = coords, crs = crs)
 
-  expect_lt(mean(st_coordinates(copyDT$geometry) -
-                   copyDT[, as.matrix(.SD), .SDcols = coords]),
-            0)
+  expect_equal(
+    mean(st_coordinates(copyDT$geometry) -
+      copyDT[, as.matrix(.SD), .SDcols = coords]),
+    0
+  )
 
   copyDT <- copy(DT)[sample(seq.int(.N), 10), c(coords) := NA]
   get_geometry(copyDT, coords = coords, crs = crs)

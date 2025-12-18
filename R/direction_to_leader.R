@@ -1,34 +1,40 @@
 #' Direction to group leader
 #'
 #' `direction_to_leader` calculates the direction to the leader of each
-#' spatiotemporal group. The function expects a `data.table` with
-#' relocation data appended with a `rank_position_group_direction` column
-#' indicating the ranked position along the group direction generated with
-#' `leader_direction_group(return_rank = TRUE)`. Relocation data should be
-#' in planar coordinates provided in two columns representing the X and Y
-#' coordinates.
+#' spatiotemporal group. The function expects a `data.table` with relocation
+#' data appended with a `rank_position_group_direction` column indicating the
+#' ranked position along the group direction generated with
+#' `leader_direction_group(return_rank = TRUE)`. Relocation data should be in
+#' two columns representing the X and Y coordinates, or in a geometry column
+#' prepared by the helper function [get_geometry()].
 #'
-#' The `DT` must be a `data.table`. If your data is a
-#' `data.frame`, you can convert it by reference using
-#' [data.table::setDT()] or by reassigning using
+#' The `DT` must be a `data.table`. If your data is a `data.frame`, you can
+#' convert it by reference using [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' This function expects a `rank_position_group_direction` column
-#' generated with `leader_direction_group(return_rank = TRUE)`,
-#' a `group` column generated with the
-#' `group_pts` function. The `coords` and `group` arguments
-#' expect the names of columns in `DT` which correspond to the X and Y
-#' coordinates and group columns.
+#' This function expects a `rank_position_group_direction` column generated with
+#' `leader_direction_group(return_rank = TRUE)`, a `group` column generated with
+#' the `group_pts` function. The `group` argument expects the name of the column
+#' in `DT` which correspond to the group column.
 #'
-#' @inheritParams distance_to_leader
+#' See below under "Interface" for details on providing coordinates and under
+#' "Direction function" for details on the underlying direction function used.
 #'
-#' @return `direction_to_leader` returns the input `DT` appended with
-#'   a `direction_leader` column indicating the direction to the group
-#'   leader. A value of NaN is returned when the coordinates of the focal
+#' @inheritSection direction_step Interface
+#' @inheritSection direction_step Direction function
+#'
+#' @inheritParams direction_step
+#' @inheritParams leader_direction_group
+#'
+#' @return `direction_to_leader` returns the input `DT` appended with a
+#'   `direction_leader` column indicating the direction to the group leader in
+#'   radians. A value of NaN is returned when the coordinates of the focal
 #'   individual equal the coordinates of the leader.
 #'
-#'   A message is returned when the `direction_leader` column already
-#'   exist in the input `DT` because it will be overwritten.
+#'   Missing values in coordinates / geometry are ignored and NA is returned.
+#'
+#'   A message is returned when the `direction_leader` column already exist in
+#'   the input `DT` because it will be overwritten.
 #'
 #'   See details for appending outputs using modify-by-reference in the
 #'   [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
@@ -36,7 +42,8 @@
 #' @export
 #' @family Direction functions
 #' @family Leadership functions
-#' @seealso [distance_to_leader], [leader_direction_group], [group_pts]
+#' @seealso [distance_to_leader], [leader_direction_group], [group_pts],
+#'   [lwgeom::st_geod_azimuth()]
 #' @references
 #'
 #' See examples of using direction to leader and position within group:
@@ -70,7 +77,7 @@
 #'   DT = DT,
 #'   id = 'ID',
 #'   coords = c('X', 'Y'),
-#'   projection = 32736
+#'   crs = 32736
 #' )
 #'
 #' # Calculate group centroid
@@ -83,98 +90,159 @@
 #' leader_direction_group(
 #'   DT,
 #'   coords = c('X', 'Y'),
-#'   return_rank = TRUE
+#'   crs = 32736
 #' )
 #'
-#' # Calculate direction to leader
-#' direction_to_leader(DT, coords = c('X', 'Y'))
+#' # Or, using the new geometry interface
+#' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
+#' group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
+#' direction_step(
+#'   DT = DT,
+#'   id = 'ID'
+#' )
+#' centroid_group(DT)
+#' direction_group(DT)
+#' leader_direction_group(
+#'   DT
+#' )
+#' direction_to_leader(DT)
 direction_to_leader <- function(
     DT = NULL,
     coords = NULL,
-    group = 'group') {
+    group = 'group',
+    crs = NULL,
+    geometry = 'geometry') {
+
   # Due to NSE notes
-  direction_leader <- rank_position_group_direction <- has_leader <-
-    zzz_N_by_group <- . <- NULL
+  geo <- lead <- x <- y <- x_leader <- y_leader <- . <-
+    rank_position_group_direction <- has_leader <- direction_leader <- NULL
 
-  if (is.null(DT)) {
-    stop('input DT required')
-  }
-
-  if (is.null(group)) {
-    stop('group column name required')
-  }
-
-  if (length(coords) != 2) {
-    stop('coords requires a vector of column names for coordinates X and Y')
-  }
-
-  if (!group %in% colnames(DT)) {
-    stop('group column not present in input DT, did you run group_pts?')
-  }
-
-  check_cols <- c(coords, group)
-
-  if (!all((check_cols %in% colnames(DT)))) {
-    stop(paste0(
-      as.character(paste(setdiff(
-        check_cols,
-        colnames(DT)
-      ), collapse = ', ')),
-      ' field(s) provided are not present in input DT'
-    ))
-  }
-
-  if (!all((DT[, vapply(.SD, is.numeric, TRUE), .SDcols = coords]))) {
-    stop('coords must be numeric')
-  }
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(group)
+  assert_are_colnames(DT, group)
 
   leader_col <- 'rank_position_group_direction'
-
-  if (!leader_col %in% colnames(DT)) {
-    stop(leader_col,
-         ' column not present in input DT, ',
-         'did you run leader_direction_group(return_rank = TRUE)?')
-  }
-
-  if (!is.numeric(DT[[leader_col]])) {
-    stop(leader_col, ' column must be numeric')
-  }
-
-  out_col <- 'direction_leader'
-  if (out_col %in% colnames(DT)) {
-    message(
-      paste0(out_col, ' column will be overwritten by this function')
-    )
-    data.table::set(DT, j = out_col, value = NULL)
-  }
+  assert_are_colnames(
+    DT, leader_col,
+    ', did you run leader_direction_group(return_rank = TRUE)?'
+  )
+  assert_col_inherits(DT, leader_col, 'numeric')
 
   check_leaderless <- DT[, .(
-    has_leader = any(rank_position_group_direction == 1)),
+    has_leader = any(rank_position_group_direction == 1, na.rm = TRUE)),
     by = c(group)][!(has_leader)]
 
-  if (check_leaderless[, .N > 0]) {
-    warning(
-      'groups found missing leader (rank_position_group_direction == 1): \n',
-      check_leaderless[, paste(group, collapse = ', ')]
-    )
+  out_col <- 'direction_leader'
+
+  if (is.null(coords)) {
+    if (!is.null(crs)) {
+      message('crs argument is ignored when coords are null, using geometry')
+    }
+
+    assert_are_colnames(DT, geometry, ', did you run get_geometry()?')
+    assert_col_inherits(DT, geometry, 'sfc_POINT')
+
+    zzz_geometry_leader <- 'zzz_geometry_leader'
+    DT[, c(zzz_geometry_leader) :=
+      sf::st_sf(rep(geo[which(rank_position_group_direction == 1)], .N)),
+       env = list(geo = geometry),
+       by = c(group)]
+
+    if (check_leaderless[, .N > 0]) {
+      warning(
+        'groups found missing leader (rank_position_group_direction == 1): \n',
+        check_leaderless[, paste(group, collapse = ', ')]
+      )
+    }
+
+    if (out_col %in% colnames(DT)) {
+      message(
+        paste0(out_col, ' column will be overwritten by this function')
+      )
+      data.table::set(DT, j = out_col, value = NULL)
+    }
+
+    crs <- sf::st_crs(DT[[geometry]])
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
+    }
+
+    DT[!group %in% check_leaderless$group &
+         !sf::st_is_empty(geo) &
+         !sf::st_is_empty(lead),
+      direction_leader := calc_direction(
+        geometry_a = geo,
+        geometry_b = lead,
+        use_transform = use_transform
+      ),
+      env = list(
+        geo = geometry, lead = zzz_geometry_leader
+      )
+    ]
+
+    data.table::set(DT, j = zzz_geometry_leader, value = NULL)
+
+  } else {
+    assert_are_colnames(DT, coords)
+    assert_length(coords, 2)
+    assert_col_inherits(DT, coords, 'numeric')
+    assert_not_null(crs)
+
+    xcol <- data.table::first(coords)
+    ycol <- data.table::last(coords)
+    pre <- 'zzz_leader_'
+    zzz_xcol_leader <- paste0(pre, xcol)
+    zzz_ycol_leader <- paste0(pre, ycol)
+    zzz_coords_leader  <- c(zzz_xcol_leader, zzz_ycol_leader)
+
+    DT[, c(zzz_coords_leader) :=
+         .SD[which(rank_position_group_direction == 1)],
+       .SDcols = c(coords),
+       by = c(group)]
+
+    if (check_leaderless[, .N > 0]) {
+      warning(
+        'groups found missing leader (rank_position_group_direction == 1): \n',
+        check_leaderless[, paste(group, collapse = ', ')]
+      )
+    }
+
+    if (out_col %in% colnames(DT)) {
+      message(
+        paste0(out_col, ' column will be overwritten by this function')
+      )
+      data.table::set(DT, j = out_col, value = NULL)
+    }
+
+    use_transform <- !sf::st_is_longlat(crs)
+
+    if (is.na(use_transform)) {
+      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
+                          ', ensure crs is provided for direction functions'))
+    }
+
+    DT[!group %in% check_leaderless$group &
+        !is.na(x) & !is.na(y) & !is.na(x_leader) & !is.na(y_leader),
+      direction_leader := calc_direction(
+        x_a = x,
+        y_a = y,
+        x_b = x_leader,
+        y_b = y_leader,
+        crs = crs,
+        use_transform = use_transform
+      ),
+      env = list(
+        x = xcol, y = ycol, x_leader = zzz_xcol_leader, y_leader = zzz_ycol_leader
+      )
+    ]
+
+    data.table::set(DT, j = zzz_coords_leader, value = NULL)
+
   }
-
-  zzz_leader_coords <- c('zzz_leader_xcol', 'zzz_leader_ycol')
-  DT[, c(zzz_leader_coords) :=
-       .SD[which(rank_position_group_direction == 1)],
-     .SDcols = c(coords),
-     by = c(group)]
-
-  DT[!group %in% check_leaderless$group,
-     direction_leader := fifelse(
-    .SD[[1]] == .SD[[3]] &
-      .SD[[2]] == .SD[[4]],
-    NaN,
-    atan2(.SD[[4]] - .SD[[2]], (.SD[[3]] - .SD[[1]]))
-  ),
-  .SDcols = c(coords, zzz_leader_coords)]
-
-  data.table::set(DT, j = zzz_leader_coords, value = NULL)
 
   return(DT[])
 }

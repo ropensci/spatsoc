@@ -8,7 +8,7 @@ get_geometry(
   DT = NULL,
   coords = NULL,
   crs = NULL,
-  output_crs = 4326,
+  output_crs = NULL,
   geometry_colname = "geometry"
 )
 }
@@ -16,14 +16,14 @@ get_geometry(
 \item{DT}{input data.table}
 
 \item{coords}{character vector of X coordinate and Y coordinate column names.
-Note: the order is assumed X followed by Y column names.}
+Note: the order is assumed X followed by Y column names}
 
 \item{crs}{numeric or character defining the coordinate reference system to
 be passed to \link[sf:st_crs]{sf::st_crs}. For example, \code{crs = "EPSG:32736"} or
 \code{crs = 32736}.}
 
-\item{output_crs}{default 4326, the output crs to transform the input
-coordinates to with \link[sf:st_transform]{sf::st_transform}. If output_crs is NULL or FALSE or
+\item{output_crs}{default NULL, the output crs to transform the input
+coordinates to with \link[sf:st_transform]{sf::st_transform}. If output_crs is NULL or
 matching the crs argument, the coordinates will not be transformed}
 
 \item{geometry_colname}{default "geometry", to optionally set output name
@@ -53,6 +53,12 @@ convert it by reference using \code{\link[data.table:setDT]{data.table::setDT()}
 
 The \code{coords} argument expects the names of columns in \code{DT} which correspond
 to the X and Y coordinates.
+
+The \code{output_crs} argument allows the user to set an output \code{crs} for their
+geometry column. Note: some functions in spatsoc (eg. those that measure
+directions like \code{edge_direction} and \code{direction_to_leader}) require
+geographic coordinates and it is therefore simpler to leave the default
+\code{output_crs = 4326}.
 }
 \examples{
 # Load data.table

@@ -2,7 +2,7 @@
 #'
 #' `build_polys` generates a simple feature collection with POLYGONs from a
 #' `data.table`. The function expects a `data.table` with
-#' relocation data, individual identifiers, a projection,
+#' relocation data, individual identifiers, a crs,
 #' home range type and parameters. The relocation
 #' data is transformed into POLYGONs using either [adehabitatHR::mcp] or
 #' [adehabitatHR::kernelUD] for each individual and, optionally,
@@ -15,7 +15,7 @@
 #' ## R-spatial evolution
 #'
 #' Please note, spatsoc has followed updates from R spatial, GDAL and PROJ for
-#' handling projections, see more below and  details at
+#' handling coordinate reference systems, see more below and  details at
 #' <https://r-spatial.org/r/2020/03/17/wkt.html>.
 #'
 #' In addition, `build_polys` previously used [sp::SpatialPoints] but has been
@@ -32,10 +32,10 @@
 #' to the individual identifier, X and Y coordinates, and additional
 #' grouping columns.
 #'
-#' The `projection` argument expects a character string or numeric
+#' The `crs` argument expects a character string or numeric
 #' defining the coordinate reference system to be passed to [sf::st_crs].
-#' For example, for UTM zone 36S (EPSG 32736), the projection
-#' argument is `projection = "EPSG:32736"` or `projection = 32736`.
+#' For example, for UTM zone 36S (EPSG 32736), the crs
+#' argument is `crs = "EPSG:32736"` or `crs = 32736`.
 #' See <https://spatialreference.org>
 #' for a list of EPSG codes.
 #'
@@ -58,13 +58,14 @@
 #' of the respective `hrType` `adehabitatHR` function.
 #'
 #'
+#' @inheritParams build_lines
 #' @inheritParams group_polys
 #' @param spPts alternatively, provide solely a SpatialPointsDataFrame with one
 #' column representing the ID of each point, as specified by [adehabitatHR::mcp]
 #' or [adehabitatHR::kernelUD]
-#' @param projection numeric or character defining the coordinate reference
+#' @param crs numeric or character defining the coordinate reference
 #'   system to be passed to [sf::st_crs]. For example, either
-#'   `projection = "EPSG:32736"` or `projection = 32736`.
+#'   `crs = "EPSG:32736"` or `crs = 32736`.
 #' @export
 #'
 #' @family Build functions
@@ -85,25 +86,32 @@
 #' utm <- 32736
 #'
 #' # Build polygons for each individual using kernelUD and getverticeshr
-#' build_polys(DT, projection = utm, hrType = 'kernel',
+#' build_polys(DT, crs = utm, hrType = 'kernel',
 #'             hrParams = list(grid = 60, percent = 95),
 #'             id = 'ID', coords = c('X', 'Y'))
 #'
 #' # Build polygons for each individual by year
 #' DT[, yr := year(datetime)]
-#' build_polys(DT, projection = utm, hrType = 'mcp',
+#' build_polys(DT, crs = utm, hrType = 'mcp',
 #'             hrParams = list(percent = 95),
 #'             id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
-build_polys <- function(DT = NULL,
-                        projection = NULL,
-                        hrType = NULL,
-                        hrParams = NULL,
-                        id = NULL,
-                        coords = NULL,
-                        splitBy = NULL,
-                        spPts = NULL) {
+build_polys <- function(
+    DT = NULL,
+    crs = NULL,
+    hrType = NULL,
+    hrParams = NULL,
+    id = NULL,
+    coords = NULL,
+    splitBy = NULL,
+    spPts = NULL,
+    projection = NULL) {
   # due to NSE notes in R CMD check
   . <- NULL
+
+  if (!is.null(projection)) {
+    warning('projection argument is deprecated, setting crs = projection')
+    crs <- projection
+  }
 
   if (is.null(DT) && is.null(spPts)) {
     stop('input DT or spPts required')
@@ -114,21 +122,10 @@ build_polys <- function(DT = NULL,
   }
 
   if (!is.null(DT) && is.null(spPts)) {
-    if (is.null(coords)) {
-      stop('coords must be provided')
-    }
-
-    if (is.null(id)) {
-      stop('id must be provided')
-    }
-
-    if (is.null(projection)) {
-      stop('projection must be provided')
-    }
-
-    if (length(coords) != 2) {
-      stop('coords requires a vector of column names for coordinates X and Y')
-    }
+    assert_not_null(coords)
+    assert_not_null(id)
+    assert_not_null(crs)
+    assert_length(coords, 2)
 
     if (is.null(splitBy)) {
       splitBy <- id
@@ -136,43 +133,12 @@ build_polys <- function(DT = NULL,
       splitBy <- c(id, splitBy)
     }
 
-    if (!all((c(splitBy, coords) %in% colnames(DT)))) {
-      stop(paste0(
-        as.character(paste(setdiff(
-          c(id, coords), colnames(DT)
-        ),
-        collapse = ', ')),
-        ' field(s) provided are not present in input DT'
-      ))
-    }
-
-    if (!all((DT[, vapply(.SD, is.numeric, TRUE),
-                 .SDcols = coords]))) {
-      stop('coords must be numeric')
-    }
-
-    if (!all((DT[, lapply(
-      .SD,
-      FUN = function(x) {
-        is.numeric(x) | is.character(x) | is.integer(x)
-      }
-    ), .SDcols = c(splitBy)]))) {
-      stop(
-        strwrap(
-          prefix = " ",
-          initial = "",
-          x = 'id (and splitBy when provided)
-          must be character, numeric or integer type'
-        )
-      )
-    }
-
+    assert_are_colnames(DT, c(splitBy, coords))
   }
 
-
-  if (is.null(hrType)) {
-    stop('hrType must be provided')
-  }
+  assert_col_inherits(DT, coords, 'numeric')
+  assert_col_inherits(DT, splitBy, c('numeric', 'character', 'integer'))
+  assert_not_null(hrType)
 
   if (is.null(hrParams)) {
     message('hrParams is not provided, using defaults')
@@ -186,7 +152,7 @@ build_polys <- function(DT = NULL,
       sf::st_as_sf(
         DT[, cbind(.SD, ade_id), .SDcols = c(coords)],
         coords = coords,
-        crs = sf::st_crs(projection)
+        crs = sf::st_crs(crs)
       ),
       IDs = ade_id
     )
