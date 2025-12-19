@@ -67,7 +67,8 @@ print(DT)
 ### Converting from other packages
 
 Alternatively, coming from other packages, we can convert the objects to 
-`data.table`s for processing with {spatsoc}.  
+data.tables for processing with {spatsoc}. Caution: {spatsoc}'s expectation
+is that the "geometry" column is a `sfc_POINT` representing each relocation. 
 
 #### Converting from {sftrack}
 
@@ -82,6 +83,8 @@ my_track <- as_sftrack(raccoon,
 )
 
 DT_sftrack <- as.data.table(my_track)
+
+print(DT_sftrack)
 ```
 
 #### Converting from {move2}
@@ -90,12 +93,19 @@ DT_sftrack <- as.data.table(my_track)
 library(move2)
 fishers <- mt_read(mt_example(file = "fishers.csv.gz"))
 DT_move2 <- as.data.table(fishers)
+
+print(DT_move2)
 ```
 
 ### Converting to packages
 
 After processing with {spatsoc}, optionally convert output to work with other
-packages. 
+packages. Caution: {spatsoc}'s expectation is that users take their input
+data.table through any required functions in {spatsoc} before converting to
+other packages or using eg. {dplyr}. Intermixing packages between {spatsoc}
+functions can lead to issues with {data.table} class or column allocation. See
+more details under Package Design in
+[FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 
 #### Converting to {sf}
 
