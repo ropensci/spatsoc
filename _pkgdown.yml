@@ -52,7 +52,7 @@ reference:
     contents:
     - '`leader_direction_group`'
     - '`leader_edge_delay`'
-  - title: Spatial interface functions
+  - title: Geometry interface functions
     desc: ~
     contents:
     - '`get_geometry`'

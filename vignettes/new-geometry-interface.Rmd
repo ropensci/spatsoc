@@ -1,8 +1,8 @@
 ---
-title: "New spatial interface"
+title: "New geometry interface"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{New spatial interface}
+  %\VignetteIndexEntry{New geometry interface}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-`spatsoc` (> v 0.2.11) provides a new spatial interface. 
+`spatsoc` (> v 0.2.11) provides a new geometry interface. 
 
 ### Setup
 

@@ -1,7 +1,7 @@
 #' Get geometry
 #'
 #' `get_geometry` sets up an input `DT` with a 'geometry' column for spatsoc's
-#' sf interface. The function expects a `data.table` with relocation data and
+#' geometry interface. The function expects a `data.table` with relocation data and
 #' a coordinate reference system.
 #'
 #' The `DT` must be a `data.table`. If your data is a `data.frame`, you can

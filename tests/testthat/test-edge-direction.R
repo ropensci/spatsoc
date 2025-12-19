@@ -260,7 +260,7 @@ test_that('use_transform errors if crs not provided', {
 })
 
 
-# sfc interface
+# geometry interface
 test_that('if coords null, geometry required', {
   expect_error(edge_direction(edges, DT, id = id, coords = NULL),
                'get_geometry?')
@@ -279,13 +279,13 @@ test_that('geometry correctly provided else error', {
                'must be of class')
 })
 
-test_that('sfc interface message before overwrite', {
+test_that('geometry interface message before overwrite', {
   copyEdges <- copy(edges)[, direction_dyad := 42]
   expect_message(edge_direction(copyEdges, DT, id = id),
                  'overwritten')
 })
 
-test_that('sfc interface returns expected', {
+test_that('geometry interface returns expected', {
   copyEdges <- copy(edges)
   get_geometry(DT, coords = coords, crs = utm)
 

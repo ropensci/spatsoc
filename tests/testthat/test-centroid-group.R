@@ -134,7 +134,7 @@ test_that('geometry results are expected', {
 })
 
 
-test_that('sfc interface', {
+test_that('geometry interface', {
   expect_message(centroid_group(copy(DT), crs = utm), 'crs')
   copyDT <- copy(DT)
   copyDT[, centroid := 42]
