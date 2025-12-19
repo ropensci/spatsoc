@@ -140,6 +140,16 @@ The following warning may be returned when centroid functions are used with
 longlat coordinates / geometry and the {s2} package is not available or 
 `sf::sf_use_s2()` is `FALSE`. Please set `sf::sf_use_s2(TRUE)` and try again. 
 
+
+## Converting from other packages
+
+Instead of using `get_geometry()`, coming from other packages, we can convert
+the objects to data.tables for processing with {spatsoc}. Caution: {spatsoc}'s
+expectation is that the "geometry" column is a `sfc_POINT` representing each
+relocation.
+
+### Converting from {sftrack}
+
 ```{r}
 library(sftrack)
 data("raccoon")
@@ -155,7 +165,7 @@ DT_sftrack <- as.data.table(my_track)
 print(DT_sftrack)
 ```
 
-#### Converting from {move2}
+### Converting from {move2}
 
 ```{r}
 library(move2)
@@ -165,7 +175,7 @@ DT_move2 <- as.data.table(fishers)
 print(DT_move2)
 ```
 
-### Converting to packages
+## Converting to other packages
 
 After processing with {spatsoc}, optionally convert output to work with other
 packages. Caution: {spatsoc}'s expectation is that users take their input
@@ -175,7 +185,7 @@ functions can lead to issues with {data.table} class or column allocation. See
 more details under Package Design in
 [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 
-#### Converting to {sf}
+### Converting to {sf}
 
 ```{r}
 library(sf)
@@ -185,7 +195,7 @@ plot(DT_sf)
 ```
 
 
-#### Converting to {sftrack}
+### Converting to {sftrack}
 
 ```{r}
 library(sftrack)
@@ -199,7 +209,7 @@ head(DT_sftrack)
 plot(DT_sftrack)
 ```
 
-#### Converting to {move2}
+### Converting to {move2}
 
 ```{r}
 library(move2)
