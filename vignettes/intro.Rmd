@@ -24,6 +24,36 @@ The package contains grouping and edge-list generating functions that are used f
 
 The functions were developed for application across animal relocation data, for example, proximity based social network analyses and spatial and temporal clustering of points.
 
+
+See the other vignettes for further information:
+
+- [Introduction to spatsoc](https://docs.ropensci.org/spatsoc/articles/intro.html)
+  - temporal grouping
+  - spatiotemporal grouping with `group_pts`, `group_lines`, `group_polys`
+  - distance based edge-list generation with `edge_dist`
+- [Frequently asked questions about spatsoc](https://docs.ropensci.org/spatsoc/articles/faq.html)
+  - install
+  - function details for `group_times`, `group_pts`, `group_lines`, `group_polys`,
+  `edge_dist`, `edge_nn`, and `randomizations`
+  - package design including modify-by-reference, data.table column allocation
+  - calculating summary information
+- [Using spatsoc in social network analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html)
+  - generating gambit-of-the-group data
+  - generating observed networks
+  - data stream randomization, randomized networks
+  - network metrics
+- [Using distance based edge-lists generating functions, dyad_id, and fusion_id](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
+  - generate distance based edge-lists with `edge_dist` and `edge_nn`
+  - generate dyad identifiers for edge-lists with `dyad_id`
+  - identify fusion events with `fusion_id`
+- [Geometry interface](https://docs.ropensci.org/spatsoc/articles/geometry-interface-and-spatial-measures.html)
+  - using `get_geometry` to setup a geometry column and use the geometry interface
+  - details of underlying distance, direction and centroid spatial measures
+  - converting to and from related packages
+- [Interspecific interactions](https://docs.ropensci.org/spatsoc/articles/interspecific-interactions.html)
+  - combine two movement datasets
+  - identify interspecific interactions
+
 ## Data preparation
 
 ```{r, eval = TRUE, echo = TRUE}
