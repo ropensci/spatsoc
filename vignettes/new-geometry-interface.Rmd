@@ -84,6 +84,32 @@ distance function used is [stats::dist()], maintaining expected behaviour from
 previous versions. The distance returned does not have units set.
 
 Note: in both cases, if the coordinates are NA then the result will be NA.
+
+
+### Direction
+
+The underlying distance function used depends on the crs of the coordinates or
+geometry provided.
+
+- If the crs is provided and longlat degrees (as determined by
+[sf::st_is_longlat()]), the distance function is [lwgeom::st_geod_azimuth()].
+
+- If the crs is provided and not longlat degrees (eg. a projected UTM),
+the coordinates or geometry are transformed to `sf::st_crs(4326)` before the
+distance is measured using [lwgeom::st_geod_azimuth()].
+
+- If the crs is NULL or `NA_crs_`, the distance function cannot be used
+and an error is returned.
+
+The crs for direction functions (eg. `direction_step`, `direction_to_centroid`)
+should be either longlat or a crs that can be transformed to `sf::st_crs(4326)`.
+A user can check their crs by using the function 
+`sf::st_can_transform(src = crs, dst = 4326)`.
+
+If a user provides a crs that is not longlat and cannot be transformed to 4326, 
+they will receive an internal error with the following structure:
+
+ `"In CPL_transform(x, crs, aoi, pipeline, reverse, desired_accuracy, : GDAL Error 6: Cannot find coordinate operations from..."`
 ```{r}
 library(sftrack)
 data("raccoon")
