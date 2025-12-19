@@ -29,13 +29,13 @@ analysis are further described in the vignette
 
 ## Generate edge-lists
 
-spatsoc provides users with one temporal (`group_times`) and two edge-list
-generating functions (`edge_dist`, `edge_nn`) to generate edge-lists from GPS
-relocations. Users can consider edges defined by either the spatial proximity
-between individuals (with `edge_dist`), by nearest neighbour (with `edge_nn`) or
-by nearest neighbour with a maximum distance (with `edge_nn`). The edge-lists
-can be used directly by the animal social network package `asnipe` to generate
-networks.
+spatsoc provides users with one temporal (`group_times`) and two distance based
+edge-list generating functions (`edge_dist`, `edge_nn`) to generate edge-lists
+from GPS relocations. Users can consider edges defined by either the spatial
+proximity between individuals (with `edge_dist`), by nearest neighbour (with
+`edge_nn`) or by nearest neighbour with a maximum distance (with `edge_nn`). The
+edge-lists can be used directly by the animal social network package `asnipe` to
+generate networks.
 
 ### 1. Load packages and prepare data
 
