@@ -1,8 +1,10 @@
 ---
 title: "Introduction to spatsoc"
-author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Introduction to spatsoc}
   %\VignetteEngine{knitr::knitr}

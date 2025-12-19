@@ -1,7 +1,6 @@
 ---
 title: "Using spatsoc in social network analysis"
-author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
-date: "`r Sys.Date()`"
+author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
 output:
   rmarkdown::html_vignette:
     number_sections: false

@@ -1,6 +1,9 @@
 ---
 title: "Additional data formats"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Additional data formats}
   %\VignetteEngine{knitr::rmarkdown}

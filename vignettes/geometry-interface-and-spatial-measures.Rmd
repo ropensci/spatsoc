@@ -1,6 +1,10 @@
 ---
 title: "New geometry interface"
-output: rmarkdown::html_vignette
+author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: true
 vignette: >
   %\VignetteIndexEntry{New geometry interface}
   %\VignetteEngine{knitr::rmarkdown}

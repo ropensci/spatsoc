@@ -1,7 +1,6 @@
 ---
 title: "Frequently asked questions about spatsoc"
-author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
-date: "`r Sys.Date()`"
+author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
 output: 
   rmarkdown::html_vignette:
     number_sections: true

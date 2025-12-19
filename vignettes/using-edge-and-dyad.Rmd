@@ -1,6 +1,10 @@
 ---
 title: "Using edge-list generating functions and dyad_id"
-output: rmarkdown::html_vignette
+author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Using edge-list generating functions and dyad_id}
   %\VignetteEngine{knitr::rmarkdown}
