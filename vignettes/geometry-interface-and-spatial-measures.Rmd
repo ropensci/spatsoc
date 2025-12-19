@@ -1,0 +1,262 @@
+---
+title: "New geometry interface"
+author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{New geometry interface}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  eval = TRUE,
+  echo = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+{spatsoc} v 0.2.13 provides a new geometry interface and internal functions that
+provide consistent spatial measures across all {spatsoc} functions.
+
+The motivation for `get_geometry` is to allow users to supply a geometry column
+instead of providing coordinates and optionally crs through the "coords" and
+"crs" args. This interface is enabled by default on all functions that accept
+coordinates / geometry, by leaving the coords null and ensuring the geometry
+column has been set up using `get_geometry()`.
+
+Details on spatial measures below under [Spatial measures]. 
+
+---
+
+See the other vignettes for further information:
+
+- [Introduction to spatsoc](https://docs.ropensci.org/spatsoc/articles/intro.html)
+  - temporal grouping
+  - spatiotemporal grouping with `group_pts`, `group_lines`, `group_polys`
+  - distance based edge-list generation with `edge_dist`
+- [Frequently asked questions about spatsoc](https://docs.ropensci.org/spatsoc/articles/faq.html)
+  - install
+  - function details for `group_times`, `group_pts`, `group_lines`, `group_polys`,
+  `edge_dist`, `edge_nn`, and `randomizations`
+  - package design including modify-by-reference, data.table column allocation
+  - calculating summary information
+- [Using spatsoc in social network analysis](https://docs.ropensci.org/spatsoc/articles/using-in-sna.html)
+  - generating gambit-of-the-group data
+  - generating observed networks
+  - data stream randomization, randomized networks
+  - network metrics
+- [Using distance based edge-lists generating functions, dyad_id, and fusion_id](https://docs.ropensci.org/spatsoc/articles/using-edge-and-dyad.html)
+  - generate distance based edge-lists with `edge_dist` and `edge_nn`
+  - generate dyad identifiers for edge-lists with `dyad_id`
+  - identify fusion events with `fusion_id`
+- [Geometry interface](https://docs.ropensci.org/spatsoc/articles/geometry-interface-and-spatial-measures.html)
+  - using `get_geometry` to setup a geometry column and use the geometry interface
+  - details of underlying distance, direction and centroid spatial measures
+  - converting to and from related packages
+- [Interspecific interactions](https://docs.ropensci.org/spatsoc/articles/interspecific-interactions.html)
+  - combine two movement datasets
+  - identify interspecific interactions
+
+
+## Setup
+
+Load packages
+
+```{r}
+library(spatsoc)
+library(data.table)
+```
+
+Example data and variables
+
+```{r}
+# Read example data
+DT <- fread(system.file('extdata', 'DT.csv', package = 'spatsoc'))
+
+coords <- c('X', 'Y')
+crs <- 32736
+datetime <- 'datetime'
+id <- 'ID'
+```
+
+## `get_geometry`
+
+`get_geometry` can be used to setup a `DT` with a simple feature geometry list
+column. Optionally, the input coordinates can be transformed using the argument
+"output_crs". The default output geometry column name can be changed using the 
+argument "geometry_colname". 
+
+### Usage
+
+```{r}
+# Get geometry
+get_geometry(DT, coords = coords, crs = crs)
+
+print(DT)
+```
+
+## Spatial measures
+
+### Distance
+
+The underlying distance function used depends on the crs of the coordinates or
+geometry provided.
+
+- If the crs is longlat degrees (as determined by
+[sf::st_is_longlat()]), the distance function is [sf::st_distance()] which
+passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
+[lwgeom::st_geod_distance()] if [sf::sf_use_s2()] is FALSE. The distance
+returned has units set according to the crs.
+
+- If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
+distance function used is [stats::dist()], maintaining expected behaviour from
+previous versions. The distance returned does not have units set.
+
+Note: in both cases, if the coordinates are NA then the result will be NA.
+
+
+### Direction
+
+The underlying distance function used depends on the crs of the coordinates or
+geometry provided.
+
+- If the crs is provided and longlat degrees (as determined by
+[sf::st_is_longlat()]), the distance function is [lwgeom::st_geod_azimuth()].
+
+- If the crs is provided and not longlat degrees (eg. a projected UTM),
+the coordinates or geometry are transformed to `sf::st_crs(4326)` before the
+distance is measured using [lwgeom::st_geod_azimuth()].
+
+- If the crs is NULL or `NA_crs_`, the distance function cannot be used
+and an error is returned.
+
+The crs for direction functions (eg. `direction_step`, `direction_to_centroid`)
+should be either longlat or a crs that can be transformed to `sf::st_crs(4326)`.
+A user can check their crs by using the function 
+`sf::st_can_transform(src = crs, dst = 4326)`.
+
+If a user provides a crs that is not longlat and cannot be transformed to 4326, 
+they will receive an internal error with the following structure:
+
+ `"In CPL_transform(x, crs, aoi, pipeline, reverse, desired_accuracy, : GDAL Error 6: Cannot find coordinate operations from..."`
+
+### Centroid
+
+@section Centroid function:
+
+The underlying centroid function used depends on the crs of the coordinates or
+geometry provided.
+
+- If the crs is longlat degrees (as determined by
+[sf::st_is_longlat()]) and [sf::sf_use_s2()] is TRUE, the distance function is
+[sf::st_centroid()] which passes to [s2::s2_centroid()].
+
+- If the crs is longlat degrees but [sf::sf_use_s2()] is FALSE, the centroid
+calculated will be incorrect. See [sf::st_centroid()].
+
+- If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
+centroid function used is mean.
+
+Note: if the input is length 1, the input is returned directly without any
+processing.
+
+The `distance_to_centroid`, `direction_to_centroid` and `leader_direction_group`
+expect a centroid column named 'centroid' when the geometry interface is used.
+Ensure the `centroid_group` function has been used with the geometry interface
+before running these functions. 
+
+The following warning may be returned when centroid functions are used with 
+longlat coordinates / geometry and the {s2} package is not available or 
+`sf::sf_use_s2()` is `FALSE`. Please set `sf::sf_use_s2(TRUE)` and try again. 
+
+
+## Converting from other packages
+
+Instead of using `get_geometry()`, coming from other packages, we can convert
+the objects to data.tables for processing with {spatsoc}. Caution: {spatsoc}'s
+expectation is that the "geometry" column is a `sfc_POINT` representing each
+relocation.
+
+### Converting from {sftrack}
+
+```{r}
+library(sftrack)
+data("raccoon")
+raccoon$timestamp <- as.POSIXct(raccoon$timestamp, "EST")
+burstz <- list(id = raccoon$animal_id, month = as.POSIXlt(raccoon$timestamp)$mon)
+my_track <- as_sftrack(raccoon,
+  group = burstz, time = "timestamp",
+  error = NA, coords = c("longitude", "latitude")
+)
+
+DT_sftrack <- as.data.table(my_track)
+
+print(DT_sftrack)
+```
+
+### Converting from {move2}
+
+```{r}
+library(move2)
+fishers <- mt_read(mt_example(file = "fishers.csv.gz"))
+DT_move2 <- as.data.table(fishers)
+
+print(DT_move2)
+```
+
+## Converting to other packages
+
+After processing with {spatsoc}, optionally convert output to work with other
+packages. Caution: {spatsoc}'s expectation is that users take their input
+data.table through any required functions in {spatsoc} before converting to
+other packages or using eg. {dplyr}. Intermixing packages between {spatsoc}
+functions can lead to issues with {data.table} class or column allocation. See
+more details under Package Design in
+[FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
+
+### Converting to {sf}
+
+```{r}
+library(sf)
+DT_sf <- st_as_sf(DT, sf_column_name = 'geometry')
+print(DT_sf)
+plot(DT_sf)
+```
+
+
+### Converting to {sftrack}
+
+```{r}
+library(sftrack)
+
+# First convert to sf as above
+DT_sf <- st_as_sf(DT, sf_column_name = 'geometry')
+# Then convert to sftrack
+DT_sftrack <- as_sftrack(DT_sf, group = c(id = id), time = datetime)
+
+head(DT_sftrack)
+plot(DT_sftrack)
+```
+
+### Converting to {move2}
+
+```{r}
+library(move2)
+
+# Convert to a {move2} object using mt_as_move2
+DT_move2 <- mt_as_move2(DT,
+  time_column = datetime,
+  track_id_column = id,
+  sf_column_name = 'geometry'
+)
+
+print(DT_move2)
+plot(DT_move2)
+```

@@ -43,7 +43,7 @@ See details for appending outputs using modify-by-reference in the
 }
 \description{
 \code{get_geometry} sets up an input \code{DT} with a 'geometry' column for spatsoc's
-sf interface. The function expects a \code{data.table} with relocation data and
+geometry interface. The function expects a \code{data.table} with relocation data and
 a coordinate reference system.
 }
 \details{

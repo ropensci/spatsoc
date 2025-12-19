@@ -142,7 +142,7 @@ direction_step(
   crs = 32736
 )
 
-# Or: sfc interface
+# Or: geometry interface
 get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
 direction_step(DT, id = 'ID')
 

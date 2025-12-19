@@ -203,7 +203,7 @@ test_that('projection arg is deprecated', {
   )
 })
 
-# sfc interface
+# geometry interface
 test_that('if coords null, geometry required', {
   expect_error(direction_step(DT, id = id, coords = NULL, crs = utm),
                'get_geometry?')
@@ -224,13 +224,13 @@ test_that('geometry correctly provided else error', {
                'must be of class')
 })
 
-test_that('sfc interface message before overwrite', {
+test_that('geometry interface message before overwrite', {
   copyDT <- copy(DT)[, direction := 42]
   expect_message(direction_step(copyDT, id = id),
                  'overwritten')
 })
 
-test_that('sfc interface returns expected', {
+test_that('geometry interface returns expected', {
   copyDT <- get_geometry(copy(clean_DT), coords = coords, crs = utm,
                          output_crs = 4326)
 

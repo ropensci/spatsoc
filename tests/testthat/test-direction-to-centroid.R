@@ -109,7 +109,7 @@ test_that('use_transform errors if crs not provided', {
 })
 
 
-# sfc interface
+# geometry interface
 test_that('if coords null, geometry required', {
   expect_error(direction_to_centroid(DT, crs = utm),
                'get_geometry?')
