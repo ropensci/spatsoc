@@ -1,8 +1,8 @@
 ---
-title: "Additional data formats"
+title: "Detecting interspecific interactions"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Additional data formats}
+  %\VignetteIndexEntry{Detecting interspecific interactions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,10 +23,10 @@ library(data.table)
 data.table::setDTthreads(1)
 ```
 
-## Multispecies interactions
+## Interspecific interactions
 
-Multispecies data can be used with `spatsoc` to estimate 
-interspecific interactions, eg. predator-prey dyanmics. 
+Interspecific data can be used with `spatsoc` to estimate eg. predator-prey
+dyanmics.
 
 Given two datasets of movement data, simply bind them together and use 
 the `group_*` functions as usual. 
