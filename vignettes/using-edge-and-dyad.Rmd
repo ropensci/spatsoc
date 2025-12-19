@@ -1,8 +1,8 @@
 ---
-title: "Using edge-list generating functions and dyad_id"
+title: "Using distance based edge-list generating functions, dyad_id and fusion_id"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using edge-list generating functions and dyad_id}
+  %\VignetteIndexEntry{Using distance based edge-list generating functions, dyad_id and fusion_id}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
