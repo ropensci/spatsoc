@@ -97,10 +97,9 @@ direction_polarization <- function(
     data.table::set(DT, j = out, value = NULL)
   }
 
-  DT[, c(out) :=
-       CircStats::r.test(units::drop_units(.SD[[1]]), degree = FALSE)$r.bar,
-    by = c(group),
-    .SDcols = c(direction)]
+  DT[, out :=  CircStats::r.test(as.numeric(dir), degree = FALSE)$r.bar,
+     by = c(group),
+     env = list(dir = direction, out = out)]
 
   return(DT[])
 }
