@@ -24,6 +24,7 @@ The package contains grouping and edge-list generating functions that are used f
 
 The functions were developed for application across animal relocation data, for example, proximity based social network analyses and spatial and temporal clustering of points.
 
+---
 
 See the other vignettes for further information:
 

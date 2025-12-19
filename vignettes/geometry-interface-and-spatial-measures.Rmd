@@ -33,6 +33,7 @@ column has been set up using `get_geometry()`.
 
 Details on spatial measures below under [Spatial measures]. 
 
+---
 
 See the other vignettes for further information:
 

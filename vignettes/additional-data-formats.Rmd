@@ -17,11 +17,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(spatsoc)
-library(data.table)
-```
-
 ```{r, echo = FALSE, eval = TRUE}
 data.table::setDTthreads(1)
 ```
@@ -30,6 +25,8 @@ data.table::setDTthreads(1)
 
 Interspecific data can be used with {spatsoc} to estimate interspecific
 interactions, eg. predator-prey dynamics. 
+
+---
 
 See the other vignettes for further information:
 
@@ -69,9 +66,16 @@ the `group_*` functions as usual.
 ```{r}
 #| fig.alt: >
 #|   Predator prey interactions
+
+# Load packages
+library(spatsoc)
+library(data.table)
+
+# Load data
 predator <- fread(system.file("extdata", "DT_predator.csv", package = "spatsoc"))
 prey <- fread(system.file("extdata", "DT_prey.csv", package = "spatsoc"))
 
+# Combine data
 DT <- rbindlist(list(predator, prey))
 
 # Set the datetime as a POSIxct

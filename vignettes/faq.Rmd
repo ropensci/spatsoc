@@ -24,6 +24,8 @@ gambit-of-the-group format and edge-lists. In addition, the randomization
 function provides data-stream randomization methods suitable for GPS data.
 
 
+---
+
 See the other vignettes for further information:
 
 - [Introduction to spatsoc](https://docs.ropensci.org/spatsoc/articles/intro.html)

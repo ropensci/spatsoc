@@ -3,8 +3,8 @@ title: "Using spatsoc in social network analysis"
 author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
 output:
   rmarkdown::html_vignette:
-    number_sections: false
-    toc: false
+    number_sections: true
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Using spatsoc in social network analysis}
   %\VignetteEngine{knitr::knitr}
@@ -29,10 +29,10 @@ Gambit of the group format data is generated using the grouping functions:
 * `group_lines`
 * `group_polys`
 
-Data stream randomization is performed using the `randomizations` function. 
+Data stream randomization is performed using the `randomizations` function. Group
+by individual matrices are generated using the `get_gbi` function. 
 
-Group by individual matrices are generated using the `get_gbi` function. 
-
+--- 
 
 See the other vignettes for further information:
 
