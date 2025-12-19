@@ -31,7 +31,6 @@ dyanmics.
 Given two datasets of movement data, simply bind them together and use 
 the `group_*` functions as usual. 
 
-
 ```{r}
 #| fig.alt: >
 #|   Predator prey interactions
@@ -61,12 +60,10 @@ sub_prey <- DT[type == 'prey']
 sub_prey[, mean(interact)]
 
 
-
 # Plot --------------------------------------------------------------------
 # If we subset only where there are interactions
 sub_interact <- DT[(interact)]
 
-# Base R plot
 plot(sub_prey$X, sub_prey$Y, col = 'grey', pch = 21)
 points(sub_interact$X, sub_interact$Y, col = factor(sub_interact$type))
 ```
