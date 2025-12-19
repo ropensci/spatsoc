@@ -81,26 +81,24 @@ See the vignette about
 
 # Installation
 
-## System dependencies
-
-### GEOS
-
-Install `GEOS`:
-
-- Debian/Ubuntu: `apt-get install libgeos-dev`
-- Arch: `pacman -S geos`
-- Fedora: `dnf install geos geos-devel`
-- Mac: `brew install geos`
-- Windows: see [here](https://trac.osgeo.org/osgeo4w/)
-
 ## Package dependencies
 
-* `data.table`
-* `igraph`
-* `sp`
-* `adehabitatHR`
-* `rgeos`
+```
+adehabitatHR (>= 0.4.21),
+data.table (>= 1.15.0),
+igraph,
+sf,
+lwgeom (>= 0.2.15),
+CircStats,
+stats,
+units (>= 0.8-6),
+rlang
+```
 
+See [here](https://github.com/r-spatial/sf/?tab=readme-ov-file#installing) for
+help installing `sf`, see [here](https://github.com/r-quantities/units/?tab=readme-ov-file#installation) 
+for help installing `units` and [here](https://github.com/r-spatial/lwgeom?tab=readme-ov-file#installing) for
+help installing `lwgeom`.
 
 
 # Functions
