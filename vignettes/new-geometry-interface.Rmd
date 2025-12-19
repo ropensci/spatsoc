@@ -110,6 +110,36 @@ If a user provides a crs that is not longlat and cannot be transformed to 4326,
 they will receive an internal error with the following structure:
 
  `"In CPL_transform(x, crs, aoi, pipeline, reverse, desired_accuracy, : GDAL Error 6: Cannot find coordinate operations from..."`
+
+### Centroid
+
+@section Centroid function:
+
+The underlying centroid function used depends on the crs of the coordinates or
+geometry provided.
+
+- If the crs is longlat degrees (as determined by
+[sf::st_is_longlat()]) and [sf::sf_use_s2()] is TRUE, the distance function is
+[sf::st_centroid()] which passes to [s2::s2_centroid()].
+
+- If the crs is longlat degrees but [sf::sf_use_s2()] is FALSE, the centroid
+calculated will be incorrect. See [sf::st_centroid()].
+
+- If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
+centroid function used is mean.
+
+Note: if the input is length 1, the input is returned directly without any
+processing.
+
+The `distance_to_centroid`, `direction_to_centroid` and `leader_direction_group`
+expect a centroid column named 'centroid' when the geometry interface is used.
+Ensure the `centroid_group` function has been used with the geometry interface
+before running these functions. 
+
+The following warning may be returned when centroid functions are used with 
+longlat coordinates / geometry and the {s2} package is not available or 
+`sf::sf_use_s2()` is `FALSE`. Please set `sf::sf_use_s2(TRUE)` and try again. 
+
 ```{r}
 library(sftrack)
 data("raccoon")
