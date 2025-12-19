@@ -18,13 +18,16 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-`spatsoc` (> v 0.2.11) provides a new geometry interface. The motivation is to
-allow users to supply a geometry column instead of providing coordinates and
-optionally crs through the "coords" and "crs" args. This interface is enabled by
-default on all functions that accept coordinates / geometry, by leaving the
-coords null and ensuring the geometry column has been set up using
-`get_geometry()`. 
+{spatsoc} v 0.2.13 provides a new geometry interface and internal functions that
+provide consistent spatial measures across all {spatsoc} functions.
 
+The motivation for `get_geometry` is to allow users to supply a geometry column
+instead of providing coordinates and optionally crs through the "coords" and
+"crs" args. This interface is enabled by default on all functions that accept
+coordinates / geometry, by leaving the coords null and ensuring the geometry
+column has been set up using `get_geometry()`.
+
+Details on spatial measures below under [Spatial measures]. 
 
 ### Setup
 
