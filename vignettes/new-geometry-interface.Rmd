@@ -45,7 +45,6 @@ coords <- c('X', 'Y')
 crs <- 32736
 datetime <- 'datetime'
 id <- 'ID'
-geometry <- 'geometry'
 ```
 
 ## `get_geometry`
