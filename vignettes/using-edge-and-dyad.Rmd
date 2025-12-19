@@ -163,58 +163,30 @@ and end relocation, etc. **Note:** since the edges are duplicated A-B and B-A,
 you will need to use the unique timegroup*dyadID or divide counts by 2.
 
 
+## Fusion events
 
-### 4. Dyad stats
+### 4. `fusion_id`
+
+The function `fusion_id` can be used to identify fusion events in distance based
+edge-lists. The "n_min_length" argument defines the minimum number of successive
+fixes that are required to establish a fusion event. The "n_max_missing"
+argument defines the the maximum number of allowable missing observations for
+the dyad within a fusion event. The "allow_split" argument defines if a single
+observation can be greater than the threshold distance without initiating
+fission event.
+
 
 ```{r, eval = TRUE}
-# Get the unique dyads by timegroup
-# NOTE: we are explicitly selecting only where dyadID is not NA
-dyads <- unique(edges[!is.na(dyadID)], by = c('timegroup', 'dyadID'))
+fusion_id(
+  edges = edges,
+  threshold = 100,
+  n_min_length = 1,
+  n_max_missing = 0,
+  allow_split = FALSE
+)
 
-# NOTE: if we wanted to also include where dyadID is NA, we should do it explicitly
-# dyadNN <- unique(DT[!is.na(NN)], by = c('timegroup', 'dyadID'))
-
-# Get where NN was NA
-# dyadNA <- DT[is.na(NN)]
-
-# Combine where NN is NA
-# dyads <- rbindlist(list(dyadNN, dyadNA))
-
-
-# Set the order of the rows
-setorder(dyads, timegroup)
-
-## Count number of timegroups dyads are observed together
-dyads[, nObs := .N, by = .(dyadID)]
-
-## Count consecutive relocations together
-# Shift the timegroup within dyadIDs
-dyads[, shifttimegrp := shift(timegroup, 1), by =  dyadID]
-
-# Difference between consecutive timegroups for each dyadID
-# where difftimegrp == 1, the dyads remained together in consecutive timegroups
-dyads[, difftimegrp := timegroup - shifttimegrp]
-
-
-# Run id of diff timegroups
-dyads[, runid := rleid(difftimegrp), by = dyadID]
-
-# N consecutive observations of dyadIDs
-dyads[, runCount := fifelse(difftimegrp == 1, .N, NA_integer_), 
-      by = .(runid, dyadID)]
-
-## Start and end of consecutive relocations for each dyad
-# Dont consider where runs aren't more than one relocation
-dyads[runCount > 1, start := fifelse(timegroup == min(timegroup), TRUE, FALSE), 
-      by = .(runid, dyadID)]
-
-dyads[runCount > 1, end := fifelse(timegroup == max(timegroup), TRUE, FALSE), 
-      by = .(runid, dyadID)]
-
-## Example output
-dyads[dyadID == 'B-H', 
-      .(timegroup, nObs, shifttimegrp, difftimegrp, runid, runCount, start, end)]
+# Print first 10 fusion events
+print(edges[fusionID <= 5])
 ```
 
-<!-- mean xy, todo -->
 
