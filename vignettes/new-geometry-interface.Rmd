@@ -57,7 +57,6 @@ argument "geometry_colname".
 ### Usage
 
 ```{r}
-
 # Get geometry
 get_geometry(DT, coords = coords, crs = crs)
 
@@ -68,7 +67,7 @@ print(DT)
 ### Converting from other packages
 
 Alternatively, coming from other packages, we can convert the objects to 
-data.tables for processing with spatsoc. 
+`data.table`s for processing with {spatsoc}.  
 
 #### Converting from {sftrack}
 
@@ -101,8 +100,8 @@ packages.
 #### Converting to {sf}
 
 ```{r}
-DT_sf <- st_as_sf(DT, sf_column_name = geometry)
 library(sf)
+DT_sf <- st_as_sf(DT, sf_column_name = 'geometry')
 print(DT_sf)
 plot(DT_sf)
 ```
@@ -113,7 +112,9 @@ plot(DT_sf)
 ```{r}
 library(sftrack)
 
-# First convert to sf as above, then:
+# First convert to sf as above
+DT_sf <- st_as_sf(DT, sf_column_name = 'geometry')
+# Then convert to sftrack
 DT_sftrack <- as_sftrack(DT_sf, group = c(id = id), time = datetime)
 
 head(DT_sftrack)
@@ -125,10 +126,13 @@ plot(DT_sftrack)
 ```{r}
 library(move2)
 
-DT_move2 <- mt_as_move2(DT, 
-                   time_column = datetime, 
-                   track_id_column = id, 
-                   sf_column_name = geometry)
+# Convert to a {move2} object using mt_as_move2
+DT_move2 <- mt_as_move2(DT,
+  time_column = datetime,
+  track_id_column = id,
+  sf_column_name = 'geometry'
+)
+
 print(DT_move2)
 plot(DT_move2)
 ```
