@@ -1,11 +1,11 @@
 ---
-title: "Additional data formats"
+title: "Detecting interspecific interactions"
 output: 
   rmarkdown::html_vignette:
     number_sections: true
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Additional data formats}
+  %\VignetteIndexEntry{Detecting interspecific interactions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -26,11 +26,10 @@ library(data.table)
 data.table::setDTthreads(1)
 ```
 
-## Multispecies interactions
+## Interspecific interactions
 
-Multispecies data can be used with {spatsoc} to estimate interspecific
+Interspecific data can be used with {spatsoc} to estimate interspecific
 interactions, eg. predator-prey dynamics. 
-
 
 See the other vignettes for further information:
 
@@ -64,9 +63,8 @@ See the other vignettes for further information:
 
 ## Interspecific interactions
 
-Given two datasets of movement data, simply bind them together and use 
+Given two movement datasets, simply bind them together and use 
 the `group_*` functions as usual. 
-
 
 ```{r}
 #| fig.alt: >
@@ -97,12 +95,10 @@ sub_prey <- DT[type == 'prey']
 sub_prey[, mean(interact)]
 
 
-
 # Plot --------------------------------------------------------------------
 # If we subset only where there are interactions
 sub_interact <- DT[(interact)]
 
-# Base R plot
 plot(sub_prey$X, sub_prey$Y, col = 'grey', pch = 21)
 points(sub_interact$X, sub_interact$Y, col = factor(sub_interact$type))
 ```

@@ -1,12 +1,12 @@
 ---
-title: "Using edge-list generating functions and dyad_id"
+title: "Using distance based edge-list generating functions, dyad_id and fusion_id"
 author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
 output: 
   rmarkdown::html_vignette:
     number_sections: true
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Using edge-list generating functions and dyad_id}
+  %\VignetteIndexEntry{Using distance based edge-list generating functions, dyad_id and fusion_id}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,7 +20,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-`spatsoc` can be used in social network analysis to generate edge-lists from GPS relocation data. Distance based edge-lists are generated using either the `edge_dist` or the `edge_nn` function. 
+`spatsoc` can be used in social network analysis to generate distance based edge-lists from GPS relocation data. 
+Distance based edge-lists are generated using either the `edge_dist` or the `edge_nn` function. 
 
 See the other vignettes for further information:
 
@@ -53,10 +54,19 @@ See the other vignettes for further information:
 
 
 ## Generate edge-lists
-spatsoc provides users with one temporal (`group_times`) and two edge-list generating functions (`edge_dist`, `edge_nn`) to generate edge-lists from GPS relocations. Users can consider edges defined by either the spatial proximity between individuals (with `edge_dist`), by nearest neighbour (with `edge_nn`) or by nearest neighbour with a maximum distance (with `edge_nn`). The edge-lists can be used directly by the animal social network package `asnipe` to generate networks. 
+
+spatsoc provides users with one temporal (`group_times`) and two distance based
+edge-list generating functions (`edge_dist`, `edge_nn`) to generate edge-lists
+from GPS relocations. Users can consider edges defined by either the spatial
+proximity between individuals (with `edge_dist`), by nearest neighbour (with
+`edge_nn`) or by nearest neighbour with a maximum distance (with `edge_nn`). The
+edge-lists can be used directly by the animal social network package `asnipe` to
+generate networks.
 
 ### 1. Load packages and prepare data
-`spatsoc` expects a `data.table` for all `DT` arguments and date time columns to be formatted `POSIXct`. 
+
+`spatsoc` expects a `data.table` for all `DT` arguments and date time columns to
+be formatted `POSIXct`.
 
 ```{r, eval = TRUE}
 ## Load packages
@@ -76,17 +86,25 @@ DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 DT[, datetime := as.POSIXct(datetime)]
 ```
 
-
-
-Next, we will group relocations temporally with `group_times` and generate edges lists with one of `edge_dist`, `edge_dist`. Note: these are mutually exclusive, only select one edge-list generating function at a time. 
+Next, we will group relocations temporally with `group_times` and generate edges
+lists with one of `edge_dist`, `edge_dist`. Note: these are mutually exclusive,
+only select one edge-list generating function at a time.
 
 ### 2. a) `edge_dist` 
 
-Distance based edge-lists where relocations in each timegroup are considered edges if they are within the spatial distance defined by the user with the `threshold` argument. Depending on species and study system, relevant temporal and spatial distance thresholds are used. In this case, relocations within 5 minutes and 50 meters are considered edges. 
+Distance based edge-lists where relocations in each timegroup are considered
+edges if they are within the spatial distance defined by the user with the
+`threshold` argument. Depending on species and study system, relevant temporal
+and spatial distance thresholds are used. In this case, relocations within 5
+minutes and 50 meters are considered edges.
 
-This is the non-chain rule implementation similar to `group_pts`. Edges are defined by the distance threshold and NAs are returned for individuals within each timegroup if they are not within the threshold distance of any other individual (if `fillNA` is TRUE). 
+This is the non-chain rule implementation similar to `group_pts`. Edges are
+defined by the distance threshold and NAs are returned for individuals within
+each timegroup if they are not within the threshold distance of any other
+individual (if `fillNA` is TRUE).
 
-Optionally, `edge_dist` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument `returnDist = TRUE`. 
+Optionally, `edge_dist` can return the distances between individuals (less than
+the threshold) in a column named 'distance' with argument `returnDist = TRUE`.
 
 ```{r, eval = TRUE}
 # Temporal groups
@@ -106,11 +124,18 @@ edges <- edge_dist(
 
 ### 2. b) `edge_nn`
 
-Nearest neighbour based edge-lists where each individual is connected to their nearest neighbour. `edge_nn` can be used to generate edge-lists defined either by nearest neighbour or nearest neighbour with a maximum distance. As with grouping functions and `edge_dist`, temporal and spatial threshold depend on  species and study system. 
+Nearest neighbour based edge-lists where each individual is connected to their
+nearest neighbour. `edge_nn` can be used to generate edge-lists defined either
+by nearest neighbour or nearest neighbour with a maximum distance. As with
+grouping functions and `edge_dist`, temporal and spatial threshold depend on
+species and study system.
 
-NAs are returned for nearest neighbour for an individual was alone in a timegroup (and/or splitBy) or if the distance between an individual and its nearest neighbour is greater than the threshold. 
+NAs are returned for nearest neighbour for an individual was alone in a
+timegroup (and/or splitBy) or if the distance between an individual and its
+nearest neighbour is greater than the threshold.
 
-Optionally, `edge_nn` can return the distances between individuals (less than the threshold) in a column named 'distance' with argument `returnDist = TRUE`. 
+Optionally, `edge_nn` can return the distances between individuals (less than
+the threshold) in a column named 'distance' with argument `returnDist = TRUE`.
 
 ```{r, eval = FALSE}
 # Temporal groups
@@ -150,7 +175,8 @@ edges <- edge_nn(
 
 ### 3. `dyad_id`
 
-The function `dyad_id` can be used to generate a unique, undirected dyad identifier for edge-lists. 
+The function `dyad_id` can be used to generate a unique, undirected dyad
+identifier for edge-lists.
 
 ```{r, eval = TRUE}
 # In this case, using the edges generated in 2. a) edge_dist
@@ -158,60 +184,35 @@ dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 ```
 
 
-Once we have generated dyad ids, we can measure consecutive relocations, start and end relocation, etc. **Note:** since the edges are duplicated A-B and B-A, you will need to use the unique timegroup*dyadID or divide counts by 2. 
+Once we have generated dyad ids, we can measure consecutive relocations, start
+and end relocation, etc. **Note:** since the edges are duplicated A-B and B-A,
+you will need to use the unique timegroup*dyadID or divide counts by 2.
 
 
-### 4. Dyad stats
+## Fusion events
+
+### 4. `fusion_id`
+
+The function `fusion_id` can be used to identify fusion events in distance based
+edge-lists. The "n_min_length" argument defines the minimum number of successive
+fixes that are required to establish a fusion event. The "n_max_missing"
+argument defines the the maximum number of allowable missing observations for
+the dyad within a fusion event. The "allow_split" argument defines if a single
+observation can be greater than the threshold distance without initiating
+fission event.
+
 
 ```{r, eval = TRUE}
-# Get the unique dyads by timegroup
-# NOTE: we are explicitly selecting only where dyadID is not NA
-dyads <- unique(edges[!is.na(dyadID)], by = c('timegroup', 'dyadID'))
+fusion_id(
+  edges = edges,
+  threshold = 100,
+  n_min_length = 1,
+  n_max_missing = 0,
+  allow_split = FALSE
+)
 
-# NOTE: if we wanted to also include where dyadID is NA, we should do it explicitly
-# dyadNN <- unique(DT[!is.na(NN)], by = c('timegroup', 'dyadID'))
-
-# Get where NN was NA
-# dyadNA <- DT[is.na(NN)]
-
-# Combine where NN is NA
-# dyads <- rbindlist(list(dyadNN, dyadNA))
-
-
-# Set the order of the rows
-setorder(dyads, timegroup)
-
-## Count number of timegroups dyads are observed together
-dyads[, nObs := .N, by = .(dyadID)]
-
-## Count consecutive relocations together
-# Shift the timegroup within dyadIDs
-dyads[, shifttimegrp := shift(timegroup, 1), by =  dyadID]
-
-# Difference between consecutive timegroups for each dyadID
-# where difftimegrp == 1, the dyads remained together in consecutive timegroups
-dyads[, difftimegrp := timegroup - shifttimegrp]
-
-
-# Run id of diff timegroups
-dyads[, runid := rleid(difftimegrp), by = dyadID]
-
-# N consecutive observations of dyadIDs
-dyads[, runCount := fifelse(difftimegrp == 1, .N, NA_integer_), 
-      by = .(runid, dyadID)]
-
-## Start and end of consecutive relocations for each dyad
-# Dont consider where runs aren't more than one relocation
-dyads[runCount > 1, start := fifelse(timegroup == min(timegroup), TRUE, FALSE), 
-      by = .(runid, dyadID)]
-
-dyads[runCount > 1, end := fifelse(timegroup == max(timegroup), TRUE, FALSE), 
-      by = .(runid, dyadID)]
-
-## Example output
-dyads[dyadID == 'B-H', 
-      .(timegroup, nObs, shifttimegrp, difftimegrp, runid, runCount, start, end)]
+# Print first 10 fusion events
+print(edges[fusionID <= 5])
 ```
 
-<!-- mean xy, todo -->
 
