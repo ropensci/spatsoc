@@ -50,8 +50,9 @@ id <- 'ID'
 ## `get_geometry`
 
 `get_geometry` can be used to setup a `DT` with a simple feature geometry list
-column. By default, `get_geometry` transforms the input coordinates to 
-`crs = 4326`.
+column. Optionally, the input coordinates can be transformed using the argument
+"output_crs". The default output geometry column name can be changed using the 
+argument "geometry_colname". 
 
 ### Usage
 
