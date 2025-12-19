@@ -29,13 +29,17 @@ Enhancements:
   compatibility if crs is NULL
 * add geometry interface and ensure coordinates/geometry are planar for 
 `leader_direction_group` ([PR 125](https://github.com/ropensci/spatsoc/pull/125))
-
-
-Fixes:
-
 * improve speed of `direction_group` 
 ([PR 133](https://github.com/ropensci/spatsoc/pull/133))
 
+Vignettes:
+
+* add geometry interface and spatial measures vignette 
+([PR 119](https://github.com/ropensci/spatsoc/pull/119/files))
+  * add toc and links to other vignettes in all vignettes
+  * add `fusion_id` example to using distance based edge-list generating functions
+  vignette
+  * rename "additional data formats" vignette to "interspecific interactions"
 
 # spatsoc 0.2.12
 
