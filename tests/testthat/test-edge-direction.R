@@ -360,10 +360,10 @@ test_that('geometry interface can manage edges and DT both with geometry', {
   copy_DT <- copy(clean_DT)
   copy_edges <- copy(clean_edges)
 
+  get_geometry(copy_DT, coords = coords, crs = utm)
+
   fusion_id(edges = copy_edges, threshold = 50)
   cent <- centroid_fusion(edges = copy_edges, DT = copy_DT, id = id)
-
-  get_geometry(copy_DT, coords = coords, crs = utm)
 
   expect_true('direction_dyad' %in%
                 colnames(edge_direction(edges = cent, DT = copy_DT, id = id)))
