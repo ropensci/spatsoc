@@ -368,4 +368,8 @@ test_that('geometry interface can manage edges and DT both with geometry', {
   expect_true('direction_dyad' %in%
                 colnames(edge_direction(edges = cent, DT = copy_DT, id = id)))
 
+  # And can manage if not present
+  cent[, geometry := NULL]
+  expect_true('direction_dyad' %in%
+                colnames(edge_direction(edges = cent, DT = copy_DT, id = id)))
 })
