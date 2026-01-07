@@ -150,9 +150,11 @@ edge_direction <- function(
       c(geometry, id, timegroup)
     }
 
-    drop_cols <- ifelse(geometry %in% colnames(edges), geometry, NULL)
+    if (geometry %in% colnames(edges)) {
+      edges <- data.table::copy(edges)[, .SD, .SDcols = -c(geometry)]
+    }
 
-    m <- merge(edges[, .SD, .SDcols = -c(drop_cols)],
+    m <- merge(edges,
                DT[, .SD, .SDcols = ID1_cols],
                by.x = c('ID1', timegroup),
                by.y = c(id, timegroup),
