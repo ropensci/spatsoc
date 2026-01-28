@@ -14,10 +14,9 @@
 #' using [data.table::data.table()].
 #'
 #' The `edges` and `DT` are internally merged in this function using the columns
-#' `id`, `dyadID` and `timegroup`. This function expects a `dyadID` present,
-#' generated with the [dyad_id()] function. The `id`, and `timegroup` arguments
+#' `id` / `ID1` and `ID2`, `timegroup`. The `id`, and `timegroup` arguments
 #' expect the names of columns which correspond to the ID, and timegroup
-#' columns.
+#' columns in `DT`.
 #'
 #' See below under "Interface" for details on providing coordinates and under
 #' "Direction function" for details on the underlying direction function used.
@@ -81,9 +80,6 @@
 #'     fillNA = FALSE
 #'   )
 #'
-#' # Generate dyad id
-#' dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
-#'
 #' # Direction based edge-lists
 #' dyad_directions <- edge_direction(
 #'   edges,
@@ -129,7 +125,6 @@ edge_direction <- function(
   assert_not_null(timegroup)
   assert_are_colnames(DT, c(id, timegroup))
   assert_are_colnames(edges, timegroup)
-  assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
   out_col <- 'direction_dyad'
 
@@ -191,7 +186,7 @@ edge_direction <- function(
     ]
 
     data.table::set(m, j = c(geometry_id1, geometry_id2), value = NULL)
-    data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))
+    data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2'))
 
   } else {
     assert_are_colnames(DT, coords)
@@ -255,7 +250,7 @@ edge_direction <- function(
     ]
 
     data.table::set(m, j = c(coords_id1, coords_id2), value = NULL)
-    data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2', 'dyadID'))
+    data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2'))
   }
 
 
