@@ -72,10 +72,9 @@ you can convert it by reference using \code{\link[data.table:setDT]{data.table::
 using \code{\link[data.table:data.table]{data.table::data.table()}}.
 
 The \code{edges} and \code{DT} are internally merged in this function using the columns
-\code{id}, \code{dyadID} and \code{timegroup}. This function expects a \code{dyadID} present,
-generated with the \code{\link[=dyad_id]{dyad_id()}} function. The \code{id}, and \code{timegroup} arguments
+\code{id} / \code{ID1} and \code{ID2}, \code{timegroup}. The \code{id}, and \code{timegroup} arguments
 expect the names of columns which correspond to the ID, and timegroup
-columns.
+columns in \code{DT}.
 
 See below under "Interface" for details on providing coordinates and under
 "Direction function" for details on the underlying direction function used.
@@ -140,9 +139,6 @@ edges <- edge_dist(
     returnDist = TRUE,
     fillNA = FALSE
   )
-
-# Generate dyad id
-dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 
 # Direction based edge-lists
 dyad_directions <- edge_direction(
