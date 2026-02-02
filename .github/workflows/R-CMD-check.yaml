@@ -45,7 +45,6 @@ jobs:
         if: runner.os == 'macos'
         run: |
           brew install udunits geos proj
-          UDUNITS2_LIBS=$(brew --prefix)/lib/
           echo "UDUNITS2_LIBS=$(brew --prefix)/lib/" >> $GITHUB_ENV
           echo "UDUNITS2_INCLUDE=$(brew --prefix)/include/" >> $GITHUB_ENV
 
