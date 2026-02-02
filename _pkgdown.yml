@@ -75,6 +75,10 @@ articles:
   navbar: ~
   contents:
   - faq
+- title: Geometry interface and spatial measures
+  navbar: ~
+  contents:
+  - geometry-interface-and-spatial-measures
 - title: Using spatsoc in social network analysis
   navbar: ~
   contents:
