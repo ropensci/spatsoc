@@ -43,13 +43,15 @@ jobs:
 
       - name: Install macOS system dependencies
         if: runner.os == 'macos'
-        run: brew install udunits geos proj gfortran
+        run: |
+          brew install udunits geos proj
+          echo "UDUNITS2_LIBS=$(brew --prefix)/lib/" >> $GITHUB_ENV
+          echo "UDUNITS2_INCLUDE=$(brew --prefix)/include/" >> $GITHUB_ENV
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
           needs: check
-          cache: false
 
       - uses: r-lib/actions/check-r-package@v2
         with:
