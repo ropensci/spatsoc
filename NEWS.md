@@ -42,6 +42,10 @@ Vignettes:
   vignette
   * rename "additional data formats" vignette to "interspecific interactions"
 
+Fixes:
+
+* fix `edge_direction` bug if geometry in both edges and DT ([PR 136](https://github.com/ropensci/spatsoc/pull/136))
+
 # spatsoc 0.2.12
 
 New experimental functions:

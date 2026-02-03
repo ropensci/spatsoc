@@ -145,6 +145,10 @@ edge_direction <- function(
       c(geometry, id, timegroup)
     }
 
+    if (geometry %in% colnames(edges)) {
+      edges <- data.table::copy(edges)[, .SD, .SDcols = -c(geometry)]
+    }
+
     m <- merge(edges,
                DT[, .SD, .SDcols = ID1_cols],
                by.x = c('ID1', timegroup),

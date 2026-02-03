@@ -8,7 +8,7 @@ message: 'To cite package "spatsoc" in publications use:'
 type: software
 license: GPL-3.0-only
 title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship'
-version: 0.2.12.9006
+version: 0.2.12.9007
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.spatsoc
@@ -102,11 +102,14 @@ references:
     email: asrini@pm.me
   - family-names: Gorecki
     given-names: Jan
+    email: j.gorecki@wit.edu.pl
   - family-names: Chirico
     given-names: Michael
+    email: michaelchirico4@gmail.com
     orcid: https://orcid.org/0000-0003-0787-087X
   - family-names: Hocking
     given-names: Toby
+    email: toby.hocking@r-project.org
     orcid: https://orcid.org/0000-0002-3146-0865
   - family-names: Schwendinger
     given-names: Benjamin
