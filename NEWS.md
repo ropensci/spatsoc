@@ -31,6 +31,7 @@ Enhancements:
 `leader_direction_group` ([PR 125](https://github.com/ropensci/spatsoc/pull/125))
 * improve speed of `direction_group` 
 ([PR 133](https://github.com/ropensci/spatsoc/pull/133))
+* remove requirement on 'dyadID' for edge_direction ([PR 137](https://github.com/ropensci/spatsoc/pull/137))
 
 Vignettes:
 

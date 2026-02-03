@@ -17,7 +17,6 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
 edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
                    timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
-dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 
 clean_DT <- copy(DT)
 clean_edges <- copy(edges)
@@ -85,20 +84,6 @@ test_that('column names must exist in DT', {
     ),
     'timegroup field'
   )
-
-  copyEdges <- copy(edges)[, dyadID := NULL]
-  expect_error(
-    edge_direction(
-      copyEdges,
-      DT,
-      id = id,
-      coords = coords,
-      crs = utm,
-      timegroup = timegroup
-    ),
-    'dyadID field'
-  )
-
 })
 
 test_that('coords are correctly provided or error detected', {

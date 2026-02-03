@@ -19,6 +19,7 @@
 #'
 #' a) If the blind volume is not provided, simply provide your distance based
 #' edge-lists from `edge_dist` with zone thresholds and labels.
+#'
 #' b) If the blind volume is provided, the following order of functions is
 #' expected to ensure the relevant direction columns are available:
 #'    1. direction_step(DT)
