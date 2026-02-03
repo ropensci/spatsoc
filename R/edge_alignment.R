@@ -40,7 +40,7 @@
 #'
 #' @return `edge_alignment` returns a `data.table` with columns ID1, ID2,
 #'   timegroup, and a 'direction_diff' column indicating the difference in direction
-#'   between ID1 and ID2, along with any columns provided in splitBy.
+#'   between ID1 and ID2 in radians, along with any columns provided in splitBy.
 #'
 #'  Note: unlike many other functions (eg. `group_pts`) in `spatsoc`,
 #'  `edge_alignment` needs to be reassigned. See details in
