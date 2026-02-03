@@ -119,7 +119,7 @@ edge_alignment <- function(
     splitBy = NULL,
     signed = FALSE) {
   # due to NSE notes in R CMD check
-  ID1 <- ID2 <- N <- NULL
+  ID1 <- ID2 <- N <- direction_diff <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
