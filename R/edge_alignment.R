@@ -182,5 +182,8 @@ edge_alignment <- function(
     env = list(id = id, direction = direction)
   ]
 
+  edges[, direction_diff := units::as_units(direction_diff, 'rad')][]
+
   return(edges)
 }
+
