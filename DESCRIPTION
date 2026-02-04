@@ -1,6 +1,6 @@
 Package: spatsoc
 Title: Group Animal Relocation Data by Spatial and Temporal Relationship
-Version: 0.2.12.9007
+Version: 0.2.12.9008
 Authors@R: c(
     person("Alec L.", "Robitaille", , "robit.alec@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4706-1762")),

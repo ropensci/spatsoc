@@ -40,7 +40,7 @@
 #'
 #' @return `edge_alignment` returns a `data.table` with columns ID1, ID2,
 #'   timegroup, and a 'direction_diff' column indicating the difference in direction
-#'   between ID1 and ID2, along with any columns provided in splitBy.
+#'   between ID1 and ID2 in radians, along with any columns provided in splitBy.
 #'
 #'  Note: unlike many other functions (eg. `group_pts`) in `spatsoc`,
 #'  `edge_alignment` needs to be reassigned. See details in
@@ -119,7 +119,7 @@ edge_alignment <- function(
     splitBy = NULL,
     signed = FALSE) {
   # due to NSE notes in R CMD check
-  ID1 <- ID2 <- N <- NULL
+  ID1 <- ID2 <- N <- direction_diff <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
@@ -182,5 +182,8 @@ edge_alignment <- function(
     env = list(id = id, direction = direction)
   ]
 
+  edges[, direction_diff := units::as_units(direction_diff, 'rad')][]
+
   return(edges)
 }
+

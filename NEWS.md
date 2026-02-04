@@ -45,6 +45,8 @@ Vignettes:
 Fixes:
 
 * fix `edge_direction` bug if geometry in both edges and DT ([PR 136](https://github.com/ropensci/spatsoc/pull/136))
+* fix missing return units in output from `edge_alignment` ([PR 141](https://github.com/ropensci/spatsoc/pull/141))
+
 
 # spatsoc 0.2.12
 

@@ -17,6 +17,7 @@ DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
 edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
                    timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
+dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 
 clean_DT <- copy(DT)
 clean_edges <- copy(edges)
