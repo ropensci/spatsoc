@@ -44,8 +44,7 @@ jobs:
       - name: Install macOS system dependencies
         if: runner.os == 'macos'
         run: |
-          brew install udunits
-          UDUNITS2_LIBS=$(brew --prefix)/lib/
+          brew install udunits geos proj
           echo "UDUNITS2_LIBS=$(brew --prefix)/lib/" >> $GITHUB_ENV
           echo "UDUNITS2_INCLUDE=$(brew --prefix)/include/" >> $GITHUB_ENV
 
