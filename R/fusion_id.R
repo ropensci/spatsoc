@@ -148,7 +148,7 @@ fusion_id <- function(
   # Check timegroup difference, unless first obs for dyad
   unique_edges[, tg_diff := data.table::fifelse(
     within_dist,
-    timegroup - data.table::shift(timegroup, 1) <= 1 |
+    timegroup - data.table::shift(timegroup, type = 'lag') <= 1 |
       timegroup == min(timegroup),
     NA
   ), by = dyadID]
@@ -159,8 +159,8 @@ fusion_id <- function(
     unique_edges[, tg_diff := data.table::fifelse(
       tg_diff,
       tg_diff,
-      data.table::shift(within_dist, 1) &
-        (timegroup - data.table::shift(timegroup, 1)) <=
+      data.table::shift(within_dist, type = 'lag') &
+        (timegroup - data.table::shift(timegroup, type = 'lag')) <=
         (tg_threshold)
     ), by = dyadID]
   }
