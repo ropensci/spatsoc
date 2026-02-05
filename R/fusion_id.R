@@ -173,6 +173,21 @@ fusion_id <- function(
                both_rleid := (both_rleid + seq.int(.N)) * -1,
                by = dyadID]
 
+  # Check if shift lead is fusion and within spatial+temporal threshold
+  unique_edges[, is_lead :=
+    both_rleid < 0 &
+    abs(timegroup - data.table::shift(timegroup, type = 'lead')) <=
+      temp_threshold &
+      within &
+      data.table::shift(within, type = 'lead'),
+  by = dyadID
+  ]
+  unique_edges[, both_rleid := fifelse(
+    is_lead,
+    data.table::shift(both_rleid, type = 'lead'),
+    both_rleid
+  )]
+
   # If n minimum length > 0, check nrows and return NA if less than min
   if (n_min_length > 0) {
     unique_edges[!is.na(both_rleid), both_rleid := data.table::fifelse(
@@ -184,6 +199,7 @@ fusion_id <- function(
 
   # Set fusion id on runs and dyad id
   unique_edges[!is.na(both_rleid), fusionID := .GRP, by = .(dyadID, both_rleid)]
+
 
   # Merge fusion id onto input edges
   if ('fusionID' %in% colnames(edges)) {
