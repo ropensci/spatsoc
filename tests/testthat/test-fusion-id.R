@@ -316,6 +316,23 @@ test_that('lead edge cases identified as expected', {
   expect_identical(split_allow_true_7_miss[, fusionID[timegroup == 11]],
                    split_allow_true_7_miss[, fusionID[timegroup == 12]])
 
+  # Also check with n_min_length
+  split_allow_true <- fusion_id(
+    copy(split_expected),
+    threshold = threshold,
+    n_min_length = 1,
+    n_max_missing = 0,
+    allow_split = TRUE
+  )
+  expect_identical(split_allow_true[, fusionID[timegroup == 3]], NA_integer_)
+  expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
+                         split_allow_true[, fusionID[timegroup == 2]]))
+  expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
+                         split_allow_true[, fusionID[timegroup == 11]]))
+  expect_identical(split_allow_true[, fusionID[timegroup == 11]],
+                   split_allow_true[, fusionID[timegroup == 12]])
+
+
   lead_expected <- data.table(
     dyadID = rep('A-B', 5),
     timegroup = c(1,   3, 4, 5, 6),
@@ -331,6 +348,38 @@ test_that('lead edge cases identified as expected', {
     threshold = threshold,
     n_min_length = 0,
     n_max_missing = 0,
+    allow_split = FALSE
+  )
+
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 4]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 5]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 6]])
+
+  # Also check with n_max_missing
+  defaults_lead <- fusion_id(
+    copy(lead_expected),
+    threshold = threshold,
+    n_min_length = 0,
+    n_max_missing = 2,
+    allow_split = FALSE
+  )
+
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 4]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 5]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 6]])
+
+  # Also check with n_max_missing, n_min_length
+  defaults_lead <- fusion_id(
+    copy(lead_expected),
+    threshold = threshold,
+    n_min_length = 2,
+    n_max_missing = 2,
     allow_split = FALSE
   )
 
