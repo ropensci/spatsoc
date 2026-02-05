@@ -35,7 +35,7 @@ which the direction alignment will be calculated}
 \value{
 \code{edge_alignment} returns a \code{data.table} with columns ID1, ID2,
 timegroup, and a 'direction_diff' column indicating the difference in direction
-between ID1 and ID2, along with any columns provided in splitBy.
+between ID1 and ID2 in radians, along with any columns provided in splitBy.
 
 Note: unlike many other functions (eg. \code{group_pts}) in \code{spatsoc},
 \code{edge_alignment} needs to be reassigned. See details in
