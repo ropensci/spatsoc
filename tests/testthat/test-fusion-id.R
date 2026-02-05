@@ -135,7 +135,9 @@ test_that('n_min_length returns expected number of unique fusionIDs', {
     fusion_id(
       edges_expected,
       threshold = threshold,
-      n_min_length = 0
+      n_min_length = 0,
+      n_max_missing = 0,
+      allow_split = FALSE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     5
   )
@@ -144,7 +146,9 @@ test_that('n_min_length returns expected number of unique fusionIDs', {
     fusion_id(
       edges_expected,
       threshold = threshold,
-      n_min_length = 2
+      n_min_length = 2,
+      n_max_missing = 0,
+      allow_split = FALSE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     2
   )
@@ -153,11 +157,12 @@ test_that('n_min_length returns expected number of unique fusionIDs', {
     fusion_id(
       edges_expected,
       threshold = threshold,
-      n_min_length = 3
+      n_min_length = 3,
+      n_max_missing = 0,
+      allow_split = FALSE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     0
   )
-
 })
 
 
@@ -168,6 +173,7 @@ test_that('allow_split returns expected number of unique fusionIDs', {
       edges_expected,
       threshold = threshold,
       n_min_length = 2,
+      n_max_missing = 0,
       allow_split = FALSE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     2
@@ -178,6 +184,7 @@ test_that('allow_split returns expected number of unique fusionIDs', {
       edges_expected,
       threshold = threshold,
       n_min_length = 2,
+      n_max_missing = 0,
       allow_split = FALSE
     )[!is.na(fusionID), .N, fusionID][, max(N)],
     2
@@ -188,6 +195,7 @@ test_that('allow_split returns expected number of unique fusionIDs', {
       edges_expected,
       threshold = threshold,
       n_min_length = 2,
+      n_max_missing = 0,
       allow_split = TRUE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     2
@@ -198,6 +206,7 @@ test_that('allow_split returns expected number of unique fusionIDs', {
       edges_expected,
       threshold = threshold,
       n_min_length = 2,
+      n_max_missing = 0,
       allow_split = TRUE
     )[!is.na(fusionID), .N, fusionID][, max(N)],
     4
@@ -260,5 +269,4 @@ test_that('n_max_missing returns expected number of unique fusionIDs', {
     )[!is.na(fusionID), .N, fusionID][, max(N)],
     5
   )
-
 })
