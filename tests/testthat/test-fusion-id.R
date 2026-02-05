@@ -290,7 +290,7 @@ test_that('lead edge cases identified as expected', {
     n_max_missing = 0,
     allow_split = TRUE
   )
-  expect_identical(split_allow_true[, fusionID[timegroup == 3]], NA)
+  expect_identical(split_allow_true[, fusionID[timegroup == 3]], NA_integer_)
   expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
                          split_allow_true[, fusionID[timegroup == 2]]))
   expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
