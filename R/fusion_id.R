@@ -134,9 +134,10 @@ fusion_id <- function(
     unique_edges[, within := data.table::fifelse(
       within | timegroup == min(timegroup) | timegroup == max(timegroup),
       within,
-      data.table::shift(within, -1) &
-        data.table::shift(within, 1) &
-        timegroup - data.table::shift(timegroup, 1) == 1
+      data.table::shift(within, type = 'lag') &
+        data.table::shift(within, type = 'lead') &
+        abs(timegroup - data.table::shift(timegroup, type = 'lag')) <= temp_threshold &
+        abs(timegroup - data.table::shift(timegroup, type = 'lead')) <= temp_threshold
     ), by = dyadID]
   }
 
