@@ -211,6 +211,49 @@ test_that('allow_split returns expected number of unique fusionIDs', {
     )[!is.na(fusionID), .N, fusionID][, max(N)],
     4
   )
+
+  split_expected <- data.table(
+    dyadID = rep('A-B', 7),
+    timegroup = c(1,  2,   3, 10, 11, 12,  13),
+    distance =  c(50, 1,  50, 1,  1,  50,   1)
+  )
+  threshold <- 25
+
+  # If allow_split = TRUE,
+  #  obs separate (tg 3) where not within 1 tg of lead+lag together should be NA
+  #  obs separate (tg 12) where within lead+lag obs together should be same fusionID
+  split_allow_true <- fusion_id(
+    copy(split_expected),
+    threshold = threshold,
+    n_min_length = 0,
+    n_max_missing = 0,
+    allow_split = TRUE
+  )
+  expect_identical(split_allow_true[, fusionID[timegroup == 3]], NA)
+  expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
+                         split_allow_true[, fusionID[timegroup == 2]]))
+  expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
+                         split_allow_true[, fusionID[timegroup == 11]]))
+  expect_identical(split_allow_true[, fusionID[timegroup == 11]],
+                   split_allow_true[, fusionID[timegroup == 12]])
+
+  # If allow_split = TRUE and n_max_missing = 7,
+  #  obs separate (tg 3) where within lead+lag obs together should be
+  #   same fusionID given n_max_missing = 7
+  #  obs separate (tg 12) where within lead+lag obs together should be same fusionID
+  split_allow_true_7_miss <- fusion_id(
+    copy(split_expected),
+    threshold = threshold,
+    n_min_length = 0,
+    n_max_missing = 7,
+    allow_split = TRUE
+  )
+  expect_identical(split_allow_true_7_miss[, fusionID[timegroup == 3]],
+                   split_allow_true_7_miss[, fusionID[timegroup == 2]])
+  expect_identical(split_allow_true_7_miss[, fusionID[timegroup == 3]],
+                   split_allow_true_7_miss[, fusionID[timegroup == 11]])
+  expect_identical(split_allow_true_7_miss[, fusionID[timegroup == 11]],
+                   split_allow_true_7_miss[, fusionID[timegroup == 12]])
 })
 
 
