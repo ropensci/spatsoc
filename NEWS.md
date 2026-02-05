@@ -6,6 +6,10 @@ Breaking changes:
 in original crs by default ([PR 132](https://github.com/ropensci/spatsoc/pull/132))
 * default for "return_rank" in `distance_to_centroid` changed from FALSE to TRUE
 * `group_pts` now returns NA if coords / geometry are NA (part of ([PR 128](https://github.com/ropensci/spatsoc/pull/128))
+* `fusion_id` now also checks future timegroup with `shift(type = 'lead')` 
+whereas previous versions only checked lag timegroups and lead+lag spatial 
+distance ([PR 142](https://github.com/ropensci/spatsoc/pull/142))
+
 
 Enhancements:
 

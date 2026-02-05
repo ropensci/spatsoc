@@ -135,7 +135,9 @@ test_that('n_min_length returns expected number of unique fusionIDs', {
     fusion_id(
       edges_expected,
       threshold = threshold,
-      n_min_length = 0
+      n_min_length = 0,
+      n_max_missing = 0,
+      allow_split = FALSE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     5
   )
@@ -144,7 +146,9 @@ test_that('n_min_length returns expected number of unique fusionIDs', {
     fusion_id(
       edges_expected,
       threshold = threshold,
-      n_min_length = 2
+      n_min_length = 2,
+      n_max_missing = 0,
+      allow_split = FALSE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     2
   )
@@ -153,11 +157,12 @@ test_that('n_min_length returns expected number of unique fusionIDs', {
     fusion_id(
       edges_expected,
       threshold = threshold,
-      n_min_length = 3
+      n_min_length = 3,
+      n_max_missing = 0,
+      allow_split = FALSE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     0
   )
-
 })
 
 
@@ -168,6 +173,7 @@ test_that('allow_split returns expected number of unique fusionIDs', {
       edges_expected,
       threshold = threshold,
       n_min_length = 2,
+      n_max_missing = 0,
       allow_split = FALSE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     2
@@ -178,6 +184,7 @@ test_that('allow_split returns expected number of unique fusionIDs', {
       edges_expected,
       threshold = threshold,
       n_min_length = 2,
+      n_max_missing = 0,
       allow_split = FALSE
     )[!is.na(fusionID), .N, fusionID][, max(N)],
     2
@@ -188,6 +195,7 @@ test_that('allow_split returns expected number of unique fusionIDs', {
       edges_expected,
       threshold = threshold,
       n_min_length = 2,
+      n_max_missing = 0,
       allow_split = TRUE
     )[, uniqueN(fusionID,  na.rm = TRUE)],
     2
@@ -198,6 +206,7 @@ test_that('allow_split returns expected number of unique fusionIDs', {
       edges_expected,
       threshold = threshold,
       n_min_length = 2,
+      n_max_missing = 0,
       allow_split = TRUE
     )[!is.na(fusionID), .N, fusionID][, max(N)],
     4
@@ -260,5 +269,125 @@ test_that('n_max_missing returns expected number of unique fusionIDs', {
     )[!is.na(fusionID), .N, fusionID][, max(N)],
     5
   )
+})
+
+
+test_that('lead edge cases identified as expected', {
+  split_expected <- data.table(
+    dyadID = rep('A-B', 7),
+    timegroup = c(1,  2,   3, 10, 11, 12,  13),
+    distance =  c(50, 1,  50, 1,  1,  50,   1)
+  )
+  threshold <- 25
+
+  # If allow_split = TRUE,
+  #  obs separate (tg 3) where not within 1 tg of lead+lag together should be NA
+  #  obs separate (tg 12) where within lead+lag obs together should be same fusionID
+  split_allow_true <- fusion_id(
+    copy(split_expected),
+    threshold = threshold,
+    n_min_length = 0,
+    n_max_missing = 0,
+    allow_split = TRUE
+  )
+  expect_identical(split_allow_true[, fusionID[timegroup == 3]], NA_integer_)
+  expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
+                         split_allow_true[, fusionID[timegroup == 2]]))
+  expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
+                         split_allow_true[, fusionID[timegroup == 11]]))
+  expect_identical(split_allow_true[, fusionID[timegroup == 11]],
+                   split_allow_true[, fusionID[timegroup == 12]])
+
+  # If allow_split = TRUE and n_max_missing = 7,
+  #  obs separate (tg 3) where within lead+lag obs together should be
+  #   same fusionID given n_max_missing = 7
+  #  obs separate (tg 12) where within lead+lag obs together should be same fusionID
+  split_allow_true_7_miss <- fusion_id(
+    copy(split_expected),
+    threshold = threshold,
+    n_min_length = 0,
+    n_max_missing = 7,
+    allow_split = TRUE
+  )
+  expect_identical(split_allow_true_7_miss[, fusionID[timegroup == 3]],
+                   split_allow_true_7_miss[, fusionID[timegroup == 2]])
+  expect_identical(split_allow_true_7_miss[, fusionID[timegroup == 3]],
+                   split_allow_true_7_miss[, fusionID[timegroup == 11]])
+  expect_identical(split_allow_true_7_miss[, fusionID[timegroup == 11]],
+                   split_allow_true_7_miss[, fusionID[timegroup == 12]])
+
+  # Also check with n_min_length
+  split_allow_true <- fusion_id(
+    copy(split_expected),
+    threshold = threshold,
+    n_min_length = 1,
+    n_max_missing = 0,
+    allow_split = TRUE
+  )
+  expect_identical(split_allow_true[, fusionID[timegroup == 3]], NA_integer_)
+  expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
+                         split_allow_true[, fusionID[timegroup == 2]]))
+  expect_false(identical(split_allow_true[, fusionID[timegroup == 3]],
+                         split_allow_true[, fusionID[timegroup == 11]]))
+  expect_identical(split_allow_true[, fusionID[timegroup == 11]],
+                   split_allow_true[, fusionID[timegroup == 12]])
+
+
+  lead_expected <- data.table(
+    dyadID = rep('A-B', 5),
+    timegroup = c(1,   3, 4, 5, 6),
+    distance =  c(50,  1, 1, 1, 1)
+  )
+  threshold <- 25
+
+  # If defaults,
+  #  first obs together (tg 3) where lag timegroup difference is > 1, but
+  #  lead timegroup difference is 1, fusionID should match tg 4-6s
+  defaults_lead <- fusion_id(
+    copy(lead_expected),
+    threshold = threshold,
+    n_min_length = 0,
+    n_max_missing = 0,
+    allow_split = FALSE
+  )
+
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 4]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 5]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 6]])
+
+  # Also check with n_max_missing
+  defaults_lead <- fusion_id(
+    copy(lead_expected),
+    threshold = threshold,
+    n_min_length = 0,
+    n_max_missing = 2,
+    allow_split = FALSE
+  )
+
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 4]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 5]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 6]])
+
+  # Also check with n_max_missing, n_min_length
+  defaults_lead <- fusion_id(
+    copy(lead_expected),
+    threshold = threshold,
+    n_min_length = 2,
+    n_max_missing = 2,
+    allow_split = FALSE
+  )
+
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 4]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 5]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 6]])
 
 })
