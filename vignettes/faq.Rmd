@@ -257,11 +257,6 @@ which represents the spatial (and temporal if `timegroup` is provided) group.
 
 The threshold must be in the units of the coordinates. 
 
-### coords
-
-The coordinates must be planar, such as UTM (of whichever zone your relocations
-are in).
-
 ## group_lines
 
 `group_lines(DT, threshold, crs, id, coords, timegroup, sortBy, splitBy, spLines)`

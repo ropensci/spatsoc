@@ -12,9 +12,8 @@
 #' [data.table::setDT()].
 #'
 #' The `threshold` must be provided in the units of the coordinates. The
-#' `threshold` must be larger than 0. The coordinates must be planar
-#' coordinates (e.g.: UTM). In the case of UTM, a `threshold` = 50 would
-#' indicate a 50 m distance threshold.
+#' `threshold` must be larger than 0. Eg. in the case of UTM, a `threshold` = 50
+#' would indicate a 50 m distance threshold.
 #'
 #' The `n_min_length` argument defines the minimum number of successive
 #' fixes that are required to establish a fusion event. The `n_max_missing`
