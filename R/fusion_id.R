@@ -129,7 +129,7 @@ fusion_id <- function(
   #   timegroup difference between before and after is only 1
   if (allow_split) {
     unique_edges[, within := data.table::fifelse(
-      within | timegroup == min(timegroup),
+      within | timegroup == min(timegroup) | timegroup == max(timegroup),
       within,
       data.table::shift(within, -1) &
         data.table::shift(within, 1) &
