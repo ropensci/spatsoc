@@ -122,6 +122,9 @@ fusion_id <- function(
 
   data.table::setorder(unique_edges, 'timegroup')
 
+  # Define temporal threshold
+  temp_threshold <- 1 + n_max_missing
+
   # Check if edge distance less than threshold
   unique_edges[, within := distance < threshold]
 
@@ -157,7 +160,7 @@ fusion_id <- function(
       tg_diff,
       data.table::shift(within, 1) &
         (timegroup - data.table::shift(timegroup, 1)) <=
-        (1 + n_max_missing)
+        (temp_threshold)
     ), by = dyadID]
   }
 
