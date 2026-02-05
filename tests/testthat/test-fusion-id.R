@@ -313,3 +313,32 @@ test_that('n_max_missing returns expected number of unique fusionIDs', {
     5
   )
 })
+
+
+test_that('lead', {
+  lead_expected <- data.table(
+    dyadID = rep('A-B', 5),
+    timegroup = c(1,   3, 4, 5, 6),
+    distance =  c(50,  1, 1, 1, 1)
+  )
+  threshold <- 25
+
+  # If defaults,
+  #  first obs together (tg 3) where lag timegroup difference is > 1, but
+  #  lead timegroup difference is 1, fusionID should match tg 4-6s
+  defaults_lead <- fusion_id(
+    copy(lead_expected),
+    threshold = threshold,
+    n_min_length = 0,
+    n_max_missing = 0,
+    allow_split = FALSE
+  )
+
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 4]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 5]])
+  expect_identical(defaults_lead[, fusionID[timegroup == 3]],
+                   defaults_lead[, fusionID[timegroup == 6]])
+
+})
