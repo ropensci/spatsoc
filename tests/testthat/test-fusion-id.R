@@ -391,3 +391,20 @@ test_that('lead edge cases identified as expected', {
                    defaults_lead[, fusionID[timegroup == 6]])
 
 })
+
+test_that('max timegroup difference is not greater than expected', {
+  fusions <- fusion_id(
+    copy(edges),
+    50,
+    n_min_length = 3,
+    n_max_missing = 1,
+    allow_split = TRUE
+  )
+  expect_all_false(
+    fusions[, max(timegroup - shift(timegroup), na.rm = TRUE), by = fusionID][,
+      V1 > (n_min_length + n_max_missing)]
+  )
+})
+
+
+
