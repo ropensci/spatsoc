@@ -1,4 +1,4 @@
-# Development version
+# spatsoc (development version)
 
 Breaking changes:
 
