@@ -1,5 +1,5 @@
 ---
-title: "New geometry interface"
+title: "New geometry interface and spatial measures"
 author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
 output: 
   rmarkdown::html_vignette:

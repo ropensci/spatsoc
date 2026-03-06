@@ -1,5 +1,6 @@
 ---
 title: "Detecting interspecific interactions"
+author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
 output: 
   rmarkdown::html_vignette:
     number_sections: true

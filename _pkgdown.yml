@@ -87,6 +87,10 @@ articles:
   navbar: ~
   contents:
   - using-edge-and-dyad
+- title: New geometry interface and spatial measures
+  navbar: ~
+  contents:
+  - geometry-interface-and-spatial-measures
 - title: Additional data formats
   navbar: ~
   contents:
