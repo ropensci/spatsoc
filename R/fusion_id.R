@@ -184,11 +184,14 @@ fusion_id <- function(
       data.table::shift(within_dist, type = 'lead'),
   by = dyadID
   ]
+
+  # If shift lead is fusion then shift id to lead id
   unique_edges[, both_run := fifelse(
     is_lead,
     data.table::shift(both_run, type = 'lead'),
     both_run
-  )]
+  ),
+  by = dyadID]
 
   # If n minimum length > 0, check nrows and return NA if less than min
   if (n_min_length > 0) {
