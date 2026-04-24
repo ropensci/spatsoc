@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/ropensci/spatsoc",
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.12.9010",
+  "version": "0.2.13",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.5.2 (2025-10-31)",
+  "runtimePlatform": "R version 4.5.3 (2026-03-11)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -114,6 +114,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "s2",
+      "name": "s2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=s2"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "sftrack",
       "name": "sftrack",
       "provider": {
@@ -206,7 +218,7 @@
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://github.com/r-spatial/lwgeom"
+      "sameAs": "https://CRAN.R-project.org/package=lwgeom"
     },
     "7": {
       "@type": "SoftwareApplication",
@@ -252,7 +264,7 @@
     },
     "SystemRequirements": "GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),\n    sqlite3"
   },
-  "fileSize": "2290.388KB",
+  "fileSize": "2291.304KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
