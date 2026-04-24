@@ -181,7 +181,7 @@ longlat coordinates / geometry and the {s2} package is not available or
 
 Instead of using `get_geometry()`, coming from other packages, we can convert
 the objects to data.tables for processing with {spatsoc}. Caution: {spatsoc}'s
-expectation is that the "geometry" column is a `sfc_POINT` representing each
+expectation is that the "geometry" column is `sfc_POINT` representing each
 relocation.
 
 ### Converting from {sftrack}
