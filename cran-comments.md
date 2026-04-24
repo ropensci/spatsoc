@@ -1,15 +1,9 @@
-## v 0.2.1
+## v 0.2.13
+
 See NEWS.md for all updates. 
 
-* Fix CRAN notes by @robitalec in https://github.com/ropensci/spatsoc/pull/56
-
-## v 0.2.0
-
-* Fix/rm sp build lines by @robitalec in https://github.com/ropensci/spatsoc/pull/53
-* Fix/rm sp build polys by @robitalec in https://github.com/ropensci/spatsoc/pull/52
-* Fix/rm sp group lines by @robitalec in https://github.com/ropensci/spatsoc/pull/54
-* Fix/rm sp group polys by @robitalec in https://github.com/ropensci/spatsoc/pull/55
-* Fix/rm retired spatial packages by @robitalec in https://github.com/ropensci/spatsoc/pull/51
+Adds suite of functions for measuring intragroup social dynamics including 
+metrics for identifying leaders, measuring centroids, and directions and distances to centroids, leaders, neighbours. 
 
 ## Test environments
 * windows-latest (release) 
