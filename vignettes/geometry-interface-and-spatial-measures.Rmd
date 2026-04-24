@@ -125,7 +125,7 @@ coordinates or geometry provided.
     `lwgeom::st_geod_distance()` if `sf::sf_use_s2()` is FALSE. The
     distance returned has units set according to the crs.
 
--   If the crs is not longlat degrees (eg. NULL, NA_crs\_, or
+-   If the crs is not longlat degrees (eg. NULL, `NA_crs_`, or
     projected), the distance function used is `stats::dist()`,
     maintaining expected behaviour from previous versions. The distance
     returned does not have units set.
@@ -162,8 +162,6 @@ structure:
 `"In CPL_transform(x, crs, aoi, pipeline, reverse, desired_accuracy, : GDAL Error 6: Cannot find coordinate operations from..."`
 
 ### Centroid
-
-@section Centroid function:
 
 The underlying centroid function used depends on the crs of the
 coordinates or geometry provided.
@@ -259,7 +257,6 @@ DT[1:10, plot(st_sfc(geometry, recompute_bbox = TRUE))]
 ### Converting to {sf}
 
 ```{r}
-library(sf)
 DT_sf <- st_as_sf(DT, sf_column_name = 'geometry')
 print(DT_sf)
 plot(DT_sf)
