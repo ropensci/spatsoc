@@ -37,6 +37,7 @@ Suggests:
     markdown,
     move2,
     rmarkdown,
+    s2,
     sftrack,
     testthat (>= 2.1.0)
 VignetteBuilder: 
