@@ -7,24 +7,82 @@
 \title{spatsoc}
 \description{
 spatsoc is an R package for detecting spatial and temporal groups in GPS
-relocations. It can be used to convert GPS relocations to gambit-of-the-group
-format to build proximity-based social networks. In addition, the
-randomization function provides data-stream randomization methods suitable
-for GPS data.
+relocations and measuring intragroup social dynamics. It can be used to convert GPS relocations to gambit-of-the-group
+format to build proximity-based social networks, identify nearest neighbours distances and direction, and measure individual's position with respect to the group centroid or group leader. See all available functions below, in the manual or on the acommpanying documentation website at https://docs.ropensci.org/spatsoc/.
 }
 \details{
-The spatsoc package provides one temporal grouping function:
+Temporal grouping:
+\itemize{
+\item \code{\link[=group_times]{group_times()}}
+}
 
-\itemize{ \item \code{group_times} } three spatial grouping functions:
-\itemize{ \item \code{group_pts} \item \code{group_lines} \item
-\code{group_polys} }
+Spatial grouping:
+\itemize{
+\item \code{\link[=group_lines]{group_lines()}}
+\item \code{\link[=group_polys]{group_polys()}}
+\item \code{\link[=group_pts]{group_pts()}}
+}
 
-two edge-list generating functions:
+Edge-list generation:
+\itemize{
+\item \code{\link[=edge_dist]{edge_dist()}}
+\item \code{\link[=edge_nn]{edge_nn()}}
+\item \code{\link[=edge_delay]{edge_delay()}}
+\item \code{\link[=edge_alignment]{edge_alignment()}}
+\item \code{\link[=edge_direction]{edge_direction()}}
+\item \code{\link[=edge_zones]{edge_zones()}}
+}
 
-\itemize{ \item \code{edge_dist} \item \code{edge_nn} }
+Social network tools:
+\itemize{
+\item \code{\link[=randomizations]{randomizations()}}
+\item \code{\link[=get_gbi]{get_gbi()}}
+}
 
-and two social network functions: \itemize{ \item
-\code{randomizations} \item \code{get_gbi} }
+Dyad functions
+\itemize{
+\item \code{\link[=dyad_id]{dyad_id()}}
+\item \code{\link[=fusion_id]{fusion_id()}}
+}
+
+Centroid functions
+\itemize{
+\item \code{\link[=centroid_group]{centroid_group()}}
+\item \code{\link[=centroid_dyad]{centroid_dyad()}}
+\item \code{\link[=centroid_fusion]{centroid_fusion()}}
+}
+
+Direction functions
+\itemize{
+\item \code{\link[=direction_step]{direction_step()}}
+\item \code{\link[=direction_to_centroid]{direction_to_centroid()}}
+\item \code{\link[=direction_to_leader]{direction_to_leader()}}
+\item \code{\link[=direction_group]{direction_group()}}
+\item \code{\link[=direction_polarization]{direction_polarization()}}
+}
+
+Distance functions
+\itemize{
+\item \code{\link[=distance_to_centroid]{distance_to_centroid()}}
+\item \code{\link[=distance_to_leader]{distance_to_leader()}}
+}
+
+Leadership functions
+\itemize{
+\item \code{\link[=leader_direction_group]{leader_direction_group()}}
+\item \code{\link[=leader_edge_delay]{leader_edge_delay()}}
+}
+
+Geometry interface functions
+\itemize{
+\item \code{\link[=get_geometry]{get_geometry()}}
+}
+
+Build functions
+\itemize{
+\item \code{\link[=build_lines]{build_lines()}}
+\item \code{\link[=build_polys]{build_polys()}}
+}
 }
 \seealso{
 Useful links:
