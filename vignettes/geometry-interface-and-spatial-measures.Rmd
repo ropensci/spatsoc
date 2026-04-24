@@ -221,6 +221,27 @@ functions can lead to issues with {data.table} class or column allocation. See
 more details under Package Design in
 [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
 
+An example of a potential issue with intermixing packages between spatsoc functions
+is that attributes
+such as the sf column's bbox aren't automatically updated when subsetting with
+data.table. This impacts the bbox returned, and also the bbox used for plotting. 
+The recommendation is to run all required {spatsoc} functions then convert to
+standard spatial formats as described below for further processing and visualization. 
+
+```{r}
+library(sf)
+DT[, st_bbox(geometry)]
+DT[1:10, st_bbox(geometry)]
+
+DT[, plot(geometry)]
+DT[1:10, plot(geometry)]
+
+# Note the bbox can also be manually recomputed
+DT[1:10, st_bbox(st_sfc(geometry, recompute_bbox = TRUE))]
+DT[1:10, plot(st_sfc(geometry, recompute_bbox = TRUE))]
+```
+
+
 ### Converting to {sf}
 
 ```{r}
