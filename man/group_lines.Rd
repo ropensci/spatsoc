@@ -112,9 +112,8 @@ rows are sorted by date time.
 
 The \code{threshold} must be provided in the units of the coordinates. The
 \code{threshold} can be equal to 0 if strict overlap is intended, otherwise it
-should be some value greater than 0. The coordinates must be planar
-coordinates (e.g.: UTM). In the case of UTM, a \code{threshold = 50} would
-indicate a 50m distance threshold.
+should be some value greater than 0, in the units of the coordinates. Eg. in
+the case of UTM, a \code{threshold = 50} would indicate a 50m distance threshold.
 
 The \code{timegroup} argument is optional, but recommended to pair with
 \link{group_times}. The intended framework is to group rows temporally with
