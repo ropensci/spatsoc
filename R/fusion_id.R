@@ -102,7 +102,7 @@ fusion_id <- function(
 
   # due to NSE notes  in R CMD check
   . <- both_run <- distance <- dyadID <- fusionID <- tg_diff <- timegroup <-
-    within_dist_run <- NULL
+    within_dist_run <- is_lead <- within_dist <- NULL
 
   assert_not_null(edges)
 
