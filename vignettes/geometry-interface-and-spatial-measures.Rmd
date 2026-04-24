@@ -110,13 +110,13 @@ The underlying distance function used depends on the crs of the coordinates or
 geometry provided.
 
 - If the crs is longlat degrees (as determined by
-[sf::st_is_longlat()]), the distance function is [sf::st_distance()] which
-passes to [s2::s2_distance()] if [sf::sf_use_s2()] is TRUE and
-[lwgeom::st_geod_distance()] if [sf::sf_use_s2()] is FALSE. The distance
+`sf::st_is_longlat()`), the distance function is `sf::st_distance()` which
+passes to `s2::s2_distance()` if `sf::sf_use_s2()` is TRUE and
+`lwgeom::st_geod_distance()` if `sf::sf_use_s2()` is FALSE. The distance
 returned has units set according to the crs.
 
 - If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
-distance function used is [stats::dist()], maintaining expected behaviour from
+distance function used is `stats::dist()`, maintaining expected behaviour from
 previous versions. The distance returned does not have units set.
 
 Note: in both cases, if the coordinates are NA then the result will be NA.
@@ -128,11 +128,11 @@ The underlying distance function used depends on the crs of the coordinates or
 geometry provided.
 
 - If the crs is provided and longlat degrees (as determined by
-[sf::st_is_longlat()]), the distance function is [lwgeom::st_geod_azimuth()].
+`sf::st_is_longlat()`), the distance function is `lwgeom::st_geod_azimuth()`.
 
 - If the crs is provided and not longlat degrees (eg. a projected UTM),
 the coordinates or geometry are transformed to `sf::st_crs(4326)` before the
-distance is measured using [lwgeom::st_geod_azimuth()].
+distance is measured using `lwgeom::st_geod_azimuth()`.
 
 - If the crs is NULL or `NA_crs_`, the distance function cannot be used
 and an error is returned.
@@ -155,11 +155,11 @@ The underlying centroid function used depends on the crs of the coordinates or
 geometry provided.
 
 - If the crs is longlat degrees (as determined by
-[sf::st_is_longlat()]) and [sf::sf_use_s2()] is TRUE, the distance function is
-[sf::st_centroid()] which passes to [s2::s2_centroid()].
+`sf::st_is_longlat()`) and `sf::sf_use_s2()` is TRUE, the distance function is
+`sf::st_centroid()` which passes to `s2::s2_centroid()`.
 
-- If the crs is longlat degrees but [sf::sf_use_s2()] is FALSE, the centroid
-calculated will be incorrect. See [sf::st_centroid()].
+- If the crs is longlat degrees but `sf::sf_use_s2()` is FALSE, the centroid
+calculated will be incorrect. See `sf::st_centroid()`.
 
 - If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
 centroid function used is mean.
