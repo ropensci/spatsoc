@@ -1,12 +1,12 @@
 ---
-title: "New geometry interface and spatial measures"
+title: "Geometry interface and spatial measures"
 author: "Alec L. Robitaille, Quinn Webber and Eric Vander Wal"
 output: 
   rmarkdown::html_vignette:
     number_sections: true
     toc: true
 vignette: >
-  %\VignetteIndexEntry{New geometry interface}
+  %\VignetteIndexEntry{Geometry interface and spatial measures}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-{spatsoc} v 0.2.13 provides a new geometry interface and internal functions that
+{spatsoc} v 0.2.13 provides a geometry interface and internal functions that
 provide consistent spatial measures across all {spatsoc} functions.
 
 The motivation for `get_geometry` is to allow users to supply a geometry column
