@@ -1,5 +1,5 @@
 Package: spatsoc
-Title: Group Animal Relocation Data by Spatial and Temporal Relationship And Measure Intragroup Social Dynamics
+Title: Group Animal Relocation Data by Spatial and Temporal Relationship and Measure Intragroup Social Dynamics
 Version: 0.2.13
 Authors@R: c(
     person("Alec L.", "Robitaille", , "robit.alec@gmail.com", role = c("aut", "cre"),
