@@ -87,10 +87,10 @@ articles:
   navbar: ~
   contents:
   - using-edge-and-dyad
-- title: Additional data formats
+- title: Detecting interspecific interactions
   navbar: ~
   contents:
-  - additional-data-formats
+  - interspecific-interactions
 
 
 navbar:
