@@ -2,6 +2,9 @@
 
 See NEWS.md for all updates. 
 
+Fixes links, title case in DESCRIPTION, reduced example runtimes.
+Note "intragroup" is not a typo. 
+
 Adds suite of functions for measuring intragroup social dynamics including 
 metrics for identifying leaders, measuring centroids, and directions and distances to centroids, leaders, neighbours. 
 
