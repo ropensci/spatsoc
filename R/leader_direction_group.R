@@ -67,16 +67,17 @@
 #' # Load data.table
 #' library(data.table)
 #' \dontshow{data.table::setDTthreads(1)}
-#'
 #' # Read example data
 #' DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
 #'
-#' # (Subset example data to reduce example run time)
-#' DT <- DT[year(datetime) == 2016]
-#'
 #' # Cast the character column to POSIXct
 #' DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
-#'
+#' \dontshow{
+#' # (Subset example data to reduce runtime on CRAN)
+#' if (isFALSE(rlang::is_interactive())) {
+#'   DT <- DT[as.Date(datetime) == '2017-01-17']
+#' }
+#' }
 #' # Temporal grouping
 #' group_times(DT, datetime = 'datetime', threshold = '20 minutes')
 #'
