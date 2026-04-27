@@ -1,4 +1,4 @@
-# spatsoc (development version)
+# spatsoc v0.2.13
 
 Breaking changes:
 
@@ -8,7 +8,7 @@ in original crs by default ([PR 132](https://github.com/ropensci/spatsoc/pull/13
 * `group_pts` now returns NA if coords / geometry are NA (part of ([PR 128](https://github.com/ropensci/spatsoc/pull/128))
 * `fusion_id` now also checks future timegroup with `shift(type = 'lead')` 
 whereas previous versions only checked lag timegroups and lead+lag spatial 
-distance ([PR 142](https://github.com/ropensci/spatsoc/pull/142))
+distance ([PR 142](https://github.com/ropensci/spatsoc/pull/142), [PR 144](https://github.com/ropensci/spatsoc/pull/144))
 
 
 Enhancements:
@@ -36,6 +36,7 @@ Enhancements:
 * improve speed of `direction_group` 
 ([PR 133](https://github.com/ropensci/spatsoc/pull/133))
 * remove requirement on 'dyadID' for edge_direction ([PR 137](https://github.com/ropensci/spatsoc/pull/137))
+* `edge_alignment` returns units output ([PR 141](https://github.com/ropensci/spatsoc/pull/141))
 
 Vignettes:
 
@@ -44,12 +45,20 @@ Vignettes:
   * add toc and links to other vignettes in all vignettes
   * add `fusion_id` example to using distance based edge-list generating functions
   vignette
-  * rename "additional data formats" vignette to "interspecific interactions"
+  * rename "additional data formats" vignette to "interspecific interactions" ([PR 148](https://github.com/ropensci/spatsoc/pull/148))
+
+Documentation:
+* update package title and description to include mention of intragroup social dynamics
+* fix missing vignette in _pkgdown.yml [PR 139](https://github.com/ropensci/spatsoc/pull/139)
 
 Fixes:
 
 * fix `edge_direction` bug if geometry in both edges and DT ([PR 136](https://github.com/ropensci/spatsoc/pull/136))
 * fix missing return units in output from `edge_alignment` ([PR 141](https://github.com/ropensci/spatsoc/pull/141))
+* fix reduce example runtimes ([PR 150](https://github.com/ropensci/spatsoc/pull/150), [PR 151](https://github.com/ropensci/spatsoc/pull/151))
+* fix remove remotes: lwgeom and adds s2 to suggests ([PR 146](https://github.com/ropensci/spatsoc/pull/146))
+* fix CI error on macos ([PR 140](https://github.com/ropensci/spatsoc/pull/140))
+* fix speed direction_polarization ([PR 134](https://github.com/ropensci/spatsoc/pull/134))
 
 
 # spatsoc 0.2.12
