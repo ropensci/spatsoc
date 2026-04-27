@@ -7,16 +7,18 @@ cff-version: 1.2.0
 message: 'To cite package "spatsoc" in publications use:'
 type: software
 license: GPL-3.0-only
-title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship'
+title: 'spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship
+  and Measure Intragroup Social Dynamics'
 version: 0.2.13
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.spatsoc
 abstract: Detects spatial and temporal groups in GPS relocations (Robitaille et al.
   (2019) <https://doi.org/10.1111/2041-210X.13215>). It can be used to convert GPS
-  relocations to gambit-of-the-group format to build proximity-based social networks
-  In addition, the randomizations function provides data-stream randomization methods
-  suitable for GPS data.
+  relocations to gambit-of-the-group format to build proximity-based social networks,
+  and perform data-stream randomization methods suitable for GPS data. Also provides
+  measures of intragroup social dynamics including distance and direction to leaders,
+  centroids and nearest neighbours.
 authors:
 - family-names: Robitaille
   given-names: Alec L.
