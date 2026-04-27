@@ -2,8 +2,8 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "spatsoc",
-  "description": "Detects spatial and temporal groups in GPS relocations (Robitaille et al. (2019) <doi:10.1111/2041-210X.13215>). It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks In addition, the randomizations function provides data-stream randomization methods suitable for GPS data.",
-  "name": "spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship",
+  "description": "Detects spatial and temporal groups in GPS relocations (Robitaille et al. (2019) <doi:10.1111/2041-210X.13215>). It can be used to convert GPS relocations to gambit-of-the-group format to build proximity-based social networks, and perform data-stream randomization methods suitable for GPS data. Also provides measures of intragroup social dynamics including distance and direction to leaders, centroids and nearest neighbours. ",
+  "name": "spatsoc: Group Animal Relocation Data by Spatial and Temporal Relationship and Measure Intragroup Social Dynamics",
   "relatedLink": "https://docs.ropensci.org/spatsoc/",
   "codeRepository": "https://github.com/ropensci/spatsoc",
   "issueTracker": "https://github.com/ropensci/spatsoc/issues",
@@ -264,7 +264,7 @@
     },
     "SystemRequirements": "GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0),\n    sqlite3"
   },
-  "fileSize": "2291.304KB",
+  "fileSize": "2296.763KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
