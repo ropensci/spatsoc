@@ -123,14 +123,14 @@
 #' direction_step(example, 'ID', c('X', 'Y'), crs = 4326)
 #' example[, .(step, direction, units::set_units(direction, 'degree'))]
 direction_step <- function(
-    DT = NULL,
-    id = NULL,
-    coords = NULL,
-    crs = NULL,
-    splitBy = NULL,
-    geometry = 'geometry',
-    projection = NULL) {
-
+  DT = NULL,
+  id = NULL,
+  coords = NULL,
+  crs = NULL,
+  splitBy = NULL,
+  geometry = 'geometry',
+  projection = NULL
+) {
   # due to NSE notes in R CMD check
   geo <- x <- y <- NULL
 
@@ -163,18 +163,24 @@ direction_step <- function(
     use_transform <- !sf::st_is_longlat(crs)
 
     if (is.na(use_transform)) {
-      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
-                          ', ensure crs is provided for direction functions'))
+      rlang::abort(paste0(
+        'sf::st_is_longlat(crs) is ',
+        use_transform,
+        ', ensure crs is provided for direction functions'
+      ))
     }
 
-    DT[, c(out_colname) := c(calc_direction(
-      geometry_a = geo,
-      use_transform = use_transform
-    ), units::set_units(NA, 'rad')),
-    by = c(id, splitBy),
-    env = list(geo = geometry)
+    DT[,
+      c(out_colname) := c(
+        calc_direction(
+          geometry_a = geo,
+          use_transform = use_transform
+        ),
+        units::set_units(NA, 'rad')
+      ),
+      by = c(id, splitBy),
+      env = list(geo = geometry)
     ]
-
   } else {
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
@@ -189,19 +195,25 @@ direction_step <- function(
     use_transform <- !sf::st_is_longlat(crs)
 
     if (is.na(use_transform)) {
-      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
-                          ', ensure crs is provided for direction functions'))
+      rlang::abort(paste0(
+        'sf::st_is_longlat(crs) is ',
+        use_transform,
+        ', ensure crs is provided for direction functions'
+      ))
     }
 
-    DT[, c(out_colname) := c(calc_direction(
-      x_a = x,
-      y_a = y,
-      crs = crs,
-      use_transform = use_transform
-    ), units::set_units(NA, 'rad')),
-    by = c(id, splitBy),
-    env = list(x = data.table::first(coords), y = data.table::last(coords))
+    DT[,
+      c(out_colname) := c(
+        calc_direction(
+          x_a = x,
+          y_a = y,
+          crs = crs,
+          use_transform = use_transform
+        ),
+        units::set_units(NA, 'rad')
+      ),
+      by = c(id, splitBy),
+      env = list(x = data.table::first(coords), y = data.table::last(coords))
     ]
   }
-
 }

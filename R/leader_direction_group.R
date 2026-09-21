@@ -109,14 +109,15 @@
 #' direction_group(DT)
 #' leader_direction_group(DT)
 leader_direction_group <- function(
-    DT = NULL,
-    group_direction = 'group_direction',
-    coords = NULL,
-    group = 'group',
-    crs = NULL,
-    geometry = 'geometry',
-    return_rank = TRUE,
-    ties.method = NULL) {
+  DT = NULL,
+  group_direction = 'group_direction',
+  coords = NULL,
+  group = 'group',
+  crs = NULL,
+  geometry = 'geometry',
+  return_rank = TRUE,
+  ties.method = NULL
+) {
   # Due to NSE notes
   geo <- cent <- group_dir <- x <- x_centroid <- y <- y_centroid <- pos <- NULL
 
@@ -155,25 +156,28 @@ leader_direction_group <- function(
 
     if (pos_col %in% colnames(DT)) {
       message(
-        pos_col, ' column will be overwritten by this function'
+        pos_col,
+        ' column will be overwritten by this function'
       )
       data.table::set(DT, j = pos_col, value = NULL)
     }
 
-    DT[, c(pos_col) := {
-      coords_geo <- sf::st_coordinates(geo)
-      coords_cent <- sf::st_coordinates(cent)
+    DT[,
+      c(pos_col) := {
+        coords_geo <- sf::st_coordinates(geo)
+        coords_cent <- sf::st_coordinates(cent)
 
-      cos(units::drop_units(group_dir)) * (coords_geo[, 1] - coords_cent[, 1]) +
-        sin(units::drop_units(group_dir)) * (coords_geo[, 2] - coords_cent[, 2])
-    },
-    env = list(
-      group_dir = group_direction,
-      geo = geometry,
-      cent = centroid
-    )
+        cos(units::drop_units(group_dir)) *
+          (coords_geo[, 1] - coords_cent[, 1]) +
+          sin(units::drop_units(group_dir)) *
+            (coords_geo[, 2] - coords_cent[, 2])
+      },
+      env = list(
+        group_dir = group_direction,
+        geo = geometry,
+        cent = centroid
+      )
     ]
-
   } else {
     assert_not_null(coords)
     assert_are_colnames(DT, coords)
@@ -186,7 +190,7 @@ leader_direction_group <- function(
     pre <- 'centroid_'
     centroid_xcol <- paste0(pre, xcol)
     centroid_ycol <- paste0(pre, ycol)
-    coords_centroid  <- c(centroid_xcol, centroid_ycol)
+    coords_centroid <- c(centroid_xcol, centroid_ycol)
 
     assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
     assert_col_inherits(DT, coords_centroid, 'numeric')
@@ -205,19 +209,23 @@ leader_direction_group <- function(
 
     if (pos_col %in% colnames(DT)) {
       message(
-        pos_col, ' column will be overwritten by this function'
+        pos_col,
+        ' column will be overwritten by this function'
       )
       data.table::set(DT, j = pos_col, value = NULL)
     }
 
-    DT[, c(pos_col) :=
-      cos(units::drop_units(group_dir)) * (x - x_centroid) +
-      sin(units::drop_units(group_dir)) * (y - y_centroid),
-    env = list(
-      group_dir = group_direction,
-      x = xcol, y = ycol,
-      x_centroid = centroid_xcol, y_centroid = centroid_ycol
-    )
+    DT[,
+      c(pos_col) := cos(units::drop_units(group_dir)) *
+        (x - x_centroid) +
+        sin(units::drop_units(group_dir)) * (y - y_centroid),
+      env = list(
+        group_dir = group_direction,
+        x = xcol,
+        y = ycol,
+        x_centroid = centroid_xcol,
+        y_centroid = centroid_ycol
+      )
     ]
   }
 
@@ -233,11 +241,15 @@ leader_direction_group <- function(
     assert_not_null(group)
     assert_are_colnames(DT, group, ', did you run group_pts?')
 
-    DT[, c(rank_col) :=
-         data.table::frank(-pos, ties.method = ties.method,
-                           na.last = 'keep'),
-       by = c(group),
-       env = list(pos = pos_col)]
+    DT[,
+      c(rank_col) := data.table::frank(
+        -pos,
+        ties.method = ties.method,
+        na.last = 'keep'
+      ),
+      by = c(group),
+      env = list(pos = pos_col)
+    ]
   }
 
   return(DT[])

@@ -71,17 +71,17 @@ dyad_id <- function(DT = NULL, id1 = NULL, id2 = NULL) {
 
   ids <- unique(stats::na.omit(c(DT[[id1]], DT[[id2]])))
   dyads <- data.table::CJ(ID1 = ids, ID2 = ids)[ID1 != ID2]
-  dyads[, dyadID :=
-          apply(
-            X = .SD,
-            MARGIN = 1,
-            FUN = function(x)
-              paste(sort(x), collapse = '-')
-          )]
+  dyads[,
+    dyadID := apply(
+      X = .SD,
+      MARGIN = 1,
+      FUN = function(x) {
+        paste(sort(x), collapse = '-')
+      }
+    )
+  ]
 
   data.table::setnames(dyads, c('ID1', 'ID2'), c(id1, id2))
 
   return(DT[dyads, dyadID := dyadID, on = c(id1, id2)][])
 }
-
-

@@ -54,12 +54,12 @@
 #' # Print
 #' print(DT)
 get_geometry <- function(
-    DT = NULL,
-    coords = NULL,
-    crs = NULL,
-    output_crs = NULL,
-    geometry_colname = 'geometry') {
-
+  DT = NULL,
+  coords = NULL,
+  crs = NULL,
+  output_crs = NULL,
+  geometry_colname = 'geometry'
+) {
   assert_not_null(DT)
   assert_is_data_table(DT)
 
@@ -70,21 +70,27 @@ get_geometry <- function(
   assert_not_null(crs)
 
   if (geometry_colname %in% colnames(DT)) {
-    message(paste0(geometry_colname,
-                   ' column will be overwritten by this function'))
+    message(paste0(
+      geometry_colname,
+      ' column will be overwritten by this function'
+    ))
     data.table::set(DT, j = geometry_colname, value = NULL)
   }
 
-  DT[, (geometry_colname) := {
-    x <- sf::st_as_sf(data.frame(.SD),
-                      coords = coords,
-                      crs = crs,
-                      na.fail = FALSE
-    )
-    if (!is.null(output_crs) && !identical(crs, sf::st_crs(output_crs))) {
-      x <- sf::st_transform(x, output_crs)
-    }
-    x
-  }, .SDcols = coords]
+  DT[,
+    (geometry_colname) := {
+      x <- sf::st_as_sf(
+        data.frame(.SD),
+        coords = coords,
+        crs = crs,
+        na.fail = FALSE
+      )
+      if (!is.null(output_crs) && !identical(crs, sf::st_crs(output_crs))) {
+        x <- sf::st_transform(x, output_crs)
+      }
+      x
+    },
+    .SDcols = coords
+  ]
   return(DT)
 }

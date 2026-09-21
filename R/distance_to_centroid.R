@@ -125,14 +125,14 @@
 #' centroid_group(DT)
 #' direction_to_centroid(DT)
 distance_to_centroid <- function(
-    DT = NULL,
-    coords = NULL,
-    group = 'group',
-    crs = NULL,
-    return_rank = TRUE,
-    ties.method = NULL,
-    geometry = 'geometry') {
-
+  DT = NULL,
+  coords = NULL,
+  group = 'group',
+  crs = NULL,
+  return_rank = TRUE,
+  ties.method = NULL,
+  geometry = 'geometry'
+) {
   # Due to NSE notes in R CMD check
   geo <- cent <- x <- y <- x_centroid <- y_centroid <- NULL
 
@@ -161,14 +161,14 @@ distance_to_centroid <- function(
     crs <- sf::st_crs(DT[[geometry]])
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
-    DT[, c(out) := calc_distance(
-      geometry_a = geo,
-      geometry_b = cent,
-      use_dist = use_dist
-    ),
-    env = list(geo = geometry, cent = centroid_col)
+    DT[,
+      c(out) := calc_distance(
+        geometry_a = geo,
+        geometry_b = cent,
+        use_dist = use_dist
+      ),
+      env = list(geo = geometry, cent = centroid_col)
     ]
-
   } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
@@ -183,7 +183,7 @@ distance_to_centroid <- function(
     pre <- 'centroid_'
     xcol_centroid <- paste0(pre, xcol)
     ycol_centroid <- paste0(pre, ycol)
-    coords_centroid  <- c(xcol_centroid, ycol_centroid)
+    coords_centroid <- c(xcol_centroid, ycol_centroid)
 
     assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
     assert_col_inherits(DT, coords_centroid, 'numeric')
@@ -205,11 +205,12 @@ distance_to_centroid <- function(
         use_dist = use_dist
       ),
       env = list(
-        x = xcol, y = ycol,
-        x_centroid = xcol_centroid, y_centroid = ycol_centroid
+        x = xcol,
+        y = ycol,
+        x_centroid = xcol_centroid,
+        y_centroid = ycol_centroid
       )
     ]
-
   }
 
   if (return_rank) {
@@ -219,15 +220,21 @@ distance_to_centroid <- function(
     out_rank <- 'rank_distance_centroid'
     if (out_rank %in% colnames(DT)) {
       message(
-        out_rank, ' column will be overwritten by this function'
+        out_rank,
+        ' column will be overwritten by this function'
       )
       data.table::set(DT, j = out_rank, value = NULL)
     }
 
-    DT[, c(out_rank) :=
-         data.table::frank(out,  ties.method = ties.method, na.last = 'keep'),
-       by = group,
-       env = list(out = out, group = group)]
+    DT[,
+      c(out_rank) := data.table::frank(
+        out,
+        ties.method = ties.method,
+        na.last = 'keep'
+      ),
+      by = group,
+      env = list(out = out, group = group)
+    ]
   }
 
   return(DT[])

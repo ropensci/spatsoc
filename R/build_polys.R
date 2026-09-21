@@ -96,15 +96,16 @@
 #'             hrParams = list(percent = 95),
 #'             id = 'ID', coords = c('X', 'Y'), splitBy = 'yr')
 build_polys <- function(
-    DT = NULL,
-    crs = NULL,
-    hrType = NULL,
-    hrParams = NULL,
-    id = NULL,
-    coords = NULL,
-    splitBy = NULL,
-    spPts = NULL,
-    projection = NULL) {
+  DT = NULL,
+  crs = NULL,
+  hrType = NULL,
+  hrParams = NULL,
+  id = NULL,
+  coords = NULL,
+  splitBy = NULL,
+  spPts = NULL,
+  projection = NULL
+) {
   # due to NSE notes in R CMD check
   . <- NULL
 
@@ -145,8 +146,10 @@ build_polys <- function(
   }
 
   if (is.null(spPts)) {
-    ade_id <- DT[, do.call(function(...) paste(..., sep = '-'), .SD),
-                           .SDcols = c(splitBy)]
+    ade_id <- DT[,
+      do.call(function(...) paste(..., sep = '-'), .SD),
+      .SDcols = c(splitBy)
+    ]
 
     spPts <- sf::as_Spatial(
       sf::st_as_sf(
@@ -185,12 +188,17 @@ build_polys <- function(
       if (!('unout' %in% names(hrParams))) {
         hrParams$unout <- 'm2'
       }
-      kern <- do.call(adehabitatHR::kernelUD,
-                      hrParams[intersect(names(hrParams), names(kernelParam))])
-      out <- do.call(adehabitatHR::getverticeshr,
-                     c(x = list(kern),
-                       hrParams[intersect(names(hrParams),
-                                          names(verticesParam))]))
+      kern <- do.call(
+        adehabitatHR::kernelUD,
+        hrParams[intersect(names(hrParams), names(kernelParam))]
+      )
+      out <- do.call(
+        adehabitatHR::getverticeshr,
+        c(
+          x = list(kern),
+          hrParams[intersect(names(hrParams), names(verticesParam))]
+        )
+      )
     } else {
       stop(
         strwrap(
@@ -210,5 +218,3 @@ build_polys <- function(
   colnames(out_sf) <- gsub('id', id, colnames(out_sf))
   return(out_sf)
 }
-
-

@@ -101,15 +101,15 @@
 #'   timegroup = 'timegroup'
 #' )
 edge_direction <- function(
-    edges = NULL,
-    DT = NULL,
-    id = NULL,
-    coords = NULL,
-    crs = NULL,
-    timegroup = 'timegroup',
-    geometry = 'geometry',
-    projection = NULL) {
-
+  edges = NULL,
+  DT = NULL,
+  id = NULL,
+  coords = NULL,
+  crs = NULL,
+  timegroup = 'timegroup',
+  geometry = 'geometry',
+  projection = NULL
+) {
   # Due to NSE notes in R CMD check
   geo_id1 <- geo_id2 <- x_id1 <- y_id1 <- x_id2 <- y_id2 <- NULL
 
@@ -149,19 +149,23 @@ edge_direction <- function(
       edges <- data.table::copy(edges)[, .SD, .SDcols = -c(geometry)]
     }
 
-    m <- merge(edges,
-               DT[, .SD, .SDcols = ID1_cols],
-               by.x = c('ID1', timegroup),
-               by.y = c(id, timegroup),
-               all.x = TRUE,
-               sort = FALSE)
+    m <- merge(
+      edges,
+      DT[, .SD, .SDcols = ID1_cols],
+      by.x = c('ID1', timegroup),
+      by.y = c(id, timegroup),
+      all.x = TRUE,
+      sort = FALSE
+    )
     data.table::setnames(m, geometry, geometry_id1)
-    m <- merge(m,
-               DT[, .SD, .SDcols = c(geometry, id, timegroup)],
-               by.x = c('ID2', timegroup),
-               by.y = c(id, timegroup),
-               all.x = TRUE,
-               sort = FALSE)
+    m <- merge(
+      m,
+      DT[, .SD, .SDcols = c(geometry, id, timegroup)],
+      by.x = c('ID2', timegroup),
+      by.y = c(id, timegroup),
+      all.x = TRUE,
+      sort = FALSE
+    )
     data.table::setnames(m, geometry, geometry_id2)
 
     if (out_col %in% colnames(m)) {
@@ -173,11 +177,15 @@ edge_direction <- function(
     use_transform <- !sf::st_is_longlat(crs)
 
     if (is.na(use_transform)) {
-      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
-                          ', ensure crs is provided for direction functions'))
+      rlang::abort(paste0(
+        'sf::st_is_longlat(crs) is ',
+        use_transform,
+        ', ensure crs is provided for direction functions'
+      ))
     }
 
-    m[!sf::st_is_empty(geo_id1) & !sf::st_is_empty(geo_id2),
+    m[
+      !sf::st_is_empty(geo_id1) & !sf::st_is_empty(geo_id2),
       (out_col) := calc_direction(
         geometry_a = geo_id1,
         geometry_b = geo_id2,
@@ -191,7 +199,6 @@ edge_direction <- function(
 
     data.table::set(m, j = c(geometry_id1, geometry_id2), value = NULL)
     data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2'))
-
   } else {
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
@@ -209,19 +216,23 @@ edge_direction <- function(
       c(coords, id, timegroup)
     }
 
-    m <- merge(edges,
-               DT[, .SD, .SDcols = ID1_cols],
-               by.x = c('ID1', timegroup),
-               by.y = c(id, timegroup),
-               all.x = TRUE,
-               sort = FALSE)
+    m <- merge(
+      edges,
+      DT[, .SD, .SDcols = ID1_cols],
+      by.x = c('ID1', timegroup),
+      by.y = c(id, timegroup),
+      all.x = TRUE,
+      sort = FALSE
+    )
     data.table::setnames(m, coords, coords_id1)
-    m <- merge(m,
-               DT[, .SD, .SDcols = c(coords, id, timegroup)],
-               by.x = c('ID2', timegroup),
-               by.y = c(id, timegroup),
-               all.x = TRUE,
-               sort = FALSE)
+    m <- merge(
+      m,
+      DT[, .SD, .SDcols = c(coords, id, timegroup)],
+      by.x = c('ID2', timegroup),
+      by.y = c(id, timegroup),
+      all.x = TRUE,
+      sort = FALSE
+    )
     data.table::setnames(m, coords, coords_id2)
 
     if (out_col %in% colnames(m)) {
@@ -232,11 +243,15 @@ edge_direction <- function(
     use_transform <- !sf::st_is_longlat(crs)
 
     if (is.na(use_transform)) {
-      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
-                          ', ensure crs is provided for direction functions'))
+      rlang::abort(paste0(
+        'sf::st_is_longlat(crs) is ',
+        use_transform,
+        ', ensure crs is provided for direction functions'
+      ))
     }
 
-    m[!is.na(x_id1) & !is.na(y_id1) & !is.na(x_id2) & !is.na(y_id2),
+    m[
+      !is.na(x_id1) & !is.na(y_id1) & !is.na(x_id2) & !is.na(y_id2),
       (out_col) := calc_direction(
         x_a = x_id1,
         y_a = y_id1,
@@ -256,8 +271,6 @@ edge_direction <- function(
     data.table::set(m, j = c(coords_id1, coords_id2), value = NULL)
     data.table::setcolorder(m, c(timegroup, 'ID1', 'ID2'))
   }
-
-
 
   return(m[])
 }

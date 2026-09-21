@@ -56,10 +56,7 @@
 #'
 #' gbiMtrx <- get_gbi(DT = DT, group = 'group', id = 'ID')
 #'
-get_gbi <- function(DT = NULL,
-    group = 'group',
-    id = NULL) {
-
+get_gbi <- function(DT = NULL, group = 'group', id = NULL) {
   assert_not_null(DT)
   assert_is_data_table(DT)
   assert_not_null(group)
@@ -71,8 +68,7 @@ get_gbi <- function(DT = NULL,
   }
 
   uDT <-
-    stats::na.omit(unique(DT[, .SD, .SDcols = c(group, id)]),
-            cols = group)
+    stats::na.omit(unique(DT[, .SD, .SDcols = c(group, id)]), cols = group)
 
   cDT <-
     data.table::dcast(

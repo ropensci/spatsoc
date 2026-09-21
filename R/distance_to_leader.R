@@ -110,12 +110,12 @@
 #' )
 #' distance_to_leader(DT)
 distance_to_leader <- function(
-    DT = NULL,
-    coords = NULL,
-    group = 'group',
-    crs = NULL,
-    geometry = 'geometry') {
-
+  DT = NULL,
+  coords = NULL,
+  group = 'group',
+  crs = NULL,
+  geometry = 'geometry'
+) {
   # Due to NSE notes
   geo <- lead <- x <- y <- x_leader <- y_leader <- . <-
     rank_position_group_direction <- has_leader <- distance_leader <- NULL
@@ -127,15 +127,19 @@ distance_to_leader <- function(
 
   leader_col <- 'rank_position_group_direction'
   assert_are_colnames(
-    DT, leader_col,
+    DT,
+    leader_col,
     ', did you run leader_direction_group(return_rank = TRUE)?'
   )
   assert_col_inherits(DT, leader_col, 'numeric')
 
-  check_leaderless <- DT[, .(
-    has_leader = any(rank_position_group_direction == 1, na.rm = TRUE)),
+  check_leaderless <- DT[,
+    .(
+      has_leader = any(rank_position_group_direction == 1, na.rm = TRUE)
+    ),
     by = group,
-    env = list(group = group)][!(has_leader)]
+    env = list(group = group)
+  ][!(has_leader)]
 
   out_col <- 'distance_leader'
 
@@ -148,10 +152,14 @@ distance_to_leader <- function(
     assert_col_inherits(DT, geometry, 'sfc_POINT')
 
     zzz_geometry_leader <- 'zzz_geometry_leader'
-    DT[, c(zzz_geometry_leader) :=
-         sf::st_sf(rep(geo[which(rank_position_group_direction == 1)], .N)),
-       env = list(geo = geometry, group = group),
-       by = group]
+    DT[,
+      c(zzz_geometry_leader) := sf::st_sf(rep(
+        geo[which(rank_position_group_direction == 1)],
+        .N
+      )),
+      env = list(geo = geometry, group = group),
+      by = group
+    ]
 
     if (check_leaderless[, .N > 0]) {
       warning(
@@ -170,17 +178,20 @@ distance_to_leader <- function(
     crs <- sf::st_crs(DT[[geometry]])
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
-    DT[!group %in% check_leaderless$group, c(out_col) := calc_distance(
-      geometry_a = geo,
-      geometry_b = lead,
-      use_dist = use_dist
-    ),
-    env = list(
-      geo = geometry, lead = zzz_geometry_leader
-    )]
+    DT[
+      !group %in% check_leaderless$group,
+      c(out_col) := calc_distance(
+        geometry_a = geo,
+        geometry_b = lead,
+        use_dist = use_dist
+      ),
+      env = list(
+        geo = geometry,
+        lead = zzz_geometry_leader
+      )
+    ]
 
     data.table::set(DT, j = zzz_geometry_leader, value = NULL)
-
   } else {
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
@@ -195,13 +206,14 @@ distance_to_leader <- function(
     pre <- 'zzz_leader_'
     zzz_xcol_leader <- paste0(pre, xcol)
     zzz_ycol_leader <- paste0(pre, ycol)
-    zzz_coords_leader  <- c(zzz_xcol_leader, zzz_ycol_leader)
+    zzz_coords_leader <- c(zzz_xcol_leader, zzz_ycol_leader)
 
-    DT[, c(zzz_coords_leader) :=
-         .SD[which(rank_position_group_direction == 1)],
-       .SDcols = c(coords),
-       env = list(group = group),
-       by = group]
+    DT[,
+      c(zzz_coords_leader) := .SD[which(rank_position_group_direction == 1)],
+      .SDcols = c(coords),
+      env = list(group = group),
+      by = group
+    ]
 
     if (check_leaderless[, .N > 0]) {
       warning(
@@ -219,7 +231,8 @@ distance_to_leader <- function(
 
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
-    DT[!group %in% check_leaderless$group,
+    DT[
+      !group %in% check_leaderless$group,
       c(out_col) := calc_distance(
         x_a = x,
         y_a = y,
@@ -229,12 +242,14 @@ distance_to_leader <- function(
         use_dist = use_dist
       ),
       env = list(
-        x = xcol, y = ycol, x_leader = zzz_xcol_leader, y_leader = zzz_ycol_leader
+        x = xcol,
+        y = ycol,
+        x_leader = zzz_xcol_leader,
+        y_leader = zzz_ycol_leader
       )
     ]
 
     data.table::set(DT, j = zzz_coords_leader, value = NULL)
-
   }
 
   return(DT[])

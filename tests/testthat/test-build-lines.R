@@ -72,7 +72,8 @@ test_that('coords, id, crs, sortBy must be provided, proper format', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'coords must be length 2', fixed = FALSE
+    'coords must be length 2',
+    fixed = FALSE
   )
 
   expect_error(
@@ -93,9 +94,9 @@ test_that('coords, id, crs, sortBy must be provided, proper format', {
       crs = utm,
       sortBy = 'ID'
     ),
-    'sortBy must be', fixed = FALSE
+    'sortBy must be',
+    fixed = FALSE
   )
-
 })
 
 
@@ -139,16 +140,18 @@ test_that('column names must exist in DT', {
 
 test_that('returns same number of lines as unique IDs/splitBy provided', {
   # without splitBy
-  expect_equal(nrow(
-    build_lines(
-      DT = DT,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      crs = utm,
-      sortBy = 'datetime'
-    )
-  ),
-  DT[, uniqueN(ID)])
+  expect_equal(
+    nrow(
+      build_lines(
+        DT = DT,
+        id = 'ID',
+        coords = c('X', 'Y'),
+        crs = utm,
+        sortBy = 'datetime'
+      )
+    ),
+    DT[, uniqueN(ID)]
+  )
 
   # with splitBy
   DT[, jul := data.table::yday(as.POSIXct(datetime))]
@@ -156,17 +159,19 @@ test_that('returns same number of lines as unique IDs/splitBy provided', {
   DT[, count := .N, by = splitBy]
   subDT <- DT[count >= 2]
 
-  expect_equal(nrow(
-    build_lines(
-      DT = subDT,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      crs = utm,
-      splitBy = 'jul',
-      sortBy = 'datetime'
-    )
-  ),
-  nrow(unique(subDT[, .SD, .SDcols = splitBy])))
+  expect_equal(
+    nrow(
+      build_lines(
+        DT = subDT,
+        id = 'ID',
+        coords = c('X', 'Y'),
+        crs = utm,
+        splitBy = 'jul',
+        sortBy = 'datetime'
+      )
+    ),
+    nrow(unique(subDT[, .SD, .SDcols = splitBy]))
+  )
 })
 
 
@@ -256,13 +261,16 @@ test_that('build_lines returns an sf object with LINESTRINGs', {
 
   expect_in(
     'LINESTRING',
-    sf::st_geometry_type(build_lines(
-      DT = DT,
-      id = 'ID',
-      coords = c('X', 'Y'),
-      crs = utm,
-      sortBy = 'datetime'
-    ), by_geometry = FALSE)
+    sf::st_geometry_type(
+      build_lines(
+        DT = DT,
+        id = 'ID',
+        coords = c('X', 'Y'),
+        crs = utm,
+        sortBy = 'datetime'
+      ),
+      by_geometry = FALSE
+    )
   )
 })
 
@@ -284,12 +292,10 @@ test_that('build_lines builds ordered lines', {
   )
 
   expect_equal(
-    base_lines[order(base_lines$ID),],
-    random_lines[order(random_lines$ID),]
+    base_lines[order(base_lines$ID), ],
+    random_lines[order(random_lines$ID), ]
   )
 })
-
-
 
 
 test_that('splitBy argument doesnt use splitBy column', {

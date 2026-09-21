@@ -15,13 +15,23 @@ utm <- 32736
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, timethreshold)
-group_pts(DT, threshold = threshold, id = id,
-          coords = coords, timegroup = timegroup)
+group_pts(
+  DT,
+  threshold = threshold,
+  id = id,
+  coords = coords,
+  timegroup = timegroup
+)
 centroid_group(DT, coords = coords, group = group)
 direction_step(DT = DT, id = id, coords = coords, crs = utm)
 direction_group(DT)
-leader_direction_group(DT, coords = coords, group = group, crs = utm,
-                       return_rank = TRUE)
+leader_direction_group(
+  DT,
+  coords = coords,
+  group = group,
+  crs = utm,
+  return_rank = TRUE
+)
 
 get_geometry(DT, coords = coords, crs = utm)
 
@@ -30,56 +40,72 @@ DT_with_missing <- copy(DT)
 DT <- copy(DT)[
   !group %in%
     DT[, any(rank_position_group_direction == 1, na.rm = TRUE), by = group][
-      !(V1), group]][group != 868]
+      !(V1),
+      group
+    ]
+][group != 868]
 
 clean_DT <- copy(DT)
 
 test_that('arguments required, otherwise error detected', {
   expect_error(distance_to_leader(DT = NULL))
 
-  expect_error(distance_to_leader(DT, coords = coords, group = NULL),
-               'group must be provided')
+  expect_error(
+    distance_to_leader(DT, coords = coords, group = NULL),
+    'group must be provided'
+  )
 })
 
 test_that('column names must exist in DT', {
-  expect_error(distance_to_leader(DT, coords = rep('potato', 2), group = group),
-               'potato field')
-  expect_error(distance_to_leader(DT, coords = coords, group = 'potato'),
-               'potato field')
+  expect_error(
+    distance_to_leader(DT, coords = rep('potato', 2), group = group),
+    'potato field'
+  )
+  expect_error(
+    distance_to_leader(DT, coords = coords, group = 'potato'),
+    'potato field'
+  )
   copy_DT <- copy(DT)
   setnames(copy_DT, 'rank_position_group_direction', 'potato')
-  expect_error(distance_to_leader(copy_DT, coords = coords, group = group),
-               'did you run leader?')
+  expect_error(
+    distance_to_leader(copy_DT, coords = coords, group = group),
+    'did you run leader?'
+  )
 
   copy_DT <- copy(DT)[, rank_position_group_direction := NULL]
-  expect_error(distance_to_leader(copy_DT, coords = coords,
-                                  group = group))
+  expect_error(distance_to_leader(copy_DT, coords = coords, group = group))
 })
 
 test_that('coords/geometry are correctly provided or error detected', {
-  expect_error(distance_to_leader(DT, coords = c('X', NULL), group = group),
-               'coords must be length 2')
+  expect_error(
+    distance_to_leader(DT, coords = c('X', NULL), group = group),
+    'coords must be length 2'
+  )
   copy_DT <- copy(DT)[, X := as.character(X)]
-  expect_error(distance_to_leader(copy_DT, coords = coords, group = group),
-               'coords must be of class numeric')
+  expect_error(
+    distance_to_leader(copy_DT, coords = coords, group = group),
+    'coords must be of class numeric'
+  )
   copy_DT <- copy(DT)[, X := as.character(X)]
-  expect_error(distance_to_leader(copy_DT, coords = coords,
-                                  group = group),
-               'coords must be of class numeric')
+  expect_error(
+    distance_to_leader(copy_DT, coords = coords, group = group),
+    'coords must be of class numeric'
+  )
 
   # geometry
-  expect_error(distance_to_leader(DT, geometry = 'potato'),
-               'get_geometry')
-  expect_message(distance_to_leader(DT, crs = utm),
-                 'crs argument is ignored')
+  expect_error(distance_to_leader(DT, geometry = 'potato'), 'get_geometry')
+  expect_message(distance_to_leader(DT, crs = utm), 'crs argument is ignored')
   expect_error(distance_to_leader(DT, geometry = 'X'))
 })
 
 test_that('leader is correctly provided or error detected', {
-  copy_DT <- copy(DT)[, rank_position_group_direction :=
-                        as.character(rank_position_group_direction)]
-  expect_error(distance_to_leader(copy_DT, coords = coords, group = group),
-               'must be of class numeric')
+  copy_DT <- copy(DT)[,
+    rank_position_group_direction := as.character(rank_position_group_direction)
+  ]
+  expect_error(
+    distance_to_leader(copy_DT, coords = coords, group = group),
+    'must be of class numeric'
+  )
 })
 
 test_that('warns if group does not have a leader', {
@@ -122,20 +148,23 @@ test_that('message when distance_leader column overwritten', {
 test_that('no rows are added to the result DT', {
   # coords
   copyDT <- copy(clean_DT)
-  expect_equal(nrow(copyDT),
-               nrow(distance_to_leader(copyDT, coords = coords, group = group)))
+  expect_equal(
+    nrow(copyDT),
+    nrow(distance_to_leader(copyDT, coords = coords, group = group))
+  )
 
   # geometry
   copyDT <- copy(clean_DT)
-  expect_equal(nrow(copyDT),
-               nrow(distance_to_leader(copyDT, group = group)))
+  expect_equal(nrow(copyDT), nrow(distance_to_leader(copyDT, group = group)))
 })
 
 test_that('one column added to the result DT', {
   # coords
   copyDT <- copy(clean_DT)
-  expect_equal(ncol(clean_DT) + 1,
-               ncol(distance_to_leader(copyDT, coords = coords, group = group)))
+  expect_equal(
+    ncol(clean_DT) + 1,
+    ncol(distance_to_leader(copyDT, coords = coords, group = group))
+  )
 
   # And check modifies by reference
   copyDT <- copy(clean_DT)
@@ -144,8 +173,10 @@ test_that('one column added to the result DT', {
 
   # geometry
   copyDT <- copy(clean_DT)
-  expect_equal(ncol(clean_DT) + 1,
-               ncol(distance_to_leader(copyDT, group = group)))
+  expect_equal(
+    ncol(clean_DT) + 1,
+    ncol(distance_to_leader(copyDT, group = group))
+  )
 
   # And check modifies by reference
   copyDT <- copy(clean_DT)
@@ -171,7 +202,10 @@ test_that('zzz columns not added to the result', {
   # coords
   zzz_cols <- c('has_leader', 'zzz_N_by_group')
   expect_false(
-    any(zzz_cols %in% colnames(direction_to_leader(DT, coords = coords, crs = utm)))
+    any(
+      zzz_cols %in%
+        colnames(direction_to_leader(DT, coords = coords, crs = utm))
+    )
   )
 
   # geometry
@@ -183,12 +217,13 @@ test_that('zzz columns not added to the result', {
 
 test_that('returns a data.table', {
   # coords
-  expect_s3_class(distance_to_leader(DT, coords = coords, group = group),
-                  'data.table')
+  expect_s3_class(
+    distance_to_leader(DT, coords = coords, group = group),
+    'data.table'
+  )
 
   # geometry
-  expect_s3_class(distance_to_leader(DT, group = group),
-                  'data.table')
+  expect_s3_class(distance_to_leader(DT, group = group), 'data.table')
 })
 
 test_that('NA for leader returns NA for distance', {
@@ -198,8 +233,10 @@ test_that('NA for leader returns NA for distance', {
     coords = coords,
     group = 'group'
   ))
-  leaderless <- out[, !any(rank_position_group_direction == 1, na.rm = TRUE),
-                    by = group]
+  leaderless <- out[,
+    !any(rank_position_group_direction == 1, na.rm = TRUE),
+    by = group
+  ]
   expect_all_true(
     out[group %in% leaderless[(V1)]$group, is.na(distance_leader)]
   )
@@ -209,8 +246,10 @@ test_that('NA for leader returns NA for distance', {
     DT = DT_with_missing,
     group = 'group'
   ))
-  leaderless <- out[, !any(rank_position_group_direction == 1, na.rm = TRUE),
-                    by = group]
+  leaderless <- out[,
+    !any(rank_position_group_direction == 1, na.rm = TRUE),
+    by = group
+  ]
   expect_all_true(
     out[group %in% leaderless[(V1)]$group, is.na(distance_leader)]
   )
@@ -225,8 +264,13 @@ expect_DT <- data.table(
   group = c(1, 1)
 )
 centroid_group(expect_DT, coords = coords)
-leader_direction_group(expect_DT, coords = coords, crs = utm,
-                       return_rank = TRUE, group = group)
+leader_direction_group(
+  expect_DT,
+  coords = coords,
+  crs = utm,
+  return_rank = TRUE,
+  group = group
+)
 distance_to_leader(expect_DT, coords = c('X', 'Y'))
 
 test_that('expected results for simple case', {
@@ -254,8 +298,13 @@ expect_DT <- data.table(
   group = c(1, 1)
 )
 centroid_group(expect_DT, coords = coords)
-leader_direction_group(expect_DT, coords = coords, crs = utm,
-                       return_rank = TRUE, group = group)
+leader_direction_group(
+  expect_DT,
+  coords = coords,
+  crs = utm,
+  return_rank = TRUE,
+  group = group
+)
 get_geometry(expect_DT, coords = coords, crs = NA)
 distance_to_leader(expect_DT)
 
@@ -274,4 +323,3 @@ test_that('expected results for simple case', {
     'B'
   )
 })
-

@@ -15,8 +15,15 @@ group <- 'group'
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
-                   timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
+edges <- edge_dist(
+  DT,
+  threshold = threshold,
+  id = id,
+  coords = coords,
+  timegroup = timegroup,
+  returnDist = TRUE,
+  fillNA = FALSE
+)
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 
 clean_DT <- copy(DT)
@@ -36,19 +43,25 @@ expected_DT[ID %in% first(expected_edges$ID1), X := NA]
 test_that('results are expected', {
   expect_equal(
     centroid_dyad(expected_edges, expected_DT, id = id, coords = coords)[
-      timegroup == 1, unique(centroid_Y)],
+      timegroup == 1,
+      unique(centroid_Y)
+    ],
     10
   )
 
   expect_equal(
     centroid_dyad(expected_edges, expected_DT, id = id, coords = coords)[
-      timegroup == 2, .N],
+      timegroup == 2,
+      .N
+    ],
     0
   )
 
   expect_gt(
     centroid_dyad(expected_edges, expected_DT, id = id, coords = coords)[
-      timegroup == 1, unique(centroid_X)],
+      timegroup == 1,
+      unique(centroid_X)
+    ],
     10
   )
 
@@ -59,16 +72,26 @@ test_that('results are expected', {
 
   expect_equal(
     expected_edges[, unique(ID1)],
-    centroid_dyad(expected_edges, expected_DT,
-                  id = id, coords = coords)[, unique(ID1)]
+    centroid_dyad(
+      expected_edges,
+      expected_DT,
+      id = id,
+      coords = coords
+    )[, unique(ID1)]
   )
 })
 
 test_that('NAs in dyadID result in NAs for centroid', {
   # Set fillNA = TRUE
-  edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
-                     timegroup = timegroup, returnDist = TRUE,
-                     fillNA = TRUE)
+  edges <- edge_dist(
+    DT,
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    fillNA = TRUE
+  )
   dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 
   centroids <- centroid_dyad(edges, DT, id, coords)

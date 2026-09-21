@@ -112,12 +112,12 @@
 #' group_pts(DT, threshold = 5, id = 'ID', timegroup = 'timegroup')
 #' centroid_group(DT)
 centroid_group <- function(
-    DT = NULL,
-    coords = NULL,
-    crs = NULL,
-    group = 'group',
-    geometry = 'geometry') {
-
+  DT = NULL,
+  coords = NULL,
+  crs = NULL,
+  group = 'group',
+  geometry = 'geometry'
+) {
   # Due to NSE notes in R CMD check
   centroid <- geo <- cent <- . <- x <- y <- NULL
 
@@ -143,12 +143,15 @@ centroid_group <- function(
 
     use_mean <- crs_use_mean(sf::st_crs(DT[[geometry]]))
 
-    DT[, (out) := calc_centroid(geo, use_mean = use_mean),
-       env = list(geo = geometry),
-       by = c(group)]
-    DT[, (out) := sf::st_sfc(cent, recompute_bbox = TRUE),
-       env = list(cent = out)]
-
+    DT[,
+      (out) := calc_centroid(geo, use_mean = use_mean),
+      env = list(geo = geometry),
+      by = c(group)
+    ]
+    DT[,
+      (out) := sf::st_sfc(cent, recompute_bbox = TRUE),
+      env = list(cent = out)
+    ]
   } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
@@ -174,10 +177,16 @@ centroid_group <- function(
       data.table::set(DT, j = out_ycol, value = NULL)
     }
     use_mean <- crs_use_mean(crs)
-    DT[, (c(out_xcol, out_ycol)) :=
-         calc_centroid(, x, y, crs = crs, use_mean = use_mean),
-       env = list(x = xcol, y = ycol),
-       by = c(group)]
+    DT[,
+      (c(out_xcol, out_ycol)) := calc_centroid(,
+        x,
+        y,
+        crs = crs,
+        use_mean = use_mean
+      ),
+      env = list(x = xcol, y = ycol),
+      by = c(group)
+    ]
   }
 
   return(DT[])

@@ -113,14 +113,15 @@
 #' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
 #' group_pts(DT, threshold = 50, id = 'ID', timegroup = 'timegroup')
 group_pts <- function(
-    DT = NULL,
-    threshold = NULL,
-    id = NULL,
-    coords = NULL,
-    timegroup,
-    crs = NULL,
-    splitBy = NULL,
-    geometry = 'geometry') {
+  DT = NULL,
+  threshold = NULL,
+  id = NULL,
+  coords = NULL,
+  timegroup,
+  crs = NULL,
+  splitBy = NULL,
+  geometry = 'geometry'
+) {
   # due to NSE notes in R CMD check
   N <- withinGroup <- group <- geo <- x <- y <- NULL
 
@@ -133,8 +134,12 @@ group_pts <- function(
   assert_are_colnames(DT, check_colnames)
 
   if (!is.null(timegroup)) {
-    if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
-            c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+    if (
+      any(
+        unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+          c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character')
+      )
+    ) {
       warning(
         strwrap(
           prefix = " ",
@@ -171,31 +176,38 @@ group_pts <- function(
 
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
-    if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
-        !use_dist) {
+    if (
+      !inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) && !use_dist
+    ) {
       threshold <- units::as_units(threshold, 'm')
     }
 
-    DT[!sf::st_is_empty(geo), withinGroup := {
-      distMatrix <- calc_distance(
-        geometry_a = geo,
-        use_dist = use_dist
-      )
-      graphAdj <-
-        igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
-      igraph::components(graphAdj)$membership
-    },
-    by = c(splitBy, timegroup),
-    env = list(geo = geometry)]
+    DT[
+      !sf::st_is_empty(geo),
+      withinGroup := {
+        distMatrix <- calc_distance(
+          geometry_a = geo,
+          use_dist = use_dist
+        )
+        graphAdj <-
+          igraph::graph_from_adjacency_matrix(distMatrix <= threshold)
+        igraph::components(graphAdj)$membership
+      },
+      by = c(splitBy, timegroup),
+      env = list(geo = geometry)
+    ]
 
     if ('group' %in% colnames(DT)) {
       message('group column will be overwritten by this function')
       data.table::set(DT, j = 'group', value = NULL)
     }
 
-    DT[!sf::st_is_empty(geo), group := .GRP,
+    DT[
+      !sf::st_is_empty(geo),
+      group := .GRP,
       by = c(splitBy, timegroup, 'withinGroup'),
-      env = list(geo = geometry)]
+      env = list(geo = geometry)
+    ]
   } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
@@ -216,15 +228,19 @@ group_pts <- function(
 
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
-    if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
-        !use_dist) {
+    if (
+      !inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) && !use_dist
+    ) {
       threshold <- units::as_units(threshold, 'm')
     }
 
-    DT[!is.na(x) & !is.na(y),
+    DT[
+      !is.na(x) & !is.na(y),
       withinGroup := {
         distMatrix <- calc_distance(
-          x_a = x, y_a = y, crs = crs,
+          x_a = x,
+          y_a = y,
+          crs = crs,
           use_dist = use_dist
         )
         graphAdj <-
@@ -235,7 +251,8 @@ group_pts <- function(
       env = list(x = xcol, y = ycol)
     ]
 
-    DT[!is.na(x) & !is.na(y),
+    DT[
+      !is.na(x) & !is.na(y),
       group := .GRP,
       by = c(splitBy, timegroup, 'withinGroup'),
       env = list(x = xcol, y = ycol)

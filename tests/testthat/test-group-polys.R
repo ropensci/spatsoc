@@ -12,19 +12,23 @@ DT[, jul := data.table::yday(datetime)]
 utm <- 32736
 
 test_that('DT or spPts are required but not both', {
-  expect_error(group_polys(
-    DT = NULL,
-    sfPolys = NULL,
-    area = FALSE
-  ),
-  'must provide either DT or sfPolys')
+  expect_error(
+    group_polys(
+      DT = NULL,
+      sfPolys = NULL,
+      area = FALSE
+    ),
+    'must provide either DT or sfPolys'
+  )
 
-  expect_error(group_polys(
-    DT = DT,
-    sfPolys = 10,
-    area = FALSE
-  ),
-  'cannot provide both DT and sfPolys')
+  expect_error(
+    group_polys(
+      DT = DT,
+      sfPolys = 10,
+      area = FALSE
+    ),
+    'cannot provide both DT and sfPolys'
+  )
 })
 
 test_that('id required', {
@@ -224,42 +228,44 @@ test_that('ID field does not have spaces', {
 test_that('column and row lengths returned make sense', {
   copyDT <- copy(DT)
   group_polys_mcp <- group_polys(
-      DT = copyDT,
-      crs = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      area = TRUE,
-      coords = c('X', 'Y'),
-      id = 'ID'
+    DT = copyDT,
+    crs = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    area = TRUE,
+    coords = c('X', 'Y'),
+    id = 'ID'
   )
-  expect_lte(nrow(group_polys_mcp),
-             nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)])))
+  expect_lte(
+    nrow(group_polys_mcp),
+    nrow(expand.grid(DT[, unique(ID)], DT[, unique(ID)]))
+  )
 
   copyDT <- copy(DT)[, yr := year(datetime)]
 
   group_polys_mcp_split <- group_polys(
-      DT = copyDT,
-      crs = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      area = FALSE,
-      coords = c('X', 'Y'),
-      id = 'ID',
-      splitBy = 'yr'
-    )
+    DT = copyDT,
+    crs = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    area = FALSE,
+    coords = c('X', 'Y'),
+    id = 'ID',
+    splitBy = 'yr'
+  )
 
   expect_equal(nrow(group_polys_mcp_split), nrow(copyDT))
 
   group_sf_polys <- group_polys(
-      id = 'ID',
-      area = FALSE,
-      sfPolys = build_polys(
-        DT = DT,
-        crs = utm,
-        hrType = 'mcp',
-        hrParams = list(percent = 95),
-        coords = c('X', 'Y'),
-        id = 'ID'
+    id = 'ID',
+    area = FALSE,
+    sfPolys = build_polys(
+      DT = DT,
+      crs = utm,
+      hrType = 'mcp',
+      hrParams = list(percent = 95),
+      coords = c('X', 'Y'),
+      id = 'ID'
     )
   )
   group_sf_polys_area <- group_polys(
@@ -275,7 +281,7 @@ test_that('column and row lengths returned make sense', {
     )
   )
   expect_length(unique(DT$ID), nrow(group_sf_polys))
-  expect_equal(nrow(group_sf_polys_area), length(unique(DT$ID)) ^ 2)
+  expect_equal(nrow(group_sf_polys_area), length(unique(DT$ID))^2)
 })
 
 
@@ -287,13 +293,13 @@ test_that('withinGroup is not returned to the user', {
   )
   copyDT[, N := .N, by = .(ID, block)]
   within_group <- group_polys(
-      DT = copyDT,
-      crs = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      area = FALSE,
-      coords = c('X', 'Y'),
-      id = 'ID'
+    DT = copyDT,
+    crs = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    area = FALSE,
+    coords = c('X', 'Y'),
+    id = 'ID'
   )
   expect_false('withinGroup' %in% colnames(within_group))
 })
@@ -340,38 +346,38 @@ test_that('area provided with splitBy does not return errors', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   copyDT[, yr := year(datetime)]
   within_split <- group_polys(
-      DT = copyDT,
-      crs = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      area = TRUE,
-      coords = c('X', 'Y'),
-      id = 'ID',
-      splitBy = 'yr'
+    DT = copyDT,
+    crs = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    area = TRUE,
+    coords = c('X', 'Y'),
+    id = 'ID',
+    splitBy = 'yr'
   )
   expect_false('withinGroup' %in% colnames(within_split))
 
   area <- group_polys(
-      DT = copyDT,
-      crs = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      area = TRUE,
-      coords = c('X', 'Y'),
-      id = 'ID',
-      splitBy = 'yr'
+    DT = copyDT,
+    crs = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    area = TRUE,
+    coords = c('X', 'Y'),
+    id = 'ID',
+    splitBy = 'yr'
   )
   expect_true('area' %in% colnames(area))
 
   prop <- group_polys(
-      DT = copyDT,
-      crs = utm,
-      hrType = 'mcp',
-      hrParams = list(percent = 95),
-      area = TRUE,
-      coords = c('X', 'Y'),
-      id = 'ID',
-      splitBy = 'yr'
+    DT = copyDT,
+    crs = utm,
+    hrType = 'mcp',
+    hrParams = list(percent = 95),
+    area = TRUE,
+    coords = c('X', 'Y'),
+    id = 'ID',
+    splitBy = 'yr'
   )
   expect_true('proportion' %in% colnames(prop))
 })
@@ -392,7 +398,8 @@ test_that('less than 5 locs returns NAs and warning', {
       id = 'ID',
       splitBy = 'yr'
     ),
-    'build_polys failed for some rows', fixed = FALSE
+    'build_polys failed for some rows',
+    fixed = FALSE
   )
 
   expect_warning(
@@ -406,7 +413,8 @@ test_that('less than 5 locs returns NAs and warning', {
       id = 'ID',
       splitBy = 'yr'
     ),
-    'build_polys failed for some rows', fixed = FALSE
+    'build_polys failed for some rows',
+    fixed = FALSE
   )
 
   expect_true(
@@ -419,8 +427,8 @@ test_that('less than 5 locs returns NAs and warning', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'yr'
-    )[is.na(group), .N != 0]
-  ))
+    )[is.na(group), .N != 0])
+  )
 
   expect_true(
     suppressWarnings(group_polys(
@@ -432,12 +440,9 @@ test_that('less than 5 locs returns NAs and warning', {
       coords = c('X', 'Y'),
       id = 'ID',
       splitBy = 'yr'
-    )[is.na(area), .N != 0]
-  ))
-
-
+    )[is.na(area), .N != 0])
+  )
 })
-
 
 
 test_that('splitBy argument doesnt use splitBy column', {
@@ -460,7 +465,8 @@ test_that('splitBy argument doesnt use splitBy column', {
     ))[, uniqueN(jul), group][, all(V1 == 1)]
   )
 
-  expect_false('splitBy' %in%
+  expect_false(
+    'splitBy' %in%
       suppressWarnings(group_polys(
         DT = copyDT,
         crs = utm,
@@ -470,13 +476,12 @@ test_that('splitBy argument doesnt use splitBy column', {
         coords = c('X', 'Y'),
         id = 'ID',
         splitBy = 'jul'
-      )))
-
+      ))
+  )
 })
 
 
 test_that('proportion within 0-100, area > 0', {
-
   out_mcp <- suppressWarnings(group_polys(
     DT = DT,
     crs = utm,
@@ -487,13 +492,9 @@ test_that('proportion within 0-100, area > 0', {
     id = 'ID'
   ))
 
-  expect_gte(min(out_mcp$proportion),
-             units::as_units(0, 'percent'))
-  expect_lte(max(out_mcp$proportion),
-             units::as_units(100.01, 'percent'))
-  expect_gte(min(out_mcp$area),
-             units::as_units(0, 'm^2'))
-
+  expect_gte(min(out_mcp$proportion), units::as_units(0, 'percent'))
+  expect_lte(max(out_mcp$proportion), units::as_units(100.01, 'percent'))
+  expect_gte(min(out_mcp$area), units::as_units(0, 'm^2'))
 
   out_kernel <- suppressWarnings(group_polys(
     DT = DT,
@@ -505,27 +506,26 @@ test_that('proportion within 0-100, area > 0', {
     id = 'ID'
   ))
 
-  expect_gte(min(out_kernel$proportion),
-             units::as_units(0, 'percent'))
-  expect_lte(max(out_kernel$proportion),
-             units::as_units(100.01, 'percent'))
-  expect_gte(min(out_kernel$area),
-             units::as_units(0, 'm^2'))
-
+  expect_gte(min(out_kernel$proportion), units::as_units(0, 'percent'))
+  expect_lte(max(out_kernel$proportion), units::as_units(100.01, 'percent'))
+  expect_gte(min(out_kernel$area), units::as_units(0, 'm^2'))
 })
 
 
 test_that('sfPolys has area column', {
-  sfPolys <- build_polys(DT, crs = utm, hrType = 'kernel',
-                         hrParams = list(grid = 60, percent = 95),
-                         id = 'ID', coords = c('X', 'Y'))
+  sfPolys <- build_polys(
+    DT,
+    crs = utm,
+    hrType = 'kernel',
+    hrParams = list(grid = 60, percent = 95),
+    id = 'ID',
+    coords = c('X', 'Y')
+  )
 
   sfPolys$area <- NULL
 
   expect_error(
-    group_polys(sfPolys = sfPolys,
-                area = TRUE,
-                id = 'id'),
+    group_polys(sfPolys = sfPolys, area = TRUE, id = 'id'),
     'please ensure column "area"',
     fixed = TRUE
   )

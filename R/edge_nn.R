@@ -100,15 +100,16 @@
 #' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
 #' edge_nn(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
 edge_nn <- function(
-    DT = NULL,
-    id = NULL,
-    coords = NULL,
-    timegroup,
-    crs = NULL,
-    splitBy = NULL,
-    threshold = NULL,
-    geometry = 'geometry',
-    returnDist = FALSE) {
+  DT = NULL,
+  id = NULL,
+  coords = NULL,
+  timegroup,
+  crs = NULL,
+  splitBy = NULL,
+  threshold = NULL,
+  geometry = 'geometry',
+  returnDist = FALSE
+) {
   # NSE
   N <- geo <- x <- y <- NULL
 
@@ -121,8 +122,12 @@ edge_nn <- function(
   check_cols <- c(timegroup, id, splitBy)
   assert_are_colnames(DT, check_cols)
 
-  if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
-          c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+  if (
+    any(
+      unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+        c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character')
+    )
+  ) {
     warning(
       strwrap(
         prefix = " ",
@@ -135,9 +140,11 @@ edge_nn <- function(
 
   if ('splitBy' %in% colnames(DT)) {
     warning(
-      strwrap(x = 'a column named "splitBy" was found in your data.table,
+      strwrap(
+        x = 'a column named "splitBy" was found in your data.table,
               renamed to "split_by" to avoid confusion with the argument
-              "splitBy"')
+              "splitBy"'
+      )
     )
     data.table::setnames(DT, 'splitBy', 'split_by')
   }
@@ -170,50 +177,53 @@ edge_nn <- function(
     if (!is.null(threshold)) {
       assert_threshold(threshold, crs)
 
-      if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
-          !use_dist) {
+      if (
+        !inherits(threshold, 'units') &&
+          !identical(crs, sf::NA_crs_) &&
+          !use_dist
+      ) {
         threshold <- units::as_units(threshold, 'm')
       }
     }
 
-    DT[, {
+    DT[,
+      {
+        distMatrix <- calc_distance(
+          geometry_a = geo,
+          use_dist = use_dist
+        )
+        diag(distMatrix) <- NA
 
-      distMatrix <- calc_distance(
-        geometry_a = geo,
-        use_dist = use_dist
-      )
-      diag(distMatrix) <- NA
-
-      if (!is.null(threshold)) {
-        distMatrix[distMatrix > threshold] <- NA
-      }
-      wm <- as.numeric(apply(distMatrix, MARGIN = 2, which.min))
-
-      out_id <- id
-      if (all(is.na(wm))) {
-        out_nn <- NA_character_
-        if (returnDist) {
-          out_dist <- NA_real_
+        if (!is.null(threshold)) {
+          distMatrix[distMatrix > threshold] <- NA
         }
-      } else {
-        out_nn <- id[wm]
-        if (returnDist) {
-          w <- wm + (length(wm) * (seq_along(wm) - 1))
-          out_dist <- distMatrix[w]
+        wm <- as.numeric(apply(distMatrix, MARGIN = 2, which.min))
+
+        out_id <- id
+        if (all(is.na(wm))) {
+          out_nn <- NA_character_
+          if (returnDist) {
+            out_dist <- NA_real_
+          }
+        } else {
+          out_nn <- id[wm]
+          if (returnDist) {
+            w <- wm + (length(wm) * (seq_along(wm) - 1))
+            out_dist <- distMatrix[w]
+          }
         }
-      }
 
-      l <- list(ID = out_id,
-                NN = out_nn)
+        l <- list(ID = out_id, NN = out_nn)
 
-      if (returnDist) {
-        l <- c(l, list(distance = out_dist))
-      }
+        if (returnDist) {
+          l <- c(l, list(distance = out_dist))
+        }
 
-      l
-    },
-    by = c(splitBy),
-    env = list(geo = geometry, id = id)]
+        l
+      },
+      by = c(splitBy),
+      env = list(geo = geometry, id = id)
+    ]
   } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
@@ -231,54 +241,54 @@ edge_nn <- function(
     if (!is.null(threshold)) {
       assert_threshold(threshold, crs)
 
-      if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
-          !use_dist) {
+      if (
+        !inherits(threshold, 'units') &&
+          !identical(crs, sf::NA_crs_) &&
+          !use_dist
+      ) {
         threshold <- units::as_units(threshold, 'm')
       }
     }
 
-    DT[, {
+    DT[,
+      {
+        distMatrix <- calc_distance(
+          x_a = x,
+          y_a = y,
+          crs = crs,
+          use_dist = use_dist
+        )
+        diag(distMatrix) <- NA
 
-      distMatrix <- calc_distance(
-        x_a = x,
-        y_a = y,
-        crs = crs,
-        use_dist = use_dist
-      )
-      diag(distMatrix) <- NA
-
-      if (!is.null(threshold)) {
-        distMatrix[distMatrix > threshold] <- NA
-      }
-      wm <- as.numeric(apply(distMatrix, MARGIN = 2, which.min))
-
-      out_id <- id
-      if (all(is.na(wm))) {
-        out_nn <- NA_character_
-        if (returnDist) {
-          out_dist <- NA_real_
+        if (!is.null(threshold)) {
+          distMatrix[distMatrix > threshold] <- NA
         }
-      } else {
-        out_nn <- id[wm]
-        if (returnDist) {
-          w <- wm + (length(wm) * (seq_along(wm) - 1))
-          out_dist <- distMatrix[w]
+        wm <- as.numeric(apply(distMatrix, MARGIN = 2, which.min))
+
+        out_id <- id
+        if (all(is.na(wm))) {
+          out_nn <- NA_character_
+          if (returnDist) {
+            out_dist <- NA_real_
+          }
+        } else {
+          out_nn <- id[wm]
+          if (returnDist) {
+            w <- wm + (length(wm) * (seq_along(wm) - 1))
+            out_dist <- distMatrix[w]
+          }
         }
-      }
 
-      l <- list(ID = out_id,
-                NN = out_nn)
+        l <- list(ID = out_id, NN = out_nn)
 
-      if (returnDist) {
-        l <- c(l, list(distance = out_dist))
-      }
+        if (returnDist) {
+          l <- c(l, list(distance = out_dist))
+        }
 
-      l
-    },
-    by = c(splitBy),
-    env = list(x = xcol, y = ycol, id = id)]
+        l
+      },
+      by = c(splitBy),
+      env = list(x = xcol, y = ycol, id = id)
+    ]
   }
-
-
 }
-

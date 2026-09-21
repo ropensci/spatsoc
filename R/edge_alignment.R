@@ -111,13 +111,14 @@
 #'   signed = FALSE
 #' )
 edge_alignment <- function(
-    DT = NULL,
-    id = NULL,
-    direction = 'direction',
-    timegroup = 'timegroup',
-    group = NULL,
-    splitBy = NULL,
-    signed = FALSE) {
+  DT = NULL,
+  id = NULL,
+  direction = 'direction',
+  timegroup = 'timegroup',
+  group = NULL,
+  splitBy = NULL,
+  signed = FALSE
+) {
   # due to NSE notes in R CMD check
   ID1 <- ID2 <- N <- direction_diff <- NULL
 
@@ -135,8 +136,12 @@ edge_alignment <- function(
 
   assert_inherits(signed, 'logical')
 
-  if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
-    c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+  if (
+    any(
+      unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+        c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character')
+    )
+  ) {
     warning(
       strwrap(
         prefix = ' ',
@@ -162,20 +167,23 @@ edge_alignment <- function(
 
   if ('splitBy' %in% colnames(DT)) {
     warning(
-      strwrap(x = 'a column named "splitBy" was found in your data.table,
+      strwrap(
+        x = 'a column named "splitBy" was found in your data.table,
               renamed to "split_by" to avoid confusion with the argument
-              "splitBy"')
+              "splitBy"'
+      )
     )
     data.table::setnames(DT, 'splitBy', 'split_by')
   }
 
-  edges <- DT[, {
+  edges <- DT[,
+    {
       m <- outer(direction, direction, FUN = diff_rad, signed = signed)
 
       data.table::data.table(
-          ID1 = id[rep(seq_len(nrow(m)), ncol(m))],
-          ID2 = id[rep(seq_len(ncol(m)), each = nrow(m))],
-          direction_diff = c(m)
+        ID1 = id[rep(seq_len(nrow(m)), ncol(m))],
+        ID2 = id[rep(seq_len(ncol(m)), each = nrow(m))],
+        direction_diff = c(m)
       )[ID1 != ID2]
     },
     by = splitBy,
@@ -186,4 +194,3 @@ edge_alignment <- function(
 
   return(edges)
 }
-

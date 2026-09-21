@@ -79,9 +79,10 @@
 #' direction_step(DT, id = 'ID')
 #' direction_group(DT)
 direction_group <- function(
-    DT,
-    direction = 'direction',
-    group = 'group') {
+  DT,
+  direction = 'direction',
+  group = 'group'
+) {
   # due to NSE notes in R CMD check
   dir <- out <- NULL
 
@@ -101,12 +102,13 @@ direction_group <- function(
     data.table::set(DT, j = out_mean, value = NULL)
   }
 
-  DT[, out := CircStats::circ.mean(as.numeric(dir)),
+  DT[,
+    out := CircStats::circ.mean(as.numeric(dir)),
     by = c(group),
-    env = list(dir = direction, out = out_mean)]
+    env = list(dir = direction, out = out_mean)
+  ]
 
   DT[, out := units::as_units(out, 'rad'), env = list(out = out_mean)]
 
   return(DT[])
 }
-

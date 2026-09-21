@@ -106,14 +106,14 @@
 #' )
 #' print(centroids)
 centroid_dyad <- function(
-    edges = NULL,
-    DT = NULL,
-    id = NULL,
-    coords = NULL,
-    crs = NULL,
-    timegroup = 'timegroup',
-    geometry = 'geometry') {
-
+  edges = NULL,
+  DT = NULL,
+  id = NULL,
+  coords = NULL,
+  crs = NULL,
+  timegroup = 'timegroup',
+  geometry = 'geometry'
+) {
   centroid_(
     'dyadID',
     edges = edges,

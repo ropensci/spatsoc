@@ -80,14 +80,14 @@
 #' lines <- build_lines(DT, crs = utm, id = 'ID', coords = c('X', 'Y'),
 #'             sortBy = 'datetime', splitBy = 'yr')
 build_lines <- function(
-    DT = NULL,
-    crs = NULL,
-    id = NULL,
-    coords = NULL,
-    sortBy = NULL,
-    splitBy = NULL,
-    projection = NULL) {
-
+  DT = NULL,
+  crs = NULL,
+  id = NULL,
+  coords = NULL,
+  sortBy = NULL,
+  splitBy = NULL,
+  projection = NULL
+) {
   # due to NSE notes in R CMD check
   dropped <- . <- NULL
 
@@ -110,7 +110,11 @@ build_lines <- function(
   }
 
   assert_col_inherits(DT, id, c('numeric', 'character', 'integer'))
-  assert_col_inherits(DT, splitBy, c('numeric', 'character', 'integer', 'IDate'))
+  assert_col_inherits(
+    DT,
+    splitBy,
+    c('numeric', 'character', 'integer', 'IDate')
+  )
   assert_col_inherits(DT, sortBy, 'POSIXct')
 
   assert_not_null(coords)
@@ -129,8 +133,11 @@ build_lines <- function(
   data.table::setorderv(wo_drop, sortBy)
 
   lines <- sf::st_as_sf(
-    wo_drop[, .(geometry = sf::st_sfc(sf::st_linestring(as.matrix(.SD)))),
-       by = c(splitBy), .SDcols = coords],
+    wo_drop[,
+      .(geometry = sf::st_sfc(sf::st_linestring(as.matrix(.SD)))),
+      by = c(splitBy),
+      .SDcols = coords
+    ],
     crs = sf::st_crs(crs)
   )
 }

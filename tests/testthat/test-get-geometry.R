@@ -9,10 +9,12 @@ coords <- c('X', 'Y')
 crs <- 32736
 
 test_that('DT is required', {
-  expect_error(get_geometry(
-    DT = NULL
-  ),
-  'DT must be provided')
+  expect_error(
+    get_geometry(
+      DT = NULL
+    ),
+    'DT must be provided'
+  )
 })
 
 test_that('coords provided correctly, else error', {
@@ -47,7 +49,6 @@ test_that('coords provided correctly, else error', {
     ),
     'coords must be of class numeric'
   )
-
 })
 
 test_that('crs provided correctly, else error', {
@@ -83,15 +84,19 @@ test_that('geometry column returned is sfc, as expected', {
   copyDT <- copy(DT)
   get_geometry(copyDT, coords = coords, crs = crs)
 
-  expect_equal(st_coordinates(copyDT$geometry),
-               copyDT[, as.matrix(.SD), .SDcols = coords])
+  expect_equal(
+    st_coordinates(copyDT$geometry),
+    copyDT[, as.matrix(.SD), .SDcols = coords]
+  )
 
   copyDT <- copy(DT)
   get_geometry(copyDT, coords = coords, crs = crs)
 
   expect_equal(
-    mean(st_coordinates(copyDT$geometry) -
-      copyDT[, as.matrix(.SD), .SDcols = coords]),
+    mean(
+      st_coordinates(copyDT$geometry) -
+        copyDT[, as.matrix(.SD), .SDcols = coords]
+    ),
     0
   )
 

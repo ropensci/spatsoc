@@ -18,9 +18,15 @@ window <- 3
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
 direction_step(DT, id, coords, utm)
-edges <- edge_dist(DT, threshold = threshold, id = id,
-                   coords = coords, timegroup = timegroup,
-                   returnDist = TRUE, fillNA = FALSE)
+edges <- edge_dist(
+  DT,
+  threshold = threshold,
+  id = id,
+  coords = coords,
+  timegroup = timegroup,
+  returnDist = TRUE,
+  fillNA = FALSE
+)
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 fusion_id(edges, threshold = threshold)
 
@@ -35,58 +41,66 @@ test_that('edges, DT are required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(edge_delay(edges, DT, id = NULL),
-               'id must be provided')
-  expect_error(edge_delay(edges, DT, id = id, window = NULL),
-               'window must be provided')
+  expect_error(edge_delay(edges, DT, id = NULL), 'id must be provided')
+  expect_error(
+    edge_delay(edges, DT, id = id, window = NULL),
+    'window must be provided'
+  )
 })
 
 test_that('window is numeric, timegroup is integer', {
-  expect_error(edge_delay(edges, DT, id = id, window = 'potato'),
-               'numeric')
+  expect_error(edge_delay(edges, DT, id = id, window = 'potato'), 'numeric')
   copy_edges <- copy(clean_edges)
   copy_edges[, timegroup := as.character(timegroup)]
-  expect_error(edge_delay(copy_edges, DT, id = id, window = 2),
-               'integer')
+  expect_error(edge_delay(copy_edges, DT, id = id, window = 2), 'integer')
 
   copy_DT <- copy(clean_DT)
   copy_DT[, timegroup := as.character(timegroup)]
-  expect_error(edge_delay(edges, copy_DT, id = id, window = 2),
-               'integer')
+  expect_error(edge_delay(edges, copy_DT, id = id, window = 2), 'integer')
 })
 
 test_that('column names must exist in DT', {
-  expect_error(edge_delay(edges, DT, id = 'potato'),
-               'potato field')
+  expect_error(edge_delay(edges, DT, id = 'potato'), 'potato field')
 
   copy_edges <- copy(clean_edges)
   copy_edges[, timegroup := NULL]
-  expect_error(edge_delay(copy_edges, DT, id = id, window = window),
-               'timegroup field')
+  expect_error(
+    edge_delay(copy_edges, DT, id = id, window = window),
+    'timegroup field'
+  )
 
   copy_edges <- copy(clean_edges)
   copy_edges[, fusionID := NULL]
-  expect_error(edge_delay(copy_edges, DT, id = id, window = window),
-               'fusionID field')
+  expect_error(
+    edge_delay(copy_edges, DT, id = id, window = window),
+    'fusionID field'
+  )
 
   copy_edges <- copy(clean_edges)
   copy_edges[, dyadID := NULL]
-  expect_error(edge_delay(copy_edges, DT, id = id, window = window),
-               'dyadID field')
+  expect_error(
+    edge_delay(copy_edges, DT, id = id, window = window),
+    'dyadID field'
+  )
 
-  expect_error(edge_delay(edges, DT, id = id, window = window,
-                          direction = 'potato'),
-               'potato field')
+  expect_error(
+    edge_delay(edges, DT, id = id, window = window, direction = 'potato'),
+    'potato field'
+  )
 
   copy_DT <- copy(clean_DT)
   copy_DT[, timegroup := NULL]
-  expect_error(edge_delay(edges, copy_DT, id = id, window = window),
-               'timegroup field')
+  expect_error(
+    edge_delay(edges, copy_DT, id = id, window = window),
+    'timegroup field'
+  )
 })
 
 test_that('no rows are added to the result edges', {
-  expect_equal(nrow(edges),
-               nrow(edge_delay(edges, DT, id = id, window = window)))
+  expect_equal(
+    nrow(edges),
+    nrow(edge_delay(edges, DT, id = id, window = window))
+  )
 })
 
 test_that('column added to the result DT', {
@@ -94,15 +108,21 @@ test_that('column added to the result DT', {
 
   expected_cols <- c(colnames(copyEdges), 'direction_delay', 'direction_diff')
 
-  expect_setequal(expected_cols,
-                  colnames(edge_delay(edges, DT, id = id, window = window)))
-  expect_length(expected_cols, ncol(edge_delay(edges, DT, id = id, window = window)))
-
+  expect_setequal(
+    expected_cols,
+    colnames(edge_delay(edges, DT, id = id, window = window))
+  )
+  expect_length(
+    expected_cols,
+    ncol(edge_delay(edges, DT, id = id, window = window))
+  )
 })
 
 test_that('column added to the result DT is integer', {
-  expect_type(edge_delay(edges, DT, id = id,
-                         window = window)$direction_delay, 'integer')
+  expect_type(
+    edge_delay(edges, DT, id = id, window = window)$direction_delay,
+    'integer'
+  )
 })
 
 test_that('returns a data.table', {
@@ -112,9 +132,10 @@ test_that('returns a data.table', {
 test_that('direction colname can be different than default', {
   copyDT <- copy(clean_DT)
   setnames(copyDT, 'direction', 'potato')
-  expect_s3_class(edge_delay(edges, copyDT, id = id, window = window,
-                             direction = 'potato'),
-                  'data.table')
+  expect_s3_class(
+    edge_delay(edges, copyDT, id = id, window = window, direction = 'potato'),
+    'data.table'
+  )
 })
 
 test_that('window column in edge, DT does not influence results', {
@@ -130,17 +151,20 @@ test_that('window column in edge, DT does not influence results', {
   )
 
   expect_equal(
-    edge_delay(copyEdges, DT, id = id,
-               window = window)[, .SD, .SDcols = -'window'],
+    edge_delay(copyEdges, DT, id = id, window = window)[,
+      .SD,
+      .SDcols = -'window'
+    ],
     edge_delay(edges, DT, id = id, window = window)
   )
 
   expect_equal(
-    edge_delay(copyEdges, copyDT, id = id,
-               window = window)[, .SD, .SDcols = -'window'],
+    edge_delay(copyEdges, copyDT, id = id, window = window)[,
+      .SD,
+      .SDcols = -'window'
+    ],
     edge_delay(edges, DT, id = id, window = window)
   )
-
 })
 
 test_that('rows with NAs in ID1, ID2, dyadID, fusionID are dropped', {
@@ -175,7 +199,6 @@ test_that('rows with NAs in ID1, ID2, dyadID, fusionID are dropped', {
     edge_delay(edges = na_edges, DT = DT, window, id)[, .N + n_dropped],
     edge_delay(edges = edges, DT = DT, window, id)[, .N]
   )
-
 })
 
 test_that('setorder doesnt impact results', {
@@ -195,10 +218,14 @@ test_that('setorder doesnt impact results', {
 })
 
 test_that('forward/reverse are equal', {
-  swap_edges <- edge_dist(DT,
-                          threshold = threshold, id = id,
-                          coords = coords, timegroup = timegroup,
-                          returnDist = TRUE, fillNA = FALSE
+  swap_edges <- edge_dist(
+    DT,
+    threshold = threshold,
+    id = id,
+    coords = coords,
+    timegroup = timegroup,
+    returnDist = TRUE,
+    fillNA = FALSE
   )
   setnames(swap_edges, c('ID1', 'ID2'), c('ID2', 'ID1'))
   dyad_id(swap_edges, id1 = 'ID1', id2 = 'ID2')
@@ -217,11 +244,12 @@ test_that('forward/reverse are equal', {
 })
 
 
-
 N_id <- 5
 N_seq <- 10
-seq_xy <- c(seq(0, 5, length.out = N_seq / 2),
-            seq(5.1, 0, length.out = N_seq / 2))
+seq_xy <- c(
+  seq(0, 5, length.out = N_seq / 2),
+  seq(5.1, 0, length.out = N_seq / 2)
+)
 DT_expect <- data.table(
   X = rep(seq_xy, each = N_id),
   Y = rep(seq_xy, each = N_id),
@@ -231,8 +259,14 @@ DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
 setorder(DT_expect, timegroup)
 direction_step(DT_expect, id, coords, crs = 4326)
 
-edge_expect <- edge_dist(DT_expect, threshold = 100, id, coords, timegroup,
-                         returnDist = TRUE)
+edge_expect <- edge_dist(
+  DT_expect,
+  threshold = 100,
+  id,
+  coords,
+  timegroup,
+  returnDist = TRUE
+)
 dyad_id(edge_expect, 'ID1', 'ID2')
 fusion_id(edge_expect, threshold = 100)
 
@@ -252,11 +286,14 @@ test_that('expected results are returned', {
   expect_equal(mean_delays[V1 == max(V1), ID1], LETTERS[1])
 
   mean_delays_wrt_A <- delay_expect[
-    ID1 == 'A', mean(direction_delay, na.rm = TRUE), by = ID2]
+    ID1 == 'A',
+    mean(direction_delay, na.rm = TRUE),
+    by = ID2
+  ]
   expect_equal(mean_delays_wrt_A[V1 == max(V1), ID2], LETTERS[N_id])
 })
 
-test_that('exaggerated window size returns the same',  {
+test_that('exaggerated window size returns the same', {
   expect_equal(
     edge_delay(edge_expect, DT_expect, window = window, id = id),
     edge_delay(edge_expect, DT_expect, window = window + 10, id = id)
