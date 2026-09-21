@@ -1,4 +1,4 @@
-#' Leadership along group direction
+#' Leadership in position along group direction
 #'
 #' Given the mean direction of a group of individuals, `leader_direction_group`
 #' shifts the coordinate system to a new origin at the group centroid and
@@ -57,11 +57,17 @@
 #' @family Direction functions
 #'
 #' @references
-#' See examples of measuring leadership along group direction (also called
+#' See examples of measuring leadership in position along group direction (also called
 #' forefront index):
 #'  * \doi{doi:10.1371/journal.pone.0036567}
 #'  * \doi{doi:10.1111/jfb.15315}
 #'  * \doi{doi:10.1098/rspb.2021.0839}
+#'
+#'  Other methods for measuring leadership include [leader_edge_delay()] with
+#'  [edge_delay()], movement initiations (e.g. Quera et al. J Fish Biol 2023,
+#'  Bracken et al. Proceedings of the Royal Society B: Biological Sciences 2022,
+#'  Strandburg-Peshkin et al. Philosophical Transactions of the Royal Society B:
+#'  Biological Sciences 2018), and measures of dominance.
 #'
 #' @examples
 #' # Load data.table
