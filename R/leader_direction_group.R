@@ -1,4 +1,4 @@
-#' Leadership along group direction
+#' Leadership in position along group direction
 #'
 #' Given the mean direction of a group of individuals, `leader_direction_group`
 #' shifts the coordinate system to a new origin at the group centroid and
