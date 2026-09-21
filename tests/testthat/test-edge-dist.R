@@ -13,8 +13,13 @@ timegroup <- 'timegroup'
 group_times(DT, 'datetime', '10 minutes')
 
 get_geometry(DT, coords = coords, crs = utm)
-get_geometry(DT, coords = coords, crs = utm, output_crs = 4326,
-             geometry_colname = 'geometry_longlat')
+get_geometry(
+  DT,
+  coords = coords,
+  crs = utm,
+  output_crs = 4326,
+  geometry_colname = 'geometry_longlat'
+)
 
 test_that('error/warn/msg if args are not provided as expected', {
   expect_error(
@@ -53,7 +58,13 @@ test_that('error/warn/msg if args are not provided as expected', {
 
   # geometry
   expect_message(
-    edge_dist(DT, threshold = threshold, id = id, timegroup = timegroup, crs = utm),
+    edge_dist(
+      DT,
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup,
+      crs = utm
+    ),
     'crs argument is ignored'
   )
 })
@@ -186,79 +197,106 @@ test_that('warns about splitBy column', {
 
 test_that('threshold correctly provided or error detected', {
   expect_error(
-    edge_dist(DT,
-      threshold = -10, timegroup = timegroup, id = id,
+    edge_dist(
+      DT,
+      threshold = -10,
+      timegroup = timegroup,
+      id = id,
       coords = coords
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_dist(DT,
-      threshold = 0, timegroup = timegroup, id = id,
+    edge_dist(
+      DT,
+      threshold = 0,
+      timegroup = timegroup,
+      id = id,
       coords = coords
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_dist(DT,
-      threshold = '0', timegroup = timegroup, id = id,
+    edge_dist(
+      DT,
+      threshold = '0',
+      timegroup = timegroup,
+      id = id,
       coords = coords
     ),
     'threshold must be of class numeric'
   )
 
   expect_error(
-    edge_dist(DT,
-              threshold = -10, timegroup = timegroup, id = id,
-              coords = coords, crs = utm
+    edge_dist(
+      DT,
+      threshold = -10,
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_dist(DT,
-              threshold = 0, timegroup = timegroup, id = id,
-              coords = coords, crs = utm
+    edge_dist(
+      DT,
+      threshold = 0,
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_dist(DT,
-              threshold = '0', timegroup = timegroup, id = id,
-              coords = coords, crs = utm
+    edge_dist(
+      DT,
+      threshold = '0',
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be of class numeric'
   )
 
   expect_error(
-    edge_dist(DT,
-              threshold = units::as_units(-1, 'm'),
-              timegroup = timegroup, id = id,
-              coords = coords, crs = utm
+    edge_dist(
+      DT,
+      threshold = units::as_units(-1, 'm'),
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be > 0'
   )
 
   # geometry
   expect_error(
-    edge_dist(DT,
-              threshold = units::as_units(-1, 'm'),
-              timegroup = timegroup, id = id
+    edge_dist(
+      DT,
+      threshold = units::as_units(-1, 'm'),
+      timegroup = timegroup,
+      id = id
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_dist(DT,
-              threshold = units::as_units(100, 'km'),
-              timegroup = timegroup, id = id
+    edge_dist(
+      DT,
+      threshold = units::as_units(100, 'km'),
+      timegroup = timegroup,
+      id = id
     ),
     'units of threshold'
   )
-
 })
 
 
@@ -403,7 +441,6 @@ test_that('returned IDs make sense', {
   expect_true(all(eDT$ID2 %in% IDs))
   expect_true(eDT[ID1 == ID2, .N] == 0)
 })
-
 
 
 test_that('returnDist works', {
@@ -565,34 +602,39 @@ test_that('returnDist works', {
 
 test_that('returns a data.table', {
   # coords
-  expect_s3_class(edge_dist(
-    DT,
-    threshold = threshold,
-    id = id,
-    coords = coords,
-    timegroup = timegroup
-  ), 'data.table')
+  expect_s3_class(
+    edge_dist(
+      DT,
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = timegroup
+    ),
+    'data.table'
+  )
 
   # geometry
-  expect_s3_class(edge_dist(
-    DT,
-    threshold = threshold,
-    id = id,
-    timegroup = timegroup
-  ), 'data.table')
+  expect_s3_class(
+    edge_dist(
+      DT,
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup
+    ),
+    'data.table'
+  )
 
-  expect_s3_class(edge_dist(
-    DT,
-    threshold = threshold,
-    id = id,
-    timegroup = timegroup,
-    geometry = 'geometry_longlat'
-  ), 'data.table')
-
+  expect_s3_class(
+    edge_dist(
+      DT,
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup,
+      geometry = 'geometry_longlat'
+    ),
+    'data.table'
+  )
 })
-
-
-
 
 
 test_that('handles NULL threshold', {

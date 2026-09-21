@@ -81,11 +81,11 @@
 #' centroid_group(DT)
 #' direction_to_centroid(DT)
 direction_to_centroid <- function(
-    DT = NULL,
-    coords = NULL,
-    crs = NULL,
-    geometry = 'geometry') {
-
+  DT = NULL,
+  coords = NULL,
+  crs = NULL,
+  geometry = 'geometry'
+) {
   # Due to NSE notes in R CMD check
   geo <- cent <- x <- y <- x_centroid <- y_centroid <- NULL
 
@@ -114,11 +114,15 @@ direction_to_centroid <- function(
     use_transform <- !sf::st_is_longlat(crs)
 
     if (is.na(use_transform)) {
-      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
-                          ', ensure crs is provided for direction functions'))
+      rlang::abort(paste0(
+        'sf::st_is_longlat(crs) is ',
+        use_transform,
+        ', ensure crs is provided for direction functions'
+      ))
     }
 
-    DT[!sf::st_is_empty(geo) & !sf::st_is_empty(cent),
+    DT[
+      !sf::st_is_empty(geo) & !sf::st_is_empty(cent),
       c(out_colname) := calc_direction(
         geometry_a = geo,
         geometry_b = cent,
@@ -126,7 +130,6 @@ direction_to_centroid <- function(
       ),
       env = list(geo = geometry, cent = centroid_col)
     ]
-
   } else {
     assert_are_colnames(DT, coords)
     assert_length(coords, 2)
@@ -138,7 +141,7 @@ direction_to_centroid <- function(
     pre <- 'centroid_'
     xcol_centroid <- paste0(pre, xcol)
     ycol_centroid <- paste0(pre, ycol)
-    coords_centroid  <- c(xcol_centroid, ycol_centroid)
+    coords_centroid <- c(xcol_centroid, ycol_centroid)
 
     assert_are_colnames(DT, coords_centroid, ', did you run centroid_group?')
     assert_col_inherits(DT, coords_centroid, 'numeric')
@@ -151,20 +154,28 @@ direction_to_centroid <- function(
     use_transform <- !sf::st_is_longlat(crs)
 
     if (is.na(use_transform)) {
-      rlang::abort(paste0('sf::st_is_longlat(crs) is ', use_transform,
-                          ', ensure crs is provided for direction functions'))
+      rlang::abort(paste0(
+        'sf::st_is_longlat(crs) is ',
+        use_transform,
+        ', ensure crs is provided for direction functions'
+      ))
     }
 
-    DT[!is.na(x) & !is.na(y) & !is.na(x_centroid) & !is.na(y_centroid),
+    DT[
+      !is.na(x) & !is.na(y) & !is.na(x_centroid) & !is.na(y_centroid),
       c(out_colname) := calc_direction(
-        x_a = x, y_a = y,
-        x_b = x_centroid, y_b = y_centroid,
+        x_a = x,
+        y_a = y,
+        x_b = x_centroid,
+        y_b = y_centroid,
         crs = crs,
         use_transform = use_transform
       ),
       env = list(
-        x = xcol, y = ycol,
-        x_centroid = xcol_centroid, y_centroid = ycol_centroid
+        x = xcol,
+        y = ycol,
+        x_centroid = xcol_centroid,
+        y_centroid = ycol_centroid
       )
     ]
   }

@@ -16,8 +16,13 @@ utm <- 32736
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-group_pts(DT, threshold = threshold, id = id,
-          coords = coords, timegroup = timegroup)
+group_pts(
+  DT,
+  threshold = threshold,
+  id = id,
+  coords = coords,
+  timegroup = timegroup
+)
 
 clean_DT <- copy(DT)
 
@@ -26,24 +31,33 @@ test_that('DT is required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(centroid_group(DT, group = group, coords = 'X'),
-               'coords must be length 2')
-  expect_error(centroid_group(DT, coords = coords, group = NULL),
-               'group must be provided')
+  expect_error(
+    centroid_group(DT, group = group, coords = 'X'),
+    'coords must be length 2'
+  )
+  expect_error(
+    centroid_group(DT, coords = coords, group = NULL),
+    'group must be provided'
+  )
 })
 
 test_that('column names must exist in DT', {
-  expect_error(centroid_group(DT, coords = rep('potato', 2)),
-               'potato field')
-  expect_error(centroid_group(DT, coords = coords, group = 'potato'),
-               'potato field')
+  expect_error(centroid_group(DT, coords = rep('potato', 2)), 'potato field')
+  expect_error(
+    centroid_group(DT, coords = coords, group = 'potato'),
+    'potato field'
+  )
 })
 
 test_that('coords are correctly provided or error detected', {
-  expect_error(centroid_group(DT, coords = c('X', NULL)),
-               'coords must be length 2')
-  expect_error(centroid_group(DT, coords = c('X', 'ID')),
-               'coords must be of class numeric')
+  expect_error(
+    centroid_group(DT, coords = c('X', NULL)),
+    'coords must be length 2'
+  )
+  expect_error(
+    centroid_group(DT, coords = c('X', 'ID')),
+    'coords must be of class numeric'
+  )
 })
 
 test_that('centroid column succesfully detected', {
@@ -57,15 +71,13 @@ test_that('centroid column succesfully detected', {
 test_that('no rows are added to the result DT', {
   copyDT <- copy(clean_DT)
 
-  expect_equal(nrow(copyDT),
-               nrow(centroid_group(copyDT, coords = coords)))
+  expect_equal(nrow(copyDT), nrow(centroid_group(copyDT, coords = coords)))
 })
 
 test_that('two columns added to the result DT', {
   copyDT <- copy(clean_DT)
 
-  expect_equal(ncol(copyDT) + 2,
-               ncol(centroid_group(DT, coords = coords)))
+  expect_equal(ncol(copyDT) + 2, ncol(centroid_group(DT, coords = coords)))
 })
 
 test_that('two columns added to the result DT are doubles', {
@@ -87,19 +99,25 @@ DT <- data.table(
 test_that('xy results are expected', {
   expect_equal(
     centroid_group(copy(DT), coords)[
-      group == 1, unique(centroid_X)],
+      group == 1,
+      unique(centroid_X)
+    ],
     15
   )
 
   expect_equal(
     centroid_group(copy(DT), coords)[
-      group == 1, unique(centroid_X)],
+      group == 1,
+      unique(centroid_X)
+    ],
     15
   )
 
   expect_equal(
     centroid_group(copy(DT), coords)[
-      group == 2, unique(centroid_X)],
+      group == 2,
+      unique(centroid_X)
+    ],
     10
   )
 })
@@ -115,22 +133,27 @@ get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
 test_that('geometry results are expected', {
   expect_equal(
     centroid_group(copy(DT))[
-      group == 1, sf::st_coordinates(unique(centroid))[,1]],
-      setNames(15, 'X')
+      group == 1,
+      sf::st_coordinates(unique(centroid))[, 1]
+    ],
+    setNames(15, 'X')
   )
 
   expect_equal(
     centroid_group(copy(DT))[
-      group == 1, sf::st_coordinates(unique(centroid))[,2]],
+      group == 1,
+      sf::st_coordinates(unique(centroid))[, 2]
+    ],
     setNames(15, 'Y')
   )
 
   expect_equal(
     centroid_group(copy(DT))[
-      group == 2, sf::st_coordinates(unique(centroid))[,1]],
+      group == 2,
+      sf::st_coordinates(unique(centroid))[, 1]
+    ],
     setNames(10, 'X')
   )
-
 })
 
 

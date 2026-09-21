@@ -101,16 +101,17 @@
 #' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
 #' edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
 edge_dist <- function(
-    DT = NULL,
-    threshold,
-    id = NULL,
-    coords = NULL,
-    timegroup,
-    crs = NULL,
-    splitBy = NULL,
-    geometry = 'geometry',
-    returnDist = FALSE,
-    fillNA = TRUE) {
+  DT = NULL,
+  threshold,
+  id = NULL,
+  coords = NULL,
+  timegroup,
+  crs = NULL,
+  splitBy = NULL,
+  geometry = 'geometry',
+  returnDist = FALSE,
+  fillNA = TRUE
+) {
   # due to NSE notes in R CMD check
   ID1 <- ID2 <- N <- geo <- x <- y <- NULL
 
@@ -124,8 +125,12 @@ edge_dist <- function(
   check_cols <- c(timegroup, id, coords, splitBy)
   assert_are_colnames(DT, check_cols)
 
-  if (any(unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
-          c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character'))) {
+  if (
+    any(
+      unlist(lapply(DT[, .SD, .SDcols = timegroup], class)) %in%
+        c('POSIXct', 'POSIXlt', 'Date', 'IDate', 'ITime', 'character')
+    )
+  ) {
     warning(
       strwrap(
         prefix = " ",
@@ -151,13 +156,14 @@ edge_dist <- function(
 
   if ('splitBy' %in% colnames(DT)) {
     warning(
-      strwrap(x = 'a column named "splitBy" was found in your data.table,
+      strwrap(
+        x = 'a column named "splitBy" was found in your data.table,
               renamed to "split_by" to avoid confusion with the argument
-              "splitBy"')
+              "splitBy"'
+      )
     )
     data.table::setnames(DT, 'splitBy', 'split_by')
   }
-
 
   if (is.null(coords)) {
     if (!is.null(crs)) {
@@ -172,58 +178,69 @@ edge_dist <- function(
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
     if (is.null(threshold)) {
-      edges <- DT[, {
-        distMatrix <- calc_distance(
-          geometry_a = geo,
-          use_dist = use_dist
-        )
-        diag(distMatrix) <- NA
+      edges <- DT[,
+        {
+          distMatrix <- calc_distance(
+            geometry_a = geo,
+            use_dist = use_dist
+          )
+          diag(distMatrix) <- NA
 
-        if (returnDist) {
-          l <- data.table::data.table(
-            ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
-            ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
-            distance = c(distMatrix)
-          )[ID1 != ID2]
-        } else {
-          l <- data.table::data.table(
-            ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
-            ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
-          )[ID1 != ID2]
-        }
-        l
-      },
-      by = splitBy,
-      env = list(geo = geometry, id = id)]
+          if (returnDist) {
+            l <- data.table::data.table(
+              ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+              ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
+              distance = c(distMatrix)
+            )[ID1 != ID2]
+          } else {
+            l <- data.table::data.table(
+              ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+              ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
+            )[ID1 != ID2]
+          }
+          l
+        },
+        by = splitBy,
+        env = list(geo = geometry, id = id)
+      ]
     } else {
       assert_threshold(threshold, crs)
 
-      if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
-          !use_dist) {
-        threshold <- units::as_units(threshold, units(sf::st_crs(crs)$SemiMajor))
+      if (
+        !inherits(threshold, 'units') &&
+          !identical(crs, sf::NA_crs_) &&
+          !use_dist
+      ) {
+        threshold <- units::as_units(
+          threshold,
+          units(sf::st_crs(crs)$SemiMajor)
+        )
       }
 
-      edges <- DT[, {
-        distMatrix <- calc_distance(
-          geometry_a = geo,
-          use_dist = use_dist
-        )
-        diag(distMatrix) <- NA
+      edges <- DT[,
+        {
+          distMatrix <- calc_distance(
+            geometry_a = geo,
+            use_dist = use_dist
+          )
+          diag(distMatrix) <- NA
 
-        w <- which(distMatrix < threshold, arr.ind = TRUE)
+          w <- which(distMatrix < threshold, arr.ind = TRUE)
 
-        if (returnDist) {
-          l <- list(ID1 = id[w[, 1]],
-                    ID2 = id[w[, 2]],
-                    distance = distMatrix[w])
-        } else {
-          l <- list(ID1 = id[w[, 1]],
-                    ID2 = id[w[, 2]])
-        }
-        l
-      },
-      by = splitBy,
-      env = list(geo = geometry, id = id)]
+          if (returnDist) {
+            l <- list(
+              ID1 = id[w[, 1]],
+              ID2 = id[w[, 2]],
+              distance = distMatrix[w]
+            )
+          } else {
+            l <- list(ID1 = id[w[, 1]], ID2 = id[w[, 2]])
+          }
+          l
+        },
+        by = splitBy,
+        env = list(geo = geometry, id = id)
+      ]
     }
   } else {
     if (is.null(crs)) {
@@ -239,74 +256,82 @@ edge_dist <- function(
     use_dist <- isFALSE(sf::st_is_longlat(crs)) || identical(crs, sf::NA_crs_)
 
     if (is.null(threshold)) {
-      edges <- DT[, {
-        distMatrix <- calc_distance(
-          x_a = x,
-          y_a = y,
-          crs = crs,
-          use_dist = use_dist
-        )
-        diag(distMatrix) <- NA
+      edges <- DT[,
+        {
+          distMatrix <- calc_distance(
+            x_a = x,
+            y_a = y,
+            crs = crs,
+            use_dist = use_dist
+          )
+          diag(distMatrix) <- NA
 
-        if (returnDist) {
-          l <- data.table::data.table(
-            ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
-            ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
-            distance = c(distMatrix)
-          )[ID1 != ID2]
-        } else {
-          l <- data.table::data.table(
-            ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
-            ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
-          )[ID1 != ID2]
-        }
-        l
-      },
-      by = splitBy,
-      env = list(x = xcol, y = ycol, id = id)]
+          if (returnDist) {
+            l <- data.table::data.table(
+              ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+              ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))],
+              distance = c(distMatrix)
+            )[ID1 != ID2]
+          } else {
+            l <- data.table::data.table(
+              ID1 = id[rep(seq_len(nrow(distMatrix)), ncol(distMatrix))],
+              ID2 = id[rep(seq_len(ncol(distMatrix)), each = nrow(distMatrix))]
+            )[ID1 != ID2]
+          }
+          l
+        },
+        by = splitBy,
+        env = list(x = xcol, y = ycol, id = id)
+      ]
     } else {
-
       assert_threshold(threshold, crs)
 
-      if (!inherits(threshold, 'units') && !identical(crs, sf::NA_crs_) &&
-          !use_dist) {
+      if (
+        !inherits(threshold, 'units') &&
+          !identical(crs, sf::NA_crs_) &&
+          !use_dist
+      ) {
         threshold <- units::as_units(threshold, 'm')
       }
 
-      edges <- DT[, {
-        distMatrix <- calc_distance(
-          x_a = x,
-          y_a = y,
-          crs = crs,
-          use_dist = use_dist
-        )
-        diag(distMatrix) <- NA
+      edges <- DT[,
+        {
+          distMatrix <- calc_distance(
+            x_a = x,
+            y_a = y,
+            crs = crs,
+            use_dist = use_dist
+          )
+          diag(distMatrix) <- NA
 
-        w <- which(distMatrix < threshold, arr.ind = TRUE)
+          w <- which(distMatrix < threshold, arr.ind = TRUE)
 
-        if (returnDist) {
-          l <- list(ID1 = id[w[, 1]],
-                    ID2 = id[w[, 2]],
-                    distance = distMatrix[w])
-        } else {
-          l <- list(ID1 = id[w[, 1]],
-                    ID2 = id[w[, 2]])
-        }
-        l
-      },
-      by = splitBy,
-      env = list(id = id, x = xcol, y = ycol)]
+          if (returnDist) {
+            l <- list(
+              ID1 = id[w[, 1]],
+              ID2 = id[w[, 2]],
+              distance = distMatrix[w]
+            )
+          } else {
+            l <- list(ID1 = id[w[, 1]], ID2 = id[w[, 2]])
+          }
+          l
+        },
+        by = splitBy,
+        env = list(id = id, x = xcol, y = ycol)
+      ]
     }
   }
 
   if (fillNA) {
-    merge(edges,
-          unique(DT[, .SD, .SDcols = c(splitBy, id)]),
-          by.x = c(splitBy, 'ID1'),
-          by.y = c(splitBy, id),
-          all = TRUE)
+    merge(
+      edges,
+      unique(DT[, .SD, .SDcols = c(splitBy, id)]),
+      by.x = c(splitBy, 'ID1'),
+      by.y = c(splitBy, id),
+      all = TRUE
+    )
   } else {
     return(edges)
   }
 }
-

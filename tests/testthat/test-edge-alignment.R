@@ -20,52 +20,51 @@ direction_step(
 )
 
 test_that('required arguments are provided else error', {
-  expect_error(edge_alignment(DT = NULL),
-               'DT')
+  expect_error(edge_alignment(DT = NULL), 'DT')
 
-  expect_error(edge_alignment(DT, id = NULL),
-               'id')
+  expect_error(edge_alignment(DT, id = NULL), 'id')
 
-  expect_error(edge_alignment(DT, id, direction = NULL),
-               'direction')
+  expect_error(edge_alignment(DT, id, direction = NULL), 'direction')
 
-  expect_error(edge_alignment(DT, id, direction, timegroup = NULL),
-               'timegroup')
+  expect_error(edge_alignment(DT, id, direction, timegroup = NULL), 'timegroup')
 })
 
 test_that('column names must exist in DT', {
-  expect_error(edge_alignment(DT, id = 'potato', direction, timegroup),
-               'field')
+  expect_error(edge_alignment(DT, id = 'potato', direction, timegroup), 'field')
 
-  expect_error(edge_alignment(DT, id, direction = 'potato', timegroup),
-               'field')
+  expect_error(edge_alignment(DT, id, direction = 'potato', timegroup), 'field')
 
-  expect_error(edge_alignment(DT, id, direction, timegroup = 'potato'),
-               'field')
+  expect_error(edge_alignment(DT, id, direction, timegroup = 'potato'), 'field')
 
-  expect_error(edge_alignment(DT, id, direction, timegroup, group = 'potato'),
-               'field')
+  expect_error(
+    edge_alignment(DT, id, direction, timegroup, group = 'potato'),
+    'field'
+  )
 
-  expect_error(edge_alignment(DT, id, direction, timegroup, splitBy = 'potato'),
-               'field')
+  expect_error(
+    edge_alignment(DT, id, direction, timegroup, splitBy = 'potato'),
+    'field'
+  )
 })
 
 test_that('direction is units, timegroup is integer, signed is logical', {
-  expect_error(edge_alignment(DT, id, direction = 'X', timegroup),
-               'units')
+  expect_error(edge_alignment(DT, id, direction = 'X', timegroup), 'units')
 
-  expect_warning(edge_alignment(DT, id, direction, timegroup = 'ID'),
-                 'timegroup')
+  expect_warning(
+    edge_alignment(DT, id, direction, timegroup = 'ID'),
+    'timegroup'
+  )
 
-  expect_error(edge_alignment(DT, id, direction, timegroup, signed = 42),
-               'signed')
+  expect_error(
+    edge_alignment(DT, id, direction, timegroup, signed = 42),
+    'signed'
+  )
 })
 
 test_that('duplicate IDs in a timegroup detected', {
   copyDT <- copy(DT)[, datetime := as.POSIXct(datetime)]
   group_times(copyDT, datetime = 'datetime', threshold = '8 hours')
-  expect_warning(edge_alignment(copyDT, id, direction, timegroup),
-                 'duplicate')
+  expect_warning(edge_alignment(copyDT, id, direction, timegroup), 'duplicate')
 })
 
 test_that('warns about splitBy column', {
@@ -73,8 +72,7 @@ test_that('warns about splitBy column', {
   group_times(copyDT, 'datetime', '5 minutes')
   copyDT[, splitBy := as.IDate(datetime)]
 
-  expect_warning(edge_alignment(copyDT, id, direction, timegroup),
-                 'split_by')
+  expect_warning(edge_alignment(copyDT, id, direction, timegroup), 'split_by')
 })
 
 test_that('returned IDs make sense', {
@@ -87,8 +85,7 @@ test_that('returned IDs make sense', {
 })
 
 test_that('returns a data.table', {
-  expect_s3_class(edge_alignment(DT, id, direction, timegroup),
-                  'data.table')
+  expect_s3_class(edge_alignment(DT, id, direction, timegroup), 'data.table')
 })
 
 test_that('signed arg works', {

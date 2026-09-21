@@ -15,8 +15,13 @@ utm <- 32736
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-group_pts(DT, threshold = threshold, id = id,
-          coords = coords, timegroup = timegroup)
+group_pts(
+  DT,
+  threshold = threshold,
+  id = id,
+  coords = coords,
+  timegroup = timegroup
+)
 direction_step(DT, id = id, coords = coords, crs = utm)
 
 clean_DT <- copy(DT)
@@ -26,23 +31,27 @@ test_that('DT is required', {
 })
 
 test_that('arguments required, otherwise error detected', {
-  expect_error(direction_polarization(DT, group = NULL),
-               'group must be provided')
-  expect_error(direction_polarization(DT, direction = NULL),
-               'direction must be provided')
+  expect_error(
+    direction_polarization(DT, group = NULL),
+    'group must be provided'
+  )
+  expect_error(
+    direction_polarization(DT, direction = NULL),
+    'direction must be provided'
+  )
 })
 
 test_that('column names must exist in DT', {
-  expect_error(direction_polarization(DT, direction = 'potato'),
-               'potato field')
-  expect_error(direction_polarization(DT, group = 'potato'),
-               'potato field')
+  expect_error(direction_polarization(DT, direction = 'potato'), 'potato field')
+  expect_error(direction_polarization(DT, group = 'potato'), 'potato field')
 })
 
 test_that('radians expected else error', {
   copyDT <- copy(clean_DT)[, deg := units::as_units(1.1, 'degree')]
-  expect_error(direction_group(copyDT, direction = 'deg'),
-               'direction must be of units radians')
+  expect_error(
+    direction_group(copyDT, direction = 'deg'),
+    'direction must be of units radians'
+  )
 })
 
 
@@ -57,15 +66,13 @@ test_that('polarization column succesfully detected', {
 test_that('no rows are added to the result DT', {
   copyDT <- copy(clean_DT)
 
-  expect_equal(nrow(copyDT),
-               nrow(direction_polarization(copyDT)))
+  expect_equal(nrow(copyDT), nrow(direction_polarization(copyDT)))
 })
 
 test_that('one column added to the result DT', {
   copyDT <- copy(clean_DT)
 
-  expect_equal(ncol(copyDT) + 1,
-               ncol(direction_polarization(DT)))
+  expect_equal(ncol(copyDT) + 1, ncol(direction_polarization(DT)))
 })
 
 test_that('column added to the result DT is numeric, between 0-1', {

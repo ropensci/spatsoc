@@ -7,13 +7,16 @@ utm <- 'EPSG:32736'
 
 
 test_that('DT or spPts are required but not both', {
-  expect_error(build_polys(DT = NULL, spPts = NULL),
-               'input DT or spPts required')
+  expect_error(
+    build_polys(DT = NULL, spPts = NULL),
+    'input DT or spPts required'
+  )
 
-  expect_error(build_polys(DT = DT, spPts = 10),
-               'cannot provide both DT and spPts')
+  expect_error(
+    build_polys(DT = DT, spPts = 10),
+    'cannot provide both DT and spPts'
+  )
 })
-
 
 
 test_that('coords, id, crs, (splitBy) provided and proper format', {
@@ -97,7 +100,8 @@ test_that('coords, id, crs, (splitBy) provided and proper format', {
       id = 'ID',
       splitBy = 's'
     ),
-    'splitBy must be', fixed = FALSE
+    'splitBy must be',
+    fixed = FALSE
   )
 })
 
@@ -182,7 +186,6 @@ test_that('hrParams returns error if params do not match function params', {
     'hrParams provided do not match function parameters',
     fixed = FALSE
   )
-
 })
 
 test_that('if hrParams NULL, warns', {
@@ -201,7 +204,6 @@ test_that('if hrParams NULL, warns', {
     paramspromise$messages,
     'hrParams is not provided, using defaults'
   )
-
 })
 
 
@@ -231,33 +233,36 @@ test_that('build_polys returns sf, POLYGONs', {
   )
 
   expect_true(
-    any(c('POLYGON', 'MULTIPOLYGON') %in%
-    sf::st_geometry_type(
-      build_polys(
-        DT = DT,
-        crs = utm,
-        hrType = 'mcp',
-        hrParams = list(percent = 95),
-        coords = c('X', 'Y'),
-        id = 'ID'
-      ),
-      by_geometry = FALSE)
+    any(
+      c('POLYGON', 'MULTIPOLYGON') %in%
+        sf::st_geometry_type(
+          build_polys(
+            DT = DT,
+            crs = utm,
+            hrType = 'mcp',
+            hrParams = list(percent = 95),
+            coords = c('X', 'Y'),
+            id = 'ID'
+          ),
+          by_geometry = FALSE
+        )
     )
   )
 
-
   expect_true(
-    any(c('POLYGON', 'MULTIPOLYGON') %in%
-    sf::st_geometry_type(
-        build_polys(
-          DT = DT,
-          crs = utm,
-          hrType = 'kernel',
-          hrParams = list(grid = 60),
-          coords = c('X', 'Y'),
-          id = 'ID'),
-        by_geometry = FALSE
-      )
+    any(
+      c('POLYGON', 'MULTIPOLYGON') %in%
+        sf::st_geometry_type(
+          build_polys(
+            DT = DT,
+            crs = utm,
+            hrType = 'kernel',
+            hrParams = list(grid = 60),
+            coords = c('X', 'Y'),
+            id = 'ID'
+          ),
+          by_geometry = FALSE
+        )
     )
   )
 })
@@ -277,17 +282,19 @@ test_that('hrParams can have both vertices and kernel args', {
   )
 
   expect_true(
-    any(c('POLYGON', 'MULTIPOLYGON') %in%
-      sf::st_geometry_type(
-        build_polys(
-          DT = DT,
-          crs = utm,
-          hrType = 'kernel',
-          hrParams = list(percent = 95, grid = 60),
-          coords = c('X', 'Y'),
-          id = 'ID'),
-        by_geometry = FALSE
-      )
+    any(
+      c('POLYGON', 'MULTIPOLYGON') %in%
+        sf::st_geometry_type(
+          build_polys(
+            DT = DT,
+            crs = utm,
+            hrType = 'kernel',
+            hrParams = list(percent = 95, grid = 60),
+            coords = c('X', 'Y'),
+            id = 'ID'
+          ),
+          by_geometry = FALSE
+        )
     )
   )
 })

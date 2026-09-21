@@ -1,10 +1,11 @@
 assert_are_colnames <- function(x, nms, ...) {
   if (length(nms)) {
     for (nm in nms) {
-      if(!nm %in% colnames(x)) {
-        rlang::abort(paste0(nm, ' field provided is not present in input',
-                            ...),
-                     call = rlang::caller_env())
+      if (!nm %in% colnames(x)) {
+        rlang::abort(
+          paste0(nm, ' field provided is not present in input', ...),
+          call = rlang::caller_env()
+        )
       } else {
         invisible(NULL)
       }
@@ -15,11 +16,16 @@ assert_are_colnames <- function(x, nms, ...) {
 assert_col_inherits <- function(x, cols, classes, ...) {
   if (length(cols)) {
     for (col in cols) {
-      if(!inherits(x[[col]], classes)) {
-        rlang::abort(paste0(rlang::caller_arg(cols), ' must be of class ',
-                            paste0(classes, collapse = '/'),
-                            ...),
-                     call = rlang::caller_env())
+      if (!inherits(x[[col]], classes)) {
+        rlang::abort(
+          paste0(
+            rlang::caller_arg(cols),
+            ' must be of class ',
+            paste0(classes, collapse = '/'),
+            ...
+          ),
+          call = rlang::caller_env()
+        )
       } else {
         invisible(NULL)
       }
@@ -28,10 +34,11 @@ assert_col_inherits <- function(x, cols, classes, ...) {
 }
 
 assert_col_radians <- function(x, col, ...) {
-  if(!identical(units(x[[col]])$numerator, 'rad')) {
-    rlang::abort(paste0(rlang::caller_arg(col),
-                        ' must be of units radians', ...),
-                 call = rlang::caller_env())
+  if (!identical(units(x[[col]])$numerator, 'rad')) {
+    rlang::abort(
+      paste0(rlang::caller_arg(col), ' must be of units radians', ...),
+      call = rlang::caller_env()
+    )
   } else {
     invisible(NULL)
   }
@@ -40,11 +47,16 @@ assert_col_radians <- function(x, col, ...) {
 assert_col_typeof <- function(x, cols, type, ...) {
   if (length(cols)) {
     for (col in cols) {
-      if(!identical(typeof(x[[col]]), type)) {
-        rlang::abort(paste0(rlang::caller_arg(cols), ' must be of type ',
-                            paste0(type, collapse = '/'),
-                            ...),
-                     call = rlang::caller_env())
+      if (!identical(typeof(x[[col]]), type)) {
+        rlang::abort(
+          paste0(
+            rlang::caller_arg(cols),
+            ' must be of type ',
+            paste0(type, collapse = '/'),
+            ...
+          ),
+          call = rlang::caller_env()
+        )
       } else {
         invisible(NULL)
       }
@@ -53,11 +65,16 @@ assert_col_typeof <- function(x, cols, type, ...) {
 }
 
 assert_inherits <- function(x, classes, ...) {
-  if(!inherits(x, classes)) {
-    rlang::abort(paste0(rlang::caller_arg(x), ' must be of class ',
-                        paste0(classes, collapse = '/'),
-                        ...),
-                 call = rlang::caller_env())
+  if (!inherits(x, classes)) {
+    rlang::abort(
+      paste0(
+        rlang::caller_arg(x),
+        ' must be of class ',
+        paste0(classes, collapse = '/'),
+        ...
+      ),
+      call = rlang::caller_env()
+    )
   } else {
     invisible(NULL)
   }
@@ -65,21 +82,26 @@ assert_inherits <- function(x, classes, ...) {
 
 assert_is_data_table <- function(x) {
   if (!data.table::is.data.table(x)) {
-    rlang::abort(paste0('input ', rlang::caller_arg(x),
-                        ' must be a data.table'),
-                 call = rlang::caller_env())
+    rlang::abort(
+      paste0('input ', rlang::caller_arg(x), ' must be a data.table'),
+      call = rlang::caller_env()
+    )
   }
   if (nrow(x) == 0L) {
-    rlang::abort(paste0('input ', rlang::caller_arg(x), ' has zero rows'),
-                 call = rlang::caller_env())
+    rlang::abort(
+      paste0('input ', rlang::caller_arg(x), ' has zero rows'),
+      call = rlang::caller_env()
+    )
   }
   return(invisible(NULL))
 }
 
 assert_length <- function(x, len) {
   if (length(x) != len) {
-    rlang::abort(paste0(rlang::caller_arg(x), ' must be length ', len),
-                 call = rlang::caller_env())
+    rlang::abort(
+      paste0(rlang::caller_arg(x), ' must be length ', len),
+      call = rlang::caller_env()
+    )
   } else {
     return(invisible(NULL))
   }
@@ -87,16 +109,20 @@ assert_length <- function(x, len) {
 
 assert_not_missing <- function(x) {
   if (missing(x)) {
-    rlang::abort(paste0(rlang::caller_arg(x), ' must be provided'),
-                 call = rlang::caller_env())
+    rlang::abort(
+      paste0(rlang::caller_arg(x), ' must be provided'),
+      call = rlang::caller_env()
+    )
   }
   return(invisible(NULL))
 }
 
 assert_not_null <- function(x, ...) {
   if (is.null(x)) {
-    rlang::abort(paste0(rlang::caller_arg(x), ' must be provided', ...),
-                 call = rlang::caller_env())
+    rlang::abort(
+      paste0(rlang::caller_arg(x), ' must be provided', ...),
+      call = rlang::caller_env()
+    )
   }
   return(invisible(NULL))
 }
@@ -126,13 +152,14 @@ assert_threshold <- function(threshold = NULL, crs = NULL) {
       assert_units_match(threshold, sf::st_crs(crs)$ud_unit, n = 2)
       assert_relation(threshold, `>`, units::as_units(0, units(threshold)))
     }
-  } else if (inherits(threshold, 'numeric')){
+  } else if (inherits(threshold, 'numeric')) {
     if (any(is.null(crs), is.na(crs))) {
       assert_relation(threshold, `>`, 0)
     } else {
-      threshold <- units::as_units(threshold,
-                                   units(sf::st_crs(crs)$ud_unit))
-      assert_relation(threshold, `>`,
+      threshold <- units::as_units(threshold, units(sf::st_crs(crs)$ud_unit))
+      assert_relation(
+        threshold,
+        `>`,
         units::as_units(0, units(sf::st_crs(crs)$ud_unit)),
         n = 2
       )
@@ -151,10 +178,14 @@ assert_units_match <- function(x, y, n = 1) {
       paste0(
         'units of ',
         rlang::caller_arg(x),
-        ' (', units(x), ')',
+        ' (',
+        units(x),
+        ')',
         ' do not match units of ',
         rlang::caller_arg(y),
-        ' (', units(y), ')'
+        ' (',
+        units(y),
+        ')'
       ),
       call = rlang::caller_env(n = n)
     )
@@ -221,8 +252,9 @@ calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
       } else {
         sf::st_as_sf(sf::st_centroid(sf::st_combine(geometry)))
       }
-    } else if (missing(geometry) && !missing(x) && !missing(y) &&
-               !missing(crs)) {
+    } else if (
+      missing(geometry) && !missing(x) && !missing(y) && !missing(crs)
+    ) {
       if (identical(length(x), 1L) & identical(length(y), 1L)) {
         return(data.frame(x, y))
       } else {
@@ -248,10 +280,20 @@ calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
         return(sf::st_as_sf(geometry))
       } else {
         sf::st_as_sf(
-          data.frame(apply(sf::st_coordinates(geometry), 2, mean, na.rm = TRUE,
-                           simplify = FALSE)), coords = seq.int(2), crs = crs)
+          data.frame(apply(
+            sf::st_coordinates(geometry),
+            2,
+            mean,
+            na.rm = TRUE,
+            simplify = FALSE
+          )),
+          coords = seq.int(2),
+          crs = crs
+        )
       }
-    } else if (missing(geometry) && !missing(x) && !missing(y) && !missing(crs)) {
+    } else if (
+      missing(geometry) && !missing(x) && !missing(y) && !missing(crs)
+    ) {
       if (identical(length(x), 1L) & identical(length(y), 1L)) {
         return(data.frame(x, y))
       } else {
@@ -310,20 +352,29 @@ calc_centroid <- function(geometry, x, y, crs, use_mean = FALSE) {
 #' # E, N, W, S
 #' example[, spatsoc:::calc_direction(x_a = X, y_a = Y, crs = 4326, use_transform = FALSE)]
 calc_direction <- function(
-    geometry_a, geometry_b,
-    x_a, y_a,
-    x_b, y_b,
-    crs,
-    use_transform) {
+  geometry_a,
+  geometry_b,
+  x_a,
+  y_a,
+  x_b,
+  y_b,
+  crs,
+  use_transform
+) {
   crs_longlat <- 4326
 
-  if (!missing(geometry_a) && missing(x_a) && missing(y_a)
-      && missing(x_b) && missing(y_b)) {
-    if(any(rowSums(is.na(sf::st_coordinates(geometry_a))) == 2)) {
+  if (
+    !missing(geometry_a) &&
+      missing(x_a) &&
+      missing(y_a) &&
+      missing(x_b) &&
+      missing(y_b)
+  ) {
+    if (any(rowSums(is.na(sf::st_coordinates(geometry_a))) == 2)) {
       rlang::abort('missing values in coordinates')
     }
     if (!missing(geometry_b)) {
-      if(any(rowSums(is.na(sf::st_coordinates(geometry_b))) == 2)) {
+      if (any(rowSums(is.na(sf::st_coordinates(geometry_b))) == 2)) {
         rlang::abort('missing values in coordinates')
       }
       if (use_transform) {
@@ -357,37 +408,61 @@ calc_direction <- function(
       if (use_transform) {
         lwgeom::st_geod_azimuth(
           x = sf::st_transform(
-            sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                         na.fail = TRUE),
+            sf::st_as_sf(
+              data.frame(x_a, y_a),
+              crs = crs,
+              coords = seq.int(2),
+              na.fail = TRUE
+            ),
             crs = crs_longlat
           ),
           y = sf::st_transform(
-            sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2),
-                         na.fail = TRUE),
+            sf::st_as_sf(
+              data.frame(x_b, y_b),
+              crs = crs,
+              coords = seq.int(2),
+              na.fail = TRUE
+            ),
             crs = crs_longlat
           )
         )
       } else {
         lwgeom::st_geod_azimuth(
-          x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                           na.fail = TRUE),
-          y = sf::st_as_sf(data.frame(x_b, y_b), crs = crs, coords = seq.int(2),
-                           na.fail = TRUE)
+          x = sf::st_as_sf(
+            data.frame(x_a, y_a),
+            crs = crs,
+            coords = seq.int(2),
+            na.fail = TRUE
+          ),
+          y = sf::st_as_sf(
+            data.frame(x_b, y_b),
+            crs = crs,
+            coords = seq.int(2),
+            na.fail = TRUE
+          )
         )
       }
     } else {
       if (use_transform) {
         lwgeom::st_geod_azimuth(
           x = sf::st_transform(
-            sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                         na.fail = TRUE),
+            sf::st_as_sf(
+              data.frame(x_a, y_a),
+              crs = crs,
+              coords = seq.int(2),
+              na.fail = TRUE
+            ),
             crs = crs_longlat
           )
         )
       } else {
         lwgeom::st_geod_azimuth(
-          x = sf::st_as_sf(data.frame(x_a, y_a), crs = crs, coords = seq.int(2),
-                           na.fail = TRUE)
+          x = sf::st_as_sf(
+            data.frame(x_a, y_a),
+            crs = crs,
+            coords = seq.int(2),
+            na.fail = TRUE
+          )
         )
       }
     }
@@ -456,13 +531,22 @@ calc_direction <- function(
 #' # E, N, W, S
 #' example[, spatsoc:::calc_distance(x_a = X, y_a = Y, crs = 4326, use_dist = FALSE)]
 calc_distance <- function(
-    geometry_a, geometry_b,
-    x_a, y_a,
-    x_b, y_b,
-    crs,
-    use_dist) {
-  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
-    missing(x_b) && missing(y_b)) {
+  geometry_a,
+  geometry_b,
+  x_a,
+  y_a,
+  x_b,
+  y_b,
+  crs,
+  use_dist
+) {
+  if (
+    !missing(geometry_a) &&
+      missing(x_a) &&
+      missing(y_a) &&
+      missing(x_b) &&
+      missing(y_b)
+  ) {
     if (!missing(geometry_b)) {
       # Pairwise
       if (use_dist) {
@@ -475,7 +559,7 @@ calc_distance <- function(
       if (use_dist) {
         coords <- sf::st_coordinates(geometry_a)
         m <- as.matrix(stats::dist(coords))
-        m[is.na(coords[, 1]),] <- NA_real_
+        m[is.na(coords[, 1]), ] <- NA_real_
         m[, is.na(coords[, 2])] <- NA_real_
         m
       } else {
@@ -489,13 +573,17 @@ calc_distance <- function(
         calc_distance_pairwise(x_a = x_a, y_a = y_a, x_b = x_b, y_b = y_b)
       } else {
         sf::st_distance(
-          x = sf::st_as_sf(data.frame(x_a, y_a),
-                           crs = crs, coords = seq.int(2),
-                           na.fail = FALSE
+          x = sf::st_as_sf(
+            data.frame(x_a, y_a),
+            crs = crs,
+            coords = seq.int(2),
+            na.fail = FALSE
           ),
-          y = sf::st_as_sf(data.frame(x_b, y_b),
-                           crs = crs, coords = seq.int(2),
-                           na.fail = FALSE
+          y = sf::st_as_sf(
+            data.frame(x_b, y_b),
+            crs = crs,
+            coords = seq.int(2),
+            na.fail = FALSE
           ),
           by_element = TRUE
         )
@@ -504,14 +592,16 @@ calc_distance <- function(
       # Matrix
       if (use_dist) {
         m <- as.matrix(stats::dist(cbind(x_a, y_a)))
-        m[is.na(x_a),] <- NA_real_
+        m[is.na(x_a), ] <- NA_real_
         m[, is.na(y_a)] <- NA_real_
         m
       } else {
         sf::st_distance(
-          x = sf::st_as_sf(data.frame(x_a, y_a),
-                           crs = crs, coords = seq.int(2),
-                           na.fail = FALSE
+          x = sf::st_as_sf(
+            data.frame(x_a, y_a),
+            crs = crs,
+            coords = seq.int(2),
+            na.fail = FALSE
           ),
           by_element = FALSE
         )
@@ -529,17 +619,21 @@ calc_distance <- function(
 }
 
 # Internal calc pairwise distance used in internal calc_distance
-calc_distance_pairwise <- function(geometry_a, geometry_b,
-                          x_a, y_a,
-                          x_b, y_b) {
-  if (!missing(geometry_a) && missing(x_a) && missing(y_a) &&
-      !missing(geometry_b)) {
+calc_distance_pairwise <- function(geometry_a, geometry_b, x_a, y_a, x_b, y_b) {
+  if (
+    !missing(geometry_a) && missing(x_a) && missing(y_a) && !missing(geometry_b)
+  ) {
     a <- sf::st_coordinates(geometry_a)
     b <- sf::st_coordinates(geometry_b)
-    sqrt((a[, 1] - b[, 1]) ^ 2 + (a[, 2] - b[, 2]) ^ 2)
-  } else if (missing(geometry_a) && !missing(x_a) && !missing(y_a) &&
-             !missing(x_b) && !missing(y_b)) {
-    sqrt((x_a - x_b) ^ 2 + (y_a - y_b) ^ 2)
+    sqrt((a[, 1] - b[, 1])^2 + (a[, 2] - b[, 2])^2)
+  } else if (
+    missing(geometry_a) &&
+      !missing(x_a) &&
+      !missing(y_a) &&
+      !missing(x_b) &&
+      !missing(y_b)
+  ) {
+    sqrt((x_a - x_b)^2 + (y_a - y_b)^2)
   }
 }
 
@@ -549,8 +643,10 @@ crs_use_mean <- function(crs) {
     if (sf::sf_use_s2()) {
       use_mean <- FALSE
     } else {
-      warning('st_centroid does not give correct centroids for longlat',
-              '\nsee ?sf::st_centroid')
+      warning(
+        'st_centroid does not give correct centroids for longlat',
+        '\nsee ?sf::st_centroid'
+      )
       use_mean <- TRUE
     }
   } else {

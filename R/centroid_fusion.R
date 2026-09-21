@@ -111,14 +111,14 @@
 #' )
 #' print(centroids)
 centroid_fusion <- function(
-    edges = NULL,
-    DT = NULL,
-    id = NULL,
-    coords = NULL,
-    crs = NULL,
-    timegroup = 'timegroup',
-    geometry = 'geometry') {
-
+  edges = NULL,
+  DT = NULL,
+  id = NULL,
+  coords = NULL,
+  crs = NULL,
+  timegroup = 'timegroup',
+  geometry = 'geometry'
+) {
   centroid_(
     centroid_groupings = 'fusionID',
     edges = edges,
@@ -133,15 +133,15 @@ centroid_fusion <- function(
 
 # Internal function reused for centroid_dyad and centroid_fusion
 centroid_ <- function(
-    centroid_groupings = NULL,
-    edges = NULL,
-    DT = NULL,
-    id = NULL,
-    coords = NULL,
-    crs = NULL,
-    timegroup = 'timegroup',
-    geometry = 'geometry') {
-
+  centroid_groupings = NULL,
+  edges = NULL,
+  DT = NULL,
+  id = NULL,
+  coords = NULL,
+  crs = NULL,
+  timegroup = 'timegroup',
+  geometry = 'geometry'
+) {
   # Due to NSE notes in R CMD check
   centroid <- geo <- . <- x <- y <- NULL
 
@@ -160,23 +160,28 @@ centroid_ <- function(
   assert_are_colnames(DT, check_cols_DT)
 
   if (is.null(coords)) {
-    m <- merge(edges,
-               DT[, .SD, .SDcols = c(geometry, id, 'timegroup')],
-               by.x = c('ID1', timegroup),
-               by.y = c(id, timegroup),
-               all.x = TRUE,
-               sort = FALSE)
+    m <- merge(
+      edges,
+      DT[, .SD, .SDcols = c(geometry, id, 'timegroup')],
+      by.x = c('ID1', timegroup),
+      by.y = c(id, timegroup),
+      all.x = TRUE,
+      sort = FALSE
+    )
 
     use_mean <- crs_use_mean(sf::st_crs(DT[[geometry]]))
 
-    m[!is.na(centroid_groupings),
+    m[
+      !is.na(centroid_groupings),
       centroid := calc_centroid(geometry = geo, use_mean = use_mean),
-      env = list(geo = geometry,
-                 centroid_groupings = centroid_groupings,
-                 timegroup = timegroup),
-      by = .(centroid_groupings, timegroup)]
+      env = list(
+        geo = geometry,
+        centroid_groupings = centroid_groupings,
+        timegroup = timegroup
+      ),
+      by = .(centroid_groupings, timegroup)
+    ]
     m[, centroid := sf::st_sfc(centroid, recompute_bbox = TRUE)]
-
   } else {
     if (is.null(crs)) {
       crs <- sf::NA_crs_
@@ -192,12 +197,14 @@ centroid_ <- function(
     out_xcol <- paste0('centroid_', gsub(' ', '', xcol))
     out_ycol <- paste0('centroid_', gsub(' ', '', ycol))
 
-    m <- merge(edges,
-               DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
-               by.x = c('ID1', timegroup),
-               by.y = c(id, timegroup),
-               all.x = TRUE,
-               sort = FALSE)
+    m <- merge(
+      edges,
+      DT[, .SD, .SDcols = c(coords, id, 'timegroup')],
+      by.x = c('ID1', timegroup),
+      by.y = c(id, timegroup),
+      all.x = TRUE,
+      sort = FALSE
+    )
 
     if (out_xcol %in% colnames(m)) {
       message(paste(out_xcol, 'column will be overwritten by this function'))
@@ -211,13 +218,22 @@ centroid_ <- function(
 
     use_mean <- crs_use_mean(crs)
 
-    m[!is.na(centroid_groupings),
-      (c(out_xcol, out_ycol)) :=
-        calc_centroid(, x, y, crs = crs, use_mean = use_mean),
-      env = list(x = xcol, y = ycol,
-                 centroid_groupings = centroid_groupings,
-                 timegroup = timegroup),
-      by = .(centroid_groupings, timegroup)]
+    m[
+      !is.na(centroid_groupings),
+      (c(out_xcol, out_ycol)) := calc_centroid(,
+        x,
+        y,
+        crs = crs,
+        use_mean = use_mean
+      ),
+      env = list(
+        x = xcol,
+        y = ycol,
+        centroid_groupings = centroid_groupings,
+        timegroup = timegroup
+      ),
+      by = .(centroid_groupings, timegroup)
+    ]
 
     data.table::set(m, j = coords, value = NULL)
   }

@@ -20,19 +20,38 @@ blind_volume <- 2
 
 DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
 group_times(DT, datetime = datetime, threshold = timethreshold)
-edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
-                   timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
+edges <- edge_dist(
+  DT,
+  threshold = threshold,
+  id = id,
+  coords = coords,
+  timegroup = timegroup,
+  returnDist = TRUE,
+  fillNA = FALSE
+)
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 
 DT_blind <- copy(DT)
 direction_step(DT_blind, id, coords, utm)
 group_times(DT_blind, datetime = datetime, threshold = timethreshold)
-edges <- edge_dist(DT, threshold = threshold, id = id, coords = coords,
-                   timegroup = timegroup, returnDist = TRUE, fillNA = FALSE)
+edges <- edge_dist(
+  DT,
+  threshold = threshold,
+  id = id,
+  coords = coords,
+  timegroup = timegroup,
+  returnDist = TRUE,
+  fillNA = FALSE
+)
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
-dyad_directions <- edge_direction(edges = edges, DT = DT_blind, id = id,
-                                  coords = coords, crs = utm,
-                                  timegroup = timegroup)
+dyad_directions <- edge_direction(
+  edges = edges,
+  DT = DT_blind,
+  id = id,
+  coords = coords,
+  crs = utm,
+  timegroup = timegroup
+)
 
 # edge_zones(
 #   edges = edges,
@@ -78,32 +97,43 @@ test_that('arguments required, otherwise error detected', {
 
 test_that('columns must exist in edges', {
   rm_col <- copy(edges)[, .SD, .SDcols = -'distance']
-  expect_error(edge_zones(rm_col, zone_thresholds, zone_labels),
-               'distance')
+  expect_error(edge_zones(rm_col, zone_thresholds, zone_labels), 'distance')
 
   rm_col <- copy(dyad_directions)[, .SD, .SDcols = -'direction']
-  expect_error(edge_zones(rm_col, zone_thresholds, zone_labels, blind_volume),
-               'direction')
+  expect_error(
+    edge_zones(rm_col, zone_thresholds, zone_labels, blind_volume),
+    'direction'
+  )
 
   rm_col <- copy(dyad_directions)[, .SD, .SDcols = -'direction_dyad']
-  expect_error(edge_zones(rm_col, zone_thresholds, zone_labels, blind_volume),
-               'direction_dyad')
-
+  expect_error(
+    edge_zones(rm_col, zone_thresholds, zone_labels, blind_volume),
+    'direction_dyad'
+  )
 })
 
 test_that('columns are correctly provided or error detected', {
   copyEdges <- copy(edges)[, distance := as.character(distance)]
-  expect_error(edge_zones(copyEdges, zone_thresholds, zone_labels),
-               'distance must be of class numeric')
+  expect_error(
+    edge_zones(copyEdges, zone_thresholds, zone_labels),
+    'distance must be of class numeric'
+  )
 
-  copyDyad <- copy(dyad_directions)[, direction := units::set_units(direction, 'degrees')]
-  expect_error(edge_zones(copyDyad, zone_thresholds, zone_labels, blind_volume),
-               'radians',
-              )
+  copyDyad <- copy(dyad_directions)[,
+    direction := units::set_units(direction, 'degrees')
+  ]
+  expect_error(
+    edge_zones(copyDyad, zone_thresholds, zone_labels, blind_volume),
+    'radians',
+  )
 
-  copyDyadDir <- copy(dyad_directions)[, direction_dyad := units::set_units(direction_dyad, 'degrees')]
-  expect_error(edge_zones(copyDyadDir, zone_thresholds, zone_labels, blind_volume),
-               'radians')
+  copyDyadDir <- copy(dyad_directions)[,
+    direction_dyad := units::set_units(direction_dyad, 'degrees')
+  ]
+  expect_error(
+    edge_zones(copyDyadDir, zone_thresholds, zone_labels, blind_volume),
+    'radians'
+  )
 })
 
 test_that('zone column succesfully detected', {
@@ -117,59 +147,72 @@ test_that('zone column succesfully detected', {
 test_that('no rows are added to the result', {
   copyEdges <- copy(edges)
 
-  expect_equal(nrow(copyEdges),
-               nrow(edge_zones(copyEdges, zone_thresholds, zone_labels)))
+  expect_equal(
+    nrow(copyEdges),
+    nrow(edge_zones(copyEdges, zone_thresholds, zone_labels))
+  )
 })
 
 test_that('one column added to the result', {
   copyEdges <- copy(edges)
 
-  expect_equal(ncol(copyEdges) + 1,
-               ncol(edge_zones(copyEdges, zone_thresholds, zone_labels)))
+  expect_equal(
+    ncol(copyEdges) + 1,
+    ncol(edge_zones(copyEdges, zone_thresholds, zone_labels))
+  )
 
-  expect_false('direction_dyad_relative' %in%
-                 colnames(edge_zones(copyEdges, zone_thresholds, zone_labels)))
+  expect_false(
+    'direction_dyad_relative' %in%
+      colnames(edge_zones(copyEdges, zone_thresholds, zone_labels))
+  )
 })
 
 test_that('one column added to the result is a factor', {
   copyEdges <- copy(edges)
 
-  expect_s3_class(edge_zones(copyEdges, zone_thresholds, zone_labels)$zone,
-                  'factor')
+  expect_s3_class(
+    edge_zones(copyEdges, zone_thresholds, zone_labels)$zone,
+    'factor'
+  )
 
-  expect_equal(levels(edge_zones(copyEdges, zone_thresholds, zone_labels)$zone),
-              zone_labels)
+  expect_equal(
+    levels(edge_zones(copyEdges, zone_thresholds, zone_labels)$zone),
+    zone_labels
+  )
 
   copyDyadDirs <- copy(dyad_directions)
 
-  expect_s3_class(edge_zones(copyDyadDirs, zone_thresholds, zone_labels,
-                         blind_volume)$zone,
-                  'factor')
+  expect_s3_class(
+    edge_zones(copyDyadDirs, zone_thresholds, zone_labels, blind_volume)$zone,
+    'factor'
+  )
 
-  expect_equal(levels(edge_zones(copyDyadDirs, zone_thresholds, zone_labels,
-                                 blind_volume)$zone),
-               c(zone_labels, 'blind'))
-
+  expect_equal(
+    levels(
+      edge_zones(copyDyadDirs, zone_thresholds, zone_labels, blind_volume)$zone
+    ),
+    c(zone_labels, 'blind')
+  )
 })
 test_that('returns a data.table', {
-  expect_s3_class(edge_zones(edges, zone_thresholds, zone_labels),
-                  'data.table')
+  expect_s3_class(edge_zones(edges, zone_thresholds, zone_labels), 'data.table')
 })
-
 
 
 test_that('results are expected', {
-  expected <- merge(edge_zones(edges, zone_thresholds, zone_labels),
-                    data.table(threshold = zone_thresholds, zone = zone_labels),
-                    by = 'zone')
+  expected <- merge(
+    edge_zones(edges, zone_thresholds, zone_labels),
+    data.table(threshold = zone_thresholds, zone = zone_labels),
+    by = 'zone'
+  )
 
   expect_true(all(expected[, distance < threshold, by = zone]$V1))
 
-  expected <- merge(edge_zones(dyad_directions, zone_thresholds,
-                               zone_labels, blind_volume),
-                    data.table(threshold = zone_thresholds, zone = zone_labels),
-                    by = 'zone')
+  expected <- merge(
+    edge_zones(dyad_directions, zone_thresholds, zone_labels, blind_volume),
+    data.table(threshold = zone_thresholds, zone = zone_labels),
+    by = 'zone'
+  )
 
   expect_true(all(expected[, distance < threshold, by = zone]$V1))
-
 })

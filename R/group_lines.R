@@ -129,17 +129,17 @@
 #'             timegroup = 'timegroup', sortBy = 'datetime',
 #'             splitBy = 'population')
 group_lines <- function(
-    DT = NULL,
-    threshold = NULL,
-    crs = NULL,
-    id = NULL,
-    coords = NULL,
-    timegroup = NULL,
-    sortBy = NULL,
-    splitBy = NULL,
-    sfLines = NULL,
-    projection = NULL) {
-
+  DT = NULL,
+  threshold = NULL,
+  crs = NULL,
+  id = NULL,
+  coords = NULL,
+  timegroup = NULL,
+  sortBy = NULL,
+  splitBy = NULL,
+  sfLines = NULL,
+  projection = NULL
+) {
   # due to NSE notes in R CMD check
   group <- ..coords <- ..id <- ..sortBy <- withinGroup <- NULL
 
@@ -162,8 +162,10 @@ group_lines <- function(
   } else if (is.null(sfLines) && is.null(DT)) {
     stop('must provide either DT or sfLines')
   } else if (!is.null(sfLines) && is.null(DT)) {
-    if (!inherits(sfLines, 'sf') ||
-        !'LINESTRING' %in% sf::st_geometry_type(sfLines)) {
+    if (
+      !inherits(sfLines, 'sf') ||
+        !'LINESTRING' %in% sf::st_geometry_type(sfLines)
+    ) {
       stop('sfLines provided must be a sf object with LINESTRINGs')
     }
     assert_not_null(id)
@@ -181,8 +183,7 @@ group_lines <- function(
     dimnames(inter) <- list(sfLines[[id]], sfLines[[id]])
     g <- igraph::graph_from_adjacency_matrix(inter)
     ovr <- igraph::components(g)$membership
-    out <- data.table::data.table(names(ovr),
-                                  unlist(ovr))
+    out <- data.table::data.table(names(ovr), unlist(ovr))
     data.table::setnames(out, c('ID', 'group'))
     return(out[])
   } else if (is.null(sfLines) && !is.null(DT)) {
@@ -200,16 +201,18 @@ group_lines <- function(
   }
 
   if (is.null(timegroup)) {
-    withCallingHandlers({
-      lns <- build_lines(
-        DT = DT,
-        crs = crs,
-        coords = coords,
-        id = id,
-        sortBy = sortBy,
-        splitBy = splitBy
-      )},
-      warning = function(w){
+    withCallingHandlers(
+      {
+        lns <- build_lines(
+          DT = DT,
+          crs = crs,
+          coords = coords,
+          id = id,
+          sortBy = sortBy,
+          splitBy = splitBy
+        )
+      },
+      warning = function(w) {
         if (startsWith(conditionMessage(w), 'some rows dropped')) {
           invokeRestart('muffleWarning')
         }
@@ -225,8 +228,7 @@ group_lines <- function(
       dimnames(inter) <- list(lns[[id]], lns[[id]])
       g <- igraph::graph_from_adjacency_matrix(inter)
       ovr <- igraph::components(g)$membership
-      ovrDT <- data.table::data.table(ID = names(ovr),
-                                      group = unlist(ovr))
+      ovrDT <- data.table::data.table(ID = names(ovr), group = unlist(ovr))
     } else {
       ovrDT <- data.table::data.table(ID = DT[[id]], group = NA_integer_)
     }
@@ -246,52 +248,56 @@ group_lines <- function(
     }
     return(DT[])
   } else {
-
     if (is.null(splitBy)) {
       splitBy <- timegroup
-    }
-    else {
+    } else {
       splitBy <- c(splitBy, timegroup)
     }
     ovrDT <-
-      DT[, {
-        withCallingHandlers({
-          lns <- build_lines(
-            DT = .SD,
-            crs = crs,
-            coords = ..coords,
-            id = ..id,
-            sortBy = ..sortBy
-          )},
-          warning = function(w){
-            if (startsWith(conditionMessage(w), 'some rows dropped')) {
-              invokeRestart('muffleWarning')
+      DT[,
+        {
+          withCallingHandlers(
+            {
+              lns <- build_lines(
+                DT = .SD,
+                crs = crs,
+                coords = ..coords,
+                id = ..id,
+                sortBy = ..sortBy
+              )
+            },
+            warning = function(w) {
+              if (startsWith(conditionMessage(w), 'some rows dropped')) {
+                invokeRestart('muffleWarning')
+              }
             }
-          }
-        )
-        if (!is.null(lns)) {
-          if (threshold == 0) {
-            inter <- sf::st_intersects(lns, lns, sparse = FALSE)
+          )
+          if (!is.null(lns)) {
+            if (threshold == 0) {
+              inter <- sf::st_intersects(lns, lns, sparse = FALSE)
+            } else {
+              buffered <- sf::st_buffer(lns, dist = threshold)
+              inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
+            }
+            dimnames(inter) <- list(lns[[id]], lns[[id]])
+            g <- igraph::graph_from_adjacency_matrix(inter)
+            ovr <- igraph::components(g)$membership
+            out <- data.table::data.table(names(ovr), unlist(ovr))
+            data.table::setnames(out, c(..id, 'withinGroup'))
           } else {
-            buffered <- sf::st_buffer(lns, dist = threshold)
-            inter <- sf::st_intersects(lns, buffered, sparse = FALSE)
+            out <- data.table(get(..id), withinGroup = NA_real_)
+            data.table::setnames(out, c(..id, 'withinGroup'))
           }
-          dimnames(inter) <- list(lns[[id]], lns[[id]])
-          g <- igraph::graph_from_adjacency_matrix(inter)
-          ovr <- igraph::components(g)$membership
-          out <- data.table::data.table(names(ovr),
-                                        unlist(ovr))
-          data.table::setnames(out, c(..id, 'withinGroup'))
-        } else {
-          out <- data.table(get(..id), withinGroup = NA_real_)
-          data.table::setnames(out, c(..id, 'withinGroup'))
-
-        }
-      }, by = c(splitBy), .SDcols = c(coords, id, sortBy)]
+        },
+        by = c(splitBy),
+        .SDcols = c(coords, id, sortBy)
+      ]
 
     DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
-    DT[, group := ifelse(is.na(withinGroup), NA_integer_, .GRP),
-       by = c(splitBy, 'withinGroup')]
+    DT[,
+      group := ifelse(is.na(withinGroup), NA_integer_, .GRP),
+      by = c(splitBy, 'withinGroup')
+    ]
     data.table::set(DT, j = 'withinGroup', value = NULL)
     if (DT[is.na(group), .N] > 0) {
       warning(

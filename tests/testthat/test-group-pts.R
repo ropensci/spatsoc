@@ -36,10 +36,7 @@ test_that('args provided as expected else conditions', {
   )
 
   expect_error(
-    group_pts(DT,
-      threshold = threshold, id = id,
-      coords = coords
-    ),
+    group_pts(DT, threshold = threshold, id = id, coords = coords),
     'timegroup must be'
   )
 })
@@ -98,75 +95,103 @@ test_that('column names must exist in DT', {
 
 test_that('threshold correctly provided or error detected', {
   expect_error(
-    group_pts(DT,
-            threshold = -10, timegroup = timegroup, id = id,
-            coords = coords
+    group_pts(
+      DT,
+      threshold = -10,
+      timegroup = timegroup,
+      id = id,
+      coords = coords
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    group_pts(DT,
-            threshold = 0, timegroup = timegroup, id = id,
-            coords = coords
+    group_pts(
+      DT,
+      threshold = 0,
+      timegroup = timegroup,
+      id = id,
+      coords = coords
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    group_pts(DT,
-            threshold = '0', timegroup = timegroup, id = id,
-            coords = coords
+    group_pts(
+      DT,
+      threshold = '0',
+      timegroup = timegroup,
+      id = id,
+      coords = coords
     ),
     'threshold must be of class numeric'
   )
 
   expect_error(
-    group_pts(DT,
-            threshold = -10, timegroup = timegroup, id = id,
-            coords = coords, crs = utm
+    group_pts(
+      DT,
+      threshold = -10,
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    group_pts(DT,
-            threshold = 0, timegroup = timegroup, id = id,
-            coords = coords, crs = utm
+    group_pts(
+      DT,
+      threshold = 0,
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    group_pts(DT,
-            threshold = '0', timegroup = timegroup, id = id,
-            coords = coords, crs = utm
+    group_pts(
+      DT,
+      threshold = '0',
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be of class numeric'
   )
 
   expect_error(
-    group_pts(DT,
-            threshold = units::as_units(-1, 'm'),
-            timegroup = timegroup, id = id,
-            coords = coords, crs = utm
+    group_pts(
+      DT,
+      threshold = units::as_units(-1, 'm'),
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be > 0'
   )
 
   # geometry
   expect_error(
-    group_pts(DT,
-            threshold = units::as_units(-1, 'm'),
-            timegroup = timegroup, id = id
+    group_pts(
+      DT,
+      threshold = units::as_units(-1, 'm'),
+      timegroup = timegroup,
+      id = id
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    group_pts(DT,
-            threshold = units::as_units(100, 'km'),
-            timegroup = timegroup, id = id
+    group_pts(
+      DT,
+      threshold = units::as_units(100, 'km'),
+      timegroup = timegroup,
+      id = id
     ),
     'units of threshold'
   )
@@ -295,26 +320,32 @@ test_that('group column succesfully detected', {
 
 test_that('withinGroup is not returned to the user', {
   # coords
-  expect_false('withinGroup' %in% colnames(
-    group_pts(
-      copy(DT),
-      threshold = threshold,
-      id = id,
-      coords = coords,
-      timegroup = timegroup
-    )
-  ))
+  expect_false(
+    'withinGroup' %in%
+      colnames(
+        group_pts(
+          copy(DT),
+          threshold = threshold,
+          id = id,
+          coords = coords,
+          timegroup = timegroup
+        )
+      )
+  )
 
   # geometry
-  expect_false('withinGroup' %in% colnames(
-    group_pts(
-      copy(DT),
-      threshold = threshold,
-      id = id,
-      coords = coords,
-      timegroup = timegroup
-    )
-  ))
+  expect_false(
+    'withinGroup' %in%
+      colnames(
+        group_pts(
+          copy(DT),
+          threshold = threshold,
+          id = id,
+          coords = coords,
+          timegroup = timegroup
+        )
+      )
+  )
 })
 
 test_that('no rows are added to the result DT', {
@@ -361,16 +392,18 @@ test_that('group column added to the result DT', {
     )
   )
 
-  expect_true('group' %in%
-    colnames(
-      group_pts(
-        copy(DT),
-        threshold = threshold,
-        id = id,
-        coords = coords,
-        timegroup = timegroup
+  expect_true(
+    'group' %in%
+      colnames(
+        group_pts(
+          copy(DT),
+          threshold = threshold,
+          id = id,
+          coords = coords,
+          timegroup = timegroup
+        )
       )
-    ))
+  )
 
   # geometry
   expect_equal(
@@ -385,15 +418,17 @@ test_that('group column added to the result DT', {
     )
   )
 
-  expect_true('group' %in%
-    colnames(
-      group_pts(
-        copy(DT),
-        threshold = threshold,
-        id = id,
-        timegroup = timegroup
+  expect_true(
+    'group' %in%
+      colnames(
+        group_pts(
+          copy(DT),
+          threshold = threshold,
+          id = id,
+          timegroup = timegroup
+        )
       )
-    ))
+  )
 })
 
 test_that('duplicate IDs in a timegroup detected', {
@@ -414,21 +449,27 @@ test_that('duplicate IDs in a timegroup detected', {
 
 test_that('returns a data.table', {
   # coords
-  expect_s3_class(group_pts(
-    copy(DT),
-    threshold = threshold,
-    id = id,
-    coords = coords,
-    timegroup = timegroup
-  ), 'data.table')
+  expect_s3_class(
+    group_pts(
+      copy(DT),
+      threshold = threshold,
+      id = id,
+      coords = coords,
+      timegroup = timegroup
+    ),
+    'data.table'
+  )
 
   # geometry
-  expect_s3_class(group_pts(
-    copy(DT),
-    threshold = threshold,
-    id = id,
-    timegroup = timegroup
-  ), 'data.table')
+  expect_s3_class(
+    group_pts(
+      copy(DT),
+      threshold = threshold,
+      id = id,
+      timegroup = timegroup
+    ),
+    'data.table'
+  )
 })
 
 

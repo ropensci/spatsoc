@@ -136,14 +136,15 @@
 #' )
 #'
 randomizations <- function(
-    DT = NULL,
-    type = NULL,
-    id = NULL,
-    group = NULL,
-    coords = NULL,
-    datetime = NULL,
-    splitBy = NULL,
-    iterations = NULL) {
+  DT = NULL,
+  type = NULL,
+  id = NULL,
+  group = NULL,
+  coords = NULL,
+  datetime = NULL,
+  splitBy = NULL,
+  iterations = NULL
+) {
   # due to NSE notes in R CMD check
   randomID <- jul <- randomJul <- rowID <- iteration <- observed <- NULL
 
@@ -167,8 +168,10 @@ randomizations <- function(
 
   assert_inherits(iterations, c('numeric', 'integer'))
 
-  if (length(datetime) == 1 &&
-      any(class(DT[[datetime]]) %in% c('POSIXct', 'POSIXt'))) {
+  if (
+    length(datetime) == 1 &&
+      any(class(DT[[datetime]]) %in% c('POSIXct', 'POSIXt'))
+  ) {
     dateFormatted <- TRUE
   } else {
     dateFormatted <- FALSE
@@ -211,7 +214,7 @@ randomizations <- function(
   repDT <- DT[, .SD, .SDcols = selCols][rep(1:.N, iterations + 1)]
   repDT[, rowID := .GRP, by = c(selCols)]
 
-  if (any(repDT[, .N , by = rowID]$N != iterations + 1)) {
+  if (any(repDT[, .N, by = rowID]$N != iterations + 1)) {
     warning('found non-unique rows of id, datetime (and splitBy)')
   }
 
@@ -228,8 +231,12 @@ randomizations <- function(
       splitBy <- c(datetime, 'iteration', splitBy)
     }
 
-    repDT[!(observed), randomID := .SD[sample(.N, size = .N)],
-          by = splitBy, .SDcols = id]
+    repDT[
+      !(observed),
+      randomID := .SD[sample(.N, size = .N)],
+      by = splitBy,
+      .SDcols = id
+    ]
 
     repDT[(observed), randomID := .SD, .SDcols = id]
 
@@ -248,12 +255,14 @@ randomizations <- function(
       splitBy <- c('jul', 'iteration', 'observed', splitBy)
     }
 
-    idDays[, randomID := .SD[sample(.N, size = .N)], by = c(splitBy),
-           .SDcols = id]
+    idDays[,
+      randomID := .SD[sample(.N, size = .N)],
+      by = c(splitBy),
+      .SDcols = id
+    ]
     idDays[(observed), randomID := .SD[[1]], .SDcols = id]
 
     return(merge(repDT, idDays, by = c(splitBy, id), all = TRUE))
-
   } else if (type == 'trajectory') {
     if (is.null(splitBy)) {
       splitBy <- c(id, 'iteration')
@@ -271,13 +280,16 @@ randomizations <- function(
     )
 
     randomDateCol <- paste0('random', datetime)
-    merged[, (randomDateCol) :=
-             as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
-           .SDcols = datetime]
+    merged[,
+      (randomDateCol) := as.POSIXct(.SD[[1]] + (86400 * (randomJul - jul))),
+      .SDcols = datetime
+    ]
 
-    merged[(observed),
-           c(randomDateCol, 'randomJul') := .SD,
-           .SDcols = c(datetime, 'jul')]
+    merged[
+      (observed),
+      c(randomDateCol, 'randomJul') := .SD,
+      .SDcols = c(datetime, 'jul')
+    ]
 
     return(merged)
   }

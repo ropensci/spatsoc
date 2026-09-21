@@ -175,10 +175,11 @@
 #' )
 #' print(dyad_directions[, .SD[1:3], by = zone])
 edge_zones <- function(
-    edges = NULL,
-    zone_thresholds = NULL,
-    zone_labels = NULL,
-    blind_volume = NULL) {
+  edges = NULL,
+  zone_thresholds = NULL,
+  zone_labels = NULL,
+  blind_volume = NULL
+) {
   # due to NSE notes in R CMD check
   distance <- direction_dyad <- direction <- direction_dyad_relative <- NULL
   direction <- 'direction'
@@ -198,27 +199,47 @@ edge_zones <- function(
     data.table::set(edges, j = out_col, value = NULL)
   }
 
-  edges[, (out_col) := cut(distance, breaks = c(0, zone_thresholds),
-                           labels = c(zone_labels))]
+  edges[,
+    (out_col) := cut(
+      distance,
+      breaks = c(0, zone_thresholds),
+      labels = c(zone_labels)
+    )
+  ]
 
   if (!is.null(blind_volume)) {
     assert_are_colnames(edges, direction_dyad, ', did you use edge_direction?')
     assert_are_colnames(edges, direction, ', did you use direction_step?')
-    assert_col_inherits(edges, direction_dyad, 'units', ', did you use direction_step?')
-    assert_col_inherits(edges, direction, 'units', ', did you use direction_step?')
+    assert_col_inherits(
+      edges,
+      direction_dyad,
+      'units',
+      ', did you use direction_step?'
+    )
+    assert_col_inherits(
+      edges,
+      direction,
+      'units',
+      ', did you use direction_step?'
+    )
     assert_col_radians(edges, direction_dyad, ', did you use edge_direction?')
     assert_col_radians(edges, direction, ', did you use edge_direction?')
 
-    edges[, direction_dyad_relative :=
-            diff_rad(direction, direction_dyad, signed = TRUE)]
+    edges[,
+      direction_dyad_relative := diff_rad(
+        direction,
+        direction_dyad,
+        signed = TRUE
+      )
+    ]
 
-    edges[abs(direction_dyad_relative) > blind_volume & !is.na(get(out_col)),
-          (out_col) := 'blind']
+    edges[
+      abs(direction_dyad_relative) > blind_volume & !is.na(get(out_col)),
+      (out_col) := 'blind'
+    ]
 
     data.table::set(edges, j = 'direction_dyad_relative', value = NULL)
-
   }
 
   return(edges)
-
 }

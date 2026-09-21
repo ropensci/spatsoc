@@ -107,16 +107,17 @@
 #'                       id = 'ID', coords = c('X', 'Y'))
 #' print(areaDT)
 group_polys <- function(
-    DT = NULL,
-    area = NULL,
-    hrType = NULL,
-    hrParams = NULL,
-    crs = NULL,
-    id = NULL,
-    coords = NULL,
-    splitBy = NULL,
-    sfPolys = NULL,
-    projection = NULL) {
+  DT = NULL,
+  area = NULL,
+  hrType = NULL,
+  hrParams = NULL,
+  crs = NULL,
+  id = NULL,
+  coords = NULL,
+  splitBy = NULL,
+  sfPolys = NULL,
+  projection = NULL
+) {
   # due to NSE notes in R CMD check
   nBy <- ..coords <- ..id <- withinGroup <- group <- outGroup <- NULL
 
@@ -163,20 +164,19 @@ group_polys <- function(
       dimnames(inter) <- list(sfPolys[[id]], sfPolys[[id]])
       g <- igraph::graph_from_adjacency_matrix(inter)
       ovr <- igraph::components(g)$membership
-      out <- data.table::data.table(names(ovr),
-                                    as.integer(unlist(ovr)))
+      out <- data.table::data.table(names(ovr), as.integer(unlist(ovr)))
       data.table::setnames(out, c(id, 'group'))
       if (input == 'DT') {
         DT[out, group := group, on = c(id)]
         return(DT)
-      } else if (input == 'sfPolys'){
+      } else if (input == 'sfPolys') {
         return(out)
       }
     } else if (area) {
       if (any(grepl(' ', sfPolys[[id]]))) {
         stop('please ensure IDs do not contain spaces')
       }
-      if (! 'area' %in% colnames(sfPolys)) {
+      if (!'area' %in% colnames(sfPolys)) {
         stop('please ensure column "area" present in input DT or sfPolys')
       }
       sf::st_agr(sfPolys) <- 'constant'
@@ -186,22 +186,27 @@ group_polys <- function(
         ID1 = inter[[id]],
         ID2 = inter[[paste0(id, '.1')]],
         area = areas,
-        area_ID1 = units::as_units(inter[['area']], units(areas),
-                                   set_units_mode = 'standard')
+        area_ID1 = units::as_units(
+          inter[['area']],
+          units(areas),
+          set_units_mode = 'standard'
+        )
       )
-      data.table::set(out_inter, j = 'proportion',
-          value = units::set_units(
-            out_inter[['area']] / out_inter[['area_ID1']],
-            'percent')
+      data.table::set(
+        out_inter,
+        j = 'proportion',
+        value = units::set_units(
+          out_inter[['area']] / out_inter[['area_ID1']],
+          'percent'
+        )
       )
-      data.table::set(out_inter, j = 'area_ID1',  value = NULL)
+      data.table::set(out_inter, j = 'area_ID1', value = NULL)
 
       disjointed <- data.frame(sf::st_disjoint(sfPolys))
       out_disjointed <- data.frame(
         ID1 = sfPolys[[id]][disjointed$row.id],
         ID2 = sfPolys[[id]][disjointed$col.id],
-        area = rep(units::as_units(0, units(out_inter$area)),
-                   nrow(disjointed)),
+        area = rep(units::as_units(0, units(out_inter$area)), nrow(disjointed)),
         proportion = rep(units::set_units(0, 'percent'), nrow(disjointed))
       )
       out <- rbind(out_inter, out_disjointed)
@@ -223,38 +228,43 @@ group_polys <- function(
         data.table::set(DT, j = 'group', value = NULL)
       }
       ovrDT <-
-        DT[nBy > 5, {
-          try(
-            sfPolys <-
-              build_polys(
-                DT = .SD,
-                crs = crs,
-                hrType = hrType,
-                hrParams = hrParams,
-                coords = ..coords,
-                id = ..id,
-                splitBy = NULL,
-                spPts = NULL
-              ),
-            silent = TRUE
-          )
-          if (!is.null(sfPolys)) {
-            inter <- sf::st_intersects(sfPolys, sfPolys, sparse = FALSE)
-            dimnames(inter) <- list(sfPolys[[..id]], sfPolys[[..id]])
-            g <- igraph::graph_from_adjacency_matrix(inter)
-            ovr <- igraph::components(g)$membership
-            out <- data.table::data.table(names(ovr),
-                                          as.integer(unlist(ovr)))
-            data.table::setnames(out, c(id, 'withinGroup'))
-            out
-          } else {
-            data.table(ID = get(..id),
-                       withinGroup = NA_integer_)
-          }
-        }, by = c(splitBy), .SDcols = c(coords, id)]
+        DT[
+          nBy > 5,
+          {
+            try(
+              sfPolys <-
+                build_polys(
+                  DT = .SD,
+                  crs = crs,
+                  hrType = hrType,
+                  hrParams = hrParams,
+                  coords = ..coords,
+                  id = ..id,
+                  splitBy = NULL,
+                  spPts = NULL
+                ),
+              silent = TRUE
+            )
+            if (!is.null(sfPolys)) {
+              inter <- sf::st_intersects(sfPolys, sfPolys, sparse = FALSE)
+              dimnames(inter) <- list(sfPolys[[..id]], sfPolys[[..id]])
+              g <- igraph::graph_from_adjacency_matrix(inter)
+              ovr <- igraph::components(g)$membership
+              out <- data.table::data.table(names(ovr), as.integer(unlist(ovr)))
+              data.table::setnames(out, c(id, 'withinGroup'))
+              out
+            } else {
+              data.table(ID = get(..id), withinGroup = NA_integer_)
+            }
+          },
+          by = c(splitBy),
+          .SDcols = c(coords, id)
+        ]
       DT[ovrDT, withinGroup := withinGroup, on = c(id, splitBy)]
-      DT[, group := ifelse(is.na(withinGroup), NA_integer_, .GRP),
-         by = c(splitBy, 'withinGroup')]
+      DT[,
+        group := ifelse(is.na(withinGroup), NA_integer_, .GRP),
+        by = c(splitBy, 'withinGroup')
+      ]
       data.table::set(DT, j = c('withinGroup', 'nBy'), value = NULL)
       if (DT[is.na(group), .N] > 0) {
         warning(
@@ -272,70 +282,90 @@ group_polys <- function(
         stop('please ensure IDs do not contain spaces')
       }
       outDT <-
-        DT[nBy > 5, {
-          try(
-            sfPolys <-
-              build_polys(
-                DT = .SD,
-                crs = crs,
-                hrType = hrType,
-                hrParams = hrParams,
-                id = ..id,
-                coords = ..coords,
-                splitBy = NULL,
-                spPts = NULL
-              ),
-            silent = TRUE
-          )
-          if (!is.null(sfPolys)) {
-            sf::st_agr(sfPolys) <- 'constant'
-            inter <- sf::st_intersection(sfPolys, sfPolys)
-            areas <- sf::st_area(inter)
-            out_inter <- data.table::data.table(
-              ID1 = inter[[id]],
-              ID2 = inter[[paste0(id, '.1')]],
-              area = areas,
-              area_ID1 = units::as_units(inter[['area']], units(areas),
-                                         set_units_mode = 'standard')
+        DT[
+          nBy > 5,
+          {
+            try(
+              sfPolys <-
+                build_polys(
+                  DT = .SD,
+                  crs = crs,
+                  hrType = hrType,
+                  hrParams = hrParams,
+                  id = ..id,
+                  coords = ..coords,
+                  splitBy = NULL,
+                  spPts = NULL
+                ),
+              silent = TRUE
             )
-            data.table::set(out_inter, j = 'proportion',
+            if (!is.null(sfPolys)) {
+              sf::st_agr(sfPolys) <- 'constant'
+              inter <- sf::st_intersection(sfPolys, sfPolys)
+              areas <- sf::st_area(inter)
+              out_inter <- data.table::data.table(
+                ID1 = inter[[id]],
+                ID2 = inter[[paste0(id, '.1')]],
+                area = areas,
+                area_ID1 = units::as_units(
+                  inter[['area']],
+                  units(areas),
+                  set_units_mode = 'standard'
+                )
+              )
+              data.table::set(
+                out_inter,
+                j = 'proportion',
                 value = units::set_units(
                   out_inter[['area']] / out_inter[['area_ID1']],
-                  'percent')
-            )
-            data.table::set(out_inter, j = 'area_ID1',  value = NULL)
-            data.table::set(out_inter, j = 'proportion',
-                i = which(unclass(out_inter$proportion) > 100),
-                value = units::set_units(100, 'percent'))
-
-            disjointed <- data.frame(sf::st_disjoint(sfPolys))
-            out_disjointed <- data.frame(
-              ID1 = sfPolys[[id]][disjointed$row.id],
-              ID2 = sfPolys[[id]][disjointed$col.id],
-              area = rep(
-                units::as_units(0, units(out_inter$area)),
-                nrow(disjointed)
-              ),
-              proportion = rep(
-                units::set_units(0, 'percent'),
-                nrow(disjointed)
+                  'percent'
+                )
               )
-            )
-            out <- rbind(out_inter, out_disjointed)
+              data.table::set(out_inter, j = 'area_ID1', value = NULL)
+              data.table::set(
+                out_inter,
+                j = 'proportion',
+                i = which(unclass(out_inter$proportion) > 100),
+                value = units::set_units(100, 'percent')
+              )
 
-            data.table::setcolorder(out,
-                                    c('ID1', 'ID2', 'area', 'proportion'))
-            out
-          } else {
-            out <- data.table(ID = get(..id),
-                              ID2 = NA_character_,
-                              NA_real_,
-                              NA_real_)
-            data.table::setnames(out, c(..id, paste0(..id, '2'),
-                            'area', 'proportion'))
-            out
-          }
-        }, by = c(splitBy), .SDcols = c(coords, id)]
+              disjointed <- data.frame(sf::st_disjoint(sfPolys))
+              out_disjointed <- data.frame(
+                ID1 = sfPolys[[id]][disjointed$row.id],
+                ID2 = sfPolys[[id]][disjointed$col.id],
+                area = rep(
+                  units::as_units(0, units(out_inter$area)),
+                  nrow(disjointed)
+                ),
+                proportion = rep(
+                  units::set_units(0, 'percent'),
+                  nrow(disjointed)
+                )
+              )
+              out <- rbind(out_inter, out_disjointed)
+
+              data.table::setcolorder(
+                out,
+                c('ID1', 'ID2', 'area', 'proportion')
+              )
+              out
+            } else {
+              out <- data.table(
+                ID = get(..id),
+                ID2 = NA_character_,
+                NA_real_,
+                NA_real_
+              )
+              data.table::setnames(
+                out,
+                c(..id, paste0(..id, '2'), 'area', 'proportion')
+              )
+              out
+            }
+          },
+          by = c(splitBy),
+          .SDcols = c(coords, id)
+        ]
       dropped <-
         unique(DT[nBy <= 5, .SD, .SDcols = c(splitBy, id)])
       out <- data.table::rbindlist(list(dropped, outDT), fill = TRUE)

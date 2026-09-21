@@ -77,10 +77,10 @@
 #' direction_step(DT, id = 'ID')
 #' direction_polarization(DT)
 direction_polarization <- function(
-    DT,
-    direction = 'direction',
-    group = 'group') {
-
+  DT,
+  direction = 'direction',
+  group = 'group'
+) {
   assert_not_null(DT)
   assert_is_data_table(DT)
   assert_not_null(direction)
@@ -97,11 +97,11 @@ direction_polarization <- function(
     data.table::set(DT, j = out, value = NULL)
   }
 
-  DT[, out :=  CircStats::r.test(as.numeric(dir), degree = FALSE)$r.bar,
-     by = c(group),
-     env = list(dir = direction, out = out)]
+  DT[,
+    out := CircStats::r.test(as.numeric(dir), degree = FALSE)$r.bar,
+    by = c(group),
+    env = list(dir = direction, out = out)
+  ]
 
   return(DT[])
 }
-
-

@@ -12,8 +12,13 @@ timegroup <- 'timegroup'
 
 group_times(DT, 'datetime', '10 minutes')
 get_geometry(DT, coords = coords, crs = utm)
-get_geometry(DT, coords = coords, crs = utm, output_crs = 4326,
-             geometry_colname = 'geometry_longlat')
+get_geometry(
+  DT,
+  coords = coords,
+  crs = utm,
+  output_crs = 4326,
+  geometry_colname = 'geometry_longlat'
+)
 coords_longlat <- paste0(coords, '_longlat')
 DT[, (coords_longlat) := data.frame(sf::st_coordinates(geometry_longlat))]
 
@@ -165,75 +170,97 @@ test_that('warns about splitBy column', {
 
 test_that('threshold correctly provided or error detected', {
   expect_error(
-    edge_nn(DT,
-      threshold = -10, timegroup = timegroup, id = id,
+    edge_nn(
+      DT,
+      threshold = -10,
+      timegroup = timegroup,
+      id = id,
       coords = coords
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_nn(DT,
-      threshold = 0, timegroup = timegroup, id = id,
-      coords = coords
-    ),
+    edge_nn(DT, threshold = 0, timegroup = timegroup, id = id, coords = coords),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_nn(DT,
-      threshold = '0', timegroup = timegroup, id = id,
+    edge_nn(
+      DT,
+      threshold = '0',
+      timegroup = timegroup,
+      id = id,
       coords = coords
     ),
     'threshold must be of class numeric'
   )
 
   expect_error(
-    edge_nn(DT,
-              threshold = -10, timegroup = timegroup, id = id,
-              coords = coords, crs = utm
+    edge_nn(
+      DT,
+      threshold = -10,
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_nn(DT,
-              threshold = 0, timegroup = timegroup, id = id,
-              coords = coords, crs = utm
+    edge_nn(
+      DT,
+      threshold = 0,
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_nn(DT,
-              threshold = '0', timegroup = timegroup, id = id,
-              coords = coords, crs = utm
+    edge_nn(
+      DT,
+      threshold = '0',
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be of class numeric'
   )
 
   expect_error(
-    edge_nn(DT,
-              threshold = units::as_units(-1, 'm'),
-              timegroup = timegroup, id = id,
-              coords = coords, crs = utm
+    edge_nn(
+      DT,
+      threshold = units::as_units(-1, 'm'),
+      timegroup = timegroup,
+      id = id,
+      coords = coords,
+      crs = utm
     ),
     'threshold must be > 0'
   )
 
   # geometry
   expect_error(
-    edge_nn(DT,
-              threshold = units::as_units(-1, 'm'),
-              timegroup = timegroup, id = id
+    edge_nn(
+      DT,
+      threshold = units::as_units(-1, 'm'),
+      timegroup = timegroup,
+      id = id
     ),
     'threshold must be > 0'
   )
 
   expect_error(
-    edge_nn(DT,
-              threshold = units::as_units(100, 'km'),
-              timegroup = timegroup, id = id
+    edge_nn(
+      DT,
+      threshold = units::as_units(100, 'km'),
+      timegroup = timegroup,
+      id = id
     ),
     'units of threshold'
   )
@@ -368,7 +395,6 @@ test_that('returned columns match', {
   expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
   expect_false('distance' %in% colnames(eDT))
 
-
   eDT <- edge_nn(
     copyDT,
     id = id,
@@ -378,7 +404,6 @@ test_that('returned columns match', {
   )
 
   expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
-
 
   eDT <- edge_nn(
     copyDT,
@@ -416,7 +441,6 @@ test_that('returned columns match', {
   expect_true(all(c('ID', 'NN') %in% colnames(eDT)))
   expect_false('distance' %in% colnames(eDT))
 
-
   eDT <- edge_nn(
     copyDT,
     id = id,
@@ -425,7 +449,6 @@ test_that('returned columns match', {
   )
 
   expect_true(all(c('ID', 'NN', 'distance') %in% colnames(eDT)))
-
 
   eDT <- edge_nn(
     copyDT,
@@ -557,30 +580,38 @@ test_that('NAs exist in NN when threshold provided', {
 
   expect_gt(eDT[is.na(NN), .N], 0)
   expect_all_true(eDT[is.na(NN), is.na(distance)])
-
 })
 
 test_that('returns a data.table', {
   # coords
-  expect_s3_class(edge_nn(
-    DT,
-    id = id,
-    coords = coords,
-    timegroup = timegroup
-  ), 'data.table')
+  expect_s3_class(
+    edge_nn(
+      DT,
+      id = id,
+      coords = coords,
+      timegroup = timegroup
+    ),
+    'data.table'
+  )
 
   # geometry
-  expect_s3_class(edge_nn(
-    DT,
-    id = id,
-    timegroup = timegroup
-  ), 'data.table')
+  expect_s3_class(
+    edge_nn(
+      DT,
+      id = id,
+      timegroup = timegroup
+    ),
+    'data.table'
+  )
 
   # geometry
-  expect_s3_class(edge_nn(
-    DT,
-    id = id,
-    timegroup = timegroup,
-    geometry = 'geometry_longlat'
-  ), 'data.table')
+  expect_s3_class(
+    edge_nn(
+      DT,
+      id = id,
+      timegroup = timegroup,
+      geometry = 'geometry_longlat'
+    ),
+    'data.table'
+  )
 })

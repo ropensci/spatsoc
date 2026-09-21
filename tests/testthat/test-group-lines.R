@@ -90,7 +90,6 @@ test_that('coords, id, crs provided and proper format', {
     ),
     'sortBy must be provided'
   )
-
 })
 
 
@@ -125,7 +124,6 @@ test_that('column names must exist in DT', {
 })
 
 
-
 test_that('timegroup is correctly provided but is not required', {
   copyDT <- copy(DT)
   # to avoid block length warning
@@ -143,10 +141,12 @@ test_that('timegroup is correctly provided but is not required', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'potato field', fixed = FALSE
+    'potato field',
+    fixed = FALSE
   )
 
-  expect_true(inherits(group_lines(
+  expect_true(inherits(
+    group_lines(
       DT = copyDT,
       threshold = 10,
       timegroup = NULL,
@@ -154,10 +154,10 @@ test_that('timegroup is correctly provided but is not required', {
       coords = c('X', 'Y'),
       crs = utm,
       sortBy = 'datetime'
-    ), 'data.table')
-  )
+    ),
+    'data.table'
+  ))
 })
-
 
 
 test_that('threshold is correctly provided, or error', {
@@ -242,9 +242,9 @@ test_that('group lines returns a single warning for <2 locs', {
       crs = utm,
       sortBy = 'datetime'
     ),
-    'some rows were dropped, cannot build a line with', fixed = FALSE
+    'some rows were dropped, cannot build a line with',
+    fixed = FALSE
   )
-
 })
 
 test_that('group column is added to result or NA if < 2 locs', {
@@ -255,18 +255,20 @@ test_that('group column is added to result or NA if < 2 locs', {
   )
   copyDT[, N := .N, by = .(ID, timegroup)]
 
-  expect_true('group' %in%
-                colnames(
-                  group_lines(
-                    DT = copyDT[N > 2],
-                    threshold = 10,
-                    timegroup = 'timegroup',
-                    id = 'ID',
-                    coords = c('X', 'Y'),
-                    crs = utm,
-                    sortBy = 'datetime'
-                  )
-                ))
+  expect_true(
+    'group' %in%
+      colnames(
+        group_lines(
+          DT = copyDT[N > 2],
+          threshold = 10,
+          timegroup = 'timegroup',
+          id = 'ID',
+          coords = c('X', 'Y'),
+          crs = utm,
+          sortBy = 'datetime'
+        )
+      )
+  )
 
   copyDT <- copy(DT)
   copyDT[1, ID := 'Z']
@@ -278,8 +280,9 @@ test_that('group column is added to result or NA if < 2 locs', {
       coords = c('X', 'Y'),
       crs = utm,
       sortBy = 'datetime'
-    )[is.na(group), .N] != 0)
-  )
+    )[is.na(group), .N] !=
+      0
+  ))
 
   copyDT <- DT[, .SD[1], by = ID]
   expect_true(suppressWarnings(
@@ -290,8 +293,9 @@ test_that('group column is added to result or NA if < 2 locs', {
       coords = c('X', 'Y'),
       crs = utm,
       sortBy = 'datetime'
-    )[is.na(group), .N] != 0)
-  )
+    )[is.na(group), .N] !=
+      0
+  ))
 })
 
 test_that('only one column added to the result DT', {
@@ -302,18 +306,20 @@ test_that('only one column added to the result DT', {
   )
   copyDT[, N := .N, by = .(ID, timegroup)]
 
-  expect_equal(ncol(copyDT[N > 2]) + 1,
-               ncol(
-                 group_lines(
-                   DT = copyDT[N > 2],
-                   threshold = 10,
-                   timegroup = 'timegroup',
-                   id = 'ID',
-                   coords = c('X', 'Y'),
-                   crs = utm,
-                   sortBy = 'datetime'
-                 )
-               ))
+  expect_equal(
+    ncol(copyDT[N > 2]) + 1,
+    ncol(
+      group_lines(
+        DT = copyDT[N > 2],
+        threshold = 10,
+        timegroup = 'timegroup',
+        id = 'ID',
+        coords = c('X', 'Y'),
+        crs = utm,
+        sortBy = 'datetime'
+      )
+    )
+  )
 })
 
 test_that('no rows are added to the result DT', {
@@ -324,18 +330,20 @@ test_that('no rows are added to the result DT', {
   )
   copyDT[, N := .N, by = .(ID, timegroup)]
   copyDT <- copyDT[N > 2]
-  expect_equal(nrow(copyDT),
-               nrow(
-                 group_lines(
-                   DT = copyDT,
-                   threshold = 10,
-                   timegroup = 'timegroup',
-                   id = 'ID',
-                   coords = c('X', 'Y'),
-                   crs = utm,
-                   sortBy = 'datetime'
-                 )
-               ))
+  expect_equal(
+    nrow(copyDT),
+    nrow(
+      group_lines(
+        DT = copyDT,
+        threshold = 10,
+        timegroup = 'timegroup',
+        id = 'ID',
+        coords = c('X', 'Y'),
+        crs = utm,
+        sortBy = 'datetime'
+      )
+    )
+  )
 })
 
 
@@ -346,17 +354,20 @@ test_that('withinGroup is not returned to the user', {
     group_times(copyDT, datetime = 'datetime', threshold = '14 days')
   )
   copyDT[, N := .N, by = .(ID, timegroup)]
-  expect_false('withinGroup' %in% colnames(
-    group_lines(
-      DT = copyDT[N > 2],
-      threshold = 10,
-      timegroup = 'timegroup',
-      id = 'ID',
-      coords = c('X', 'Y'),
-      crs = utm,
-      sortBy = 'datetime'
-    )
-  ))
+  expect_false(
+    'withinGroup' %in%
+      colnames(
+        group_lines(
+          DT = copyDT[N > 2],
+          threshold = 10,
+          timegroup = 'timegroup',
+          id = 'ID',
+          coords = c('X', 'Y'),
+          crs = utm,
+          sortBy = 'datetime'
+        )
+      )
+  )
 })
 
 test_that('only 1 unique timegroup * splitBy', {
@@ -373,17 +384,19 @@ test_that('only 1 unique timegroup * splitBy', {
     splitBy = 'yr',
     sortBy = 'datetime'
   )
-  expect_equal(copyDT[, .(uniqueMonths = uniqueN(mnth)),
-                      by = .(group)][, max(uniqueMonths)],
-               1)
+  expect_equal(
+    copyDT[, .(uniqueMonths = uniqueN(mnth)), by = .(group)][, max(
+      uniqueMonths
+    )],
+    1
+  )
 
-  expect_equal(copyDT[, .(uniqueYears = uniqueN(yr)),
-                      by = .(group)][, max(uniqueYears)],
-               1)
-
+  expect_equal(
+    copyDT[, .(uniqueYears = uniqueN(yr)), by = .(group)][, max(uniqueYears)],
+    1
+  )
 })
 # or uniquen(.SD, by = c(id, splitBy))
-
 
 test_that('group column succesfully detected', {
   copyDT <- copy(DT)[, group := 1]
@@ -430,7 +443,6 @@ test_that('group column succesfully detected', {
 #   crs = utm
 # )
 
-
 test_that('sfLines provided must be an sf LINESTRING', {
   expect_error(
     group_lines(sfLines = DT, threshold = 10, id = 'ID'),
@@ -472,18 +484,23 @@ test_that('sfLines provided returns data.table', {
   )
 
   expect_true(
-    inherits(group_lines(sfLines = sfLines, threshold = 10, id = 'ID'), 'data.table')
+    inherits(
+      group_lines(sfLines = sfLines, threshold = 10, id = 'ID'),
+      'data.table'
+    )
   )
 
   expect_true(
-    inherits(group_lines(sfLines = sfLines, threshold = 0, id = 'ID'), 'data.table')
+    inherits(
+      group_lines(sfLines = sfLines, threshold = 0, id = 'ID'),
+      'data.table'
+    )
   )
 
   expect_equal(
     nrow(group_lines(sfLines = sfLines, threshold = 10, id = 'ID')),
     nrow(sfLines)
   )
-
 })
 
 
@@ -510,7 +527,6 @@ test_that('splitBy argument doesnt use splitBy column', {
 })
 
 
-
 test_that('group_lines can accomodate NULL timegroup and non null splitBy', {
   copyDT <- copy(DT)
   copyDT[, yr := year(datetime)]
@@ -525,10 +541,10 @@ test_that('group_lines can accomodate NULL timegroup and non null splitBy', {
       timegroup = NULL,
       splitBy = 'yr',
       sortBy = 'datetime'
-    ) |> colnames(),
+    ) |>
+      colnames(),
     'group'
   )
-
 })
 
 

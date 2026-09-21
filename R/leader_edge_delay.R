@@ -125,9 +125,10 @@
 #' )
 #' print(leadership)
 leader_edge_delay <- function(
-    edges = NULL,
-    threshold = NULL,
-    splitBy = NULL) {
+  edges = NULL,
+  threshold = NULL,
+  splitBy = NULL
+) {
   # Due to NSE notes
   . <- direction_diff <- direction_delay <- mean_direction_delay <-
     mean_direction_delay_dyad <- NULL
@@ -139,10 +140,18 @@ leader_edge_delay <- function(
 
   check_cols <- c(direction_delay, direction_diff, 'ID1', 'ID2', splitBy)
   assert_are_colnames(edges, check_cols, ', did you use edge_delay?')
-  assert_col_inherits(edges, direction_delay, 'integer',
-                      ', did you use edge_delay?')
-  assert_col_inherits(edges, direction_diff, 'numeric',
-                      ', did you use edge_delay?')
+  assert_col_inherits(
+    edges,
+    direction_delay,
+    'integer',
+    ', did you use edge_delay?'
+  )
+  assert_col_inherits(
+    edges,
+    direction_diff,
+    'numeric',
+    ', did you use edge_delay?'
+  )
 
   if (is.null(threshold)) {
     threshold <- Inf
@@ -154,10 +163,13 @@ leader_edge_delay <- function(
 
   out <- subset_threshold[,
     .(mean_direction_delay_dyad = mean(direction_delay, na.rm = TRUE)),
-    by = c('ID1', 'ID2', 'dyadID', splitBy)]
+    by = c('ID1', 'ID2', 'dyadID', splitBy)
+  ]
 
-  out[, mean_direction_delay := mean(mean_direction_delay_dyad, na.rm = TRUE),
-      by = c('ID1', splitBy)]
+  out[,
+    mean_direction_delay := mean(mean_direction_delay_dyad, na.rm = TRUE),
+    by = c('ID1', splitBy)
+  ]
 
   return(out[])
 }

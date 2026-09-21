@@ -1,8 +1,11 @@
 # Test assert family
 context('test assert_*')
 
-test <- data.table(X = LETTERS, Y = LETTERS,
-                   ANGLE = runif(length(LETTERS), 0, 180))
+test <- data.table(
+  X = LETTERS,
+  Y = LETTERS,
+  ANGLE = runif(length(LETTERS), 0, 180)
+)
 units(test$ANGLE) <- 'degrees'
 
 
@@ -37,8 +40,11 @@ test_that('assert_inherits', {
 
 
 test_that('assert_col_radians', {
-  expect_error(assert_col_radians(test, 'ANGLE',
-                                  ', did you use direction_step?'))
+  expect_error(assert_col_radians(
+    test,
+    'ANGLE',
+    ', did you use direction_step?'
+  ))
 })
 test_that('assert_length', {
   expect_error(assert_length(1:2, 3L))
@@ -57,8 +63,7 @@ test_that('assert_threshold', {
   expect_silent(assert_threshold(1))
   expect_error(assert_threshold(units::as_units(-1, 'm')), '> 0')
   expect_silent(assert_threshold(units::as_units(1, 'degree'), 4326))
-  expect_error(assert_threshold(units::as_units(1, 'm'), 4326),
-               'do not match')
+  expect_error(assert_threshold(units::as_units(1, 'm'), 4326), 'do not match')
   expect_silent(assert_threshold(units::as_units(1, 'm'), 32649))
   expect_silent(assert_threshold(NULL))
   expect_silent(assert_threshold(100, 4326))
@@ -66,6 +71,8 @@ test_that('assert_threshold', {
 })
 
 test_that('assert_units_match', {
-  expect_error(assert_units_match(units::as_units(1, 'm'),
-                                  units::as_units(1, 'km')))
+  expect_error(assert_units_match(
+    units::as_units(1, 'm'),
+    units::as_units(1, 'km')
+  ))
 })

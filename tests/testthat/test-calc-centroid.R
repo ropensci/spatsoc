@@ -10,8 +10,13 @@ crs <- 32736
 crs_longlat <- 4326
 
 get_geometry(DT, coords = coords, crs = crs)
-get_geometry(DT, coords = coords, crs = crs, output_crs = 4326,
-             geometry_colname = 'geometry_longlat')
+get_geometry(
+  DT,
+  coords = coords,
+  crs = crs,
+  output_crs = 4326,
+  geometry_colname = 'geometry_longlat'
+)
 
 DT[, dest_geometry := st_centroid(st_union(geometry))]
 
@@ -59,10 +64,14 @@ test_that('data.table/numeric returned when coords provided, sf when geo', {
 
 test_that('expected dims returned', {
   expect_length(DT[, calc_centroid(geometry)], 1L)
-  expect_length(DT[, calc_centroid(x = X_longlat, y = Y_longlat, crs = crs_longlat)],
-                2L)
-  expect_equal(ncol(DT[, calc_centroid(x = X_longlat, y = Y_longlat, crs = crs_longlat)]),
-               2L)
+  expect_length(
+    DT[, calc_centroid(x = X_longlat, y = Y_longlat, crs = crs_longlat)],
+    2L
+  )
+  expect_equal(
+    ncol(DT[, calc_centroid(x = X_longlat, y = Y_longlat, crs = crs_longlat)]),
+    2L
+  )
 })
 
 test_that('calc_centroid equals st_centroid for mean and length 1 inputs', {
@@ -71,14 +80,18 @@ test_that('calc_centroid equals st_centroid for mean and length 1 inputs', {
   i <- DT[, sample(.I, 1)]
 
   expect_equal(
-    data.frame(setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)],
-                        new = new_nms)),
+    data.frame(setnames(
+      DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)],
+      new = new_nms
+    )),
     data.frame(DT[i, .(X, Y)])
   )
 
   expect_equal(
-    data.frame(setnames(DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = FALSE)],
-                        new = new_nms)),
+    data.frame(setnames(
+      DT[i, calc_centroid(x = X, y = Y, crs = crs, use_mean = FALSE)],
+      new = new_nms
+    )),
     data.frame(DT[i, .(X, Y)])
   )
 
@@ -95,16 +108,30 @@ test_that('calc_centroid equals st_centroid for mean and length 1 inputs', {
   i_seq <- DT[, sample(.I, 100)]
 
   expect_equal(
-    setnames(DT[i_seq, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)], new = new_nms),
+    setnames(
+      DT[i_seq, calc_centroid(x = X, y = Y, crs = crs, use_mean = TRUE)],
+      new = new_nms
+    ),
     data.frame(st_coordinates(
-      st_centroid(st_combine(st_as_sf(DT[i_seq, .(X, Y)], coords = seq.int(2), crs = crs)))
+      st_centroid(st_combine(st_as_sf(
+        DT[i_seq, .(X, Y)],
+        coords = seq.int(2),
+        crs = crs
+      )))
     ))
   )
 
   expect_equal(
-    setnames(DT[i_seq, calc_centroid(x = X, y = Y, crs = NA_crs_, use_mean = TRUE)], new = new_nms),
+    setnames(
+      DT[i_seq, calc_centroid(x = X, y = Y, crs = NA_crs_, use_mean = TRUE)],
+      new = new_nms
+    ),
     data.frame(st_coordinates(
-      st_centroid(st_combine(st_as_sf(DT[i_seq, .(X, Y)], coords = seq.int(2), crs = NA_crs_)))
+      st_centroid(st_combine(st_as_sf(
+        DT[i_seq, .(X, Y)],
+        coords = seq.int(2),
+        crs = NA_crs_
+      )))
     ))
   )
 })
@@ -114,11 +141,19 @@ test_that('crs_use_mean decides as expected', {
   expect_true(crs_use_mean(NA))
   expect_true(crs_use_mean(NULL))
   expect_true(crs_use_mean(32736))
-  expect_false({sf::sf_use_s2(TRUE); crs_use_mean(4326)})
-  expect_true(suppressWarnings({sf::sf_use_s2(FALSE); crs_use_mean(4326)}))
-  expect_warning({sf::sf_use_s2(FALSE); crs_use_mean(4326)})
+  expect_false({
+    sf::sf_use_s2(TRUE)
+    crs_use_mean(4326)
+  })
+  expect_true(suppressWarnings({
+    sf::sf_use_s2(FALSE)
+    crs_use_mean(4326)
+  }))
+  expect_warning({
+    sf::sf_use_s2(FALSE)
+    crs_use_mean(4326)
+  })
 })
-
 
 # These specific test results require recent commits to sf. Save for later.
 # test_that('NAs returned as expected', {

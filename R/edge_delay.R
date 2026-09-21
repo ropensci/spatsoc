@@ -127,15 +127,16 @@
 #'   id = 'ID'
 #' )
 edge_delay <- function(
-    edges,
-    DT,
-    window = NULL,
-    id = NULL,
-    direction = 'direction') {
+  edges,
+  DT,
+  window = NULL,
+  id = NULL,
+  direction = 'direction'
+) {
   # due to NSE notes in R CMD check
   . <- timegroup <- fusionID <- timegroup_min <- timegroup_max <-
-    timegroup_delay <- ID1  <- ID2 <- direction_delay <- direction_diff <-
-    dyadID <- NULL
+    timegroup_delay <- ID1 <- ID2 <- direction_delay <- direction_diff <-
+      dyadID <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
@@ -158,50 +159,69 @@ edge_delay <- function(
   assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
   drop_nas <- data.table::copy(edges)[
-    !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))]
+    !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
+  ]
 
   # "Forward": all edges ID1 -> ID2
   forward <- drop_nas[ID1 == tstrsplit(dyadID, '-')[[1L]]]
 
-  forward[, timegroup_min :=
-            data.table::fifelse(timegroup - window < min(timegroup),
-                                min(timegroup),
-                                timegroup - window),
-          by = fusionID,
-          env = list(window = window)]
+  forward[,
+    timegroup_min := data.table::fifelse(
+      timegroup - window < min(timegroup),
+      min(timegroup),
+      timegroup - window
+    ),
+    by = fusionID,
+    env = list(window = window)
+  ]
 
-  forward[, timegroup_max :=
-            data.table::fifelse(timegroup + window > max(timegroup),
-                                max(timegroup),
-                                timegroup + window),
-          by = fusionID,
-          env = list(window = window)]
+  forward[,
+    timegroup_max := data.table::fifelse(
+      timegroup + window > max(timegroup),
+      max(timegroup),
+      timegroup + window
+    ),
+    by = fusionID,
+    env = list(window = window)
+  ]
 
-  forward[, c('timegroup_delay', 'direction_diff') := {
-    focal_direction <- DT[timegroup == .BY$timegroup &
-                            id == ID1, direction]
-    sub <- DT[between(timegroup, timegroup_min, timegroup_max) & id == ID2,
-              .(timegroup, diff = diff_rad(focal_direction, direction))]
-    sub[which.min(diff)]
-  },
-  by = c('timegroup', 'dyadID'),
-  env = list(id = id, direction = direction)]
+  forward[,
+    c('timegroup_delay', 'direction_diff') := {
+      focal_direction <- DT[
+        timegroup == .BY$timegroup &
+          id == ID1,
+        direction
+      ]
+      sub <- DT[
+        between(timegroup, timegroup_min, timegroup_max) & id == ID2,
+        .(timegroup, diff = diff_rad(focal_direction, direction))
+      ]
+      sub[which.min(diff)]
+    },
+    by = c('timegroup', 'dyadID'),
+    env = list(id = id, direction = direction)
+  ]
 
   forward[, direction_delay := timegroup_delay - timegroup]
 
-  data.table::set(forward,
-                  j = c('timegroup_min', 'timegroup_max','timegroup_delay'),
-                  value = NULL)
+  data.table::set(
+    forward,
+    j = c('timegroup_min', 'timegroup_max', 'timegroup_delay'),
+    value = NULL
+  )
 
   # "Reverse": replicate forward but reverse direction ID1 <- ID2
   reverse <- data.table::copy(forward)
   data.table::setnames(reverse, c('ID1', 'ID2'), c('ID2', 'ID1'))
-  reverse[, direction_delay := - direction_delay]
+  reverse[, direction_delay := -direction_delay]
 
-  out <- data.table::rbindlist(list(
-    forward,
-    reverse
-  ), use.names = TRUE)
+  out <- data.table::rbindlist(
+    list(
+      forward,
+      reverse
+    ),
+    use.names = TRUE
+  )
 
   data.table::setorder(out, timegroup)
   data.table::setcolorder(
@@ -211,4 +231,3 @@ edge_delay <- function(
 
   return(out)
 }
-
