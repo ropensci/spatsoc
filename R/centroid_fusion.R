@@ -1,7 +1,7 @@
 #' Fusion centroid
 #'
-#' `centroid_fusion` calculates the centroid of each timestep in fusion events.
-#' The function expects an edge-list of fusion events identified by
+#' `centroid_fusion` calculates the centroid of each timestep in dyadic fusion
+#' events. The function expects an edge-list of fusion events identified by
 #' [fusion_id()] from edge-lists generated with [edge_dist()] and a `data.table`
 #' with relocation data appended with a `timegroup` column from [group_times()].
 #' Relocation data should be in two columns representing the X and Y
