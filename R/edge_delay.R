@@ -158,6 +158,8 @@ edge_delay <- function(
   assert_are_colnames(edges, 'fusionID', ', did you run fusion_id?')
   assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
+  assert_col_radians(DT, direction, ', did you use direction_step?')
+
   drop_nas <- data.table::copy(edges)[
     !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
   ]
