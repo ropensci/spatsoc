@@ -135,7 +135,7 @@ edge_delay <- function(
 ) {
   # due to NSE notes in R CMD check
   . <- timegroup <- fusionID <- timegroup_min <- timegroup_max <-
-    timegroup_delay <- ID1 <- ID2 <- direction_delay <- direction_diff <-
+    timegroup_delay <- ID1 <- ID2 <- direction_delay <- direction_cor <-
       dyadID <- NULL
 
   assert_not_null(DT)
@@ -186,7 +186,7 @@ edge_delay <- function(
   ]
 
   forward[,
-    c('timegroup_delay', 'direction_diff') := {
+    c('timegroup_delay', 'direction_cor') := {
       focal_direction <- DT[
         timegroup == .BY$timegroup &
           id == ID1,
@@ -194,14 +194,17 @@ edge_delay <- function(
       ]
       sub <- DT[
         between(timegroup, timegroup_min, timegroup_max) & id == ID2,
-        .(timegroup, diff = diff_rad(focal_direction, direction))
+        .(
+          timegroup,
+          direction_cor = cos(focal_direction - direction)
+        )
       ]
-      sub[which.min(diff)]
+      sub[which.max(direction_cor)]
     },
     by = c('timegroup', 'dyadID'),
     env = list(id = id, direction = direction)
   ]
-
+  forward[, direction_cor := units::drop_units(direction_cor)]
   forward[, direction_delay := timegroup_delay - timegroup]
 
   data.table::set(
