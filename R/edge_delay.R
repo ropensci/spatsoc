@@ -12,34 +12,32 @@
 #' you can convert it by reference using [data.table::setDT()].
 #'
 #' The `edges` argument expects a distance based edge-list generated with
-#' `edge_dist`. The `DT` argument expects relocation
-#' data with a timegroup column generated with `group_times`.
+#' `edge_dist`. The `DT` argument expects relocation data with a timegroup
+#' column generated with `group_times` and a distance column generated with
+#' `direction_step`.
 #'
-#' The rows in `edges` and `DT` are internally matched in
-#' `edge_delay` using the columns `timegroup` (from
-#' `group_times`) and `ID1` and `ID2` (in `edges`, from
-#' `dyad_id`) with `id` (in `DT`). This function expects a
-#' `fusionID` present, generated with the `fusion_id` function, and a
-#' `dyadID` present, generated with the `dyad_id` function. The
-#' `id`, and `direction` arguments expect the names of a column in
-#' `DT` which correspond to the id, and direction columns.
+#' The rows in `edges` and `DT` are internally matched in `edge_delay` using the
+#' columns `timegroup` (from `group_times`) and `ID1` and `ID2` (in `edges`,
+#' from `dyad_id`) with `id` (in `DT`). This function expects a `fusionID`
+#' present, generated with the `fusion_id` function, and a `dyadID` present,
+#' generated with the `dyad_id` function. The `id`, and `direction` arguments
+#' expect the names of a column in `DT` which correspond to the id, and
+#' direction columns.
 #'
 #' @inheritParams centroid_fusion
 #' @inheritParams direction_group
 #' @param window temporal window in unit of timegroup column generated with
-#'   `group_times`, eg. `window = 4` corresponds to the 4 timegroups
-#'   before and after the focal observation
+#'   `group_times`, eg. `window = 2` corresponds to the timegroups shifted by
+#'   -2, -1, 0, 1, and 2 around each focal timegroup.
 #'
 #' @return `edge_delay` returns the input `edges` appended with a
 #'   'direction_delay' column indicating the temporal delay (in units of
 #'   timegroups) at which ID1's direction of movement is most similar to ID2's
-#'   direction of movement, within the temporal window defined, and a
-#'   'direction_cor' column indicating the dot product of movement directions.
-#'   For example, if focal individual 'A' moves in a 45 degree direction at time
-#'   2 and individual 'B' moves in a most similar direction within the window at
-#'   time 5, the directional correlation delay between A and B is 3. Positive
-#'   values of directional correlation delay indicate a directed leadership edge
-#'   from ID1 to ID2.
+#'   direction of movement within the temporal window defined, and a
+#'   'direction_cor' column indicating the similarity in movement direction. The
+#'   directional similarity returned in the column 'direction_cor' is the dot
+#'   product of the movement directions, or equivalently, the cosine of the
+#'   difference in movement directions.
 #'
 #'  Note: due to the merge required within this function, the output needs to be
 #'  reassigned unlike some other `spatsoc` functions like `dyad_id`. See details
@@ -107,15 +105,13 @@
 #' # Generate fusion id
 #' fusion_id(edges, threshold = 100)
 #'
-#' # Directional correlation delay
+#' # Momentary temporal delay and direction correlation
 #' delay <- edge_delay(
 #'   edges = edges,
 #'   DT = DT,
 #'   window = 3,
 #'   id = 'ID'
 #' )
-#'
-#' delay[, mean(direction_delay, na.rm = TRUE), by = .(ID1, ID2)][V1 > 0]
 #'
 #' # Or, using the new geometry interface
 #' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
