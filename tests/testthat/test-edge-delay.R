@@ -234,12 +234,9 @@ test_that('forward/reverse are equal', {
   swap_delay <- edge_delay(swap_edges, DT, window, id)
   delay <- edge_delay(edges, DT, window, id)
 
-  swap_leader <- leader_edge_delay(swap_delay)
-  leader <- leader_edge_delay(delay)
-
   expect_equal(
-    swap_leader[order(dyadID, ID1)],
-    leader[order(dyadID, ID1)]
+    swap_delay[order(dyadID, ID1)],
+    delay[order(dyadID, ID1)]
   )
 })
 
@@ -272,8 +269,6 @@ fusion_id(edge_expect, threshold = 100)
 
 window <- 5
 delay_expect <- edge_delay(edge_expect, DT_expect, window = window, id = id)
-
-leader_expect <- leader_edge_delay(delay_expect)
 
 test_that('expected results are returned', {
   expect_lte(nrow(delay_expect), nrow(edge_expect))
