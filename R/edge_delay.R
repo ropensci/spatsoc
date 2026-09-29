@@ -53,12 +53,13 @@
 #' (\doi{doi:10.1038/nature08891}). Nagy et al. 2010's version measures the
 #' global delay across the sampling period between two individuals. This
 #' function, `edge_delay`, implements the version described in Quera 2023
-#' (\doi{doi:10.1111/jfb.15315}) as the momentary delay at each timestep.
+#' (\doi{doi:10.1111/jfb.15315}) as the momentary temporal delay that maximizes
+#' the direction correlation at each timestep.
 #'
 #' See examples of measuring the directional correlation delay:
+#'  * \doi{doi:10.1111/jfb.15315}
 #'  * \doi{doi:10.1016/j.anbehav.2013.07.005}
 #'  * \doi{doi:10.1073/pnas.1305552110}
-#'  * \doi{doi:10.1111/jfb.15315}
 #'  * \doi{doi:10.1371/journal.pcbi.1003446}
 #'
 #' @family Edge-list generation
