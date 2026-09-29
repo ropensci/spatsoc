@@ -106,7 +106,7 @@ test_that('no rows are added to the result edges', {
 test_that('column added to the result DT', {
   copyEdges <- copy(edges)
 
-  expected_cols <- c(colnames(copyEdges), 'direction_delay', 'direction_diff')
+  expected_cols <- c(colnames(copyEdges), 'direction_delay', 'direction_cor')
 
   expect_setequal(
     expected_cols,
