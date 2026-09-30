@@ -1,5 +1,5 @@
-# Test leader_edge_delay
-context('test leader_edge_delay')
+# Test leader_direction_delay
+context('test leader_direction_delay')
 
 library(spatsoc)
 
@@ -29,44 +29,50 @@ edges <- edge_dist(
 )
 dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 fusion_id(edges, threshold = threshold)
-delay <- edge_delay(edges, DT, id = id, window = window)
-leader_delay <- leader_edge_delay(delay, threshold = 0.5)
+leader_delay <- leader_direction_delay(
+  edges = edges,
+  DT = DT,
+  window = 3,
+  id = 'ID',
+  splitBy = 'dyadID'
+)
 
-# leader_edge_delay(edges = edges, threshold = 0.5, splitBy = 'population')
+# leader_direction_delay(edges = edges, DT = DT, window = 3,
+#                        id = 'ID', splitBy = 'dyadID')
 
 clean_delay <- copy(delay)
 
 test_that('edges required', {
-  expect_error(leader_edge_delay(edges = NULL))
+  expect_error(leader_direction_delay(edges = NULL))
 })
 
 test_that('threshold is numeric', {
-  expect_error(leader_edge_delay(delay, threshold = 'potato'), 'numeric')
+  expect_error(leader_direction_delay(delay, threshold = 'potato'), 'numeric')
 })
 
 test_that('column names must exist in DT', {
   missing_delay <- copy(clean_delay)[, direction_diff := NULL]
-  expect_error(leader_edge_delay(missing_delay), 'direction_diff')
+  expect_error(leader_direction_delay(missing_delay), 'direction_diff')
 
   missing_delay <- copy(clean_delay)[, direction_delay := NULL]
-  expect_error(leader_edge_delay(missing_delay), 'direction_delay')
+  expect_error(leader_direction_delay(missing_delay), 'direction_delay')
 
   missing_delay <- copy(clean_delay)[, ID1 := NULL]
-  expect_error(leader_edge_delay(missing_delay), 'ID1')
+  expect_error(leader_direction_delay(missing_delay), 'ID1')
 
   missing_delay <- copy(clean_delay)[, ID2 := NULL]
-  expect_error(leader_edge_delay(missing_delay), 'ID2')
+  expect_error(leader_direction_delay(missing_delay), 'ID2')
 })
 
 test_that('non-numeric cols passed as direction_diff and _delay error', {
   char_delay <- copy(delay)[, direction_diff := as.character(direction_diff)]
   expect_error(
-    leader_edge_delay(char_delay, threshold = 0.5),
+    leader_direction_delay(char_delay, threshold = 0.5),
     "must be of class numeric"
   )
   char_delay <- copy(delay)[, direction_delay := as.character(direction_delay)]
   expect_error(
-    leader_edge_delay(char_delay, threshold = 0.5),
+    leader_direction_delay(char_delay, threshold = 0.5),
     "must be of class integer"
   )
 })
@@ -77,17 +83,17 @@ test_that('output length as expected', {
 
   # nrow(delay) is less than when threshold is 1e-2 since some dyads will drop
   expect_gt(
-    nrow(leader_edge_delay(delay)),
-    nrow(leader_edge_delay(delay, threshold = 1e-2))
+    nrow(leader_direction_delay(delay)),
+    nrow(leader_direction_delay(delay, threshold = 1e-2))
   )
   # nrow(delay) is the same when threshold is 1e3 since no rows will drop
   expect_equal(
-    nrow(leader_edge_delay(delay)),
-    nrow(leader_edge_delay(delay, threshold = 1e3))
+    nrow(leader_direction_delay(delay)),
+    nrow(leader_direction_delay(delay, threshold = 1e3))
   )
 
   # nrow(delay) with tiny threshold is 0 since all rows will drop
-  expect_equal(nrow(leader_edge_delay(delay, threshold = 1e-3)), 0)
+  expect_equal(nrow(leader_direction_delay(delay, threshold = 1e-3)), 0)
 })
 
 test_that('columns added to the result DT', {
@@ -99,17 +105,17 @@ test_that('columns added to the result DT', {
     'mean_direction_delay'
   )
 
-  expect_setequal(expected_cols, colnames(leader_edge_delay(delay)))
-  expect_length(expected_cols, ncol(leader_edge_delay(delay)))
+  expect_setequal(expected_cols, colnames(leader_direction_delay(delay)))
+  expect_length(expected_cols, ncol(leader_direction_delay(delay)))
 })
 
 test_that('column added to the result DT is double', {
-  expect_type(leader_edge_delay(delay)$mean_direction_delay_dyad, 'double')
-  expect_type(leader_edge_delay(delay)$mean_direction_delay, 'double')
+  expect_type(leader_direction_delay(delay)$mean_direction_delay_dyad, 'double')
+  expect_type(leader_direction_delay(delay)$mean_direction_delay, 'double')
 })
 
 test_that('returns a data.table', {
-  expect_s3_class(leader_edge_delay(delay), 'data.table')
+  expect_s3_class(leader_direction_delay(delay), 'data.table')
 })
 
 
@@ -140,8 +146,13 @@ dyad_id(edge_expect, 'ID1', 'ID2')
 fusion_id(edge_expect, threshold = 50)
 
 window <- 5
-delay_expect <- edge_delay(edge_expect, DT_expect, window = window, id = id)
-leader_expect <- leader_edge_delay(delay_expect)
+delay_expect <- direction_delay(
+  edge_expect,
+  DT_expect,
+  window = window,
+  id = id
+)
+leader_expect <- leader_direction_delay(delay_expect)
 
 test_that('expected results are returned', {
   expect_lte(nrow(leader_expect), delay_expect[, uniqueN(dyadID) * 2])
