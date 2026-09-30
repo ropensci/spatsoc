@@ -18,8 +18,7 @@
 #'
 #' The rows in `edges` and `DT` are internally matched in `edge_delay` using the
 #' columns `timegroup` (from `group_times`) and `ID1` and `ID2` (in `edges`,
-#' from `dyad_id`) with `id` (in `DT`). This function expects a `fusionID`
-#' present, generated with the `fusion_id` function, and a `dyadID` present,
+#' from `dyad_id`) with `id` (in `DT`). This function expects a `dyadID` column,
 #' generated with the `dyad_id` function. The `id`, and `direction` arguments
 #' expect the names of a column in `DT` which correspond to the id, and
 #' direction columns.
@@ -102,9 +101,6 @@
 #' # Generate dyad id
 #' dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 #'
-#' # Generate fusion id
-#' fusion_id(edges, threshold = 100)
-#'
 #' # Momentary temporal delay and direction correlation
 #' delay <- edge_delay(
 #'   edges = edges,
@@ -118,7 +114,6 @@
 #' direction_step(DT, id = 'ID')
 #' edges <- edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
 #' dyad_id(edges, id = 'ID1', id2 = 'ID2')
-#' fusion_id(edges, threshold = 100)
 #' delay <- edge_delay(
 #'   edges = edges,
 #'   DT = DT,
@@ -133,7 +128,7 @@ edge_delay <- function(
   direction = 'direction'
 ) {
   # due to NSE notes in R CMD check
-  . <- timegroup <- fusionID <- timegroup_min <- timegroup_max <-
+  . <- timegroup <- timegroup_min <- timegroup_max <-
     timegroup_delay <- ID1 <- ID2 <- direction_delay <- direction_cor <-
       dyadID <- NULL
 
@@ -154,38 +149,18 @@ edge_delay <- function(
   assert_col_inherits(DT, 'timegroup', 'integer')
   assert_col_inherits(edges, 'timegroup', 'integer')
 
-  assert_are_colnames(edges, 'fusionID', ', did you run fusion_id?')
   assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
   assert_col_radians(DT, direction, ', did you use direction_step?')
 
   drop_nas <- data.table::copy(edges)[
-    !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
+    !(is.na(ID1) | is.na(ID2) | is.na(dyadID))
   ]
 
   # "Forward": all edges ID1 -> ID2
   forward <- drop_nas[ID1 == tstrsplit(dyadID, '-')[[1L]]]
 
-  forward[,
-    timegroup_min := data.table::fifelse(
-      timegroup - window < min(timegroup),
-      min(timegroup),
-      timegroup - window
-    ),
-    by = fusionID,
-    env = list(window = window)
-  ]
-
-  forward[,
-    timegroup_max := data.table::fifelse(
-      timegroup + window > max(timegroup),
-      max(timegroup),
-      timegroup + window
-    ),
-    by = fusionID,
-    env = list(window = window)
-  ]
-
+  seq_tau <- -window:window
   forward[,
     c('timegroup_delay', 'direction_cor') := {
       focal_direction <- DT[
@@ -194,7 +169,7 @@ edge_delay <- function(
         direction
       ]
       sub <- DT[
-        between(timegroup, timegroup_min, timegroup_max) & id == ID2,
+        timegroup %in% (.BY$timegroup + seq_tau) & id == ID2,
         .(
           timegroup,
           direction_cor = cos(focal_direction - direction)
@@ -210,7 +185,7 @@ edge_delay <- function(
 
   data.table::set(
     forward,
-    j = c('timegroup_min', 'timegroup_max', 'timegroup_delay'),
+    j = c('timegroup_delay'),
     value = NULL
   )
 
@@ -230,7 +205,7 @@ edge_delay <- function(
   data.table::setorder(out, timegroup)
   data.table::setcolorder(
     out,
-    c('timegroup', 'ID1', 'ID2', 'dyadID', 'fusionID')
+    c('timegroup', 'ID1', 'ID2', 'dyadID')
   )
 
   return(out)
