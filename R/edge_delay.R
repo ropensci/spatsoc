@@ -38,6 +38,12 @@
 #'   product of the movement directions, or equivalently, the cosine of the
 #'   difference in movement directions.
 #'
+#'   This momentary implementation of the directional correlation delay is
+#'   calculated by comparing the direction of the focal individual when dyads
+#'   are within a threshold distance (set using `edge_dist`) to the neighbour
+#'   individual for timegroups within the window (set using the 'window'
+#'   argument).
+#'
 #'  Note: due to the merge required within this function, the output needs to be
 #'  reassigned unlike some other `spatsoc` functions like `dyad_id`. See details
 #'  in [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
