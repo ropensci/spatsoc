@@ -106,7 +106,7 @@ test_that('no rows are added to the result edges', {
 test_that('column added to the result DT', {
   copyEdges <- copy(edges)
 
-  expected_cols <- c(colnames(copyEdges), 'direction_delay', 'direction_diff')
+  expected_cols <- c(colnames(copyEdges), 'direction_delay', 'direction_cor')
 
   expect_setequal(
     expected_cols,
@@ -217,33 +217,6 @@ test_that('setorder doesnt impact results', {
   )
 })
 
-test_that('forward/reverse are equal', {
-  swap_edges <- edge_dist(
-    DT,
-    threshold = threshold,
-    id = id,
-    coords = coords,
-    timegroup = timegroup,
-    returnDist = TRUE,
-    fillNA = FALSE
-  )
-  setnames(swap_edges, c('ID1', 'ID2'), c('ID2', 'ID1'))
-  dyad_id(swap_edges, id1 = 'ID1', id2 = 'ID2')
-  fusion_id(swap_edges, threshold = threshold)
-
-  swap_delay <- edge_delay(swap_edges, DT, window, id)
-  delay <- edge_delay(edges, DT, window, id)
-
-  swap_leader <- leader_edge_delay(swap_delay)
-  leader <- leader_edge_delay(delay)
-
-  expect_equal(
-    swap_leader[order(dyadID, ID1)],
-    leader[order(dyadID, ID1)]
-  )
-})
-
-
 N_id <- 5
 N_seq <- 10
 seq_xy <- c(
@@ -273,8 +246,6 @@ fusion_id(edge_expect, threshold = 100)
 window <- 5
 delay_expect <- edge_delay(edge_expect, DT_expect, window = window, id = id)
 
-leader_expect <- leader_edge_delay(delay_expect)
-
 test_that('expected results are returned', {
   expect_lte(nrow(delay_expect), nrow(edge_expect))
   expect_lte(nrow(DT_expect), nrow(delay_expect))
@@ -302,5 +273,64 @@ test_that('exaggerated window size returns the same', {
   expect_equal(
     edge_delay(edge_expect, DT_expect, window = window, id = id),
     edge_delay(edge_expect, DT_expect, window = window + 1000, id = id)
+  )
+})
+
+test_that('reorganized difference in direction for ID2 matches', {
+  test_edges <- edges[
+    fusionID == edges[, .N, fusionID][N > 10][, sample(fusionID, 1)]
+  ]
+  forward <- test_edges[ID1 == tstrsplit(dyadID, '-')[[1]]]
+  tg_matching <- forward[,
+    {
+      tg <- seq(min(timegroup), max(timegroup))
+      list(
+        timegroup = tg,
+        ID1 = rep(ID1, length.out = length(tg)),
+        ID2 = rep(ID2, length.out = length(tg))
+      )
+    },
+    by = fusionID
+  ]
+  tg_matching[
+    DT,
+    direction_ID1 := direction,
+    on = .(ID1 == ID, timegroup == timegroup)
+  ]
+  tg_matching[
+    DT,
+    direction_ID2 := direction,
+    on = .(ID2 == ID, timegroup == timegroup)
+  ]
+
+  seq_tau <- -2:2
+
+  shift_dir_ID2 <- do.call(
+    cbind,
+    shift(tg_matching$direction_ID2, seq_tau, type = 'lead')
+  )
+  dif_dir_ID1 <- units::drop_units(cos(
+    tg_matching$direction_ID1 - shift_dir_ID2
+  ))
+
+  expect_equal(
+    {
+      shift_dir_ID1 <- do.call(
+        cbind,
+        shift(tg_matching$direction_ID1, seq_tau, type = 'lead')
+      )
+      dif_dir_ID2 <- units::drop_units(cos(
+        tg_matching$direction_ID2 - shift_dir_ID1
+      ))
+    },
+    {
+      reorg_dif <- dif_dir_ID1[, rev(seq.int(ncol(dif_dir_ID1)))]
+      dif_dir_ID2_reorg <- do.call(
+        cbind,
+        lapply(seq_along(seq_tau), function(i) {
+          shift(reorg_dif[, i], n = rev(seq_tau)[i], type = 'cyclic')
+        })
+      )
+    }
   )
 })
