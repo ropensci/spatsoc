@@ -194,34 +194,33 @@ edge_delay <- function(
     direction_ID2 := direction,
     on = c(paste0('ID2 == ', id), 'timegroup == timegroup')
   ]
-  seq_tau <- -window:window
-  forward[,
-    c('timegroup_delay', 'direction_cor') := {
-      focal_direction <- DT[
-        timegroup == .BY$timegroup &
-          id == ID1,
-        direction
-      ]
-      sub <- DT[
-        timegroup %in% (.BY$timegroup + seq_tau) & id == ID2,
-        .(
-          timegroup,
-          direction_cor = cos(focal_direction - direction)
-        )
-      ]
-      sub[which.max(direction_cor)]
-    },
-    by = c('timegroup', 'dyadID'),
-    env = list(id = id, direction = direction)
-  ]
-  forward[, direction_cor := units::drop_units(direction_cor)]
-  forward[, direction_delay := timegroup_delay - timegroup]
 
-  data.table::set(
-    forward,
-    j = c('timegroup_delay'),
-    value = NULL
-  )
+  seq_tau <- -window:window
+
+  tg_matching[,
+    c('sufficient_nobs_ID1', 'sufficient_nobs_ID2') := {
+      window_dir1 <- do.call(
+        cbind,
+        shift(direction_ID1, seq_tau, type = 'lead')
+      )
+      window_dir2 <- do.call(
+        cbind,
+        shift(direction_ID2, seq_tau, type = 'lead')
+      )
+
+      n_obs_ID1 <- apply(window_dir1, MARGIN = 1, FUN = function(x) {
+        sum(!is.na(x))
+      })
+      n_obs_ID2 <- apply(window_dir2, MARGIN = 1, FUN = function(x) {
+        sum(!is.na(x))
+      })
+      list(n_obs_ID1 >= min_nobs, n_obs_ID2 >= min_nobs)
+    },
+    by = fusionID
+  ]
+
+  tg_matching[!(sufficient_nobs_ID1), direction_ID1 := NA]
+  tg_matching[!(sufficient_nobs_ID2), direction_ID2 := NA]
 
   # "Reverse": replicate forward but reverse direction ID1 <- ID2
   reverse <- data.table::copy(forward)
