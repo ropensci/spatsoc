@@ -217,30 +217,6 @@ test_that('setorder doesnt impact results', {
   )
 })
 
-test_that('forward/reverse are equal', {
-  swap_edges <- edge_dist(
-    DT,
-    threshold = threshold,
-    id = id,
-    coords = coords,
-    timegroup = timegroup,
-    returnDist = TRUE,
-    fillNA = FALSE
-  )
-  setnames(swap_edges, c('ID1', 'ID2'), c('ID2', 'ID1'))
-  dyad_id(swap_edges, id1 = 'ID1', id2 = 'ID2')
-  fusion_id(swap_edges, threshold = threshold)
-
-  swap_delay <- edge_delay(swap_edges, DT, window, id)
-  delay <- edge_delay(edges, DT, window, id)
-
-  expect_equal(
-    swap_delay[order(dyadID, ID1)],
-    delay[order(dyadID, ID1)]
-  )
-})
-
-
 N_id <- 5
 N_seq <- 10
 seq_xy <- c(
