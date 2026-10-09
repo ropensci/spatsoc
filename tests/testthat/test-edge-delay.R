@@ -275,3 +275,62 @@ test_that('exaggerated window size returns the same', {
     edge_delay(edge_expect, DT_expect, window = window + 1000, id = id)
   )
 })
+
+test_that('reorganized difference in direction for ID2 matches', {
+  test_edges <- edges[
+    fusionID == edges[, .N, fusionID][N > 10][, sample(fusionID, 1)]
+  ]
+  forward <- test_edges[ID1 == tstrsplit(dyadID, '-')[[1]]]
+  tg_matching <- forward[,
+    {
+      tg <- seq(min(timegroup), max(timegroup))
+      list(
+        timegroup = tg,
+        ID1 = rep(ID1, length.out = length(tg)),
+        ID2 = rep(ID2, length.out = length(tg))
+      )
+    },
+    by = fusionID
+  ]
+  tg_matching[
+    DT,
+    direction_ID1 := direction,
+    on = .(ID1 == ID, timegroup == timegroup)
+  ]
+  tg_matching[
+    DT,
+    direction_ID2 := direction,
+    on = .(ID2 == ID, timegroup == timegroup)
+  ]
+
+  seq_tau <- -2:2
+
+  shift_dir_ID2 <- do.call(
+    cbind,
+    shift(tg_matching$direction_ID2, seq_tau, type = 'lead')
+  )
+  dif_dir_ID1 <- units::drop_units(cos(
+    tg_matching$direction_ID1 - shift_dir_ID2
+  ))
+
+  expect_equal(
+    {
+      shift_dir_ID1 <- do.call(
+        cbind,
+        shift(tg_matching$direction_ID1, seq_tau, type = 'lead')
+      )
+      dif_dir_ID2 <- units::drop_units(cos(
+        tg_matching$direction_ID2 - shift_dir_ID1
+      ))
+    },
+    {
+      reorg_dif <- dif_dir_ID1[, rev(seq.int(ncol(dif_dir_ID1)))]
+      dif_dir_ID2_reorg <- do.call(
+        cbind,
+        lapply(seq_along(seq_tau), function(i) {
+          shift(reorg_dif[, i], n = rev(seq_tau)[i], type = 'cyclic')
+        })
+      )
+    }
+  )
+})
