@@ -159,7 +159,7 @@ edge_delay <- function(
 
   assert_not_null(min_nobs)
   assert_inherits(min_nobs, 'numeric')
-  assert_relation(min_nobs, `>`, 0)
+  assert_relation(min_nobs, `>=`, 0)
 
   assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
@@ -197,24 +197,32 @@ edge_delay <- function(
 
   seq_tau <- -window:window
 
-  tg_matching[,
-    c('sufficient_nobs_ID1', 'sufficient_nobs_ID2') := {
-      window_dir1 <- do.call(
-        cbind,
-        shift(direction_ID1, seq_tau, type = 'lead')
-      )
-      window_dir2 <- do.call(
-        cbind,
-        shift(direction_ID2, seq_tau, type = 'lead')
-      )
+  if (min_nobs > 0) {
+    tg_matching[,
+      c('sufficient_nobs_ID1', 'sufficient_nobs_ID2') := {
+        window_dir1 <- do.call(
+          cbind,
+          shift(direction_ID1, seq_tau, type = 'lead')
+        )
+        window_dir2 <- do.call(
+          cbind,
+          shift(direction_ID2, seq_tau, type = 'lead')
+        )
 
-      n_obs_ID1 <- apply(window_dir1, MARGIN = 1, FUN = function(x) {
-        sum(!is.na(x))
-      })
-      n_obs_ID2 <- apply(window_dir2, MARGIN = 1, FUN = function(x) {
-        sum(!is.na(x))
-      })
-      list(n_obs_ID1 >= min_nobs, n_obs_ID2 >= min_nobs)
+        n_obs_ID1 <- apply(window_dir1, MARGIN = 1, FUN = function(x) {
+          sum(!is.na(x))
+        })
+        n_obs_ID2 <- apply(window_dir2, MARGIN = 1, FUN = function(x) {
+          sum(!is.na(x))
+        })
+        list(n_obs_ID1 >= min_nobs, n_obs_ID2 >= min_nobs)
+      },
+      by = fusionID
+    ]
+
+    tg_matching[!(sufficient_nobs_ID1), direction_ID1 := NA]
+    tg_matching[!(sufficient_nobs_ID2), direction_ID2 := NA]
+  }
     },
     by = fusionID
   ]
