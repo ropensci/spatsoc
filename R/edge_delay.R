@@ -223,6 +223,54 @@ edge_delay <- function(
     tg_matching[!(sufficient_nobs_ID1), direction_ID1 := NA]
     tg_matching[!(sufficient_nobs_ID2), direction_ID2 := NA]
   }
+
+  each <- tg_matching[,
+    {
+      if (.N > min_nobs) {
+        shift_tg <- do.call(cbind, shift(timegroup, seq_tau, type = 'lead'))
+        dif_tg <- timegroup - shift_tg
+
+        shift_dir_ID2 <- do.call(
+          cbind,
+          shift(direction_ID2, seq_tau, type = 'lead')
+        )
+        dif_dir_ID1 <- units::drop_units(cos(direction_ID1 - shift_dir_ID2))
+
+        reorg_dif <- dif_dir_ID1[, rev(seq.int(ncol(dif_dir_ID1)))]
+        dif_dir_ID2 <- do.call(
+          cbind,
+          lapply(seq_along(seq_tau), function(i) {
+            shift(reorg_dif[, i], n = rev(seq_tau)[i], type = 'cyclic')
+          })
+        )
+
+        i <- apply(dif_dir_ID1, 1, which.max)
+        i[lengths(i) == 0] <- NA_integer_
+
+        ind <- cbind(seq.int(.N), unlist(i))
+        ret <- dif_dir_ID1[ind]
+        del <- dif_tg[ind]
+
+        i_ID2 <- apply(dif_dir_ID2, 1, which.max)
+        i_ID2[lengths(i_ID2) == 0] <- NA_integer_
+
+        ind_ID2 <- cbind(seq.int(.N), unlist(i_ID2))
+        ret_ID2 <- dif_dir_ID2[ind_ID2]
+        del_ID2 <- dif_tg[ind_ID2]
+
+        list(ret, del, ret_ID2, del_ID2, ID1, ID2, dyadID, timegroup)
+      } else {
+        list(
+          ret = NA_real_,
+          del = NA_integer_,
+          ret_ID2 = NA_real_,
+          del_ID2 = NA_integer_,
+          ID1,
+          ID2,
+          dyadID,
+          timegroup
+        )
+      }
     },
     by = fusionID
   ]
