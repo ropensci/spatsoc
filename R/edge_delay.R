@@ -18,7 +18,8 @@
 #'
 #' The rows in `edges` and `DT` are internally matched in `edge_delay` using the
 #' columns `timegroup` (from `group_times`) and `ID1` and `ID2` (in `edges`,
-#' from `dyad_id`) with `id` (in `DT`). This function expects a `dyadID` column,
+#' from `dyad_id`) with `id` (in `DT`). This function expects a `fusionID`
+#' column, generated with the `fusion_id` function, and a dyadID` column,
 #' generated with the `dyad_id` function. The `id`, and `direction` arguments
 #' expect the names of a column in `DT` which correspond to the id, and
 #' direction columns.
@@ -107,6 +108,9 @@
 #' # Generate dyad id
 #' dyad_id(edges, id1 = 'ID1', id2 = 'ID2')
 #'
+#' # Generate fusion_id
+#' fusion_id(edges, threshold = 100)
+#'
 #' # Momentary temporal delay and direction correlation
 #' delay <- edge_delay(
 #'   edges = edges,
@@ -120,6 +124,7 @@
 #' direction_step(DT, id = 'ID')
 #' edges <- edge_dist(DT, threshold = 100, id = 'ID', timegroup = 'timegroup', returnDist = TRUE)
 #' dyad_id(edges, id = 'ID1', id2 = 'ID2')
+#' fusion_id(edges, threshold = 100)
 #' delay <- edge_delay(
 #'   edges = edges,
 #'   DT = DT,
@@ -162,6 +167,7 @@ edge_delay <- function(
   assert_relation(min_nobs, `>=`, 0)
 
   assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
+  assert_are_colnames(edges, 'fusionID', ', did you run fusion_id?')
 
   assert_col_radians(DT, direction, ', did you use direction_step?')
 
