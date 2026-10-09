@@ -152,6 +152,7 @@ edge_delay <- function(
 
   assert_not_null(window)
   assert_inherits(window, 'numeric')
+  assert_relation(window, `>`, 0)
 
   assert_col_inherits(DT, 'timegroup', 'integer')
   assert_col_inherits(edges, 'timegroup', 'integer')
