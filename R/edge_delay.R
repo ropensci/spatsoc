@@ -149,7 +149,7 @@ edge_delay <- function(
   assert_not_null(edges)
   assert_not_null(id)
 
-  check_cols_edges <- c('ID1', 'ID2', 'timegroup')
+  check_cols_edges <- c('ID1', 'ID2', 'timegroup', 'distance')
   assert_are_colnames(edges, check_cols_edges)
 
   check_cols_DT <- c(id, 'timegroup', direction)
@@ -183,6 +183,7 @@ edge_delay <- function(
       tg <- seq(min(timegroup), max(timegroup))
       list(
         timegroup = tg,
+        distance = distance,
         ID1 = rep(ID1, length.out = length(tg)),
         ID2 = rep(ID2, length.out = length(tg))
       )
@@ -264,7 +265,7 @@ edge_delay <- function(
         ret_ID2 <- dif_dir_ID2[ind_ID2]
         del_ID2 <- dif_tg[ind_ID2]
 
-        list(ret, del, ret_ID2, del_ID2, ID1, ID2, dyadID, timegroup)
+        list(ret, del, ret_ID2, del_ID2, ID1, ID2, dyadID, timegroup, distance)
       } else {
         list(
           ret = NA_real_,
@@ -274,7 +275,8 @@ edge_delay <- function(
           ID1,
           ID2,
           dyadID,
-          timegroup
+          timegroup,
+          distance
         )
       }
     },
@@ -289,6 +291,7 @@ edge_delay <- function(
         ID2,
         dyadID,
         fusionID,
+        distance,
         direction_cor = ret,
         direction_delay = del
       )],
@@ -298,6 +301,7 @@ edge_delay <- function(
         ID2 = ID1,
         dyadID,
         fusionID,
+        distance,
         direction_cor = ret_ID2,
         direction_delay = del_ID2
       )]
