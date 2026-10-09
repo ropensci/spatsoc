@@ -80,7 +80,7 @@ get_geometry <- function(
   DT[,
     (geometry_colname) := {
       x <- sf::st_as_sf(
-        data.frame(.SD),
+        data.table::data.table(.SD),
         coords = coords,
         crs = crs,
         na.fail = FALSE
