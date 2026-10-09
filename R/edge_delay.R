@@ -275,27 +275,30 @@ edge_delay <- function(
     by = fusionID
   ]
 
-  tg_matching[!(sufficient_nobs_ID1), direction_ID1 := NA]
-  tg_matching[!(sufficient_nobs_ID2), direction_ID2 := NA]
-
-  # "Reverse": replicate forward but reverse direction ID1 <- ID2
-  reverse <- data.table::copy(forward)
-  data.table::setnames(reverse, c('ID1', 'ID2'), c('ID2', 'ID1'))
-  reverse[, direction_delay := -direction_delay]
-
-  out <- data.table::rbindlist(
+  out <- rbindlist(
     list(
-      forward,
-      reverse
-    ),
-    use.names = TRUE
+      each[, .(
+        timegroup,
+        ID1,
+        ID2,
+        dyadID,
+        fusionID,
+        direction_cor = ret,
+        direction_delay = del
+      )],
+      each[, .(
+        timegroup,
+        ID1 = ID2,
+        ID2 = ID1,
+        dyadID,
+        fusionID,
+        direction_cor = ret_ID2,
+        direction_delay = del_ID2
+      )]
+    )
   )
 
   data.table::setorder(out, timegroup)
-  data.table::setcolorder(
-    out,
-    c('timegroup', 'ID1', 'ID2', 'dyadID')
-  )
 
   return(out)
 }
