@@ -233,7 +233,7 @@ edge_delay <- function(
 
   each <- tg_matching[,
     {
-      if (.N > min_nobs) {
+      if (.N > 1) {
         shift_tg <- do.call(cbind, shift(timegroup, seq_tau, type = 'lead'))
         dif_tg <- timegroup - shift_tg
 
