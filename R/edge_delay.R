@@ -160,12 +160,14 @@ edge_delay <- function(
   assert_not_null(min_nobs)
   assert_inherits(min_nobs, 'numeric')
   assert_relation(min_nobs, `>`, 0)
+
   assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
   assert_col_radians(DT, direction, ', did you use direction_step?')
 
+  # "Forward": all edges ID1 -> ID2
   drop_nas <- data.table::copy(edges)[
-    !(is.na(ID1) | is.na(ID2) | is.na(dyadID))
+    !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
   ]
 
   # "Forward": all edges ID1 -> ID2
