@@ -170,9 +170,30 @@ edge_delay <- function(
     !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
   ]
 
-  # "Forward": all edges ID1 -> ID2
   forward <- drop_nas[ID1 == tstrsplit(dyadID, '-')[[1L]]]
 
+  tg_matching <- forward[,
+    {
+      tg <- seq(min(timegroup), max(timegroup))
+      list(
+        timegroup = tg,
+        ID1 = rep(ID1, length.out = length(tg)),
+        ID2 = rep(ID2, length.out = length(tg))
+      )
+    },
+    by = .(dyadID, fusionID)
+  ]
+
+  tg_matching[
+    DT,
+    direction_ID1 := direction,
+    on = c(paste0('ID1 == ', id), 'timegroup == timegroup')
+  ]
+  tg_matching[
+    DT,
+    direction_ID2 := direction,
+    on = c(paste0('ID2 == ', id), 'timegroup == timegroup')
+  ]
   seq_tau <- -window:window
   forward[,
     c('timegroup_delay', 'direction_cor') := {
