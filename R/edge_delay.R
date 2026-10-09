@@ -137,7 +137,7 @@ edge_delay <- function(
   window = NULL,
   id = NULL,
   direction = 'direction',
-  min_nobs = NULL
+  min_nobs = 0
 ) {
   # due to NSE notes in R CMD check
   . <- timegroup <- timegroup_min <- timegroup_max <-
