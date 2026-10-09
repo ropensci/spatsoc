@@ -131,7 +131,8 @@ edge_delay <- function(
   DT,
   window = NULL,
   id = NULL,
-  direction = 'direction'
+  direction = 'direction',
+  min_nobs = NULL
 ) {
   # due to NSE notes in R CMD check
   . <- timegroup <- timegroup_min <- timegroup_max <-
@@ -155,6 +156,9 @@ edge_delay <- function(
   assert_col_inherits(DT, 'timegroup', 'integer')
   assert_col_inherits(edges, 'timegroup', 'integer')
 
+  assert_not_null(min_nobs)
+  assert_inherits(min_nobs, 'numeric')
+  assert_relation(min_nobs, `>`, 0)
   assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
 
   assert_col_radians(DT, direction, ', did you use direction_step?')
