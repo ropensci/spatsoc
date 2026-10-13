@@ -151,18 +151,12 @@ test_that('window column in edge, DT does not influence results', {
   )
 
   expect_equal(
-    edge_delay(copyEdges, DT, id = id, window = window)[,
-      .SD,
-      .SDcols = -'window'
-    ],
+    edge_delay(copyEdges, DT, id = id, window = window),
     edge_delay(edges, DT, id = id, window = window)
   )
 
   expect_equal(
-    edge_delay(copyEdges, copyDT, id = id, window = window)[,
-      .SD,
-      .SDcols = -'window'
-    ],
+    edge_delay(copyEdges, copyDT, id = id, window = window),
     edge_delay(edges, DT, id = id, window = window)
   )
 })
