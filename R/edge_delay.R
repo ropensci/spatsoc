@@ -183,7 +183,6 @@ edge_delay <- function(
       tg <- seq(min(timegroup), max(timegroup))
       list(
         timegroup = tg,
-        distance = distance,
         ID1 = rep(ID1, length.out = length(tg)),
         ID2 = rep(ID2, length.out = length(tg))
       )
@@ -191,6 +190,11 @@ edge_delay <- function(
     by = .(dyadID, fusionID)
   ]
 
+  tg_matching[
+    edges,
+    distance := distance,
+    on = .(ID1, ID2, timegroup)
+  ]
   tg_matching[
     DT,
     direction_ID1 := direction,
@@ -265,7 +269,17 @@ edge_delay <- function(
         ret_ID2 <- dif_dir_ID2[ind_ID2]
         del_ID2 <- dif_tg[ind_ID2]
 
-        list(ret, del, ret_ID2, del_ID2, ID1, ID2, dyadID, timegroup, distance)
+        list(
+          ret,
+          del,
+          ret_ID2,
+          del_ID2,
+          ID1,
+          ID2,
+          dyadID,
+          timegroup,
+          distance
+        )
       } else {
         list(
           ret = NA_real_,
