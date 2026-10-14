@@ -197,13 +197,15 @@ edge_delay <- function(
   ]
   tg_matching[
     DT,
-    direction_ID1 := direction,
-    on = c(paste0('ID1 == ', id), 'timegroup == timegroup')
+    direction_ID1 := DT_direction_column,
+    on = c(paste0('ID1 == ', id), 'timegroup == timegroup'),
+    env = list(DT_direction_column = paste0('i.', direction))
   ]
   tg_matching[
     DT,
-    direction_ID2 := direction,
-    on = c(paste0('ID2 == ', id), 'timegroup == timegroup')
+    direction_ID2 := DT_direction_column,
+    on = c(paste0('ID2 == ', id), 'timegroup == timegroup'),
+    env = list(DT_direction_column = paste0('i.', direction))
   ]
 
   seq_tau <- -window:window
