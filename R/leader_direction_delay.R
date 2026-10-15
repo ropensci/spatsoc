@@ -186,6 +186,46 @@ leader_direction_delay <- function(
     by = c('dyadID', 'fusionID', splitBy)
   ]
 
+  tg_matching[
+    DT,
+    direction_ID1 := DT_direction_column,
+    on = c(paste0('ID1 == ', id), 'timegroup == timegroup'),
+    env = list(DT_direction_column = paste0('i.', direction))
+  ]
+  tg_matching[
+    DT,
+    direction_ID2 := DT_direction_column,
+    on = c(paste0('ID2 == ', id), 'timegroup == timegroup'),
+    env = list(DT_direction_column = paste0('i.', direction))
+  ]
+
+  seq_tau <- -window:window
+
+  if (min_nobs > 0) {
+    tg_matching[,
+      c('sufficient_nobs_ID1', 'sufficient_nobs_ID2') := {
+        window_dir1 <- do.call(
+          cbind,
+          shift(direction_ID1, seq_tau, type = 'lead')
+        )
+        window_dir2 <- do.call(
+          cbind,
+          shift(direction_ID2, seq_tau, type = 'lead')
+        )
+
+        n_obs_ID1 <- apply(window_dir1, MARGIN = 1, FUN = function(x) {
+          sum(!is.na(x))
+        })
+        n_obs_ID2 <- apply(window_dir2, MARGIN = 1, FUN = function(x) {
+          sum(!is.na(x))
+        })
+        list(n_obs_ID1 >= min_nobs, n_obs_ID2 >= min_nobs)
+      },
+      by = c('fusionID', splitBy)
+    ]
+
+    tg_matching[!(sufficient_nobs_ID1), direction_ID1 := NA]
+    tg_matching[!(sufficient_nobs_ID2), direction_ID2 := NA]
   }
 
   subset_threshold <- edges[direction_diff < threshold]
