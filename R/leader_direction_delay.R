@@ -125,9 +125,13 @@
 #'   threshold = 0.5
 #' )
 #' print(leadership)
-leader_edge_delay <- function(
-  edges = NULL,
-  threshold = NULL,
+leader_direction_delay <- function(
+  edges,
+  DT,
+  window = NULL,
+  id = NULL,
+  direction = 'direction',
+  min_nobs = 0,
   splitBy = NULL
 ) {
   # Due to NSE notes
