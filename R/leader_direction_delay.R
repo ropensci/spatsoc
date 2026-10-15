@@ -140,28 +140,33 @@ leader_direction_delay <- function(
   direction_delay <- 'direction_delay'
   direction_diff <- 'direction_diff'
 
+  assert_not_null(DT)
+  assert_is_data_table(DT)
   assert_not_null(edges)
   assert_is_data_table(edges)
+  assert_not_null(id)
+  check_cols_edges <- c('ID1', 'ID2', 'timegroup', 'distance', splitBy)
+  assert_are_colnames(edges, check_cols_edges)
 
-  check_cols <- c(direction_delay, direction_diff, 'ID1', 'ID2', splitBy)
-  assert_are_colnames(edges, check_cols, ', did you use edge_delay?')
-  assert_col_inherits(
-    edges,
-    direction_delay,
-    'integer',
-    ', did you use edge_delay?'
-  )
-  assert_col_inherits(
-    edges,
-    direction_diff,
-    'numeric',
-    ', did you use edge_delay?'
-  )
+  check_cols_DT <- c(id, 'timegroup', direction)
+  assert_are_colnames(DT, check_cols_DT)
 
-  if (is.null(threshold)) {
-    threshold <- Inf
-  } else {
-    assert_inherits(threshold, 'numeric')
+  assert_not_null(window)
+  assert_inherits(window, 'numeric')
+  assert_relation(window, `>`, 0)
+
+  assert_col_inherits(DT, 'timegroup', 'integer')
+  assert_col_inherits(edges, 'timegroup', 'integer')
+
+  assert_not_null(min_nobs)
+  assert_inherits(min_nobs, 'numeric')
+  assert_relation(min_nobs, `>=`, 0)
+
+  assert_are_colnames(edges, 'dyadID', ', did you run dyad_id?')
+  assert_are_colnames(edges, 'fusionID', ', did you run fusion_id?')
+
+  assert_col_radians(DT, direction, ', did you use direction_step?')
+
   }
 
   subset_threshold <- edges[direction_diff < threshold]
