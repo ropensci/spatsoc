@@ -277,5 +277,16 @@ leader_direction_delay <- function(
     on = 'fusionID'
   ]
 
-  return(out[])
+  out <- means[,
+    .(wt_mn = weighted.mean(mean_ID1, nobs_ID1, na.rm = TRUE)),
+    by = c('ID1', 'ID2', 'del', splitBy)
+  ]
+
+  data.table::setnames(
+    out,
+    c('wt_mn', 'del'),
+    c('direction_cor', 'direction_delay')
+  )
+
+  return(out)
 }
