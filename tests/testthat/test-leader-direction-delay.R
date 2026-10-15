@@ -33,67 +33,100 @@ leader_delay <- leader_direction_delay(
   edges = edges,
   DT = DT,
   window = 3,
-  id = 'ID',
-  splitBy = 'dyadID'
+  id = 'ID'
 )
 
-# leader_direction_delay(edges = edges, DT = DT, window = 3,
-#                        id = 'ID', splitBy = 'dyadID')
+clean_edges <- copy(edges)
+clean_DT <- copy(DT)
 
-clean_delay <- copy(delay)
-
-test_that('edges required', {
-  expect_error(leader_direction_delay(edges = NULL))
+test_that('edges, DT are required', {
+  expect_error(leader_direction_delay(edges, DT = NULL))
+  expect_error(leader_direction_delay(edges = NULL, DT))
 })
 
-test_that('threshold is numeric', {
-  expect_error(leader_direction_delay(delay, threshold = 'potato'), 'numeric')
+test_that('arguments required, otherwise error detected', {
+  expect_error(
+    leader_direction_delay(edges, DT, id = NULL),
+    'id must be provided'
+  )
+  expect_error(
+    leader_direction_delay(edges, DT, id = id, window = NULL),
+    'window must be provided'
+  )
+})
+
+test_that('window is numeric, timegroup is integer', {
+  expect_error(
+    leader_direction_delay(edges, DT, id = id, window = 'potato'),
+    'numeric'
+  )
+  copy_edges <- copy(clean_edges)
+  copy_edges[, timegroup := as.character(timegroup)]
+  expect_error(
+    leader_direction_delay(copy_edges, DT, id = id, window = 2),
+    'integer'
+  )
+
+  copy_DT <- copy(clean_DT)
+  copy_DT[, timegroup := as.character(timegroup)]
+  expect_error(
+    leader_direction_delay(edges, copy_DT, id = id, window = 2),
+    'integer'
+  )
 })
 
 test_that('column names must exist in DT', {
-  missing_delay <- copy(clean_delay)[, direction_diff := NULL]
-  expect_error(leader_direction_delay(missing_delay), 'direction_diff')
+  expect_error(leader_direction_delay(edges, DT, id = 'potato'), 'potato field')
 
-  missing_delay <- copy(clean_delay)[, direction_delay := NULL]
-  expect_error(leader_direction_delay(missing_delay), 'direction_delay')
-
-  missing_delay <- copy(clean_delay)[, ID1 := NULL]
-  expect_error(leader_direction_delay(missing_delay), 'ID1')
-
-  missing_delay <- copy(clean_delay)[, ID2 := NULL]
-  expect_error(leader_direction_delay(missing_delay), 'ID2')
-})
-
-test_that('non-numeric cols passed as direction_diff and _delay error', {
-  char_delay <- copy(delay)[, direction_diff := as.character(direction_diff)]
+  copy_edges <- copy(clean_edges)
+  copy_edges[, timegroup := NULL]
   expect_error(
-    leader_direction_delay(char_delay, threshold = 0.5),
-    "must be of class numeric"
+    leader_direction_delay(copy_edges, DT, id = id, window = window),
+    'timegroup field'
   )
-  char_delay <- copy(delay)[, direction_delay := as.character(direction_delay)]
+
+  copy_edges <- copy(clean_edges)
+  copy_edges[, fusionID := NULL]
   expect_error(
-    leader_direction_delay(char_delay, threshold = 0.5),
-    "must be of class integer"
+    leader_direction_delay(copy_edges, DT, id = id, window = window),
+    'fusionID field'
+  )
+
+  copy_edges <- copy(clean_edges)
+  copy_edges[, dyadID := NULL]
+  expect_error(
+    leader_direction_delay(copy_edges, DT, id = id, window = window),
+    'dyadID field'
+  )
+
+  expect_error(
+    leader_direction_delay(
+      edges,
+      DT,
+      id = id,
+      window = window,
+      direction = 'potato'
+    ),
+    'potato field'
+  )
+
+  copy_DT <- copy(clean_DT)
+  copy_DT[, timegroup := NULL]
+  expect_error(
+    leader_direction_delay(edges, copy_DT, id = id, window = window),
+    'timegroup field'
   )
 })
 
 test_that('output length as expected', {
-  # nrow(delay) is less than nrow(leader_delay) since leader_delay is aggregate
-  expect_gt(nrow(delay), nrow(leader_delay))
+  # nrow(edges) is less than nrow(leader_delay) since leader_delay is aggregate
+  expect_gt(nrow(edges), nrow(leader_delay))
 
-  # nrow(delay) is less than when threshold is 1e-2 since some dyads will drop
-  expect_gt(
-    nrow(leader_direction_delay(delay)),
-    nrow(leader_direction_delay(delay, threshold = 1e-2))
-  )
-  # nrow(delay) is the same when threshold is 1e3 since no rows will drop
+  # number of ID1, ID2 combinations * the length of seq_tau / only ID1-ID2 in output
   expect_equal(
-    nrow(leader_direction_delay(delay)),
-    nrow(leader_direction_delay(delay, threshold = 1e3))
+    nrow(edges[, .GRP, .(ID1, ID2)]) * length(-window:window) / 2,
+    nrow(leader_delay)
   )
-
-  # nrow(delay) with tiny threshold is 0 since all rows will drop
-  expect_equal(nrow(leader_direction_delay(delay, threshold = 1e-3)), 0)
 })
 
 test_that('columns added to the result DT', {
@@ -101,21 +134,31 @@ test_that('columns added to the result DT', {
     'ID1',
     'ID2',
     'dyadID',
-    'mean_direction_delay_dyad',
-    'mean_direction_delay'
+    'direction_delay',
+    'direction_cor'
   )
 
-  expect_setequal(expected_cols, colnames(leader_direction_delay(delay)))
-  expect_length(expected_cols, ncol(leader_direction_delay(delay)))
+  expect_setequal(
+    expected_cols,
+    colnames(leader_direction_delay(edges, DT, id = id, window = window))
+  )
+  expect_length(
+    expected_cols,
+    ncol(leader_direction_delay(edges, DT, id = id, window = window))
+  )
 })
 
-test_that('column added to the result DT is double', {
-  expect_type(leader_direction_delay(delay)$mean_direction_delay_dyad, 'double')
-  expect_type(leader_direction_delay(delay)$mean_direction_delay, 'double')
+test_that('columns in result match expected type', {
+  out <- leader_direction_delay(edges, DT, id = id, window = window)
+  expect_type(out$direction_delay, 'integer')
+  expect_type(out$direction_cor, 'double')
 })
 
 test_that('returns a data.table', {
-  expect_s3_class(leader_direction_delay(delay), 'data.table')
+  expect_s3_class(
+    leader_direction_delay(edges, DT, id = id, window = window),
+    'data.table'
+  )
 })
 
 
