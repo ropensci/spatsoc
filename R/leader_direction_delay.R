@@ -228,16 +228,53 @@ leader_direction_delay <- function(
     tg_matching[!(sufficient_nobs_ID2), direction_ID2 := NA]
   }
 
-  subset_threshold <- edges[direction_diff < threshold]
+  tg_matching[, N_by_fusion := .N, by = fusionID]
 
-  out <- subset_threshold[,
-    .(mean_direction_delay_dyad = mean(direction_delay, na.rm = TRUE)),
-    by = c('ID1', 'ID2', 'dyadID', splitBy)
+  means <- tg_matching[
+    N_by_fusion > 1,
+    {
+      shift_tg <- do.call(cbind, shift(timegroup, seq_tau, type = 'lead'))
+      dif_tg <- timegroup - shift_tg
+
+      shift_dir_ID2 <- do.call(
+        cbind,
+        shift(direction_ID2, seq_tau, type = 'lead')
+      )
+      dif_dir_ID1 <- units::drop_units(cos(direction_ID1 - shift_dir_ID2))
+
+      reorg_dif <- dif_dir_ID1[, rev(seq.int(ncol(dif_dir_ID1)))]
+      dif_dir_ID2 <- do.call(
+        cbind,
+        lapply(seq_along(seq_tau), function(i) {
+          shift(
+            reorg_dif[, i],
+            n = rev(seq_tau)[i],
+            type = 'cyclic'
+          )
+        })
+      )
+
+      nobs_ID1 <- apply(dif_dir_ID1, 2, function(x) sum(!is.na(x)))
+      nobs_ID2 <- apply(dif_dir_ID2, 2, function(x) sum(!is.na(x)))
+
+      mean_ID1 <- apply(dif_dir_ID1, 2, mean, na.rm = TRUE)
+      mean_ID2 <- apply(dif_dir_ID2, 2, mean, na.rm = TRUE)
+
+      list(
+        mean_ID1,
+        nobs_ID1,
+        mean_ID2,
+        nobs_ID2,
+        del = seq_tau
+      )
+    },
+    by = c('fusionID', splitBy)
   ]
 
-  out[,
-    mean_direction_delay := mean(mean_direction_delay_dyad, na.rm = TRUE),
-    by = c('ID1', splitBy)
+  means[
+    edges,
+    c('ID1', 'ID2', 'dyadID', 'distance') := .(ID1, ID2, dyadID, distance),
+    on = 'fusionID'
   ]
 
   return(out[])
