@@ -167,6 +167,25 @@ leader_direction_delay <- function(
 
   assert_col_radians(DT, direction, ', did you use direction_step?')
 
+  # "Forward": all edges ID1 -> ID2
+  drop_nas <- data.table::copy(edges)[
+    !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
+  ]
+
+  forward <- drop_nas[ID1 == tstrsplit(dyadID, '-')[[1L]]]
+
+  tg_matching <- forward[,
+    {
+      tg <- seq(min(timegroup), max(timegroup))
+      list(
+        timegroup = tg,
+        ID1 = rep(ID1, length.out = length(tg)),
+        ID2 = rep(ID2, length.out = length(tg))
+      )
+    },
+    by = c('dyadID', 'fusionID', splitBy)
+  ]
+
   }
 
   subset_threshold <- edges[direction_diff < threshold]
