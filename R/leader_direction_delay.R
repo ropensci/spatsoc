@@ -273,13 +273,13 @@ leader_direction_delay <- function(
 
   means[
     edges,
-    c('ID1', 'ID2', 'dyadID', 'distance') := .(ID1, ID2, dyadID, distance),
+    c('ID1', 'ID2', 'dyadID') := .(ID1, ID2, dyadID),
     on = 'fusionID'
   ]
 
   out <- means[,
     .(wt_mn = weighted.mean(mean_ID1, nobs_ID1, na.rm = TRUE)),
-    by = c('ID1', 'ID2', 'del', splitBy)
+    by = c('ID1', 'ID2', 'dyadID', 'del', splitBy)
   ]
 
   data.table::setnames(
