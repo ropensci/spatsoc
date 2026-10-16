@@ -76,13 +76,26 @@ test_that('window is numeric, timegroup is integer', {
 })
 
 test_that('column names must exist in DT', {
-  expect_error(leader_direction_delay(edges, DT, id = 'potato'), 'potato field')
-
+  # Edges: missing
   copy_edges <- copy(clean_edges)
   copy_edges[, timegroup := NULL]
   expect_error(
     leader_direction_delay(copy_edges, DT, id = id, window = window),
     'timegroup field'
+  )
+
+  copy_edges <- copy(clean_edges)
+  copy_edges[, ID1 := NULL]
+  expect_error(
+    leader_direction_delay(copy_edges, DT, id = id, window = window),
+    'ID1 field'
+  )
+
+  copy_edges <- copy(clean_edges)
+  copy_edges[, ID2 := NULL]
+  expect_error(
+    leader_direction_delay(copy_edges, DT, id = id, window = window),
+    'ID2 field'
   )
 
   copy_edges <- copy(clean_edges)
@@ -99,6 +112,43 @@ test_that('column names must exist in DT', {
     'dyadID field'
   )
 
+  # Edges: colname not found in edges
+  expect_error(leader_direction_delay(edges, DT, id = 'potato'), 'potato field')
+
+  expect_error(
+    leader_direction_delay(
+      edges,
+      DT,
+      id = id,
+      window = window,
+      splitBy = 'potato'
+    ),
+    'potato field'
+  )
+
+  # DT: missing
+  copy_DT <- copy(clean_DT)
+  copy_DT[, c(id) := NULL]
+  expect_error(
+    leader_direction_delay(edges, copy_DT, id = id, window = window),
+    paste0(id, ' field')
+  )
+
+  copy_DT <- copy(clean_DT)
+  copy_DT[, 'timegroup' := NULL]
+  expect_error(
+    leader_direction_delay(edges, copy_DT, id = id, window = window),
+    'timegroup field'
+  )
+
+  copy_DT <- copy(clean_DT)
+  copy_DT[, 'direction' := NULL]
+  expect_error(
+    leader_direction_delay(edges, copy_DT, id = id, window = window),
+    'direction field'
+  )
+
+  # DT: colname not found in DT
   expect_error(
     leader_direction_delay(
       edges,
@@ -108,13 +158,6 @@ test_that('column names must exist in DT', {
       direction = 'potato'
     ),
     'potato field'
-  )
-
-  copy_DT <- copy(clean_DT)
-  copy_DT[, timegroup := NULL]
-  expect_error(
-    leader_direction_delay(edges, copy_DT, id = id, window = window),
-    'timegroup field'
   )
 })
 
