@@ -155,7 +155,7 @@ leader_direction_delay <- function(
   assert_col_radians(DT, direction, ', did you use direction_step?')
 
   # "Forward": all edges ID1 -> ID2
-  drop_nas <- data.table::copy(edges)[
+  drop_nas <- edges[
     !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
   ]
 
