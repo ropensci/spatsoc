@@ -153,6 +153,7 @@ edge_delay <- function(
   assert_not_null(DT)
   assert_is_data_table(DT)
   assert_not_null(edges)
+  assert_is_data_table(edges)
   assert_not_null(id)
 
   check_cols_edges <- c('ID1', 'ID2', 'timegroup', 'distance')
