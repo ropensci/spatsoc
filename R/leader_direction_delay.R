@@ -134,11 +134,10 @@ leader_direction_delay <- function(
   min_nobs = 0,
   splitBy = NULL
 ) {
-  # Due to NSE notes
-  . <- direction_diff <- direction_delay <- mean_direction_delay <-
-    mean_direction_delay_dyad <- NULL
-  direction_delay <- 'direction_delay'
-  direction_diff <- 'direction_diff'
+  # due to NSE notes in R CMD check
+  . <- fusionID <- ID1 <- ID2 <- dyadID <- timegroup <- direction_ID1 <-
+    direction_ID2 <- sufficient_nobs_ID1 <- sufficient_nobs_ID2 <-
+      N_by_fusion <- DT_direction_column <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)

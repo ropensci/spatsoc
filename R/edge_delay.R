@@ -140,9 +140,9 @@ edge_delay <- function(
   min_nobs = 0
 ) {
   # due to NSE notes in R CMD check
-  . <- timegroup <- timegroup_min <- timegroup_max <-
-    timegroup_delay <- ID1 <- ID2 <- direction_delay <- direction_cor <-
-      dyadID <- NULL
+  . <- fusionID <- ID1 <- ID2 <- dyadID <- timegroup <- distance <-
+    direction_ID1 <- direction_ID2 <- DT_direction_column <-
+      sufficient_nobs_ID1 <- sufficient_nobs_ID2 <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
