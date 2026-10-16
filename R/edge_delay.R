@@ -29,6 +29,12 @@
 #' @param window temporal window in unit of timegroup column generated with
 #'   `group_times`, eg. `window = 2` corresponds to the timegroups shifted by
 #'   -2, -1, 0, 1, and 2 around each focal timegroup.
+#' @param min_nobs minimum number of observations in window for each focal
+#'   observation, default: 0. For example, given a focal observation (e.g.
+#'   direction 1 radian at timegroup 5), check the number of valid observations
+#'   in the window (e.g. with window = 2, timegroups 3, 4, 5, 6, 7) and if there
+#'   are less observations than the 'min_nobs' argument specifies, the focal
+#'   observation is set to NA.
 #'
 #' @return `edge_delay` returns the input `edges` appended with a
 #'   'direction_delay' column indicating the temporal delay (in units of
