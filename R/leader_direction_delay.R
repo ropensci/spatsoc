@@ -9,8 +9,8 @@
 #' X and Y coordinates.
 #'
 #' The function expects a distance based edge-list from `edge_dist` with columns
-#' 'distance', columns 'ID1' and 'ID2' indicating individuals and column
-#' 'dyadID' indicating the dyad ID from `dyad_id`.
+#' 'ID1' and 'ID2' indicating individuals and column 'dyadID' indicating the
+#' dyad ID from `dyad_id`.
 #'
 #' The `edge` must be a `data.table`. If your data is a `data.frame`, you can
 #' convert it by reference using [data.table::setDT()] or by reassigning using
@@ -145,7 +145,7 @@ leader_direction_delay <- function(
   assert_not_null(edges)
   assert_is_data_table(edges)
   assert_not_null(id)
-  check_cols_edges <- c('ID1', 'ID2', 'timegroup', 'distance', splitBy)
+  check_cols_edges <- c('ID1', 'ID2', 'timegroup', splitBy)
   assert_are_colnames(edges, check_cols_edges)
 
   check_cols_DT <- c(id, 'timegroup', direction)
