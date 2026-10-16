@@ -278,7 +278,7 @@ leader_direction_delay <- function(
   ]
 
   out <- means[,
-    .(wt_mn = weighted.mean(mean_ID1, nobs_ID1, na.rm = TRUE)),
+    .(wt_mn = stats::weighted.mean(mean_ID1, nobs_ID1, na.rm = TRUE)),
     by = c('ID1', 'ID2', 'dyadID', 'del', splitBy)
   ]
 
