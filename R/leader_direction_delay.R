@@ -30,8 +30,10 @@
 #'
 #' @inheritParams edge_delay
 #' @param splitBy (optional) character string or vector of grouping column
-#'   name(s) upon which the mean directional correlation delay will be
-#'   calculated
+#'   name(s) upon which the directional correlation delay will be calculated.
+#'   For example, if a column named 'month' is passed to splitBy
+#'   (`splitBy = c('month')`), the output directional delay will be
+#'   calculated within each month.
 #'
 #' @export
 #' @seealso `edge_delay`
