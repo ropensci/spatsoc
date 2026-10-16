@@ -161,6 +161,15 @@ test_that('returns a data.table', {
   )
 })
 
+test_that('ID1 matches first col from tstrsplit of dyadID', {
+  expect_equal(
+    leader_direction_delay(edges, DT, id = id, window = window)$ID1,
+    leader_direction_delay(edges, DT, id = id, window = window)[, tstrsplit(
+      dyadID,
+      '-'
+    )[[1]]]
+  )
+})
 
 N_id <- 5
 N_seq <- 10

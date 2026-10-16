@@ -259,7 +259,7 @@ leader_direction_delay <- function(
   ]
 
   means[
-    edges,
+    forward,
     c('ID1', 'ID2', 'dyadID') := .(ID1, ID2, dyadID),
     on = 'fusionID'
   ]
