@@ -154,6 +154,31 @@ test_that('columns in result match expected type', {
   expect_type(out$direction_cor, 'double')
 })
 
+test_that('splitBy argument doesnt use splitBy column', {
+  copy_edges <- copy(clean_edges)
+  copy_edges[, splitBy := timegroup]
+
+  expect_equal(
+    nrow(edges[, .GRP, .(ID1, ID2)]) * length(-window:window) / 2,
+    nrow(leader_direction_delay(
+      copy_edges,
+      DT,
+      id = id,
+      window = window
+    ))
+  )
+
+  expect_error(
+    leader_direction_delay(
+      copy_edges,
+      DT,
+      id = id,
+      window = window,
+      splitBy = 'timegroup'
+    )
+  )
+})
+
 test_that('returns a data.table', {
   expect_s3_class(
     leader_direction_delay(edges, DT, id = id, window = window),
