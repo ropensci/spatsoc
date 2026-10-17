@@ -231,7 +231,7 @@ test_that('columns in result match expected type', {
   out <- leader_direction_delay(edges, DT, id = id, window = window)
   expect_type(out$direction_delay, 'integer')
   expect_type(out$direction_cor, 'double')
-  expect_type(out$max_direction_cor, 'boolean')
+  expect_type(out$max_direction_cor, 'logical')
 })
 
 test_that('splitBy argument doesnt use splitBy column', {
