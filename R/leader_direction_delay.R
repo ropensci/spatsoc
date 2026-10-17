@@ -16,11 +16,19 @@
 #' convert it by reference using [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
-#' @return `leader_direction_delay` returns the input `edges` aggregated
-#'   with a `mean_direction_delay_dyad` column indicating the mean
-#'   directional correlation delay between ID1 and ID2 and a
-#'   `mean_direction_delay` column indicating the mean directional
-#'   correlation delay for each individual in 'ID1' column.
+#' @return `leader_direction_delay` returns columns 'ID1', 'ID2' and 'dyadID'
+#'   from edges, the column 'direction_delay' indicating the directional delay
+#'   time (a sequence from -window to window e.g. for `window = 2` the
+#'   'direction_delay' column will include -2, -1, 0, 1, 2 for each dyad), the
+#'   column 'direction_cor' incidating the mean correlation between directions
+#'   for ID1 at the focal timegroup and ID2 at the directional delay time in
+#'   'direction_delay'. The column 'max_direction_cor' is also returned to
+#'   indicate the maximum direction correlation for each dyad. The columns
+#'   optionally provided in `splitBy` are used to restrict the calculations
+#'   within subsets of the input edges. For example, if a column named 'month'
+#'   is passed to `splitBy` (`splitBy = 'month'`), the directional correlation
+#'   delay and directional delay time will be calculated for each dyad within
+#'   months.
 #'
 #'  Note: since `leader_direction_delay` returns an aggregation of the input
 #'  `edges`, the output needs to be reassigned unlike some other
