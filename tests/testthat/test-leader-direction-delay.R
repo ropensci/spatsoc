@@ -178,7 +178,8 @@ test_that('columns added to the result DT', {
     'ID2',
     'dyadID',
     'direction_delay',
-    'direction_cor'
+    'direction_cor',
+    'max_direction_cor'
   )
 
   expect_setequal(
@@ -191,10 +192,12 @@ test_that('columns added to the result DT', {
   )
 })
 
+
 test_that('columns in result match expected type', {
   out <- leader_direction_delay(edges, DT, id = id, window = window)
   expect_type(out$direction_delay, 'integer')
   expect_type(out$direction_cor, 'double')
+  expect_type(out$max_direction_cor, 'boolean')
 })
 
 test_that('splitBy argument doesnt use splitBy column', {
