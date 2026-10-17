@@ -162,13 +162,11 @@ test_that('column names must exist in DT', {
 })
 
 test_that('output length as expected', {
-  # nrow(edges) is less than nrow(leader_delay) since leader_delay is aggregate
-  expect_gt(nrow(edges), nrow(leader_delay))
+  expect_lt(nrow(leader_delay), nrow(edges))
 
-  # number of ID1, ID2 combinations * the length of seq_tau / only ID1-ID2 in output
-  expect_equal(
-    nrow(edges[, .GRP, .(ID1, ID2)]) * length(-window:window) / 2,
-    nrow(leader_delay)
+  expect_lte(
+    nrow(leader_delay),
+    edges[, uniqueN(dyadID)] * length(-window:window),
   )
 })
 
@@ -186,7 +184,7 @@ test_that('n unique matches ID1, ID2 and optionally splitBy', {
 
   expect_lte(
     lead_delay[, uniqueN(direction_cor)],
-    edges[, uniqueN(dyadID)] * length(seq(-window:window))
+    edges[, uniqueN(dyadID)] * length(-window:window)
   )
 
   expect_in(lead_delay[, unique(dyadID)], edges[, unique(dyadID)])
@@ -194,7 +192,7 @@ test_that('n unique matches ID1, ID2 and optionally splitBy', {
   expect_lte(
     lead_delay_split[, uniqueN(direction_cor)],
     edges[, uniqueN(dyadID)] *
-      length(seq(-window:window)) *
+      length(-window:window) *
       edges[, uniqueN(split_tg)]
   )
 
