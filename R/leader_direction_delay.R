@@ -108,6 +108,14 @@
 #' )
 #' print(lead_delay)
 #'
+#' # Subset to maximum values of the directional correlation delay for each dyad
+#' max_lead_delay <- lead_delay[(max_direction_cor)]
+#' print(max_lead_delay)
+#'
+#' # Use a threshold to subset only directional delay values with a minimum correlation
+#' threshold <- 0.7
+#' max_lead_delay[direction_cor > threshold]
+#'
 #' # Or, using the new geometry interface
 #' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
 #' direction_step(DT, id = 'ID')
@@ -121,6 +129,14 @@
 #'   id = 'ID'
 #' )
 #' print(lead_delay)
+#'
+#' # Subset to maximum values of the directional correlation delay for each dyad
+#' max_lead_delay <- lead_delay[(max_direction_cor)]
+#' print(max_lead_delay)
+#'
+#' # Use a threshold to subset only directional delay values with a minimum correlation
+#' threshold <- 0.7
+#' max_lead_delay[direction_cor > threshold]
 leader_direction_delay <- function(
   edges,
   DT,
