@@ -229,6 +229,68 @@ test_that('returns a data.table', {
   )
 })
 
+test_that('direction colname can be different than default', {
+  copyDT <- copy(clean_DT)
+  setnames(copyDT, 'direction', 'potato')
+  expect_s3_class(
+    leader_direction_delay(
+      edges,
+      copyDT,
+      id = id,
+      window = window,
+      direction = 'potato'
+    ),
+    'data.table'
+  )
+})
+
+test_that('window column in edge, DT does not influence results', {
+  copyDT <- copy(clean_DT)
+  copyDT[, window := 42]
+
+  copyEdges <- copy(clean_edges)
+  copyEdges[, window := 42]
+
+  expect_equal(
+    leader_direction_delay(edges, copyDT, id = id, window = window),
+    leader_direction_delay(edges, DT, id = id, window = window)
+  )
+
+  expect_equal(
+    leader_direction_delay(copyEdges, DT, id = id, window = window),
+    leader_direction_delay(edges, DT, id = id, window = window)
+  )
+
+  expect_equal(
+    leader_direction_delay(copyEdges, copyDT, id = id, window = window),
+    leader_direction_delay(edges, DT, id = id, window = window)
+  )
+})
+
+test_that('setorder doesnt impact results', {
+  reorder_edges <- copy(edges)
+  setorder(reorder_edges, ID1)
+  expect_equal(
+    leader_direction_delay(edges = edges, DT, window, id)[, sort(
+      direction_delay
+    )],
+    leader_direction_delay(edges = reorder_edges, DT, window, id)[, sort(
+      direction_delay
+    )]
+  )
+
+  reorder_DT <- copy(DT)
+  setorder(reorder_DT, ID)
+  expect_equal(
+    leader_direction_delay(edges = edges, DT, window, id)[, sort(
+      direction_delay
+    )],
+    leader_direction_delay(edges = edges, reorder_DT, window, id)[, sort(
+      direction_delay
+    )]
+  )
+})
+
 test_that('ID1 matches first col from tstrsplit of dyadID', {
   expect_equal(
     leader_direction_delay(edges, DT, id = id, window = window)$ID1,
