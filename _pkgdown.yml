@@ -51,7 +51,7 @@ reference:
     desc: ~
     contents:
     - '`leader_direction_group`'
-    - '`leader_edge_delay`'
+    - '`leader_direction_delay`'
   - title: Geometry interface functions
     desc: ~
     contents:

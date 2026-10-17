@@ -451,7 +451,7 @@ Functions that require their outputs be reassigned include:
 - `edge_alignment`
 - `centroid_fusion`
 - `centroid_dyad`
-- `leader_edge_delay`
+- `leader_direction_delay`
 - `randomizations`
 
 
