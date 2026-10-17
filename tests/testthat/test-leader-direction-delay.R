@@ -172,6 +172,40 @@ test_that('output length as expected', {
   )
 })
 
+test_that('n unique matches ID1, ID2 and optionally splitBy', {
+  lead_delay <- leader_direction_delay(edges, DT, id = id, window = window)
+
+  edges[, split_tg := timegroup < median(timegroup)]
+  lead_delay_split <- leader_direction_delay(
+    edges,
+    DT,
+    id = id,
+    window = window,
+    splitBy = 'split_tg'
+  )
+
+  expect_lte(
+    lead_delay[, uniqueN(direction_cor)],
+    edges[, uniqueN(dyadID)] * length(seq(-window:window))
+  )
+
+  expect_in(lead_delay[, unique(dyadID)], edges[, unique(dyadID)])
+
+  expect_lte(
+    lead_delay_split[, uniqueN(direction_cor)],
+    edges[, uniqueN(dyadID)] *
+      length(seq(-window:window)) *
+      edges[, uniqueN(split_tg)]
+  )
+
+  expect_in(lead_delay_split[, unique(dyadID)], edges[, unique(dyadID)])
+
+  expect_lte(
+    lead_delay[, uniqueN(direction_cor)],
+    lead_delay_split[, uniqueN(direction_cor)]
+  )
+})
+
 test_that('columns added to the result DT', {
   expected_cols <- c(
     'ID1',
