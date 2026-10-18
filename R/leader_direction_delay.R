@@ -245,7 +245,6 @@ leader_direction_delay <- function(
     N_by_fusion > 1,
     {
       shift_tg <- do.call(cbind, shift(timegroup, seq_tau, type = 'lead'))
-      dif_tg <- timegroup - shift_tg
 
       shift_dir_ID2 <- do.call(
         cbind,
