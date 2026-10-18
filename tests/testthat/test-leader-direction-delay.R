@@ -336,6 +336,14 @@ test_that('ID1 matches first col from tstrsplit of dyadID', {
   )
 })
 
+test_that('increasing min nobs required increases NAs', {
+  min_nobs_0 <- leader_direction_delay(
+    edges,
+    DT,
+    id = id,
+    window = window,
+    min_nobs = 0
+  )
 N_id <- 5
 N_seq <- 10
 seq_xy <- c(
@@ -371,13 +379,24 @@ delay_expect <- direction_delay(
 )
 leader_expect <- leader_direction_delay(delay_expect)
 
+  min_nobs_5 <- leader_direction_delay(
+    edges,
+    DT,
+    id = id,
+    window = window,
+    min_nobs = 5
+  )
 test_that('expected results are returned', {
   expect_lte(nrow(leader_expect), delay_expect[, uniqueN(dyadID) * 2])
 
+  expect_lt(
+    min_nobs_0[, sum(is.na(direction_cor))],
+    min_nobs_5[, sum(is.na(direction_cor))]
   expect_equal(
     leader_expect[, uniqueN(abs(mean_direction_delay_dyad)), by = dyadID],
     leader_expect[, 1, by = dyadID]
   )
+})
 
   expect_equal(
     leader_expect[, mean(mean_direction_delay_dyad)],
