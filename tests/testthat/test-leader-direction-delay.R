@@ -344,40 +344,6 @@ test_that('increasing min nobs required increases NAs', {
     window = window,
     min_nobs = 0
   )
-N_id <- 5
-N_seq <- 10
-seq_xy <- c(
-  seq(0, 5, length.out = N_seq / 2),
-  seq(5.1, 0, length.out = N_seq / 2)
-)
-DT_expect <- data.table(
-  X = rep(seq_xy, each = N_id),
-  Y = rep(seq_xy, each = N_id),
-  ID = LETTERS[seq.int(N_id)]
-)
-DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
-setorder(DT_expect, timegroup)
-direction_step(DT_expect, id, coords, crs = 4326)
-
-edge_expect <- edge_dist(
-  DT_expect,
-  threshold = 100,
-  id,
-  coords,
-  timegroup,
-  returnDist = TRUE
-)
-dyad_id(edge_expect, 'ID1', 'ID2')
-fusion_id(edge_expect, threshold = 50)
-
-window <- 5
-delay_expect <- direction_delay(
-  edge_expect,
-  DT_expect,
-  window = window,
-  id = id
-)
-leader_expect <- leader_direction_delay(delay_expect)
 
   min_nobs_5 <- leader_direction_delay(
     edges,
@@ -386,44 +352,116 @@ leader_expect <- leader_direction_delay(delay_expect)
     window = window,
     min_nobs = 5
   )
-test_that('expected results are returned', {
-  expect_lte(nrow(leader_expect), delay_expect[, uniqueN(dyadID) * 2])
 
   expect_lt(
     min_nobs_0[, sum(is.na(direction_cor))],
     min_nobs_5[, sum(is.na(direction_cor))]
-  expect_equal(
-    leader_expect[, uniqueN(abs(mean_direction_delay_dyad)), by = dyadID],
-    leader_expect[, 1, by = dyadID]
   )
 })
 
-  expect_equal(
-    leader_expect[, mean(mean_direction_delay_dyad)],
-    0,
-    tolerance = 2
-  )
-  expect_equal(leader_expect[, mean(mean_direction_delay)], 0, tolerance = 2)
+test_that('equality Cij(tau) = Cji(-tau) holds', {
+  # With strict fusion_id settings
+  copy_edges <- copy(edges)
+  copy_edges[, fusionID := NULL]
+  fusion_id(copy_edges, threshold = threshold)
 
-  expect_equal(
-    leader_expect[
-      mean_direction_delay == min(mean_direction_delay),
-      unique(ID1)
-    ],
-    LETTERS[N_id]
+  # Calculate direction correlation and delay from ij direction
+  # in spatsoc, this is dyadID is used to assign i to the first ID from the
+  # dyadID and j to the second.
+  # For example, if dyadID is 'A-B', i: A and j:B
+  out <- leader_direction_delay(copy_edges, DT, id = id, window = window)
+
+  # Next, we reverse this relationship to calculate Cji, with these IDs reversed
+  copy_edges[,
+    dyadID := do.call(paste, c(rev(tstrsplit(dyadID, '-')), sep = '-'))
+  ]
+
+  out_rev <- leader_direction_delay(copy_edges, DT, id = id, window = window)
+
+  # Preserve the delay and correlation from the ID2 / ji perspective
+  out_rev[, direction_delay_ID2 := direction_delay]
+  out_rev[, direction_cor_ID2 := direction_cor]
+
+  # Revert the reversed dyadID
+  out_rev[, dyadID := do.call(paste, c(rev(tstrsplit(dyadID, '-')), sep = '-'))]
+
+  # Multiple the Cji delay by -1 for the merge
+  out_rev[, direction_delay := direction_delay * -1]
+
+  # Merge based on dyadID and direction
+  m <- out[out_rev, on = .(dyadID, direction_delay)]
+
+  expect_all_true(
+    m[, ID1 != i.ID1]
   )
-  expect_equal(
-    leader_expect[
-      mean_direction_delay == median(mean_direction_delay),
-      unique(ID1)
-    ],
-    LETTERS[ceiling(N_id / 2)]
+  expect_all_true(
+    m[, ID2 != i.ID2]
   )
-  expect_equal(
-    leader_expect[
-      mean_direction_delay == max(mean_direction_delay),
-      unique(ID1)
-    ],
-    LETTERS[1]
+  expect_all_true(
+    m[, direction_delay == -direction_delay_ID2]
   )
+
+  expect_all_true(
+    m[
+      !is.na(direction_cor) & !is.na(direction_cor_ID2),
+      direction_cor == direction_cor_ID2
+    ]
+  )
+
+  expect_equal(m[, .N, is.na(direction_cor)], m[, .N, is.na(direction_cor_ID2)])
+
+  # With loose fusion_id settings
+  copy_edges <- copy(edges)
+  copy_edges[, fusionID := NULL]
+  fusion_id(
+    copy_edges,
+    threshold = threshold,
+    n_max_missing = 1,
+    allow_split = TRUE
+  )
+
+  # Calculate direction correlation and delay from ij direction
+  # in spatsoc, this is dyadID is used to assign i to the first ID from the
+  # dyadID and j to the second.
+  # For example, if dyadID is 'A-B', i: A and j:B
+  out <- leader_direction_delay(copy_edges, DT, id = id, window = window)
+
+  # Next, we reverse this relationship to calculate Cji, with these IDs reversed
+  copy_edges[,
+    dyadID := do.call(paste, c(rev(tstrsplit(dyadID, '-')), sep = '-'))
+  ]
+
+  out_rev <- leader_direction_delay(copy_edges, DT, id = id, window = window)
+
+  # Preserve the delay and correlation from the ID2 / ji perspective
+  out_rev[, direction_delay_ID2 := direction_delay]
+  out_rev[, direction_cor_ID2 := direction_cor]
+
+  # Revert the reversed dyadID
+  out_rev[, dyadID := do.call(paste, c(rev(tstrsplit(dyadID, '-')), sep = '-'))]
+
+  # Multiple the Cji delay by -1 for the merge
+  out_rev[, direction_delay := direction_delay * -1]
+
+  # Merge based on dyadID and direction
+  m <- out[out_rev, on = .(dyadID, direction_delay)]
+
+  expect_all_true(
+    m[, ID1 != i.ID1]
+  )
+  expect_all_true(
+    m[, ID2 != i.ID2]
+  )
+  expect_all_true(
+    m[, direction_delay == -direction_delay_ID2]
+  )
+
+  expect_all_true(
+    m[
+      !is.na(direction_cor) & !is.na(direction_cor_ID2),
+      direction_cor == direction_cor_ID2
+    ]
+  )
+
+  expect_equal(m[, .N, is.na(direction_cor)], m[, .N, is.na(direction_cor_ID2)])
 })
