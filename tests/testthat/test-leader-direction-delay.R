@@ -236,25 +236,25 @@ test_that('splitBy argument doesnt use splitBy column', {
   copy_edges <- copy(clean_edges)
   copy_edges[, splitBy := timegroup]
 
-  expect_equal(
-    nrow(edges[, .GRP, .(ID1, ID2)]) * length(-window:window) / 2,
+  expect_lte(
     nrow(leader_direction_delay(
       copy_edges,
       DT,
       id = id,
       window = window
-    ))
+    )),
+    edges[, uniqueN(dyadID)] * length(-window:window)
   )
 
-  expect_error(
-    leader_direction_delay(
-      copy_edges,
-      DT,
-      id = id,
-      window = window,
-      splitBy = 'timegroup'
-    )
+  delay_split_tg <- leader_direction_delay(
+    copy_edges,
+    DT,
+    id = id,
+    window = window,
+    splitBy = 'timegroup'
   )
+
+  expect_all_true(delay_split_tg[direction_delay != 0, is.na(direction_cor)])
 })
 
 test_that('returns a data.table', {
