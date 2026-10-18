@@ -253,29 +253,13 @@ leader_direction_delay <- function(
       )
       dif_dir_ID1 <- units::drop_units(cos(direction_ID1 - shift_dir_ID2))
 
-      reorg_dif <- dif_dir_ID1[, rev(seq.int(ncol(dif_dir_ID1)))]
-      dif_dir_ID2 <- do.call(
-        cbind,
-        lapply(seq_along(seq_tau), function(i) {
-          shift(
-            reorg_dif[, i],
-            n = rev(seq_tau)[i],
-            type = 'cyclic'
-          )
-        })
-      )
-
       nobs_ID1 <- apply(dif_dir_ID1, 2, function(x) sum(!is.na(x)))
-      nobs_ID2 <- apply(dif_dir_ID2, 2, function(x) sum(!is.na(x)))
 
       mean_ID1 <- apply(dif_dir_ID1, 2, mean, na.rm = TRUE)
-      mean_ID2 <- apply(dif_dir_ID2, 2, mean, na.rm = TRUE)
 
       list(
         mean_ID1,
         nobs_ID1,
-        mean_ID2,
-        nobs_ID2,
         del = seq_tau
       )
     },
