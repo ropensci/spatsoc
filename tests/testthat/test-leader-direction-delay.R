@@ -465,3 +465,100 @@ test_that('equality Cij(tau) = Cji(-tau) holds', {
 
   expect_equal(m[, .N, is.na(direction_cor)], m[, .N, is.na(direction_cor_ID2)])
 })
+
+
+test_that('tg_matching internal intermediate object matches seq tau', {
+  # Strict fusion_id settings
+  copy_edges <- copy(edges)
+
+  # Taking from inside of leader_direction_delay
+  drop_nas <- copy_edges[
+    !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
+  ]
+
+  forward <- drop_nas[ID1 == tstrsplit(dyadID, '-')[[1L]]]
+
+  tg_matching <- forward[,
+    {
+      tg <- seq(min(timegroup), max(timegroup))
+      list(
+        timegroup = tg,
+        ID1 = rep(ID1, length.out = length(tg)),
+        ID2 = rep(ID2, length.out = length(tg))
+      )
+    },
+    by = c('dyadID', 'fusionID')
+  ]
+  seq_tau <- -window:window
+  tg_matching[, N_by_fusion := .N, fusionID]
+
+  # Check 1) dif_tg columns line up in delay, 2) dif_tg within seq_tau
+  check_dif_tg <- tg_matching[
+    N_by_fusion > 1,
+    {
+      shift_tg <- shift(timegroup, seq_tau, type = 'lead')
+      dif_tg <- timegroup - do.call(cbind, shift_tg)
+      unique_dif_tg <- apply(dif_tg, 2, uniqueN, na.rm = TRUE)
+      list(
+        columns_match = all(unique_dif_tg <= 1),
+        dif_within_seq_tau = all(
+          (na.omit(unlist(shift_tg) - timegroup)) %in% seq_tau
+        )
+      )
+    },
+    by = c('fusionID')
+  ]
+
+  expect_all_true(check_dif_tg$columns_match)
+  expect_all_true(check_dif_tg$dif_within_seq_tau)
+
+  # With loose fusion_id settings
+  copy_edges <- copy(edges)
+  copy_edges[, fusionID := NULL]
+  fusion_id(
+    copy_edges,
+    threshold = threshold,
+    n_max_missing = 1,
+    allow_split = TRUE
+  )
+
+  drop_nas <- copy_edges[
+    !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
+  ]
+
+  forward <- drop_nas[ID1 == tstrsplit(dyadID, '-')[[1L]]]
+
+  tg_matching <- forward[,
+    {
+      tg <- seq(min(timegroup), max(timegroup))
+      list(
+        timegroup = tg,
+        ID1 = rep(ID1, length.out = length(tg)),
+        ID2 = rep(ID2, length.out = length(tg))
+      )
+    },
+    by = c('dyadID', 'fusionID')
+  ]
+  seq_tau <- -window:window
+  tg_matching[, N_by_fusion := .N, fusionID]
+
+  # Check 1) dif_tg columns line up in delay, 2) dif_tg within seq_tau
+  check_dif_tg <- tg_matching[
+    N_by_fusion > 1,
+    {
+      shift_tg <- shift(timegroup, seq_tau, type = 'lead')
+      dif_tg <- timegroup - do.call(cbind, shift_tg)
+      unique_dif_tg <- apply(dif_tg, 2, uniqueN, na.rm = TRUE)
+      list(
+        columns_match = all(unique_dif_tg <= 1),
+        dif_within_seq_tau = all(
+          (na.omit(unlist(shift_tg) - timegroup)) %in% seq_tau
+        )
+      )
+    },
+    by = c('fusionID')
+  ]
+
+  expect_all_true(check_dif_tg$columns_match)
+  expect_all_true(check_dif_tg$dif_within_seq_tau)
+})
