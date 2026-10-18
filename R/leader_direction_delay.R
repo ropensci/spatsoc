@@ -112,9 +112,9 @@
 #' max_lead_delay <- lead_delay[(max_direction_cor)]
 #' print(max_lead_delay)
 #'
-#' # Use a threshold to subset only directional delay values with a minimum correlation
-#' threshold <- 0.7
-#' max_lead_delay[direction_cor > threshold]
+#' # Use a correlation threshold to subset directional delay values
+#' cor_threshold <- 0.7
+#' max_lead_delay[direction_cor > cor_threshold]
 #'
 #' # Or, using the new geometry interface
 #' get_geometry(DT, coords = c('X', 'Y'), crs = 32736)
@@ -134,9 +134,10 @@
 #' max_lead_delay <- lead_delay[(max_direction_cor)]
 #' print(max_lead_delay)
 #'
-#' # Use a threshold to subset only directional delay values with a minimum correlation
-#' threshold <- 0.7
-#' max_lead_delay[direction_cor > threshold]
+#' # Use a correlation threshold to subset directional delay values
+#' cor_threshold <- 0.7
+#' max_lead_delay[direction_cor > cor_threshold]
+# TODO: document that the Cij = -Cji equality holds in the tests, add to FAQ
 leader_direction_delay <- function(
   edges,
   DT,
