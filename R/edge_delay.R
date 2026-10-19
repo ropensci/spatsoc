@@ -60,11 +60,19 @@
 #' @references
 #'
 #' The directional correlation delay is defined in Nagy et al. 2010
-#' (\doi{doi:10.1038/nature08891}). Nagy et al. 2010's version measures the
-#' global delay across the sampling period between two individuals. This
-#' function, `edge_delay`, implements the version described in Quera 2023
-#' (\doi{doi:10.1111/jfb.15315}) as the momentary temporal delay that maximizes
-#' the direction correlation at each timestep.
+#' (\doi{doi:10.1038/nature08891}). Nagy's version measures the global delay
+#' across the sampling period between two individuals whereas this function,
+#' `edge_delay`, implements the version described in Quera 2023
+#' (\doi{doi:10.1111/jfb.15315}). Quera 2023 adapt the directional correlation
+#' delay from a global measure of dyads within a sampling effort, to a momentary
+#' measure of directional correlation delay that determines the temporal delay
+#' that maximizes the direction correlation within dyads at each time step. See
+#' [leader_direction_delay()] for the global measure defined in Nagy et al.
+#' 2010.
+#'
+#' See measuring the momentary implementation of the directional
+#' correlation delay:
+#' * (\doi{doi:10.1111/jfb.15315})
 #'
 #' See examples of measuring the directional correlation delay:
 #'  * \doi{doi:10.1111/jfb.15315}
@@ -74,6 +82,7 @@
 #'
 #' @family Edge-list generation
 #' @family Direction functions
+#' @seealso [leader_direction_delay()]
 #'
 #' @examples
 #' # Load data.table

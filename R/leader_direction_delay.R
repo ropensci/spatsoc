@@ -49,12 +49,22 @@
 #' @family Direction functions
 #'
 #' @references
+#'
+#' The directional correlation delay is defined in Nagy et al. 2010
+#' (\doi{doi:10.1038/nature08891}). Nagy's version measures the global
+#' directional correlation delay within dyads across sampling periods and is
+#' provided by the function [leader_direction_delay()]. Quera et al. 2023
+#' (\doi{doi:10.1111/jfb.15315}) adapted the directional correlation delay from
+#' the global measure described in Nagy et al. 2010 to a momentary measure of
+#' directional correlation delay that determines the temporal delay that
+#' maximizes the direction correlation within dyads at each time step. See
+#' [edge_delay()] for the momentary measure defined in Quera et al. 2023.
+#'
 #' See examples of measuring leadership using the directional correlation
 #' delay:
 #'  * \doi{doi:10.1016/j.anbehav.2013.07.005}
 #'  * \doi{doi:10.1073/pnas.1305552110}
 #'  * \doi{doi:10.1126/science.aap7781}
-#'  * \doi{doi:10.1111/jfb.15315}
 #'  * \doi{doi:10.1371/journal.pcbi.1003446}
 #'
 #' @examples
