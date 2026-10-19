@@ -213,13 +213,13 @@ edge_delay <- function(
   ]
   tg_matching[
     DT,
-    direction_ID1 := DT_direction_column,
+    direction_ID1 := units::drop_units(DT_direction_column),
     on = c(paste0('ID1 == ', id), 'timegroup == timegroup'),
     env = list(DT_direction_column = paste0('i.', direction))
   ]
   tg_matching[
     DT,
-    direction_ID2 := DT_direction_column,
+    direction_ID2 := units::drop_units(DT_direction_column),
     on = c(paste0('ID2 == ', id), 'timegroup == timegroup'),
     env = list(DT_direction_column = paste0('i.', direction))
   ]
@@ -253,64 +253,50 @@ edge_delay <- function(
     tg_matching[!(sufficient_nobs_ID2), direction_ID2 := NA]
   }
 
-  each <- tg_matching[,
+  tg_matching[, N_by_fusion := .N, by = fusionID]
+  each <- tg_matching[
+    N_by_fusion > 1,
     {
-      if (.N > 1) {
-        shift_tg <- do.call(cbind, shift(timegroup, seq_tau, type = 'lead'))
-        dif_tg <- timegroup - shift_tg
+      shift_tg <- do.call(cbind, shift(timegroup, seq_tau, type = 'lead'))
+      dif_tg <- timegroup - shift_tg
 
-        shift_dir_ID2 <- do.call(
-          cbind,
-          shift(direction_ID2, seq_tau, type = 'lead')
-        )
-        dif_dir_ID1 <- units::drop_units(cos(direction_ID1 - shift_dir_ID2))
+      shift_dir_ID2 <- do.call(
+        cbind,
+        shift(direction_ID2, seq_tau, type = 'lead')
+      )
+      dif_dir_ID1 <- cos(direction_ID1 - shift_dir_ID2)
 
-        reorg_dif <- dif_dir_ID1[, rev(seq.int(ncol(dif_dir_ID1)))]
-        dif_dir_ID2 <- do.call(
-          cbind,
-          lapply(seq_along(seq_tau), function(i) {
-            shift(reorg_dif[, i], n = rev(seq_tau)[i], type = 'cyclic')
-          })
-        )
+      shift_dir_ID1 <- do.call(
+        cbind,
+        shift(direction_ID1, seq_tau, type = 'lead')
+      )
+      dif_dir_ID2 <- cos(direction_ID2 - shift_dir_ID1)
 
-        i <- apply(dif_dir_ID1, 1, which.max)
-        i[lengths(i) == 0] <- NA_integer_
+      i <- apply(dif_dir_ID1, 1, which.max)
+      i[lengths(i) == 0] <- NA_integer_
 
-        ind <- cbind(seq.int(.N), unlist(i))
-        ret <- dif_dir_ID1[ind]
-        del <- dif_tg[ind]
+      ind <- cbind(seq.int(.N), unlist(i))
+      ret <- dif_dir_ID1[ind]
+      del <- dif_tg[ind]
 
-        i_ID2 <- apply(dif_dir_ID2, 1, which.max)
-        i_ID2[lengths(i_ID2) == 0] <- NA_integer_
+      i_ID2 <- apply(dif_dir_ID2, 1, which.max)
+      i_ID2[lengths(i_ID2) == 0] <- NA_integer_
 
-        ind_ID2 <- cbind(seq.int(.N), unlist(i_ID2))
-        ret_ID2 <- dif_dir_ID2[ind_ID2]
-        del_ID2 <- dif_tg[ind_ID2]
+      ind_ID2 <- cbind(seq.int(.N), unlist(i_ID2))
+      ret_ID2 <- dif_dir_ID2[ind_ID2]
+      del_ID2 <- dif_tg[ind_ID2]
 
-        list(
-          ret,
-          del,
-          ret_ID2,
-          del_ID2,
-          ID1,
-          ID2,
-          dyadID,
-          timegroup,
-          distance
-        )
-      } else {
-        list(
-          ret = NA_real_,
-          del = NA_integer_,
-          ret_ID2 = NA_real_,
-          del_ID2 = NA_integer_,
-          ID1,
-          ID2,
-          dyadID,
-          timegroup,
-          distance
-        )
-      }
+      list(
+        ret,
+        del,
+        ret_ID2,
+        del_ID2,
+        ID1,
+        ID2,
+        dyadID,
+        timegroup,
+        distance
+      )
     },
     by = fusionID
   ]
@@ -336,11 +322,13 @@ edge_delay <- function(
         distance,
         direction_cor = ret_ID2,
         direction_delay = del_ID2
-      )]
-    )
+      )],
+      edges[fusionID %in% tg_matching[N_by_fusion <= 1, fusionID]]
+    ),
+    fill = TRUE
   )
 
-  data.table::setorder(out, timegroup)
+  data.table::setorder(out, timegroup, dyadID)
 
   return(out)
 }
