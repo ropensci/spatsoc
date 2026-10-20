@@ -237,13 +237,13 @@ test_that('equality Cij(t, tau) == Cji(t + tau, -tau) holds', {
   direction <- 'direction'
   tg_matching[
     copy_DT,
-    direction_ID1 := DT_direction_column,
+    direction_ID1 := units::drop_units(DT_direction_column),
     on = c(paste0('ID1 == ', id), 'timegroup == timegroup'),
     env = list(DT_direction_column = paste0('i.', direction))
   ]
   tg_matching[
     copy_DT,
-    direction_ID2 := DT_direction_column,
+    direction_ID2 := units::drop_units(DT_direction_column),
     on = c(paste0('ID2 == ', id), 'timegroup == timegroup'),
     env = list(DT_direction_column = paste0('i.', direction))
   ]
@@ -258,13 +258,13 @@ test_that('equality Cij(t, tau) == Cji(t + tau, -tau) holds', {
         cbind,
         shift(direction_ID2, seq_tau, type = 'lead')
       )
-      dif_dir_ID1 <- units::drop_units(cos(direction_ID1 - shift_dir_ID2))
+      dif_dir_ID1 <- cos(direction_ID1 - shift_dir_ID2)
 
       shift_dir_ID1 <- do.call(
         cbind,
         shift(direction_ID1, seq_tau, type = 'lead')
       )
-      dif_dir_ID2 <- units::drop_units(cos(direction_ID2 - shift_dir_ID1))
+      dif_dir_ID2 <- cos(direction_ID2 - shift_dir_ID1)
 
       # Indices for non-NA values
       ind <- data.table(which(!is.na(dif_dir_ID1), arr.ind = TRUE))
