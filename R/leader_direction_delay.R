@@ -340,9 +340,11 @@ leader_direction_delay <- function(
 #' @seealso [edge_delay()]
 #'
 #' @returns
+#' leader_edge_delay is deprecated, see ?leader_edge_delay and NEWS for details
 #' @export
 #'
 #' @examples
+#' # leader_edge_delay is deprecated, see ?leader_edge_delay
 leader_edge_delay <- function() {
   stop(
     'leader_edge_delay has been renamed to leader_direction_delay and refactored to',
