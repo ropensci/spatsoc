@@ -169,7 +169,7 @@ leader_direction_delay <- function(
   # due to NSE notes in R CMD check
   . <- fusionID <- ID1 <- ID2 <- dyadID <- timegroup <- direction_ID1 <-
     direction_ID2 <- sufficient_nobs_ID1 <- sufficient_nobs_ID2 <-
-      N_by_fusion <- DT_direction_column <- max_direction_cor <- NULL
+      N_by_fusion <- DT_direction_column <- max_direction_cor <- wt_mn <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)

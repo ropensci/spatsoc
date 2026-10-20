@@ -175,7 +175,7 @@ edge_delay <- function(
   # due to NSE notes in R CMD check
   . <- fusionID <- ID1 <- ID2 <- dyadID <- timegroup <- distance <-
     direction_ID1 <- direction_ID2 <- DT_direction_column <-
-      sufficient_nobs_ID1 <- sufficient_nobs_ID2 <- NULL
+      sufficient_nobs_ID1 <- sufficient_nobs_ID2 <- N_by_fusion <- NULL
 
   assert_not_null(DT)
   assert_is_data_table(DT)
