@@ -210,13 +210,13 @@ leader_direction_delay <- function(
 
   tg_matching[
     DT,
-    direction_ID1 := DT_direction_column,
+    direction_ID1 := units::drop_units(DT_direction_column),
     on = c(paste0('ID1 == ', id), 'timegroup == timegroup'),
     env = list(DT_direction_column = paste0('i.', direction))
   ]
   tg_matching[
     DT,
-    direction_ID2 := DT_direction_column,
+    direction_ID2 := units::drop_units(DT_direction_column),
     on = c(paste0('ID2 == ', id), 'timegroup == timegroup'),
     env = list(DT_direction_column = paste0('i.', direction))
   ]
@@ -245,7 +245,6 @@ leader_direction_delay <- function(
       },
       by = c('fusionID', splitBy)
     ]
-
     tg_matching[!(sufficient_nobs_ID1), direction_ID1 := NA]
     tg_matching[!(sufficient_nobs_ID2), direction_ID2 := NA]
   }
@@ -261,7 +260,7 @@ leader_direction_delay <- function(
         cbind,
         shift(direction_ID2, seq_tau, type = 'lead')
       )
-      dif_dir_ID1 <- units::drop_units(cos(direction_ID1 - shift_dir_ID2))
+      dif_dir_ID1 <- cos(direction_ID1 - shift_dir_ID2)
 
       nobs_ID1 <- apply(dif_dir_ID1, 2, function(x) sum(!is.na(x)))
 
