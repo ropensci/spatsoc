@@ -104,3 +104,16 @@ test_that('geometry column returned is sfc, as expected', {
   get_geometry(copyDT, coords = coords, crs = crs)
   expect_equal(copyDT[is.na(X), .N], copyDT[st_is_empty(geometry), .N])
 })
+
+
+test_that('coords can be provided with dashes', {
+  copyDT <- copy(DT)
+  coords <- c('X', 'Y')
+  dash_coords <- paste0(coords, '-test')
+  setnames(copyDT, coords, dash_coords)
+
+  expect_equal(
+    nrow(copyDT),
+    nrow(get_geometry(copyDT, coords = dash_coords, crs = crs))
+  )
+})
