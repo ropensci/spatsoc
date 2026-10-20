@@ -24,6 +24,16 @@
 #' expect the names of a column in `DT` which correspond to the id, and
 #' direction columns.
 #'
+#' `edge_delay` respects the equality described in Quera et al. 2023
+#' (\doi{doi:10.1111/jfb.15315}) where
+#'
+#' \deqn{C_{ij}(t, \tau) = C_{ji}(t + \tau, -\tau)}
+#'
+#' This equality does not describe, however, any specific relationship between
+#' the lags for individuals, e.g. that the lags for individual's maximum
+#' directional correlation delays in a dyad at some time step will be opposite.
+#' See internal tests that confirm the equality is respected.
+#'
 #' @inheritParams centroid_fusion
 #' @inheritParams direction_group
 #' @param window temporal window in unit of timegroup column generated with

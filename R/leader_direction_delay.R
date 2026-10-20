@@ -16,6 +16,17 @@
 #' convert it by reference using [data.table::setDT()] or by reassigning using
 #' [data.table::data.table()].
 #'
+#' `leader_direction_delay` respects the equalities described in Nagy et al.
+#' 2010 (\doi{doi:10.1038/nature08891}) where
+#'
+#' \deqn{C_{ij}(\tau) = C_{ji}(-\tau)}
+#'
+#' and
+#'
+#' \deqn{\tau^{*}_{ij} = -\tau^{*}_{ji}}
+#'
+#' See internal tests that confirm these equalities are respected.
+#'
 #' @return `leader_direction_delay` returns columns 'ID1', 'ID2' and 'dyadID'
 #'   from edges, the column 'direction_delay' indicating the directional delay
 #'   time (a sequence from -window to window e.g. for `window = 2` the
@@ -34,7 +45,6 @@
 #'  `edges`, the output needs to be reassigned unlike some other
 #'  `spatsoc` functions like `dyad_id`. See details in
 #'  [FAQ](https://docs.ropensci.org/spatsoc/articles/faq.html).
-#'
 #'
 #' @inheritParams edge_delay
 #' @param splitBy (optional) character string or vector of grouping column
@@ -147,7 +157,6 @@
 #' # Use a correlation threshold to subset directional delay values
 #' cor_threshold <- 0.7
 #' max_lead_delay[direction_cor > cor_threshold]
-# TODO: document that the Cij = -Cji equality holds in the tests, add to FAQ
 leader_direction_delay <- function(
   edges,
   DT,
@@ -167,6 +176,7 @@ leader_direction_delay <- function(
   assert_not_null(edges)
   assert_is_data_table(edges)
   assert_not_null(id)
+
   check_cols_edges <- c('ID1', 'ID2', 'timegroup', splitBy)
   assert_are_colnames(edges, check_cols_edges)
 
