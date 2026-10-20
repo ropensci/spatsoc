@@ -309,3 +309,44 @@ leader_direction_delay <- function(
 
   return(out)
 }
+
+#' Deprecated: leader_edge_delay
+#'
+#' The function `leader_edge_delay` has been renamed to
+#' `leader_direction_delay`, with the original name deprecated to clarify the
+#' distinction between the global directional correlation delay method decsribed
+#' by Nagy et al. 2010 and implemented in `leader_direction_delay` and the
+#' momentary directional correlation delay method described in Quera et al. 2023
+#' and implemented in `edge_delay`.
+#'
+#' Previous versions of {spatsoc} included an incorrect translation of the
+#' methods described in Nagy et al. 2010, specifically due to 1) a
+#' misunderstanding regarding the \eqn{<...>} notation to represent
+#' time-averaging in the figure caption, 2) the use of differences in direction
+#' instead of the cosine of the differences in direction (equivalent to the
+#' correlation in direction), 3) not returning the correlation in direction for
+#' thresholding by the user.
+#'
+#' The previous version (`leader_edge_delay`) used the results of `edge_delay`
+#' as an aggregation step. The renaming here is intended to differentiate these
+#' functions as related, but not steps in a shared workflow: the user is not
+#' expected to use the output from `edge_delay` in `leader_direction_delay`. As
+#' above, `edge_delay` is the momentary directional correlation delay calculated
+#' at each time step while `leader_direction_delay` is the global directional
+#' correlation delay calculated for each dyad, and optionally sampling period
+#' (using the 'splitBy' argument).
+#'
+#' @seealso [leader_direction_delay()]
+#' @seealso [edge_delay()]
+#'
+#' @returns
+#' @export
+#'
+#' @examples
+leader_edge_delay <- function() {
+  stop(
+    'leader_edge_delay has been renamed to leader_direction_delay and refactored to',
+    ' better follow methods described in Nagy et al. 2010.',
+    '\nPlease see NEWS and help page ?leader_edge_delay for more details.'
+  )
+}
