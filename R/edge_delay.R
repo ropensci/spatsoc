@@ -213,7 +213,6 @@ edge_delay <- function(
     },
     by = .(dyadID, fusionID)
   ]
-
   tg_matching[
     edges,
     distance := distance,
@@ -331,7 +330,11 @@ edge_delay <- function(
         direction_cor = ret_ID2,
         direction_delay = del_ID2
       )],
-      edges[fusionID %in% tg_matching[N_by_fusion <= 1, fusionID]]
+      drop_nas[
+        fusionID %in% tg_matching[N_by_fusion <= 1, fusionID],
+        .SD,
+        .SDcols = intersect(colnames(drop_nas), colnames(each))
+      ]
     ),
     fill = TRUE
   )
