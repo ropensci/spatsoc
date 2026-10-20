@@ -1,8 +1,9 @@
-#' Distance to group leader
+#' Distance to leader in position along group direction
 #'
-#' `distance_to_leader` calculates the distance to the leader of each
-#' spatiotemporal group. The function expects a `data.table` with relocation
-#' data appended with a `rank_position_group_direction` column indicating the
+#' `distance_to_leader` calculates the distance to the leader in position along
+#' group direction of each spatiotemporal group. The function expects a
+#' `data.table` with relocation data appended with a
+#' `rank_position_group_direction` column indicating the
 #' ranked position along the group direction generated with
 #' `leader_direction_group(return_rank = TRUE)`. Relocation data should be in
 #' two columns representing the X and Y coordinates, or in a geometry column
