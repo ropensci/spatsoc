@@ -359,7 +359,7 @@ test_that('increasing min nobs required increases NAs', {
   )
 })
 
-test_that('equality Cij(tau) = Cji(-tau) holds', {
+test_that('equalities Cij(tau) = Cji(-tau) and tau*ij = -tau*ji hold', {
   # With strict fusion_id settings
   copy_edges <- copy(edges)
   copy_edges[, fusionID := NULL]
@@ -381,6 +381,7 @@ test_that('equality Cij(tau) = Cji(-tau) holds', {
   # Preserve the delay and correlation from the ID2 / ji perspective
   out_rev[, direction_delay_ID2 := direction_delay]
   out_rev[, direction_cor_ID2 := direction_cor]
+  out_rev[, max_direction_cor_ID2 := max_direction_cor]
 
   # Revert the reversed dyadID
   out_rev[, dyadID := do.call(paste, c(rev(tstrsplit(dyadID, '-')), sep = '-'))]
@@ -409,6 +410,8 @@ test_that('equality Cij(tau) = Cji(-tau) holds', {
   )
 
   expect_equal(m[, .N, is.na(direction_cor)], m[, .N, is.na(direction_cor_ID2)])
+
+  expect_equal(m[, max_direction_cor], m[, max_direction_cor_ID2])
 
   # With loose fusion_id settings
   copy_edges <- copy(edges)
@@ -436,6 +439,7 @@ test_that('equality Cij(tau) = Cji(-tau) holds', {
   # Preserve the delay and correlation from the ID2 / ji perspective
   out_rev[, direction_delay_ID2 := direction_delay]
   out_rev[, direction_cor_ID2 := direction_cor]
+  out_rev[, max_direction_cor_ID2 := max_direction_cor]
 
   # Revert the reversed dyadID
   out_rev[, dyadID := do.call(paste, c(rev(tstrsplit(dyadID, '-')), sep = '-'))]
@@ -464,6 +468,8 @@ test_that('equality Cij(tau) = Cji(-tau) holds', {
   )
 
   expect_equal(m[, .N, is.na(direction_cor)], m[, .N, is.na(direction_cor_ID2)])
+
+  expect_equal(m[, max_direction_cor], m[, max_direction_cor_ID2])
 })
 
 
