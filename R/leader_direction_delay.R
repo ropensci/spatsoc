@@ -320,12 +320,16 @@ leader_direction_delay <- function(
 #' and implemented in `edge_delay`.
 #'
 #' Previous versions of {spatsoc} included an incorrect translation of the
-#' methods described in Nagy et al. 2010, specifically due to 1) a
-#' misunderstanding regarding the \eqn{<...>} notation to represent
-#' time-averaging in the figure caption, 2) the use of differences in direction
-#' instead of the cosine of the differences in direction (equivalent to the
-#' correlation in direction), 3) not returning the correlation in direction for
-#' thresholding by the user.
+#' methods described in Nagy et al. 2010, specifically:
+#'
+#' - a misunderstanding regarding the \eqn{<...>} notation to represent
+#' time-averaging in the figure caption of Nagy et al. 2010
+#'
+#'- the use of minimum differences in direction instead of the cosine of the
+#' differences in direction (equivalent to the dot product of directions)
+#'
+#' - not returning the correlation in direction for thresholding or evaluation by
+#' the user
 #'
 #' The previous version (`leader_edge_delay`) used the results of `edge_delay`
 #' as an aggregation step. The renaming here is intended to differentiate these
