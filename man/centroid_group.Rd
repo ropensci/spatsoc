@@ -34,7 +34,7 @@ centroid column(s) for each group.
 
 If the \code{crs} for \code{coords} or \code{st_crs(geometry)} for \code{geometry} is long lat
 (see \code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), centroids will be calculated using
-\code{\link[s2:s2_boundary]{s2::s2_centroid()}} through \code{\link[sf:geos_unary]{sf::st_centroid()}}. If the \code{crs} for \code{coords}
+\code{\link[s2:s2_centroid]{s2::s2_centroid()}} through \code{\link[sf:st_centroid]{sf::st_centroid()}}. If the \code{crs} for \code{coords}
 or \code{st_crs(geometry)} for \code{geometry} is projected or NA, the centroids will
 be calculated using a mean on the coordinates.
 
@@ -95,10 +95,10 @@ The underlying centroid function used depends on the crs of the coordinates
 or geometry provided.
 \itemize{
 \item If the crs is longlat degrees (as determined by
-\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}) and \code{\link[sf:s2]{sf::sf_use_s2()}} is TRUE, the distance function
-is \code{\link[sf:geos_unary]{sf::st_centroid()}} which passes to \code{\link[s2:s2_boundary]{s2::s2_centroid()}}.
-\item If the crs is longlat degrees but \code{\link[sf:s2]{sf::sf_use_s2()}} is FALSE, the centroid
-calculated will be incorrect. See \code{\link[sf:geos_unary]{sf::st_centroid()}}.
+\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}) and \code{\link[sf:sf_use_s2]{sf::sf_use_s2()}} is TRUE, the distance function
+is \code{\link[sf:st_centroid]{sf::st_centroid()}} which passes to \code{\link[s2:s2_centroid]{s2::s2_centroid()}}.
+\item If the crs is longlat degrees but \code{\link[sf:sf_use_s2]{sf::sf_use_s2()}} is FALSE, the centroid
+calculated will be incorrect. See \code{\link[sf:st_centroid]{sf::st_centroid()}}.
 \item If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
 centroid function used is mean.
 }
@@ -139,10 +139,10 @@ centroid_group(DT)
 \seealso{
 \code{group_pts}
 
-Other Centroid functions: 
-\code{\link{centroid_dyad}()},
-\code{\link{centroid_fusion}()},
-\code{\link{direction_to_centroid}()},
-\code{\link{distance_to_centroid}()}
+Other Centroid functions:
+\code{\link[=centroid_dyad]{centroid_dyad()}},
+\code{\link[=centroid_fusion]{centroid_fusion()}},
+\code{\link[=direction_to_centroid]{direction_to_centroid()}},
+\code{\link[=distance_to_centroid]{distance_to_centroid()}}
 }
 \concept{Centroid functions}

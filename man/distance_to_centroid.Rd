@@ -100,9 +100,9 @@ The underlying distance function used depends on the crs of the coordinates
 or geometry provided.
 \itemize{
 \item If the crs is longlat degrees (as determined by
-\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), the distance function is \code{\link[sf:geos_measures]{sf::st_distance()}} which
-passes to \code{\link[s2:s2_is_collection]{s2::s2_distance()}} if \code{\link[sf:s2]{sf::sf_use_s2()}} is TRUE and
-\code{\link[lwgeom:geod]{lwgeom::st_geod_distance()}} if \code{\link[sf:s2]{sf::sf_use_s2()}} is FALSE. The distance
+\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), the distance function is \code{\link[sf:st_distance]{sf::st_distance()}} which
+passes to \code{\link[s2:s2_distance]{s2::s2_distance()}} if \code{\link[sf:sf_use_s2]{sf::sf_use_s2()}} is TRUE and
+\code{\link[lwgeom:st_geod_distance]{lwgeom::st_geod_distance()}} if \code{\link[sf:sf_use_s2]{sf::sf_use_s2()}} is FALSE. The distance
 returned has units set according to the crs.
 \item If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
 distance function used is \code{\link[stats:dist]{stats::dist()}}, maintaining expected behaviour
@@ -159,19 +159,19 @@ See examples of using distance to group centroid:
 }
 }
 \seealso{
-\link{centroid_group}, \link{group_pts}, \code{\link[sf:geos_measures]{sf::st_distance()}}
+\link{centroid_group}, \link{group_pts}, \code{\link[sf:st_distance]{sf::st_distance()}}
 
-Other Distance functions: 
-\code{\link{distance_to_leader}()},
-\code{\link{edge_dist}()},
-\code{\link{edge_nn}()},
-\code{\link{edge_zones}()}
+Other Distance functions:
+\code{\link[=distance_to_leader]{distance_to_leader()}},
+\code{\link[=edge_dist]{edge_dist()}},
+\code{\link[=edge_nn]{edge_nn()}},
+\code{\link[=edge_zones]{edge_zones()}}
 
-Other Centroid functions: 
-\code{\link{centroid_dyad}()},
-\code{\link{centroid_fusion}()},
-\code{\link{centroid_group}()},
-\code{\link{direction_to_centroid}()}
+Other Centroid functions:
+\code{\link[=centroid_dyad]{centroid_dyad()}},
+\code{\link[=centroid_fusion]{centroid_fusion()}},
+\code{\link[=centroid_group]{centroid_group()}},
+\code{\link[=direction_to_centroid]{direction_to_centroid()}}
 }
 \concept{Centroid functions}
 \concept{Distance functions}

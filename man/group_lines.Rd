@@ -85,8 +85,8 @@ handling coordinate reference systems, see more at
 
 In addition, \code{group_lines} (and \link{build_lines}) previously used
 \link[sp:SpatialLines]{sp::SpatialLines}, rgeos::gIntersects, rgeos::gBuffer but have been
-updated to use \link[sf:st_as_sf]{sf::st_as_sf}, \link[sf:st]{sf::st_linestring}, \link[sf:geos_binary_pred]{sf::st_intersects}, and
-\link[sf:geos_unary]{sf::st_buffer} according to the R-spatial evolution, see more at
+updated to use \link[sf:st_as_sf]{sf::st_as_sf}, \link[sf:st_linestring]{sf::st_linestring}, \link[sf:st_intersects]{sf::st_intersects}, and
+\link[sf:st_buffer]{sf::st_buffer} according to the R-spatial evolution, see more at
 \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
 }
 
@@ -170,8 +170,8 @@ group_lines(DT, threshold = 50, crs = utm,
 \seealso{
 \link{build_lines} \link{group_times}
 
-Other Spatial grouping: 
-\code{\link{group_polys}()},
-\code{\link{group_pts}()}
+Other Spatial grouping:
+\code{\link[=group_polys]{group_polys()}},
+\code{\link[=group_pts]{group_pts()}}
 }
 \concept{Spatial grouping}

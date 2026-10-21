@@ -70,7 +70,7 @@ Distance functions
 Leadership functions
 \itemize{
 \item \code{\link[=leader_direction_group]{leader_direction_group()}}
-\item \code{\link[=leader_edge_delay]{leader_edge_delay()}}
+\item \code{\link[=leader_direction_delay]{leader_direction_delay()}}
 }
 
 Geometry interface functions
@@ -98,6 +98,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Alec L. Robitaille \email{robit.alec@gmail.com} (\href{https://orcid.org/0000-0002-4706-1762}{ORCID})
   \item Quinn Webber (\href{https://orcid.org/0000-0002-0434-9360}{ORCID})
   \item Eric Vander Wal (\href{https://orcid.org/0000-0002-8534-4317}{ORCID})
 }

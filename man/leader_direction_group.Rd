@@ -161,21 +161,21 @@ forefront index):
 \seealso{
 \code{direction_group}, \code{centroid_group}
 
-Other Leadership functions: 
-\code{\link{direction_to_leader}()},
-\code{\link{leader_edge_delay}()}
+Other Leadership functions:
+\code{\link[=direction_to_leader]{direction_to_leader()}},
+\code{\link[=leader_direction_delay]{leader_direction_delay()}}
 
-Other Direction functions: 
-\code{\link{direction_group}()},
-\code{\link{direction_polarization}()},
-\code{\link{direction_step}()},
-\code{\link{direction_to_centroid}()},
-\code{\link{direction_to_leader}()},
-\code{\link{edge_alignment}()},
-\code{\link{edge_delay}()},
-\code{\link{edge_direction}()},
-\code{\link{edge_zones}()},
-\code{\link{leader_edge_delay}()}
+Other Direction functions:
+\code{\link[=direction_group]{direction_group()}},
+\code{\link[=direction_polarization]{direction_polarization()}},
+\code{\link[=direction_step]{direction_step()}},
+\code{\link[=direction_to_centroid]{direction_to_centroid()}},
+\code{\link[=direction_to_leader]{direction_to_leader()}},
+\code{\link[=edge_alignment]{edge_alignment()}},
+\code{\link[=edge_delay]{edge_delay()}},
+\code{\link[=edge_direction]{edge_direction()}},
+\code{\link[=edge_zones]{edge_zones()}},
+\code{\link[=leader_direction_delay]{leader_direction_delay()}}
 }
 \concept{Direction functions}
 \concept{Leadership functions}

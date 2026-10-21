@@ -87,7 +87,7 @@ handling coordinate reference systems, see more below and  details at
 
 In addition, \code{group_polys} previously used rgeos::gIntersection,
 rgeos::gIntersects and rgeos::gArea but has been
-updated to use \link[sf:geos_binary_pred]{sf::st_intersects}, \link[sf:geos_binary_ops]{sf::st_intersection} and \link[sf:geos_measures]{sf::st_area}
+updated to use \link[sf:st_intersects]{sf::st_intersects}, \link[sf:st_intersection]{sf::st_intersection} and \link[sf:st_area]{sf::st_area}
 according to the R-spatial evolution, see more
 at \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
 }
@@ -143,8 +143,8 @@ print(areaDT)
 \seealso{
 \code{\link[=build_polys]{build_polys()}} \code{\link[=group_times]{group_times()}}
 
-Other Spatial grouping: 
-\code{\link{group_lines}()},
-\code{\link{group_pts}()}
+Other Spatial grouping:
+\code{\link[=group_lines]{group_lines()}},
+\code{\link[=group_pts]{group_pts()}}
 }
 \concept{Spatial grouping}

@@ -162,7 +162,7 @@ randTraj <- randomizations(
 \url{doi:10.1111/2041-210X.12553}
 }
 \seealso{
-Other Social network tools: 
-\code{\link{get_gbi}()}
+Other Social network tools:
+\code{\link[=get_gbi]{get_gbi()}}
 }
 \concept{Social network tools}
