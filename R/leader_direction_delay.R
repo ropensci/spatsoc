@@ -31,7 +31,7 @@
 #'   from edges, the column 'direction_delay' indicating the directional delay
 #'   time (a sequence from -window to window e.g. for `window = 2` the
 #'   'direction_delay' column will include -2, -1, 0, 1, 2 for each dyad), the
-#'   column 'direction_cor' incidating the mean correlation between directions
+#'   column 'direction_cor' indicating the mean correlation between directions
 #'   for ID1 at the focal timegroup and ID2 at the directional delay time in
 #'   'direction_delay'. The column 'max_direction_cor' is also returned to
 #'   indicate the maximum direction correlation for each dyad. The columns

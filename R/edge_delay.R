@@ -145,7 +145,7 @@
 #' )
 #'
 #' # Calculate momentary leadership index (Quera et al. 2023)
-#' delay[, momentary_leadership_index := mean(direction_cor, na.rm = TRUE), by =
+#' delay[, momentary_leadership_index := mean(direction_delay), by =
 #' .(ID1, timegroup)]
 #'
 #' # Or, using the new geometry interface
@@ -162,7 +162,7 @@
 #' )
 #'
 #' # Calculate momentary leadership index (Quera et al. 2023)
-#' delay[, momentary_leadership_index := mean(direction_cor, na.rm = TRUE), by =
+#' delay[, momentary_leadership_index := mean(direction_delay), by =
 #' .(ID1, timegroup)]
 edge_delay <- function(
   edges,
