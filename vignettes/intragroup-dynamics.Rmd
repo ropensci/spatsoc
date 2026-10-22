@@ -1,0 +1,655 @@
+---
+title: "Intragroup dynamics"
+author: "Alec Robitaille, Quinn Webber and Eric Vander Wal"
+date: "`r Sys.Date()`"
+output: "github_document"
+---
+
+# Measuring intragroup dynamics
+
+Functionality previously available in {spatsoc} includes spatiotemporal grouping,
+edge list generation and data-stream permutations (Robitaille et al. 2019). 
+These functions have allowed users to detect interactions between individuals, 
+measure coocurrence within and across species, and generate social networks
+from telemetry data. (TODO: point to example lit using spatsoc)
+
+Spatiotemporal grouping can be performed given a telemetry dataset, 
+temporal and spatial thresholds, and one of three grouping functions:
+`group_pts`, `group_lines` or `group_polys`. Each return a unique identifier
+for each spatiotemporal group, defined using point based distances, 
+linear trajectory overlap or home range overlap, respectively. 
+
+
+For example, the suggested `group_pts` workflow 
+with example data from the package: 
+
+```{r}
+#| eval: false
+#| echo: true
+
+# Load packages
+library(data.table)
+library(spatsoc)
+library(ggplot2)
+library(ggdist)
+library(patchwork)
+library(scico)
+
+# Read example data
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+
+# Cast the character column to POSIXct
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+
+# Set variables
+temporal_threshold  <- '20 minutes'
+spatial_threshold <- 50
+id <- 'ID'
+coords <- c('X', 'Y')
+
+# Temporal grouping
+group_times(DT, datetime = 'datetime', threshold = temporal_threshold)
+
+# Spatial grouping with timegroup
+group_pts(DT, threshold = spatial_threshold, id = id,
+          coords = coords, timegroup = 'timegroup')
+
+```
+
+```{r}
+#| echo: false
+
+# Load packages
+library(data.table)
+library(ggplot2)
+library(ggdist)
+library(patchwork)
+library(scico)
+suppressPackageStartupMessages(library(spatsoc))
+
+# Read example data
+DT <- fread(system.file("extdata", "DT.csv", package = "spatsoc"))
+
+# Cast the character column to POSIXct
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+
+# Set variables
+temporal_threshold  <- '20 minutes'
+spatial_threshold <- 50
+id <- 'ID'
+coords <- c('X', 'Y')
+
+# Temporal grouping
+DT <- group_times(DT, datetime = 'datetime', threshold = temporal_threshold)
+setorder(DT, timegroup)
+
+# Spatial grouping with timegroup
+DT <- group_pts(DT, threshold = spatial_threshold, id = id, 
+                coords = coords, timegroup = 'timegroup')
+
+tinytable::tt(DT[order(timegroup)][1:5])
+```
+
+Users can also measure dyadic interindividual distance using the `edge_dist`
+function and identify nearest neighbors using the `edge_nn` function. For
+example:
+
+```{r}
+#| echo: true
+#| eval: false
+interindividual_dist <- edge_dist(
+  DT,
+  threshold = spatial_threshold,
+  id = id,
+  coords = coords,
+  timegroup = 'timegroup',
+  returnDist = TRUE,
+  fillNA = TRUE
+)
+```
+
+```{r}
+#| label: "IID"
+#| echo: false
+#| eval: true
+interindividual_dist <- edge_dist(
+  DT,
+  threshold = spatial_threshold,
+  id = id,
+  coords = coords,
+  timegroup = 'timegroup',
+  returnDist = TRUE,
+  fillNA = TRUE
+)
+tinytable::tt(interindividual_dist[1:5])
+```
+
+```{r}
+#| echo: true
+#| eval: false
+nearest_neighbours <- edge_nn(
+  DT,
+  id = id,
+  coords = coords,
+  timegroup = 'timegroup',
+  returnDist = TRUE
+)
+```
+
+```{r}
+#| label: "nn"
+#| echo: false
+#| eval: true
+nearest_neighbours <- edge_nn(
+  DT,
+  id = id,
+  coords = coords,
+  timegroup = 'timegroup',
+  returnDist = TRUE
+)
+tinytable::tt(nearest_neighbours[1:5])
+```
+
+Building on these functions, {spatsoc}'s new functionality provides 
+a finer understanding of an individual's behaviour with respect to conspecifics. 
+We aim to provide users with accessible, flexible functions that will 
+help them identify leader follower patterns, fission fusion dynamics and 
+potentially dominance behaviours in their own animal telemetry data. 
+
+## Position within groups
+
+Extending {spatsoc}'s abilities to identify spatiotemporal groups, a new 
+set of functions are now available to measure individuals position relative within
+spatiotemporal groups. 
+
+After identifying spatiotemporal groups with eg. `group_pts`, we 
+can measure the group centroid. The group centroid is defined as the 
+the mean of individual locations in a group. 
+
+```{r}
+#| eval: false
+#| echo: true
+group_centroid(DT, coords = coords)
+```
+
+```{r}
+#| eval: true
+#| echo: false
+DT <- group_pts(DT, threshold = spatial_threshold, id = id, 
+                coords = coords, timegroup = 'timegroup')
+cent <- group_centroid(DT, coords = coords)
+tinytable::tt(cent[1:5, .(ID, X, Y, datetime, timegroup, group, group_mean_X, group_mean_Y)])
+```
+
+Then we can measure each individual's direction and distance to the group centroid. 
+The distance to group centroid is the distance between from the focal
+individual to the group centroid. The direction to group centroid is the absolute
+azimuth from the focal individual to the group centroid. The rank distance
+to group centroid is the ordinal rank of individuals' distances to the 
+group centroid. 
+<!-- TODO: insert refs with examples of biological interpretation of distance and direction to  -->
+<!-- group centroid.  -->
+
+```{r}
+#| echo: true
+#| eval: false
+distance_to_group_centroid(DT, coords, return_rank = TRUE)
+bearing_to_group_centroid(DT, coords)
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+dist_dir_cent <- distance_to_group_centroid(cent, coords, return_rank = TRUE)
+dist_dir_cent <- bearing_to_group_centroid(cent, coords)
+g1 <- ggplot(dist_dir_cent) +
+  geom_histogram(aes(bearing_centroid), bins = 30) +
+  labs(x = 'Direction to group centroid', y = '')
+g2 <- ggplot(dist_dir_cent) +
+  stat_halfeye(aes(dist_group_centroid, factor(rank_dist_group_centroid))) +
+  labs(x = 'Distance to group centroid', y = 'Rank distance to group centroid')
+
+g1 + g2
+```
+
+After considering how individuals are positioned relative to the group centroid, 
+we can also measure how individuals are positioned relative to the mean 
+group direction. To do so, we rotate the coordinate system around the 
+group centroid by the mean bearing of all individuals in the group. Then 
+we take the distance along this new axis to the measure of front-back position
+within the group. 
+<!-- TODO: refs where this is used, extended biological interpretation -->
+
+The position within group is the position along the front-to-back axis of the
+group's bearing (eg. [@Quera_2023; @Harel_2021]). The rank position within group
+is the ordinal rank along the front-to-back axis of the group's bearing (eg.
+[@Burns_2012]). The time spent leading group is an aggregate metric of the time
+in the first rank position within group. The distance to leader is the 
+geographic distance from the focal individual to the group's leader. The direction to 
+leader is the absolute azimuth from the focal individual to the group's leader. 
+
+```{r}
+#| eval: false
+#| echo: true
+projection <- 32636
+bearing_sequential(DT, id = id, coords = coords, projection = projection)
+group_bearing(DT)
+position_within_group(DT, coords = coords, return_rank = TRUE)
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| warning: false
+projection <- 32636
+bearing_sequential(DT, id = id, coords = coords, projection = projection)
+group_bearing(DT)
+group_leader(DT, coords = coords, return_rank = TRUE)
+
+sel_group <- DT[, .N, group][N > 3, sample(group, 1)]
+sub_DT <- DT[group == sel_group]
+slope <- sub_DT[1, tan(group_mean_bearing)]
+intercept <- sub_DT[1, group_mean_Y - slope * group_mean_X]
+intercept_inv <- sub_DT[1, group_mean_Y - (-1/slope * group_mean_X)]
+
+g_pos <- ggplot(sub_DT, aes(X, Y, color = id)) +
+  geom_point(size = 0.8) +
+  geom_text(aes(label = paste0(format(dist_along_group_bearing, digits = 1),
+                               ' (', rank_dist_along_group_bearing, ')')),
+                nudge_y = 0.5) +
+  geom_point(color = 'black', aes(group_mean_X, group_mean_Y)) +
+  geom_abline(slope = slope, intercept = intercept) +
+  geom_abline(slope = -1/slope, intercept = intercept_inv,
+              linewidth = 0.2) +
+  theme_bw() +
+  labs(x = '', y = '') +
+  theme(axis.text = element_blank(), axis.ticks = element_blank()) +
+  coord_fixed() +
+  guides(color = 'none') +
+  scale_x_continuous(expand = expansion(add = 10))
+
+DT[, N_by_group := .N, group]
+g_hist <- ggplot(DT[N_by_group > 1]) +
+  geom_histogram(aes(dist_along_group_bearing), binwidth = 1) +
+  labs(x = 'Distance along group az', y = '') +
+  theme_bw()
+
+g_hist2 <- ggplot(DT[N_by_group > 1]) +
+  geom_histogram(aes(rank_dist_along_group_bearing), binwidth = 1) +
+  labs(x = 'Rank distance along group az', y = '') +
+  theme_bw()
+
+g_dist <- ggplot(DT[N_by_group > 1]) +
+  stat_halfeye(aes(dist_along_group_bearing, factor(rank_dist_along_group_bearing))) +
+  labs(x = 'Distance along group az', y = 'Rank distance along group az') +
+  theme_bw()
+
+print(g_pos)
+print(g_dist + (g_hist / g_hist2))
+```
+
+## Position relative to leader
+
+Taking a simple, dynamic definition of leadership, we can identify the 
+distance and direction of each individual to the leader of each spatiotemporal
+group. 
+
+```{r}
+#| eval: false
+#| echo: true
+distance_to_leader(DT, coords = coords)
+bearing_to_leader(DT, coords = coords)
+```
+
+
+```{r}
+#| eval: true
+#| echo: false
+#| warning: false
+DT <- distance_to_leader(DT, coords = coords)
+DT <- bearing_to_leader(DT, coords = coords)
+
+sel_group <- DT[N_by_group > 3, sample(group, 1)]
+sub <- DT[group == sel_group]
+slope <- sub[1, tan(group_mean_bearing)]
+intercept <- sub[1, group_mean_Y - slope * group_mean_X]
+intercept_inv <- sub[1, group_mean_Y - (-1/slope * group_mean_X)]
+
+g <- ggplot(sub, aes(X, Y, color = id)) +
+  geom_point(size = 0.8) +
+  geom_text(aes(label = rank_dist_along_group_bearing), nudge_y = 0.5) +
+  geom_text(aes(label = paste0(format(dist_leader, digits = 2),
+                               ', ',
+                               format(bearing_leader, digits = 2),
+                               ' rad')), nudge_y = -0.5) +
+  geom_point(color = 'black', aes(group_mean_X, group_mean_Y)) +
+  geom_abline(slope = slope, intercept = intercept) +
+  geom_abline(slope = -1/slope, intercept = intercept_inv,
+              linewidth = 0.2) +
+  theme_bw() +
+  labs(x = '', y = '') +
+  theme(axis.text = element_blank(), axis.ticks = element_blank()) +
+  coord_fixed() +
+  guides(color = 'none') +
+  scale_x_continuous(expand = expansion(add = 10))
+
+g_dist <- ggplot(DT, aes(bearing_leader, 
+                         factor(rank_dist_along_group_bearing))) +
+  stat_halfeye() +
+  labs(x = 'Direction to leader', y = 'Rank along group az') +
+  theme_bw()
+
+g_dir <- ggplot(DT, aes(dist_leader, factor(rank_dist_along_group_bearing))) +
+  stat_halfeye() +
+  labs(x = 'Distance to leader', y = 'Rank along group az') +
+  theme_bw()
+
+print(g)
+print(g_dist + g_dir)
+```
+
+
+
+## Fission fusion
+
+Given the variability in defining fission fusion dynamics in the literature, we
+developed a flexible function that allows users to both use their system
+specific definitions and at the same time easily compare to results to other
+definitions. 
+
+Function arguments: 
+- `threshold`: spatial distance threshold to establish a fusion event
+- `n_min_length`: the minimum number of successive fixes that are required to 
+establish a fusion event
+- `n_max_missing`: the maximum number of allowable missed observations for 
+either individual in a dyad within a fusion event
+- `allow_split`: if fusion events allow a temporary spatial splitting for one
+observation without resulting in a fission event
+
+<!-- See Table Sup B: varying definitions of fission fusion -->
+
+```{r}
+#| eval: false
+#| echo: true
+# Fission fusion events using interinvidiual distance calculated with edge_dist
+fusion_events <- fusion_id(
+  interindividual_dist,
+  threshold = spatial_threshold, 
+  n_min_length = 0, 
+  n_max_missing = 0, 
+  allow_split = FALSE
+)
+```
+
+
+```{r}
+#| echo: false
+#| eval: true
+#| fig-height: 10
+max_tg <- 50
+threshold <- 50
+id <- 'id'
+coords <- c('x_proj', 'y_proj')
+
+DT_fogo <- fread('../../prepare-locs/output/2024-01-26_NL-Fogo-Caribou-Telemetry.csv')
+DT_fogo <- group_times(DT_fogo, 'datetime', '10 minutes')
+DT_fogo <- setorder(DT_fogo, timegroup)
+edges_fogo <- edge_dist(DT_fogo, threshold = threshold,
+                   id = id, coords = coords,
+                   timegroup = 'timegroup', fillNA = FALSE, returnDist = TRUE)
+edges_fogo <- dyad_id(edges_fogo, 'ID1', 'ID2')
+edges_fogo <- fusion_id(edges_fogo, threshold = threshold, n_min_length = 1, n_max_missing = 1)
+
+sub_fogo <- DT_fogo[id %in% c('FO2016008', 'FO2017007') & timegroup < max_tg]
+sub_edges <- edges_fogo[ID1 %in% c('FO2016008', 'FO2017007') &
+                          ID2 %in% c('FO2016008', 'FO2017007') &
+                          timegroup < max_tg]
+
+fogo_min0_miss0_splitF <- fusion_id(
+  copy(sub_edges), threshold = 50, n_min_length = 0, n_max_missing = 0, allow_split = FALSE)
+fogo_min2_miss1_splitT <- fusion_id(
+  copy(sub_edges), threshold = 50, n_min_length = 2, n_max_missing = 1, allow_split = TRUE)
+fogo_min2_miss0_splitF <- fusion_id(
+  copy(sub_edges), threshold = 50, n_min_length = 2, n_max_missing = 0, allow_split = FALSE)
+
+g <- ggplot(sub_fogo,
+            aes(x_proj, y_proj, color = id)) +
+  geom_path() +
+  geom_label(aes(label = timegroup),
+            data = sub_fogo[timegroup %in% c(min(timegroup), max(timegroup))]) +
+  theme_bw() + 
+  labs(x = '', y = '')
+
+g2.1 <- ggplot(fogo_min0_miss0_splitF[!is.na(fusionID)],
+               aes(timegroup,  dyadID, shape= factor(fusionID), group = fusionID)) +
+  geom_line() +
+  geom_point(size = 3) +
+  labs(#title = 'Minimum obs: 0, maximum missing: 0, allow split: FALSE',
+       y = '')
+g2.2 <- ggplot(fogo_min2_miss1_splitT[!is.na(fusionID)],
+               aes(timegroup,  dyadID, shape = factor(fusionID), group = fusionID)) +
+  geom_line() +
+  geom_point(size = 3) +
+  labs(title = 'Minimum obs: 2, maximum missing: 1, allow split: TRUE',
+       y = '')
+g2.3 <- ggplot(fogo_min2_miss0_splitF[!is.na(fusionID)],
+               aes(timegroup,  dyadID, shape = factor(fusionID), group = fusionID)) +
+  geom_line() +
+  geom_point(size = 3) +
+  labs(title = 'Minimum obs: 2, maximum missing: 0, allow split: FALSE',
+       y = '')
+# TODO: fix
+print(g / (g2.1 * #/ g2.2 / g2.3 *
+             xlim(0, 50) *
+             guides(shape = 'none')) &
+        labs(shape = 'fusionID') &
+        scale_shape_manual(values = seq.int(15)) &
+        theme_bw())
+```
+
+
+## Bearings
+
+Next, we can use individuals' bearings to explore interindividual direction,
+directional alignment and group polarization.  
+
+<!-- TODO: references -->
+<!-- related eg. direction between individuals (always L / R), polarization of flock, -->
+<!-- etc -->
+
+Polarization measures the uniformity of absolute azimuth in a group of individuals 
+[@Wang_2022] on a scale of 0-1 where values near 0 indicate that azimuths point
+in different directions and values near 1 indicate that azimuths point in 
+similar directions. 
+
+```{r}
+#| echo: true
+#| eval: false
+# Calculate polarization using azimuth from az_sequential()
+bearing_polarization(DT)
+```
+
+```{r}
+#| echo: false
+#| eval: true
+DT <- bearing_polarization(DT)
+
+sel_group <- DT[, .N, group][N > 2, sample(group, 5)]
+sub <- DT[group %in% sel_group]
+g <- ggplot(sub, aes(bearing)) +
+  stat_dotsinterval(binwidth = 0.1, overflow = "keep", dotsize = 1) +
+  geom_text(x = 0, y = 0.75,
+            aes(label = format(polarization, digits = 2))) +
+  theme_bw() +
+  facet_grid(group~.)
+
+print(g)
+```
+
+Directional alignment is the relative difference between two individuals' 
+azimuths. Given the similarity to `edge_dist`, this functionality
+is provided under a similar name: `edge_az`. 
+
+```{r}
+#| echo: true
+#| eval: false
+directional_align <- edge_az(
+  DT,
+  threshold = NULL,
+  id = id,
+  timegroup = 'timegroup',
+  coords = coords,
+  returnDist = TRUE,
+  fillNA = TRUE
+)
+```
+
+```{r}
+#| echo: false
+#| eval: false
+# TODO: fix
+directional_align <- edge_az(DT, threshold = NULL, id = id,
+                             timegroup = 'timegroup',
+                        coords = coords, returnDist = TRUE, fillNA = TRUE)
+directional_align <- dyad_id(directional_align, 'ID1', 'ID2')
+
+sel_group <- DT[N_by_group > 2, sample(group, 1)]
+sub <- DT[id %in% DT[group == sel_group, id] &
+                      between(timegroup,
+                              DT[group == sel_group, first(timegroup) - 1],
+                              DT[group == sel_group, first(timegroup) + 2])]
+g <- ggplot(sub, aes(X, Y, color = id)) +
+  geom_path(arrow = arrow()) +
+  geom_label(aes(label = timegroup), data  = sub[timegroup == min(timegroup)]) +
+  guides(color = 'none') +
+  labs(x = '', y = '')
+
+sub_edges <- directional_align[(ID1 %in% DT[group == sel_group, id] &
+                          ID2 %in% DT[group == sel_group, id]) &
+                          between(timegroup,
+                                DT[group == sel_group, first(timegroup) - 1],
+                                DT[group == sel_group, first(timegroup) + 2])]
+g2 <- ggplot(sub_edges,
+                  aes(factor(timegroup), dyadID, color = diff_az)) +
+  geom_point(size = 5) +
+  scale_color_viridis_c() +
+  labs(x = 'Timegroup', y = '')
+
+print(g / g2 & theme_bw())
+```
+
+
+Interindividual direction measures the absolute azimuth between individuals. 
+
+(TODO)
+<!-- TODO: interindividual difference in bearing code and example -->
+
+
+## Lagged differences in bearing
+
+The directional correlation delay [@Nagy_2010] of individuals i, j is given by
+
+$$C_{ij} = [\overrightarrow{v_{i}}(t) * \overrightarrow{j}(t + \tau)]_{t}$$
+
+where 
+
+- $\overrightarrow{v_{i}}(t)$ is the normalized velocity of individual i at time t
+- $\overrightarrow{v_{j}}(t + \tau)$ is the normalized velocity of individual j at time t + $\tau$
+- Note that $C_{ij}(\tau)$ = $C_{ji}(-\tau)$
+- Calculated only where pairs of individuals were less than 100 m apart
+
+The maximum value of the directional correlation function $C_{ij}$ is at
+$C_{ij}(\tau^{*}_{ij})$ where $\tau^{*}_{ij}$ is the directional correlation
+delay time. $\tau^{*}_{ij}$ values focus on the relationship in pairs of
+individuals, ignoring hierarchy changes caused by other individuals.
+
+- Note that $\tau^{*}_{ij}$ = $-\tau^{*}_{ji}$
+- Negative values indicate that flight directional changes of individual
+i falls behind that of individual j and therefore j is leading
+
+Hierarchical networks can be generated using $\tau^{*}_{ij}$. 
+
+```{r}
+#| eval: false
+#| echo: true
+# Cast the character column to POSIXct
+DT[, datetime := as.POSIXct(datetime, tz = 'UTC')]
+
+# Temporal grouping
+DT <- group_times(DT, datetime = 'datetime', threshold = temporal_threshold)
+
+# Interindividual distance with maximum distance threshold set at 50 m
+interindividual_dist <- edge_dist(
+  DT,
+  threshold = 100,
+  id = id,
+  coords = coords,
+  timegroup = 'timegroup',
+  returnDist = TRUE,
+  fillNA = TRUE
+)
+
+# Identify fusion events
+fusion_events <- fusion_id(
+  interindividual_dist,
+  threshold = spatial_threshold, 
+  n_min_length = 0, 
+  n_max_missing = 0, 
+  allow_split = FALSE
+)
+
+# Calculate the directional correlation delay during fusion events
+dir_delay <- edge_delay(
+  DT = DT,
+  id = id,
+  edges = fusion_events[!is.na(fusionID)],
+  window = 2
+)
+```
+
+```{r}
+#| eval: true
+#| echo: false
+DT_fogo <- DT_fogo[timegroup < 50]
+id <- 'id'
+bearing_sequential(DT_fogo, id = id, coords = c('x_long', 'y_lat'), projection = 4326)
+dir_delay_fogo <- edge_delay(DT_fogo, id = id, edges = edges_fogo, window = 2)
+
+sub_fogo <- DT_fogo[id %in% c('FO2016008', 'FO2017007') & timegroup < 50]
+g <- ggplot(sub_fogo,
+            aes(x_proj, y_proj, color = id)) +
+  geom_path() +
+  geom_label(aes(label = timegroup),
+             data = sub_fogo[timegroup %in% c(min(timegroup), max(timegroup))]) +
+  theme_bw()
+g2 <- ggplot(dir_delay_fogo[dyadID == 'FO2016008-FO2017007' & timegroup < 50]) +
+  geom_point(aes(timegroup, interaction(ID1, ID2), color = dir_corr_delay), size = 5) +
+  scale_color_scico(midpoint = 0, palette = 'vik', begin = 0.8, end = 0.2) +
+  theme_bw()
+
+print(g / g2)
+
+```
+
+
+<!-- TODO: example of hierarchical networks -->
+
+## Behavioural zones
+
+The behavioural zones metric assigns neighbours to three non-overlapping
+behavioural zones [Couzin_2002]. The "zone of repulsion" is the minimum distance
+around an individual within which neighbours are expected to move away to avoid
+collisions. The "zone of orientation" is the next zone around an individual
+beyond the "zone of repulsion" within which neighbours are expected to orient
+themselves to the movement of their neighbours. The "zone of attraction" is the
+farthest zone around an individual within which neighbours are expected to be
+attracted to the position of the focal individual. Notably, there is a possibly
+"blind volume" behind the individual representing the limits of their
+perception.
+
+(TODO)
+
+<!-- TODO: code and example -->
+
+
