@@ -106,7 +106,7 @@ test_that('no rows are added to the result edges', {
 test_that('column added to the result DT', {
   copyEdges <- copy(edges)
 
-  expected_cols <- c(colnames(copyEdges), 'direction_delay', 'direction_diff')
+  expected_cols <- c(colnames(copyEdges), 'direction_delay', 'direction_cor')
 
   expect_setequal(
     expected_cols,
@@ -151,18 +151,12 @@ test_that('window column in edge, DT does not influence results', {
   )
 
   expect_equal(
-    edge_delay(copyEdges, DT, id = id, window = window)[,
-      .SD,
-      .SDcols = -'window'
-    ],
+    edge_delay(copyEdges, DT, id = id, window = window),
     edge_delay(edges, DT, id = id, window = window)
   )
 
   expect_equal(
-    edge_delay(copyEdges, copyDT, id = id, window = window)[,
-      .SD,
-      .SDcols = -'window'
-    ],
+    edge_delay(copyEdges, copyDT, id = id, window = window),
     edge_delay(edges, DT, id = id, window = window)
   )
 })
@@ -217,90 +211,90 @@ test_that('setorder doesnt impact results', {
   )
 })
 
-test_that('forward/reverse are equal', {
-  swap_edges <- edge_dist(
-    DT,
-    threshold = threshold,
-    id = id,
-    coords = coords,
-    timegroup = timegroup,
-    returnDist = TRUE,
-    fillNA = FALSE
-  )
-  setnames(swap_edges, c('ID1', 'ID2'), c('ID2', 'ID1'))
-  dyad_id(swap_edges, id1 = 'ID1', id2 = 'ID2')
-  fusion_id(swap_edges, threshold = threshold)
+test_that('equality Cij(t, tau) == Cji(t + tau, -tau) holds', {
+  copy_edges <- copy(edges)
+  copy_DT <- copy(DT)
 
-  swap_delay <- edge_delay(swap_edges, DT, window, id)
-  delay <- edge_delay(edges, DT, window, id)
-
-  swap_leader <- leader_edge_delay(swap_delay)
-  leader <- leader_edge_delay(delay)
-
-  expect_equal(
-    swap_leader[order(dyadID, ID1)],
-    leader[order(dyadID, ID1)]
-  )
-})
-
-
-N_id <- 5
-N_seq <- 10
-seq_xy <- c(
-  seq(0, 5, length.out = N_seq / 2),
-  seq(5.1, 0, length.out = N_seq / 2)
-)
-DT_expect <- data.table(
-  X = rep(seq_xy, each = N_id),
-  Y = rep(seq_xy, each = N_id),
-  ID = LETTERS[seq.int(N_id)]
-)
-DT_expect[, timegroup := seq.int(.GRP)[.GRP] + seq.int(.N), by = ID]
-setorder(DT_expect, timegroup)
-direction_step(DT_expect, id, coords, crs = 4326)
-
-edge_expect <- edge_dist(
-  DT_expect,
-  threshold = 100,
-  id,
-  coords,
-  timegroup,
-  returnDist = TRUE
-)
-dyad_id(edge_expect, 'ID1', 'ID2')
-fusion_id(edge_expect, threshold = 100)
-
-window <- 5
-delay_expect <- edge_delay(edge_expect, DT_expect, window = window, id = id)
-
-leader_expect <- leader_edge_delay(delay_expect)
-
-test_that('expected results are returned', {
-  expect_lte(nrow(delay_expect), nrow(edge_expect))
-  expect_lte(nrow(DT_expect), nrow(delay_expect))
-
-  mean_delays <- delay_expect[, mean(direction_delay, na.rm = TRUE), by = ID1]
-
-  expect_equal(mean_delays[V1 == min(V1), ID1], LETTERS[N_id])
-  expect_equal(mean_delays[V1 == median(V1), ID1], LETTERS[ceiling(N_id / 2)])
-  expect_equal(mean_delays[V1 == max(V1), ID1], LETTERS[1])
-
-  mean_delays_wrt_A <- delay_expect[
-    ID1 == 'A',
-    mean(direction_delay, na.rm = TRUE),
-    by = ID2
+  # Taking from inside of edge_delay, since intermediate matrices are not returned
+  drop_nas <- copy_edges[
+    !(is.na(fusionID) | is.na(ID1) | is.na(ID2) | is.na(dyadID))
   ]
-  expect_equal(mean_delays_wrt_A[V1 == max(V1), ID2], LETTERS[N_id])
-})
 
-test_that('exaggerated window size returns the same', {
-  expect_equal(
-    edge_delay(edge_expect, DT_expect, window = window, id = id),
-    edge_delay(edge_expect, DT_expect, window = window + 10, id = id)
-  )
+  forward <- drop_nas[ID1 == tstrsplit(dyadID, '-')[[1L]]]
 
-  expect_equal(
-    edge_delay(edge_expect, DT_expect, window = window, id = id),
-    edge_delay(edge_expect, DT_expect, window = window + 1000, id = id)
-  )
+  tg_matching <- forward[,
+    {
+      tg <- seq(min(timegroup), max(timegroup))
+      list(
+        timegroup = tg,
+        ID1 = rep(ID1, length.out = length(tg)),
+        ID2 = rep(ID2, length.out = length(tg))
+      )
+    },
+    by = .(dyadID, fusionID)
+  ]
+
+  direction <- 'direction'
+  tg_matching[
+    copy_DT,
+    direction_ID1 := units::drop_units(DT_direction_column),
+    on = c(paste0('ID1 == ', id), 'timegroup == timegroup'),
+    env = list(DT_direction_column = paste0('i.', direction))
+  ]
+  tg_matching[
+    copy_DT,
+    direction_ID2 := units::drop_units(DT_direction_column),
+    on = c(paste0('ID2 == ', id), 'timegroup == timegroup'),
+    env = list(DT_direction_column = paste0('i.', direction))
+  ]
+
+  seq_tau <- -window:window
+
+  tg_matching[, N_by_fusion := .N, by = fusionID]
+  check_equality <- tg_matching[
+    N_by_fusion > 1,
+    {
+      shift_dir_ID2 <- do.call(
+        cbind,
+        shift(direction_ID2, seq_tau, type = 'lead')
+      )
+      dif_dir_ID1 <- cos(direction_ID1 - shift_dir_ID2)
+
+      shift_dir_ID1 <- do.call(
+        cbind,
+        shift(direction_ID1, seq_tau, type = 'lead')
+      )
+      dif_dir_ID2 <- cos(direction_ID2 - shift_dir_ID1)
+
+      # Indices for non-NA values
+      ind <- data.table(which(!is.na(dif_dir_ID1), arr.ind = TRUE))
+
+      # Rename to match equality: rows are t, cols are the column representing tau
+      setnames(ind, c('row', 'col'), c('t_val', 'tau_col'))
+
+      # Get each Cij(t, tau) correlation value
+      ind[, Cij_t_tau := dif_dir_ID1[t_val, tau_col], by = .(t_val, tau_col)]
+
+      # Match the tau col to the corresponding tau value
+      ind[, tau_val := seq_tau[tau_col]]
+
+      # Calculate t + tau
+      ind[, t_plus_tau := t_val + tau_val]
+
+      # Calculate -tau then match the corresponding column
+      ind[, neg_tau_col := which(seq_tau == -tau_val), by = tau_val]
+
+      # Get each Cji(t + tau, -tau) correlation value
+      ind[,
+        Cji_t_plus_tau_neg_tau := dif_dir_ID2[t_plus_tau, neg_tau_col],
+        by = .(t_plus_tau, neg_tau_col)
+      ]
+
+      # Check they are all equal
+      list(check_cor = ind[, all(Cij_t_tau == Cji_t_plus_tau_neg_tau)])
+    },
+    by = fusionID
+  ]
+
+  expect_all_true(check_equality$check_cor)
 })

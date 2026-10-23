@@ -140,23 +140,23 @@ See example of using direction to group centroid:
 \seealso{
 \link{centroid_group}, \link{group_pts}, \code{\link[lwgeom:st_geod_azimuth]{lwgeom::st_geod_azimuth()}}
 
-Other Direction functions: 
-\code{\link{direction_group}()},
-\code{\link{direction_polarization}()},
-\code{\link{direction_step}()},
-\code{\link{direction_to_leader}()},
-\code{\link{edge_alignment}()},
-\code{\link{edge_delay}()},
-\code{\link{edge_direction}()},
-\code{\link{edge_zones}()},
-\code{\link{leader_direction_group}()},
-\code{\link{leader_edge_delay}()}
+Other Direction functions:
+\code{\link[=direction_group]{direction_group()}},
+\code{\link[=direction_polarization]{direction_polarization()}},
+\code{\link[=direction_step]{direction_step()}},
+\code{\link[=direction_to_leader]{direction_to_leader()}},
+\code{\link[=edge_alignment]{edge_alignment()}},
+\code{\link[=edge_delay]{edge_delay()}},
+\code{\link[=edge_direction]{edge_direction()}},
+\code{\link[=edge_zones]{edge_zones()}},
+\code{\link[=leader_direction_delay]{leader_direction_delay()}},
+\code{\link[=leader_direction_group]{leader_direction_group()}}
 
-Other Centroid functions: 
-\code{\link{centroid_dyad}()},
-\code{\link{centroid_fusion}()},
-\code{\link{centroid_group}()},
-\code{\link{distance_to_centroid}()}
+Other Centroid functions:
+\code{\link[=centroid_dyad]{centroid_dyad()}},
+\code{\link[=centroid_fusion]{centroid_fusion()}},
+\code{\link[=centroid_group]{centroid_group()}},
+\code{\link[=distance_to_centroid]{distance_to_centroid()}}
 }
 \concept{Centroid functions}
 \concept{Direction functions}

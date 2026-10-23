@@ -128,9 +128,9 @@ The underlying distance function used depends on the crs of the coordinates
 or geometry provided.
 \itemize{
 \item If the crs is longlat degrees (as determined by
-\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), the distance function is \code{\link[sf:geos_measures]{sf::st_distance()}} which
-passes to \code{\link[s2:s2_is_collection]{s2::s2_distance()}} if \code{\link[sf:s2]{sf::sf_use_s2()}} is TRUE and
-\code{\link[lwgeom:geod]{lwgeom::st_geod_distance()}} if \code{\link[sf:s2]{sf::sf_use_s2()}} is FALSE. The distance
+\code{\link[sf:st_is_longlat]{sf::st_is_longlat()}}), the distance function is \code{\link[sf:st_distance]{sf::st_distance()}} which
+passes to \code{\link[s2:s2_distance]{s2::s2_distance()}} if \code{\link[sf:sf_use_s2]{sf::sf_use_s2()}} is TRUE and
+\code{\link[lwgeom:st_geod_distance]{lwgeom::st_geod_distance()}} if \code{\link[sf:sf_use_s2]{sf::sf_use_s2()}} is FALSE. The distance
 returned has units set according to the crs.
 \item If the crs is not longlat degrees (eg. NULL, NA_crs_, or projected), the
 distance function used is \code{\link[stats:dist]{stats::dist()}}, maintaining expected behaviour
@@ -172,8 +172,8 @@ group_pts(DT, threshold = 50, id = 'ID', timegroup = 'timegroup')
 \seealso{
 \code{group_times}
 
-Other Spatial grouping: 
-\code{\link{group_lines}()},
-\code{\link{group_polys}()}
+Other Spatial grouping:
+\code{\link[=group_lines]{group_lines()}},
+\code{\link[=group_polys]{group_polys()}}
 }
 \concept{Spatial grouping}

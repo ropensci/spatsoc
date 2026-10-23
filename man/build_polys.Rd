@@ -129,7 +129,7 @@ build_polys(DT, crs = utm, hrType = 'mcp',
 \seealso{
 \link{group_polys}
 
-Other Build functions: 
-\code{\link{build_lines}()}
+Other Build functions:
+\code{\link[=build_lines]{build_lines()}}
 }
 \concept{Build functions}

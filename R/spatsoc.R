@@ -55,7 +55,7 @@
 #' Leadership functions
 #'
 #' - [`leader_direction_group()`]
-#' - [`leader_edge_delay()`]
+#' - [`leader_direction_delay()`]
 #'
 #' Geometry interface functions
 #'

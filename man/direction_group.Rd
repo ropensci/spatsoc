@@ -92,16 +92,16 @@ See examples of using mean group direction:
 \code{\link[=direction_step]{direction_step()}}, \code{\link[=group_pts]{group_pts()}},
 \code{\link[CircStats:circ.mean]{CircStats::circ.mean()}}
 
-Other Direction functions: 
-\code{\link{direction_polarization}()},
-\code{\link{direction_step}()},
-\code{\link{direction_to_centroid}()},
-\code{\link{direction_to_leader}()},
-\code{\link{edge_alignment}()},
-\code{\link{edge_delay}()},
-\code{\link{edge_direction}()},
-\code{\link{edge_zones}()},
-\code{\link{leader_direction_group}()},
-\code{\link{leader_edge_delay}()}
+Other Direction functions:
+\code{\link[=direction_polarization]{direction_polarization()}},
+\code{\link[=direction_step]{direction_step()}},
+\code{\link[=direction_to_centroid]{direction_to_centroid()}},
+\code{\link[=direction_to_leader]{direction_to_leader()}},
+\code{\link[=edge_alignment]{edge_alignment()}},
+\code{\link[=edge_delay]{edge_delay()}},
+\code{\link[=edge_direction]{edge_direction()}},
+\code{\link[=edge_zones]{edge_zones()}},
+\code{\link[=leader_direction_delay]{leader_direction_delay()}},
+\code{\link[=leader_direction_group]{leader_direction_group()}}
 }
 \concept{Direction functions}

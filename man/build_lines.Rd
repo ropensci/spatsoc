@@ -59,7 +59,7 @@ for handling coordinate reference systems, see more at
 \url{https://r-spatial.org/r/2020/03/17/wkt.html}.
 
 In addition, \code{build_lines} previously used \link[sp:SpatialLines]{sp::SpatialLines} but has been
-updated to use \link[sf:st_as_sf]{sf::st_as_sf} and \link[sf:st]{sf::st_linestring} according to the
+updated to use \link[sf:st_as_sf]{sf::st_as_sf} and \link[sf:st_linestring]{sf::st_linestring} according to the
 R-spatial evolution, see more at
 \url{https://r-spatial.org/r/2022/04/12/evolution.html}.
 }
@@ -112,7 +112,7 @@ lines <- build_lines(DT, crs = utm, id = 'ID', coords = c('X', 'Y'),
 \seealso{
 \code{group_lines}
 
-Other Build functions: 
-\code{\link{build_polys}()}
+Other Build functions:
+\code{\link[=build_polys]{build_polys()}}
 }
 \concept{Build functions}

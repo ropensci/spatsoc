@@ -19,3 +19,4 @@ Makefile
 ^CRAN-SUBMISSION$
 ^data-raw$
 ^doc$
+^air\.toml$
