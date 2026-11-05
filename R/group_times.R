@@ -88,6 +88,74 @@ group_times <- function(
   datetime = NULL,
   threshold = NULL
 ) {
+  # TODO: check NSE
+  # due to NSE notes in R CMD check
+  # minutes <- block <- hours <- itime <- . <- idate <- timegroup <- NULL
+  # minday <- maxday <- rangeday <- adjIDate <- adjHour <- NULL
+
+  assert_not_null(DT)
+  assert_is_data_table(DT)
+  assert_not_null(datetime)
+  assert_are_colnames(DT, datetime)
+
+  checkCols <- c('hours', 'minutes', 'block', 'timegroup')
+
+  if (any(checkCols %in% colnames(DT))) {
+    message(paste0(
+      paste(
+        as.character(intersect(
+          colnames(DT),
+          checkCols
+        )),
+        collapse = ', '
+      ),
+      ' columns found in input DT and will be overwritten by this function'
+    ))
+    data.table::set(DT, j = intersect(colnames(DT), checkCols), value = NULL)
+  }
+
+  if (is.null(threshold)) {
+    message('no threshold provided, using the time field directly to group')
+    DT[, timegroup := .GRP, by = c(datetime)]
+    # TODO: add test if datetime length > 1, does this still work
+    return(DT[])
+  } else {
+    if (grepl('week|day|hour|minute|second', threshold)) {
+      # TODO: what to do here if c('IDate', 'ITime') provided?
+      #       see dtm, or return error and deprecate this option
+
+      # TODO: check without type.convert
+      split_threshold <- data.table::tstrsplit(
+        threshold,
+        ' ',
+        type.convert = TRUE
+      )
+      match_precision <- match.arg(
+        substr(data.table::last(split_threshold), 1, 4),
+        c('week', 'day', 'hour', 'minute', 'second')
+      )
+
+      DT[,
+        timegroup := .GRP,
+        by = clock::date_round(
+          column_datetime,
+          precision = match_precision,
+          n = data.table::first(split_threshold)
+        ),
+        env = list(column_datetime = datetime)
+      ]
+    } else {
+      stop(
+        "must provide threshold in units of week, day, hour, minute, or second"
+      )
+    }
+  }
+}
+zzz_group_times <- function(
+  DT = NULL,
+  datetime = NULL,
+  threshold = NULL
+) {
   # due to NSE notes in R CMD check
   minutes <- block <- hours <- itime <- . <- idate <- timegroup <- NULL
   minday <- maxday <- rangeday <- adjIDate <- adjHour <- NULL
